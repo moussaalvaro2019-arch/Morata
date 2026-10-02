@@ -21,26 +21,43 @@ A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", gr
   {id:"acou-8", niv:3, titre:"Acoustique des salles : classes, lieux de culte, auditoriums", duree:30, nq:4, nex:0},
   {id:"acou-9", niv:3, titre:"Bruit de l'environnement : routes, chantiers et protections", duree:30, nq:4, nex:0}
  ]});
-A.addMatiere({id:"ba", titre:"Béton armé", court:"Béton armé", groupe:"struct", icone:"column", couleur:"#14202E", niveau:"Intermédiaire", heures:36, ordre:3, prerequis:["rdm", "mat"], resume:"Principes du béton armé, actions et descente de charges, dispositions constructives, poteaux, poutres, dalles et semelles selon le BAEL 91 et l'Eurocode 2.", objectifs:[
-  "Comprendre le rôle respectif du béton et de l'acier",
-  "Faire une descente de charges et appliquer les combinaisons ELU / ELS",
+A.addMatiere({id:"ba", titre:"Béton armé", court:"Béton armé", groupe:"struct", icone:"column", couleur:"#14202E", niveau:"Intermédiaire", heures:100, ordre:3, prerequis:["rdm", "mat"], resume:"Du principe du béton armé au plan de ferraillage : matériaux, états limites, descente de charges, dispositions constructives, tirants, poteaux, poutres (ELU, ELS, sections en T, effort tranchant), dalles, fondations, poutres continues, escaliers, voiles, flexion composée et étude complète d'un bâtiment, selon le BAEL 91 et l'Eurocode 2.", objectifs:[
+  "Connaître les caractéristiques de calcul du béton et des aciers",
+  "Établir les combinaisons d'actions et faire la descente de charges d'un bâtiment",
   "Respecter enrobages, ancrages, recouvrements et espacements",
-  "Dimensionner un poteau, une poutre, une dalle et une semelle"
+  "Dimensionner tirants, poteaux, poutres rectangulaires et en T à l'ELU et vérifier l'ELS",
+  "Calculer les armatures d'effort tranchant et leur répartition",
+  "Dimensionner dalles, semelles, longrines, escaliers et murs",
+  "Calculer une poutre continue (méthode forfaitaire, Caquot) et arrêter les barres",
+  "Produire un plan de ferraillage avec sa nomenclature"
  ], applications:[
-  "Ferraillage des poteaux et poutres d'une maison R+1",
+  "Ferraillage complet d'une maison ou d'un immeuble R+2",
   "Plans de ferraillage et nomenclatures d'aciers",
-  "Contrôle du ferraillage avant coulage",
-  "Lecture d'une note de calcul de bureau d'études"
- ], src:"data/cours/ba.js?v=fe7127ba", chapitres:[
-  {id:"ba-1", niv:1, titre:"Principe du béton armé et matériaux", duree:30, nq:4, nex:0},
-  {id:"ba-3", niv:1, titre:"Dispositions constructives : enrobage, ancrage, espacements", duree:30, nq:4, nex:0},
-  {id:"ba-8", niv:1, titre:"Lire un plan de ferraillage et façonner les aciers", duree:30, nq:4, nex:0},
-  {id:"ba-2", niv:2, titre:"Actions, combinaisons et descente de charges", duree:35, nq:4, nex:0},
-  {id:"ba-4", niv:2, titre:"Poteaux en compression centrée", duree:35, nq:4, nex:0},
-  {id:"ba-5", niv:2, titre:"Poutres en flexion simple", duree:40, nq:4, nex:0},
-  {id:"ba-6", niv:3, titre:"Les dalles", duree:35, nq:4, nex:0},
-  {id:"ba-7", niv:3, titre:"Fondations superficielles : semelles", duree:35, nq:4, nex:0},
-  {id:"ba-9", niv:3, titre:"Effort tranchant, ancrages et vérifications à l'ELS", duree:40, nq:4, nex:0}
+  "Contrôle du ferraillage sur chantier avant coulage",
+  "Lecture et vérification d'une note de calcul de bureau d'études"
+ ], src:"data/cours/ba.js?v=81deb1a7", chapitres:[
+  {id:"ba-1", niv:1, titre:"Principe du béton armé et caractéristiques des matériaux", duree:60, nq:5, nex:5},
+  {id:"ba-2", niv:1, titre:"États limites, actions et combinaisons", duree:55, nq:5, nex:5},
+  {id:"ba-11", niv:1, titre:"Descente de charges d'un bâtiment", duree:70, nq:5, nex:5},
+  {id:"ba-3", niv:1, titre:"Dispositions constructives : enrobage, espacements, sections minimales", duree:55, nq:5, nex:5},
+  {id:"ba-12", niv:1, titre:"Adhérence, ancrages et recouvrements", duree:55, nq:5, nex:5},
+  {id:"ba-8", niv:1, titre:"Lire un plan de ferraillage, façonner et contrôler les aciers", duree:50, nq:5, nex:5},
+  {id:"ba-13", niv:2, titre:"Tirants : pièces en traction simple", duree:45, nq:5, nex:4},
+  {id:"ba-4", niv:2, titre:"Poteaux en compression centrée", duree:70, nq:5, nex:5},
+  {id:"ba-5", niv:2, titre:"Flexion simple à l'ELU : section rectangulaire", duree:80, nq:5, nex:5},
+  {id:"ba-14", niv:2, titre:"Flexion simple à l'ELS : contraintes et fissuration", duree:65, nq:5, nex:4},
+  {id:"ba-15", niv:2, titre:"Poutres en T : la dalle participe à la résistance", duree:60, nq:5, nex:4},
+  {id:"ba-9", niv:2, titre:"Effort tranchant : cadres, étriers et vérifications d'appui", duree:70, nq:5, nex:5},
+  {id:"ba-6", niv:2, titre:"Les dalles pleines : portant dans un sens ou dans deux sens", duree:75, nq:5, nex:5},
+  {id:"ba-7", niv:2, titre:"Fondations superficielles : semelles isolées et filantes", duree:75, nq:5, nex:5},
+  {id:"ba-16", niv:2, titre:"Poutres continues : méthode forfaitaire, méthode de Caquot et arrêt des barres", duree:75, nq:5, nex:4},
+  {id:"ba-17", niv:3, titre:"Planchers à corps creux : poutrelles et dalle de compression", duree:60, nq:5, nex:4},
+  {id:"ba-18", niv:3, titre:"Semelles excentrées, longrines et radiers", duree:65, nq:5, nex:4},
+  {id:"ba-19", niv:3, titre:"Escaliers, paliers et balcons", duree:65, nq:5, nex:4},
+  {id:"ba-20", niv:3, titre:"Voiles et murs de soutènement en béton armé", duree:65, nq:5, nex:4},
+  {id:"ba-21", niv:3, titre:"Flexion composée : poteaux de portique et éléments excentrés", duree:70, nq:5, nex:4},
+  {id:"ba-22", niv:3, titre:"Flèches et durabilité : vérifications de service", duree:60, nq:5, nex:4},
+  {id:"ba-23", niv:3, titre:"Étude complète d'un bâtiment : du plan au ferraillage (BAEL et Eurocode 2)", duree:80, nq:5, nex:4}
  ]});
 A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Gestion chantier", groupe:"gest", icone:"clip", couleur:"#B8700A", niveau:"Intermédiaire", heures:24, ordre:1, prerequis:["tech"], resume:"Documents du marché, installation de chantier, planification, rendements, gestion des ressources et approvisionnements, qualité, sécurité, environnement et suivi financier.", objectifs:[
   "Connaître les pièces d'un marché et les documents de chantier",
