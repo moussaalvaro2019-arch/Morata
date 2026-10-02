@@ -754,3 +754,44 @@ a.carte:hover { box-shadow: var(--ombre-forte); }
 .win .ed-formulaire { max-width: none; }
 .win .champ input, .win .champ textarea, .win .champ select { background: var(--surface); }
 .ed-liste { background: #F0E8DF; }
+
+/* ---------- Inscription et abonnement (lecteurs) ---------- */
+.hbtn.connecte { position: relative; color: var(--primaire); border-color: var(--or); }
+.hbtn.connecte::after { content: ""; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--or); box-shadow: 0 0 0 2px var(--surface); }
+button.kpi { font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.abo { max-width: 640px; margin: 0 auto 28px; display: grid; gap: 14px; }
+.abo-etapes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.abo-etapes li { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--texte-doux); min-width: 0; }
+.abo-etapes li span { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--bordure); font-size: 12px; }
+.abo-etapes li.en-cours { color: var(--primaire); }
+.abo-etapes li.en-cours span { background: var(--primaire); border-color: var(--primaire); color: #fff; }
+.abo-etapes li.fait span { background: var(--succes-doux); border-color: transparent; color: #0F5A36; }
+.abo-carte { background: var(--surface); border: 1px solid var(--bordure); border-radius: 20px; padding: clamp(16px, 3vw, 24px); display: grid; gap: 14px; min-width: 0; }
+.abo-carte .formulaire { max-width: none; }
+.abo-carte .sub { margin: 0; font-size: 13px; color: var(--texte-doux); }
+.abo-carte .stabs { margin: -4px 0 0; }
+.abo-compte { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--bordure); border-radius: 16px; padding: 12px 14px; }
+.abo-compte .av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(140deg, #F1D08A, #B98522); color: #2A1406; font-weight: 800; }
+.abo-compte div { display: grid; min-width: 0; margin-right: auto; }
+.abo-compte small { color: var(--texte-doux); }
+.abo-prix { display: flex; align-items: baseline; gap: 10px; }
+.abo-prix b { font-family: var(--police-titre); font-size: 40px; letter-spacing: -.03em; color: var(--primaire); }
+.abo-prix span { color: var(--texte-doux); }
+.abo-moyens { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.abo-moyen { border: 1px solid var(--bordure); border-radius: 16px; padding: 14px; display: grid; gap: 8px; justify-items: start; background: linear-gradient(160deg, #FFFDF9, #FBF4EA); min-width: 0; }
+.abo-moyen > b { font-size: 16px; }
+.abo-numero { font-size: 20px; font-weight: 700; letter-spacing: .04em; overflow-wrap: anywhere; }
+.abo-moyen small { color: var(--texte-doux); font-size: 12.5px; }
+.abo-ok { justify-items: center; text-align: center; }
+.abo-ok > .ic, .abo-appel > .ic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--succes-doux); color: #0F5A36; font-size: 22px; }
+.abo-appel { margin: 26px 0 8px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: radial-gradient(circle at 100% 0%, #5A1F14, transparent 60%), var(--sombre); color: #F6EEE6; border-radius: 20px; padding: 18px; }
+.abo-appel > .ic { background: rgba(217, 164, 65, .18); color: var(--or-2); }
+.abo-appel p { margin: 4px 0 0; color: #C9B6A9; font-size: 14px; }
+.abo-extrait { position: relative; max-height: 150px; overflow: hidden; margin-bottom: 18px; }
+.abo-extrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent, var(--fond, #F6F1EA) 85%); }
+.navigation-chapitres small .i { font-size: 13px; vertical-align: -2px; }
+@media (max-width: 620px) {
+  .abo-appel { grid-template-columns: auto 1fr; }
+  .abo-appel .btn { grid-column: 1 / -1; justify-content: center; }
+  .abo-etapes li { font-size: 12px; }
+}

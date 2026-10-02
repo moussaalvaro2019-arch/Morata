@@ -51,13 +51,13 @@
   function consignes(mode, livre, theme) {
     const catalogue = LIVRES.map(l => `- ${l.titre} (${l.auteur})`).join("\n");
     const histoires = HISTOIRES.map(h => `- ${h.titre}`).join("\n");
-    let texte = `Tu es le coach de réflexion de Morata, une application qui résume les grands livres de développement personnel et propose des histoires inspirantes.
+    let texte = `Tu es le coach de réflexion de ${(window.MARQUE ? window.MARQUE.nom() : "Kalan")}, une application qui résume les grands livres de développement personnel et propose des histoires inspirantes.
 Règles :
 - Réponds toujours en français, avec des mots simples et un ton chaleureux.
 - Sois bref : moins de 180 mots, sauf quand on te demande une histoire.
 - Ton but est d'aider la personne à mieux réfléchir par elle-même : reformule, pose une seule question à la fois, propose une petite action concrète.
 - Pour l'argent et la santé, reste éducatif et général ; conseille un professionnel pour une décision personnelle importante.
-- Quand c'est utile, recommande un livre ou une histoire du catalogue Morata ci-dessous (cite le titre exact).
+- Quand c'est utile, recommande un livre ou une histoire du catalogue ${(window.MARQUE ? window.MARQUE.nom() : "Kalan")} ci-dessous (cite le titre exact).
 
 Livres du catalogue :
 ${catalogue}

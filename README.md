@@ -1,11 +1,14 @@
-# Morata · Livres, histoires et coach IA
+# Kalan · Livres, histoires et coach IA
+
+« Kalan » veut dire « lire, étudier » en bambara et en dioula. Le nom et le slogan se changent dans l'espace PDG > Paramètres > Identité.
 
 Site web en français :
 
 - **Livres** : les grands livres de développement personnel résumés en chapitres, chaque section expliquée avec un exemple concret, plus « l'essentiel en 5 minutes », des questions et un exercice.
 - **Histoires** : des séries de 20 chapitres (5 parties et une leçon par chapitre) et des histoires courtes, classées par thème (amour, philosophie, développement personnel, finance, résilience, amitié, spiritualité…). La lecture est suivie sur l'appareil (« Reprendre la lecture »).
 - **Boutique** : les livres de l'auteur (titre, prix en FCFA, photo, description) ; les lecteurs commandent sur WhatsApp.
-- **Espace PDG** (`#/pdg`, lien « Espace PDG » en bas de page ; bouton doré dans l'en-tête pour le PDG connecté) : même coquille qu'EventLoc (barre latérale sombre, tableau de bord, fiches qui s'ouvrent sur le côté), un tableau de bord séparé, protégé par mot de passe, pour modifier tout le contenu sans toucher au code : livres et leurs chapitres, séries, histoires, thèmes, images (couvertures, illustrations, bannière), textes de l'accueil, boutique et mot de passe. Les lecteurs ne voient ni cet espace ni les boutons de gestion.
+- **Espace PDG** (`#/pdg`, lien « Espace PDG » en bas de page ; bouton doré dans l'en-tête pour le PDG connecté) : même coquille qu'EventLoc (barre latérale sombre, tableau de bord, fiches qui s'ouvrent sur le côté), un tableau de bord séparé, protégé par mot de passe, pour modifier tout le contenu sans toucher au code : livres et leurs chapitres, séries, histoires, thèmes, images (couvertures, illustrations, bannière), textes de l'accueil, nom de l'application, réseaux sociaux, abonnés, prix et moyens de paiement, boutique et mot de passe. Les lecteurs ne voient ni cet espace ni les boutons de gestion.
+- **Inscription et abonnement** : le premier chapitre de chaque livre et de chaque série est gratuit. Pour lire la suite, le lecteur crée son compte (nom, téléphone) puis paie l'abonnement (0,99 € par mois, 650 F CFA) par Wave ou un autre moyen affiché, et déclare son paiement. Le PDG le vérifie dans *Abonnés* et l'ouvre pour 30 jours ; en attendant, le lecteur peut lire 48 h. Prix, chapitres gratuits, délai et moyens de paiement se règlent dans *Paramètres > Abonnement & paiements*.
 - **Coach IA** : une conversation avec Claude pour réfléchir à une situation, approfondir un livre, inventer une histoire ou relever un défi de réflexion.
 - **Question du jour** sur la page d'accueil.
 
@@ -34,9 +37,11 @@ La clé reste sur le serveur et n'est jamais envoyée au navigateur. Chaque rép
 
 1. Dans Netlify : *Site configuration > Environment variables*, ajoutez `ADMIN_CODE` (le mot de passe de départ de l'espace PDG, à garder secret). L'ancien nom `BOUTIQUE_CODE` fonctionne aussi.
 2. Redéployez, puis ouvrez `votre-site.netlify.app/#/pdg` et connectez-vous.
-3. Changez le mot de passe dans *Réglages* : le nouveau est gardé (haché) dans Netlify Blobs et remplace `ADMIN_CODE`.
+3. Changez le mot de passe dans *Paramètres > Accès PDG* : le nouveau est gardé (haché) dans Netlify Blobs et remplace `ADMIN_CODE`.
 
 Les modifications sont gardées dans Netlify Blobs (`netlify/functions/contenu.mjs`, annonces dans `netlify/functions/boutique.mjs`) et appliquées par-dessus le contenu du dossier `data/` : tous les lecteurs les voient aussitôt. *Revenir au texte d'origine* efface une modification ; un élément d'origine supprimé peut être restauré depuis sa liste.
+
+Les comptes lecteurs sont gardés dans Netlify Blobs (`netlify/functions/abonnes.mjs`) : mot de passe haché, sessions par jeton. Les paiements ne sont pas encaissés automatiquement : le lecteur paie par Wave (ou autre) puis déclare sa référence, et le PDG valide. Pour un encaissement automatique, il faut un prestataire (lien de paiement Wave Business, CinetPay…) : collez son lien dans le champ « Lien de paiement » du moyen concerné.
 
 Sans Netlify (site ouvert en local ou hébergé ailleurs), l'espace PDG fonctionne mais les modifications restent dans le navigateur de l'appareil ; le mot de passe de départ est alors `morata`.
 
@@ -60,9 +65,11 @@ Chaque `id` doit être unique, en minuscules, avec des tirets à la place des es
 - `js/coach.js` et `js/ia.js` : le coach IA
 - `js/boutique.js` : la boutique
 - `js/contenu.js` : enregistrement des modifications du PDG et application au contenu
-- `js/pdg.js` : l'espace PDG (tableau de bord et formulaires)
+- `js/pdg.js` : l'espace PDG (tableau de bord, abonnés et formulaires)
+- `js/abonnement.js` : comptes lecteurs, accès aux chapitres et déclaration des paiements
 - `netlify/functions/coach.mjs` : la connexion à Claude côté serveur
 - `netlify/functions/boutique.mjs` : l'enregistrement des annonces
 - `netlify/functions/contenu.mjs` et `netlify/lib/acces.mjs` : modifications du PDG et mot de passe
+- `netlify/functions/abonnes.mjs` : comptes lecteurs et abonnements
 - `data/` : le contenu
 - `doc.html` : ancienne page vitrine BTP, non modifiée

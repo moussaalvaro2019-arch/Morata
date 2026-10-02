@@ -1,4 +1,4 @@
-// Application Morata : navigation par adresse (#/livres, #/serie/premier-pas/3, ...),
+// Application Kalan : navigation par adresse (#/livres, #/serie/premier-pas/3, ...),
 // recherche, filtres, lecture par chapitres et suivi de lecture.
 // Le contenu vient des fichiers du dossier data/.
 (function () {
@@ -20,6 +20,9 @@
 
   // Textes de l'accueil par défaut (modifiables dans l'espace PDG > Page d'accueil).
   const ACCUEIL_DEFAUT = window.ACCUEIL_DEFAUT = {
+    nomApp: "Kalan",
+    slogan: "Livres & histoires",
+    reseaux: [],
     titre: "Les grands livres et les belles histoires,",
     accent: "chapitre par chapitre.",
     texte: "Des résumés détaillés avec des exemples de chez nous, des histoires en série à suivre chaque jour, et un coach IA pour aller plus loin.",
@@ -57,6 +60,14 @@
   }
   window.TOAST = toast;
   const accueilActuel = () => ({ ...ACCUEIL_DEFAUT, ...((window.SITE || {}).accueil || {}) });
+  // Nom de l'application (modifiable dans Paramètres) : « Ka<em>lan</em> » dans le logo.
+  const nomApp = () => accueilActuel().nomApp || ACCUEIL_DEFAUT.nomApp;
+  function motMarque(nom) {
+    const n = String(nom || ""), coupe = Math.floor(n.length / 2);
+    return `${echapper(n.slice(0, coupe))}<em>${echapper(n.slice(coupe))}</em>`;
+  }
+  const marque = sousTitre => `<svg class="logo"><use href="#logo"/></svg><span class="wm"><span>${motMarque(nomApp())}</span><small>${echapper(sousTitre == null ? accueilActuel().slogan : sousTitre)}</small></span>`;
+  window.MARQUE = { nom: nomApp, html: marque };
   const lienWhatsapp = numero => { const n = String(numero || "").replace(/\D/g, ""); return n ? "https://wa.me/" + n : ""; };
 
   function normaliser(texte) {
@@ -380,7 +391,7 @@
     const nbSections = chapitres.reduce((n, c) => n + c.sections.length, 0);
     const mots = chapitres.reduce((n, c) => n + c.sections.reduce((m, s) => m + motsDe(s.texte, s.exemple), 0), 0);
     if (!chapitres.length) etat.ongletLivre = "essentiel";
-    document.title = `${l.titre} · Morata`;
+    document.title = `${l.titre} · ${nomApp()}`;
 
     app.innerHTML = `
       <a class="retour" href="#/livres">← Livres</a>
@@ -440,11 +451,16 @@
     afficherOnglet();
   }
 
+  // Chapitres réservés aux abonnés au-delà des chapitres gratuits (js/abonnement.js).
+  const chapitreLibre = n => !window.ABO || window.ABO.chapitreLibre(n);
+
   function navigationChapitres(base, n, total, titres) {
+    const verrou = !chapitreLibre(n + 1);
     return `
+      ${n < total && verrou ? appelAbonnement(n) : ""}
       <nav class="navigation-chapitres" aria-label="Chapitres">
         ${n > 1 ? `<a href="${base}/${n - 1}"><small>← Précédent</small><span>${echapper(titres[n - 2])}</span></a>` : ""}
-        ${n < total ? `<a class="suivant" href="${base}/${n + 1}"><small>Suivant →</small><span>${echapper(titres[n])}</span></a>`
+        ${n < total ? `<a class="suivant" href="${base}/${n + 1}"><small>${verrou ? `${ic("lock")} Réservé aux abonnés →` : "Suivant →"}</small><span>${echapper(titres[n])}</span></a>`
           : `<a class="suivant" href="${base}"><small>Terminé</small><span>Retour au sommaire</span></a>`}
       </nav>`;
   }
@@ -455,6 +471,7 @@
     const c = chapitres[n - 1];
     if (!l || !c) return pageIntrouvable();
     document.title = `${c.titre} · ${l.titre}`;
+    if (!chapitreLibre(n)) return pageVerrou(`#/livres/${echapper(id)}`, l.titre, n, chapitres.length, c.titre, c.intro || ((c.sections || [])[0] || {}).texte);
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/livres/${echapper(id)}">← ${echapper(l.titre)}</a>
@@ -483,7 +500,7 @@
     const cle = "serie:" + id;
     s.chapitres = s.chapitres || [];
     const mots = s.chapitres.reduce((n, c) => n + (c.sections || []).reduce((m, x) => m + motsDe(x.texte), 0), 0);
-    document.title = `${s.titre} · Morata`;
+    document.title = `${s.titre} · ${nomApp()}`;
     app.innerHTML = `
       <a class="retour" href="#/histoires">← Histoires</a>
       <article class="fiche">
@@ -492,7 +509,7 @@
           <div>
             <span class="etiquette">${t.emoji} ${echapper(t.nom)}</span>
             <h1>${echapper(s.titre)}</h1>
-            <p class="fiche__auteur">Une série Morata</p>
+            <p class="fiche__auteur">Une série ${echapper(nomApp())}</p>
           </div>
         </div>
         <p class="fiche__accroche">${echapper(s.resume)}</p>
@@ -520,6 +537,7 @@
     const c = s && s.chapitres[n - 1];
     if (!c) return pageIntrouvable();
     document.title = `${c.titre} · ${s.titre}`;
+    if (!chapitreLibre(n)) return pageVerrou(`#/serie/${echapper(id)}`, s.titre, n, s.chapitres.length, c.titre, ((c.sections || [])[0] || {}).texte);
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/serie/${echapper(id)}">← ${echapper(s.titre)}</a>
@@ -544,7 +562,7 @@
     const h = HISTOIRES.find(x => x.id === id);
     if (!h) return pageIntrouvable();
     const t = theme(h.theme);
-    document.title = `${h.titre} · Morata`;
+    document.title = `${h.titre} · ${nomApp()}`;
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/histoires">← Histoires</a>
@@ -557,6 +575,177 @@
       </article>`;
   }
 
+  // ---------- Inscription et abonnement ----------
+
+  const prixTexte = r => `${echapper(r.prixEuro)} € par mois${r.prixFcfa ? ` <small>(${echapper(r.prixFcfa)} F CFA)</small>` : ""}`;
+  const dateCourte = v => v ? new Date(v).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "";
+  function memoriserRetour(lien) { try { sessionStorage.setItem("kalan-retour", lien); } catch { /* rien */ } }
+  function lireRetour() { try { return sessionStorage.getItem("kalan-retour") || ""; } catch { return ""; } }
+
+  // Encadré à la fin du dernier chapitre gratuit.
+  function appelAbonnement(n) {
+    const A = window.ABO, r = A.reglages(), c = A.compte();
+    memoriserRetour(location.hash.replace(/\/\d+$/, "/" + (n + 1)));
+    return `<div class="abo-appel">
+      <span class="ic">${ic("lock")}</span>
+      <div><b>${c ? "La suite est réservée aux abonnés" : "Vous avez aimé ce chapitre ?"}</b>
+        <p>${c ? `Activez votre abonnement pour lire tous les chapitres : ${prixTexte(r)}.` : `Créez votre compte en 30 secondes pour continuer la lecture, puis abonnez-vous : ${prixTexte(r)}.`}</p></div>
+      <a class="btn b-gold" href="#/abonnement">${c ? "Je m'abonne" : "Je m'inscris"} ${ic("arrow")}</a>
+    </div>`;
+  }
+
+  // Chapitre verrouillé : début du texte flouté, puis inscription et paiement sur place.
+  function pageVerrou(base, ouvrage, n, total, titre, extrait) {
+    memoriserRetour(`${base}/${n}`);
+    app.innerHTML = `
+      <article class="lecteur">
+        <a class="retour" href="${base}">← ${echapper(ouvrage)}</a>
+        <p class="lecteur__surtitre">Chapitre ${n} sur ${total}</p>
+        <h1>${echapper(titre)}</h1>
+        ${extrait ? `<div class="abo-extrait" aria-hidden="true">${paragraphes(String(extrait).slice(0, 420))}</div>` : ""}
+        <div id="zone-abo"></div>
+      </article>`;
+    rendreAbonnement(app.querySelector("#zone-abo"), `${base}/${n}`);
+  }
+
+  function pageAbonnement(compte) {
+    const r = window.ABO.reglages();
+    app.innerHTML = `
+      <section class="pageh"><span class="kick">${ic(compte ? "user" : "crown")}${compte ? "Mon compte" : "Abonnement"}</span>
+        <h1>${compte ? "Mon <em>compte</em>" : "Tout lire, <em>sans limite</em>"}</h1>
+        <p>Tous les chapitres des résumés et des séries pour ${prixTexte(r)}. Le premier chapitre reste gratuit.</p></section>
+      <div id="zone-abo"></div>`;
+    rendreAbonnement(app.querySelector("#zone-abo"), lireRetour());
+  }
+
+  function rendreAbonnement(zone, retour) {
+    const A = window.ABO;
+    if (!A) { zone.innerHTML = ""; return; }
+    const r = A.reglages(), c = A.compte(), acc = A.acces(), e = A.etat(c);
+    const etape = !c ? 1 : (acc.ok && acc.raison !== "provisoire") ? 3 : 2;
+    const moyens = A.moyensVisibles();
+    const wa = lienWhatsapp(accueilActuel().whatsapp);
+    const etapes = `<ol class="abo-etapes">${["Mon compte", "Paiement", "Lecture"].map((x, i) =>
+      `<li class="${i + 1 < etape ? "fait" : i + 1 === etape ? "en-cours" : ""}"><span>${i + 1 < etape ? ic("check") : i + 1}</span>${x}</li>`).join("")}</ol>`;
+    const continuer = retour ? `<a class="btn b-gold" href="${echapper(retour)}">Continuer la lecture ${ic("arrow")}</a>` : `<a class="btn b-gold" href="#/livres">Lire les résumés ${ic("arrow")}</a>`;
+    let corps = "";
+    if (etape === 1) {
+      const connexion = A.mode() !== "claude";
+      corps = `
+        <div class="abo-carte">
+          ${connexion ? `<div class="stabs" role="tablist"><button class="stab" type="button" role="tab" data-abo-onglet="inscription" aria-selected="true">Créer mon compte</button><button class="stab" type="button" role="tab" data-abo-onglet="connexion" aria-selected="false">J'ai déjà un compte</button></div>` : ""}
+          <form class="formulaire" id="abo-form" data-type="inscription" novalidate>
+            <label class="champ" data-seul="inscription" for="abo-nom">Votre nom<input id="abo-nom" autocomplete="name" placeholder="Prénom et nom"></label>
+            <label class="champ" for="abo-tel">Numéro de téléphone<input id="abo-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="07 00 00 00 00"></label>
+            ${A.demandeMotDePasse() ? `<label class="champ" for="abo-mdp">Mot de passe (6 caractères minimum)<input id="abo-mdp" type="password" autocomplete="new-password"></label>` : ""}
+            <p class="ed-erreur" id="abo-erreur" hidden></p>
+            <button class="btn b-pri" type="submit">${ic("user")}<span>Créer mon compte</span></button>
+          </form>
+          <p class="sub">Votre numéro sert à retrouver votre compte et à vérifier votre paiement. Il n'est jamais affiché.</p>
+        </div>`;
+    } else if (etape === 2) {
+      const attente = A.enAttente(c);
+      corps = `
+        ${attente ? `<div class="note ok">${ic("bell")}<span>Paiement déclaré le ${dateCourte(c.paiement.le)} (${echapper(c.paiement.moyen)}, ${echapper(c.paiement.reference)}). Il est en cours de vérification.${acc.ok ? " Vous pouvez lire en attendant." : ""}</span></div>
+          ${acc.ok ? `<div class="acts">${continuer}</div>` : ""}` : ""}
+        ${e.code === "refuse" ? `<div class="note">${ic("bell")}<span>Votre dernier paiement n'a pas été retrouvé. Vérifiez la référence ou contactez-nous.</span></div>` : ""}
+        ${e.code === "expire" ? `<div class="note">${ic("bell")}<span>Votre abonnement a pris fin le ${dateCourte(c.jusqua)}. Renouvelez-le pour continuer.</span></div>` : ""}
+        <div class="abo-carte">
+          <div class="abo-prix"><b class="num">${echapper(r.prixEuro)} €</b><span>par mois${r.prixFcfa ? ` · ${echapper(r.prixFcfa)} F CFA` : ""}</span></div>
+          ${moyens.length ? `<p class="sub">1. Payez avec l'un de ces moyens :</p>
+          <div class="abo-moyens">${moyens.map(m => `
+            <div class="abo-moyen">
+              <b>${echapper(m.nom)}</b>
+              ${m.numero ? `<span class="num abo-numero">${echapper(m.numero)}</span>
+                <button class="btn b-line b-sm" type="button" data-copier="${echapper(m.numero)}">${ic("doc")}Copier le numéro</button>` : ""}
+              ${m.details ? `<small>${echapper(m.details)}</small>` : ""}
+              ${/^https:\/\//.test(m.lien || "") ? `<a class="btn b-gold b-sm" href="${echapper(m.lien)}" target="_blank" rel="noopener">Payer avec ${echapper(m.nom)} ${ic("arrow")}</a>` : ""}
+            </div>`).join("")}</div>
+          <p class="sub">2. Dites-nous que c'est fait :</p>
+          <form class="formulaire" id="abo-paiement" novalidate>
+            <label class="champ" for="abo-moyen">Moyen utilisé<select id="abo-moyen">${moyens.map(m => `<option>${echapper(m.nom)}</option>`).join("")}</select></label>
+            <label class="champ" for="abo-ref">Numéro qui a payé ou référence de la transaction<input id="abo-ref" placeholder="Ex. 07 00 00 00 00 ou référence"></label>
+            <p class="ed-erreur" id="abo-erreur" hidden></p>
+            <button class="btn b-pri" type="submit">${ic("check")}J'ai payé</button>
+          </form>
+          ${r.heuresProvisoires && r.obligatoire === "oui" ? `<p class="sub">Vous pouvez lire pendant ${r.heuresProvisoires} h, le temps que le paiement soit vérifié.</p>` : ""}`
+          : `<div class="note">${ic("bell")}<span>Les moyens de paiement seront bientôt affichés ici.${wa ? " Écrivez-nous sur WhatsApp pour vous abonner dès maintenant." : ""}</span></div>`}
+          ${wa ? `<a class="btn b-line b-sm" href="${wa}?text=${encodeURIComponent(`Bonjour, je viens de payer mon abonnement ${nomApp()} (${c.nom}, ${c.telephone}).`)}" target="_blank" rel="noopener">${ic("chat")}Envoyer la capture sur WhatsApp</a>` : ""}
+        </div>`;
+    } else {
+      corps = `
+        <div class="abo-carte abo-ok">
+          <span class="ic">${ic("check")}</span>
+          <b>${acc.raison === "pdg" ? "Vous êtes le PDG : tout est ouvert." : acc.raison === "libre" ? "Votre compte est prêt : bonne lecture !" : `Abonnement actif jusqu'au ${dateCourte(c.jusqua)}`}</b>
+          <div class="acts">${continuer}</div>
+        </div>`;
+    }
+    const enTete = c ? `<div class="abo-compte"><span class="av">${echapper(String(c.nom || "?").charAt(0).toUpperCase())}</span><div><b>${echapper(c.nom)}</b><small>${echapper(c.telephone || "")}</small></div><span class="pill ${e.pastille}">${e.texte}</span>
+      ${A.mode() !== "claude" ? `<button class="btn b-line b-sm" type="button" id="abo-sortir">${ic("logout")}Se déconnecter</button>` : ""}</div>` : "";
+    zone.innerHTML = `<div class="abo">${etapes}${enTete}${corps}</div>`;
+
+    // Sur un chapitre verrouillé, le chapitre s'affiche dès que l'accès est ouvert.
+    const refaire = () => {
+      if (retour && location.hash === retour && A.acces().ok) { router(); return; }
+      rendreAbonnement(zone, retour); afficherCompte();
+    };
+    const erreur = m => { const p = zone.querySelector("#abo-erreur"); if (p) { p.textContent = m; p.hidden = !m; } };
+    zone.querySelectorAll("[data-abo-onglet]").forEach(b => b.addEventListener("click", () => {
+      const type = b.dataset.aboOnglet, form = zone.querySelector("#abo-form");
+      form.dataset.type = type;
+      zone.querySelectorAll("[data-abo-onglet]").forEach(x => x.setAttribute("aria-selected", x === b));
+      form.querySelectorAll("[data-seul]").forEach(x => { x.hidden = x.dataset.seul !== type; });
+      form.querySelector("button[type=submit] span").textContent = type === "connexion" ? "Me connecter" : "Créer mon compte";
+      const mdp = form.querySelector("#abo-mdp");
+      if (mdp) mdp.autocomplete = type === "connexion" ? "current-password" : "new-password";
+      erreur("");
+    }));
+    const form = zone.querySelector("#abo-form");
+    if (form) form.addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const bouton = form.querySelector("button[type=submit]");
+      const donnees = { nom: form.querySelector("#abo-nom").value, telephone: form.querySelector("#abo-tel").value, motdepasse: (form.querySelector("#abo-mdp") || {}).value };
+      bouton.disabled = true;
+      try {
+        if (form.dataset.type === "connexion") await A.connecter(donnees); else await A.inscrire(donnees);
+        toast(form.dataset.type === "connexion" ? "Vous êtes connecté" : "Compte créé", "user");
+        refaire();
+      } catch (e) { erreur(e.message || "Échec, réessayez."); bouton.disabled = false; }
+    });
+    const paiement = zone.querySelector("#abo-paiement");
+    if (paiement) paiement.addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const bouton = paiement.querySelector("button[type=submit]");
+      bouton.disabled = true;
+      try {
+        await A.declarerPaiement({ moyen: paiement.querySelector("#abo-moyen").value, reference: paiement.querySelector("#abo-ref").value });
+        toast("Paiement envoyé pour vérification", "bell");
+        refaire();
+      } catch (e) { erreur(e.message || "Échec, réessayez."); bouton.disabled = false; }
+    });
+    zone.querySelectorAll("[data-copier]").forEach(b => b.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copier); toast("Numéro copié", "doc"); }
+      catch { toast("Numéro : " + b.dataset.copier, "doc"); }
+    }));
+    const sortir = zone.querySelector("#abo-sortir");
+    if (sortir) sortir.addEventListener("click", async () => { await A.deconnecter(); toast("Vous êtes déconnecté", "logout"); refaire(); });
+  }
+
+  // Icône du compte dans l'en-tête : pastille dorée pour les abonnés.
+  function afficherCompte() {
+    const lien = document.getElementById("lien-compte");
+    if (!lien || !window.ABO) return;
+    const c = window.ABO.compte();
+    lien.classList.toggle("connecte", !!c);
+    lien.setAttribute("aria-label", c ? `Mon compte (${c.nom})` : "M'inscrire ou me connecter");
+  }
+
+  // Nom et slogan de l'application dans l'en-tête et l'onglet.
+  function afficherMarque() {
+    const lock = document.querySelector(".chead .lock");
+    if (lock) { lock.innerHTML = marque(); lock.setAttribute("aria-label", `${nomApp()}, accueil`); }
+  }
+
   function pageIntrouvable() {
     app.innerHTML = `<div class="vide"><h1>Page introuvable</h1><p><a href="#/">Retour à l'accueil</a></p></div>`;
   }
@@ -567,12 +756,12 @@
     const parties = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
     const [section, id, arg] = parties;
     const n = parseInt(arg, 10);
-    document.title = "Morata · Livres & Histoires";
+    document.title = `${nomApp()} · ${accueilActuel().slogan}`;
     const routeActive = section === "serie" ? "histoires" : (section || "accueil");
     document.body.classList.toggle("mode-pdg", section === "pdg");
     document.body.classList.toggle("page-accueil", !section);
     fermerMenu();
-    if (section !== "pdg") { afficherPied(); afficherLienPDG(); }
+    if (section !== "pdg") { afficherPied(); afficherLienPDG(); afficherMarque(); afficherCompte(); }
     document.querySelectorAll("[data-route]").forEach(a => a.classList.toggle("actif", a.dataset.route === routeActive));
 
     if (!section) pageAccueil();
@@ -581,6 +770,7 @@
     else if (section === "serie") n ? pageChapitreSerie(id, n) : pageSerie(id);
     else if (section === "boutique") window.pageBoutique(app, id);
     else if (section === "coach") window.pageCoach(app, id, arg);
+    else if (section === "abonnement" || section === "compte") pageAbonnement(section === "compte");
     else if (section === "pdg") window.pagePDG(app, id, arg, parties[3]);
     else pageIntrouvable();
 
@@ -597,14 +787,15 @@
     ["#/livres", "Livres", "book", "Résumés en chapitres et en 5 minutes"],
     ["#/histoires", "Histoires", "story", "Séries et histoires courtes par thème"],
     ["#/boutique", "Boutique", "cart", "Les livres de l'auteur, sur WhatsApp"],
-    ["#/coach", "Coach IA", "spark", "Réfléchir avec l'intelligence artificielle"]
+    ["#/coach", "Coach IA", "spark", "Réfléchir avec l'intelligence artificielle"],
+    ["#/compte", "Mon compte", "user", "Inscription et abonnement"]
   ];
   const zoneMenu = document.getElementById("menu");
   function ouvrirMenu() {
     const wa = lienWhatsapp(accueilActuel().whatsapp);
     zoneMenu.innerHTML = `
       <div class="mdrop" data-menu-close><aside class="mdraw" role="dialog" aria-modal="true" aria-label="Menu">
-        <div class="mhead"><span class="lock"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Livres &amp; histoires</small></span></span><button class="x" type="button" data-menu-close aria-label="Fermer le menu">${ic("x")}</button></div>
+        <div class="mhead"><span class="lock">${marque()}</span><button class="x" type="button" data-menu-close aria-label="Fermer le menu">${ic("x")}</button></div>
         <nav class="mlinks">${MENU.map(m => `<a href="${m[0]}"><span class="mi">${ic(m[2])}</span><span><b>${m[1]}</b><small>${m[3]}</small></span>${ic("arrow")}</a>`).join("")}</nav>
         <div class="mfoot">
           ${wa ? `<a class="btn b-gold b-full" href="${wa}" target="_blank" rel="noopener">${ic("chat")}Écrire sur WhatsApp</a>` : ""}
@@ -628,14 +819,14 @@
     const accueil = accueilActuel();
     const wa = lienWhatsapp(accueil.whatsapp);
     pied.innerHTML = `<div class="conteneur"><div class="fg">
-      <div><a href="#/" class="lock"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Livres &amp; histoires</small></span></a>
+      <div><a href="#/" class="lock">${marque()}</a>
         <p>Les grands livres résumés chapitre par chapitre, des histoires qui font réfléchir et un coach IA. Lire moins, retenir plus.</p></div>
       <div><h4>Menu</h4>${MENU.slice(1).map(m => `<a href="${m[0]}">${m[1]}</a>`).join("")}</div>
       <div><h4>Thèmes</h4>${THEMES.slice(0, 6).map(t => `<a href="#/histoires/theme/${echapper(t.id)}">${echapper(t.nom)}</a>`).join("")}</div>
-      <div><h4>Contact</h4>${wa ? `<a href="${wa}" target="_blank" rel="noopener">WhatsApp : <b class="num">${echapper(accueil.whatsapp)}</b></a>` : ""}<span>Abidjan, Côte d'Ivoire</span>
+      <div><h4>Contact</h4>${wa ? `<a href="${wa}" target="_blank" rel="noopener">WhatsApp : <b class="num">${echapper(accueil.whatsapp)}</b></a>` : ""}${(accueil.reseaux || []).filter(x => x && x.nom && /^https:\/\//.test(x.lien || "")).map(x => `<a href="${echapper(x.lien)}" target="_blank" rel="noopener">${echapper(x.nom)}</a>`).join("")}<span>Abidjan, Côte d'Ivoire</span>
         <span>Couvertures : <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></span></div>
     </div>
-    <div class="fbot"><span>© ${new Date().getFullYear()} Morata · ${echapper(accueil.nomPDG)}</span><a href="#/pdg">${ic("lock")}Espace PDG</a></div></div>`;
+    <div class="fbot"><span>© ${new Date().getFullYear()} ${echapper(nomApp())} · ${echapper(accueil.nomPDG)}</span><a href="#/pdg">${ic("lock")}Espace PDG</a></div></div>`;
   }
 
   // Le bouton doré « Espace PDG » n'apparaît que pour le propriétaire (comme dans EventLoc).
@@ -648,7 +839,10 @@
   // Si elles arrivent plus tard, la page lecteur est simplement réaffichée.
   let premierAffichage = false;
   const afficherUneFois = () => { if (!premierAffichage) { premierAffichage = true; router(); } };
-  const pret = window.CONTENU ? window.CONTENU.pret : Promise.resolve(false);
+  const pret = Promise.all([
+    window.CONTENU ? window.CONTENU.pret : Promise.resolve(false),
+    window.ABO ? window.ABO.pret.catch(() => null) : null
+  ]).then(([change, compte]) => change || !!compte);
   pret.then(change => {
     if (!premierAffichage) afficherUneFois();
     else if (change && !location.hash.startsWith("#/pdg")) router();

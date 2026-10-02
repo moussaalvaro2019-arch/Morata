@@ -22,7 +22,7 @@
   function lienWhatsapp(livre) {
     const numero = String(livre.whatsapp || "").replace(/\D/g, "");
     if (!numero) return "";
-    const texte = `Bonjour, je souhaite commander « ${livre.titre} » (${formatPrix(livre.prix)}) vu sur Morata.`;
+    const texte = `Bonjour, je souhaite commander « ${livre.titre} » (${formatPrix(livre.prix)}) vu sur ${(window.MARQUE ? window.MARQUE.nom() : "Kalan")}.`;
     return `https://wa.me/${numero}?text=${encodeURIComponent(texte)}`;
   }
 

@@ -1,6 +1,6 @@
 // Espace PDG (#/pdg) : tableau de bord réservé au propriétaire, séparé de l'espace lecteurs.
 // On y modifie tout le contenu : livres et leurs chapitres, séries, histoires, thèmes,
-// images, textes de la page d'accueil, boutique et mot de passe.
+// images, abonnés, nom de l'application, textes de l'accueil, paiements, boutique et mot de passe.
 (function () {
   const C = () => window.CONTENU;
 
@@ -342,26 +342,27 @@
   const ANAV = [
     ["", "Tableau de bord", "grid"], ["livres", "Livres", "book"], ["series", "Séries", "layers"],
     ["histoires", "Histoires", "story"], ["themes", "Thèmes", "tag"], ["boutique", "Boutique", "cart"],
-    ["parametres", "Paramètres", "cog"]
+    ["abonnes", "Abonnés", "users"], ["parametres", "Paramètres", "cog"]
   ];
   const RUBRIQUE_TYPE = { livres: "livre", series: "serie", histoires: "histoire", themes: "theme" };
   const ANCIENNES = { accueil: "parametres", reglages: "parametres" };
   const accueil = () => ({ ...(window.ACCUEIL_DEFAUT || {}), ...((window.SITE || {}).accueil || {}) });
   const initiales = nom => String(nom || "PDG").split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0].toUpperCase()).join("");
 
+  let attente = 0; // paiements déclarés, pas encore vérifiés
   function coquille(sous, titre, action, corps) {
     const a = accueil();
     const photo = (window.IMAGES || {}).pdg;
     const sortir = C().mode() !== "claude";
     const lien = r => `#/pdg${r ? "/" + r : ""}`;
     const courant = r => (r === sous ? ' aria-current="page"' : "");
-    const marque = `<svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Espace PDG</small></span>`;
+    const marque = window.MARQUE.html("Espace PDG");
     return `
       <div class="shell">
         <aside class="side">
           <div class="brand">${marque}</div>
           <span class="sec">Gestion</span>
-          ${ANAV.map(([r, nom, i]) => `<a class="nav" href="${lien(r)}"${courant(r)}>${ic(i)}${nom}</a>`).join("")}
+          ${ANAV.map(([r, nom, i]) => `<a class="nav" href="${lien(r)}"${courant(r)}>${ic(i)}${nom}${r === "abonnes" && attente ? `<span class="cnt">${attente}</span>` : ""}</a>`).join("")}
           <div class="foot">
             <div class="me">${photo ? `<img src="${echapper(photo)}" alt="">` : `<span class="av">${echapper(initiales(a.nomPDG))}</span>`}<div><b>${echapper(a.nomPDG)}</b><small>Administrateur · PDG</small></div></div>
             <a class="nav" href="#/">${ic("home")}Voir le site lecteurs</a>
@@ -393,6 +394,7 @@
 
     if (RUBRIQUE_TYPE[sous]) return catalogue(app, sous, id);
     if (sous === "boutique") return boutique(app, id);
+    if (sous === "abonnes") return abonnes(app, id);
     if (sous === "parametres") return parametres(app, id);
     return tableauDeBord(app);
   }
@@ -404,11 +406,11 @@
     app.innerHTML = `
       <div class="pro"><div class="pro-in">
         <a class="btn b-sm" style="justify-self:start;background:rgba(255,255,255,.08);color:#E9DDD3" href="#/">${ic("back")}Retour au site</a>
-        <span class="lock"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Espace professionnel</small></span></span>
-        <div><h1>Espace de travail</h1><p style="color:#BBA89B;margin-top:8px">Réservé à la direction de Morata. Les lecteurs n'ont pas accès à cette partie.</p></div>
+        <span class="lock">${window.MARQUE.html("Espace professionnel")}</span>
+        <div><h1>Espace de travail</h1><p style="color:#BBA89B;margin-top:8px">Réservé à la direction de ${echapper(window.MARQUE.nom())}. Les lecteurs n'ont pas accès à cette partie.</p></div>
         <div class="pro-cards">
           <div class="pcard"><span class="ic" style="background:linear-gradient(140deg,#F1D08A,#B98522);color:#2A1406">${ic("crown")}</span><b>Direction</b>
-            <p>Livres, chapitres, histoires, séries, thèmes, images, boutique et paramètres.</p>
+            <p>Livres, chapitres, histoires, séries, thèmes, images, abonnés, boutique et paramètres.</p>
             ${claude ? `<p>Cet espace est réservé au propriétaire de l'application.</p>` : `
             <form id="form-connexion" style="display:grid;gap:10px">
               <input class="inp" id="mdp" type="password" placeholder="Mot de passe" aria-label="Mot de passe" autocomplete="current-password" required>
@@ -418,7 +420,7 @@
             </form>`}
           </div>
           <div class="pcard"><span class="ic" style="background:#2F4A2C;color:#CDE7C6">${ic("book")}</span><b>Lecteurs</b>
-            <p>Pas besoin de compte pour lire : les résumés, les histoires, la boutique et le coach IA sont ouverts à tous.</p>
+            <p>Le premier chapitre est gratuit. Ensuite, les lecteurs créent leur compte et s'abonnent depuis le site.</p>
             <a class="btn b-pri" style="justify-self:start" href="#/livres">Lire les résumés ${ic("arrow")}</a>
           </div>
         </div>
@@ -468,6 +470,7 @@
         <a class="kpi" href="#/pdg/boutique"><small>${ic("cart")}Livres en vente</small><b class="num" id="nb-annonces">…</b><em>boutique WhatsApp</em></a>
       </div>
       ${noteMode()}
+      <div id="alerte-abonnes"></div>
       <div class="cols">
         <div class="card"><h3>Dernières modifications <small>les plus récentes d'abord</small></h3>
           ${histo.length ? `<div class="tw"><table class="t"><thead><tr><th>Élément</th><th>Type</th><th>Date</th></tr></thead><tbody>
@@ -484,11 +487,20 @@
           <a class="btn b-line" href="#/pdg/series/nouveau">${ic("plus")}Série</a>
           <a class="btn b-line" href="#/pdg/histoires/nouveau">${ic("plus")}Histoire</a>
           <a class="btn b-line" href="#/pdg/boutique/nouveau">${ic("cart")}Livre à vendre</a>
+          <a class="btn b-line" href="#/pdg/abonnes">${ic("users")}Abonnés</a>
           <a class="btn b-line" href="#/pdg/parametres">${ic("camera")}Photo de l'accueil</a>
         </div>
       </div>`;
     app.innerHTML = coquille("", "Tableau de bord", `<a class="btn b-gold" href="#/pdg/livres/nouveau">${ic("plus")}Nouveau livre</a>`, corps);
     app.querySelectorAll("[data-lien]").forEach(tr => tr.addEventListener("click", () => { location.hash = tr.dataset.lien; }));
+    chargerAbonnes().then(liste => {
+      const zone = app.querySelector("#alerte-abonnes");
+      if (!zone || !liste) return;
+      const n = attente;
+      if (n) zone.innerHTML = `<a class="note ok" href="#/pdg/abonnes" style="text-decoration:none">${ic("bell")}<span><b>${n} paiement${n > 1 ? "s" : ""} à vérifier.</b> Comparez avec votre relevé Wave ou Djamo, puis validez l'abonnement.</span></a>`;
+      const lien = app.querySelector('.side a[href="#/pdg/abonnes"]');
+      if (lien && n && !lien.querySelector(".cnt")) lien.insertAdjacentHTML("beforeend", `<span class="cnt">${n}</span>`);
+    });
     window.BOUTIQUE.stockage().then(s => s.lister()).then(l => {
       const el = app.querySelector("#nb-annonces");
       if (el) el.textContent = l.length;
@@ -707,27 +719,145 @@
     await window.BOUTIQUE.remplirAnnonces(app.querySelector("#annonces"), true, () => { toast("Retiré de la vente", "trash"); boutique(app); });
   }
 
-  // ---------- Paramètres : identité et accueil, mot de passe, sauvegarde ----------
+  // ---------- Abonnés : comptes lecteurs et paiements à vérifier ----------
 
-  const STABS = [["identite", "Identité & accueil", "crown"], ["acces", "Accès PDG", "lock"], ["sauvegarde", "Sauvegarde", "download"]];
-  const ACCUEIL = [
-    { nom: "nomPDG", label: "Nom du PDG (affiché dans l'espace PDG et en bas du site)", type: "texte", demi: true },
-    { nom: "whatsapp", label: "Numéro WhatsApp de contact (avec l'indicatif)", type: "texte", demi: true },
-    { nom: "titre", label: "Grand titre de l'accueil", type: "texte" },
-    { nom: "accent", label: "Fin du titre, en doré", type: "texte" },
-    { nom: "texte", label: "Texte sous le titre", type: "zone", lignes: 3 },
-    { nom: "boutiqueTitre", label: "Bandeau boutique : titre", type: "texte" },
-    { nom: "boutiqueTexte", label: "Bandeau boutique : texte", type: "zone", lignes: 2 }
+  async function chargerAbonnes() {
+    try {
+      const liste = await window.ABO.lister();
+      attente = liste.filter(c => window.ABO.enAttente(c)).length;
+      return liste;
+    } catch { return null; }
+  }
+  const dateCourte = v => v ? new Date(v).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" }) : "";
+  const lienWa = tel => { const n = String(tel || "").replace(/\D/g, ""); return n ? "https://wa.me/" + (n.length === 10 ? "225" + n : n) : ""; };
+  let filtreAbonnes = "tous";
+
+  async function abonnes(app) {
+    const A = window.ABO;
+    app.innerHTML = coquille("abonnes", "Abonnés", "", `<p class="sub">Chargement des comptes…</p>`);
+    let liste;
+    try { liste = await A.lister(); }
+    catch (e) {
+      app.querySelector("#pdg-page").innerHTML = `<div class="note">${ic("bell")}<span>Impossible de lire les comptes : ${echapper(messageErreur(e))}</span></div>`;
+      return;
+    }
+    liste.sort((a, b) => Number(A.enAttente(b)) - Number(A.enAttente(a)) || String(b.creeLe).localeCompare(String(a.creeLe)));
+    attente = liste.filter(c => A.enAttente(c)).length;
+    const r = A.reglages();
+    const actifs = liste.filter(c => A.actif(c));
+    const fcfa = parseInt(String(r.prixFcfa).replace(/\D/g, ""), 10) || 0;
+    const groupes = { tous: () => true, attente: c => A.enAttente(c), actifs: c => A.actif(c), autres: c => !A.actif(c) && !A.enAttente(c) };
+    const visibles = liste.filter(groupes[filtreAbonnes] || groupes.tous);
+    const actions = c => {
+      const b = [];
+      if (A.enAttente(c)) b.push(`<button class="btn b-pri b-sm" type="button" data-action="valider" data-id="${echapper(c.id)}">${ic("check")}Valider 30 j</button>`,
+        `<button class="btn b-line b-sm" type="button" data-action="refuser" data-id="${echapper(c.id)}">${ic("x")}Refuser</button>`);
+      else b.push(`<button class="btn b-line b-sm" type="button" data-action="valider" data-id="${echapper(c.id)}">${ic("plus")}${A.actif(c) ? "Prolonger" : "Offrir"} 30 j</button>`);
+      if (lienWa(c.telephone)) b.push(`<a class="btn b-line b-sm" href="${lienWa(c.telephone)}" target="_blank" rel="noopener" aria-label="WhatsApp">${ic("chat")}</a>`);
+      b.push(`<button class="btn b-bad b-sm" type="button" data-action="supprimer" data-id="${echapper(c.id)}" aria-label="Supprimer le compte">${ic("trash")}</button>`);
+      return b.join("");
+    };
+    const corps = `
+      <div class="kpis">
+        <button class="kpi" type="button" data-groupe="tous"><small>${ic("users")}Inscrits</small><b class="num">${liste.length}</b><em>comptes lecteurs</em></button>
+        <button class="kpi" type="button" data-groupe="actifs"><small>${ic("crown")}Abonnés actifs</small><b class="num">${actifs.length}</b><em>${echapper(r.prixEuro)} € / mois chacun</em></button>
+        <button class="kpi${attente ? " hl" : ""}" type="button" data-groupe="attente"><small>${ic("bell")}À vérifier</small><b class="num">${attente}</b><em>paiements déclarés</em></button>
+        <div class="kpi"><small>${ic("tag")}Revenu du mois</small><b class="num">${(actifs.length * fcfa).toLocaleString("fr-FR")}</b><em>F CFA estimés</em></div>
+      </div>
+      <div class="note ok">${ic("shield")}<span>Quand un lecteur déclare un paiement, retrouvez-le dans votre application Wave ou Djamo (montant et numéro), puis touchez <b>Valider</b> : l'abonnement s'ouvre pour 30 jours.${r.heuresProvisoires ? ` En attendant, il peut lire pendant ${r.heuresProvisoires} h.` : ""}</span></div>
+      ${A.moyensVisibles().length ? "" : `<a class="note" href="#/pdg/parametres/abonnement" style="text-decoration:none">${ic("bell")}<span>Aucun moyen de paiement n'est affiché aux lecteurs. Ajoutez un numéro dans Paramètres › Abonnement.</span></a>`}
+      ${r.obligatoire !== "oui" ? `<div class="note">${ic("bell")}<span>L'abonnement est désactivé : une simple inscription suffit pour tout lire.</span></div>` : ""}
+      <div class="chips" style="margin:0">${[["tous", "Tous"], ["attente", "À vérifier"], ["actifs", "Actifs"], ["autres", "Sans abonnement"]].map(([v, t]) =>
+        `<button class="chip" type="button" data-groupe="${v}" aria-pressed="${filtreAbonnes === v}">${t}</button>`).join("")}</div>
+      ${visibles.length ? `<div class="card"><div class="tw"><table class="t"><thead><tr><th>Lecteur</th><th>Paiement déclaré</th><th>Statut</th><th></th></tr></thead><tbody>
+        ${visibles.map(c => { const e = A.etat(c); return `<tr>
+          <td><b>${echapper(c.nom)}</b><br><span class="sub num">${echapper(c.telephone || "")}</span><br><span class="sub">inscrit le ${dateCourte(c.creeLe)}</span></td>
+          <td>${c.paiement ? `<b>${echapper(c.paiement.moyen)}</b> · <span class="num">${echapper(c.paiement.reference)}</span><br><span class="sub">le ${dateCourte(c.paiement.le)}</span>` : `<span class="sub">Aucun</span>`}</td>
+          <td><span class="pill ${e.pastille}">${e.texte}</span>${c.jusqua && c.statut === "actif" ? `<br><span class="sub">jusqu'au ${dateCourte(c.jusqua)}</span>` : ""}</td>
+          <td><div class="acts" style="justify-content:flex-end;flex-wrap:nowrap">${actions(c)}</div></td></tr>`; }).join("")}
+      </tbody></table></div></div>` : `<div class="empty">${ic("users")}${liste.length ? "Aucun compte dans ce filtre." : "Aucun lecteur inscrit pour l'instant. Ils s'inscrivent après le chapitre gratuit."}</div>`}`;
+    app.innerHTML = coquille("abonnes", "Abonnés", `<a class="btn b-line" href="#/pdg/parametres/abonnement">${ic("cog")}Prix et paiements</a>`, corps);
+    app.querySelectorAll("[data-groupe]").forEach(b => b.addEventListener("click", () => { filtreAbonnes = b.dataset.groupe; abonnes(app); }));
+    app.querySelectorAll("[data-action]").forEach(b => b.addEventListener("click", async () => {
+      const c = liste.find(x => x.id === b.dataset.id);
+      if (!c) return;
+      const action = b.dataset.action;
+      if (action === "supprimer" && b.dataset.confirme !== "1") { b.dataset.confirme = "1"; b.innerHTML = `${ic("trash")}Supprimer ?`; return; }
+      b.disabled = true;
+      try {
+        if (action === "valider") await A.valider(c, 30);
+        else if (action === "refuser") await A.refuser(c);
+        else await A.supprimer(c);
+        toast({ valider: `Abonnement de ${c.nom} ouvert pour 30 jours`, refuser: "Paiement refusé", supprimer: "Compte supprimé" }[action], { valider: "check", refuser: "x", supprimer: "trash" }[action]);
+        abonnes(app);
+      } catch (e) { b.disabled = false; toast(messageErreur(e), "x"); }
+    }));
+  }
+
+  // ---------- Paramètres : identité, accueil, abonnement et paiements, accès, sauvegarde ----------
+
+  const STABS = [
+    ["identite", "Identité", "crown"], ["accueil", "Page d'accueil", "home"], ["abonnement", "Abonnement & paiements", "tag"],
+    ["acces", "Accès PDG", "lock"], ["sauvegarde", "Sauvegarde", "download"]
   ];
+  const BLOCS = {
+    identite: [
+      { titre: "Nom de l'application", petit: "affiché dans le logo, l'onglet et les messages", schema: [
+        { nom: "nomApp", label: "Nom", type: "texte", demi: true, requis: true },
+        { nom: "slogan", label: "Slogan sous le nom", type: "texte", demi: true }
+      ] },
+      { titre: "Contact", petit: "en bas du site et dans le menu", schema: [
+        { nom: "nomPDG", label: "Nom du PDG", type: "texte", demi: true },
+        { nom: "whatsapp", label: "Numéro WhatsApp (avec l'indicatif, ex. 225…)", type: "texte", demi: true }
+      ] },
+      { titre: "Réseaux sociaux", petit: "liens affichés en bas du site", schema: [
+        { nom: "reseaux", label: "Liens", type: "liste", nouveau: "Ajouter un réseau", nomItem: "Réseau", sous: [
+          { nom: "nom", label: "Nom (Facebook, TikTok, Instagram…)", type: "texte", demi: true },
+          { nom: "lien", label: "Adresse (https://…)", type: "texte", demi: true }
+        ] }
+      ] }
+    ],
+    accueil: [
+      { titre: "Textes de l'accueil", schema: [
+        { nom: "titre", label: "Grand titre", type: "texte" },
+        { nom: "accent", label: "Fin du titre, en doré", type: "texte" },
+        { nom: "texte", label: "Texte sous le titre", type: "zone", lignes: 3 },
+        { nom: "boutiqueTitre", label: "Bandeau boutique : titre", type: "texte" },
+        { nom: "boutiqueTexte", label: "Bandeau boutique : texte", type: "zone", lignes: 2 }
+      ] }
+    ],
+    abonnement: [
+      { titre: "Abonnement", petit: "ce que paient les lecteurs", schema: [
+        { nom: "obligatoire", label: "Abonnement payant", type: "choix", options: [{ v: "oui", t: "Oui : payer pour lire la suite" }, { v: "non", t: "Non : l'inscription gratuite suffit" }] },
+        { nom: "prixEuro", label: "Prix par mois (€)", type: "texte", demi: true },
+        { nom: "prixFcfa", label: "Prix par mois (F CFA)", type: "texte", demi: true },
+        { nom: "chapitresGratuits", label: "Chapitres gratuits par livre ou série", type: "nombre", demi: true },
+        { nom: "heuresProvisoires", label: "Heures de lecture en attendant votre validation (0 = aucune)", type: "nombre", demi: true }
+      ] },
+      { titre: "Moyens de paiement", petit: "seuls ceux qui ont un numéro ou un lien sont affichés", schema: [
+        { nom: "moyens", label: "Moyens", type: "liste", nouveau: "Ajouter un moyen de paiement", nomItem: "Moyen", sous: [
+          { nom: "nom", label: "Nom (Wave, Djamo, Orange Money…)", type: "texte", demi: true },
+          { nom: "numero", label: "Numéro ou compte affiché aux lecteurs", type: "texte", demi: true },
+          { nom: "details", label: "Consigne pour le lecteur", type: "zone", lignes: 2 },
+          { nom: "lien", label: "Lien de paiement (facultatif, https://…), ex. lien Wave Business", type: "texte" }
+        ] }
+      ] }
+    ]
+  };
+  const valeursOnglet = onglet => onglet === "abonnement" ? window.ABO.reglages() : accueil();
 
   function parametres(app, onglet) {
     onglet = STABS.some(t => t[0] === onglet) ? onglet : "identite";
     let corps = "";
-    if (onglet === "identite") {
+    if (BLOCS[onglet]) {
+      const v = valeursOnglet(onglet);
+      const djamoVide = onglet === "abonnement" && v.moyens.some(m => /djamo/i.test(m.nom || "") && !String(m.numero || "").trim());
       corps = `<form class="formulaire ed-formulaire" id="ed-form" novalidate>
-        <div class="card"><h3>Photo de fond de l'accueil <small>un voile sombre garde le texte lisible</small></h3><div id="img-banniere"></div></div>
-        <div class="card"><h3>Votre photo <small>affichée dans l'espace PDG</small></h3><div id="img-pdg"></div></div>
-        <div class="card"><h3>Textes</h3>${rendreObjet(ACCUEIL, accueil())}</div>
+        ${onglet === "identite" ? `<div class="card"><h3>Votre photo <small>affichée dans l'espace PDG</small></h3><div id="img-pdg"></div></div>` : ""}
+        ${onglet === "accueil" ? `<div class="card"><h3>Photo de fond de l'accueil <small>un voile sombre garde le texte lisible</small></h3><div id="img-banniere"></div></div>` : ""}
+        ${onglet === "abonnement" ? `<div class="note ok">${ic("shield")}<span>Le lecteur paie avec l'un de ces moyens puis déclare son paiement ; vous le validez dans Abonnés. Pour un encaissement automatique, collez un lien de paiement (Wave Business, CinetPay…) dans « Lien de paiement ».</span></div>` : ""}
+        ${djamoVide ? `<div class="note">${ic("bell")}<span>Le numéro de compte Djamo n'est pas rempli : Djamo n'est pas encore proposé aux lecteurs. Saisissez-le ci-dessous si vous voulez l'afficher.</span></div>` : ""}
+        ${BLOCS[onglet].map((b, i) => `<div class="card" data-bloc="${i}"><h3>${b.titre}${b.petit ? ` <small>${b.petit}</small>` : ""}</h3>${rendreObjet(b.schema, v)}</div>`).join("")}
         <div class="acts" style="justify-content:flex-end"><span class="ed-message" id="ed-message" aria-live="polite" style="margin-right:auto"></span><button class="btn b-pri" type="submit">${ic("check")}Enregistrer</button></div>
       </form>`;
     } else if (onglet === "acces") {
@@ -752,29 +882,34 @@
       <div class="stabs" role="tablist">${STABS.map(([id, nom, i]) => `<a class="stab" role="tab" href="#/pdg/parametres/${id}" aria-selected="${id === onglet}">${ic(i)}${nom}</a>`).join("")}</div>
       ${corps}`);
 
-    if (onglet === "identite") {
+    if (BLOCS[onglet]) {
       const form = app.querySelector("#ed-form");
       const message = app.querySelector("#ed-message");
       const changement = () => { message.textContent = "Non enregistré"; message.classList.remove("ed-erreur"); };
-      const banniere = champImage("banniere", "Photo de fond de la bannière d'accueil.", `<span class="ed-image__defaut">Fond sombre à motif bogolan</span>`);
-      const photo = champImage("pdg", "Votre portrait, en carré de préférence.", `<span class="ed-image__defaut">${echapper(initiales(accueil().nomPDG))}</span>`, "imgp-");
-      // Deux champs image sur la même page : chacun dans sa zone, avec ses propres identifiants.
-      const zoneB = app.querySelector("#img-banniere"), zoneP = app.querySelector("#img-pdg");
-      zoneB.innerHTML = banniere.html; banniere.brancher(zoneB, changement);
-      zoneP.innerHTML = photo.html; photo.brancher(zoneP, changement);
+      const images = [];
+      if (onglet === "identite") images.push(["#img-pdg", champImage("pdg", "Votre portrait, en carré de préférence.", `<span class="ed-image__defaut">${echapper(initiales(accueil().nomPDG))}</span>`, "imgp-")]);
+      if (onglet === "accueil") images.push(["#img-banniere", champImage("banniere", "Photo de fond de la bannière d'accueil.", `<span class="ed-image__defaut">Fond sombre à motif bogolan</span>`)]);
+      images.forEach(([sel, champ]) => { const z = app.querySelector(sel); z.innerHTML = champ.html; champ.brancher(z, changement); });
       brancherFormulaire(form, changement);
       form.addEventListener("submit", async ev => {
         ev.preventDefault();
         const bouton = form.querySelector("button[type=submit]");
+        const lu = {};
+        BLOCS[onglet].forEach((b, i) => Object.assign(lu, lireObjet(form.querySelector(`[data-bloc="${i}"] > .ed-objet`), b.schema)));
+        if (onglet === "identite" && !lu.nomApp) { message.textContent = "Le nom de l'application est obligatoire."; message.classList.add("ed-erreur"); return; }
+        if (lu.reseaux) lu.reseaux = lu.reseaux.filter(x => x.nom || x.lien);
+        if (lu.moyens) lu.moyens = lu.moyens.filter(x => x.nom || x.numero || x.lien);
+        const mauvaisLien = [...(lu.reseaux || []), ...(lu.moyens || [])].find(x => x.lien && !/^https:\/\/\S+$/.test(x.lien));
+        if (mauvaisLien) { message.textContent = `Le lien de « ${mauvaisLien.nom || "?"} » doit commencer par https://`; message.classList.add("ed-erreur"); return; }
         bouton.disabled = true;
         message.textContent = "Enregistrement…";
         try {
-          await C().enregistrer("site", "accueil", lireObjet(form.querySelector(".card .ed-objet"), ACCUEIL));
-          await banniere.enregistrer();
-          await photo.enregistrer();
-          message.textContent = "Enregistré ✓";
+          const site = window.SITE || {};
+          if (onglet === "abonnement") await C().enregistrer("site", "paiement", { ...(site.paiement || {}), ...lu });
+          else await C().enregistrer("site", "accueil", { ...(site.accueil || {}), ...lu });
+          for (const [, champ] of images) await champ.enregistrer();
           toast("Paramètres enregistrés");
-          parametres(app, "identite");
+          parametres(app, onglet);
         } catch (e) { message.textContent = messageErreur(e); message.classList.add("ed-erreur"); bouton.disabled = false; }
       });
     }
@@ -794,7 +929,7 @@
     if (sauvegarde) sauvegarde.addEventListener("click", () => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(new Blob([C().sauvegarde()], { type: "application/json" }));
-      a.download = `morata-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = `${window.MARQUE.nom().toLowerCase().replace(/[^a-z0-9]+/g, "-")}-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });

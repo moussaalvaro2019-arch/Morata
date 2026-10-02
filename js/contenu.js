@@ -90,6 +90,8 @@
       this.db = await window.claude.use("db").catch(() => null);
       if (!this.db) return false;
       this.user = await window.claude.use("user").catch(() => null);
+      // canEdit() renvoie une promesse : on garde la réponse une fois pour toutes.
+      this.admin = this.user ? !!(await Promise.resolve(this.user.canEdit()).catch(() => false)) : false;
       return true;
     },
     async lire() {
@@ -100,7 +102,7 @@
     },
     async ecrire(cle, valeur) { await this.db.collection("contenu").doc(versDoc(cle)).set(valeur); },
     async effacer(cle) { await this.db.collection("contenu").doc(versDoc(cle)).delete(); },
-    estAdmin() { return this.user ? this.user.canEdit() : false; },
+    estAdmin() { return this.admin === true; },
     async connexion() { return this.estAdmin(); }
   };
 
