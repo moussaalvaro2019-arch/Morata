@@ -99,6 +99,7 @@ function polyGeo(tris){ // tris : [[x,y,z]*3]... en coordonnées monde, uv = pro
 function build(s, cfg, mode){
   let g;
   if(s.k === 'box'){ g = boxGeo(Math.max(.001, s.w), Math.max(.001, s.h), Math.max(.001, s.d)); const m = new THREE.Mesh(g, material(s.slot, cfg, mode)); m.position.set(s.x + s.w/2, s.z + s.h/2, s.y + s.d/2); if(s.rot){ m.rotation.y = -s.rot; } return m; }
+  if(s.k === 'obox'){ g = boxGeo(Math.max(.001, s.L), Math.max(.001, s.h), Math.max(.001, s.t)); const m = new THREE.Mesh(g, material(s.slot, cfg, mode)); m.position.set(s.cx, s.z + s.h/2, s.cy); m.rotation.y = -s.ang; return m; }
   if(s.k === 'cyl'){ g = new THREE.CylinderGeometry(s.r, s.r2 ?? s.r, s.h, s.seg || 20); const m = new THREE.Mesh(g, material(s.slot, cfg, mode)); m.position.set(s.x, s.z + s.h/2, s.y); return m; }
   if(s.k === 'sphere'){ g = new THREE.SphereGeometry(s.r, 14, 10); const m = new THREE.Mesh(g, material(s.slot, cfg, mode)); m.position.set(s.x, s.z, s.y); m.scale.y = s.sy || 1; return m; }
   if(s.k === 'prism'){ const sh = new THREE.Shape(s.pts.map(([x,y]) => new THREE.Vector2(x, -y))); g = new THREE.ExtrudeGeometry(sh, {depth:s.h, bevelEnabled:false}); g.rotateX(-Math.PI/2); const m = new THREE.Mesh(g, material(s.slot, cfg, mode)); m.position.y = s.z; return m; }
@@ -130,7 +131,7 @@ function viewer(host, opt={}){
     target.copy(c); target.y = Math.min(c.y, s.y*.4);
     rad = R*1.55 + 6;
     const P = {persp:[-.75, 1.05], face:[0, 1.35], arriere:[Math.PI, 1.35], cote:[-Math.PI/2, 1.35], dessus:[0, .05], droite:[Math.PI/2, 1.35]}[preset || 'persp'];
-    th = P[0]; ph = P[1]; if(preset === 'dessus') rad = R*1.25 + 4; place();
+    th = P[0] + (opt.flip ? Math.PI : 0); ph = P[1]; if(preset === 'dessus') rad = R*1.25 + 4; place();
   };
   V.setSun = h => { V.hour = h; const t = (h - 6)/12, el = Math.max(.08, Math.sin(t*Math.PI));
     const c = box ? box.getCenter(new THREE.Vector3()) : new THREE.Vector3(); const d = 60;
@@ -158,7 +159,7 @@ function viewer(host, opt={}){
     need = true;
   };
   V.set = (solids, cfg, keepView) => { V.solids = solids; if(cfg) V.cfg = cfg; for(const k in MCACHE) delete MCACHE[k];
-    const b = new THREE.Box3(); solids.filter(s => !s.ground).forEach(s => { if(s.k === 'box') b.expandByPoint(new THREE.Vector3(s.x, s.z, s.y)).expandByPoint(new THREE.Vector3(s.x + s.w, s.z + s.h, s.y + s.d)); else if(s.k === 'cyl') b.expandByPoint(new THREE.Vector3(s.x - s.r, s.z, s.y - s.r)).expandByPoint(new THREE.Vector3(s.x + s.r, s.z + s.h, s.y + s.r)); else if(s.k === 'tris') s.tris.forEach(t => t.forEach(p => b.expandByPoint(new THREE.Vector3(...p)))); else if(s.k === 'prism') s.pts.forEach(([x,y]) => b.expandByPoint(new THREE.Vector3(x, s.z, y)).expandByPoint(new THREE.Vector3(x, s.z + s.h, y))); });
+    const b = new THREE.Box3(); solids.filter(s => !s.ground).forEach(s => { if(s.k === 'box') b.expandByPoint(new THREE.Vector3(s.x, s.z, s.y)).expandByPoint(new THREE.Vector3(s.x + s.w, s.z + s.h, s.y + s.d)); else if(s.k === 'obox') b.expandByPoint(new THREE.Vector3(s.cx - s.L/2, s.z, s.cy - s.L/2)).expandByPoint(new THREE.Vector3(s.cx + s.L/2, s.z + s.h, s.cy + s.L/2)); else if(s.k === 'cyl') b.expandByPoint(new THREE.Vector3(s.x - s.r, s.z, s.y - s.r)).expandByPoint(new THREE.Vector3(s.x + s.r, s.z + s.h, s.y + s.r)); else if(s.k === 'tris') s.tris.forEach(t => t.forEach(p => b.expandByPoint(new THREE.Vector3(...p)))); else if(s.k === 'prism') s.pts.forEach(([x,y]) => b.expandByPoint(new THREE.Vector3(x, s.z, y)).expandByPoint(new THREE.Vector3(x, s.z + s.h, y))); });
     if(b.isEmpty()) b.set(new THREE.Vector3(-5, 0, -5), new THREE.Vector3(5, 3, 5));
     box = b; V.box = b; V.rebuild(); V.setSun(V.hour); if(!keepView) V.frame('persp'); };
   V.matChange = () => { for(const k in MCACHE) delete MCACHE[k]; V.rebuild(); };

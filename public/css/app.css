@@ -587,3 +587,22 @@ table.t.click td.mono b{color:var(--navy)}
 .planbox.p3d{padding:6px}
 @media(max-width:900px){.v3d{grid-template-columns:1fr}.v3d-view{height:56vh}.v3d-side{max-height:none}}
 .v3d-sec input[type=range]{width:100%}
+
+/* ---------- Atelier : vue 3D ---------- */
+.cview{position:relative;min-width:0;min-height:0;display:grid;grid-template-columns:1fr}
+.cview .ccanvas{min-height:0}
+.cview .c3d{display:none;position:relative;min-width:0;min-height:0;background:#DCE7F1;overflow:hidden}
+.cview.m-3d .ccanvas{display:none}
+.cview.m-3d .c3d,.cview.m-split .c3d{display:block}
+.cview.m-split{grid-template-columns:1fr 1fr}
+.cview.m-split .c3d{border-left:2px solid #1E3150}
+@media(max-width:960px){.cview.m-split{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.cview.m-split .c3d{border-left:0;border-top:2px solid #1E3150}}
+.c3load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;color:#5E6B7A;font-weight:600}
+.c3tools{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:5px;z-index:2}
+.c3tools .ibtn{width:32px;height:32px;background:rgba(255,255,255,.92)}
+.c3bar{position:absolute;right:8px;bottom:8px;display:flex;gap:8px;align-items:center;background:rgba(16,29,49,.82);padding:6px 8px;border-radius:10px;z-index:2;flex-wrap:wrap}
+.c3bar .seg button{background:#17263B;border-color:#2B4060;color:#C8D3E0;padding:4px 8px;font-size:12px}
+.c3bar .seg button.on{background:var(--or);border-color:var(--or);color:#fff}
+.c3d canvas{display:block}
+.ctools .tsep{font:600 9.5px var(--fm);color:#6F86A3;letter-spacing:.1em;padding:6px 0 2px;border-top:1px solid #1E3150;width:100%;text-align:center}
+#cLv{width:auto;max-width:150px}
