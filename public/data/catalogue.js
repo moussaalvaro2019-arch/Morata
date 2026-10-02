@@ -114,7 +114,7 @@ A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"so
   "Dimensionnement des semelles et choix des fondations",
   "Fouilles sous la nappe et rabattement",
   "Sols difficiles : vases lagunaires, argiles gonflantes, remblais, talus instables"
- ], src:"data/cours/geo.js?v=bc9e1ed3", chapitres:[
+ ], src:"data/cours/geo.js?v=4a51a8ae", chapitres:[
   {id:"geo-1", niv:1, titre:"Le sol : origine, constituants et paramètres d'état", duree:60, nq:5, nex:4},
   {id:"geo-10", niv:1, titre:"Les sols de Côte d'Ivoire et les sols difficiles", duree:45, nq:5, nex:3},
   {id:"geo-6", niv:1, titre:"Reconnaître les sols sur le terrain : puits, sondages et essais simples", duree:50, nq:5, nex:3},
@@ -189,26 +189,41 @@ A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", 
   {id:"mdf-8", niv:3, titre:"Écoulements à surface libre : caniveaux et dalots", duree:30, nq:4, nex:0},
   {id:"mdf-9", niv:3, titre:"Coup de bélier et protection des réseaux", duree:25, nq:4, nex:0}
  ]});
-A.addMatiere({id:"metre", titre:"Métré", court:"Métré", groupe:"gest", icone:"list", couleur:"#2D6FB5", niveau:"Débutant", heures:26, ordre:3, prerequis:["math", "tech"], resume:"Règles du métré, terrassements, fondations, béton armé, maçonnerie, enduits, revêtements, menuiseries et peinture, jusqu'au devis quantitatif et estimatif.", objectifs:[
-  "Appliquer les règles et conventions du métré",
+A.addMatiere({id:"metre", titre:"Métré", court:"Métré", groupe:"gest", icone:"list", couleur:"#2D6FB5", niveau:"Débutant", heures:70, ordre:3, prerequis:["math", "tech"], resume:"Mesurer les ouvrages sur plans et sur chantier, de la fouille à la peinture : règles du métré, lecture des plans, géométrie utile, terrassements, fondations, maçonneries, béton armé et aciers, planchers, toitures, revêtements, lots techniques et VRD, jusqu'au sous-détail de prix, au devis quantitatif et estimatif et aux situations de travaux, avec applications chiffrées et exercices corrigés.", objectifs:[
+  "Appliquer les règles et conventions du métré et lire les plans",
   "Calculer les quantités de chaque lot avec la bonne unité",
-  "Établir le sous-détail des matériaux (ciment, sable, gravier, acier, agglos)",
-  "Construire un DQE et son récapitulatif"
+  "Établir le sous-détail des matériaux pour les commandes",
+  "Établir le sous-détail d'un prix unitaire (déboursé sec, coefficient K)",
+  "Construire un BPU, un DQE et son récapitulatif",
+  "Établir des attachements, des situations et un décompte"
  ], applications:[
-  "Avant-métré d'une maison à partir des plans",
-  "Commande des matériaux",
-  "Vérification d'un devis d'entreprise",
+  "Avant-métré complet d'une maison à partir des plans",
+  "Commande des matériaux (ciment, sable, gravier, acier, agglos)",
+  "Réponse à un appel d'offres et vérification d'un devis",
+  "Situations mensuelles de travaux",
   "Utilisation de l'outil Métré de la plateforme"
- ], src:"data/cours/metre.js?v=a782faff", chapitres:[
-  {id:"metre-1", niv:1, titre:"Principes et règles du métré", duree:25, nq:4, nex:0},
-  {id:"metre-2", niv:1, titre:"Terrassements et fondations", duree:30, nq:4, nex:0},
-  {id:"metre-4", niv:1, titre:"Maçonnerie et enduits", duree:30, nq:4, nex:0},
-  {id:"metre-3", niv:2, titre:"Béton armé : bétons, coffrages et aciers", duree:35, nq:4, nex:0},
-  {id:"metre-5", niv:2, titre:"Revêtements, menuiseries et peinture", duree:25, nq:4, nex:0},
-  {id:"metre-6", niv:2, titre:"Du métré au devis quantitatif et estimatif", duree:30, nq:4, nex:0},
-  {id:"metre-7", niv:3, titre:"Métré des lots techniques : électricité, plomberie, climatisation", duree:30, nq:4, nex:0},
-  {id:"metre-8", niv:3, titre:"Métré des VRD et des ouvrages extérieurs", duree:30, nq:4, nex:0},
-  {id:"metre-9", niv:3, titre:"Attachements, situations et décomptes", duree:30, nq:4, nex:0}
+ ], src:"data/cours/metre.js?v=01818a9f", chapitres:[
+  {id:"metre-1", niv:1, titre:"Le métré : rôle, vocabulaire et règles de base", duree:50, nq:5, nex:5},
+  {id:"metre-10", niv:1, titre:"Lire les plans pour métrer : échelles, cotes et documents", duree:45, nq:5, nex:5},
+  {id:"metre-11", niv:1, titre:"La géométrie du métreur : surfaces, volumes et pentes", duree:50, nq:5, nex:5},
+  {id:"metre-2", niv:1, titre:"Métré des terrassements", duree:55, nq:5, nex:5},
+  {id:"metre-12", niv:1, titre:"Métré des fondations, soubassements et dallages", duree:60, nq:5, nex:5},
+  {id:"metre-4", niv:1, titre:"Métré des maçonneries", duree:55, nq:5, nex:5},
+  {id:"metre-13", niv:1, titre:"Métré des enduits, chapes et ravalements", duree:50, nq:5, nex:5},
+  {id:"metre-3", niv:2, titre:"Métré du béton armé d'élévation : bétons et coffrages", duree:60, nq:5, nex:5},
+  {id:"metre-14", niv:2, titre:"Métré des aciers : nomenclatures, poids et commandes", duree:60, nq:5, nex:5},
+  {id:"metre-15", niv:2, titre:"Métré des planchers à corps creux, dalles et escaliers", duree:55, nq:5, nex:5},
+  {id:"metre-16", niv:2, titre:"Métré des charpentes, couvertures et étanchéités", duree:55, nq:5, nex:5},
+  {id:"metre-5", niv:2, titre:"Métré des revêtements de sols et de murs", duree:50, nq:5, nex:5},
+  {id:"metre-17", niv:2, titre:"Métré des menuiseries, faux plafonds et peintures", duree:50, nq:5, nex:5},
+  {id:"metre-20", niv:2, titre:"Le sous-détail des matériaux et les approvisionnements", duree:50, nq:5, nex:5},
+  {id:"metre-6", niv:2, titre:"Du métré au devis : BPU, DQE et récapitulatif", duree:55, nq:5, nex:5},
+  {id:"metre-18", niv:3, titre:"Le sous-détail de prix : déboursé sec et prix de vente", duree:60, nq:5, nex:5},
+  {id:"metre-7", niv:3, titre:"Métré des lots techniques : électricité, plomberie, climatisation", duree:55, nq:5, nex:5},
+  {id:"metre-8", niv:3, titre:"Métré des VRD et des aménagements extérieurs", duree:55, nq:5, nex:5},
+  {id:"metre-21", niv:3, titre:"Les cubatures de terrassement : profils et carroyage", duree:60, nq:5, nex:5},
+  {id:"metre-9", niv:3, titre:"Attachements, situations de travaux et décomptes", duree:55, nq:5, nex:5},
+  {id:"metre-22", niv:3, titre:"Étude de cas : avant-métré et devis complet d'une maison", duree:75, nq:5, nex:5}
  ]});
 A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", groupe:"struct", icone:"cube", couleur:"#5B6B7F", niveau:"Avancé", heures:20, ordre:1, prerequis:["om", "sp"], resume:"Contraintes, déformations, loi de Hooke, cercle de Mohr et critères de résistance : la base théorique de la RDM, du béton armé et de la géotechnique.", objectifs:[
   "Comprendre les hypothèses du milieu continu",

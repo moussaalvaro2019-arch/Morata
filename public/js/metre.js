@@ -46,7 +46,7 @@ const pu = code => { const o = (A.cfg().prix || {})[code]; return o != null ? +o
 /* sous-détail des matériaux par unité d'ouvrage */
 const MAT = {
   ba:{ciment:7, sable:.4, gravier:.8}, bp:{ciment:3, sable:.4, gravier:.8},
-  dallage:{ciment:.48, sable:.032, gravier:.064, treillis:1.1}, hourdis:{ciment:1, sable:.02, gravier:.04, treillis:1.1, hourdis:8.3, poutrelles:1.7},
+  dallage:{ciment:.48, sable:.032, gravier:.064, treillis:1.1}, hourdis:{ciment:.5, sable:.03, gravier:.06, treillis:1.1, hourdis:8.3, poutrelles:1.7},
   agg15:{agg15:12.5, ciment:.09, sable:.015}, agg10:{agg10:12.5, ciment:.06, sable:.01}, aggp:{aggp:12.5, ciment:.09, sable:.015},
   enduit:{ciment:.13, sable:.018}, carreau:{carreaux:1.08, ciment:.1, sable:.01}, faience:{faience:1.08}, linteau:{ciment:.21, sable:.012, gravier:.024, acier:3.5},
   acier:{acier:1}, heris:{pierres:.16}
