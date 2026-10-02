@@ -523,6 +523,9 @@ $$ 60 cm ≤ 2h + g ≤ 64 cm
 /* ------------------------------------------------------------------ */
 A.AZ.projets = [
 {id:'eco', titre:'Maison économique F3', standing:'Économique', niveauxTxt:'Rez-de-chaussée', surface:70, budget:[16000000, 22000000], duree:'5 à 6 mois', toiture:'pente', entrees:2,
+ site:{ville:'Abidjan, Yopougon', alt:24.60, tn:-0.20, sol:{sigma:1.5, nature:'Latérite argileuse compacte', prof:0.90}, orient:'S', borne:[-3, -4]},
+ toit:{type:'2 pans', pente:15, debord:0.6, couverture:'Tôles bac aluminium 6/10e', charpente:'Bois traité (fermes en W)', entraxe:1.2},
+ coupes:[{nom:'A', x:5.9}, {nom:'B', y:2.0}],
  gamme:{carreau:.75, faience:.8, fenetre:.65, porte:.7, portee:.6, sanit:.7, fplaf:.8, peinti:.85, peinte:.85, tableau:.7, charpente:.9},
  resume:'2 chambres, séjour, cuisine, salle d\'eau, WC, magasin et buanderie sur 76 m² d\'emprise.',
  description:`Maison de plain-pied conçue pour un budget maîtrisé et une **extension future** possible (troisième chambre à l'arrière). La structure est en **poteaux et chaînages en béton armé** avec un remplissage en **agglos creux de 15**, sur **semelles isolées reliées par des longrines**. La toiture est en **tôles bac aluminium** sur charpente en bois traité, avec faux plafond.`,
@@ -558,11 +561,14 @@ A.AZ.projets = [
  lots:[['Terrassements & fondations',18],['Élévation béton armé & maçonnerie',27],['Toiture',13],['Menuiseries',10],['Électricité',7],['Plomberie sanitaire',7],['Revêtements & enduits',12],['Peinture',6]]
 },
 {id:'moyen', titre:'Villa moyen standing F5', standing:'Moyen standing', niveauxTxt:'Rez-de-chaussée', surface:135, budget:[42000000, 55000000], duree:'7 à 9 mois', toiture:'pente', entrees:2,
+ site:{ville:'Abidjan, Cocody Angré', alt:58.20, tn:-0.25, sol:{sigma:1.8, nature:'Sable argileux latéritique', prof:1.00}, orient:'S', borne:[-4, -5]},
+ toit:{type:'4 pans', pente:17, debord:0.7, couverture:'Tôles bac aluminium 7/10e', charpente:'Métallique (fermes en IPE et pannes en Z)', entraxe:3.0},
+ coupes:[{nom:'A', x:3.0}, {nom:'B', y:5.8}],
  gamme:{carreau:1.2, faience:1.15, fenetre:1.1, porte:1.2, portee:1.4, sanit:1.3, ptl:1.2, charpente:1.3, fplaf:1.2},
  extras:[['Électricité','Climatiseurs split 1,5 CV posés (séjour + 3 chambres)','u',4,450000],['Plomberie sanitaire','Chauffe-eau électrique 100 L posé','u',2,180000],['Menuiseries','Placards et cuisine (meubles bas et hauts)','ens',1,1800000],['Divers','Clôture, portail, allées et aménagements extérieurs','ens',1,3500000]],
  resume:'3 chambres dont une suite parentale, bureau, grand séjour, terrasse couverte, sur 158 m².',
- description:`Villa de plain-pied avec une **suite parentale** (chambre, salle de bains privative), deux chambres, un bureau, un grand séjour ouvert sur une **terrasse couverte**, une cuisine avec cellier. Structure **poteaux-poutres** en béton armé, maçonnerie en agglos de 15, fondations sur **semelles isolées 1,00 × 1,00 m**. Couverture tôle bac alu sur charpente métallique, faux plafond en staff.`,
- struct:{poteau:20, semelle:[100,100,30], longrine:[20,35], chainage:[20,25], prof:1.0, aciers:'Poteaux 4 HA12, cadres HA6/15 · Longrines 4 HA12 · Chaînages 6 HA10 · Semelles nappe HA12/15'},
+ description:`Villa de plain-pied avec une **suite parentale** (chambre, salle de bains privative), deux chambres, un bureau, un grand séjour ouvert sur une **terrasse couverte**, une cuisine avec cellier. Structure **poteaux-poutres** en béton armé, maçonnerie en agglos de 15, fondations sur **semelles isolées de 0,80 × 0,80 m** reliées par des longrines. Couverture tôle bac alu sur charpente métallique, faux plafond en staff.`,
+ struct:{poteau:20, semelle:[100,100,30], longrine:[20,35], chainage:[20,25], prof:1.0, extraPosts:[[0,0],[3.5,0]], extraBeams:[[0,0,7,0],[0,0,0,2]], aciers:'Poteaux 4 HA12, cadres HA6/15 · Longrines 4 HA12 · Chaînages 6 HA10 · Semelles nappe HA12/15'},
  pieces:[
   {n:'Terrasse couverte', t:'terrasse', x:0, y:0, w:7.0, h:2.0},
   {n:'Séjour / salle à manger', t:'sejour', x:0, y:2.0, w:5.6, h:5.0},
@@ -599,10 +605,13 @@ A.AZ.projets = [
  lots:[['Terrassements & fondations',15],['Élévation béton armé & maçonnerie',24],['Toiture & faux plafond',13],['Menuiseries alu & bois',12],['Électricité & climatisation',9],['Plomberie sanitaire',8],['Revêtements & enduits',13],['Peinture & VRD',6]]
 },
 {id:'haut', titre:'Villa haut standing R+1', standing:'Haut standing', niveauxTxt:'R+1 (duplex)', surface:330, budget:[160000000, 210000000], duree:'12 à 16 mois', toiture:'terrasse', entrees:2, tableaux:2,
+ site:{ville:'Abidjan, Riviera Golf', alt:31.40, tn:-0.40, sol:{sigma:2.0, nature:'Sable argileux compact (étude de sol G2)', prof:1.20}, orient:'S', borne:[-4, -5]},
+ toit:{type:'terrasse', acces:false, acrotere:0.6, pente:2},
+ coupes:[{nom:'A', x:7.9}, {nom:'B', y:3.5}],
  gamme:{carreau:2.4, faience:2, plinthe:2, fenetre:1.9, porte:2.2, portee:3.5, sanit:2.6, ptl:1.8, prise:1.5, tableau:2, peinti:1.6, peinte:1.5, enduit:1.2, ba:1.05},
  extras:[['Électricité','Climatisation (splits inverter) posée','u',9,550000],['Électricité','Groupe électrogène 20 kVA + inverseur','ens',1,9500000],['Électricité','Vidéosurveillance, alarme et domotique','ens',1,6000000],['Menuiseries','Cuisine équipée haut de gamme + dressings','ens',1,11000000],['Menuiseries','Garde-corps et escalier habillé (marbre, inox-verre)','ens',1,6500000],['Divers','Piscine 8 × 4 m avec local technique','ens',1,18000000],['Divers','Clôture, portail motorisé, pavés, jardin, éclairage extérieur','ens',1,12000000]],
  resume:'Duplex de 4 chambres, double séjour, bureau, salon familial et terrasse à l\'étage.',
- description:`Duplex haut de gamme : au rez-de-chaussée, grand salon, salle à manger, cuisine équipée avec office, bureau, chambre d'amis avec salle d'eau ; à l'étage, **suite parentale** (dressing, salle de bains), deux chambres avec salles d'eau, salon familial et **grande terrasse**. Structure **poteaux-poutres** et **planchers à corps creux 16+4**, **toiture-terrasse étanchée**. Fondations sur **semelles isolées 1,40 × 1,40 m** après étude de sol.`,
+ description:`Duplex haut de gamme : au rez-de-chaussée, grand salon, salle à manger, cuisine équipée avec office, bureau, chambre d'amis avec salle d'eau ; à l'étage, **suite parentale** (dressing, salle de bains), deux chambres avec salles d'eau, salon familial et **grande terrasse**. Structure **poteaux-poutres** et **planchers à corps creux 16+4**, **toiture-terrasse étanchée**. Fondations sur **semelles isolées de 0,80 à 1,40 m de côté** (4 types calculés poteau par poteau) après étude de sol.`,
  struct:{poteau:25, semelle:[140,140,35], longrine:[25,40], chainage:[20,25], poutre:[25,45], dalle:'hourdis', prof:1.2, aciers:'Poteaux RDC 4 HA14 + 2 HA12, cadres HA8/15 · Poutres 3 HA14 + chapeaux 3 HA12 · Plancher 16+4 treillis ST25 · Semelles nappe HA14/15'},
  niveaux:[
   {nom:'Rez-de-chaussée', pieces:[
@@ -639,15 +648,21 @@ A.AZ.projets = [
  planning:[['Études, étude de sol, permis',0,4],['Installation, terrassements',4,2],['Fondations, longrines, dallage',6,4],['Structure RDC + plancher haut',10,6],['Structure étage + terrasse',16,6],['Étanchéité',22,2],['Maçonnerie, réseaux encastrés',14,12],['Menuiseries alu, enduits',26,8],['Revêtements haut de gamme',32,10],['Peinture, VRD, piscine, réception',40,12]],
  lots:[['Terrassements & fondations',11],['Gros œuvre béton armé',25],['Étanchéité',4],['Menuiseries alu & bois massif',12],['Électricité, domotique & climatisation',11],['Plomberie & sanitaires haut de gamme',9],['Revêtements (marbre, grès cérame)',16],['Peinture, staff & VRD',12]]
 },
-{id:'immeuble', titre:'Immeuble R+4 de logements', standing:'Immeuble', niveauxTxt:'R+4 (étage courant × 5)', surface:1220, budget:[320000000, 420000000], duree:'18 à 24 mois', toiture:'terrasse', entrees:10, tableaux:10,
+{id:'immeuble', titre:'Immeuble R+4 de logements', standing:'Immeuble', niveauxTxt:'R+4 (étage courant × 5)', surface:1220, budget:[320000000, 420000000], duree:'18 à 24 mois', toiture:'terrasse', entrees:10, tableaux:10, edicule:true,
+ site:{ville:'Abidjan, Cocody Riviera 3', alt:45.00, tn:-0.30, sol:{sigma:2.5, nature:'Sable argileux très compact (étude géotechnique G2 AVP)', prof:1.50}, orient:'S', borne:[-5, -6]},
+ toit:{type:'terrasse', acces:false, acrotere:0.8, pente:2},
+ coupes:[{nom:'A', x:11.0}, {nom:'B', y:9.0}],
  gamme:{carreau:1.1, fenetre:1.05, portee:1.6},
  extras:[['Fondations','Étude géotechnique et contrôle technique (bureau de contrôle)','ens',1,9000000],['Électricité','Colonne montante, comptages, éclairage des communs, paratonnerre','ens',1,14000000],['Plomberie sanitaire','Colonnes d\'eau, surpresseur, bâche à eau 20 m³','ens',1,16000000],['Plomberie sanitaire','Sécurité incendie (extincteurs, RIA, détection)','ens',1,8000000],['Divers','VRD : parking, voirie, réseaux, assainissement collectif','ens',1,30000000],['Électricité','Climatiseurs split dans les logements','u',30,420000]],
  resume:'10 appartements F3 (2 par niveau), cage d\'escalier centrale, ossature en portiques.',
- description:`Immeuble de 5 niveaux (RDC + 4 étages) comprenant **2 appartements F3 par niveau** autour d'une **cage d'escalier centrale**. Ossature en **portiques béton armé** (poteaux-poutres) sur une **trame régulière**, planchers à **corps creux 16+4** (dalle pleine dans la cage d'escalier), toiture-terrasse inaccessible étanchée. Les fondations sont des **semelles isolées 1,80 × 1,80 m** reliées par des longrines, à confirmer par l'**étude géotechnique obligatoire** (un radier peut être nécessaire sur sol médiocre).`,
+ description:`Immeuble de 5 niveaux (RDC + 4 étages) comprenant **2 appartements F3 par niveau** autour d'une **cage d'escalier centrale**. Ossature en **portiques béton armé** (poteaux-poutres) sur une **trame régulière**, planchers à **corps creux 16+4** (dalle pleine dans la cage d'escalier), toiture-terrasse inaccessible étanchée. Les fondations sont des **semelles isolées de 1,60 à 2,80 m de côté** (6 types) reliées par des longrines, à confirmer par l'**étude géotechnique obligatoire** (un radier peut être nécessaire sur sol médiocre).`,
  struct:{poteau:35, semelle:[180,180,50], longrine:[30,50], chainage:[20,30], poutre:[25,50], dalle:'hourdis', prof:1.5, aciers:'Poteaux RDC 35×35 : 8 HA16, cadres HA8/12 · Étages 30×30 : 8 HA14 · Poutres 25×50 : 4 HA16 + chapeaux · Semelles nappe HA14/12'},
  grille:{x:[0, 4.7, 9.5, 12.5, 17.3, 22.0], y:[0, 5.5, 12.0]},
  niveaux:[
-  {nom:'Étage courant', repeat:5, pieces:[
+  {nom:'Étage courant', repeat:5,
+   rdc:{renomme:{'Palier':'Hall d\'entrée'}, portes:[{x:10.4, y:0, w:1.2, o:'h', s:1}]},
+   etage:{fenetres:[{x:10.4, y:0, w:1.2, o:'h'}]},
+   pieces:[
    {n:'Séjour A', t:'sejour', x:0, y:0, w:5.5, h:5.5},
    {n:'Cuisine A', t:'cuisine', x:5.5, y:0, w:4.0, h:3.0},
    {n:'SdB A', t:'eau', x:5.5, y:3.0, w:2.4, h:2.5},
