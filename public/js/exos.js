@@ -62,7 +62,7 @@ function epList(list){
   <div class="exlist">${list.map(ep => `<a class="exrow" href="#/app/epreuve/${ep.id}">${nivTag(ep.exam)}<span style="min-width:0"><span class="ti">${esc(ep.titre)}</span><div class="sub">${esc(ep.duree)} · ${ep.exos.length} exercice${ep.exos.length > 1 ? 's' : ''} · ${esc(ep.mats.map(id => (A.mat(id) || {}).court || id).join(', '))}</div></span>${ic('chev')}</a>`).join('')}</div>`;
 }
 let anF = {exam:'', annee:'', mat:''};
-function annList(list, filters){
+function annList(list, filters, edit){
   if(!list) return `<div class="row sub">${ic('refresh')}Chargement des annales…</div>`;
   let l = list.filter(a => a.pub || (S.me && S.me.isAdmin));
   if(filters){ if(anF.exam) l = l.filter(a => a.examen === anF.exam); if(anF.annee) l = l.filter(a => +a.annee === +anF.annee); if(anF.mat) l = l.filter(a => a.mat === anF.mat); }
@@ -71,7 +71,7 @@ function annList(list, filters){
   return `${filters ? `<div class="row"><select class="inp sm" style="width:auto" data-anf="exam"><option value="">Tous les examens</option>${EXAMS.map(x => `<option ${anF.exam === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>
     <select class="inp sm" style="width:auto" data-anf="annee"><option value="">Toutes les années</option>${YEARS.map(y => `<option ${+anF.annee === y ? 'selected' : ''}>${y}</option>`).join('')}</select>
     <select class="inp sm" style="width:auto" data-anf="mat"><option value="">Toutes les matières</option>${cat.map(m => `<option value="${m.id}" ${anF.mat === m.id ? 'selected' : ''}>${esc(m.titre)}</option>`).join('')}</select></div>` : ''}
-   ${l.length ? `<div class="exlist">${l.map(a => `<a class="exrow" href="#/app/annale/${a.id}">${nivTag(a.examen || 'Examen')}<span style="min-width:0"><span class="ti">${esc(a.titre || 'Sujet')}</span><div class="sub">${a.annee ? 'Session ' + a.annee : ''}${a.session ? ' (' + esc(a.session) + ')' : ''}${a.mat ? ' · ' + esc((A.mat(a.mat) || {}).titre || '') : ''}${a.option ? ' · ' + esc(a.option) : ''} · ${a.hasC ? 'corrigé disponible' : 'sans corrigé'}${a.pub ? '' : ' · <b>brouillon</b>'}</div></span>${ic('chev')}</a>`).join('')}</div>`
+   ${l.length ? `<div class="exlist">${l.map(a => `<a class="exrow" href="#/${edit ? 'admin' : 'app'}/annale/${a.id}">${nivTag(a.examen || 'Examen')}<span style="min-width:0"><span class="ti">${esc(a.titre || 'Sujet')}</span><div class="sub">${a.annee ? 'Session ' + a.annee : ''}${a.session ? ' (' + esc(a.session) + ')' : ''}${a.mat ? ' · ' + esc((A.mat(a.mat) || {}).titre || '') : ''}${a.option ? ' · ' + esc(a.option) : ''} · ${a.hasC ? 'corrigé disponible' : 'sans corrigé'}${a.pub ? '' : ' · <b>brouillon</b>'}</div></span>${ic('chev')}</a>`).join('')}</div>`
      : A.empty('doc', filters ? 'Aucune annale ne correspond à ces filtres.' : 'Aucune annale pour cette matière pour le moment.', S.me && S.me.isAdmin ? `<a class="btn b-pri" href="#/admin/annale/nouvelle">${ic('plus')}Importer un sujet</a>` : '<p class="sub">La direction ajoute les sujets officiels au fur et à mesure.</p>')}`;
 }
 A.on('change', '[data-anf]', el => { anF[el.dataset.anf] = el.value; A.refresh(); });
@@ -163,7 +163,7 @@ A.page('app/annale/:id', {space:'app', title:() => CUR && CUR.titre || 'Annale',
   const a = CUR, m = A.mat(a.mat);
   return `<div class="reader" style="max-width:980px"><div class="stack">
    <div class="card stack s8"><div class="row" style="gap:8px">${nivTag(a.examen || 'Examen')}${a.annee ? `<span class="pill p-mute">Session ${a.annee}</span>` : ''}${m ? `<span class="pill p-mute">${esc(m.titre)}</span>` : ''}${a.option ? `<span class="pill p-mute">${esc(a.option)}</span>` : ''}${a.pub ? '' : '<span class="pill p-bad">Brouillon (visible par la direction seulement)</span>'}</div>
-    <h2 style="margin:0">${esc(a.titre || 'Sujet')}</h2>
+    <h2 style="margin:0">${esc(a.titre || 'Sujet')}</h2>${a.src ? `<p class="small">Source : <a href="${esc(a.src)}" target="_blank" rel="noopener">${esc(((String(a.src).match(/^https?:\/\/([^/?#]+)/i) || [])[1] || a.src).replace(/^www\./, ''))}</a></p>` : ''}
     <div class="row">${a.pages && a.pages.length ? `<button class="btn b-pri" data-annia>${ic('spark')}Me faire expliquer ce sujet par l'IA</button>` : ''}${S.me && S.me.isAdmin ? `<a class="btn b-line" href="#/admin/annale/${a.id}">${ic('edit')}Modifier</a>` : ''}</div></div>
    ${a.pages && a.pages.length ? `<div class="card stack"><b class="kick">Sujet (${a.pages.length} page${a.pages.length > 1 ? 's' : ''})</b>${a.pages.map((src, i) => `<img class="annpage" src="${esc(src)}" alt="Page ${i + 1} du sujet" loading="lazy">`).join('')}</div>` : ''}
    ${a.enonce ? `<div class="card"><b class="kick">Énoncé (texte)</b>${A.mdHtml(a.enonce)}</div>` : ''}
@@ -177,12 +177,124 @@ A.on('click', '[data-annia]', () => { if(!CUR || !CUR.pages) return; A.photoHand
    ESPACE PDG : importer et corriger les annales
    ===================================================================== */
 A.page('admin/annales', {space:'admin', title:'Annales d\'examens', crumb:'Sujets officiels BTS, Licence… et leurs corrigés',
- actions:() => `<a class="btn b-pri b-sm" href="#/admin/annale/nouvelle">${ic('plus')}Importer un sujet</a>`, render(){
+ actions:() => `<a class="btn b-pri b-sm" href="#/admin/annale/nouvelle">${ic('plus')}Ajouter un sujet</a>`, render(){
   if(!AN) loadAnnales().then(() => A.refresh());
   return `<div class="stack">
-   <div class="note">${ic('info')}<div>Importez ici les <b>sujets officiels</b> (photos ou scans des pages) par examen, année et matière. L'IA peut <b>transcrire l'énoncé</b> et <b>rédiger un corrigé</b> à partir des photos : relisez-le, corrigez-le si besoin, puis publiez. Seuls les sujets publiés sont visibles des apprenants.</div></div>
-   ${annList(AN, true)}</div>`;
+   <div class="note">${ic('info')}<div>Importez ici les <b>sujets d'examen</b> (PDF, photos ou scans) par examen, année et matière. L'IA peut <b>transcrire l'énoncé</b> et <b>rédiger un corrigé</b> : relisez-le, corrigez-le si besoin, puis publiez. Seuls les sujets publiés sont visibles des apprenants.</div></div>
+   ${importCard()}
+   ${annList(AN, true, true)}</div>`;
 }});
+
+/* ---------- import en lot depuis un site autorisé (Fomesoutra…) ---------- */
+const DEF_SRC = 'https://www.fomesoutra.com/sujets-du-superieur/bts/bts-genie-civil-option-batiment';
+const IMP = {url:DEF_SRC, exam:'BTS Bâtiment', items:[], loading:false, run:false, stop:false, ai:true, pub:false, msg:''};
+const nrm = t => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+A.guessMat = t => { t = nrm(t);
+  if(/\brdm\b|resistance des materiaux|beton arme|\bba\b|bael/.test(t)) return /beton|\bba\b|bael/.test(t) ? 'ba' : 'rdm';
+  if(/topo/.test(t)) return 'topo'; if(/metre|devis|etude de prix|quantitatif/.test(t)) return 'metre'; if(/math/.test(t)) return 'math';
+  if(/materiau/.test(t)) return 'mat'; if(/structure|technolog|construction metallique|charpente|route|ouvrage/.test(t)) return 'tech';
+  if(/etude de cas|organisation|chantier|\bogc\b|planning/.test(t)) return 'chant'; if(/econom|droit|comptab|gestion/.test(t)) return 'eco';
+  if(/\bsols?\b|geotech/.test(t)) return 'geo'; if(/hydraul|fluide|assainissement/.test(t)) return 'mdf'; if(/thermi|physique|electri/.test(t)) return 'pb';
+  if(/mecanique|statique/.test(t)) return 'rdm'; return ''; };
+const guessYear = t => { const m = String(t).match(/\b(20[0-3]\d)\b/); return m ? +m[1] : null; };
+const guessSess = t => { t = nrm(t); return /blanc/.test(t) ? 'BTS blanc' : /partiel|\btd\b|efm|devoir|composition/.test(t) ? 'Devoir / TD' : /session|officiel/.test(t) ? 'Session officielle' : ''; };
+function importCard(){
+  const sel = IMP.items.filter(x => x.on).length, cat = A.catalog(true);
+  return `<div class="card stack"><div class="row between"><h3 style="margin:0;justify-content:flex-start">${ic('download')} Importer les sujets d'un site autorisé</h3><span class="pill p-mute">Fomesoutra</span></div>
+   <p class="sub">Collez l'adresse d'une rubrique (par exemple « BTS Génie Civil option bâtiment ») : la plateforme liste tous ses sujets, télécharge les PDF, les convertit en pages et, si vous le souhaitez, fait <b>transcrire l'énoncé</b> et <b>rédiger un corrigé</b> par l'IA. Les sujets sont enregistrés en <b>brouillon</b> pour relecture.</p>
+   <div class="row"><input class="inp" id="impUrl" value="${esc(IMP.url)}" placeholder="https://www.fomesoutra.com/…" style="flex:1 1 260px;width:auto;min-width:0"><button class="btn b-pri" data-act="implist" ${IMP.loading || IMP.run ? 'disabled' : ''}>${ic('search')}Lister les sujets</button></div>
+   ${IMP.msg ? `<div class="note${/rreur|impossible|refus|autoris/i.test(IMP.msg) ? ' bad' : ''}">${ic('info')}<span>${esc(IMP.msg)}</span></div>` : ''}
+   ${IMP.loading ? `<div class="row sub">${ic('refresh')}Lecture de la rubrique…</div>` : ''}
+   ${IMP.items.length ? `<div class="row"><label class="fld" style="max-width:260px"><span>Examen</span><select class="inp sm" id="impExam">${EXAMS.map(x => `<option ${IMP.exam === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></label>
+     <label class="check"><input type="checkbox" id="impAi" ${IMP.ai ? 'checked' : ''}><span>Transcrire et rédiger le corrigé avec l'IA</span></label>
+     <label class="check"><input type="checkbox" id="impPub" ${IMP.pub ? 'checked' : ''}><span>Publier tout de suite</span></label></div>
+    <div class="row between"><span class="sub">${IMP.items.length} sujet(s) trouvé(s) · ${sel} sélectionné(s)</span><div class="row" style="gap:6px"><button class="btn b-line b-xs" data-impall="1">Tout cocher</button><button class="btn b-line b-xs" data-impall="0">Tout décocher</button></div></div>
+    <div class="tw"><table class="t sm"><thead><tr><th></th><th>Sujet</th><th>Année</th><th>Matière</th><th>État</th></tr></thead><tbody>${IMP.items.map((x, i) => `<tr><td><input type="checkbox" data-impon="${i}" ${x.on ? 'checked' : ''} ${IMP.run ? 'disabled' : ''}></td>
+      <td style="min-width:220px"><b style="font-size:13px">${esc(x.title)}</b>${x.inCat ? '' : ' <span class="pill p-mute">autre rubrique</span>'}<div class="small"><a href="${esc(x.url)}" target="_blank" rel="noopener">source</a>${x.session ? ' · ' + esc(x.session) : ''}</div></td>
+      <td><input class="inp sm num" style="width:70px" data-impy="${i}" value="${x.annee || ''}"></td>
+      <td><select class="inp sm" data-impm="${i}"><option value="">—</option>${cat.map(m => `<option value="${m.id}" ${x.mat === m.id ? 'selected' : ''}>${esc(m.court || m.titre)}</option>`).join('')}</select></td>
+      <td class="small" style="min-width:120px">${x.done ? `<span class="pill p-ok">${ic('check')}${esc(x.state || 'importé')}</span>${x.aid ? ` <a href="#/admin/annale/${x.aid}">ouvrir</a>` : ''}` : x.err ? `<span class="pill p-bad">${esc(x.err)}</span>` : esc(x.state || (x.dup ? 'déjà importé' : ''))}</td></tr>`).join('')}</tbody></table></div>
+    <div class="row">${IMP.run ? `<button class="btn b-amber" data-act="impstop">${ic('x')}Arrêter après ce sujet</button><span class="sub">${ic('refresh')}Import en cours : laissez cette page ouverte.</span>` : `<button class="btn b-pri" data-act="impgo" ${sel ? '' : 'disabled'}>${ic('download')}Importer ${sel} sujet(s)</button>`}</div>` : ''}
+  </div>`;
+}
+const srcFetch = async (action, url, extra) => { const token = await A.db.token(); return fetch('/api/source', {method:'POST', headers:{'Content-Type':'application/json', ...(token ? {Authorization:'Bearer ' + token} : {})}, body:JSON.stringify({action, url, ...(extra || {})})}); };
+const srcErr = async (r) => { let m = ''; try{ m = (await r.json()).error || ''; }catch(_){} return r.status === 404 || r.status === 405 || r.status === 501 ? 'L\'import fonctionne sur le site publié sur Netlify (fonction /api/source).' : (m || 'Erreur ' + r.status); };
+A.on('click', '[data-act="implist"]', async () => {
+  IMP.url = A.val('impUrl').trim(); if(!/^https?:\/\//.test(IMP.url)) return toast('Adresse invalide', 'alert');
+  IMP.loading = true; IMP.msg = ''; IMP.items = []; A.refresh();
+  try{
+    // la rubrique est lue page par page (?limit=100 d'abord, puis les liens de pagination)
+    let big = IMP.url; try{ const u = new URL(IMP.url); u.searchParams.set('limit', '100'); big = u.href; }catch(_){}
+    const queue = [big, IMP.url], seen = new Set(), found = new Map(); let err = '';
+    while(queue.length && seen.size < 30){
+      const url = queue.shift(); if(seen.has(url)) continue; seen.add(url);
+      const r = await srcFetch('list', url, {cat:IMP.url});
+      if(!r.ok){ if(!found.size && (r.status !== 502 || !queue.length)) { err = await srcErr(r); if(r.status !== 502) break; } continue; }
+      const j = await r.json();
+      (j.items || []).forEach(x => { const p = found.get(x.id); if(!p) found.set(x.id, x); else { if(x.title.length > p.title.length) p.title = x.title; p.inCat = p.inCat || x.inCat; } });
+      (j.next || []).forEach(n => { if(!seen.has(n) && !queue.includes(n)) queue.push(n); });
+      IMP.msg = found.size + ' sujet(s) trouvé(s) · ' + seen.size + ' page(s) lue(s)…'; A.refresh();
+    }
+    await loadAnnales(true); const have = new Set((AN || []).map(a => a.src).filter(Boolean));
+    IMP.items = [...found.values()].map(x => ({...x, annee:guessYear(x.title), mat:A.guessMat(x.title), session:guessSess(x.title), dup:have.has(x.url), on:x.inCat && !have.has(x.url)}))
+      .sort((a, b) => (b.inCat - a.inCat) || ((b.annee || 0) - (a.annee || 0)) || a.title.localeCompare(b.title));
+    IMP.msg = IMP.items.length ? '' : err || 'Aucun sujet trouvé à cette adresse. Vérifiez qu\'il s\'agit bien d\'une page de rubrique.';
+  }catch(e){ IMP.msg = 'Connexion impossible : ' + e.message; }
+  IMP.loading = false; A.refresh();
+});
+A.on('change', '[data-impon]', el => { IMP.items[+el.dataset.impon].on = el.checked; A.refresh(); });
+A.on('click', '[data-impall]', el => { IMP.items.forEach(x => { x.on = el.dataset.impall === '1' && !x.done; }); A.refresh(); });
+A.on('change', '[data-impy]', el => { IMP.items[+el.dataset.impy].annee = +el.value || null; });
+A.on('change', '[data-impm]', el => { IMP.items[+el.dataset.impm].mat = el.value; });
+A.on('change', '#impExam', el => { IMP.exam = el.value; });
+A.on('change', '#impAi', el => { IMP.ai = el.checked; });
+A.on('change', '#impPub', el => { IMP.pub = el.checked; });
+A.on('click', '[data-act="impstop"]', () => { IMP.stop = true; toast('L\'import s\'arrêtera après le sujet en cours', 'clock'); });
+A.on('click', '[data-act="impgo"]', async () => {
+  if(IMP.run) return; IMP.run = true; IMP.stop = false; A.refresh();
+  for(const x of IMP.items.filter(y => y.on && !y.done)){
+    if(IMP.stop) break;
+    const st = t => { x.state = t; A.refresh(); };
+    try{
+      st('téléchargement…'); const r = await srcFetch('file', x.url); if(!r.ok) throw new Error(await srcErr(r));
+      const buf = await r.arrayBuffer(); st('conversion des pages…');
+      const pages = await A.pdfPages(buf, {max:16});
+      const rec = {examen:IMP.exam, annee:x.annee, mat:x.mat, session:x.session, option:'', titre:x.title, pages, enonce:'', corrige:'', pub:IMP.pub, src:x.url};
+      let id = await A.db.saveAnnale('', rec); if(!id){ IMP.stop = true; throw new Error('enregistrement impossible : import arrêté'); }
+      x.aid = id;
+      if(IMP.ai){
+        st('transcription IA…'); const en = await aiAnnale('transcrire', rec); if(en.ok) rec.enonce = en.text;
+        st('corrigé IA…'); const co = await aiAnnale('corrige', rec); if(co.ok) rec.corrige = co.text;
+        await A.db.saveAnnale(id, rec);
+        if(!en.ok || !co.ok) throw Object.assign(new Error('IA : ' + (en.error || co.error)), {saved:true});
+      }
+      x.done = true; x.on = false; x.state = IMP.ai ? 'importé + corrigé' : 'importé';
+    }catch(e){ x.err = String(e.message || e).slice(0, 120); if(e.saved){ x.done = true; x.on = false; } }
+    A.refresh();
+  }
+  IMP.run = false; AN = null; await loadAnnales(true); A.refresh();
+  toast('Import terminé : relisez les corrigés puis publiez', 'check');
+});
+async function aiAnnale(kind, rec){
+  const m = A.mat(rec.mat);
+  return A.IA.stream({kind, ref:rec.mat || 'annale', ctx:{matiere:m ? m.titre : '', examen:rec.examen, annee:String(rec.annee || ''), titre:rec.titre, extrait:kind === 'corrige' ? rec.enonce : ''},
+    images:(rec.pages || []).slice(0, 16).map(u => ({type:'image/jpeg', data:u.split(',')[1] || ''})),
+    messages:[{role:'user', content:kind === 'corrige' ? `Rédige le corrigé détaillé de ce sujet (${rec.examen} ${rec.annee || ''}${m ? ', ' + m.titre : ''}).` : 'Transcris fidèlement l\'énoncé de ce sujet.'}]});
+}
+
+/* ---------- PDF → pages (pdf.js, fourni dans vendor/pdfjs) ---------- */
+let pdfjs = null;
+const loadPdfjs = () => pdfjs || (pdfjs = new Promise((res, rej) => { if(window.pdfjsLib) return res(window.pdfjsLib);
+  const sc = document.createElement('script'); sc.src = 'vendor/pdfjs/pdf.min.js';
+  sc.onload = () => { const L = window.pdfjsLib; if(!L) return rej(new Error('lecteur PDF indisponible')); L.GlobalWorkerOptions.workerSrc = 'vendor/pdfjs/pdf.worker.min.js'; res(L); };
+  sc.onerror = () => { pdfjs = null; rej(new Error('lecteur PDF indisponible')); }; document.head.appendChild(sc); }));
+A.pdfPages = async (buf, opt = {}) => {
+  const L = await loadPdfjs(), doc = await L.getDocument({data:new Uint8Array(buf)}).promise, out = [], n = Math.min(doc.numPages, opt.max || 16), W = opt.width || 1300;
+  for(let i = 1; i <= n; i++){ const page = await doc.getPage(i), v0 = page.getViewport({scale:1}), sc = Math.min(3, W/Math.max(v0.width, v0.height)*1.0), v = page.getViewport({scale:sc});
+    const c = document.createElement('canvas'); c.width = Math.round(v.width); c.height = Math.round(v.height); const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+    await page.render({canvasContext:g, viewport:v}).promise; out.push(c.toDataURL('image/jpeg', opt.q || .7)); page.cleanup(); }
+  await doc.destroy(); return out;
+};
 let ED = null;
 const blankAnn = () => ({id:'', examen:'BTS Bâtiment', option:'', annee:new Date().getFullYear(), session:'', mat:'', titre:'', pages:[], enonce:'', corrige:'', pub:false});
 A.page('admin/annale/:id', {space:'admin', title:() => ED && ED.titre ? ED.titre : 'Sujet d\'examen', crumb:'<a href="#/admin/annales">Annales d\'examens</a>', static:true, render(p){
@@ -200,9 +312,10 @@ A.page('admin/annale/:id', {space:'admin', title:() => ED && ED.titre ? ED.titre
      <label class="fld"><span>Session / épreuve</span><input class="inp" id="anSess" placeholder="Ex. : session normale, épreuve E4" value="${esc(ED.session)}"></label></div>
     <label class="fld"><span>Option / spécialité</span><input class="inp" id="anOpt" placeholder="Ex. : Bâtiment, Travaux publics" value="${esc(ED.option)}"></label>
     <label class="fld"><span>Titre</span><input class="inp" id="anTit" placeholder="Ex. : Résistance des matériaux et béton armé" value="${esc(ED.titre)}"></label>
-    <div class="stack s8"><b class="small">Pages du sujet (photos ou scans, 8 au maximum)</b>
+    <div class="stack s8"><b class="small">Pages du sujet (PDF, photos ou scans, 16 pages au maximum)</b>
      <div class="phgrid" id="anPages">${ED.pages.map((src, i) => `<div class="phitem"><img src="${esc(src)}" alt="Page ${i + 1}"><button class="ibtn l" data-anpm="${i}" title="Monter" aria-label="Monter">${ic('back')}</button><button class="ibtn r" data-anpd="${i}" title="Retirer" aria-label="Retirer">${ic('x')}</button></div>`).join('')}
-      ${ED.pages.length < 8 ? `<label class="phbtn" style="aspect-ratio:3/4">${ic('upload')}<span>Ajouter des pages</span><input type="file" accept="image/*" multiple data-anup></label>` : ''}</div></div>
+      ${ED.pages.length < 16 ? `<label class="phbtn" style="aspect-ratio:3/4">${ic('upload')}<span>Ajouter des pages (PDF ou photos)</span><input type="file" accept="image/*,application/pdf" multiple data-anup></label>` : ''}</div></div>
+    ${ED.src ? `<p class="small">Source : <a href="${esc(ED.src)}" target="_blank" rel="noopener">${esc(ED.src)}</a></p>` : ''}
     <label class="check"><input type="checkbox" id="anPub" ${ED.pub ? 'checked' : ''}><span><b>Publié</b> : visible par les apprenants</span></label>
     <div class="row"><button class="btn b-pri" data-act="ansave">${ic('save')}Enregistrer</button>${ED.id ? `<a class="btn b-line" href="#/app/annale/${ED.id}">${ic('eye')}Voir comme un apprenant</a><button class="btn b-ghost" data-act="andel">${ic('trash')}Supprimer</button>` : ''}</div>
    </div>
@@ -215,7 +328,12 @@ A.page('admin/annale/:id', {space:'admin', title:() => ED && ED.titre ? ED.titre
    </div></div>`;
 }});
 const readEd = () => { if(!ED) return; ED.examen = A.val('anExam'); ED.annee = +A.val('anYear'); ED.mat = A.val('anMat'); ED.session = A.val('anSess'); ED.option = A.val('anOpt'); ED.titre = A.val('anTit'); ED.enonce = A.val('anEn'); ED.corrige = A.val('anCo'); const pb = $('#anPub'); ED.pub = !!(pb && pb.checked); };
-A.on('change', '[data-anup]', async el => { readEd(); const files = [...el.files].slice(0, 8 - ED.pages.length); for(const f of files){ try{ const im = await A.imgPrep(f, 1400, .72); ED.pages.push(im.url); }catch(e){ toast('Image illisible : ' + f.name, 'x'); } } A.render(); });
+A.on('change', '[data-anup]', async el => { readEd(); const files = [...el.files];
+  for(const f of files){ if(ED.pages.length >= 16) break;
+    try{ if(/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)){ toast('Conversion du PDF…', 'refresh'); const pg = await A.pdfPages(await f.arrayBuffer(), {max:16 - ED.pages.length}); ED.pages.push(...pg); if(!ED.titre) ED.titre = f.name.replace(/\.pdf$/i, '').replace(/[-_]+/g, ' '); }
+      else { const im = await A.imgPrep(f, 1400, .72); ED.pages.push(im.url); } }
+    catch(e){ toast('Fichier illisible : ' + f.name, 'x'); } }
+  A.render(); });
 A.on('click', '[data-anpd]', el => { readEd(); ED.pages.splice(+el.dataset.anpd, 1); A.render(); });
 A.on('click', '[data-anpm]', el => { readEd(); const i = +el.dataset.anpm; if(i > 0){ const t = ED.pages[i-1]; ED.pages[i-1] = ED.pages[i]; ED.pages[i] = t; } A.render(); });
 A.on('click', '[data-act="ansave"]', async () => { readEd(); if(!ED.titre.trim()) return toast('Donnez un titre au sujet', 'alert');
@@ -227,7 +345,7 @@ A.on('click', '[data-anai]', async el => {
   const m = A.mat(ED.mat);
   el.disabled = true; const old = out.value; out.value = '';
   const r = await A.IA.stream({kind, ref:ED.mat || 'annale', ctx:{matiere:m ? m.titre : '', examen:ED.examen, annee:String(ED.annee || ''), titre:ED.titre, extrait:kind === 'corrige' ? ED.enonce : ''},
-    images:ED.pages.slice(0, 8).map(u => ({type:'image/jpeg', data:u.split(',')[1] || ''})),
+    images:ED.pages.slice(0, 16).map(u => ({type:'image/jpeg', data:u.split(',')[1] || ''})),
     messages:[{role:'user', content:kind === 'corrige' ? `Rédige le corrigé détaillé de ce sujet (${ED.examen} ${ED.annee || ''}${m ? ', ' + m.titre : ''}).` : 'Transcris fidèlement l\'énoncé de ce sujet.'}]}, t => { out.value = t; });
   el.disabled = false;
   if(!r.ok){ out.value = old; toast(r.error || 'Erreur IA', 'x'); } else { if(kind === 'corrige') ED.corrige = out.value; else ED.enonce = out.value; toast('Texte prêt : relisez-le puis enregistrez', 'check'); }

@@ -84,7 +84,7 @@ L'assistant (chat, aide dans les cours, quiz générés, rédaction de chapitres
 
 Sécurité en place : la clé n'est jamais envoyée au navigateur ; seuls les comptes connectés et non suspendus peuvent poser des questions, dans la limite du quota ; la rédaction de chapitres est réservée à la direction. Chaque question est enregistrée dans le journal visible par le PDG.
 
-Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonction les lit dans `config.js`), `IA_SANS_CONNEXION=oui` uniquement pour un test en mode démonstration (déconseillé en production : n'importe qui pourrait utiliser votre crédit).
+Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonction les lit dans `config.js`), `SOURCES_AUTORISEES` (sites d'où le PDG peut importer des sujets d'examen, par défaut `fomesoutra.com`), `IA_SANS_CONNEXION=oui` uniquement pour un test en mode démonstration (déconseillé en production : n'importe qui pourrait utiliser votre crédit).
 
 ---
 
@@ -102,7 +102,15 @@ Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonctio
 - **Paramètres** : nom de la plateforme, textes d'accueil, contacts (WhatsApp), ouverture des inscriptions, **bordereau des prix** du métré, **administrateurs** (inviter un collaborateur), exports.
 
 ### Annales d'examens (sujets officiels)
-Espace PDG → **Annales d'examens** → **Importer un sujet** : choisissez l'examen (BTS Bâtiment, Licence…), l'année, la matière, puis ajoutez les photos ou scans des pages (8 au maximum). Les boutons **Transcrire les photos** et **Rédiger le corrigé avec l'IA** préparent le texte de l'énoncé et un corrigé détaillé : relisez-les, corrigez si besoin, cochez **Publié** et enregistrez. Seuls les sujets publiés sont visibles des apprenants.
+**Importer toute une rubrique d'un site autorisé (Fomesoutra…)** — Espace PDG → **Annales d'examens** → carte **Importer les sujets d'un site autorisé** :
+1. L'adresse de la rubrique **BTS Génie Civil option bâtiment** de Fomesoutra est déjà remplie ; collez une autre rubrique si besoin (Licence, BTS Travaux publics…).
+2. **Lister les sujets** : la plateforme lit la rubrique (toutes ses pages) et affiche chaque sujet avec l'**année** et la **matière** devinées d'après le titre. Corrigez-les dans le tableau si besoin, décochez ce que vous ne voulez pas. Les sujets déjà importés sont signalés et décochés.
+3. Choisissez l'**examen** (BTS Bâtiment par défaut), laissez cochée l'option **Transcrire et rédiger le corrigé avec l'IA**, puis **Importer**. Pour chaque sujet : téléchargement du PDF, conversion en pages (16 au maximum), transcription de l'énoncé, corrigé détaillé, enregistrement **en brouillon**. Laissez la page ouverte pendant l'import (comptez environ 1 à 3 minutes par sujet avec l'IA) ; le bouton **Arrêter après ce sujet** permet de reprendre plus tard (les sujets déjà importés ne sont pas refaits).
+4. Ouvrez chaque sujet dans la liste en dessous, **relisez le corrigé** (l'IA peut se tromper sur un calcul ou une lecture de figure), corrigez si besoin, cochez **Publié** et enregistrez.
+
+Cette fonction n'est disponible que sur le site publié sur Netlify et seulement pour les administrateurs connectés. Par sécurité, seuls les sites listés dans la variable Netlify `SOURCES_AUTORISEES` peuvent être lus (par défaut : `fomesoutra.com`). Pour en ajouter : **Site configuration** → **Environment variables** → `SOURCES_AUTORISEES` = `fomesoutra.com, autre-site.com`, puis redéployez. N'importez que des sujets que vous avez le droit de reproduire sur votre plateforme et gardez la mention de la source (elle est affichée automatiquement sous chaque sujet importé).
+
+**Ajouter un sujet à la main** — **Ajouter un sujet** : choisissez l'examen (BTS Bâtiment, Licence…), l'année, la matière, puis ajoutez le **PDF** ou les photos/scans des pages (16 au maximum). Les boutons **Transcrire les photos** et **Rédiger le corrigé avec l'IA** préparent le texte de l'énoncé et un corrigé détaillé : relisez-les, corrigez si besoin, cochez **Publié** et enregistrez. Seuls les sujets publiés sont visibles des apprenants.
 
 > Si vous aviez déjà exécuté `supabase.sql`, **relancez-le** une fois : il ajoute la table `annales` sans toucher à vos données.
 

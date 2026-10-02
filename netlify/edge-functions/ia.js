@@ -68,7 +68,7 @@ Mise en forme (le texte est affiché par la plateforme, n'utilise ni LaTeX ni HT
 - encadrés : une ligne « > [!retenir] Titre » suivie de lignes commençant par « > » (types disponibles : retenir, attention, exemple, astuce, norme) ;
 - tableaux markdown simples quand ils aident à comparer.`;
 
-/* Photos jointes : 8 au maximum, JPEG/PNG/WebP en base64, 5 Mo chacune au plus */
+/* Photos jointes : 4 pour un exercice, 16 pages pour un sujet d'examen, en base64, 5 Mo chacune au plus */
 function cleanImages(list, maxN) {
   const out = [];
   for (const im of Array.isArray(list) ? list.slice(0, maxN) : []) {
@@ -180,7 +180,7 @@ export default async (request) => {
   const messages = cleanMessages(body.messages, kind === "photo" ? 20000 : 6000);
   if (!messages.length) return json({ error: "Message vide." }, 400);
   // Photos de l'exercice ou du sujet : jointes au premier message de l'apprenant
-  const images = ["photo", "corrige", "transcrire"].includes(kind) ? cleanImages(body.images, kind === "photo" ? 4 : 8) : [];
+  const images = ["photo", "corrige", "transcrire"].includes(kind) ? cleanImages(body.images, kind === "photo" ? 4 : 16) : [];
   if (images.length) messages[0] = { role: "user", content: [...images, { type: "text", text: messages[0].content }] };
   if ((kind === "transcrire") && !images.length) return json({ error: "Ajoutez d'abord les photos du sujet." }, 400);
   const model = MODELS.includes(check.model) ? check.model : DEFAULT_MODEL;

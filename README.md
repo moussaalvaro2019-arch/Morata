@@ -15,7 +15,7 @@ Plateforme d'apprentissage des métiers du bâtiment et du génie civil, avec es
 - **Atelier de dessin 2D et 3D** (DAO dans le navigateur) : murs, portes, fenêtres, pièces, cotations, textes, calques, niveaux, commandes au clavier comme AutoCAD (`MUR`, `LIGNE`, `PO`, `COT`, `@4,0`, `@3<90`…) ; vue 3D, vue partagée 2D/3D, commandes 3D (`BOITE`, `CYLINDRE`, `DALLE`, `TOIT`, `EXTRUSION`, `ELEVATION`, `COPIERNIVEAU`…), matériaux, couleurs et rendus ; import d'un projet type complet en 3D ; export PNG/SVG, métré automatique du plan.
 - **Résoudre en photo** : l'apprenant photographie un exercice (ou le tape) ; l'IA lit l'énoncé et propose quatre modes : résolution complète pas à pas, guidage par indices sans donner la réponse, vérification de sa réponse, explication de l'énoncé. Questions de suivi, historique dans « Mes travaux », et renvoi vers le solveur guidé correspondant quand l'exercice est un exercice type.
 - **53 solveurs guidés** couvrant les 18 matières : l'apprenant entre ses données (ou dessine sa poutre), la plateforme lui fait trouver chaque étape, vérifie ses réponses, donne des indices et génère de nouveaux exercices à volonté. Le solveur de poutre va de l'isostatique à l'hyperstatique (théorème des trois moments) : réactions, équations V(x) et M(x) par tronçon, diagrammes, flèche, puis aciers en travée et sur appuis, choix et disposition des barres, ELS, cadres (Caquot), plan de ferraillage, nomenclature et façonnage. Il s'ouvre aussi depuis une poutre d'un projet type et depuis l'atelier de dessin (commande `RDM`).
-- **Exercices & annales** : 123 exercices corrigés type BTS et Licence, 16 épreuves d'entraînement chronométrées, et un espace **annales officielles** où le PDG importe les sujets (photos par examen, année 2010 → aujourd'hui, matière), fait transcrire l'énoncé et rédiger un corrigé par l'IA, le relit puis le publie.
+- **Exercices & annales** : 123 exercices corrigés type BTS et Licence, 16 épreuves d'entraînement chronométrées, et un espace **annales officielles** où le PDG importe les sujets (PDF ou photos, par examen, année 2010 → aujourd'hui, matière) — un par un ou **toute une rubrique d'un site autorisé** (par exemple la rubrique BTS Génie Civil option bâtiment de Fomesoutra) —, fait transcrire l'énoncé et rédiger un corrigé par l'IA, le relit puis le publie.
 - **Métré & devis** : avant-métré par lots, bibliothèque d'ouvrages, DQE en FCFA avec TVA, sous-détail des matériaux, export CSV, calculateurs rapides.
 - **Assistant IA** (API Claude) : chat, aide contextuelle dans les cours, quiz générés, rédaction de chapitres par le PDG.
 - **Espace PDG** : tableau de bord, connexions et présence en ligne, fiches apprenants, progression, contenus, annonces, réglages IA, travaux, paramètres, administrateurs.
@@ -49,8 +49,10 @@ public/                  site statique (Netlify publie ce dossier)
   data/solveurs/*.js     solveurs guidés des 18 matières
   data/exercices/*.js    banque d'exercices corrigés et épreuves d'entraînement
   vendor/three.min.js    moteur 3D three.js (licence MIT)
+  vendor/pdfjs/          lecteur PDF pdf.js (licence Apache 2.0) : PDF → pages
   data/construction.js   étapes, éléments et projets types
 netlify/edge-functions/ia.js   fonction serveur de l'IA (POST /api/ia)
+netlify/edge-functions/source.js  import des sujets d'un site autorisé (POST /api/source, PDG)
 supabase.sql             base de données, sécurité par ligne, fonctions
 GUIDE-INSTALLATION.md    mise en ligne pas à pas
 ```

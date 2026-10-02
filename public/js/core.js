@@ -475,7 +475,7 @@ A.db = {
   },
   async saveAnnale(id, rec){
     id = id || uid('an_');
-    const meta = {examen:rec.examen, option:rec.option || '', annee:+rec.annee || null, session:rec.session || '', mat:rec.mat || '', titre:rec.titre || '', pub:!!rec.pub, np:(rec.pages || []).length, hasC:!!String(rec.corrige || '').trim(), at:now()};
+    const meta = {examen:rec.examen, option:rec.option || '', annee:+rec.annee || null, session:rec.session || '', mat:rec.mat || '', titre:rec.titre || '', pub:!!rec.pub, np:(rec.pages || []).length, hasC:!!String(rec.corrige || '').trim(), src:rec.src || '', at:now()};
     if(S.mode === 'local'){
       L.db.annales = L.db.annales || {};
       const prev = ls.get('ann_' + id, null);
