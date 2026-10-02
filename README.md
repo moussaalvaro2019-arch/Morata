@@ -44,8 +44,8 @@ public/                  site statique (Netlify publie ce dossier)
   js/metre.js            outil de métré
   js/ia.js               assistant IA (côté navigateur)
   js/admin.js            espace PDG
-  data/matieres/*.js     contenus des cours (une matière par fichier)
-  data/niveaux/*.js      chapitres complémentaires pour les 3 niveaux
+  data/cours/*.js        cours complets : une matière par fichier (chapitres des 3 niveaux, quiz, exercices corrigés)
+  data/catalogue.js      liste des matières et chapitres (générée par outils/catalogue.mjs)
   data/solveurs/*.js     solveurs guidés des 18 matières
   data/exercices/*.js    banque d'exercices corrigés et épreuves d'entraînement
   vendor/three.min.js    moteur 3D three.js (licence MIT)
@@ -64,5 +64,14 @@ cd public
 python3 -m http.server 8080
 ```
 Puis ouvrir http://localhost:8080 (mode démonstration ; l'IA ne fonctionne qu'une fois déployée sur Netlify avec la clé API).
+
+## Modifier un cours dans les fichiers
+
+Chaque matière est dans `public/data/cours/<matière>.js` : chapitres (`niv` 1 = Débutant, 2 = Intermédiaire, 3 = Avancé), contenu, quiz et exercices corrigés (`exercices: [{t: titre, d: difficulté 1 à 3, e: énoncé, c: corrigé}]`). Après une modification, régénérez le catalogue :
+
+```
+node outils/catalogue.mjs
+```
+Le script vérifie aussi les fichiers (identifiants en double, quiz mal formés, exercices incomplets). Les modifications faites depuis l'Espace PDG n'ont pas besoin de cette étape.
 
 Mise en ligne : voir **GUIDE-INSTALLATION.md**.

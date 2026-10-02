@@ -130,9 +130,15 @@ Pour chaque exercice (## Exercice n) et chaque question : la démarche, les form
   } else {
     task = `Tu rédiges, pour la direction de la plateforme, le chapitre de cours « ${chap} » de la matière « ${mat} »${ctx.niveau ? ` (niveau ${clip(ctx.niveau, 40)})` : ""}.
 ${ctx.autres ? `Autres chapitres déjà présents dans cette matière (évite les répétitions) : ${clip(ctx.autres, 2000)}.\n` : ""}Consignes :
-- 700 à 1 300 mots, commence directement par le contenu (le titre est déjà affiché, pas de titre # au début) ;
-- 3 à 6 sections ## progressives, des formules $$, au moins un encadré > [!exemple] avec un calcul chiffré complet, un encadré > [!retenir], un > [!attention] si c'est pertinent, et un tableau si c'est utile ;
+- 1 500 à 3 000 mots, commence directement par le contenu (le titre est déjà affiché, pas de titre # au début) ;
+- 4 à 8 sections ## progressives : définitions, explications détaillées, démonstrations ou justifications utiles, méthode pas à pas, formules $$ avec les unités, tableaux de valeurs usuelles (normes, données de chantier en Côte d'Ivoire) ;
+- au moins deux applications > [!exemple] avec des données chiffrées et un calcul complet, un encadré > [!retenir], un > [!attention] sur les erreurs fréquentes ;
 - tu peux insérer une figure existante de la plateforme avec une ligne « !fig:nom|Légende », en choisissant uniquement parmi : ${FIGURES} ;
+- puis 3 à 5 exercices corrigés, du plus simple au plus difficile, chacun écrit ainsi :
+=== EXERCICE n : Titre court (difficulté 1, 2 ou 3) ===
+énoncé avec toutes les données numériques et les questions numérotées
+--- CORRIGÉ ---
+corrigé détaillé : démarche, formules, application numérique avec unités, résultat en **gras** pour chaque question ;
 - termine par une ligne contenant exactement === QUIZ === suivie d'un tableau JSON de 5 questions au format [{"q":"...","o":["...","...","...","..."],"r":0,"e":"..."}].`;
   }
   // Bloc stable en premier (mise en cache), consignes variables ensuite

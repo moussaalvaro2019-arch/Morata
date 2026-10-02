@@ -8,8 +8,8 @@ const {$, esc, ic, F, toast, S} = A;
 const stats = () => {
   const cat = A.catalog();
   const ch = cat.reduce((a,m)=>a+m.chapitres.length,0);
-  const q = cat.reduce((a,m)=>a+m.chapitres.reduce((b,c)=>b+((c.quiz||[]).length),0),0);
-  return {mat:cat.length, ch, q, proj:(A.AZ && A.AZ.projets || []).length};
+  const q = cat.reduce((a,m)=>a+m.chapitres.reduce((b,c)=>b+A.nq(c),0),0), ex = cat.reduce((a,m)=>a+m.chapitres.reduce((b,c)=>b+A.nex(c),0),0);
+  return {mat:cat.length, ch, q, ex, proj:(A.AZ && A.AZ.projets || []).length};
 };
 A.matCard = (m, opt={}) => {
   const p = opt.progress ? A.matProgress(m) : null;
@@ -34,7 +34,7 @@ A.page('', {space:'site', title:'Accueil', render(){
       <h1>${esc(c.heroTitle)} <em>${esc(c.heroAccent)}</em></h1>
       <p class="lead">${esc(c.heroText)}</p>
       <div class="row"><a class="btn b-pri b-lg" href="#/${S.me?'app':'inscription'}">${S.me?'Continuer mes cours':'Commencer gratuitement'} ${ic('arrow')}</a><a class="btn b-lg" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)" href="#/matieres">Voir les ${st.mat} matières</a></div>
-      <div class="trust"><span>${ic('book')}${st.ch} chapitres</span><span>${ic('target')}${st.q} questions de quiz</span><span>${ic('building')}${st.proj} projets réels</span><span>${ic('spark')}Professeur IA</span></div>
+      <div class="trust"><span>${ic('book')}${st.ch} chapitres</span><span>${ic('edit')}${st.ex} exercices corrigés</span><span>${ic('target')}${st.q} questions de quiz</span><span>${ic('building')}${st.proj} projets réels</span><span>${ic('spark')}Professeur IA</span></div>
     </div>
     <div class="bp" aria-hidden="true">${A.PLAN ? A.PLAN.thumb(proj[1] || proj[0], {dark:true, labels:true}) : ''}</div>
   </div></section>
@@ -43,7 +43,7 @@ A.page('', {space:'site', title:'Accueil', render(){
   <section class="sect"><div class="stats">
     <div class="stat"><b>${st.mat}</b><span>matières du génie civil</span></div>
     <div class="stat"><b>${st.ch}</b><span>chapitres de cours rédigés</span></div>
-    <div class="stat"><b>${st.q}</b><span>questions de quiz corrigées</span></div>
+    <div class="stat"><b>${st.ex}</b><span>exercices corrigés pas à pas</span></div>
     <div class="stat"><b>24 h/24</b><span>assistant IA pour vos questions</span></div>
   </div></section>
 
@@ -117,7 +117,7 @@ A.page('matiere/:id', {space:'site', title:p => (A.mat(p.id)||{}).titre || 'Mati
     <h3 style="font-size:18px">Trois niveaux, à suivre dans l'ordre</h3>
     ${A.matLevels(m, {}).map(L => `<div class="card lvbox" style="--lc:${L.c}"><div class="row between"><b style="color:${L.c}">${'●'.repeat(L.id)} ${L.n}</b><span class="sub">${L.total} chapitres · ${Math.max(1, Math.round(L.min/60))} h</span></div><p class="sub" style="margin:2px 0 8px">${L.d}</p><div class="chlist">${L.ch.map((c,i) => i < pv
       ? `<a class="chap" href="#/cours/${c.id}"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · aperçu gratuit</span></span><span class="pill p-ok">Ouvert</span></a>`
-      : `<a class="chap locked" href="#/inscription"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions</span></span>${ic('lock')}</a>`).join('') || '<p class="sub">Chapitres en préparation.</p>'}</div></div>`).join('')}
+      : `<a class="chap locked" href="#/inscription"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${A.nq(c)} questions${A.nex(c) ? ` · ${A.nex(c)} exercices corrigés` : ''}</span></span>${ic('lock')}</a>`).join('') || '<p class="sub">Chapitres en préparation.</p>'}</div></div>`).join('')}
    </div><div class="stack">
     ${m.objectifs?`<div class="card"><h3>Objectifs</h3><ul style="margin:0;padding-left:18px;display:grid;gap:6px">${m.objectifs.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>`:''}
     <div class="card" style="background:var(--navy);color:#fff;border:0"><h3 style="color:#fff">Accès complet gratuit</h3><p style="color:#B7C3D3;margin-bottom:12px">Créez votre compte pour lire tous les chapitres, passer les quiz, suivre votre progression et poser vos questions à l'IA.</p><a class="btn b-pri b-full" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div>
@@ -129,13 +129,15 @@ A.matHead = m => `<div class="mhead" style="background:linear-gradient(130deg,${
 /* ---------- Cours (aperçu public) ---------- */
 A.page('cours/:id', {space:'site', title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', render(p){
   if(S.me){ location.replace('#/app/cours/'+p.id); return null; }
-  const f = A.chap(p.id); if(!f) return `<div class="wrap sect">${A.empty('book','Chapitre introuvable.')}</div>`;
-  const idx = f.m.chapitres.findIndex(c => c.id === p.id), pv = +A.cfg().preview || 0;
+  const f0 = A.chap(p.id); if(!f0) return `<div class="wrap sect">${A.empty('book','Chapitre introuvable.')}</div>`;
+  const idx = f0.m.chapitres.findIndex(c => c.id === p.id), pv = +A.cfg().preview || 0;
   if(idx >= pv) return `<div class="wrap sect"><div class="card stack" style="max-width:560px;margin:0 auto;text-align:center;justify-items:center">${ic('lock')}<h2>Chapitre réservé aux inscrits</h2><p class="muted">L'inscription est gratuite et donne accès à tous les cours, quiz et outils.</p><a class="btn b-pri" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div></div>`;
-  const md = A.md(f.c.contenu);
+  if(!A.chapReady(f0)) return `<div class="wrap sect">${A.chapLoading()}</div>`;
+  const f = A.chap(p.id), md = A.md(f.c.contenu);
   return `<div class="wrap"><section class="sect" style="max-width:900px;margin:0 auto">
    <a class="btn b-ghost b-sm" style="justify-self:start" href="#/matiere/${f.m.id}">${ic('back')}${esc(f.m.titre)}</a>
    <article class="lesson"><span class="kick">Chapitre ${idx+1} · ${f.c.duree||20} min</span><h1 style="font-size:clamp(24px,3vw,34px);margin:6px 0 18px">${esc(f.c.titre)}</h1>${md.html}</article>
+   ${A.exosHtml(f.c)}
    <div class="band"><div><h2>La suite vous attend</h2><p>Quiz corrigé, chapitres suivants, assistant IA : tout est gratuit avec un compte.</p></div><a class="btn b-lg" style="background:#fff;color:var(--or2)" href="#/inscription">S'inscrire ${ic('arrow')}</a></div>
   </section></div>`;
 }});

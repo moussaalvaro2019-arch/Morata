@@ -97,7 +97,7 @@ A.DEF = {
 };
 A.cfg = () => Object.assign({}, A.DEF, (A.S.settings||{}).main || {});
 
-/* ---------- matières (remplies par data/matieres/*.js) ---------- */
+/* ---------- matières : catalogue (data/catalogue.js) puis contenu à la demande (data/cours/<id>.js) ---------- */
 A.M = [];
 /* 3 niveaux par matière : chaque chapitre porte niv = 1 (débutant), 2 (intermédiaire) ou 3 (avancé) */
 A.NIVEAUX = [
@@ -106,11 +106,42 @@ A.NIVEAUX = [
   {id:3, n:'Avancé', d:'Dimensionnement, cas complexes et approfondissements', c:'#C8363B', bg:'#FBE9E9'}
 ];
 A.nivOf = c => Math.min(3, Math.max(1, +(c && c.niv) || 2));
-A.addMatiere = m => { m.chapitres = m.chapitres || []; m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.niv = A.nivOf(c); c._i = i; }); m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = c.ordre ?? i; }); A.M.push(m); };
+A.addMatiere = m => {
+  m.chapitres = m.chapitres || [];
+  const prev = A.M.find(x => x.id === m.id);
+  if(prev){ // contenu complet d'une matière déjà présente dans le catalogue (data/cours/<id>.js)
+    m.chapitres.forEach(c => { const o = prev.chapitres.find(x => x.id === c.id); if(o) Object.assign(o, c, {niv:A.nivOf(c)}); else prev.chapitres.push(Object.assign(c, {mat:m.id, niv:A.nivOf(c), ordre:prev.chapitres.length})); });
+    prev.loaded = true; A.coursVer++; return;
+  }
+  m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.niv = A.nivOf(c); c._i = i; }); m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = c.ordre ?? i; });
+  if(!m.src) m.loaded = true; A.M.push(m);
+};
+A.coursVer = 0;
+/* Chargement à la demande du contenu d'une matière (cours, quiz, exercices corrigés) */
+const coursLoading = {};
+A.loadMat = id => {
+  const m = A.M.find(x => x.id === id);
+  if(!m || m.loaded || !m.src) return Promise.resolve(m);
+  return coursLoading[id] || (coursLoading[id] = new Promise((res, rej) => {
+    const sc = document.createElement('script'); sc.src = m.src; sc.async = true;
+    sc.onload = () => { delete coursLoading[id]; m.loaded = true; A.coursVer++; res(m); };
+    sc.onerror = () => { delete coursLoading[id]; sc.remove(); rej(new Error('Cours indisponible : vérifiez votre connexion internet.')); };
+    document.head.appendChild(sc);
+  }));
+};
+/* Le chapitre a-t-il son contenu ? sinon on le charge puis on réaffiche la page */
+A.chapReady = (f, after) => {
+  if(!f || f.c.contenu != null) return true;
+  A.loadMat(f.m.id).then(() => (after || A.render)()).catch(e => { toast(e.message, 'x'); });
+  return false;
+};
+A.chapLoading = () => `<div class="card row" style="justify-content:center;padding:40px">${ic('refresh')}<span class="sub">Chargement du cours…</span></div>`;
+A.nq = c => c.quiz ? c.quiz.length : (c.nq || 0);
+A.nex = c => c.exercices ? c.exercices.length : (c.nex || 0);
 let catCache = null, catKey = '';
 A.catalog = function(all){
   const cont = A.S.contents || {};
-  const key = JSON.stringify(Object.keys(cont).map(k => k + (cont[k].updatedAt||'') + (cont[k].cache?'h':''))) + A.M.length + (all?'a':'');
+  const key = JSON.stringify(Object.keys(cont).map(k => k + (cont[k].updatedAt||'') + (cont[k].cache?'h':''))) + A.M.length + '/' + A.coursVer + (all?'a':'');
   if(catCache && catKey === key) return catCache;
   const mats = A.M.map(m => ({...m, chapitres: m.chapitres.map(c => ({...c}))}));
   Object.entries(cont).forEach(([id, d]) => {

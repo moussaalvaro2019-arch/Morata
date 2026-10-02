@@ -88,7 +88,7 @@ A.page('app/matiere/:id', {space:'app', title:p => (A.mat(p.id)||{}).titre || 'M
     <div class="lvcards">${LV.map(l => `<button class="lvcard ${l.id===cur?'on':''}" style="--lc:${l.c};--lb:${l.bg}" data-mlv="${l.id}" data-m="${m.id}"><span class="row between"><b>${'●'.repeat(l.id)} ${l.n}</b>${mine===l.id?'<span class="pill" style="background:var(--lc);color:#fff">Mon niveau</span>':l.pct===100?`<span class="pill p-ok">${ic('check')}Terminé</span>`:''}</span><span class="sub">${l.d}</span><span class="small">${l.total} chapitres · ${Math.max(1, Math.round(l.min/60))} h</span>${A.bar(l.pct)}<span class="small mono">${l.done}/${l.total} terminés</span></button>`).join('')}</div></div>
    <div class="card stack"><div class="row between"><h3 style="margin:0;color:${lv.c}">${'●'.repeat(lv.id)} Niveau ${lv.n}</h3><div class="row">${nx?`<a class="btn b-pri" href="#/app/cours/${nx.id}">${ic('play')}${lv.done?'Continuer':'Commencer'}</a>`:''}${mine!==lv.id?`<button class="btn b-line" data-setniv="${lv.id}" data-m="${m.id}">${ic('flag')}Choisir comme mon niveau</button>`:''}</div></div>
     <div class="chlist">${lv.ch.map((c,i) => { const d = S.progress[c.id] && S.progress[c.id].done; const best = qz.filter(q=>q.chap===c.id).reduce((a,q)=>Math.max(a,Math.round(q.score/q.total*100)),-1);
-     return `<a class="chap ${d?'done':''}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${ic('chev')}</a>`; }).join('') || A.empty('book','Aucun chapitre à ce niveau pour le moment.')}</div>
+     return `<a class="chap ${d?'done':''}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min${A.nex(c) ? ` · ${A.nex(c)} exercice${A.nex(c) > 1 ? 's' : ''} corrigé${A.nex(c) > 1 ? 's' : ''}` : ''} · ${A.nq(c)} questions${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${ic('chev')}</a>`; }).join('') || A.empty('book','Aucun chapitre à ce niveau pour le moment.')}</div>
     ${lv.pct===100 && lv.total ? `<div class="note ok">${ic('award')}<span>Niveau ${lv.n} terminé. <a href="#/app/attestation/${m.id}?n=${lv.id}">Voir mon attestation de niveau</a>${nxtL?` · <a href="#" data-mlv="${nxtL.id}" data-m="${m.id}">Passer au niveau ${nxtL.n} →</a>`:''}</span></div>` : ''}
    </div>
    ${pr.pct===100?`<a class="btn b-amber" style="justify-self:start" href="#/app/attestation/${m.id}">${ic('award')}Attestation complète de la matière</a>`:''}
@@ -110,8 +110,9 @@ let QZ = null;
 A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', crumb:p => { const f = A.chap(p.id); return f ? `<a href="#/app/matieres">Matières</a> › <a href="#/app/matiere/${f.m.id}">${esc(f.m.titre)}</a>` : ''; },
  actions:p => `<button class="ibtn noprint" data-act="print" title="Imprimer le chapitre">${ic('print')}</button>`,
  render(p){
-  const f = A.chap(p.id); if(!f) return A.empty('book','Chapitre introuvable.');
-  const m = A.mat(f.m.id) || f.m, c = f.c;
+  const f0 = A.chap(p.id); if(!f0) return A.empty('book','Chapitre introuvable.');
+  if(!A.chapReady(f0)) return A.chapLoading();
+  const f = A.chap(p.id), m = A.mat(f.m.id) || f.m, c = f.c;
   const list = m.chapitres, idx = list.findIndex(x => x.id === c.id);
   const prev = list[idx-1], next = list[idx+1];
   const done = S.progress[c.id] && S.progress[c.id].done;
@@ -124,6 +125,7 @@ A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titr
      <h1 style="font-size:clamp(24px,3vw,34px);margin-bottom:18px">${esc(c.titre)}</h1>
      ${md.html}
     </article>
+    ${A.exosHtml(c)}
     <div class="aipanel noprint" id="aiBox">
      <div class="hd">${ic('spark')}Besoin d'aide sur ce chapitre ?</div>
      <div class="sugg"><button data-iaq="simple">${ic('chat')} Expliquer plus simplement</button><button data-iaq="exemple">${ic('calc')} Un exemple chiffré</button><button data-iaq="exercice">${ic('edit')} Un exercice corrigé</button><button data-iaq="chantier">${ic('hat')} Application sur chantier</button><button data-iaq="resume">${ic('list')} Fiche résumé</button></div>
@@ -137,13 +139,23 @@ A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titr
     </div>
    </div>
    <aside class="toc noprint">
-    ${md.toc.length?`<div class="card" style="padding:12px"><b class="small faint mono" style="letter-spacing:.1em">DANS CE CHAPITRE</b><div style="display:grid;gap:2px;margin-top:6px">${md.toc.map(t=>`<a href="javascript:void 0" data-toc="${t.id}">${ic('chev')}${esc(t.t)}</a>`).join('')}<a href="javascript:void 0" data-toc="quiz">${ic('target')}Quiz</a></div></div>`:''}
+    ${md.toc.length?`<div class="card" style="padding:12px"><b class="small faint mono" style="letter-spacing:.1em">DANS CE CHAPITRE</b><div style="display:grid;gap:2px;margin-top:6px">${md.toc.map(t=>`<a href="javascript:void 0" data-toc="${t.id}">${ic('chev')}${esc(t.t)}</a>`).join('')}${(c.exercices||[]).length?`<a href="javascript:void 0" data-toc="exos">${ic('chev')}Exercices corrigés</a>`:''}<a href="javascript:void 0" data-toc="quiz">${ic('target')}Quiz</a></div></div>`:''}
     <div class="card" style="padding:12px"><b class="small faint mono" style="letter-spacing:.1em">${esc(m.titre.toUpperCase())}</b><div style="display:grid;gap:2px;margin-top:6px">${list.map((x,i)=>`<a href="#/app/cours/${x.id}" class="${x.id===c.id?'on':''} ${S.progress[x.id]&&S.progress[x.id].done?'done':''}">${ic(S.progress[x.id]&&S.progress[x.id].done?'check':'chev')}<span>${i+1}. ${esc(x.titre)}</span></a>`).join('')}</div></div>
    </aside></div>`;
  }
 });
 A.on('click', '[data-toc]', el => { const t = document.getElementById(el.dataset.toc); if(t) t.scrollIntoView({behavior:'smooth', block:'start'}); });
 A.on('click', '[data-done]', async el => { const f = A.chap(el.dataset.done); await A.db.saveProgress(f.c.id, f.m.id, true); toast('Chapitre terminé'); A.refresh(); });
+
+/* Exercices corrigés à la fin du chapitre : énoncé, puis corrigé détaillé à ouvrir */
+const EXD = {1:['Application directe','#1E9B5E','#E7F5EE'], 2:['Entraînement','#D9661F','#FDEEE2'], 3:['Approfondissement','#C8363B','#FBE9E9']};
+A.exosHtml = c => {
+  const L = c.exercices || []; if(!L.length) return '';
+  return `<section class="lesson" id="exos"><span class="kick">À vous de jouer</span><h2 style="font-size:22px;margin:4px 0 6px">Exercices corrigés</h2>
+   <p class="sub" style="margin-bottom:14px">Cherchez chaque exercice sur une feuille avant d'ouvrir le corrigé : c'est en se trompant qu'on apprend.</p>
+   <div class="exos">${L.map((x, i) => { const d = EXD[x.d] || EXD[2]; return `<div class="exo"><div class="row between nw" style="align-items:flex-start"><b>Exercice ${i + 1} · ${esc(x.t)}</b><span class="pill" style="background:${d[2]};color:${d[1]};flex:none">${d[0]}</span></div>
+    ${A.mdHtml(x.e)}<details class="cor"><summary>${ic('check')}Voir le corrigé détaillé</summary>${A.mdHtml(x.c)}</details></div>`; }).join('')}</div></section>`;
+};
 
 function quizHtml(c){
   const items = QZ.items;
