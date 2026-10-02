@@ -2,9 +2,10 @@
   "name": "morata",
   "version": "1.0.0",
   "private": true,
-  "description": "Morata : résumés des grands livres de développement personnel, histoires par thème et coach IA.",
+  "description": "Morata : résumés en chapitres, histoires, boutique de livres et coach IA.",
   "type": "module",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.131.0"
+    "@anthropic-ai/sdk": "^0.131.0",
+    "@netlify/blobs": "^11.1.3"
   }
 }
