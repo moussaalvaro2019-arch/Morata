@@ -238,27 +238,44 @@ A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", gr
   {id:"pb-8", niv:3, titre:"Conception bioclimatique en climat tropical humide", duree:35, nq:4, nex:0},
   {id:"pb-9", niv:3, titre:"Énergie solaire photovoltaïque : dimensionner une installation", duree:35, nq:4, nex:0}
  ]});
-A.addMatiere({id:"rdm", titre:"Résistance des matériaux", court:"RDM", groupe:"struct", icone:"beam", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:30, ordre:2, prerequis:["math", "sp", "om"], resume:"Réactions d'appuis, efforts internes N, V, M, caractéristiques des sections, traction, flexion, flèches et flambement : dimensionner poutres et poteaux.", objectifs:[
-  "Calculer les réactions d'appuis d'une structure isostatique",
-  "Tracer les diagrammes d'effort tranchant et de moment fléchissant",
-  "Calculer aire, centre de gravité, moment quadratique et module de flexion",
-  "Vérifier une pièce en traction, compression, flexion et cisaillement",
-  "Calculer une flèche et vérifier le flambement"
+A.addMatiere({id:"rdm", titre:"Résistance des matériaux", court:"RDM", groupe:"struct", icone:"beam", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:90, ordre:2, prerequis:["math", "sp", "om"], resume:"Des charges aux contraintes : équilibre, réactions d'appuis, efforts N, V, M, diagrammes, flexion, flèches, flambement, structures hyperstatiques, portiques et méthode de Cross, avec applications et exercices corrigés.", objectifs:[
+  "Évaluer les charges qui s'appliquent sur un ouvrage et les transmettre jusqu'aux appuis",
+  "Écrire l'équilibre d'un solide et calculer les réactions d'appuis d'une structure isostatique",
+  "Calculer contraintes et déformations en traction, compression, cisaillement et torsion",
+  "Calculer les caractéristiques géométriques d'une section (G, I, W, i)",
+  "Tracer les diagrammes d'effort tranchant et de moment fléchissant de toute poutre isostatique",
+  "Dimensionner une poutre en flexion (contraintes normales et tangentielles) et calculer sa flèche",
+  "Vérifier un élément comprimé au flambement",
+  "Résoudre une poutre continue ou un portique hyperstatique (forces, trois moments, Cross)"
  ], applications:[
-  "Choix d'un profilé métallique",
-  "Vérification d'un linteau ou d'une poutre en bois",
-  "Préalable au calcul du béton armé",
-  "Contrôle des résultats d'un logiciel"
- ], src:"data/cours/rdm.js?v=e6cadc9c", chapitres:[
-  {id:"rdm-1", niv:1, titre:"Statique : appuis et réactions", duree:30, nq:4, nex:0},
-  {id:"rdm-4", niv:1, titre:"Traction, compression et cisaillement", duree:25, nq:4, nex:0},
-  {id:"rdm-7", niv:1, titre:"Les bases : forces, charges et notion de contrainte", duree:25, nq:4, nex:0},
-  {id:"rdm-2", niv:2, titre:"Efforts internes : N, V et M", duree:35, nq:4, nex:0},
-  {id:"rdm-3", niv:2, titre:"Caractéristiques géométriques des sections", duree:30, nq:4, nex:0},
-  {id:"rdm-5", niv:2, titre:"Flexion simple et flèches", duree:35, nq:4, nex:0},
-  {id:"rdm-6", niv:3, titre:"Le flambement des éléments comprimés", duree:30, nq:4, nex:0},
-  {id:"rdm-8", niv:3, titre:"Poutres continues : le théorème des trois moments", duree:35, nq:4, nex:0},
-  {id:"rdm-9", niv:3, titre:"Treillis et portiques", duree:35, nq:4, nex:0}
+  "Choix d'un profilé métallique (IPE, HEA) ou d'une section de bois",
+  "Vérification d'un linteau, d'une poutre ou d'un poteau",
+  "Calcul des sollicitations avant le ferraillage en béton armé",
+  "Fermes de toiture en treillis, hangars et portiques",
+  "Contrôle des résultats d'un logiciel de calcul de structures"
+ ], src:"data/cours/rdm.js?v=c0572f13", chapitres:[
+  {id:"rdm-7", niv:1, titre:"Introduction : forces, charges et unités", duree:50, nq:5, nex:5},
+  {id:"rdm-10", niv:1, titre:"Moments, résultantes et équilibre d'un solide", duree:55, nq:5, nex:5},
+  {id:"rdm-1", niv:1, titre:"Liaisons, appuis et calcul des réactions", duree:60, nq:5, nex:5},
+  {id:"rdm-11", niv:1, titre:"Contraintes, déformations et loi de Hooke", duree:55, nq:5, nex:5},
+  {id:"rdm-4", niv:1, titre:"Traction et compression simples", duree:60, nq:5, nex:5},
+  {id:"rdm-12", niv:1, titre:"Cisaillement simple et assemblages", duree:55, nq:5, nex:5},
+  {id:"rdm-3", niv:2, titre:"Caractéristiques géométriques des sections", duree:65, nq:5, nex:5},
+  {id:"rdm-2", niv:2, titre:"Efforts internes N, V, M : la méthode des coupures", duree:60, nq:5, nex:5},
+  {id:"rdm-13", niv:2, titre:"Diagrammes de V et M des poutres isostatiques", duree:70, nq:5, nex:5},
+  {id:"rdm-5", niv:2, titre:"Flexion simple : contraintes normales et dimensionnement", duree:65, nq:5, nex:5},
+  {id:"rdm-14", niv:2, titre:"Contraintes de cisaillement en flexion (Jourawski)", duree:50, nq:5, nex:5},
+  {id:"rdm-15", niv:2, titre:"Déformée et flèches des poutres", duree:70, nq:5, nex:5},
+  {id:"rdm-16", niv:2, titre:"Treillis isostatiques : méthode des nœuds et de Ritter", duree:60, nq:5, nex:5},
+  {id:"rdm-17", niv:2, titre:"Torsion des arbres et des poutres", duree:50, nq:5, nex:5},
+  {id:"rdm-18", niv:3, titre:"Sollicitations composées : flexion composée et flexion déviée", duree:65, nq:5, nex:5},
+  {id:"rdm-6", niv:3, titre:"Le flambement des éléments comprimés", duree:70, nq:5, nex:5},
+  {id:"rdm-19", niv:3, titre:"Structures hyperstatiques : la méthode des forces", duree:75, nq:5, nex:5},
+  {id:"rdm-8", niv:3, titre:"Poutres continues : le théorème des trois moments", duree:70, nq:5, nex:5},
+  {id:"rdm-20", niv:3, titre:"Méthodes énergétiques : Castigliano, Menabrea et intégrales de Mohr", duree:70, nq:5, nex:5},
+  {id:"rdm-9", niv:3, titre:"Portiques et cadres", duree:70, nq:5, nex:5},
+  {id:"rdm-21", niv:3, titre:"La méthode de Cross (distribution des moments)", duree:75, nq:5, nex:4},
+  {id:"rdm-22", niv:3, titre:"Lignes d'influence et charges mobiles", duree:55, nq:5, nex:5}
  ]});
 A.addMatiere({id:"ro", titre:"Recherche opérationnelle", court:"Recherche op.", groupe:"fond", icone:"network", couleur:"#8E4FD1", niveau:"Intermédiaire", heures:20, ordre:4, prerequis:["math"], resume:"Modéliser et optimiser : programmation linéaire, ordonnancement PERT et MPM, chemin critique, transport, affectation et gestion des stocks appliqués au chantier.", objectifs:[
   "Modéliser un problème de décision (variables, contraintes, objectif)",
