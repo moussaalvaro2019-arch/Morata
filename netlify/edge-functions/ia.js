@@ -11,7 +11,9 @@ const MODELS = ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-4-5"];
 const DEFAULT_MODEL = "claude-opus-5-5";
 // Modèles qui acceptent le repli automatique côté serveur en cas de refus
 const WITH_FALLBACK = new Set(["claude-opus-5-5", "claude-sonnet-5-5"]);
-const KINDS = ["chat", "expliquer", "quiz", "cours"];
+const KINDS = ["chat", "expliquer", "quiz", "cours", "photo", "corrige", "transcrire"];
+const ADMIN_KINDS = new Set(["cours", "corrige", "transcrire"]);
+const IMG_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const FIGURES = "poteau-coupe, poteau-elevation, poutre-coupe, poutre-elevation, dalle-coupe, hourdis, semelle, semelle-filante, longrine, chainage, escalier, enrobage, coupe-type, triangle, cercle-trigo, forces, pl, pert, gantt, moments, console, traction, flambement, mohr, granulo, proctor, tassement, fondations-types, bulbe, nivellement, gisement, implantation, paroi, pont-thermique, loi-masse, bernoulli, hydrostatique, treillis";
 
 function env(name) {
@@ -36,11 +38,11 @@ async function supabaseConf(request) {
 }
 
 /* Historique de conversation propre : alternance user / assistant, tailles bornées */
-function cleanMessages(list) {
+function cleanMessages(list, max = 6000) {
   const out = [];
   for (const m of Array.isArray(list) ? list.slice(-12) : []) {
     const role = m && m.role === "assistant" ? "assistant" : "user";
-    const content = clip(m && m.content, 6000).trim();
+    const content = clip(m && m.content, max).trim();
     if (!content) continue;
     if (out.length && out[out.length - 1].role === role) out[out.length - 1].content += "\n\n" + content;
     else out.push({ role, content });
@@ -66,6 +68,17 @@ Mise en forme (le texte est affiché par la plateforme, n'utilise ni LaTeX ni HT
 - encadrés : une ligne « > [!retenir] Titre » suivie de lignes commençant par « > » (types disponibles : retenir, attention, exemple, astuce, norme) ;
 - tableaux markdown simples quand ils aident à comparer.`;
 
+/* Photos jointes : 8 au maximum, JPEG/PNG/WebP en base64, 5 Mo chacune au plus */
+function cleanImages(list, maxN) {
+  const out = [];
+  for (const im of Array.isArray(list) ? list.slice(0, maxN) : []) {
+    const type = String(im && im.type || "image/jpeg").toLowerCase(), data = String(im && im.data || "").replace(/\s/g, "");
+    if (!IMG_TYPES.has(type) || !data || data.length > 7_000_000 || !/^[A-Za-z0-9+/]+=*$/.test(data)) continue;
+    out.push({ type: "image", source: { type: "base64", media_type: type, data } });
+  }
+  return out;
+}
+
 function systemFor(kind, ctx, platform) {
   const mat = clip(ctx.matiere, 120), chap = clip(ctx.chapitre, 200), extrait = clip(ctx.extrait, 14000);
   let task;
@@ -79,6 +92,41 @@ Réponds UNIQUEMENT avec un tableau JSON valide, sans aucun texte avant ou aprè
 [{"q":"question","o":["proposition A","proposition B","proposition C","proposition D"],"r":0,"e":"explication"}]
 où "r" est l'indice (0 à 3) de la bonne proposition.
 <chapitre>\n${extrait}\n</chapitre>`;
+  } else if (kind === "photo") {
+    const mode = clip(ctx.mode, 20);
+    const MODE = {
+      resoudre: `Résous complètement l'exercice, question par question, avec cette structure :
+## Énoncé — recopie fidèlement ce que tu lis sur la photo (si un passage est illisible ou coupé, dis-le et fais une hypothèse explicite).
+## Données — liste des données avec leurs unités, et ce qui est demandé.
+## Méthode — la démarche en quelques lignes et les formules utilisées (avec la référence : BAEL, Eurocode, DTU… si c'est pertinent).
+## Résolution — pour chaque question : formule, application numérique avec les unités, résultat encadré en **gras**.
+## Résultats — tableau récapitulatif.
+## Vérification — ordre de grandeur, cohérence, erreurs fréquentes à éviter.`,
+      guider: `L'apprenant veut chercher lui-même : NE DONNE PAS les résultats numériques finaux. Structure :
+## Énoncé — recopie fidèlement ce que tu lis.
+## Ce qui est demandé — reformulation simple de chaque question.
+## Pistes — pour chaque question : la notion à utiliser, la formule, l'ordre des étapes, un piège à éviter, et une question pour le faire avancer.
+Termine en l'invitant à te proposer ses résultats pour que tu les vérifies.`,
+      verifier: `L'apprenant te donne sa réponse : vérifie-la. Structure :
+## Énoncé — recopie fidèlement ce que tu lis.
+## Correction de votre réponse — pour chaque résultat de l'apprenant : ✓ juste ou ✗ faux, avec la valeur attendue et l'explication de l'erreur (unité, formule, calcul, signe…).
+## Démarche correcte — la résolution détaillée des points faux.
+## Conseils — comment éviter ces erreurs à l'examen.`,
+      expliquer: `Explique seulement l'énoncé, sans le résoudre. Structure :
+## Énoncé — recopie fidèlement ce que tu lis.
+## De quoi parle l'exercice — la situation et les notions du cours en jeu.
+## Ce qui est demandé — chaque question reformulée simplement, avec le type de réponse attendu (valeur, schéma, justification).
+## Par où commencer — la première étape à faire.`
+    }[mode] || "";
+    task = `Un apprenant${ctx.niveau ? ` (niveau ${clip(ctx.niveau, 40)})` : ""} t'envoie un exercice${mat ? ` de « ${mat} »` : ""} : en photo (énoncé imprimé, manuscrit ou au tableau) et/ou tapé. Si la matière n'est pas indiquée, identifie-la.
+${MODE}
+Adapte le niveau des explications à l'apprenant. Si l'image ne contient pas d'exercice ou est illisible, dis-le simplement et demande une photo plus nette (cadrée, éclairée, sans reflet).
+${ctx.solveurs ? `La plateforme possède des « solveurs guidés » (exercices types refaits pas à pas). Si — et seulement si — l'exercice correspond clairement à l'un d'eux, ajoute tout à la fin un bloc de code \`\`\`morata contenant uniquement un objet JSON {"solveur":"identifiant","p":{...données...}} avec les données de l'exercice, dans les unités indiquées. Sinon n'ajoute rien. Solveurs disponibles et format de leurs données :\n${clip(ctx.solveurs, 9000)}` : ""}`;
+  } else if (kind === "transcrire") {
+    task = `Tu aides la direction de la plateforme à mettre en ligne un sujet d'examen officiel${ctx.examen ? ` (${clip(ctx.examen, 60)} ${clip(ctx.annee, 8)})` : ""}${mat ? `, matière « ${mat} »` : ""}. Transcris fidèlement et intégralement le texte des pages jointes, dans l'ordre, en Markdown : titres avec ##, questions numérotées, tableaux de données en tableaux markdown, formules sur des lignes $$. Décris brièvement entre crochets les figures ou schémas ([Figure : poutre sur deux appuis de 6 m…]). N'ajoute aucune solution ni commentaire.`;
+  } else if (kind === "corrige") {
+    task = `Tu rédiges, pour la direction de la plateforme, le corrigé détaillé d'un sujet d'examen officiel${ctx.examen ? ` (${clip(ctx.examen, 60)} ${clip(ctx.annee, 8)})` : ""}${mat ? `, matière « ${mat} »` : ""}${ctx.titre ? ` : « ${clip(ctx.titre, 160)} »` : ""}. Le sujet est sur les pages jointes${extrait ? " et/ou dans le texte ci-dessous" : ""}.
+Pour chaque exercice (## Exercice n) et chaque question : la démarche, les formules, l'application numérique avec les unités, le résultat en **gras**, et une courte justification. Signale clairement toute donnée illisible et l'hypothèse retenue. Termine par un tableau récapitulatif des résultats. Ce corrigé sera relu par un enseignant avant publication : sois rigoureux.${extrait ? `\n<sujet>\n${extrait}\n</sujet>` : ""}`;
   } else {
     task = `Tu rédiges, pour la direction de la plateforme, le chapitre de cours « ${chap} » de la matière « ${mat} »${ctx.niveau ? ` (niveau ${clip(ctx.niveau, 40)})` : ""}.
 ${ctx.autres ? `Autres chapitres déjà présents dans cette matière (évite les répétitions) : ${clip(ctx.autres, 2000)}.\n` : ""}Consignes :
@@ -124,22 +172,26 @@ export default async (request) => {
     if (!r.ok) return json({ error: "Vérification impossible : le script supabase.sql a-t-il bien été exécuté ?" }, 502);
     check = Object.assign(check, await r.json());
     if (!check.ok) return json({ error: check.msg || "Accès refusé." }, check.code === "quota" ? 429 : 403);
-    if (kind === "cours" && !check.admin) return json({ error: "La rédaction de chapitres est réservée à la direction." }, 403);
+    if (ADMIN_KINDS.has(kind) && !check.admin) return json({ error: "Cette fonction est réservée à la direction." }, 403);
   } else if (env("IA_SANS_CONNEXION") !== "oui") {
     return json({ error: "L'assistant IA a besoin de Supabase (config.js) pour vérifier les comptes. Pour un essai sans comptes, ajoutez la variable IA_SANS_CONNEXION=oui sur Netlify." }, 403);
   }
 
-  const messages = cleanMessages(body.messages);
+  const messages = cleanMessages(body.messages, kind === "photo" ? 20000 : 6000);
   if (!messages.length) return json({ error: "Message vide." }, 400);
+  // Photos de l'exercice ou du sujet : jointes au premier message de l'apprenant
+  const images = ["photo", "corrige", "transcrire"].includes(kind) ? cleanImages(body.images, kind === "photo" ? 4 : 8) : [];
+  if (images.length) messages[0] = { role: "user", content: [...images, { type: "text", text: messages[0].content }] };
+  if ((kind === "transcrire") && !images.length) return json({ error: "Ajoutez d'abord les photos du sujet." }, 400);
   const model = MODELS.includes(check.model) ? check.model : DEFAULT_MODEL;
   const params = {
     model,
-    max_tokens: kind === "cours" ? 32000 : kind === "quiz" ? 8000 : 16000,
+    max_tokens: kind === "cours" || kind === "corrige" || kind === "transcrire" ? 32000 : kind === "quiz" ? 8000 : 16000,
     system: systemFor(kind, ctx, clip(check.platform || "Morata", 60)),
     messages
   };
   // Haiku 4.5 n'accepte pas le réglage d'effort
-  if (model !== "claude-haiku-4-5") params.output_config = { effort: kind === "cours" ? "high" : "medium" };
+  if (model !== "claude-haiku-4-5") params.output_config = { effort: kind === "cours" || kind === "corrige" ? "high" : "medium" };
 
   const client = new Anthropic({ apiKey, baseURL: env("ANTHROPIC_BASE_URL") || undefined, maxRetries: 1 });
   const enc = new TextEncoder();

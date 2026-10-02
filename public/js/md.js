@@ -76,7 +76,7 @@ A.md = function(src, opt={}){
     if(l.startsWith('$$') && !/^\$\$[^$]+\$\$$/.test(l)){
       flush(); const buf = [];
       while(i < lines.length && lines[i].trim().startsWith('$$')){ const x = lines[i].trim().replace(/^\$\$\s?/, '').replace(/\$\$$/, ''); if(x) buf.push(texish(x)); i++; }
-      if(buf.length) out.push(`<div class="fx">${esc(buf.join('\n'))}</div>`); continue;
+      if(buf.length) out.push(`<div class="fx">${esc(buf.join('\n')).replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>')}</div>`); continue;
     }
     if(/^\\\[/.test(l)){ flush(); const buf = [l.replace(/^\\\[/, '')]; while(!/\\\]\s*$/.test(buf[buf.length-1]) && i+1 < lines.length){ i++; buf.push(lines[i]); } i++;
       out.push(`<div class="fx">${esc(texish(buf.join(' ').replace(/\\\]\s*$/, '')))}</div>`); continue; }

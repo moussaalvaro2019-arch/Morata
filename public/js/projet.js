@@ -577,7 +577,7 @@ function openEl(p, id){
   const M = model(p), e = M.byId(id); if(!e) return A.toast('Élément introuvable', 'x');
   const T = TYPES[e.type] || ['Élément'];
   A.win({title:`${T[0]} ${e.post || e.id}${e.type === 'poteau' ? ' · ' + M.L[e.lvl].court : ''}`, wide:true, body:sheet(M, e),
-    foot:`<span class="sub" style="margin-right:auto">Calcul simplifié (BAEL 91), à faire valider par un bureau d'études.</span>${e.type === 'poteau' ? M.postEls.filter(x => x.post === e.post).map(x => `<button class="btn b-sm ${x.id===e.id?'b-dark':'b-line'}" data-pel="${esc(x.id)}">${esc(M.L[x.lvl].court)}</button>`).join('') : ''}<button class="btn b-line" data-act="closewin">Fermer</button>`});
+    foot:`<span class="sub" style="margin-right:auto">Calcul simplifié (BAEL 91), à faire valider par un bureau d'études.</span>${e.type === 'poteau' ? M.postEls.filter(x => x.post === e.post).map(x => `<button class="btn b-sm ${x.id===e.id?'b-dark':'b-line'}" data-pel="${esc(x.id)}">${esc(M.L[x.lvl].court)}</button>`).join('') : ''}${(e.type === 'poutre' || e.type === 'chainage') && A.SOL ? `<a class="btn b-pri" href="${A.SOL.link('ba-poutre', A.SOL.beamFromProject(M, e), 'guide')}">${ic('target')}Résoudre pas à pas</a>` : ''}<button class="btn b-line" data-act="closewin">Fermer</button>`});
 }
 A.on('click', '[data-pfam]', el => { fam = el.dataset.pfam; famLv = 'all'; A.refresh(); });
 A.on('click', '[data-pflv]', el => { famLv = el.dataset.pflv; A.refresh(); });

@@ -118,7 +118,7 @@ A.page('admin/apprenant/:id', {space:'admin', title:p => nm(prof(p.id)), crumb:'
    <div class="card"><h3>Informations</h3><dl class="kv"><dt>Téléphone</dt><dd>${esc(u.data.phone||'—')}</dd><dt>Ville</dt><dd>${esc(u.data.city||'—')}</dd><dt>Profil</dt><dd>${esc(u.data.profil||'—')}</dd><dt>Statut</dt><dd>${u.admin?'Administrateur':u.status==='suspendu'?'Suspendu':'Actif'}</dd></dl>
     ${u.admin || u.id === S.me.id ? '' : `<div class="row" style="margin-top:14px">${u.status==='suspendu'?`<button class="btn b-ok b-sm" data-ust="${u.id}" data-v="actif">${ic('check')}Réactiver</button>`:`<button class="btn b-line b-sm" data-ust="${u.id}" data-v="suspendu">${ic('lock')}Suspendre</button>`}<button class="btn b-bad b-sm" data-udel="${u.id}">${ic('trash')}Supprimer le compte</button></div>`}</div>
    <div class="card"><h3>Historique des connexions <small>${cx.length}</small></h3>${cx.length?`<div class="stack s8">${cx.slice(0,15).map(c=>`<div class="row between nw"><span class="small">${fdt(c.at)}</span><span class="small faint">${esc(A.device(c.data&&c.data.ua))}</span></div>`).join('')}</div>`:'<p class="sub">Aucune connexion.</p>'}</div>
-   <div class="card"><h3>Travaux <small>${wk.length}</small></h3>${wk.length?`<div class="stack s8">${wk.map(w=>`<div class="row between nw"><span class="row nw">${w.kind==='dessin'?'<span class="pill p-dark">Plan</span>':'<span class="pill p-info">Métré</span>'}<b style="font-size:13.5px">${esc(w.name||'Sans nom')}</b></span><button class="btn b-line b-xs" data-wopen="${w.id}">Ouvrir</button></div>`).join('')}</div>`:'<p class="sub">Aucun travail enregistré.</p>'}</div>
+   <div class="card"><h3>Travaux <small>${wk.length}</small></h3>${wk.length?`<div class="stack s8">${wk.map(w=>`<div class="row between nw"><span class="row nw">${A.workPill(w.kind)}<b style="font-size:13.5px">${esc(w.name||'Sans nom')}</b></span><button class="btn b-line b-xs" data-wopen="${w.id}">Ouvrir</button></div>`).join('')}</div>`:'<p class="sub">Aucun travail enregistré.</p>'}</div>
    ${ia.length?`<div class="card"><h3>Utilisation de l'IA <small>${ia.length}</small></h3><div class="stack s8">${ia.slice(0,10).map(x=>`<div class="row between nw small"><span>${esc(iaKind(x.data&&x.data.kind))} · ${esc((x.data&&x.data.ref)||'')}</span><span class="faint">${ago(x.at)}</span></div>`).join('')}</div></div>`:''}
   </div></div>`;
 }});
@@ -129,6 +129,7 @@ A.on('click', '[data-udel]', async el => {
 });
 A.on('click', '[data-wopen]', el => {
   const w = AD().works.find(x => x.id === el.dataset.wopen); if(!w || !w.data){ toast('Contenu indisponible', 'x'); return; }
+  if(w.kind === 'photo'){ A.photoWin(w.data, nm(prof(w.owner))); return; }
   const copy = JSON.parse(JSON.stringify(w.data)); copy.name = (copy.name || 'Travail') + ' (copie de ' + nm(prof(w.owner)) + ')';
   if(w.kind === 'metre') A.METRE.openDoc(copy);
   else { A.ls.set('cadImport', copy); A.go('#/app/atelier/import'); }
@@ -322,7 +323,7 @@ A.on('click', '[data-annsave]', async el => { const titre = A.val('anT').trim(),
 A.on('click', '[data-anndel]', async el => { if(el.dataset.c !== '1'){ el.dataset.c = '1'; el.innerHTML = 'Confirmer'; return; } await A.db.delAnnonce(el.dataset.anndel); toast('Annonce supprimée', 'trash'); A.refresh(); });
 
 /* ---------- Intelligence artificielle ---------- */
-const iaKind = k => ({chat:'Conversation', expliquer:'Aide sur un cours', quiz:'Quiz généré', cours:'Rédaction de chapitre'}[k] || k || '—');
+const iaKind = k => ({chat:'Conversation', expliquer:'Aide sur un cours', quiz:'Quiz généré', cours:'Rédaction de chapitre', photo:'Exercice en photo', corrige:'Corrigé d\'annale', transcrire:'Transcription d\'annale'}[k] || k || '—');
 A.page('admin/ia', {space:'admin', title:'Intelligence artificielle', crumb:'Réglages et utilisation de l\'assistant', render(){
   const c = A.cfg(), D = AD(), t = now();
   const d1 = D.ia.filter(x => dayKey(ts(x.at)) === dayKey(t)).length, d7 = D.ia.filter(x => t - ts(x.at) < 7*DAY).length, d30 = D.ia.filter(x => t - ts(x.at) < 30*DAY).length;
@@ -353,10 +354,10 @@ A.on('submit', '#fIaTest', async () => { const out = $('#iaTO'); out.innerHTML =
 
 /* ---------- Travaux des apprenants ---------- */
 let twK = '';
-A.page('admin/travaux', {space:'admin', title:'Travaux des apprenants', crumb:'Plans dessinés et métrés enregistrés', render(){
+A.page('admin/travaux', {space:'admin', title:'Travaux des apprenants', crumb:'Plans, métrés et exercices résolus en photo', render(){
   let L = AD().works; if(twK) L = L.filter(w => w.kind === twK);
-  return `<div class="tabs">${[['','Tous'],['dessin','Plans'],['metre','Métrés']].map(x=>`<button class="tab ${twK===x[0]?'on':''}" data-twk="${x[0]}">${x[1]}</button>`).join('')}</div>
-  <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Nom</th><th>Type</th><th>Apprenant</th><th>Modifié</th><th></th></tr></thead><tbody>${L.map(w=>`<tr><td><b>${esc(w.name||'Sans nom')}</b>${w.kind==='dessin'&&w.data?`<div class="sub">${(w.data.ents||[]).length} objets</div>`:''}</td><td>${w.kind==='dessin'?'<span class="pill p-dark">Plan</span>':'<span class="pill p-info">Métré</span>'}</td><td>${who(prof(w.owner))}</td><td class="sub nowrap">${ago(w.updated_at)}</td><td class="r"><button class="btn b-line b-xs" data-wopen="${w.id}">Ouvrir une copie</button></td></tr>`).join('') || `<tr><td colspan="5">${A.empty('folder','Aucun travail enregistré.')}</td></tr>`}</tbody></table></div></div>`;
+  return `<div class="tabs">${[['','Tous'],['dessin','Plans'],['metre','Métrés'],['photo','Exercices en photo']].map(x=>`<button class="tab ${twK===x[0]?'on':''}" data-twk="${x[0]}">${x[1]}</button>`).join('')}</div>
+  <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Nom</th><th>Type</th><th>Apprenant</th><th>Modifié</th><th></th></tr></thead><tbody>${L.map(w=>`<tr><td><b>${esc(w.name||'Sans nom')}</b>${w.kind==='photo'&&w.data&&w.data.mat?`<div class="sub">${esc((A.mat(w.data.mat)||{}).titre||'')}</div>`:''}${w.kind==='dessin'&&w.data?`<div class="sub">${(w.data.ents||[]).length} objets</div>`:''}</td><td>${A.workPill(w.kind)}</td><td>${who(prof(w.owner))}</td><td class="sub nowrap">${ago(w.updated_at)}</td><td class="r"><button class="btn b-line b-xs" data-wopen="${w.id}">${w.kind==='photo'?'Voir':'Ouvrir une copie'}</button></td></tr>`).join('') || `<tr><td colspan="5">${A.empty('folder','Aucun travail enregistré.')}</td></tr>`}</tbody></table></div></div>`;
 }});
 A.on('click', '[data-twk]', el => { twK = el.dataset.twk; A.refresh(); });
 

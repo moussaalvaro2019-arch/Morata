@@ -1,0 +1,28 @@
+/* =====================================================================
+   Banque d'exercices corrigés : compléments niveau Licence
+   (sciences physiques, technologie, chantier, métré)
+   ===================================================================== */
+(function(){
+'use strict';
+const E = A.EXO;
+E.add('sp', [
+ {id:'px-7', niv:'Licence', theme:'Électricité', titre:'Relever le facteur de puissance d\'un atelier', duree:35,
+  enonce:`Un atelier de préfabrication (400 V triphasé, 50 Hz) absorbe **30 kW** avec un facteur de puissance **cos φ = 0,70**. On veut le relever à **0,93** avec une batterie de condensateurs couplés en triangle.\n\n1. Calculer la puissance réactive avant et après compensation.\n2. En déduire la puissance de la batterie de condensateurs et la capacité par phase.\n3. Calculer le courant en ligne avant et après. Quel est l'intérêt ?`,
+  corrige:`## 1. Puissances réactives\n$$ Q₁ = P tan φ₁ = 30 000 × tan(arccos 0,70) = 30 000 × 1,020 = **30,6 kvar**\n$$ Q₂ = P tan φ₂ = 30 000 × tan(arccos 0,93) = 30 000 × 0,395 = **11,9 kvar**\n\n## 2. Batterie de condensateurs\n$$ Qc = Q₁ − Q₂ = **18,7 kvar**\nEn triangle, chaque condensateur est sous U = 400 V :\n$$ C = Qc / (3 U² ω) = 18 750 / (3 × 400² × 314,16) = **124 µF** par phase\n\n## 3. Courants\n$$ I₁ = P / (√3 U cos φ₁) = 30 000 / (692,8 × 0,70) = **61,9 A**\n$$ I₂ = 30 000 / (692,8 × 0,93) = **46,6 A**\nLe courant baisse de 25 % : câbles et disjoncteur moins sollicités, pertes par effet Joule réduites (−43 %), et suppression des pénalités de consommation réactive facturées par le fournisseur.`}
+]);
+E.add('tech', [
+ {id:'tcx-7', niv:'Licence', theme:'Charpente métallique', titre:'Vérifier une panne en IPE 100', duree:35,
+  enonce:`Les pannes d'un hangar, espacées de **1,20 m**, portent sur des fermes distantes de **4,00 m** (panne sur deux appuis). Charges : couverture et accessoires G = **0,20 kN/m²**, charge d'entretien Q = **0,60 kN/m²**. Panne en **IPE 100** (8,1 kg/m, I = 171 cm⁴, Wel = 34,2 cm³), acier S235, E = 210 000 MPa.\n\n1. Calculer la charge linéique à l'ELU (poids propre compris) et le moment maximal.\n2. Vérifier la contrainte de flexion.\n3. Vérifier la flèche à l'ELS (limite L/200).`,
+  corrige:`## 1. Charge et moment (ELU)\n$$ q_u = (1,35 × 0,20 + 1,5 × 0,60) × 1,20 + 1,35 × 0,081 = 1,404 + 0,109 = **1,51 kN/m**\n$$ M = q L² / 8 = 1,51 × 4² / 8 = **3,03 kN·m**\n\n## 2. Contrainte\n$$ σ = M / Wel = 3,03 × 10⁶ / 34,2 × 10³ = **88,5 MPa** ≤ 235 MPa ✓\n\n## 3. Flèche (ELS)\n$$ q_s = (0,20 + 0,60) × 1,20 + 0,081 = 1,041 kN/m\n$$ f = 5 q L⁴ / (384 E I) = 5 × 1,041 × 4 000⁴ / (384 × 210 000 × 171 × 10⁴) = **9,7 mm**\n$$ f adm = L / 200 = 20 mm ✓\nL'IPE 100 convient (taux de travail 38 %). En pratique on vérifie aussi la flexion déviée due à la pente du toit et le soulèvement par le vent.`}
+]);
+E.add('chant', [
+ {id:'hx-7', niv:'Licence', theme:'Suivi de projet', titre:'Suivi d\'un chantier par la valeur acquise', duree:30,
+  enonce:`Le budget du gros œuvre d'un immeuble est de **60 millions FCFA**. Au 4ᵉ mois :\n- travaux **prévus** au planning à cette date : 30 M FCFA (valeur planifiée) ;\n- travaux **réalisés**, valorisés au prix du budget : 26 M FCFA (valeur acquise) ;\n- **dépenses réelles** : 29 M FCFA.\n\n1. Calculer les écarts de délai et de coût.\n2. Calculer les indices de performance SPI et CPI et les interpréter.\n3. Estimer le coût final si la tendance se maintient.`,
+  corrige:`## 1. Écarts\n$$ écart de délai SV = valeur acquise − valeur planifiée = 26 − 30 = **− 4 M FCFA** (retard)\n$$ écart de coût CV = valeur acquise − coût réel = 26 − 29 = **− 3 M FCFA** (dépassement)\n\n## 2. Indices\n$$ SPI = 26 / 30 = **0,87**   : on a réalisé 87 % de ce qui était prévu → le chantier est en **retard**.\n$$ CPI = 26 / 29 = **0,90**   : chaque franc dépensé ne produit que 0,90 franc de travaux → **surcoût** de 10 %.\n\n## 3. Coût final estimé\n$$ EAC = budget / CPI = 60 / 0,897 = **66,9 M FCFA** (dépassement prévisible de près de 7 M FCFA)\nActions : analyser les causes (rendements, pertes de matériaux, sous-traitance), renforcer l'équipe sur le chemin critique, renégocier les approvisionnements.`}
+]);
+E.add('metre', [
+ {id:'mrx-7', niv:'Licence', theme:'Estimation par ratios', titre:'Estimation rapide du gros œuvre d\'un R+3', duree:30,
+  enonce:`Un immeuble R+3 compte 4 niveaux de **320 m²** de plancher. Pour l'avant-projet, on utilise les ratios de gros œuvre suivants (par m² de plancher) : béton **0,35 m³**, acier **32 kg**, coffrage **2,6 m²**, maçonnerie **1,2 m²**.\nPrix unitaires : béton 85 000 FCFA/m³, acier 900 FCFA/kg, coffrage 6 500 FCFA/m², maçonnerie 9 000 FCFA/m².\n\n1. Calculer les quantités globales.\n2. Estimer le coût du gros œuvre et le ratio au m².\n3. Quelles sont les limites de cette méthode ?`,
+  corrige:`## 1. Quantités (S = 4 × 320 = 1 280 m²)\n| Ouvrage | Ratio | Quantité |\n| --- | --- | --- |\n| Béton | 0,35 m³/m² | **448 m³** |\n| Acier | 32 kg/m² | **40 960 kg ≈ 41 t** |\n| Coffrage | 2,6 m²/m² | **3 328 m²** |\n| Maçonnerie | 1,2 m²/m² | **1 536 m²** |\n\n## 2. Coût\n| Ouvrage | Montant (FCFA) |\n| --- | --- |\n| Béton | 38 080 000 |\n| Acier | 36 864 000 |\n| Coffrage | 21 632 000 |\n| Maçonnerie | 13 824 000 |\n| **Total gros œuvre** | **110 400 000** |\n\n$$ ratio = 110 400 000 / 1 280 = **86 250 FCFA/m²** de plancher\n\n## 3. Limites\nLes ratios viennent d'opérations comparables : ils donnent un ordre de grandeur (± 15 à 20 %) utile pour l'étude de faisabilité, mais ils ne tiennent pas compte des particularités du projet (fondations profondes, portées, sous-sol, zone sismique…). Le budget doit être confirmé par un **avant-métré détaillé**.`}
+]);
+})();

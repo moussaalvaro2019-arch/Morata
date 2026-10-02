@@ -162,7 +162,7 @@ let sb = null;
 
 /* ---- démo locale : tout est gardé dans ce navigateur ---- */
 function demoSeed(){
-  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}};
+  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}};
   const t = now(), day = 86400000;
   const people = [
     ['u_ak','Koné Aminata','Élève / étudiant','Yopougon'],['u_kj','Kouassi Jean-Marc','Technicien','Cocody'],
@@ -370,7 +370,7 @@ A.db = {
     const {error} = await sb.from('quiz_results').insert({id, owner:S.me.id, data}); if(error) toast(sbErr(error), 'x');
   },
   async saveWork(id, kind, data){
-    id = id || uid(kind === 'dessin' ? 'd_' : 'm_');
+    id = id || uid(kind === 'dessin' ? 'd_' : kind === 'photo' ? 'ph_' : 'm_');
     const at = new Date().toISOString();
     S.works[id] = {kind, data, updated_at:at};
     if(S.mode === 'local'){ L.db.works[id] = {owner:S.me.id, kind, data, updated_at:at}; L.save(); return id; }
@@ -458,6 +458,37 @@ A.db = {
   },
   async logIa(kind, ref){
     if(S.mode === 'local'){ L.db.ia.push({owner:S.me ? S.me.id : 'anon', at:now(), data:{kind, ref}}); L.save(); }
+  },
+  /* ---- annales officielles (sujets d'examen importés par la direction) ----
+     liste = métadonnées seules ; les photos des pages ne sont chargées qu'à l'ouverture */
+  async annales(){
+    if(S.mode === 'local'){ const a = L.db.annales || {}; return Object.entries(a).map(([id, r]) => ({id, ...r})).filter(r => r.pub || (S.me && S.me.isAdmin)); }
+    const {data, error} = await sb.from('annales').select('id,meta,updated_at').order('updated_at', {ascending:false}).limit(2000);
+    if(error){ console.warn(error); return []; }
+    return (data || []).map(r => ({id:r.id, ...(r.meta || {}), updated_at:r.updated_at}));
+  },
+  async annale(id){
+    if(S.mode === 'local'){ const r = (L.db.annales || {})[id]; if(!r) return null; const x = ls.get('ann_' + id, {}); return {id, ...r, pages:x.pages || [], enonce:x.enonce || '', corrige:x.corrige || ''}; }
+    const {data, error} = await sb.from('annales').select('*').eq('id', id).maybeSingle();
+    if(error || !data) return null;
+    return {id:data.id, ...(data.meta || {}), pages:data.pages || [], enonce:data.enonce || '', corrige:data.corrige || '', updated_at:data.updated_at};
+  },
+  async saveAnnale(id, rec){
+    id = id || uid('an_');
+    const meta = {examen:rec.examen, option:rec.option || '', annee:+rec.annee || null, session:rec.session || '', mat:rec.mat || '', titre:rec.titre || '', pub:!!rec.pub, np:(rec.pages || []).length, hasC:!!String(rec.corrige || '').trim(), at:now()};
+    if(S.mode === 'local'){
+      L.db.annales = L.db.annales || {};
+      const prev = ls.get('ann_' + id, null);
+      try{ localStorage.setItem('mrt_ann_' + id, JSON.stringify({pages:rec.pages || [], enonce:rec.enonce || '', corrige:rec.corrige || ''})); }
+      catch(_){ if(prev) ls.set('ann_' + id, prev); toast('Stockage du navigateur plein : réduisez le nombre de photos', 'alert'); return null; }
+      L.db.annales[id] = meta; L.save(); return id;
+    }
+    const {error} = await sb.from('annales').upsert({id, meta, pages:rec.pages || [], enonce:rec.enonce || '', corrige:rec.corrige || '', updated_at:new Date().toISOString()});
+    if(error){ toast(sbErr(error), 'x'); return null; } return id;
+  },
+  async delAnnale(id){
+    if(S.mode === 'local'){ if(L.db.annales) delete L.db.annales[id]; ls.del('ann_' + id); L.save(); return true; }
+    const {error} = await sb.from('annales').delete().eq('id', id); if(error){ toast(sbErr(error), 'x'); return false; } return true;
   },
   async token(){
     if(S.mode !== 'sb') return '';
@@ -552,13 +583,13 @@ function siteShell(body, m){
 }
 
 const LNAV = [
-  ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/construction','Construction A→Z','crane'],
-  ['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/profil','Mon profil','user']
+  ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],
   ['Apprenants'],['admin/apprenants','Apprenants','users'],['admin/progression','Progression & quiz','target'],
-  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annonces','Annonces','bell'],
+  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annales','Annales d\'examens','doc'],['admin/annonces','Annonces','bell'],
   ['Outils'],['admin/ia','Intelligence artificielle','spark'],['admin/travaux','Travaux des apprenants','folder'],
   ['Réglages'],['admin/parametres','Paramètres','cog']
 ];
@@ -566,7 +597,7 @@ function navActive(path, h){
   if(h === 'app' || h === 'admin') return path === h;
   const base = h.split('/')[1];
   const seg = path.split('/')[1] || '';
-  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil'};
+  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil', exercice:'exercices', solveur:'exercices', epreuve:'exercices', annale:path.startsWith('admin') ? 'annales' : 'exercices'};
   return seg === base || alias[seg] === base;
 }
 function appShell(body, m, title, crumb, actions, adm){
@@ -578,7 +609,7 @@ function appShell(body, m, title, crumb, actions, adm){
     : `${me.isAdmin?`<a class="nav" href="#/admin">${ic('crown')}Espace PDG</a>`:''}<a class="nav" href="#/">${ic('globe')}Site public</a>`;
   const bn = adm
     ? [['admin','Pilotage','chart'],['admin/apprenants','Apprenants','users'],['admin/contenus','Contenus','book'],['admin/connexions','Connexions','online'],['admin/parametres','Réglages','cog']]
-    : [['app','Accueil','home'],['app/matieres','Cours','book'],['app/construction','A→Z','crane'],['app/atelier','Dessin','compass'],['app/ia','IA','spark']];
+    : [['app','Accueil','home'],['app/matieres','Cours','book'],['app/resoudre','Photo','camera'],['app/exercices','Exos','target'],['app/construction','A→Z','crane']];
   return `<div class="shell${adm?' adm':''}">
   <aside class="side" id="side">
     <div class="brand">${A.lockup(adm, adm?'Direction':null)}</div>

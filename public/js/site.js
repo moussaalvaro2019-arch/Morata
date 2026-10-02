@@ -62,6 +62,15 @@ A.page('', {space:'site', title:'Accueil', render(){
   </section>
 
   <section class="sect">
+    <div class="sech"><div><span class="kick">Examens</span><h2>S'entraîner et se faire corriger</h2></div></div>
+    <div class="feat">
+      <a class="fcard" href="#/${S.me ? 'app/resoudre' : 'inscription'}" style="background:linear-gradient(140deg,#7A2E0E,#C95F18 55%,#E8752A)">${ic('camera')}<b>Résoudre en photo</b><p>Photographiez un exercice de cours, de TD ou d'examen : l'IA lit l'énoncé et vous explique la résolution étape par étape, vous guide sans donner la réponse ou vérifie votre résultat.</p><span class="go">Essayer ${ic('arrow')}</span></a>
+      <a class="fcard" href="#/${S.me ? 'app/solveur/poutre' : 'inscription'}" style="background:linear-gradient(140deg,#0B4D33,#1E9B5E 60%,#58C28A)">${ic('target')}<b>Solveurs guidés</b><p>Dessinez une poutre : la plateforme vous fait trouver le degré d'hyperstaticité, les réactions, les diagrammes de V et M, puis les aciers et leur disposition. ${A.SOL ? A.SOL.L.length : 50} exercices types dans les 18 matières, avec des valeurs nouvelles à chaque essai.</p><span class="go">S'entraîner ${ic('arrow')}</span></a>
+      <a class="fcard" href="#/${S.me ? 'app/exercices' : 'inscription'}" style="background:linear-gradient(140deg,#2A1458,#6B2FA8 60%,#9B6BD6)">${ic('doc')}<b>Exercices, épreuves et annales</b><p>${A.EXO ? A.EXO.L.length : 120} exercices corrigés type BTS et Licence, des épreuves d'entraînement chronométrées et les sujets d'examen officiels publiés par la direction avec leurs corrigés.</p><span class="go">Voir les exercices ${ic('arrow')}</span></a>
+    </div>
+  </section>
+
+  <section class="sect">
     <div class="sech"><div><span class="kick">Projets types</span><h2>Apprenez sur de vrais projets</h2></div><a class="btn b-line" href="#/construction">Voir les projets ${ic('arrow')}</a></div>
     <div class="pcards">${proj.map(p => `<a class="pcard" href="#/${S.me?'app/construction/projet/'+p.id:'construction'}"><div class="pv">${A.PLAN.thumb(p,{dark:true})}</div><div class="pb"><span class="pill p-or" style="justify-self:start">${esc(p.standing)}</span><b>${esc(p.titre)}</b><span class="sub">${esc(p.resume)}</span></div></a>`).join('')}</div>
   </section>
@@ -175,7 +184,7 @@ A.page('a-propos', {space:'site', title:'À propos', render(){
    Connexion / inscription
    ===================================================================== */
 const authHero = () => `<div class="a-hero">${A.lockup(true)}<div class="stack s20" style="margin-top:auto;margin-bottom:auto"><h1>Le bâtiment s'apprend <em>pas à pas.</em></h1><p>Un seul compte pour tous les cours, les quiz, l'atelier de dessin, le métré et l'assistant IA.</p>
- <ul><li>${ic('check')}<span>${A.catalog().length} matières, du niveau bac au niveau ingénieur</span></li><li>${ic('check')}<span>Une maison construite de A à Z avec les plans d'exécution</span></li><li>${ic('check')}<span>Votre progression enregistrée, sur téléphone comme sur ordinateur</span></li><li>${ic('check')}<span>Une attestation pour chaque matière terminée</span></li></ul></div>
+ <ul><li>${ic('check')}<span>${A.catalog().length} matières, du niveau bac au niveau ingénieur</span></li><li>${ic('check')}<span>Une maison construite de A à Z avec les plans d'exécution</span></li><li>${ic('check')}<span>Des exercices corrigés pas à pas et la résolution de vos exercices en photo</span></li><li>${ic('check')}<span>Votre progression enregistrée, sur téléphone comme sur ordinateur</span></li><li>${ic('check')}<span>Une attestation pour chaque matière terminée</span></li></ul></div>
  <a href="#/" class="sub" style="color:#7F93AA;text-decoration:none">${ic('back')} Retour au site</a></div>`;
 
 A.page('connexion', {space:'bare', title:'Connexion', render(){

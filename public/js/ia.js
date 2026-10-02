@@ -23,7 +23,7 @@ A.IA = {
     if(!res.ok){
       let msg = '';
       try{ const j = await res.json(); msg = j.error || ''; }catch(_){ }
-      if(res.status === 404 || res.status === 405) msg = OFF_MSG;
+      if(res.status === 404 || res.status === 405 || res.status === 501) msg = OFF_MSG;
       return {ok:false, error: msg || ('Erreur ' + res.status), status:res.status};
     }
     if(S.mode === 'local') A.db.logIa(req.kind, req.ref);

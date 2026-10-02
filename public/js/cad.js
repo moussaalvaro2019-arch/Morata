@@ -257,6 +257,7 @@ const ALIAS = {L:'LIGNE', LIGNE:'LIGNE', LINE:'LIGNE', MU:'MUR', MUR:'MUR', W:'M
   POTEAU:'POTEAU', POT:'POTEAU', COLUMN:'POTEAU', POUTRE:'POUTRE', POU:'POUTRE', BEAM:'POUTRE', ESCALIER:'ESCALIER', ESC:'ESCALIER', STAIR:'ESCALIER',
   EXTRUSION:'EXTRUSION', EXT:'EXTRUSION', EXTRUDE:'EXTRUSION', NIVEAU:'NIVEAU', NIV:'NIVEAU', LEVEL:'NIVEAU', COPIERNIVEAU:'COPIERNIVEAU', CN:'COPIERNIVEAU',
   ELEVATION:'ELEVATION', 'ÉLÉVATION':'ELEVATION', ELEV:'ELEVATION', MATERIAU:'MATERIAU', 'MATÉRIAU':'MATERIAU', MAT:'MATERIAU', COULEUR:'COULEUR', COUL:'COULEUR', COLOR:'COULEUR',
+  RDM:'RDM', ETUDIER:'RDM', 'ÉTUDIER':'RDM', CALCUL:'RDM',
   '3D':'VUE3D', VUE3D:'VUE3D', '2D':'VUE2D', VUE2D:'VUE2D', PLAN:'VUE2D', PARTAGE:'PARTAGE', 'PARTAGÉ':'PARTAGE', SPLIT:'PARTAGE', RENDU:'RENDU', REN:'RENDU', SOLEIL:'SOLEIL', SOL:'SOLEIL', ORBITE:'VUE3D'};
 const NEEDSEL = ['DEPLACER','COPIER','ROTATION','MIROIR'];
 const SELVAL = ['EXTRUSION','ELEVATION','MATERIAU','COULEUR'];
@@ -322,6 +323,7 @@ function start(name){
     case 'VUE3D': return setVmode(C.vmode === '3d' ? 'plan' : '3d');
     case 'VUE2D': return setVmode('plan');
     case 'PARTAGE': return setVmode('split');
+    case 'RDM': return studyBeam();
   }
   if(SELVAL.includes(n)){ C.cmd = {n, pts:[], stage:C.sel.size ? 1 : 0}; C.lastCmd = n; C.tool = 'cmd'; log(prompt()); return draw(); }
   if(n === 'EFFACER' && C.sel.size){ pushHist(); const k = C.sel.size; C.ents = C.ents.filter(e => !C.sel.has(e.id)); C.sel.clear(); log(k + ' objet(s) effacé(s)'); return draw(); }
@@ -381,6 +383,16 @@ function point(p){
 }
 function doRotate(a){ const c = C.cmd; pushHist(); C.ents = C.ents.map(e => C.sel.has(e.id) ? Object.assign(transform(e, q=>rot(q, c.base, a)), {id:e.id}) : e); C.cmd = null; log('Rotation de ' + F(a*180/Math.PI,1) + '°'); draw(); }
 function wallEpAt(p){ const w = C.ents.filter(e => e.t === 'wall').find(e => segDist(p, [e.x1,e.y1],[e.x2,e.y2]) <= e.ep/2 + .05); return w ? w.ep : C.ep; }
+
+/* RDM : étudie une poutre, une ligne ou un mur sélectionné dans le solveur guidé */
+function studyBeam(){
+  const e = C.ents.find(x => C.sel.has(x.id) && ['beam', 'line', 'wall'].includes(x.t));
+  if(!e){ log('RDM : sélectionnez d\'abord une poutre, une ligne ou un mur, puis tapez RDM.'); return; }
+  const L = Math.round(dist([e.x1, e.y1], [e.x2, e.y2])*100)/100;
+  if(!(L > .2)){ log('Élément trop court pour une étude de poutre.'); return; }
+  log(`Étude RDM d'une poutre de ${F(L, 2)} m : ouverture du solveur guidé`);
+  A.go(A.SOL.link(e.t === 'beam' ? 'ba-poutre' : 'poutre', {L, appuis:[{x:0, t:'A'}, {x:L, t:'S'}], ch:[{t:'q', a:0, b:L, g:e.t === 'beam' ? 15 : 10, q:e.t === 'beam' ? 5 : 0}], comb:e.t === 'beam' ? 'ELU' : 'brut', b:Math.round((e.b || .2)*100), h:Math.round((e.hb || .4)*100)}, 'guide'));
+}
 
 /* saisie au clavier dans la ligne de commande */
 function typed(raw){
@@ -832,7 +844,7 @@ function help(){
   const rows = [['MUR / MU','Dessine des murs (épaisseur réglable : E 0.15)'],['LIGNE / L','Lignes successives'],['POLYLIGNE / PL','Polyligne (C pour clore)'],['RECTANGLE / REC','Rectangle par 2 coins'],['CERCLE / C','Centre puis rayon'],['PIECE / PI','Pièce : 2 coins puis le nom (surface calculée)'],['PORTE / PO','2 points sur le mur puis le côté d\'ouverture'],['FENETRE / FE','2 points sur le mur'],['COTE / COT','Cotation : 2 points puis position'],['TEXTE / T','Point puis texte'],['EFFACER / E','Efface la sélection ou les objets cliqués'],['DEPLACER / D, COPIER / CO','Sélection, point de base, destination'],['ROTATION / RO, MIROIR / MI','Sélection puis point de base / axe'],['ANNULER / U, RETABLIR / R','Ctrl+Z / Ctrl+Y'],['ZE','Zoom étendu (tout voir)'],['ORTHO / O (F8)','Traits horizontaux ou verticaux'],['ACC (F3), GRILLE / G (F7)','Accrochage aux objets, grille'],['EP / HT','Épaisseur des murs, hauteur pour le métré'],['METRE / MT','Métré du plan'],['ENR','Enregistrer (Ctrl+S)']];
   A.win({title:'Aide de l\'atelier de dessin', wide:true, body:`<div class="note info">${ic('info')}<span>Les unités sont en <b>mètres</b>. L'axe Y monte vers le haut comme sur AutoCAD. Molette = zoom, bouton du milieu (ou outil main) = déplacer la vue. Entrée ou Espace répète la dernière commande.</span></div>
    <div class="tw"><table class="t"><thead><tr><th>Commande</th><th>Effet</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
-   <h3 style="font-size:16px">Dessin en 3D</h3><div class="tw"><table class="t"><tbody>${[['3D, 2D, PARTAGE','Vue 3D, vue en plan, ou les deux côte à côte (boutons dans la barre du haut)'],['NIVEAU / NIV','Choisit l\'altitude de travail (ex. 3 pour l\'étage) ; les autres niveaux sont grisés'],['COPIERNIVEAU / CN','Copie tout le niveau courant vers le haut (ex. 3) et passe au nouveau niveau'],['BOITE / BO','Boîte : 2 coins puis la hauteur'],['CYLINDRE / CYL','Centre, rayon puis hauteur'],['DALLE / DA','2 coins puis l\'épaisseur (S = dalle depuis une pièce ou un rectangle sélectionné)'],['POTEAU / POT','Clics successifs (S25 = section 25 cm)'],['POUTRE / POU','Points successifs (20 × 40 cm)'],['ESCALIER / ESC','Coin de départ, coin opposé, hauteur à monter'],['TOIT / TO','2 coins, type (2P, 4P, 1P, T) puis la pente'],['EXTRUSION / EXT','Donne une hauteur à des rectangles, polylignes fermées, cercles ou pièces'],['ELEVATION / ELEV','Change l\'altitude des objets sélectionnés'],['MATERIAU / MAT, COULEUR / COUL','Matériau (enduit, brique, pierre, bois, tôle, tuiles, verre…) et couleur (#C0A080 ou blanc, beige, rouge…) des objets'],['RENDU, SOLEIL','Mode réaliste, maquette ou filaire ; heure du soleil (6 à 18)']].map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+   <h3 style="font-size:16px">Dessin en 3D</h3><div class="tw"><table class="t"><tbody>${[['3D, 2D, PARTAGE','Vue 3D, vue en plan, ou les deux côte à côte (boutons dans la barre du haut)'],['NIVEAU / NIV','Choisit l\'altitude de travail (ex. 3 pour l\'étage) ; les autres niveaux sont grisés'],['COPIERNIVEAU / CN','Copie tout le niveau courant vers le haut (ex. 3) et passe au nouveau niveau'],['BOITE / BO','Boîte : 2 coins puis la hauteur'],['CYLINDRE / CYL','Centre, rayon puis hauteur'],['DALLE / DA','2 coins puis l\'épaisseur (S = dalle depuis une pièce ou un rectangle sélectionné)'],['POTEAU / POT','Clics successifs (S25 = section 25 cm)'],['POUTRE / POU','Points successifs (20 × 40 cm)'],['ESCALIER / ESC','Coin de départ, coin opposé, hauteur à monter'],['TOIT / TO','2 coins, type (2P, 4P, 1P, T) puis la pente'],['EXTRUSION / EXT','Donne une hauteur à des rectangles, polylignes fermées, cercles ou pièces'],['ELEVATION / ELEV','Change l\'altitude des objets sélectionnés'],['MATERIAU / MAT, COULEUR / COUL','Matériau (enduit, brique, pierre, bois, tôle, tuiles, verre…) et couleur (#C0A080 ou blanc, beige, rouge…) des objets'],['RENDU, SOLEIL','Mode réaliste, maquette ou filaire ; heure du soleil (6 à 18)'],['RDM / ETUDIER','Étude complète de la poutre, de la ligne ou du mur sélectionné : appuis, charges, réactions, diagrammes V et M, ferraillage (solveur guidé)']].map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
    <h3 style="font-size:16px">Saisie des points</h3><div class="tw"><table class="t"><tbody>
    <tr><td class="mono"><b>3,2</b></td><td>Point absolu x = 3 m, y = 2 m</td></tr><tr><td class="mono"><b>@4,0</b></td><td>4 m vers la droite depuis le dernier point</td></tr>
    <tr><td class="mono"><b>@3&lt;90</b></td><td>3 m dans la direction 90° (vers le haut)</td></tr><tr><td class="mono"><b>4.5</b></td><td>Distance directe : 4,50 m dans la direction du curseur</td></tr></tbody></table></div>
