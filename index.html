@@ -5,56 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Morata · Livres & Histoires</title>
   <meta name="description" content="Résumés en chapitres des grands livres de développement personnel, histoires par thème, boutique de livres et coach IA.">
-  <meta name="theme-color" content="#0f5c4d">
+  <meta name="theme-color" content="#150D0B">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="entete">
-    <div class="conteneur entete__barre">
-      <a href="#/" class="logo"><span class="logo__marque" aria-hidden="true">M</span>Morata<span class="logo__pdg">Espace PDG</span></a>
-      <a href="#/" class="entete__retour">Voir le site</a>
-      <nav class="nav-haut" aria-label="Navigation principale">
-        <a href="#/" data-route="accueil">Accueil</a>
+  <!-- Logo et icônes (même jeu de traits qu'EventLoc) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="lgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7DE9B"/><stop offset=".5" stop-color="#E3B04B"/><stop offset="1" stop-color="#B97A1A"/></linearGradient>
+      <linearGradient id="lgM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A5452B"/><stop offset="1" stop-color="#4A170E"/></linearGradient>
+    </defs>
+    <symbol id="logo" viewBox="0 0 64 64"><rect x="1" y="1" width="62" height="62" rx="17" fill="url(#lgM)"/><rect x="1.75" y="1.75" width="60.5" height="60.5" rx="16.3" fill="none" stroke="url(#lgG)" stroke-opacity=".6" stroke-width="1.5"/><path d="M13 19c7-2.5 13.5-1.5 18 2.5v25c-4.5-4-11-5-18-2.5z" fill="url(#lgG)"/><path d="M51 19c-7-2.5-13.5-1.5-18 2.5v25c4.5-4 11-5 18-2.5z" fill="url(#lgG)" opacity=".78"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2.5z"/><path d="M8 7h8"/></symbol>
+    <symbol id="i-story" viewBox="0 0 24 24"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5zM2 13l10 5 10-5M2 17.5l10 5 10-5"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol>
+    <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6zM14 3v5h5M9 13h7M9 17h7"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+  </svg>
+
+  <header class="chead">
+    <div class="conteneur in">
+      <a href="#/" class="lock" aria-label="Morata, accueil"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Livres &amp; histoires</small></span></a>
+      <nav class="cnav" aria-label="Navigation principale">
         <a href="#/livres" data-route="livres">Livres</a>
         <a href="#/histoires" data-route="histoires">Histoires</a>
         <a href="#/boutique" data-route="boutique">Boutique</a>
         <a href="#/coach" data-route="coach">Coach IA</a>
       </nav>
+      <div class="hacts">
+        <a class="btn b-gold b-sm" href="#/pdg" id="lien-pdg" hidden><svg class="i"><use href="#i-crown"/></svg><span class="hs">Espace PDG</span></a>
+        <a class="hbtn" href="#/boutique" aria-label="Boutique"><svg class="i"><use href="#i-cart"/></svg></a>
+        <button class="hbtn burger" type="button" data-menu-open aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+      </div>
     </div>
   </header>
 
   <main id="app" class="conteneur" tabindex="-1"></main>
 
-  <footer class="pied">
-    <div class="conteneur">Morata · Lire moins, retenir plus. Couvertures de livres : <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a>. <a class="pied__pdg" href="#/pdg">Espace PDG</a></div>
-  </footer>
+  <footer class="sfoot" id="pied"></footer>
 
   <nav class="nav-bas" aria-label="Navigation">
-    <a href="#/" data-route="accueil">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
-      Accueil
-    </a>
-    <a href="#/livres" data-route="livres">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2.5z"/><path d="M8 7h8"/></svg>
-      Livres
-    </a>
-    <a href="#/histoires" data-route="histoires">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg>
-      Histoires
-    </a>
-    <a href="#/boutique" data-route="boutique">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-      Boutique
-    </a>
-    <a href="#/coach" data-route="coach">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg>
-      Coach IA
-    </a>
+    <a href="#/" data-route="accueil"><svg class="i"><use href="#i-home"/></svg>Accueil</a>
+    <a href="#/livres" data-route="livres"><svg class="i"><use href="#i-book"/></svg>Livres</a>
+    <a href="#/histoires" data-route="histoires"><svg class="i"><use href="#i-story"/></svg>Histoires</a>
+    <a href="#/boutique" data-route="boutique"><svg class="i"><use href="#i-cart"/></svg>Boutique</a>
+    <a href="#/coach" data-route="coach"><svg class="i"><use href="#i-chat"/></svg>Coach IA</a>
   </nav>
 
-  <!-- Contenu : modifier les fichiers du dossier data/ pour ajouter des livres ou des histoires -->
+  <div id="menu"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Contenu de départ : dossier data/. Les modifications du PDG se font dans l'Espace PDG (#/pdg). -->
   <script src="data/livres.js"></script>
   <script src="data/chapitres-livres.js"></script>
   <script src="data/histoires.js"></script>

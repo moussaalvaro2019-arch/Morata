@@ -9,6 +9,8 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
   }
+  const ic = n => `<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const toast = (m, i) => window.TOAST && window.TOAST(m, i);
   const copie = v => JSON.parse(JSON.stringify(v == null ? null : v));
 
   function identifiant(texte, existants) {
@@ -149,7 +151,7 @@
         return `<div class="ed-champ ed-liste" data-champ="${c.nom}" data-schema="${numeroSchema(c)}">
           <div class="ed-liste__tete"><strong>${echapper(c.label)}</strong><span class="ed-compte">${items.length}</span></div>
           <div class="ed-items">${items.map((x, i) => rendreItem(c, x, i, false)).join("")}</div>
-          <button class="bouton bouton--contour bouton--petit" type="button" data-ajouter>+ ${echapper(c.nouveau || "Ajouter")}</button>
+          <button class="btn b-line b-sm" type="button" data-ajouter style="justify-self:start">${ic("plus")}${echapper(c.nouveau || "Ajouter")}</button>
         </div>`;
       }
       default: {
@@ -264,28 +266,28 @@
     });
   }
 
-  function champImage(cle, aide, apercuParDefaut) {
+  function champImage(cle, aide, apercuParDefaut, p = "img-") {
     const actuelle = (window.IMAGES || {})[cle] || "";
     let valeur = actuelle;
     const html = `
       <div class="ed-image">
-        <div class="ed-image__apercu" id="img-apercu">${actuelle ? `<img src="${echapper(actuelle)}" alt="">` : apercuParDefaut}</div>
+        <div class="ed-image__apercu" id="${p}apercu">${actuelle ? `<img src="${echapper(actuelle)}" alt="">` : apercuParDefaut}</div>
         <div class="ed-image__actions">
-          <strong>Image</strong>
+          <strong>Photo</strong>
           <small>${echapper(aide)}</small>
-          <label class="bouton bouton--contour bouton--petit ed-fichier">Choisir une photo<input type="file" accept="image/*" id="img-fichier"></label>
-          <label class="champ" for="img-lien">ou coller le lien d'une image (https://…)
-            <input id="img-lien" inputmode="url" placeholder="https://…" value="${actuelle.startsWith("https:") ? echapper(actuelle) : ""}">
+          <label class="btn b-line b-sm ed-fichier">${ic("camera")}Choisir une photo<input type="file" accept="image/*" id="${p}fichier"></label>
+          <label class="champ" for="${p}lien">ou coller le lien d'une image (https://…)
+            <input id="${p}lien" inputmode="url" placeholder="https://…" value="${actuelle.startsWith("https:") ? echapper(actuelle) : ""}">
           </label>
-          <button class="bouton bouton--petit ed-lien-discret" type="button" id="img-retirer"${actuelle ? "" : " hidden"}>Revenir à l'illustration dessinée</button>
-          <p class="ed-erreur" id="img-erreur" hidden></p>
+          <button class="ed-lien-discret" type="button" id="${p}retirer"${actuelle ? "" : " hidden"}>Revenir à l'illustration dessinée</button>
+          <p class="ed-erreur" id="${p}erreur" hidden></p>
         </div>
       </div>`;
     function brancher(racine, auChangement) {
-      const apercu = racine.querySelector("#img-apercu");
-      const retirer = racine.querySelector("#img-retirer");
-      const erreur = racine.querySelector("#img-erreur");
-      const lien = racine.querySelector("#img-lien");
+      const apercu = racine.querySelector("#" + p + "apercu");
+      const retirer = racine.querySelector("#" + p + "retirer");
+      const erreur = racine.querySelector("#" + p + "erreur");
+      const lien = racine.querySelector("#" + p + "lien");
       const montrer = src => {
         valeur = src;
         apercu.innerHTML = src ? `<img src="${echapper(src)}" alt="">` : apercuParDefaut;
@@ -293,7 +295,7 @@
         erreur.hidden = true;
         auChangement();
       };
-      racine.querySelector("#img-fichier").addEventListener("change", async e => {
+      racine.querySelector("#" + p + "fichier").addEventListener("change", async e => {
         const f = e.target.files && e.target.files[0];
         if (!f) return;
         try { montrer(await reduireImage(f, 900)); lien.value = ""; }
@@ -319,75 +321,110 @@
     };
   }
 
-  function vignette(type, x) {
+
+  // Visuel d'un élément : image choisie, sinon couverture ou illustration dessinée.
+  function visuel(type, x) {
     const src = (window.IMAGES || {})[TYPES[type].image(x.id)];
-    if (src) return `<span class="pdg-vignette"><img src="${echapper(src)}" alt=""></span>`;
+    if (src) return `<img src="${echapper(src)}" alt="">`;
     const dessin = window.ILLUSTRATION ? (window.ILLUSTRATION(x.id) || window.ILLUSTRATION(x.theme || "")) : "";
-    return `<span class="pdg-vignette">${dessin || `<span class="pdg-vignette__lettre">${echapper(x.emoji || (x.titre || x.nom || "?").charAt(0))}</span>`}</span>`;
+    if (dessin) return dessin;
+    if (type === "livre") return `<span class="couverture" style="--c1:#7A2E1F;--c2:#3A1710" data-couverture="${echapper(x.id)}"><span class="couverture__titre">${echapper(x.titre)}</span><span class="couverture__auteur">${echapper(x.auteur)}</span></span>`;
+    return `<span class="noimg">${echapper(x.emoji || (x.titre || x.nom || "?").charAt(0))}</span>`;
   }
 
-  const ETIQUETTES = {
-    original: "", modifie: `<span class="pastille pastille--modifie">Modifié</span>`,
-    ajoute: `<span class="pastille pastille--ajoute">Ajouté</span>`, supprime: `<span class="pastille">Supprimé</span>`
+  const PASTILLES = {
+    original: `<span class="pill p-mute">D'origine</span>`, modifie: `<span class="pill p-gold">Modifié</span>`,
+    ajoute: `<span class="pill p-ok">Ajouté</span>`, supprime: `<span class="pill p-bad">Supprimé</span>`
   };
 
-  // ---------- Coquille de l'espace PDG ----------
+  // ---------- Coquille de l'espace PDG (comme EventLoc) ----------
 
-  const MENU = [
-    ["", "Tableau de bord"], ["livres", "Livres"], ["series", "Séries"], ["histoires", "Histoires"],
-    ["themes", "Thèmes"], ["boutique", "Boutique"], ["accueil", "Page d'accueil"], ["reglages", "Réglages"]
+  const ANAV = [
+    ["", "Tableau de bord", "grid"], ["livres", "Livres", "book"], ["series", "Séries", "layers"],
+    ["histoires", "Histoires", "story"], ["themes", "Thèmes", "tag"], ["boutique", "Boutique", "cart"],
+    ["parametres", "Paramètres", "cog"]
   ];
   const RUBRIQUE_TYPE = { livres: "livre", series: "serie", histoires: "histoire", themes: "theme" };
+  const ANCIENNES = { accueil: "parametres", reglages: "parametres" };
+  const accueil = () => ({ ...(window.ACCUEIL_DEFAUT || {}), ...((window.SITE || {}).accueil || {}) });
+  const initiales = nom => String(nom || "PDG").split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0].toUpperCase()).join("");
 
-  async function pagePDG(app, sous, id, arg) {
-    app.innerHTML = `<p class="vide">Chargement de l'espace PDG…</p>`;
-    await C().pret;
-    if (!C().estAdmin()) return pageConnexion(app);
-
-    app.innerHTML = `
-      <div class="pdg">
-        <nav class="pdg__menu" aria-label="Espace PDG">
-          ${MENU.map(([r, nom]) => `<a href="#/pdg${r ? "/" + r : ""}" class="${(sous || "") === r ? "actif" : ""}">${nom}</a>`).join("")}
-        </nav>
-        <section class="pdg__contenu" id="pdg-zone"></section>
+  function coquille(sous, titre, action, corps) {
+    const a = accueil();
+    const photo = (window.IMAGES || {}).pdg;
+    const sortir = C().mode() !== "claude";
+    const lien = r => `#/pdg${r ? "/" + r : ""}`;
+    const courant = r => (r === sous ? ' aria-current="page"' : "");
+    const marque = `<svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Espace PDG</small></span>`;
+    return `
+      <div class="shell">
+        <aside class="side">
+          <div class="brand">${marque}</div>
+          <span class="sec">Gestion</span>
+          ${ANAV.map(([r, nom, i]) => `<a class="nav" href="${lien(r)}"${courant(r)}>${ic(i)}${nom}</a>`).join("")}
+          <div class="foot">
+            <div class="me">${photo ? `<img src="${echapper(photo)}" alt="">` : `<span class="av">${echapper(initiales(a.nomPDG))}</span>`}<div><b>${echapper(a.nomPDG)}</b><small>Administrateur · PDG</small></div></div>
+            <a class="nav" href="#/">${ic("home")}Voir le site lecteurs</a>
+            ${sortir ? `<button class="nav" type="button" data-deconnexion>${ic("logout")}Se déconnecter</button>` : ""}
+          </div>
+        </aside>
+        <div class="principal">
+          <div class="mtop">${marque}<a class="btn b-sm" style="margin-left:auto;background:var(--sombre-2);color:#fff" href="#/" aria-label="Voir le site">${ic("eye")}</a>${sortir ? `<button class="btn b-sm" type="button" style="background:var(--sombre-2);color:#fff" data-deconnexion aria-label="Se déconnecter">${ic("logout")}</button>` : ""}</div>
+          <div class="top"><h1><span class="crumb">Administration</span>${titre}</h1>${action || ""}</div>
+          <div class="page" id="pdg-page">${corps}</div>
+          <nav class="bnav" aria-label="Menu PDG">${ANAV.map(([r, nom, i]) => `<a href="${lien(r)}"${courant(r)}>${ic(i)}${nom.split(" ")[0]}</a>`).join("")}</nav>
+        </div>
       </div>`;
-    const zone = app.querySelector("#pdg-zone");
-    const actif = app.querySelector(".pdg__menu .actif");
-    if (actif) actif.scrollIntoView({ block: "nearest", inline: "center" });
-
-    if (!sous) return tableauDeBord(zone);
-    if (RUBRIQUE_TYPE[sous]) return id ? editeur(zone, RUBRIQUE_TYPE[sous], id) : liste(zone, RUBRIQUE_TYPE[sous]);
-    if (sous === "boutique") return id === "nouveau" ? window.BOUTIQUE.formulaireVente(zone, "#/pdg/boutique") : boutique(zone);
-    if (sous === "accueil") return pageAccueilPDG(zone);
-    if (sous === "reglages") return reglages(zone);
-    zone.innerHTML = `<p class="vide">Rubrique introuvable.</p>`;
   }
 
+  document.addEventListener("click", ev => {
+    if (!ev.target.closest("[data-deconnexion]")) return;
+    C().deconnexion();
+    location.hash = "#/";
+  });
+
+  async function pagePDG(app, sous, id, arg) {
+    app.innerHTML = `<div class="pro"><p>Chargement de l'espace PDG…</p></div>`;
+    await C().pret;
+    if (!C().estAdmin()) return pageConnexion(app);
+    sous = ANCIENNES[sous] || sous || "";
+    const fermer = document.getElementById("ed-ov");
+    if (fermer) fermer.remove();
+
+    if (RUBRIQUE_TYPE[sous]) return catalogue(app, sous, id);
+    if (sous === "boutique") return boutique(app, id);
+    if (sous === "parametres") return parametres(app, id);
+    return tableauDeBord(app);
+  }
+
+  // ---------- Connexion : « Espace professionnel » ----------
+
   function pageConnexion(app) {
-    if (C().mode() === "claude") {
-      app.innerHTML = `
-        <div class="connexion carte">
-          <span class="logo__marque" aria-hidden="true">M</span>
-          <h1>Espace PDG</h1>
-          <p>Cet espace est réservé au propriétaire de Morata. Vous pouvez continuer à lire les livres et les histoires.</p>
-          <a class="bouton bouton--accent" href="#/">Retour au site</a>
-        </div>`;
-      return;
-    }
+    const claude = C().mode() === "claude";
     app.innerHTML = `
-      <form class="connexion carte" id="form-connexion">
-        <span class="logo__marque" aria-hidden="true">M</span>
-        <h1>Espace PDG</h1>
-        <p>Connectez-vous pour gérer les livres, les histoires, les images et la boutique.</p>
-        <label class="champ" for="mdp">Mot de passe
-          <input id="mdp" type="password" autocomplete="current-password" required>
-        </label>
-        ${C().mode() === "local" ? `<small>Version sans serveur : mot de passe de départ « ${echapper(C().motDePasseLocalParDefaut)} », à changer dans Réglages.</small>` : ""}
-        <p class="ed-erreur" id="connexion-erreur" hidden></p>
-        <button class="bouton bouton--accent" type="submit">Se connecter</button>
-        <a class="ed-lien-discret" href="#/">Retour au site</a>
-      </form>`;
+      <div class="pro"><div class="pro-in">
+        <a class="btn b-sm" style="justify-self:start;background:rgba(255,255,255,.08);color:#E9DDD3" href="#/">${ic("back")}Retour au site</a>
+        <span class="lock"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>Mor<em>ata</em></span><small>Espace professionnel</small></span></span>
+        <div><h1>Espace de travail</h1><p style="color:#BBA89B;margin-top:8px">Réservé à la direction de Morata. Les lecteurs n'ont pas accès à cette partie.</p></div>
+        <div class="pro-cards">
+          <div class="pcard"><span class="ic" style="background:linear-gradient(140deg,#F1D08A,#B98522);color:#2A1406">${ic("crown")}</span><b>Direction</b>
+            <p>Livres, chapitres, histoires, séries, thèmes, images, boutique et paramètres.</p>
+            ${claude ? `<p>Cet espace est réservé au propriétaire de l'application.</p>` : `
+            <form id="form-connexion" style="display:grid;gap:10px">
+              <input class="inp" id="mdp" type="password" placeholder="Mot de passe" aria-label="Mot de passe" autocomplete="current-password" required>
+              ${C().mode() === "local" ? `<small>Version sans serveur : mot de passe de départ « ${echapper(C().motDePasseLocalParDefaut)} », à changer dans Paramètres.</small>` : ""}
+              <p class="ed-erreur" id="connexion-erreur" hidden></p>
+              <button class="btn b-gold" type="submit">Se connecter ${ic("arrow")}</button>
+            </form>`}
+          </div>
+          <div class="pcard"><span class="ic" style="background:#2F4A2C;color:#CDE7C6">${ic("book")}</span><b>Lecteurs</b>
+            <p>Pas besoin de compte pour lire : les résumés, les histoires, la boutique et le coach IA sont ouverts à tous.</p>
+            <a class="btn b-pri" style="justify-self:start" href="#/livres">Lire les résumés ${ic("arrow")}</a>
+          </div>
+        </div>
+      </div></div>`;
     const form = app.querySelector("#form-connexion");
+    if (!form) return;
     form.querySelector("#mdp").focus();
     form.addEventListener("submit", async ev => {
       ev.preventDefault();
@@ -400,96 +437,151 @@
   }
 
   const MODES = {
-    claude: "Vos modifications sont enregistrées dans l'aperçu Claude et visibles par tous ceux qui l'ouvrent. Vous seul pouvez modifier.",
-    netlify: "Vos modifications sont enregistrées sur le serveur Netlify et visibles immédiatement par tous les lecteurs.",
-    local: "Version sans serveur : vos modifications restent sur cet appareil. Publiez le site sur Netlify (avec ADMIN_CODE) pour que les lecteurs les voient."
+    claude: ["ok", "Vos modifications sont enregistrées dans l'aperçu Claude et visibles par tous ceux qui l'ouvrent. Vous seul pouvez modifier."],
+    netlify: ["ok", "Vos modifications sont enregistrées sur le serveur et visibles immédiatement par tous les lecteurs."],
+    local: ["", "Version sans serveur : vos modifications restent sur cet appareil. Publiez le site sur Netlify (avec ADMIN_CODE) pour que les lecteurs les voient."]
   };
+  const noteMode = () => { const [c, t] = MODES[C().mode()]; return `<div class="note ${c}">${ic(c ? "shield" : "bell")}<span>${t}</span></div>`; };
 
-  function tableauDeBord(zone) {
+  // ---------- Tableau de bord ----------
+
+  function tableauDeBord(app) {
     const nbChapLivres = Object.values(window.LIVRES_CHAPITRES || {}).reduce((n, x) => n + (x.chapitres || []).length, 0);
     const nbChapSeries = (window.SERIES || []).reduce((n, s) => n + (s.chapitres || []).length, 0);
-    const histo = C().historique().slice(0, 8);
+    const livresChap = window.LIVRES.filter(l => ((window.LIVRES_CHAPITRES[l.id] || {}).chapitres || []).length).length;
+    const parTheme = window.THEMES.map(t => ({ t, n: window.HISTOIRES.filter(h => h.theme === t.id).length + window.SERIES.filter(s => s.theme === t.id).length }));
+    const max = Math.max(1, ...parTheme.map(x => x.n));
+    const histo = C().historique().slice(0, 7);
+    const NOMS = { livre: "Livre", chapitres: "Chapitres", serie: "Série", histoire: "Histoire", theme: "Thème", image: "Image", site: "Paramètres" };
     const lienHisto = h => {
       const rub = { livre: "livres", chapitres: "livres", serie: "series", histoire: "histoires", theme: "themes" }[h.type];
       if (rub) return `#/pdg/${rub}/${h.id}`;
-      if (h.type === "site") return "#/pdg/accueil";
       const [t, ...reste] = h.id.split("-");
       const r = { livre: "livres", serie: "series", histoire: "histoires", theme: "themes" }[t];
-      return r ? `#/pdg/${r}/${reste.join("-")}` : "#/pdg/accueil";
+      return r ? `#/pdg/${r}/${reste.join("-")}` : "#/pdg/parametres";
     };
-    const NOMS = { livre: "Livre", chapitres: "Chapitres", serie: "Série", histoire: "Histoire", theme: "Thème", image: "Image", site: "Page d'accueil" };
-    zone.innerHTML = `
-      <h1 class="page-titre">Bonjour, PDG</h1>
-      <p class="page-sous-titre">Tout le contenu de Morata se gère ici. Les lecteurs ne voient pas cet espace.</p>
-      <div class="pdg-stats">
-        <a class="pdg-stat" href="#/pdg/livres"><strong>${window.LIVRES.length}</strong><span>livres</span><small>${nbChapLivres} chapitres</small></a>
-        <a class="pdg-stat" href="#/pdg/series"><strong>${window.SERIES.length}</strong><span>séries</span><small>${nbChapSeries} chapitres</small></a>
-        <a class="pdg-stat" href="#/pdg/histoires"><strong>${window.HISTOIRES.length}</strong><span>histoires</span><small>${window.THEMES.length} thèmes</small></a>
-        <a class="pdg-stat" href="#/pdg/boutique"><strong id="nb-annonces">…</strong><span>en vente</span><small>boutique</small></a>
+    const corps = `
+      <div class="kpis">
+        <a class="kpi hl" href="#/pdg/livres"><small>${ic("book")}Livres résumés</small><b class="num">${window.LIVRES.length}</b><em>${livresChap} en chapitres · ${nbChapLivres} chapitres</em></a>
+        <a class="kpi" href="#/pdg/series"><small>${ic("layers")}Séries</small><b class="num">${window.SERIES.length}</b><em>${nbChapSeries} chapitres au total</em></a>
+        <a class="kpi" href="#/pdg/histoires"><small>${ic("story")}Histoires courtes</small><b class="num">${window.HISTOIRES.length}</b><em>${window.THEMES.length} thèmes</em></a>
+        <a class="kpi" href="#/pdg/boutique"><small>${ic("cart")}Livres en vente</small><b class="num" id="nb-annonces">…</b><em>boutique WhatsApp</em></a>
       </div>
-      <div class="section-titre"><h2>Actions rapides</h2></div>
-      <div class="pdg-actions">
-        <a class="bouton bouton--accent" href="#/pdg/livres/nouveau">+ Livre</a>
-        <a class="bouton bouton--contour" href="#/pdg/series/nouveau">+ Série</a>
-        <a class="bouton bouton--contour" href="#/pdg/histoires/nouveau">+ Histoire</a>
-        <a class="bouton bouton--contour" href="#/pdg/boutique/nouveau">+ Livre à vendre</a>
+      ${noteMode()}
+      <div class="cols">
+        <div class="card"><h3>Dernières modifications <small>les plus récentes d'abord</small></h3>
+          ${histo.length ? `<div class="tw"><table class="t"><thead><tr><th>Élément</th><th>Type</th><th>Date</th></tr></thead><tbody>
+            ${histo.map(h => `<tr class="click" data-lien="${lienHisto(h)}"><td><b>${echapper(h.id)}</b>${h.supprime ? ` <span class="pill p-bad">Supprimé</span>` : ""}</td><td>${NOMS[h.type] || h.type}</td><td class="sub">${h.le ? new Date(h.le).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }) : ""}</td></tr>`).join("")}
+          </tbody></table></div>` : `<div class="empty">${ic("edit")}Aucune modification pour l'instant. Le site affiche le contenu d'origine.<a class="btn b-line b-sm" href="#/pdg/livres">Modifier un livre</a></div>`}
+        </div>
+        <div class="card"><h3>Contenu par thème <small>histoires et séries</small></h3>
+          <div class="bars">${parTheme.map(x => `<div class="brow"><span>${echapper(x.t.emoji)} ${echapper(x.t.nom)}</span><b class="num">${x.n}</b><div class="bar"><i style="width:${Math.round(x.n / max * 100)}%"></i></div></div>`).join("")}</div>
+        </div>
       </div>
-      <p class="note">${MODES[C().mode()]}</p>
-      <div class="section-titre"><h2>Dernières modifications</h2></div>
-      ${histo.length ? `<ul class="pdg-lignes">${histo.map(h => `
-        <li><a href="${lienHisto(h)}"><span><strong>${NOMS[h.type] || h.type}</strong> · ${echapper(h.id)}${h.supprime ? " (supprimé)" : ""}</span>
-        <small>${h.le ? new Date(h.le).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }) : ""}</small></a></li>`).join("")}</ul>`
-        : `<p class="vide">Aucune modification pour l'instant. Le site affiche le contenu d'origine.</p>`}`;
+      <div class="card"><h3>Raccourcis</h3>
+        <div class="acts">
+          <a class="btn b-line" href="#/pdg/livres/nouveau">${ic("plus")}Livre</a>
+          <a class="btn b-line" href="#/pdg/series/nouveau">${ic("plus")}Série</a>
+          <a class="btn b-line" href="#/pdg/histoires/nouveau">${ic("plus")}Histoire</a>
+          <a class="btn b-line" href="#/pdg/boutique/nouveau">${ic("cart")}Livre à vendre</a>
+          <a class="btn b-line" href="#/pdg/parametres">${ic("camera")}Photo de l'accueil</a>
+        </div>
+      </div>`;
+    app.innerHTML = coquille("", "Tableau de bord", `<a class="btn b-gold" href="#/pdg/livres/nouveau">${ic("plus")}Nouveau livre</a>`, corps);
+    app.querySelectorAll("[data-lien]").forEach(tr => tr.addEventListener("click", () => { location.hash = tr.dataset.lien; }));
     window.BOUTIQUE.stockage().then(s => s.lister()).then(l => {
-      const el = zone.querySelector("#nb-annonces");
+      const el = app.querySelector("#nb-annonces");
       if (el) el.textContent = l.length;
-    }).catch(() => { const el = zone.querySelector("#nb-annonces"); if (el) el.textContent = "–"; });
+    }).catch(() => { const el = app.querySelector("#nb-annonces"); if (el) el.textContent = "–"; });
   }
 
-  function liste(zone, type) {
+  // ---------- Catalogue : livres, séries, histoires, thèmes ----------
+
+  const filtres = {};
+  const recherches = {};
+
+  function catalogue(app, rubrique, idOuvert) {
+    const type = RUBRIQUE_TYPE[rubrique];
     const T = TYPES[type];
-    const rubrique = Object.keys(RUBRIQUE_TYPE).find(k => RUBRIQUE_TYPE[k] === type);
-    const elements = window[T.tableau];
+    const tous = window[T.tableau];
     const supprimes = C().supprimes(type);
-    zone.innerHTML = `
-      <div class="pdg-entete">
-        <div><h1 class="page-titre">${T.titre}</h1><p class="page-sous-titre">${elements.length} au total. Touchez un élément pour le modifier.</p></div>
-        <a class="bouton bouton--accent" href="#/pdg/${rubrique}/nouveau">+ ${T.nouveau}</a>
-      </div>
-      <input class="recherche" type="search" placeholder="Rechercher…" aria-label="Rechercher" id="pdg-recherche">
-      <ul class="pdg-lignes pdg-lignes--elements" id="pdg-liste">
-        ${elements.map(x => `
-          <li data-texte="${echapper(((x[T.champTitre] || "") + " " + T.sousTitre(x)).toLowerCase())}">
-            <a href="#/pdg/${rubrique}/${echapper(x.id)}">
-              ${vignette(type, x)}
-              <span class="pdg-lignes__corps"><strong>${echapper(x[T.champTitre])}</strong><small>${echapper(T.sousTitre(x))}</small></span>
-              ${ETIQUETTES[C().etat(type, x.id)] || ""}
-            </a>
-          </li>`).join("")}
-      </ul>
+    const cleFiltre = type === "livre" ? (x => x.categorie) : (type === "theme" ? null : (x => x.theme));
+    const options = !cleFiltre ? [] : type === "livre"
+      ? [...new Set(tous.map(x => x.categorie).filter(Boolean))].sort((a, b) => a.localeCompare(b, "fr")).map(c => [c, c])
+      : window.THEMES.map(t => [t.id, `${t.emoji} ${t.nom}`]);
+    const filtre = filtres[rubrique] || "tous";
+    const q = (recherches[rubrique] || "").toLowerCase();
+    const visibles = tous.filter(x => (filtre === "tous" || !cleFiltre || cleFiltre(x) === filtre) &&
+      (!q || ((x[T.champTitre] || "") + " " + T.sousTitre(x)).toLowerCase().includes(q)));
+    const sansImage = tous.filter(x => !(window.IMAGES || {})[T.image(x.id)]).length;
+    const sansChapitres = type === "livre" ? tous.filter(l => !((window.LIVRES_CHAPITRES[l.id] || {}).chapitres || []).length).length : 0;
+    const info = x => {
+      if (type === "livre") { const n = ((window.LIVRES_CHAPITRES[x.id] || {}).chapitres || []).length; return n ? `${n} <small>chapitres</small>` : `<small>express seulement</small>`; }
+      if (type === "serie") return `${(x.chapitres || []).length} <small>chapitres</small>`;
+      if (type === "histoire") return `${x.tempsLecture || "?"} <small>min</small>`;
+      return `${window.HISTOIRES.filter(h => h.theme === x.id).length + window.SERIES.filter(s => s.theme === x.id).length} <small>histoires</small>`;
+    };
+    const corps = `
+      ${type === "livre" && sansChapitres ? `<div class="note">${ic("doc")}<span>${sansChapitres} livre(s) n'ont que le résumé express. Ouvrez un livre pour ajouter ses chapitres, ses sections et ses exemples.</span></div>` : ""}
+      ${sansImage ? `<div class="note ok">${ic("camera")}<span>${sansImage} élément(s) utilisent l'image automatique. Touchez un élément pour mettre votre propre photo.</span></div>` : ""}
+      <div class="toolbar"><label class="search">${ic("search")}<input id="cat-recherche" placeholder="Chercher…" value="${echapper(recherches[rubrique] || "")}"></label></div>
+      ${options.length ? `<div class="chips" style="margin:0"><button class="chip" type="button" data-filtre="tous" aria-pressed="${filtre === "tous"}">Tout</button>${options.map(([v, t]) => `<button class="chip" type="button" data-filtre="${echapper(v)}" aria-pressed="${filtre === v}">${echapper(t)}</button>`).join("")}</div>` : ""}
+      ${visibles.length ? `<div class="pgrid">${visibles.map(x => `
+        <a class="prod" href="#/pdg/${rubrique}/${echapper(x.id)}">
+          <span class="ph">${visuel(type, x)}</span>
+          <span class="pb"><span class="sub">${echapper(T.sousTitre(x))}</span><b>${echapper(x[T.champTitre])}</b></span>
+          <span class="pf"><span class="prix-chap num">${info(x)}</span>${PASTILLES[C().etat(type, x.id)] || ""}</span>
+        </a>`).join("")}</div>` : `<div class="empty">${ic("search")}Aucun élément ici.<a class="btn b-line b-sm" href="#/pdg/${rubrique}/nouveau">${T.nouveau}</a></div>`}
       ${supprimes.length ? `
-        <div class="section-titre"><h2>Supprimés</h2></div>
-        <ul class="pdg-lignes">${supprimes.map(x => `
-          <li><span class="pdg-lignes__ligne"><span class="pdg-lignes__corps"><strong>${echapper(x[T.champTitre])}</strong></span>
-          <button class="bouton bouton--contour bouton--petit" type="button" data-restaurer="${echapper(x.id)}">Restaurer</button></span></li>`).join("")}</ul>` : ""}`;
-    const champ = zone.querySelector("#pdg-recherche");
+        <div class="card"><h3>Supprimés <small>restaurez-les en un clic</small></h3>
+          <div class="tw"><table class="t"><tbody>${supprimes.map(x => `<tr><td><b>${echapper(x[T.champTitre])}</b></td><td style="text-align:right"><button class="btn b-line b-sm" type="button" data-restaurer="${echapper(x.id)}">${ic("undo")}Restaurer</button></td></tr>`).join("")}</tbody></table></div>
+        </div>` : ""}`;
+    app.innerHTML = coquille(rubrique, T.titre, `<a class="btn b-gold" href="#/pdg/${rubrique}/nouveau">${ic("plus")}${T.nouveau}</a>`, corps);
+    if (window.COUVERTURES) window.COUVERTURES.appliquer(app);
+
+    const champ = app.querySelector("#cat-recherche");
     champ.addEventListener("input", () => {
-      const q = champ.value.trim().toLowerCase();
-      zone.querySelectorAll("#pdg-liste li").forEach(li => { li.hidden = q && !li.dataset.texte.includes(q); });
+      recherches[rubrique] = champ.value;
+      const pos = champ.selectionStart;
+      catalogue(app, rubrique);
+      const nouveau = app.querySelector("#cat-recherche");
+      nouveau.focus();
+      nouveau.setSelectionRange(pos, pos);
     });
-    zone.querySelectorAll("[data-restaurer]").forEach(b => b.addEventListener("click", async () => {
+    app.querySelectorAll("[data-filtre]").forEach(b => b.addEventListener("click", () => { filtres[rubrique] = b.dataset.filtre; catalogue(app, rubrique); }));
+    app.querySelectorAll("[data-restaurer]").forEach(b => b.addEventListener("click", async () => {
       b.disabled = true;
-      try { await C().reinitialiser(type, b.dataset.restaurer); liste(zone, type); }
-      catch (e) { b.disabled = false; b.textContent = e.message || "Échec"; }
+      try { await C().reinitialiser(type, b.dataset.restaurer); toast("Élément restauré"); catalogue(app, rubrique); }
+      catch (e) { b.disabled = false; toast(messageErreur(e), "x"); }
     }));
+    if (idOuvert) editeur(rubrique, type, idOuvert);
   }
 
-  function editeur(zone, type, id) {
+  // Fenêtre d'édition qui glisse depuis la droite (comme la fiche produit d'EventLoc).
+  function fenetre(titre, sousTitre, corps, pied, retour) {
+    const ancienne = document.getElementById("ed-ov");
+    if (ancienne) ancienne.remove();
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="ov" id="ed-ov"><div class="win" role="dialog" aria-modal="true" aria-label="${echapper(titre)}">
+        <div class="win-h"><h2>${echapper(titre)}${sousTitre ? ` <span class="sub" style="font-family:var(--police-texte);font-weight:500">${sousTitre}</span>` : ""}</h2><button class="x" type="button" data-fermer aria-label="Fermer">${ic("x")}</button></div>
+        <div class="win-b">${corps}</div>
+        <div class="win-f">${pied}</div>
+      </div></div>`);
+    const ov = document.getElementById("ed-ov");
+    const fermer = () => { ov.remove(); document.removeEventListener("keydown", echap); if (location.hash !== retour) location.hash = retour; };
+    const echap = e => { if (e.key === "Escape") fermer(); };
+    document.addEventListener("keydown", echap);
+    ov.addEventListener("click", e => { if (e.target === ov || e.target.closest("[data-fermer]")) fermer(); });
+    window.addEventListener("hashchange", () => ov.remove(), { once: true });
+    return ov;
+  }
+
+  function editeur(rubrique, type, id) {
     const T = TYPES[type];
-    const rubrique = Object.keys(RUBRIQUE_TYPE).find(k => RUBRIQUE_TYPE[k] === type);
+    const retour = `#/pdg/${rubrique}`;
     const nouveau = id === "nouveau";
     const existant = nouveau ? null : window[T.tableau].find(x => x.id === id);
-    if (!nouveau && !existant) { zone.innerHTML = `<p class="vide">Élément introuvable. <a href="#/pdg/${rubrique}">Retour à la liste</a></p>`; return; }
+    if (!nouveau && !existant) { toast("Élément introuvable", "x"); return; }
     const valeur = copie(existant) || (type === "histoire" || type === "serie" ? { theme: (window.THEMES[0] || {}).id } : {});
     if (type === "livre" && existant) valeur.chapitres = copie(((window.LIVRES_CHAPITRES[id] || {}).chapitres) || []);
     const schema = T.schema();
@@ -499,42 +591,32 @@
     const etatActuel = nouveau ? "absent" : C().etat(type, id);
     const chapitresModifies = type === "livre" && !nouveau && ["modifie", "ajoute"].includes(C().etat("chapitres", id));
 
-    zone.innerHTML = `
-      <a class="retour" href="#/pdg/${rubrique}">← ${T.titre}</a>
-      <div class="pdg-entete">
-        <div>
-          <h1 class="page-titre">${nouveau ? T.nouveau : echapper(existant[T.champTitre])}</h1>
-          <p class="page-sous-titre">${nouveau ? "Remplissez les champs puis enregistrez." : `${ETIQUETTES[etatActuel] || ""} Les changements apparaissent sur le site dès l'enregistrement.`}</p>
-        </div>
-        ${nouveau ? "" : `<a class="bouton bouton--contour bouton--petit" href="${T.lien(id)}" target="_blank" rel="noopener">Voir sur le site</a>`}
-      </div>
+    const ov = fenetre(nouveau ? T.nouveau : existant[T.champTitre], nouveau ? "" : (PASTILLES[etatActuel] || ""), `
       <form class="formulaire ed-formulaire" id="ed-form" novalidate>
         ${image.html}
         ${rendreObjet(schema, valeur)}
-        <div class="ed-barre">
-          <span class="ed-message" id="ed-message" aria-live="polite"></span>
-          <button class="bouton bouton--accent" type="submit" id="ed-enregistrer">Enregistrer</button>
-        </div>
-      </form>
-      ${nouveau ? "" : `
-        <div class="pdg-zone-danger">
-          ${etatActuel === "modifie" || chapitresModifies ? `<button class="bouton bouton--contour bouton--petit" type="button" id="ed-original">Revenir au texte d'origine</button>` : ""}
-          <button class="bouton bouton--contour bouton--petit ed-danger" type="button" id="ed-supprimer">Supprimer ${T.un}</button>
-        </div>`}`;
+      </form>`, `
+      <span class="ed-message" id="ed-message" aria-live="polite"></span>
+      ${nouveau ? "" : `<button class="btn b-bad b-sm" type="button" id="ed-supprimer">${ic("trash")}Supprimer</button>`}
+      ${etatActuel === "modifie" || chapitresModifies ? `<button class="btn b-line b-sm" type="button" id="ed-original">${ic("undo")}Texte d'origine</button>` : ""}
+      ${nouveau ? "" : `<a class="btn b-line b-sm" href="${T.lien(id)}" target="_blank" rel="noopener">${ic("eye")}Voir</a>`}
+      <button class="btn b-pri" type="submit" form="ed-form" id="ed-enregistrer">${ic("check")}Enregistrer</button>`, retour);
 
-    const form = zone.querySelector("#ed-form");
-    const message = zone.querySelector("#ed-message");
+    const form = ov.querySelector("#ed-form");
+    const message = ov.querySelector("#ed-message");
     const dire = (texte, erreur) => { message.textContent = texte; message.classList.toggle("ed-erreur", !!erreur); };
     let modifie = false;
-    const changement = () => { if (!modifie) { modifie = true; dire("Modifications non enregistrées"); } };
+    const changement = () => { if (!modifie) { modifie = true; dire("Non enregistré"); } };
     brancherFormulaire(form, changement);
     image.brancher(form, changement);
+    const premier = form.querySelector("input:not([type=file]), textarea");
+    if (premier && nouveau) premier.focus();
 
     form.addEventListener("submit", async ev => {
       ev.preventDefault();
       const data = lireObjet(form.querySelector(":scope > .ed-objet"), schema);
       if (!data[T.champTitre]) { dire(`Indiquez ${T.champTitre === "nom" ? "le nom" : "le titre"}.`, true); return; }
-      const bouton = form.querySelector("#ed-enregistrer");
+      const bouton = ov.querySelector("#ed-enregistrer");
       bouton.disabled = true;
       dire("Enregistrement…");
       try {
@@ -554,6 +636,7 @@
         }
         await image.enregistrer(T.image(cible));
         modifie = false;
+        toast(nouveau ? "Ajouté au site" : "Enregistré");
         if (nouveau) { location.hash = `#/pdg/${rubrique}/${cible}`; return; }
         dire("Enregistré ✓");
         bouton.disabled = false;
@@ -563,25 +646,27 @@
       }
     });
 
-    const original = zone.querySelector("#ed-original");
+    const original = ov.querySelector("#ed-original");
     if (original) original.addEventListener("click", async () => {
-      if (original.dataset.confirme !== "1") { original.dataset.confirme = "1"; original.textContent = "Confirmer : effacer mes changements de texte"; return; }
+      if (original.dataset.confirme !== "1") { original.dataset.confirme = "1"; original.innerHTML = `${ic("undo")}Confirmer`; return; }
       original.disabled = true;
       try {
         await C().reinitialiser(type, id);
         if (type === "livre") await C().reinitialiser("chapitres", id);
-        editeur(zone, type, id);
-      } catch (e) { original.disabled = false; original.textContent = messageErreur(e); }
+        toast("Texte d'origine rétabli");
+        editeur(rubrique, type, id);
+      } catch (e) { original.disabled = false; dire(messageErreur(e), true); }
     });
-    const supprimer = zone.querySelector("#ed-supprimer");
+    const supprimer = ov.querySelector("#ed-supprimer");
     if (supprimer) supprimer.addEventListener("click", async () => {
-      if (supprimer.dataset.confirme !== "1") { supprimer.dataset.confirme = "1"; supprimer.textContent = `Confirmer la suppression`; return; }
+      if (supprimer.dataset.confirme !== "1") { supprimer.dataset.confirme = "1"; supprimer.innerHTML = `${ic("trash")}Confirmer la suppression`; return; }
       supprimer.disabled = true;
       try {
         await C().supprimer(type, id);
         if (type === "livre") await C().supprimer("chapitres", id);
-        location.hash = `#/pdg/${rubrique}`;
-      } catch (e) { supprimer.disabled = false; supprimer.textContent = messageErreur(e); }
+        toast("Supprimé", "trash");
+        location.hash = retour;
+      } catch (e) { supprimer.disabled = false; dire(messageErreur(e), true); }
     });
   }
 
@@ -606,77 +691,94 @@
     return (e && e.message) || "L'enregistrement a échoué.";
   }
 
-  async function boutique(zone) {
-    zone.innerHTML = `
-      <div class="pdg-entete">
-        <div><h1 class="page-titre">Boutique</h1><p class="page-sous-titre">Vos livres en vente. Les lecteurs commandent sur WhatsApp.</p></div>
-        <a class="bouton bouton--accent" href="#/pdg/boutique/nouveau">+ Mettre un livre en vente</a>
-      </div>
-      <div class="grille grille--large" id="annonces"><p class="vide">Chargement…</p></div>`;
-    await window.BOUTIQUE.remplirAnnonces(zone.querySelector("#annonces"), true, () => boutique(zone));
+
+  // ---------- Boutique ----------
+
+  async function boutique(app, id) {
+    app.innerHTML = coquille("boutique", "Boutique", `<a class="btn b-gold" href="#/pdg/boutique/nouveau">${ic("plus")}Mettre un livre en vente</a>`, `
+      <div class="note ok">${ic("chat")}<span>Les lecteurs voient ces livres dans la boutique et commandent directement sur WhatsApp.</span></div>
+      <div class="pgrid" id="annonces"><p class="sub">Chargement…</p></div>`);
+    if (id === "nouveau") {
+      const ov = fenetre("Mettre un livre en vente", "", `<div id="zone-vente"></div>`, `<span class="sub" style="margin-right:auto">Le livre apparaît aussitôt dans la boutique.</span><button class="btn b-line" type="button" data-fermer>Annuler</button>`, "#/pdg/boutique");
+      await window.BOUTIQUE.formulaireVente(ov.querySelector("#zone-vente"), "#/pdg/boutique");
+      const titre = ov.querySelector("#zone-vente .page-titre");
+      if (titre) titre.remove();
+    }
+    await window.BOUTIQUE.remplirAnnonces(app.querySelector("#annonces"), true, () => { toast("Retiré de la vente", "trash"); boutique(app); });
   }
 
+  // ---------- Paramètres : identité et accueil, mot de passe, sauvegarde ----------
+
+  const STABS = [["identite", "Identité & accueil", "crown"], ["acces", "Accès PDG", "lock"], ["sauvegarde", "Sauvegarde", "download"]];
   const ACCUEIL = [
-    { nom: "titre", label: "Grand titre de la bannière", type: "texte" },
+    { nom: "nomPDG", label: "Nom du PDG (affiché dans l'espace PDG et en bas du site)", type: "texte", demi: true },
+    { nom: "whatsapp", label: "Numéro WhatsApp de contact (avec l'indicatif)", type: "texte", demi: true },
+    { nom: "titre", label: "Grand titre de l'accueil", type: "texte" },
+    { nom: "accent", label: "Fin du titre, en doré", type: "texte" },
     { nom: "texte", label: "Texte sous le titre", type: "zone", lignes: 3 },
-    { nom: "boutiqueTitre", label: "Carte boutique : titre", type: "texte" },
-    { nom: "boutiqueTexte", label: "Carte boutique : texte", type: "zone", lignes: 2 }
+    { nom: "boutiqueTitre", label: "Bandeau boutique : titre", type: "texte" },
+    { nom: "boutiqueTexte", label: "Bandeau boutique : texte", type: "zone", lignes: 2 }
   ];
 
-  function pageAccueilPDG(zone) {
-    const valeur = { ...window.ACCUEIL_DEFAUT, ...((window.SITE || {}).accueil || {}) };
-    const image = champImage("banniere", "Photo de fond de la bannière d'accueil (un voile vert est ajouté pour garder le texte lisible).", `<span class="ed-image__defaut">Fond vert à motif bogolan</span>`);
-    zone.innerHTML = `
-      <h1 class="page-titre">Page d'accueil</h1>
-      <p class="page-sous-titre">Les textes et l'image que les lecteurs voient en arrivant.</p>
-      <form class="formulaire ed-formulaire" id="ed-form" novalidate>
-        ${image.html}
-        ${rendreObjet(ACCUEIL, valeur)}
-        <div class="ed-barre">
-          <span class="ed-message" id="ed-message" aria-live="polite"></span>
-          <button class="bouton bouton--accent" type="submit">Enregistrer</button>
-        </div>
+  function parametres(app, onglet) {
+    onglet = STABS.some(t => t[0] === onglet) ? onglet : "identite";
+    let corps = "";
+    if (onglet === "identite") {
+      corps = `<form class="formulaire ed-formulaire" id="ed-form" novalidate>
+        <div class="card"><h3>Photo de fond de l'accueil <small>un voile sombre garde le texte lisible</small></h3><div id="img-banniere"></div></div>
+        <div class="card"><h3>Votre photo <small>affichée dans l'espace PDG</small></h3><div id="img-pdg"></div></div>
+        <div class="card"><h3>Textes</h3>${rendreObjet(ACCUEIL, accueil())}</div>
+        <div class="acts" style="justify-content:flex-end"><span class="ed-message" id="ed-message" aria-live="polite" style="margin-right:auto"></span><button class="btn b-pri" type="submit">${ic("check")}Enregistrer</button></div>
       </form>`;
-    const form = zone.querySelector("#ed-form");
-    const message = zone.querySelector("#ed-message");
-    const changement = () => { message.textContent = "Modifications non enregistrées"; message.classList.remove("ed-erreur"); };
-    brancherFormulaire(form, changement);
-    image.brancher(form, changement);
-    form.addEventListener("submit", async ev => {
-      ev.preventDefault();
-      const bouton = form.querySelector("button[type=submit]");
-      bouton.disabled = true;
-      message.textContent = "Enregistrement…";
-      try {
-        await C().enregistrer("site", "accueil", lireObjet(form.querySelector(":scope > .ed-objet"), ACCUEIL));
-        await image.enregistrer();
-        message.textContent = "Enregistré ✓";
-      } catch (e) { message.textContent = messageErreur(e); message.classList.add("ed-erreur"); }
-      bouton.disabled = false;
-    });
-  }
+    } else if (onglet === "acces") {
+      corps = `<div class="card">
+        <h3>Mot de passe de l'espace PDG</h3>
+        ${C().peutChangerMotDePasse() ? `
+          <form class="formulaire" id="form-mdp" novalidate>
+            <label class="champ" for="mdp-ancien">Mot de passe actuel<input id="mdp-ancien" type="password" autocomplete="current-password"></label>
+            <label class="champ" for="mdp-nouveau">Nouveau mot de passe (6 caractères minimum)<input id="mdp-nouveau" type="password" autocomplete="new-password"></label>
+            <p class="ed-message" id="mdp-message" aria-live="polite"></p>
+            <button class="btn b-pri" type="submit" style="justify-self:start">${ic("lock")}Changer le mot de passe</button>
+          </form>` : `<p class="sub">Dans l'aperçu Claude, seul le propriétaire du compte peut modifier : aucun mot de passe n'est nécessaire.</p>`}
+      </div>${noteMode()}`;
+    } else {
+      corps = C().mode() === "claude"
+        ? `<div class="card"><h3>Sauvegarde</h3><p class="sub">Dans l'aperçu Claude, vos modifications sont déjà gardées en ligne. La sauvegarde en fichier est disponible sur le site Netlify.</p></div>`
+        : `<div class="card"><h3>Sauvegarde <small>toutes vos modifications dans un fichier</small></h3>
+            <p class="sub" style="margin:0 0 12px">À garder en lieu sûr, ou à intégrer plus tard au dossier data/ du site.</p>
+            <button class="btn b-line" type="button" id="sauvegarde">${ic("download")}Télécharger la sauvegarde</button></div>`;
+    }
+    app.innerHTML = coquille("parametres", "Paramètres", "", `
+      <div class="stabs" role="tablist">${STABS.map(([id, nom, i]) => `<a class="stab" role="tab" href="#/pdg/parametres/${id}" aria-selected="${id === onglet}">${ic(i)}${nom}</a>`).join("")}</div>
+      ${corps}`);
 
-  function reglages(zone) {
-    const mode = C().mode();
-    zone.innerHTML = `
-      <h1 class="page-titre">Réglages</h1>
-      <p class="page-sous-titre">${MODES[mode]}</p>
-      ${C().peutChangerMotDePasse() ? `
-        <form class="formulaire" id="form-mdp" novalidate>
-          <h2>Changer le mot de passe</h2>
-          <label class="champ" for="mdp-ancien">Mot de passe actuel<input id="mdp-ancien" type="password" autocomplete="current-password"></label>
-          <label class="champ" for="mdp-nouveau">Nouveau mot de passe (6 caractères minimum)<input id="mdp-nouveau" type="password" autocomplete="new-password"></label>
-          <p class="ed-message" id="mdp-message" aria-live="polite"></p>
-          <button class="bouton bouton--accent" type="submit">Changer le mot de passe</button>
-        </form>` : `<p class="note">Dans l'aperçu Claude, seul le propriétaire du compte peut modifier : aucun mot de passe n'est nécessaire.</p>`}
-      ${mode === "claude" ? "" : `
-        <div class="formulaire">
-          <h2>Sauvegarde</h2>
-          <p>Téléchargez toutes vos modifications dans un fichier, pour les garder ou les intégrer au dossier data/.</p>
-          <button class="bouton bouton--contour" type="button" id="sauvegarde">Télécharger la sauvegarde</button>
-        </div>
-        <button class="bouton bouton--contour" type="button" id="deconnexion">Se déconnecter</button>`}`;
-    const form = zone.querySelector("#form-mdp");
+    if (onglet === "identite") {
+      const form = app.querySelector("#ed-form");
+      const message = app.querySelector("#ed-message");
+      const changement = () => { message.textContent = "Non enregistré"; message.classList.remove("ed-erreur"); };
+      const banniere = champImage("banniere", "Photo de fond de la bannière d'accueil.", `<span class="ed-image__defaut">Fond sombre à motif bogolan</span>`);
+      const photo = champImage("pdg", "Votre portrait, en carré de préférence.", `<span class="ed-image__defaut">${echapper(initiales(accueil().nomPDG))}</span>`, "imgp-");
+      // Deux champs image sur la même page : chacun dans sa zone, avec ses propres identifiants.
+      const zoneB = app.querySelector("#img-banniere"), zoneP = app.querySelector("#img-pdg");
+      zoneB.innerHTML = banniere.html; banniere.brancher(zoneB, changement);
+      zoneP.innerHTML = photo.html; photo.brancher(zoneP, changement);
+      brancherFormulaire(form, changement);
+      form.addEventListener("submit", async ev => {
+        ev.preventDefault();
+        const bouton = form.querySelector("button[type=submit]");
+        bouton.disabled = true;
+        message.textContent = "Enregistrement…";
+        try {
+          await C().enregistrer("site", "accueil", lireObjet(form.querySelector(".card .ed-objet"), ACCUEIL));
+          await banniere.enregistrer();
+          await photo.enregistrer();
+          message.textContent = "Enregistré ✓";
+          toast("Paramètres enregistrés");
+          parametres(app, "identite");
+        } catch (e) { message.textContent = messageErreur(e); message.classList.add("ed-erreur"); bouton.disabled = false; }
+      });
+    }
+    const form = app.querySelector("#form-mdp");
     if (form) form.addEventListener("submit", async ev => {
       ev.preventDefault();
       const msg = form.querySelector("#mdp-message");
@@ -685,9 +787,10 @@
       try {
         await C().changerMotDePasse(form.querySelector("#mdp-ancien").value, nouveau);
         msg.textContent = "Mot de passe changé ✓"; msg.classList.remove("ed-erreur"); form.reset();
+        toast("Mot de passe changé", "lock");
       } catch (e) { msg.textContent = e.message || "Échec du changement."; msg.classList.add("ed-erreur"); }
     });
-    const sauvegarde = zone.querySelector("#sauvegarde");
+    const sauvegarde = app.querySelector("#sauvegarde");
     if (sauvegarde) sauvegarde.addEventListener("click", () => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(new Blob([C().sauvegarde()], { type: "application/json" }));
@@ -695,8 +798,6 @@
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
-    const deconnexion = zone.querySelector("#deconnexion");
-    if (deconnexion) deconnexion.addEventListener("click", () => { C().deconnexion(); location.hash = "#/"; });
   }
 
   window.pagePDG = pagePDG;

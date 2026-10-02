@@ -5,7 +5,7 @@ Site web en français :
 - **Livres** : les grands livres de développement personnel résumés en chapitres, chaque section expliquée avec un exemple concret, plus « l'essentiel en 5 minutes », des questions et un exercice.
 - **Histoires** : des séries de 20 chapitres (5 parties et une leçon par chapitre) et des histoires courtes, classées par thème (amour, philosophie, développement personnel, finance, résilience, amitié, spiritualité…). La lecture est suivie sur l'appareil (« Reprendre la lecture »).
 - **Boutique** : les livres de l'auteur (titre, prix en FCFA, photo, description) ; les lecteurs commandent sur WhatsApp.
-- **Espace PDG** (`#/pdg`, lien discret en bas de page) : un tableau de bord séparé, protégé par mot de passe, pour modifier tout le contenu sans toucher au code : livres et leurs chapitres, séries, histoires, thèmes, images (couvertures, illustrations, bannière), textes de l'accueil, boutique et mot de passe. Les lecteurs ne voient ni cet espace ni les boutons de gestion.
+- **Espace PDG** (`#/pdg`, lien « Espace PDG » en bas de page ; bouton doré dans l'en-tête pour le PDG connecté) : même coquille qu'EventLoc (barre latérale sombre, tableau de bord, fiches qui s'ouvrent sur le côté), un tableau de bord séparé, protégé par mot de passe, pour modifier tout le contenu sans toucher au code : livres et leurs chapitres, séries, histoires, thèmes, images (couvertures, illustrations, bannière), textes de l'accueil, boutique et mot de passe. Les lecteurs ne voient ni cet espace ni les boutons de gestion.
 - **Coach IA** : une conversation avec Claude pour réfléchir à une situation, approfondir un livre, inventer une histoire ou relever un défi de réflexion.
 - **Question du jour** sur la page d'accueil.
 
