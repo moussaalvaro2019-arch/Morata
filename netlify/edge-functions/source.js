@@ -1,5 +1,5 @@
 // =====================================================================
-// Morata · Import de sujets d'examen depuis un site autorisé → POST /api/source
+// BâtiPro Académie · Import de sujets d'examen depuis un site autorisé → POST /api/source
 // Réservé à la direction : le compte est vérifié par Supabase (my_roles).
 // Seuls les sites listés dans la variable Netlify SOURCES_AUTORISEES
 // (par défaut : fomesoutra.com) peuvent être lus.
@@ -7,7 +7,7 @@
 //   { action: "file", url }  → le fichier PDF d'un sujet (réponse binaire)
 // =====================================================================
 
-const UA = "Mozilla/5.0 (compatible; MorataImport/1.0; +https://www.fomesoutra.com)";
+const UA = "Mozilla/5.0 (compatible; BatiProAcademie-Import/1.0)";
 const MAX_HTML = 4_000_000, MAX_PDF = 30_000_000, MAX_PAGES = 25;
 
 function env(name) {

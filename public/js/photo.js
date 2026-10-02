@@ -29,11 +29,11 @@ function solCatalog(){
   }).join('\n').slice(0, 9000);
 }
 function solBlock(t){
-  const m = String(t || '').match(/```morata\s*([\s\S]*?)```/); if(!m) return null;
+  const m = String(t || '').match(/```(?:solveur|morata)\s*([\s\S]*?)```/); if(!m) return null;
   try{ const j = JSON.parse(m[1].trim()); const def = A.SOL.get(j.solveur); if(!def) return null;
     const p = Object.assign(A.SOL.U.clone(def.ex), j.p || {}); if(A.SOL.run(def, p).err) return null; return {def, p}; }catch(_){ return null; }
 }
-const clean = t => String(t || '').replace(/```morata[\s\S]*?(```|$)/g, '').trim();
+const clean = t => String(t || '').replace(/```(?:solveur|morata)[\s\S]*?(```|$)/g, '').trim();
 
 /* ---------- page ---------- */
 A.page('app/resoudre', {space:'app', title:'Résoudre en photo', crumb:'Photographiez un exercice, l\'IA vous explique la solution', static:true,

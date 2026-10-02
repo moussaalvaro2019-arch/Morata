@@ -1,4 +1,4 @@
-# Morata · Académie du bâtiment
+# BâtiPro Académie · Académie du bâtiment
 
 Plateforme d'apprentissage des métiers du bâtiment et du génie civil, avec espace apprenant, espace PDG séparé et assistant IA.
 

@@ -171,7 +171,7 @@ A.page('a-propos', {space:'site', title:'À propos', render(){
   const c = A.cfg();
   const wa = c.whatsapp ? String(c.whatsapp).replace(/\D/g,'') : '';
   return `<div class="wrap"><section class="sect" style="max-width:900px">
-   <span class="kick">À propos</span><h2 style="font-size:clamp(26px,3vw,36px)">${esc(A.brandText())} · ${esc(c.tagline)}</h2>
+   <span class="kick">À propos</span><h2 style="font-size:clamp(26px,3vw,36px)">${esc(A.brandText())}</h2><p class="kick" style="margin-top:-6px">${esc(c.tagline)}</p>
    <p style="font-size:17px;line-height:1.7">${esc(c.about)}</p>
    <div class="g2">
     <div class="card stack"><h3>${ic('target')} Notre mission</h3><p class="muted">Rendre accessible à tous la connaissance du bâtiment : comprendre pourquoi on fait les choses sur un chantier, pas seulement comment. Chaque matière est reliée à la pratique, du calcul à la mise en œuvre.</p></div>

@@ -1,5 +1,5 @@
 // =====================================================================
-// Morata · Assistant IA (Netlify Edge Function)  →  POST /api/ia
+// BâtiPro Académie · Assistant IA (Netlify Edge Function)  →  POST /api/ia
 // Appelle l'API Claude (Anthropic) avec la clé ANTHROPIC_API_KEY stockée
 // dans les variables d'environnement Netlify : elle n'est jamais envoyée
 // au navigateur. Chaque demande est vérifiée par Supabase (compte connecté,
@@ -121,7 +121,7 @@ Termine en l'invitant à te proposer ses résultats pour que tu les vérifies.`,
     task = `Un apprenant${ctx.niveau ? ` (niveau ${clip(ctx.niveau, 40)})` : ""} t'envoie un exercice${mat ? ` de « ${mat} »` : ""} : en photo (énoncé imprimé, manuscrit ou au tableau) et/ou tapé. Si la matière n'est pas indiquée, identifie-la.
 ${MODE}
 Adapte le niveau des explications à l'apprenant. Si l'image ne contient pas d'exercice ou est illisible, dis-le simplement et demande une photo plus nette (cadrée, éclairée, sans reflet).
-${ctx.solveurs ? `La plateforme possède des « solveurs guidés » (exercices types refaits pas à pas). Si — et seulement si — l'exercice correspond clairement à l'un d'eux, ajoute tout à la fin un bloc de code \`\`\`morata contenant uniquement un objet JSON {"solveur":"identifiant","p":{...données...}} avec les données de l'exercice, dans les unités indiquées. Sinon n'ajoute rien. Solveurs disponibles et format de leurs données :\n${clip(ctx.solveurs, 9000)}` : ""}`;
+${ctx.solveurs ? `La plateforme possède des « solveurs guidés » (exercices types refaits pas à pas). Si — et seulement si — l'exercice correspond clairement à l'un d'eux, ajoute tout à la fin un bloc de code \`\`\`solveur contenant uniquement un objet JSON {"solveur":"identifiant","p":{...données...}} avec les données de l'exercice, dans les unités indiquées. Sinon n'ajoute rien. Solveurs disponibles et format de leurs données :\n${clip(ctx.solveurs, 9000)}` : ""}`;
   } else if (kind === "transcrire") {
     task = `Tu aides la direction de la plateforme à mettre en ligne un sujet d'examen officiel${ctx.examen ? ` (${clip(ctx.examen, 60)} ${clip(ctx.annee, 8)})` : ""}${mat ? `, matière « ${mat} »` : ""}. Transcris fidèlement et intégralement le texte des pages jointes, dans l'ordre, en Markdown : titres avec ##, questions numérotées, tableaux de données en tableaux markdown, formules sur des lignes $$. Décris brièvement entre crochets les figures ou schémas ([Figure : poutre sur deux appuis de 6 m…]). N'ajoute aucune solution ni commentaire.`;
   } else if (kind === "corrige") {
@@ -159,7 +159,7 @@ export default async (request) => {
   const ctx = body.ctx && typeof body.ctx === "object" ? body.ctx : {};
 
   // 1. Vérification de l'utilisateur, du quota et du modèle choisi par le PDG
-  let check = { ok: true, model: DEFAULT_MODEL, admin: false, platform: "Morata" };
+  let check = { ok: true, model: DEFAULT_MODEL, admin: false, platform: "BâtiPro Académie" };
   const sb = await supabaseConf(request);
   if (sb) {
     const token = (request.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
@@ -187,7 +187,7 @@ export default async (request) => {
   const params = {
     model,
     max_tokens: kind === "cours" || kind === "corrige" || kind === "transcrire" ? 32000 : kind === "quiz" ? 8000 : 16000,
-    system: systemFor(kind, ctx, clip(check.platform || "Morata", 60)),
+    system: systemFor(kind, ctx, clip(check.platform || "BâtiPro Académie", 60)),
     messages
   };
   // Haiku 4.5 n'accepte pas le réglage d'effort

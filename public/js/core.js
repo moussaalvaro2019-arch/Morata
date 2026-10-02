@@ -1,5 +1,5 @@
 /* =====================================================================
-   Morata · noyau : outils, données (Supabase ou démo locale), routeur,
+   BâtiPro Académie · noyau : outils, données (Supabase ou démo locale), routeur,
    gabarits des espaces (site public, apprenant, PDG)
    ===================================================================== */
 (function(){
@@ -86,10 +86,10 @@ A.MODELES = [
   {id:'claude-haiku-4-5',  n:'Claude Haiku 4.5 · très économique'}
 ];
 A.DEF = {
-  name1:'Morata', name2:'', tagline:'Académie du bâtiment', ceo:'DOUMBIA Moussa',
+  nom:'BâtiPro Académie', name1:'Bâti', name2:'Pro', tagline:'Académie du bâtiment', ceo:'DOUMBIA Moussa',
   heroTitle:'Apprenez le bâtiment', heroAccent:'de A à Z.',
   heroText:"Toutes les matières du génie civil, de la mathématique au béton armé, la construction d'une maison expliquée étape par étape, un atelier de dessin de plans, le métré et un professeur IA disponible jour et nuit.",
-  about:"Morata est une plateforme d'apprentissage créée pour former techniciens, étudiants, ouvriers et passionnés aux métiers du bâtiment. Les cours suivent les référentiels de BTS et de licence en génie civil, avec des exemples tirés des chantiers d'Afrique de l'Ouest.",
+  about:"BâtiPro Académie est une plateforme d'apprentissage créée pour former techniciens, étudiants, ouvriers et passionnés aux métiers du bâtiment. Les cours suivent les référentiels de BTS et de licence en génie civil, avec des exemples tirés des chantiers d'Afrique de l'Ouest.",
   city:"Abidjan, Côte d'Ivoire", phone:'', whatsapp:'', email:'',
   openSignup:true, preview:1,
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
@@ -179,7 +179,7 @@ function demoSeed(){
     if(k%2===0) d.quiz[u+':'+c+':'+k] = {owner:u, data:{chap:c, mat:c.split('-')[0], score: 2 + (k*7+u.length)%3, total:4, at: t - (list.length-k)*day*.8}};
   }));
   d.ia.push({owner:'u_np', at:t-3*3600000, data:{kind:'chat', ref:'ba'}},{owner:'u_kj', at:t-26*3600000, data:{kind:'expliquer', ref:'ba-2'}},{owner:'u_ak', at:t-50*3600000, data:{kind:'chat', ref:'rdm'}});
-  d.annonces.a1 = {titre:'Bienvenue sur Morata', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
+  d.annonces.a1 = {titre:'Bienvenue sur BâtiPro Académie', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
   return d;
 }
 const L = {
@@ -191,6 +191,9 @@ const L = {
 
 /* ---- chargement des données ---- */
 function applyPublic(settings, contents, annonces){
+  // réglages encore enregistrés sous l'ancien nom (Morata) : affichés sous le nouveau nom
+  const m0 = (settings || {}).main;
+  if(m0 && m0.name1 === 'Morata') settings = Object.assign({}, settings, {main:Object.assign(JSON.parse(JSON.stringify(m0).replace(/Morata/g, 'BâtiPro Académie')), {nom:'BâtiPro Académie', name1:'Bâti', name2:'Pro'})});
   S.settings = settings || {}; S.contents = contents || {}; S.annonces = annonces || {};
 }
 function rows2obj(rows){ const o = {}; (rows||[]).forEach(r => o[r.id] = r.data || {}); return o; }
@@ -558,7 +561,8 @@ window.addEventListener('hashchange', () => { closeWin(); A.render(); A.db && S.
 /* =====================================================================
    GABARITS
    ===================================================================== */
-const brandText = () => { const c = A.cfg(); return (c.name1 + (c.name2||'')).trim(); };
+// nom complet (titres, attestations, assistant IA) ; à défaut, le nom du logo
+const brandText = () => { const c = A.cfg(); return String(c.nom || '').trim() || (c.name1 + (c.name2||'')).trim(); };
 A.brandText = brandText;
 A.lockup = (dark, tag) => { const c = A.cfg(); return `<a class="lock${dark?' dk':''}" href="#/"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>${esc(c.name1)}${c.name2?`<em>${esc(c.name2)}</em>`:''}</span><small>${esc(tag==null?c.tagline:tag)}</small></span></a>`; };
 

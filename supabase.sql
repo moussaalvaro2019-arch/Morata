@@ -1,5 +1,5 @@
 -- =====================================================================
--- Morata · Académie du bâtiment : base de données Supabase
+-- BâtiPro Académie : base de données Supabase
 -- À coller en entier dans Supabase > SQL Editor > New query > Run.
 -- Le script peut être relancé sans risque (il ne supprime aucune donnée).
 -- =====================================================================
@@ -240,7 +240,7 @@ begin
   insert into public.ia_logs (owner, data) values (v_uid, jsonb_build_object('kind', left(coalesce(p_kind, ''), 20), 'ref', left(coalesce(p_ref, ''), 80)));
   return json_build_object('ok', true, 'admin', v_admin,
     'model', coalesce(nullif(v_set->>'iaModel', ''), 'claude-opus-5-5'),
-    'platform', trim(coalesce(nullif(v_set->>'name1', ''), 'Morata') || coalesce(v_set->>'name2', '')));
+    'platform', coalesce(nullif(trim(v_set->>'nom'), ''), nullif(trim(coalesce(v_set->>'name1', '') || coalesce(v_set->>'name2', '')), ''), 'BâtiPro Académie'));
 end $$;
 
 revoke execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
@@ -251,7 +251,12 @@ grant execute on function public.ia_check(text, text), public.touch(text), publi
 
 -- ---------- Paramètres de départ ----------
 -- Insérés seulement s'ils n'existent pas : vos réglages ne sont jamais écrasés.
-insert into public.settings (id, data) values ('main', '{"name1":"Morata","tagline":"Académie du bâtiment","ceo":"DOUMBIA Moussa","iaActive":true,"iaModel":"claude-opus-5-5","iaQuota":30,"openSignup":true,"preview":1,"tva":18,"devise":"FCFA"}'::jsonb)
+insert into public.settings (id, data) values ('main', '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro","tagline":"Académie du bâtiment","ceo":"DOUMBIA Moussa","iaActive":true,"iaModel":"claude-opus-5-5","iaQuota":30,"openSignup":true,"preview":1,"tva":18,"devise":"FCFA"}'::jsonb)
 on conflict (id) do nothing;
+-- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
+update public.settings
+   set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,
+       updated_at = now()
+ where id = 'main' and data->>'name1' = 'Morata';
 insert into public.annonces (id, data) values ('bienvenue', jsonb_build_object('titre', 'Bienvenue sur la plateforme', 'texte', 'Commencez par la Construction de A à Z pour voir comment toutes les matières s''enchaînent sur un vrai chantier.', 'at', (extract(epoch from now()) * 1000)::bigint))
 on conflict (id) do nothing;

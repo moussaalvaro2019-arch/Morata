@@ -1,4 +1,4 @@
-# Morata · Académie du bâtiment : mise en ligne (Supabase + GitHub + Netlify + IA)
+# BâtiPro Académie : mise en ligne (Supabase + GitHub + Netlify + IA)
 
 Durée : environ 30 minutes, depuis un ordinateur. Même principe que pour EventLoc CI.
 
@@ -22,7 +22,7 @@ Sans configuration, le site fonctionne en **mode démonstration** : les comptes 
 
 1. Allez sur **supabase.com** → **Start your project** → connectez-vous (avec GitHub, c'est le plus simple).
 2. **New project** :
-   - Name : `morata`
+   - Name : `batipro-academie`
    - Database Password : choisissez-en un et **gardez-le**
    - Region : **West EU (Paris)** ou **Frankfurt** (les plus proches d'Abidjan)
    - **Create new project**, attendez 1 à 2 minutes.
@@ -47,7 +47,7 @@ Enregistrez. Cette clé est prévue pour être publique : la sécurité est assu
 
 ## Étape 3 : mettre les fichiers sur GitHub
 
-1. Sur **github.com**, ouvrez votre dépôt (`Morata`) ou créez-en un.
+1. Sur **github.com**, ouvrez votre dépôt ou créez-en un.
 2. **Add file** → **Upload files** → glissez **le contenu** du dossier en gardant les sous-dossiers (`public`, `netlify`, `package.json`, `netlify.toml`, `supabase.sql`, `GUIDE-INSTALLATION.md`, `README.md`) → **Commit changes**.
    Astuce : sur Chrome, on peut glisser directement les dossiers `public` et `netlify`.
 
@@ -56,7 +56,7 @@ Enregistrez. Cette clé est prévue pour être publique : la sécurité est assu
 1. **app.netlify.com** → connectez-vous avec GitHub.
 2. **Add new site** → **Import an existing project** → **GitHub** → choisissez le dépôt.
 3. Laissez **Build command** vide. **Publish directory** : `public` (déjà indiqué par `netlify.toml`). → **Deploy**.
-4. Notez l'adresse du site (ex. `https://morata-academie.netlify.app`). Vous pouvez la changer dans **Site configuration → Change site name**.
+4. Notez l'adresse du site (ex. `https://batipro-academie.netlify.app`). Vous pouvez la changer dans **Site configuration → Change site name**.
 5. Retournez dans Supabase → **Authentication** → **URL Configuration** → **Site URL** : collez l'adresse Netlify (sert au lien « Mot de passe oublié »).
 
 ## Étape 5 : créer votre compte PDG
@@ -113,6 +113,19 @@ Cette fonction n'est disponible que sur le site publié sur Netlify et seulement
 **Ajouter un sujet à la main** — **Ajouter un sujet** : choisissez l'examen (BTS Bâtiment, Licence…), l'année, la matière, puis ajoutez le **PDF** ou les photos/scans des pages (16 au maximum). Les boutons **Transcrire les photos** et **Rédiger le corrigé avec l'IA** préparent le texte de l'énoncé et un corrigé détaillé : relisez-les, corrigez si besoin, cochez **Publié** et enregistrez. Seuls les sujets publiés sont visibles des apprenants.
 
 > Si vous aviez déjà exécuté `supabase.sql`, **relancez-le** une fois : il ajoute la table `annales` sans toucher à vos données.
+
+### Nom et logo de la plateforme
+La plateforme s'appelle **BâtiPro Académie** (slogan : « Académie du bâtiment »). Tout se règle dans Espace PDG → **Paramètres** → **Identité & site** :
+- **Nom de la plateforme** : utilisé dans les titres des pages, les attestations, le pied de page et par l'assistant IA ;
+- **Logo : début du nom** et **fin du nom (en couleur)** : le logo affiche « Bâti » + « Pro » en orange, avec le slogan en dessous ;
+- **Slogan** et texte de la page **À propos**.
+
+**Si votre site était déjà en ligne sous le nom Morata** :
+1. Relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run) : vos réglages enregistrés sous l'ancien nom sont renommés (y compris le texte « À propos ») et l'assistant IA se présente sous le nouveau nom. Rien d'autre n'est modifié.
+2. Netlify → **Site configuration** → **Change site name** : choisissez par exemple `batipro-academie` (l'adresse devient `https://batipro-academie.netlify.app`). Reportez ensuite cette nouvelle adresse dans Supabase → **Authentication** → **URL Configuration** → **Site URL**.
+3. Facultatif : GitHub → votre dépôt → **Settings** → **Repository name** pour renommer le dépôt. Netlify reste relié au dépôt renommé.
+
+Pour un nom de domaine propre (par exemple `batipro-academie.ci` ou `.com`), achetez-le chez un registraire puis ajoutez-le dans Netlify → **Domain management**. Avant de communiquer largement, vérifiez que le nom est libre et protégez-le si besoin : en Côte d'Ivoire, les marques se déposent auprès de l'OAPI (Organisation africaine de la propriété intellectuelle).
 
 ### Résolution d'exercices en photo
 Les apprenants envoient la photo d'un exercice depuis **Résoudre en photo**. Chaque résolution (et chaque question de suivi) compte pour une question dans le quota quotidien réglé dans Espace PDG → Intelligence artificielle. Les résolutions sont visibles dans **Travaux des apprenants**.
