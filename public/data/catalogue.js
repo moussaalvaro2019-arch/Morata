@@ -134,22 +134,36 @@ A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"so
   {id:"geo-17", niv:3, titre:"Amélioration et renforcement des sols", duree:60, nq:5, nex:5},
   {id:"geo-18", niv:3, titre:"La mission géotechnique et le rapport de sol", duree:50, nq:5, nex:5}
  ]});
-A.addMatiere({id:"mat", titre:"Matériaux de construction", court:"Matériaux", groupe:"constr", icone:"brick", couleur:"#B85C38", niveau:"Débutant", heures:24, ordre:1, prerequis:["sp"], resume:"Granulats, ciments, bétons, mortiers, agglos, aciers, bois et matériaux locaux : choisir, doser, contrôler et bien mettre en œuvre.", objectifs:[
-  "Choisir et contrôler les granulats",
-  "Connaître les ciments et leurs classes",
-  "Doser un béton, un mortier et un enduit",
-  "Contrôler la qualité des agglos et des aciers",
-  "Utiliser les bois et matériaux locaux"
- ], applications:["Commande des matériaux d'une maison", "Contrôle à la réception (sable, ciment, fers)", "Fabrication des agglos sur chantier", "Choix d'un bois de charpente"], src:"data/cours/mat.js?v=df77576f", chapitres:[
-  {id:"mat-1", niv:1, titre:"Les granulats : sable et gravier", duree:25, nq:4, nex:0},
-  {id:"mat-2", niv:1, titre:"Les liants : ciments, chaux et plâtre", duree:25, nq:4, nex:0},
-  {id:"mat-4", niv:1, titre:"Mortiers, enduits et agglos", duree:30, nq:4, nex:0},
-  {id:"mat-3", niv:2, titre:"Le béton : composition et contrôle", duree:35, nq:5, nex:0},
-  {id:"mat-5", niv:2, titre:"Les aciers pour béton armé", duree:25, nq:4, nex:0},
-  {id:"mat-6", niv:2, titre:"Bois, métaux, verre et matériaux locaux", duree:25, nq:4, nex:0},
-  {id:"mat-7", niv:3, titre:"Formuler un béton : la méthode de Dreux-Gorisse", duree:40, nq:4, nex:0},
-  {id:"mat-8", niv:3, titre:"Durabilité et pathologies des matériaux", duree:35, nq:4, nex:0},
-  {id:"mat-9", niv:3, titre:"Matériaux écologiques et innovants", duree:30, nq:4, nex:0}
+A.addMatiere({id:"mat", titre:"Matériaux de construction", court:"Matériaux", groupe:"constr", icone:"brick", couleur:"#B85C38", niveau:"Débutant", heures:65, ordre:1, prerequis:["sp"], resume:"Connaître, choisir, doser et contrôler les matériaux : propriétés physiques et mécaniques, granulats, ciments et liants, mortiers et agglos, terre et matériaux locaux, bétons frais et durcis, adjuvants, contrôle du béton, aciers, bois, métaux, verre, matériaux de second œuvre, formulation des bétons, bétons spéciaux, durabilité et essais de laboratoire, avec applications et exercices corrigés.", objectifs:[
+  "Calculer les grandeurs physiques d'un matériau (masses volumiques, porosité, teneur en eau)",
+  "Choisir et contrôler les granulats, ciments, aciers et bois",
+  "Doser un béton, un mortier et un enduit, et formuler un béton",
+  "Interpréter des essais de laboratoire et de chantier",
+  "Prévenir les pathologies et choisir des matériaux durables"
+ ], applications:[
+  "Contrôle à la réception (sable, ciment, aciers, agglos)",
+  "Composition d'un béton pour un ouvrage donné",
+  "Interprétation d'un procès-verbal d'essais",
+  "Fabrication des agglos et des BTC sur chantier",
+  "Choix d'un bois, d'un acier ou d'un isolant"
+ ], src:"data/cours/mat.js?v=2bead040", chapitres:[
+  {id:"mat-10", niv:1, titre:"Les propriétés générales des matériaux", duree:55, nq:5, nex:5},
+  {id:"mat-1", niv:1, titre:"Les granulats : nature, granulométrie et contrôle", duree:55, nq:5, nex:5},
+  {id:"mat-2", niv:1, titre:"Les liants : ciments, chaux et plâtre", duree:50, nq:5, nex:5},
+  {id:"mat-4", niv:1, titre:"Mortiers, enduits et agglos", duree:55, nq:5, nex:5},
+  {id:"mat-14", niv:1, titre:"La terre, la latérite et les matériaux locaux", duree:50, nq:5, nex:5},
+  {id:"mat-3", niv:2, titre:"Le béton : composition, béton frais et béton durci", duree:60, nq:5, nex:5},
+  {id:"mat-11", niv:2, titre:"L'eau de gâchage et les adjuvants", duree:45, nq:5, nex:5},
+  {id:"mat-12", niv:2, titre:"Le contrôle du béton sur chantier et en laboratoire", duree:50, nq:5, nex:5},
+  {id:"mat-5", niv:2, titre:"Les aciers pour béton armé", duree:50, nq:5, nex:5},
+  {id:"mat-6", niv:2, titre:"Le bois : essences, humidité et protection", duree:50, nq:5, nex:5},
+  {id:"mat-13", niv:2, titre:"Les métaux et le verre", duree:45, nq:5, nex:5},
+  {id:"mat-15", niv:2, titre:"Les matériaux de second œuvre : isolants, plâtres, peintures, plastiques", duree:50, nq:5, nex:5},
+  {id:"mat-7", niv:3, titre:"Formuler un béton : la méthode de Dreux-Gorisse", duree:60, nq:5, nex:5},
+  {id:"mat-16", niv:3, titre:"Les bétons spéciaux", duree:50, nq:5, nex:5},
+  {id:"mat-8", niv:3, titre:"Durabilité et pathologies des matériaux", duree:55, nq:5, nex:5},
+  {id:"mat-17", niv:3, titre:"Les essais de laboratoire et la lecture des procès-verbaux", duree:50, nq:5, nex:5},
+  {id:"mat-9", niv:3, titre:"Matériaux écologiques et construction bas carbone", duree:45, nq:5, nex:5}
  ]});
 A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", icone:"sigma", couleur:"#2F6FDB", niveau:"Débutant", heures:24, ordre:1, resume:"Calcul numérique, unités, géométrie, trigonométrie, volumes, équations et proportionnalité : les outils de calcul de tous les jours sur un chantier.", objectifs:[
   "Maîtriser les puissances de 10, les unités et les conversions",
