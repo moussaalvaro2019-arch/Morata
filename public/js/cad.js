@@ -1,0 +1,606 @@
+/* =====================================================================
+   ATELIER DE DESSIN (DAO) — inspiré d'AutoCAD
+   Coordonnées en mètres, Y vers le haut. Commandes au clavier :
+   LIGNE (L) MUR (MU) POLYLIGNE (PL) RECTANGLE (REC) CERCLE (C) PIECE (PI)
+   PORTE (PO) FENETRE (FE) COTE (COT) TEXTE (T) EFFACER (E) DEPLACER (D)
+   COPIER (CO) ROTATION (RO) MIROIR (MI) ANNULER (U) RETABLIR (R)
+   ZOOM (Z / ZE) ORTHO (O, F8) ACCROCHAGE (ACC, F3) GRILLE (G, F7)
+   EPAISSEUR (EP) HAUTEUR (HT) METRE (MT) ENREGISTRER (ENR) AIDE (?)
+   Saisie des points : x,y  ·  @dx,dy  ·  @d<angle  ·  d (distance directe)
+   ===================================================================== */
+(function(){
+'use strict';
+const {$, $$, esc, ic, F, toast, S} = A;
+const BG = '#0B1524';
+const LAYERS = () => [
+  {id:'murs', n:'Murs', c:'#D5DEE9', v:true}, {id:'ouv', n:'Ouvertures', c:'#FAD98D', v:true},
+  {id:'pieces', n:'Pièces', c:'#6EE7B7', v:true}, {id:'cotes', n:'Cotations', c:'#7FB2FF', v:true},
+  {id:'textes', n:'Textes', c:'#FFFFFF', v:true}, {id:'axes', n:'Axes', c:'#F87171', v:true},
+  {id:'mobilier', n:'Mobilier', c:'#C4B5FD', v:true}, {id:'dessin', n:'Dessin', c:'#E8752A', v:true}
+];
+const AUTO = {wall:'murs', door:'ouv', win:'ouv', dim:'cotes', text:'textes', room:'pieces'};
+let C = null;          // état du dessin courant
+let vw = 0, vh = 0;    // taille du canevas en pixels
+const fresh = (name) => ({id:null, name:name || 'Plan sans nom', ents:[], layers:LAYERS(), cur:'dessin', auto:true,
+  view:{ox:120, oy:520, s:40}, ortho:true, snap:true, osnap:true, grid:0.1, showGrid:true, ep:0.20, ht:2.80, th:0.25,
+  tool:'select', cmd:null, last:null, lastCmd:null, sel:new Set(), hist:[], fut:[], mouse:{x:0, y:0, sx:0, sy:0}, snapPt:null, dirty:false, log:[]});
+
+/* ---------- outils géométriques ---------- */
+const dist = (a, b) => Math.hypot(b[0]-a[0], b[1]-a[1]);
+const r3 = v => Math.round(v*1000)/1000;
+const fm = v => F(v, 2);
+function segDist(p, a, b){ const dx = b[0]-a[0], dy = b[1]-a[1], L2 = dx*dx+dy*dy; let t = L2 ? ((p[0]-a[0])*dx + (p[1]-a[1])*dy)/L2 : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(p[0]-(a[0]+t*dx), p[1]-(a[1]+t*dy)); }
+const polyArea = pts => Math.abs(pts.reduce((a,p,i) => { const q = pts[(i+1)%pts.length]; return a + p[0]*q[1] - q[0]*p[1]; }, 0))/2;
+const polyPer = pts => pts.reduce((a,p,i) => a + dist(p, pts[(i+1)%pts.length]), 0);
+const centroid = pts => [pts.reduce((a,p)=>a+p[0],0)/pts.length, pts.reduce((a,p)=>a+p[1],0)/pts.length];
+const rectPts = (a, b) => [[a[0],a[1]],[b[0],a[1]],[b[0],b[1]],[a[0],b[1]]];
+function entPts(e){
+  switch(e.t){
+    case 'line': case 'wall': case 'door': case 'win': case 'dim': return [[e.x1,e.y1],[e.x2,e.y2]];
+    case 'rect': return rectPts([e.x1,e.y1],[e.x2,e.y2]);
+    case 'circle': return [[e.cx-e.r,e.cy-e.r],[e.cx+e.r,e.cy+e.r]];
+    case 'text': return [[e.x,e.y],[e.x + e.s*.6*String(e.txt).length, e.y + e.s]];
+    case 'room': case 'poly': return e.pts;
+  }
+  return [];
+}
+function bboxOf(list){
+  const P = list.flatMap(entPts); if(!P.length) return null;
+  return {x0:Math.min(...P.map(p=>p[0])), y0:Math.min(...P.map(p=>p[1])), x1:Math.max(...P.map(p=>p[0])), y1:Math.max(...P.map(p=>p[1]))};
+}
+function transform(e, fn){ // fn([x,y]) -> [x,y]
+  const o = JSON.parse(JSON.stringify(e));
+  const T2 = (kx, ky) => { const p = fn([o[kx], o[ky]]); o[kx] = r3(p[0]); o[ky] = r3(p[1]); };
+  if('x1' in o){ T2('x1','y1'); T2('x2','y2'); }
+  if(o.t === 'circle') T2('cx','cy');
+  if(o.t === 'text') T2('x','y');
+  if(o.pts) o.pts = o.pts.map(p => fn(p).map(r3));
+  return o;
+}
+function hit(e, p, tol){
+  switch(e.t){
+    case 'line': case 'door': case 'win': return segDist(p, [e.x1,e.y1], [e.x2,e.y2]) <= tol + (e.ep||0)/2;
+    case 'wall': return segDist(p, [e.x1,e.y1], [e.x2,e.y2]) <= tol + e.ep/2;
+    case 'dim': { const n = normal(e), o = e.off||0; return segDist(p, [e.x1+n[0]*o, e.y1+n[1]*o], [e.x2+n[0]*o, e.y2+n[1]*o]) <= tol*1.5; }
+    case 'rect': { const P = rectPts([e.x1,e.y1],[e.x2,e.y2]); return P.some((a,i)=>segDist(p, a, P[(i+1)%4]) <= tol); }
+    case 'circle': return Math.abs(Math.hypot(p[0]-e.cx, p[1]-e.cy) - e.r) <= tol;
+    case 'text': { const b = bboxOf([e]); return p[0] >= b.x0-tol && p[0] <= b.x1+tol && p[1] >= b.y0-tol && p[1] <= b.y1+tol; }
+    case 'room': return inside(p, e.pts) || e.pts.some((a,i)=>segDist(p, a, e.pts[(i+1)%e.pts.length]) <= tol);
+    case 'poly': return e.pts.some((a,i)=> (i < e.pts.length-1 || e.closed) && segDist(p, a, e.pts[(i+1)%e.pts.length]) <= tol);
+  }
+  return false;
+}
+function inside(p, pts){ let c = false; for(let i=0, j=pts.length-1; i<pts.length; j=i++){ const a = pts[i], b = pts[j]; if(((a[1] > p[1]) !== (b[1] > p[1])) && (p[0] < (b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1]) + a[0])) c = !c; } return c; }
+function normal(e){ const dx = e.x2-e.x1, dy = e.y2-e.y1, L = Math.hypot(dx, dy) || 1; return [-dy/L, dx/L]; }
+
+/* ---------- vue ---------- */
+const toS = p => [p[0]*C.view.s + C.view.ox, C.view.oy - p[1]*C.view.s];
+const toW = (sx, sy) => [(sx - C.view.ox)/C.view.s, (C.view.oy - sy)/C.view.s];
+const layer = id => C.layers.find(l => l.id === id) || C.layers[0];
+
+/* ---------- rendu des entités (coordonnées monde) ---------- */
+function entSvg(e, o={}){
+  const L = layer(e.layer), col = o.col || (C.sel.has(e.id) ? '#F3B23A' : L.c), nss = 'vector-effect="non-scaling-stroke"';
+  const sw = o.light ? 1.2 : 1.5, txtCol = o.col || (C.sel.has(e.id) ? '#F3B23A' : (o.light ? '#14202E' : L.c));
+  switch(e.t){
+    case 'line': return `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="${col}" stroke-width="${sw}" ${nss}/>`;
+    case 'wall': return `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="${o.light && !C.sel.has(e.id) ? '#2A3340' : col}" stroke-width="${e.ep}" stroke-linecap="square" opacity="${o.ghost?.5:.92}"/>`;
+    case 'rect': return `<rect x="${Math.min(e.x1,e.x2)}" y="${Math.min(e.y1,e.y2)}" width="${Math.abs(e.x2-e.x1)}" height="${Math.abs(e.y2-e.y1)}" fill="none" stroke="${col}" stroke-width="${sw}" ${nss}/>`;
+    case 'circle': return `<circle cx="${e.cx}" cy="${e.cy}" r="${e.r}" fill="none" stroke="${col}" stroke-width="${sw}" ${nss}/>`;
+    case 'poly': return `<${e.closed?'polygon':'polyline'} points="${e.pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${col}" stroke-width="${sw}" ${nss}/>`;
+    case 'room': { const c = centroid(e.pts), A2 = polyArea(e.pts), h = Math.min(.32, Math.sqrt(A2)/9 + .1);
+      return `<polygon points="${e.pts.map(p=>p.join(',')).join(' ')}" fill="${o.light?'#EEF4FF':L.c}" fill-opacity="${o.light?1:.08}" stroke="${col}" stroke-width="1" stroke-dasharray="5 4" ${nss}/>
+      <g transform="translate(${c[0]} ${c[1]}) scale(1 -1)"><text text-anchor="middle" font-size="${h}" font-weight="700" fill="${txtCol}" font-family="Inter,sans-serif">${esc(e.name||'Pièce')}</text><text y="${h*1.15}" text-anchor="middle" font-size="${h*.8}" fill="${o.light?'#5E6B7A':txtCol}" opacity=".8" font-family="Inter,sans-serif">${fm(A2)} m²</text></g>`; }
+    case 'text': return `<g transform="translate(${e.x} ${e.y}) scale(1 -1)"><text font-size="${e.s}" fill="${txtCol}" font-family="Inter,sans-serif">${esc(e.txt)}</text></g>`;
+    case 'door': case 'win': {
+      const n = normal(e), w = dist([e.x1,e.y1],[e.x2,e.y2]), t = (e.ep || .2) + .02, h = t/2;
+      const bgPts = [[e.x1+n[0]*h, e.y1+n[1]*h],[e.x2+n[0]*h, e.y2+n[1]*h],[e.x2-n[0]*h, e.y2-n[1]*h],[e.x1-n[0]*h, e.y1-n[1]*h]];
+      let s = `<polygon points="${bgPts.map(p=>p.join(',')).join(' ')}" fill="${o.light?'#fff':BG}"/>`;
+      if(e.t === 'win'){ s += `<polygon points="${bgPts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${col}" stroke-width="1.2" ${nss}/><line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="${col}" stroke-width="1.2" ${nss}/>`; return s; }
+      const sg = e.sw || 1, Lp = [e.x1 + n[0]*w*sg, e.y1 + n[1]*w*sg];
+      const a = [Lp[0]-e.x1, Lp[1]-e.y1], b = [e.x2-e.x1, e.y2-e.y1], sweep = (a[0]*b[1] - a[1]*b[0]) > 0 ? 1 : 0;
+      return s + `<line x1="${e.x1}" y1="${e.y1}" x2="${Lp[0]}" y2="${Lp[1]}" stroke="${col}" stroke-width="2" ${nss}/><path d="M ${Lp[0]} ${Lp[1]} A ${w} ${w} 0 0 ${sweep} ${e.x2} ${e.y2}" fill="none" stroke="${col}" stroke-width="1" stroke-dasharray="4 3" ${nss}/>`;
+    }
+    case 'dim': {
+      const n = normal(e), off = e.off ?? .6, a = [e.x1 + n[0]*off, e.y1 + n[1]*off], b = [e.x2 + n[0]*off, e.y2 + n[1]*off];
+      const ov = Math.sign(off||1)*.12, L2 = dist([e.x1,e.y1],[e.x2,e.y2]);
+      let ang = Math.atan2(e.y2-e.y1, e.x2-e.x1)*180/Math.PI; if(ang > 90) ang -= 180; if(ang <= -90) ang += 180;
+      const m = [(a[0]+b[0])/2, (a[1]+b[1])/2], ts = e.s || Math.max(.14, Math.min(.3, L2/12)), tk = ts*.45;
+      const ux = (e.x2-e.x1)/(L2||1), uy = (e.y2-e.y1)/(L2||1);
+      const tick = p => `<line x1="${p[0]-(ux+n[0])*tk*.7}" y1="${p[1]-(uy+n[1])*tk*.7}" x2="${p[0]+(ux+n[0])*tk*.7}" y2="${p[1]+(uy+n[1])*tk*.7}" stroke="${col}" stroke-width="1.6" ${nss}/>`;
+      return `<line x1="${e.x1+n[0]*.05*Math.sign(off||1)}" y1="${e.y1+n[1]*.05*Math.sign(off||1)}" x2="${a[0]+n[0]*ov}" y2="${a[1]+n[1]*ov}" stroke="${col}" stroke-width=".8" ${nss}/><line x1="${e.x2+n[0]*.05*Math.sign(off||1)}" y1="${e.y2+n[1]*.05*Math.sign(off||1)}" x2="${b[0]+n[0]*ov}" y2="${b[1]+n[1]*ov}" stroke="${col}" stroke-width=".8" ${nss}/>
+       <line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${col}" stroke-width="1" ${nss}/>${tick(a)}${tick(b)}
+       <g transform="translate(${m[0]} ${m[1]}) rotate(${ang}) scale(1 -1)"><text y="${-ts*.35}" text-anchor="middle" font-size="${ts}" fill="${txtCol}" font-family="Inter,sans-serif">${fm(L2)}</text></g>`;
+    }
+  }
+  return '';
+}
+function entsSvg(o={}){
+  const order = {room:0, wall:1, line:2, rect:2, circle:2, poly:2, door:3, win:3, dim:4, text:5};
+  return C.ents.filter(e => layer(e.layer).v).sort((a,b)=>(order[a.t]??2)-(order[b.t]??2)).map(e => entSvg(e, o)).join('');
+}
+
+/* ---------- rendu du canevas ---------- */
+function gridSvg(){
+  if(!C.showGrid) return '';
+  let g = C.grid; while(g*C.view.s < 9) g *= (String(g).includes('25') ? 2 : g*C.view.s < 4 ? 10 : 5);
+  const G = g*C.view.s, M = Math.max(1, Math.round(1/g))*G <= vw ? (g < 1 ? 1 : g*5)*C.view.s : G*5;
+  const ox = ((C.view.ox % G) + G) % G, oy = ((C.view.oy % G) + G) % G, mx = ((C.view.ox % M) + M) % M, my = ((C.view.oy % M) + M) % M;
+  return `<defs><pattern id="cgr" x="${ox}" y="${oy}" width="${G}" height="${G}" patternUnits="userSpaceOnUse"><path d="M ${G} 0 L 0 0 0 ${G}" fill="none" stroke="#14243A" stroke-width="1"/></pattern>
+   <pattern id="cgM" x="${mx}" y="${my}" width="${M}" height="${M}" patternUnits="userSpaceOnUse"><path d="M ${M} 0 L 0 0 0 ${M}" fill="none" stroke="#1C3150" stroke-width="1"/></pattern></defs>
+   <rect width="${vw}" height="${vh}" fill="url(#cgr)"/><rect width="${vw}" height="${vh}" fill="url(#cgM)"/>
+   <line x1="${C.view.ox}" y1="0" x2="${C.view.ox}" y2="${vh}" stroke="#2B4870" stroke-width="1"/><line x1="0" y1="${C.view.oy}" x2="${vw}" y2="${C.view.oy}" stroke="#2B4870" stroke-width="1"/>`;
+}
+const wt = () => `matrix(${C.view.s} 0 0 ${-C.view.s} ${C.view.ox} ${C.view.oy})`;
+function draw(){
+  const svgEl = $('#cvs'); if(!svgEl || !C) return;
+  const cv = $('#cv'); vw = cv.clientWidth; vh = cv.clientHeight;
+  svgEl.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+  $('#cgrid').innerHTML = gridSvg();
+  const g = $('#wg'); g.setAttribute('transform', wt()); g.innerHTML = entsSvg();
+  overlay(); props(); hud();
+}
+function overlay(){
+  const o = $('#ovl'); if(!o) return;
+  const m = C.mouse, p = C.snapPt || [m.x, m.y], sp = toS(p);
+  let s = '';
+  const cmd = C.cmd;
+  // prévisualisation
+  if(cmd){
+    const P = cmd.pts, last = P[P.length-1];
+    const ghost = (e) => `<g transform="${wt()}" opacity=".75">${entSvg(Object.assign({layer:AUTO[e.t]||C.cur}, e), {col:'#F3B23A'})}</g>`;
+    if(last){
+      if(['LIGNE','POLYLIGNE','COTE','PORTE','FENETRE'].includes(cmd.n) && !(cmd.n==='COTE' && P.length===2) && !(cmd.n==='PORTE' && P.length===2)) s += ghost({t: cmd.n==='FENETRE'?'win':'line', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:C.ep});
+      if(cmd.n === 'MUR') s += ghost({t:'wall', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:cmd.ep||C.ep});
+      if(cmd.n === 'RECTANGLE') s += ghost({t:'rect', x1:last[0], y1:last[1], x2:p[0], y2:p[1]});
+      if(cmd.n === 'PIECE' && P.length === 1) s += ghost({t:'room', pts:rectPts(last, p), name:'Pièce'});
+      if(cmd.n === 'CERCLE') s += ghost({t:'circle', cx:last[0], cy:last[1], r:dist(last, p)});
+      if(cmd.n === 'COTE' && P.length === 2){ const e = {t:'dim', x1:P[0][0], y1:P[0][1], x2:P[1][0], y2:P[1][1]}; const n = normal(e); e.off = (p[0]-P[0][0])*n[0] + (p[1]-P[0][1])*n[1]; s += ghost(e); }
+      if(cmd.n === 'PORTE' && P.length === 2){ const e = {t:'door', x1:P[0][0], y1:P[0][1], x2:P[1][0], y2:P[1][1], ep:cmd.ep||C.ep}; const n = normal(e); e.sw = ((p[0]-P[0][0])*n[0] + (p[1]-P[0][1])*n[1]) >= 0 ? 1 : -1; s += ghost(e); }
+      if(['DEPLACER','COPIER'].includes(cmd.n) && cmd.base){ const d = [p[0]-cmd.base[0], p[1]-cmd.base[1]]; s += `<g transform="${wt()}" opacity=".6">${C.ents.filter(e=>C.sel.has(e.id)).map(e=>entSvg(transform(e, q=>[q[0]+d[0], q[1]+d[1]]),{col:'#F3B23A', ghost:1})).join('')}</g>`; }
+      if(cmd.n === 'ROTATION' && cmd.base){ const a = Math.atan2(p[1]-cmd.base[1], p[0]-cmd.base[0]); s += `<g transform="${wt()}" opacity=".6">${C.ents.filter(e=>C.sel.has(e.id)).map(e=>entSvg(transform(e, q=>rot(q, cmd.base, a)),{col:'#F3B23A', ghost:1})).join('')}</g>`; }
+      if(cmd.n === 'MIROIR' && cmd.base) s += `<g transform="${wt()}" opacity=".6">${C.ents.filter(e=>C.sel.has(e.id)).map(e=>entSvg(transform(e, q=>mirror(q, cmd.base, p)),{col:'#F3B23A', ghost:1})).join('')}</g>`;
+      if(!['ROTATION'].includes(cmd.n)) { const a = toS(last); s += `<line x1="${a[0]}" y1="${a[1]}" x2="${sp[0]}" y2="${sp[1]}" stroke="#F3B23A" stroke-width="1" stroke-dasharray="3 4" opacity=".5"/>`; }
+    }
+  }
+  if(C.win){ const a = C.win.a, b = [m.sx, m.sy], cross = b[0] < a[0];
+    s += `<rect x="${Math.min(a[0],b[0])}" y="${Math.min(a[1],b[1])}" width="${Math.abs(b[0]-a[0])}" height="${Math.abs(b[1]-a[1])}" fill="${cross?'rgba(30,155,94,.12)':'rgba(47,111,219,.12)'}" stroke="${cross?'#1E9B5E':'#2F6FDB'}" stroke-dasharray="${cross?'5 4':''}"/>`; }
+  // réticule
+  if(C.tool !== 'pan' && m.in) s += `<line x1="0" x2="${vw}" y1="${sp[1]}" y2="${sp[1]}" stroke="#5F7590" stroke-width=".6"/><line y1="0" y2="${vh}" x1="${sp[0]}" x2="${sp[0]}" stroke="#5F7590" stroke-width=".6"/><rect x="${sp[0]-4}" y="${sp[1]-4}" width="8" height="8" fill="none" stroke="#E3EAF2"/>`;
+  if(C.snapPt && C.snapKind) s += C.snapKind === 'mid' ? `<path d="M ${sp[0]} ${sp[1]-8} L ${sp[0]+8} ${sp[1]+6} L ${sp[0]-8} ${sp[1]+6} Z" fill="none" stroke="#1E9B5E" stroke-width="2"/>` : C.snapKind === 'ctr' ? `<circle cx="${sp[0]}" cy="${sp[1]}" r="7" fill="none" stroke="#1E9B5E" stroke-width="2"/>` : `<rect x="${sp[0]-7}" y="${sp[1]-7}" width="14" height="14" fill="none" stroke="#1E9B5E" stroke-width="2"/>`;
+  o.innerHTML = s;
+}
+function hud(){
+  const h = $('#hud'); if(!h) return;
+  const p = C.snapPt || [C.mouse.x, C.mouse.y], last = C.cmd && C.cmd.pts[C.cmd.pts.length-1];
+  h.innerHTML = `<span>X ${fm(p[0])}</span><span>Y ${fm(p[1])}</span>${last?`<span>L ${fm(dist(last,p))} m</span><span>∠ ${F((Math.atan2(p[1]-last[1],p[0]-last[0])*180/Math.PI+360)%360,1)}°</span>`:''}<span>${C.ortho?'ORTHO':''} ${C.osnap?'ACCROCH.':''}</span>`;
+  const hint = $('#hint'); if(hint){ hint.hidden = !C.cmd; if(C.cmd) hint.textContent = C.cmd.n + ' · ' + prompt(); }
+  const pr = $('#cmdP'); if(pr) pr.textContent = C.cmd ? prompt() + ' ' : 'Commande :';
+  [['ortho',C.ortho],['osnap',C.osnap],['grid',C.showGrid]].forEach(([k,v]) => { const b = $(`[data-cact="${k}"]`); if(b) b.classList.toggle('on', !!v); });
+}
+
+/* ---------- accrochage ---------- */
+function snap(sx, sy){
+  let w = toW(sx, sy); C.snapPt = null; C.snapKind = null;
+  if(C.osnap){
+    const tol = 10 / C.view.s; let best = null;
+    C.ents.forEach(e => {
+      if(!layer(e.layer).v) return;
+      const cand = [];
+      if('x1' in e){ cand.push([[e.x1,e.y1],'end'],[[e.x2,e.y2],'end'],[[(e.x1+e.x2)/2,(e.y1+e.y2)/2],'mid']); }
+      if(e.t === 'rect') rectPts([e.x1,e.y1],[e.x2,e.y2]).forEach(p => cand.push([p,'end']));
+      if(e.pts) e.pts.forEach(p => cand.push([p,'end']));
+      if(e.t === 'circle') cand.push([[e.cx,e.cy],'ctr']);
+      if(e.t === 'wall'){ const n = normal(e), h = e.ep/2; [[e.x1,e.y1],[e.x2,e.y2]].forEach(p => { cand.push([[p[0]+n[0]*h, p[1]+n[1]*h],'end'],[[p[0]-n[0]*h, p[1]-n[1]*h],'end']); }); }
+      cand.forEach(([p,k]) => { const d = dist(p, w); if(d < tol && (!best || d < best.d)) best = {p, k, d}; });
+    });
+    if(best){ C.snapPt = best.p; C.snapKind = best.k; return best.p; }
+  }
+  const cmd = C.cmd, last = cmd && cmd.pts[cmd.pts.length-1];
+  if(C.snap){ const g = C.grid; w = [Math.round(w[0]/g)*g, Math.round(w[1]/g)*g]; }
+  if(C.ortho && last && !(cmd.n === 'COTE' && cmd.pts.length === 2) && !(cmd.n === 'PORTE' && cmd.pts.length === 2) && !(cmd.base && ['ROTATION','MIROIR'].includes(cmd.n))){
+    if(Math.abs(w[0]-last[0]) >= Math.abs(w[1]-last[1])) w = [w[0], last[1]]; else w = [last[0], w[1]];
+  }
+  C.snapPt = [r3(w[0]), r3(w[1])]; C.snapKind = null; return C.snapPt;
+}
+
+/* ---------- historique ---------- */
+function pushHist(){ C.hist.push(JSON.stringify(C.ents)); if(C.hist.length > 120) C.hist.shift(); C.fut = []; C.dirty = true; }
+function undo(){ if(!C.hist.length){ log('Rien à annuler'); return; } C.fut.push(JSON.stringify(C.ents)); C.ents = JSON.parse(C.hist.pop()); C.sel.clear(); C.dirty = true; log('Annulé'); draw(); }
+function redo(){ if(!C.fut.length){ log('Rien à rétablir'); return; } C.hist.push(JSON.stringify(C.ents)); C.ents = JSON.parse(C.fut.pop()); C.dirty = true; log('Rétabli'); draw(); }
+const nid = () => 'e' + Math.random().toString(36).slice(2, 9);
+function addEnt(e){ e.id = nid(); e.layer = C.auto ? (AUTO[e.t] || C.cur) : C.cur; C.ents.push(e); return e; }
+
+/* ---------- commandes ---------- */
+const ALIAS = {L:'LIGNE', LIGNE:'LIGNE', LINE:'LIGNE', MU:'MUR', MUR:'MUR', W:'MUR', WALL:'MUR', PL:'POLYLIGNE', POLYLIGNE:'POLYLIGNE', PLINE:'POLYLIGNE', REC:'RECTANGLE', RECT:'RECTANGLE', RECTANGLE:'RECTANGLE', RECTANG:'RECTANGLE',
+  C:'CERCLE', CERCLE:'CERCLE', CIRCLE:'CERCLE', PI:'PIECE', PIECE:'PIECE', 'PIÈCE':'PIECE', PO:'PORTE', PORTE:'PORTE', DOOR:'PORTE', FE:'FENETRE', FENETRE:'FENETRE', 'FENÊTRE':'FENETRE', WIN:'FENETRE',
+  COT:'COTE', COTE:'COTE', COTATION:'COTE', DIM:'COTE', T:'TEXTE', TEXTE:'TEXTE', TEXT:'TEXTE', E:'EFFACER', EFF:'EFFACER', EFFACER:'EFFACER', ERASE:'EFFACER',
+  D:'DEPLACER', DEP:'DEPLACER', DEPLACER:'DEPLACER', 'DÉPLACER':'DEPLACER', M:'DEPLACER', MOVE:'DEPLACER', CO:'COPIER', CP:'COPIER', COPIER:'COPIER', COPY:'COPIER',
+  RO:'ROTATION', ROTATION:'ROTATION', ROTATE:'ROTATION', MI:'MIROIR', MIROIR:'MIROIR', MIRROR:'MIROIR', U:'ANNULER', ANNULER:'ANNULER', UNDO:'ANNULER', R:'RETABLIR', RET:'RETABLIR', RETABLIR:'RETABLIR', 'RÉTABLIR':'RETABLIR', REDO:'RETABLIR',
+  Z:'ZOOM', ZOOM:'ZOOM', ZE:'ZE', O:'ORTHO', ORTHO:'ORTHO', ACC:'ACCROCHAGE', ACCROCHAGE:'ACCROCHAGE', OSNAP:'ACCROCHAGE', G:'GRILLE', GRILLE:'GRILLE', GRID:'GRILLE',
+  EP:'EPAISSEUR', EPAISSEUR:'EPAISSEUR', 'ÉPAISSEUR':'EPAISSEUR', HT:'HAUTEUR', HAUTEUR:'HAUTEUR', MT:'METRE', METRE:'METRE', 'MÉTRÉ':'METRE', ENR:'ENREGISTRER', ENREGISTRER:'ENREGISTRER', SAVE:'ENREGISTRER',
+  '?':'AIDE', AIDE:'AIDE', HELP:'AIDE', TOUT:'TOUT', ALL:'TOUT', NOUVEAU:'NOUVEAU', NEW:'NOUVEAU', CALQUE:'CALQUE', LA:'CALQUE'};
+const NEEDSEL = ['DEPLACER','COPIER','ROTATION','MIROIR'];
+function prompt(){
+  const c = C.cmd; if(!c) return '';
+  const k = c.pts.length;
+  switch(c.n){
+    case 'LIGNE': case 'POLYLIGNE': return k ? 'Point suivant [Entrée = terminer, C = clore, U = annuler le dernier] :' : 'Premier point :';
+    case 'MUR': return k ? `Point suivant (ép. ${fm(c.ep||C.ep)} m) [E = épaisseur, C = clore, Entrée = terminer] :` : `Premier point du mur (ép. ${fm(c.ep||C.ep)} m) [E = épaisseur] :`;
+    case 'RECTANGLE': return k ? 'Coin opposé (ou @largeur,hauteur) :' : 'Premier coin :';
+    case 'PIECE': return k === 0 ? 'Premier coin de la pièce :' : k === 1 ? 'Coin opposé :' : 'Nom de la pièce :';
+    case 'CERCLE': return k ? 'Rayon (valeur ou point) :' : 'Centre :';
+    case 'PORTE': return k === 0 ? 'Premier point de l\'ouverture (charnière) :' : k === 1 ? 'Second point (ou largeur, ex. 0.9) :' : 'Côté d\'ouverture (cliquer) :';
+    case 'FENETRE': return k === 0 ? 'Premier point de la fenêtre :' : 'Second point (ou largeur, ex. 1.2) :';
+    case 'COTE': return k === 0 ? 'Origine de la première ligne d\'attache :' : k === 1 ? 'Origine de la seconde ligne d\'attache :' : 'Position de la ligne de cote :';
+    case 'TEXTE': return k ? 'Texte à écrire :' : `Point d'insertion (hauteur ${fm(C.th)} m) :`;
+    case 'EFFACER': return 'Cliquez les objets à effacer [Entrée = terminer] :';
+    case 'DEPLACER': case 'COPIER': return c.base ? (c.n === 'COPIER' ? 'Point de destination [Entrée = terminer] :' : 'Point de destination :') : (C.sel.size ? `Point de base (${C.sel.size} objet(s)) :` : 'Sélectionnez les objets puis Entrée :');
+    case 'ROTATION': return c.base ? 'Angle de rotation (degrés) ou point :' : (C.sel.size ? 'Point de base :' : 'Sélectionnez les objets puis Entrée :');
+    case 'MIROIR': return c.base ? 'Second point de l\'axe de symétrie :' : (C.sel.size ? 'Premier point de l\'axe :' : 'Sélectionnez les objets puis Entrée :');
+    case 'EPAISSEUR': return `Nouvelle épaisseur de mur en m <${fm(C.ep)}> :`;
+    case 'HAUTEUR': return `Hauteur des murs pour le métré en m <${fm(C.ht)}> :`;
+  }
+  return '';
+}
+function log(t){ C.log.push(t); if(C.log.length > 60) C.log.shift(); const l = $('#cmdLog'); if(l){ l.textContent = C.log.slice(-6).join('\n'); l.scrollTop = l.scrollHeight; } }
+function setTool(t){ cancel(); C.tool = t; const cv = $('#cv'); if(cv){ cv.classList.toggle('pan', t === 'pan'); cv.classList.toggle('sel', t === 'select'); } $$('[data-ctool]').forEach(b => b.classList.toggle('on', b.dataset.ctool === t)); }
+function start(name){
+  const n = ALIAS[String(name).toUpperCase().trim()];
+  if(!n){ log(`Commande inconnue : « ${name} ». Tapez AIDE pour la liste.`); return; }
+  log('Commande : ' + n);
+  switch(n){
+    case 'ANNULER': return undo();
+    case 'RETABLIR': return redo();
+    case 'ZE': return zoomExt();
+    case 'ZOOM': return zoomExt();
+    case 'ORTHO': C.ortho = !C.ortho; log('Ortho ' + (C.ortho ? 'activé' : 'désactivé')); return draw();
+    case 'ACCROCHAGE': C.osnap = !C.osnap; log('Accrochage ' + (C.osnap ? 'activé' : 'désactivé')); return draw();
+    case 'GRILLE': C.showGrid = !C.showGrid; return draw();
+    case 'METRE': return showMetre();
+    case 'ENREGISTRER': return save();
+    case 'AIDE': return help();
+    case 'NOUVEAU': return newDrawing();
+    case 'TOUT': C.ents.forEach(e => C.sel.add(e.id)); log(C.sel.size + ' objet(s) sélectionné(s)'); return draw();
+    case 'CALQUE': return toggleProps(true);
+  }
+  if(n === 'EFFACER' && C.sel.size){ pushHist(); const k = C.sel.size; C.ents = C.ents.filter(e => !C.sel.has(e.id)); C.sel.clear(); log(k + ' objet(s) effacé(s)'); return draw(); }
+  C.cmd = {n, pts:[], ep:C.ep}; C.lastCmd = n; C.tool = 'cmd';
+  $$('[data-ctool]').forEach(b => b.classList.toggle('on', b.dataset.ctool === n));
+  log(prompt()); draw();
+}
+function cancel(){ if(C && C.cmd){ log('*Annulé*'); } if(C){ C.cmd = null; C.tool = 'select'; C.win = null; $$('[data-ctool]').forEach(b => b.classList.toggle('on', b.dataset.ctool === 'select')); } }
+function finish(){
+  const c = C.cmd; if(!c) return;
+  if(c.n === 'POLYLIGNE' && c.pts.length >= 2){ pushHist(); addEnt({t:'poly', pts:c.pts.map(p=>p.slice()), closed:false}); }
+  if(['DEPLACER','COPIER','ROTATION','MIROIR'].includes(c.n) && !c.base && C.sel.size){ log(prompt()); return draw(); }
+  C.cmd = null; C.tool = 'select'; $$('[data-ctool]').forEach(b => b.classList.toggle('on', b.dataset.ctool === 'select')); draw();
+}
+const rot = (q, b, a) => { const dx = q[0]-b[0], dy = q[1]-b[1]; return [b[0] + dx*Math.cos(a) - dy*Math.sin(a), b[1] + dx*Math.sin(a) + dy*Math.cos(a)]; };
+function mirror(q, a, b){ const dx = b[0]-a[0], dy = b[1]-a[1], L2 = dx*dx+dy*dy || 1, t = ((q[0]-a[0])*dx + (q[1]-a[1])*dy)/L2, px = a[0]+t*dx, py = a[1]+t*dy; return [2*px-q[0], 2*py-q[1]]; }
+
+/* reçoit un point (clic ou saisie) */
+function point(p){
+  const c = C.cmd; if(!c) return;
+  const k = c.pts.length, last = c.pts[k-1];
+  switch(c.n){
+    case 'LIGNE': if(last && dist(last,p) > 1e-6){ pushHist(); addEnt({t:'line', x1:last[0], y1:last[1], x2:p[0], y2:p[1]}); } c.pts.push(p); break;
+    case 'MUR': if(last && dist(last,p) > 1e-6){ pushHist(); addEnt({t:'wall', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:c.ep||C.ep}); } c.pts.push(p); break;
+    case 'POLYLIGNE': c.pts.push(p); break;
+    case 'RECTANGLE': if(k){ pushHist(); addEnt({t:'rect', x1:last[0], y1:last[1], x2:p[0], y2:p[1]}); C.cmd = null; } else c.pts.push(p); break;
+    case 'PIECE': if(k === 0) c.pts.push(p); else if(k === 1){ c.pts.push(p); log(prompt()); } break;
+    case 'CERCLE': if(k){ pushHist(); addEnt({t:'circle', cx:last[0], cy:last[1], r:r3(dist(last,p))}); C.cmd = null; } else c.pts.push(p); break;
+    case 'FENETRE': if(k){ pushHist(); addEnt({t:'win', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:wallEpAt(last)}); C.cmd = null; } else c.pts.push(p); break;
+    case 'PORTE': if(k < 2) c.pts.push(p); else { const e = {t:'door', x1:c.pts[0][0], y1:c.pts[0][1], x2:c.pts[1][0], y2:c.pts[1][1], ep:wallEpAt(c.pts[0])}; const n = normal(e); e.sw = ((p[0]-e.x1)*n[0] + (p[1]-e.y1)*n[1]) >= 0 ? 1 : -1; pushHist(); addEnt(e); C.cmd = null; } break;
+    case 'COTE': if(k < 2) c.pts.push(p); else { const e = {t:'dim', x1:c.pts[0][0], y1:c.pts[0][1], x2:c.pts[1][0], y2:c.pts[1][1]}; const n = normal(e); e.off = r3((p[0]-e.x1)*n[0] + (p[1]-e.y1)*n[1]); pushHist(); addEnt(e); C.cmd = null; } break;
+    case 'TEXTE': if(!k){ c.pts.push(p); log(prompt()); } break;
+    case 'EFFACER': { const e = pick(toS(p)); if(e){ pushHist(); C.ents = C.ents.filter(x => x !== e); log('1 objet effacé'); } break; }
+    case 'DEPLACER': case 'COPIER':
+      if(!C.sel.size){ const e = pick(toS(p)); if(e){ C.sel.add(e.id); } break; }
+      if(!c.base){ c.base = p; c.pts.push(p); break; }
+      { const d = [p[0]-c.base[0], p[1]-c.base[1]]; pushHist();
+        if(c.n === 'DEPLACER'){ C.ents = C.ents.map(e => C.sel.has(e.id) ? Object.assign(transform(e, q=>[q[0]+d[0], q[1]+d[1]]), {id:e.id}) : e); C.cmd = null; log('Objets déplacés'); }
+        else { C.ents.filter(e => C.sel.has(e.id)).forEach(e => { const n = transform(e, q=>[q[0]+d[0], q[1]+d[1]]); n.id = nid(); C.ents.push(n); }); log('Objets copiés'); } }
+      break;
+    case 'ROTATION':
+      if(!C.sel.size){ const e = pick(toS(p)); if(e) C.sel.add(e.id); break; }
+      if(!c.base){ c.base = p; c.pts.push(p); break; }
+      doRotate(Math.atan2(p[1]-c.base[1], p[0]-c.base[0])); break;
+    case 'MIROIR':
+      if(!C.sel.size){ const e = pick(toS(p)); if(e) C.sel.add(e.id); break; }
+      if(!c.base){ c.base = p; c.pts.push(p); break; }
+      pushHist(); C.ents.filter(e => C.sel.has(e.id)).forEach(e => { const n = transform(e, q=>mirror(q, c.base, p)); n.id = nid(); if(n.t === 'door') n.sw = -(n.sw||1); C.ents.push(n); }); C.cmd = null; log('Symétrie créée'); break;
+  }
+  C.last = p; draw();
+}
+function doRotate(a){ const c = C.cmd; pushHist(); C.ents = C.ents.map(e => C.sel.has(e.id) ? Object.assign(transform(e, q=>rot(q, c.base, a)), {id:e.id}) : e); C.cmd = null; log('Rotation de ' + F(a*180/Math.PI,1) + '°'); draw(); }
+function wallEpAt(p){ const w = C.ents.filter(e => e.t === 'wall').find(e => segDist(p, [e.x1,e.y1],[e.x2,e.y2]) <= e.ep/2 + .05); return w ? w.ep : C.ep; }
+
+/* saisie au clavier dans la ligne de commande */
+function typed(raw){
+  const t = String(raw).trim(); const c = C.cmd;
+  if(!c){ if(!t){ if(C.lastCmd) start(C.lastCmd); return; } return start(t); }
+  const U = t.toUpperCase();
+  if(!t){ if(c.n === 'PIECE' && c.pts.length === 2) return mkRoom('Pièce'); if(c.n === 'TEXTE' && c.pts.length) return; return finish(); }
+  // options
+  if(c.n === 'TEXTE' && c.pts.length){ pushHist(); addEnt({t:'text', x:c.pts[0][0], y:c.pts[0][1], s:C.th, txt:t}); C.cmd = null; log('Texte ajouté'); return draw(); }
+  if(c.n === 'PIECE' && c.pts.length === 2) return mkRoom(t);
+  if(c.n === 'EPAISSEUR'){ const v = parseFloat(t.replace(',','.')); if(v > 0){ C.ep = v; log('Épaisseur des murs : ' + fm(v) + ' m'); } C.cmd = null; return draw(); }
+  if(c.n === 'HAUTEUR'){ const v = parseFloat(t.replace(',','.')); if(v > 0){ C.ht = v; log('Hauteur des murs : ' + fm(v) + ' m'); } C.cmd = null; return draw(); }
+  if(c.n === 'MUR' && (U === 'E' || U.startsWith('E '))){ const v = parseFloat(U.slice(1).replace(',','.')); if(v > 0){ c.ep = v; C.ep = v; log('Épaisseur : ' + fm(v) + ' m'); } else { c.askEp = true; log('Tapez l\'épaisseur (ex. 0.15) :'); } return draw(); }
+  if(c.askEp){ const v = parseFloat(t.replace(',','.')); if(v > 0){ c.ep = v; C.ep = v; log('Épaisseur : ' + fm(v) + ' m'); } c.askEp = false; return draw(); }
+  if((c.n === 'LIGNE' || c.n === 'MUR' || c.n === 'POLYLIGNE') && U === 'C' && c.pts.length >= 3){ if(c.n === 'POLYLIGNE'){ pushHist(); addEnt({t:'poly', pts:c.pts.map(p=>p.slice()), closed:true}); C.cmd = null; return draw(); } point(c.pts[0]); return finish(); }
+  if((c.n === 'LIGNE' || c.n === 'MUR' || c.n === 'POLYLIGNE') && U === 'U' && c.pts.length){ if(c.n !== 'POLYLIGNE' && c.pts.length > 1) undo(); c.pts.pop(); return draw(); }
+  if(c.n === 'ROTATION' && c.base && /^-?[\d.,]+$/.test(t)) return doRotate(parseFloat(t.replace(',','.'))*Math.PI/180);
+  if(c.n === 'CERCLE' && c.pts.length === 1 && /^[\d.,]+$/.test(t)){ pushHist(); addEnt({t:'circle', cx:c.pts[0][0], cy:c.pts[0][1], r:parseFloat(t.replace(',','.'))}); C.cmd = null; return draw(); }
+  const p = parsePt(t);
+  if(!p){ log('Point ou option non valide : ' + t); return; }
+  point(p);
+}
+function mkRoom(name){ const c = C.cmd; pushHist(); addEnt({t:'room', pts:rectPts(c.pts[0], c.pts[1]).map(p=>p.map(r3)), name}); C.cmd = null; log('Pièce « ' + name + ' » créée'); draw(); }
+function parsePt(t){
+  const c = C.cmd, last = c && c.pts[c.pts.length-1];
+  t = t.replace(/\s+/g, '');
+  let m;
+  if((m = t.match(/^@(-?[\d.]+)<(-?[\d.]+)$/)) && last){ const d = +m[1], a = +m[2]*Math.PI/180; return [r3(last[0] + d*Math.cos(a)), r3(last[1] + d*Math.sin(a))]; }
+  if((m = t.match(/^@(-?[\d.]+)[,;](-?[\d.]+)$/))){ const b = last || [0,0]; return [r3(b[0] + +m[1]), r3(b[1] + +m[2])]; }
+  if((m = t.match(/^(-?[\d.]+)<(-?[\d.]+)$/))){ const d = +m[1], a = +m[2]*Math.PI/180; return [r3(d*Math.cos(a)), r3(d*Math.sin(a))]; }
+  if((m = t.match(/^(-?[\d.]+)[,;](-?[\d.]+)$/))) return [+m[1], +m[2]];
+  if((m = t.match(/^(-?[\d]+(?:[.,][\d]+)?)$/)) && last){
+    const d = parseFloat(m[1].replace(',','.')); const cur = C.snapPt || [C.mouse.x, C.mouse.y];
+    let dx = cur[0]-last[0], dy = cur[1]-last[1];
+    if(C.ortho){ if(Math.abs(dx) >= Math.abs(dy)) dy = 0; else dx = 0; }
+    const L = Math.hypot(dx, dy) || 1; if(!dx && !dy) dx = 1;
+    return [r3(last[0] + dx/L*d), r3(last[1] + dy/L*d)];
+  }
+  return null;
+}
+function pick(sp){ const w = toW(sp[0], sp[1]), tol = 6 / C.view.s; const vis = C.ents.filter(e => layer(e.layer).v); for(let i = vis.length-1; i >= 0; i--){ if(vis[i].t !== 'room' && hit(vis[i], w, tol)) return vis[i]; } for(let i = vis.length-1; i >= 0; i--){ if(hit(vis[i], w, tol)) return vis[i]; } return null; }
+
+/* ---------- zoom ---------- */
+function zoomExt(){
+  const b = bboxOf(C.ents.filter(e => layer(e.layer).v));
+  if(!b){ C.view = {ox:80, oy:vh-80, s:40}; return draw(); }
+  const w = Math.max(1, b.x1-b.x0), h = Math.max(1, b.y1-b.y0), s = Math.min((vw-80)/w, (vh-80)/h);
+  C.view.s = Math.max(4, Math.min(400, s)); C.view.ox = (vw - w*C.view.s)/2 - b.x0*C.view.s; C.view.oy = (vh + h*C.view.s)/2 + b.y0*C.view.s; draw();
+}
+function zoomAt(sx, sy, f){ const w = toW(sx, sy); C.view.s = Math.max(2, Math.min(800, C.view.s*f)); C.view.ox = sx - w[0]*C.view.s; C.view.oy = sy + w[1]*C.view.s; draw(); }
+
+/* ---------- panneau des propriétés ---------- */
+function props(){
+  const box = $('#cprops'); if(!box) return;
+  const sel = C.ents.filter(e => C.sel.has(e.id));
+  const NAMES = {line:'Ligne', wall:'Mur', rect:'Rectangle', circle:'Cercle', poly:'Polyligne', room:'Pièce', door:'Porte', win:'Fenêtre', dim:'Cotation', text:'Texte'};
+  let selHtml = '';
+  if(sel.length === 1){
+    const e = sel[0];
+    const L = 'x1' in e ? dist([e.x1,e.y1],[e.x2,e.y2]) : 0;
+    selHtml = `<h4>${NAMES[e.t]}</h4><div class="blk">
+      <label class="fld"><span>Calque</span><select class="inp" data-pe="layer">${C.layers.map(l=>`<option value="${l.id}" ${l.id===e.layer?'selected':''}>${esc(l.n)}</option>`).join('')}</select></label>
+      ${'x1' in e ? `<div class="mlist"><div><span>Longueur</span><b>${fm(L)} m</b></div><div><span>Angle</span><b>${F((Math.atan2(e.y2-e.y1,e.x2-e.x1)*180/Math.PI+360)%360,1)}°</b></div></div>` : ''}
+      ${e.t === 'wall' ? `<label class="fld"><span>Épaisseur (m)</span><input class="inp" type="number" step="0.01" data-pe="ep" value="${e.ep}"></label>` : ''}
+      ${e.t === 'door' ? `<button class="btn b-line b-sm" data-cact="flip">${ic('refresh')}Inverser le sens d'ouverture</button>` : ''}
+      ${e.t === 'text' ? `<label class="fld"><span>Texte</span><input class="inp" data-pe="txt" value="${esc(e.txt)}"></label><label class="fld"><span>Hauteur (m)</span><input class="inp" type="number" step="0.05" data-pe="s" value="${e.s}"></label>` : ''}
+      ${e.t === 'room' ? `<label class="fld"><span>Nom</span><input class="inp" data-pe="name" value="${esc(e.name||'')}"></label><div class="mlist"><div><span>Surface</span><b>${fm(polyArea(e.pts))} m²</b></div><div><span>Périmètre</span><b>${fm(polyPer(e.pts))} m</b></div></div>` : ''}
+      ${e.t === 'circle' ? `<label class="fld"><span>Rayon (m)</span><input class="inp" type="number" step="0.05" data-pe="r" value="${e.r}"></label>` : ''}
+      ${e.t === 'dim' ? `<label class="fld"><span>Décalage (m)</span><input class="inp" type="number" step="0.1" data-pe="off" value="${e.off}"></label>` : ''}
+      <button class="btn b-line b-sm" data-cact="delsel">${ic('trash')}Effacer</button></div>`;
+  }else if(sel.length > 1){
+    selHtml = `<h4>Sélection</h4><div class="blk"><div class="mlist"><div><span>Objets sélectionnés</span><b>${sel.length}</b></div></div><label class="fld"><span>Mettre sur le calque</span><select class="inp" data-pe="layer"><option value="">—</option>${C.layers.map(l=>`<option value="${l.id}">${esc(l.n)}</option>`).join('')}</select></label><button class="btn b-line b-sm" data-cact="delsel">${ic('trash')}Effacer la sélection</button></div>`;
+  }
+  const W = C.ents.filter(e => e.t === 'wall'), Lw = W.reduce((a,e)=>a+dist([e.x1,e.y1],[e.x2,e.y2]),0), R = C.ents.filter(e => e.t === 'room'), Sr = R.reduce((a,e)=>a+polyArea(e.pts),0);
+  box.innerHTML = selHtml + `<h4>Calques</h4><div class="blk">${C.layers.map(l=>`<div class="layer ${l.id===C.cur?'cur':''}" data-clayer="${l.id}"><button data-clvis="${l.id}" title="Afficher / masquer">${ic(l.v?'eye':'eyeoff')}</button><i style="background:${l.c}"></i><span>${esc(l.n)}</span><span class="small" style="color:#6F86A3">${C.ents.filter(e=>e.layer===l.id).length}</span></div>`).join('')}
+    <label class="check" style="font-size:12.5px;color:#8EA1B8"><input type="checkbox" data-cauto ${C.auto?'checked':''}>Calque automatique selon l'objet</label></div>
+   <h4>Paramètres</h4><div class="blk"><div class="g2"><label class="fld"><span>Ép. murs (m)</span><input class="inp" type="number" step="0.01" data-cp="ep" value="${C.ep}"></label><label class="fld"><span>Hauteur (m)</span><input class="inp" type="number" step="0.05" data-cp="ht" value="${C.ht}"></label></div>
+    <div class="g2"><label class="fld"><span>Pas de grille (m)</span><select class="inp" data-cp="grid">${[0.01,0.05,0.1,0.25,0.5,1].map(g=>`<option ${g===C.grid?'selected':''}>${g}</option>`).join('')}</select></label><label class="fld"><span>Texte (m)</span><input class="inp" type="number" step="0.05" data-cp="th" value="${C.th}"></label></div></div>
+   <h4>Métré instantané</h4><div class="blk"><div class="mlist"><div><span>Murs (longueur)</span><b>${fm(Lw)} m</b></div><div><span>Murs (surface brute)</span><b>${fm(Lw*C.ht)} m²</b></div><div><span>Pièces (${R.length})</span><b>${fm(Sr)} m²</b></div><div><span>Portes / fenêtres</span><b>${C.ents.filter(e=>e.t==='door').length} / ${C.ents.filter(e=>e.t==='win').length}</b></div></div><button class="btn b-line b-sm" data-cact="metre">${ic('calc')}Métré détaillé du plan</button></div>`;
+}
+function toggleProps(force){ const p = $('#cprops'); if(p) p.classList.toggle('open', force ?? !p.classList.contains('open')); }
+
+/* ---------- sauvegarde, export ---------- */
+const data = () => ({name:C.name, ents:C.ents, layers:C.layers, ep:C.ep, ht:C.ht, th:C.th, grid:C.grid});
+async function save(){
+  if(!S.me) return;
+  C.name = ($('#cName') ? $('#cName').value.trim() : C.name) || 'Plan sans nom';
+  const wasNew = !C.id;
+  try{ C.id = await A.db.saveWork(C.id, 'dessin', data()); C.dirty = false; toast('Plan enregistré', 'save'); log('Plan enregistré : ' + C.name);
+    if(wasNew) history.replaceState(null, '', '#/app/atelier/' + C.id); }catch(e){ log('Erreur d\'enregistrement'); }
+}
+function standalone(){
+  const b = bboxOf(C.ents.filter(e => layer(e.layer).v)) || {x0:0,y0:0,x1:10,y1:8};
+  const m = 1, s = 50, w = (b.x1-b.x0+2*m)*s, h = (b.y1-b.y0+2*m)*s;
+  const keep = new Set(C.sel); C.sel.clear();
+  const body = entsSvg({light:true}).replace(/fill="#0B1524"/g, 'fill="#fff"');
+  C.sel = keep;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h+40}" width="${w}" height="${h+40}"><rect width="${w}" height="${h+40}" fill="#fff"/><g transform="matrix(${s} 0 0 ${-s} ${(m-b.x0)*s} ${(b.y1+m)*s})" style="--c:#14202E">${body.replace(/stroke="#(D5DEE9|FAD98D|6EE7B7|7FB2FF|FFFFFF|F87171|C4B5FD|E8752A)"/g,'stroke="#14202E"').replace(/fill="#(FFFFFF|D5DEE9|7FB2FF|FAD98D|6EE7B7)"/g,'fill="#14202E"')}</g><text x="12" y="${h+26}" font-family="Inter,sans-serif" font-size="14" fill="#14202E" font-weight="700">${esc(C.name)}</text><text x="${w-12}" y="${h+26}" text-anchor="end" font-family="Inter,sans-serif" font-size="12" fill="#5E6B7A">${esc(A.brandText())} · cotes en mètres</text></svg>`;
+}
+function exportPng(){
+  const svg = standalone(), img = new Image();
+  img.onload = () => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img, 0, 0); c.toBlob(b => A.download((C.name||'plan').replace(/[^\w-]+/g,'_') + '.png', b), 'image/png'); };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+function printPlan(){ const w = window.open('', '_blank'); if(!w){ toast('Autorisez les fenêtres pour imprimer', 'x'); return; } w.document.write(`<!doctype html><title>${esc(C.name)}</title><body style="margin:0">${standalone()}<script>setTimeout(()=>print(),300)<\/script>`); w.document.close(); }
+
+/* ---------- métré du plan ---------- */
+function metreDoc(d){
+  const ents = d.ents || [], ht = d.ht || 2.8;
+  const W = ents.filter(e => e.t === 'wall'), D = ents.filter(e => e.t === 'door'), Wn = ents.filter(e => e.t === 'win'), R = ents.filter(e => e.t === 'room');
+  const len = e => dist([e.x1,e.y1],[e.x2,e.y2]);
+  const L15 = W.filter(w => w.ep >= .18).reduce((a,w)=>a+len(w),0), L10 = W.filter(w => w.ep < .18).reduce((a,w)=>a+len(w),0);
+  const onThick = (o, thick) => { const w = W.find(x => segDist([o.x1,o.y1], [x.x1,x.y1],[x.x2,x.y2]) <= x.ep/2 + .05); return w ? (w.ep >= .18) === thick : thick; };
+  const Ad15 = D.filter(o=>onThick(o,true)).reduce((a,o)=>a+len(o)*2.2,0) + Wn.filter(o=>onThick(o,true)).reduce((a,o)=>a+len(o)*1.2,0);
+  const Ad10 = D.filter(o=>onThick(o,false)).reduce((a,o)=>a+len(o)*2.2,0) + Wn.filter(o=>onThick(o,false)).reduce((a,o)=>a+len(o)*1.2,0);
+  const Sr = R.reduce((a,r)=>a+polyArea(r.pts),0), Pr = R.reduce((a,r)=>a+polyPer(r.pts),0);
+  const P = A.METRE.pu;
+  const L = (lot, code, q, d, u) => ({lot, code, d: d || A.METRE.PRIX[code].d, u: u || A.METRE.PRIX[code].u, q: Math.round(q*100)/100, qm:true, pu:P(code)});
+  const lines = [];
+  if(L15) lines.push(L('Maçonnerie','agg15', Math.max(0, L15*ht - Ad15), `Agglos de 15 : ${fm(L15)} m × ${fm(ht)} m − ouvertures`));
+  if(L10) lines.push(L('Maçonnerie','agg10', Math.max(0, L10*ht - Ad10), `Agglos de 10 : ${fm(L10)} m × ${fm(ht)} m − ouvertures`));
+  if(L15 || L10) lines.push(L('Élévation','ba', (L15+L10)*.2*.2, 'Chaînage haut 20 × 20 en béton armé'), L('Élévation','acier', (L15+L10)*.04*90, 'Aciers du chaînage (ratio 90 kg/m³)'));
+  if(D.length || Wn.length) lines.push(L('Élévation','linteau', D.concat(Wn).reduce((a,o)=>a+len(o)+.5,0)));
+  if(L15 || L10) lines.push(L('Enduits & revêtements','enduit', Math.max(0, (L15+L10)*ht*2 - (Ad15+Ad10)*2), 'Enduits ciment 2 faces'));
+  if(Sr){ lines.push(L('Enduits & revêtements','carreau', Sr*1.05, `Carrelage des pièces (${R.length} pièces, ${fm(Sr)} m² + 5 %)`)); lines.push(L('Enduits & revêtements','plinthe', Math.max(0, Pr - D.reduce((a,o)=>a+len(o),0)))); lines.push(L('Peinture','peinti', Sr + Math.max(0, (L15+L10)*ht*2 - (Ad15+Ad10)*2)*.8, 'Peinture plafonds et murs intérieurs')); }
+  D.length && lines.push(L('Menuiseries','porte', D.length, `Portes (${D.map(o=>fm(len(o))).join(' ; ')} m)`));
+  Wn.length && lines.push(L('Menuiseries','fenetre', Wn.reduce((a,o)=>a+len(o)*1.2,0), 'Fenêtres (hauteur 1,20 m)'));
+  const doc = {name:'Métré · ' + (d.name || 'plan'), projet:d.name || '', tva:A.cfg().tva ?? 18, lots:[]};
+  lines.forEach(l => { let lt = doc.lots.find(x => x.nom === l.lot); if(!lt){ lt = {nom:l.lot, lignes:[]}; doc.lots.push(lt); } lt.lignes.push(l); });
+  return doc;
+}
+function showMetre(){
+  const doc = metreDoc(data()); const t = A.METRE.totals(doc);
+  A.win({title:'Métré du plan', wide:true, body:`<p class="muted">Calculé à partir des murs (${fm(C.ht)} m de hauteur), des ouvertures et des pièces dessinées. Ouvrez-le dans l'outil Métré pour l'ajuster.</p>
+   <div class="tw"><table class="t"><thead><tr><th>Lot</th><th>Ouvrage</th><th class="r">Quantité</th><th>U</th><th class="r">Montant</th></tr></thead><tbody>${doc.lots.flatMap(lt=>lt.lignes.map(l=>`<tr><td class="sub">${esc(lt.nom)}</td><td>${esc(l.d)}</td><td class="r mono">${F(l.q,2)}</td><td>${l.u}</td><td class="r mono">${F(l.q*l.pu)} F</td></tr>`)).join('') || '<tr><td colspan="5" class="sub">Dessinez des murs (commande MUR), des portes, des fenêtres et des pièces pour obtenir un métré.</td></tr>'}</tbody></table></div>
+   ${A.METRE.recapHtml(t)}`, foot:`<button class="btn b-pri" data-cact="metreopen">${ic('calc')}Ouvrir dans l'outil Métré</button>`});
+}
+
+/* ---------- ouverture d'un projet type ---------- */
+function fromProject(pj, li=0){
+  const lv = A.PLAN.levelOf(pj, li), b = A.PLAN.bbox(lv), H = b.y1;
+  const d = fresh(pj.titre + (pj.niveaux && pj.niveaux.length > 1 ? ' · ' + lv.nom : ''));
+  const fy = y => r3(H - y);
+  A.PLAN.walls(lv, pj.murs).forEach(w => d.ents.push({id:nid(), layer:'murs', t:'wall', x1:w.x1, y1:fy(w.y1), x2:w.x2, y2:fy(w.y2), ep:w.t}));
+  (lv.portes||[]).forEach(o => { const ex = o.o === 'h' ? [o.x, o.y, o.x+o.w, o.y] : [o.x, o.y, o.x, o.y+o.w]; const hinge = o.h ? [ex[2],ex[3],ex[0],ex[1]] : ex; const e = {id:nid(), layer:'ouv', t:'door', x1:hinge[0], y1:fy(hinge[1]), x2:hinge[2], y2:fy(hinge[3]), ep:.2}; const n = normal(e); const dir = o.o === 'h' ? [0, -(o.s||1)] : [(o.s||1), 0]; e.sw = (n[0]*dir[0] + n[1]*dir[1]) >= 0 ? 1 : -1; d.ents.push(e); });
+  (lv.fenetres||[]).forEach(o => { const ex = o.o === 'h' ? [o.x, o.y, o.x+o.w, o.y] : [o.x, o.y, o.x, o.y+o.w]; d.ents.push({id:nid(), layer:'ouv', t:'win', x1:ex[0], y1:fy(ex[1]), x2:ex[2], y2:fy(ex[3]), ep:.2}); });
+  lv.pieces.filter(r => r.t !== 'terrasse').forEach(r => d.ents.push({id:nid(), layer:'pieces', t:'room', name:r.n, pts:rectPts([r.x, fy(r.y+r.h)], [r.x+r.w, fy(r.y)])}));
+  d.ents.push({id:nid(), layer:'cotes', t:'dim', x1:b.x0, y1:fy(b.y0), x2:b.x1, y2:fy(b.y0), off:1.0});
+  d.ents.push({id:nid(), layer:'cotes', t:'dim', x1:b.x0, y1:fy(b.y1), x2:b.x0, y2:fy(b.y0), off:1.0});
+  d.ents.push({id:nid(), layer:'textes', t:'text', x:b.x0, y:fy(b.y1) - 1.6, s:.4, txt:pj.titre});
+  return d;
+}
+A.CAD = {metreDoc,
+  openProject(pj, li){ C = fresh(); Object.assign(C, fromProject(pj, li)); C._fit = true; A.go('#/app/atelier/nouveau'); }
+};
+
+/* =====================================================================
+   PAGE
+   ===================================================================== */
+const TOOLS = [['select','pointer','Sélection (Échap)'],['pan','hand','Déplacer la vue'],['LIGNE','line','Ligne (L)'],['MUR','wall','Mur (MU)'],['POLYLIGNE','poly','Polyligne (PL)'],['RECTANGLE','square','Rectangle (REC)'],['CERCLE','circle','Cercle (C)'],['PIECE','room','Pièce (PI)'],['PORTE','door','Porte (PO)'],['FENETRE','window','Fenêtre (FE)'],['COTE','dim','Cotation (COT)'],['TEXTE','text','Texte (T)'],['DEPLACER','move','Déplacer (D)'],['COPIER','copy','Copier (CO)'],['ROTATION','refresh','Rotation (RO)'],['MIROIR','layers','Miroir (MI)'],['EFFACER','trash','Effacer (E)']];
+let ro = null, keyH = null, ptrs = new Map(), pinch = null, downAt = null;
+A.page('app/atelier/:id', {space:'app', title:'Atelier de dessin', noTop:true, full:true, static:true, render(p){
+  if(p.id === 'import'){ const d = A.ls.get('cadImport', null); if(d){ A.ls.del('cadImport'); C = fresh(); Object.assign(C, d, {id:null, sel:new Set(), hist:[], fut:[], log:[]}); C._fit = true; } else if(!C) C = fresh(); }
+  else if(p.id === 'nouveau'){ if(!C || C.id) C = fresh(); }
+  else if(!C || C.id !== p.id){ const w = S.works[p.id]; if(!w) return `<div class="page">${A.empty('compass','Plan introuvable.')}</div>`; C = fresh(); Object.assign(C, JSON.parse(JSON.stringify(w.data)), {id:p.id}); C._fit = true; }
+  return `<div class="cad">
+   <div class="cbar">
+    <input class="inp nm" id="cName" value="${esc(C.name)}" aria-label="Nom du plan" style="width:170px">
+    <button class="ibtn" data-cact="new" title="Nouveau plan">${ic('plus')}</button><button class="ibtn" data-cact="open" title="Ouvrir">${ic('folder')}</button><button class="ibtn" data-cact="save" title="Enregistrer (Ctrl+S)">${ic('save')}</button>
+    <span class="sep"></span><button class="ibtn" data-cact="undo" title="Annuler (Ctrl+Z)">${ic('undo')}</button><button class="ibtn" data-cact="redo" title="Rétablir (Ctrl+Y)">${ic('redo')}</button>
+    <span class="sep"></span><button class="ibtn" data-cact="zin" title="Zoom +">${ic('zoomin')}</button><button class="ibtn" data-cact="zout" title="Zoom −">${ic('zoomout')}</button><button class="ibtn" data-cact="zext" title="Zoom étendu (ZE)">${ic('max')}</button>
+    <span class="sep"></span><button class="ibtn ${C.ortho?'on':''}" data-cact="ortho" title="Ortho (F8)">${ic('cross')}</button><button class="ibtn ${C.osnap?'on':''}" data-cact="osnap" title="Accrochage aux objets (F3)">${ic('magnet')}</button><button class="ibtn ${C.showGrid?'on':''}" data-cact="grid" title="Grille (F7)">${ic('grid')}</button>
+    <span class="sep"></span><button class="ibtn" data-cact="metre" title="Métré du plan">${ic('calc')}</button><button class="ibtn" data-cact="png" title="Exporter en image PNG">${ic('image')}</button><button class="ibtn" data-cact="svg" title="Exporter en SVG">${ic('download')}</button><button class="ibtn" data-cact="print" title="Imprimer">${ic('print')}</button>
+    <span class="grow"></span><button class="ibtn" data-cact="props" title="Calques et propriétés">${ic('layers')}</button><button class="ibtn" data-cact="help" title="Aide">${ic('info')}</button>
+   </div>
+   <div class="ctools">${TOOLS.map(t=>`<button class="ibtn ${C.tool===t[0]?'on':''}" data-ctool="${t[0]}" title="${esc(t[2])}">${ic(t[1])}</button>`).join('')}</div>
+   <div class="ccanvas sel" id="cv" tabindex="0"><svg id="cvs" xmlns="http://www.w3.org/2000/svg"><g id="cgrid"></g><g id="wg"></g><g id="ovl"></g></svg><div class="chud" id="hud"></div><div class="chint" id="hint" hidden></div></div>
+   <aside class="cprops" id="cprops"></aside>
+   <div class="cmd"><div class="log" id="cmdLog"></div><form class="line" id="fCmd" autocomplete="off"><b id="cmdP">Commande :</b><input id="cmdIn" placeholder="Tapez une commande (MUR, LIGNE, PORTE, COTE…) ou des coordonnées (@4,0)" spellcheck="false" autocapitalize="characters"></form></div>
+  </div>`;
+ },
+ mount(){
+  const cv = $('#cv');
+  ro = new ResizeObserver(() => { draw(); if(!C._init){ C._init = true; if(!C.ents.length){ C.view = {ox:70, oy:vh-60, s:40}; draw(); } } if(C._fit){ C._fit = false; zoomExt(); } }); ro.observe(cv);
+  if(!C.log.length){ log('Bienvenue dans l\'atelier de dessin. Tapez une commande (ex. MUR) puis Entrée, ou choisissez un outil à gauche. AIDE pour la liste.'); }
+  else { const l = $('#cmdLog'); if(l) l.textContent = C.log.slice(-6).join('\n'); }
+  cv.addEventListener('pointerdown', onDown); cv.addEventListener('pointermove', onMove); cv.addEventListener('pointerup', onUp); cv.addEventListener('pointercancel', onUp);
+  cv.addEventListener('pointerleave', () => { C.mouse.in = false; overlay(); });
+  cv.addEventListener('wheel', e => { e.preventDefault(); const r = cv.getBoundingClientRect(); zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.15 : 1/1.15); }, {passive:false});
+  cv.addEventListener('contextmenu', e => { e.preventDefault(); if(C.cmd) typed(''); });
+  keyH = onKey; document.addEventListener('keydown', keyH);
+  fitH(); window.addEventListener('resize', fitH);
+ },
+ unmount(){ if(ro){ ro.disconnect(); ro = null; } if(keyH){ document.removeEventListener('keydown', keyH); keyH = null; } window.removeEventListener('resize', fitH); }
+});
+A.page('app/atelier', {space:'app', title:'Atelier de dessin', render(){ location.replace('#/app/atelier/' + (C && C.id ? C.id : 'nouveau')); return null; }});
+
+function fitH(){ const el = $('.cad'); if(!el) return; const bn = $('.bnav'); const bh = bn && getComputedStyle(bn).display !== 'none' ? bn.offsetHeight : 0; el.style.height = Math.max(420, window.innerHeight - el.getBoundingClientRect().top - window.scrollY - bh) + 'px'; }
+function rel(e){ const r = $('#cv').getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function onDown(e){
+  const cv = $('#cv'); cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, rel(e));
+  if(ptrs.size === 2){ const [a, b] = [...ptrs.values()]; pinch = {d:dist(a,b), s:C.view.s, m:[(a[0]+b[0])/2, (a[1]+b[1])/2]}; return; }
+  const [sx, sy] = rel(e); downAt = {sx, sy, ox:C.view.ox, oy:C.view.oy, btn:e.button, moved:false};
+  if(e.button === 1 || C.tool === 'pan' || e.shiftKey && e.button === 2){ downAt.pan = true; return; }
+  if(!C.cmd && C.tool === 'select' && e.button === 0 && e.pointerType !== 'touch'){ const hitE = pick([sx, sy]); if(!hitE){ C.win = {a:[sx, sy]}; } }
+}
+function onMove(e){
+  const [sx, sy] = rel(e); if(ptrs.has(e.pointerId)) ptrs.set(e.pointerId, [sx, sy]);
+  if(pinch && ptrs.size === 2){ const [a, b] = [...ptrs.values()]; const f = dist(a,b) / pinch.d; const w = toW(pinch.m[0], pinch.m[1]); C.view.s = Math.max(2, Math.min(800, pinch.s*f)); C.view.ox = pinch.m[0] - w[0]*C.view.s; C.view.oy = pinch.m[1] + w[1]*C.view.s; draw(); return; }
+  if(downAt && Math.hypot(sx-downAt.sx, sy-downAt.sy) > 4) downAt.moved = true;
+  if(downAt && downAt.pan){ C.view.ox = downAt.ox + sx - downAt.sx; C.view.oy = downAt.oy + sy - downAt.sy; draw(); return; }
+  if(downAt && e.pointerType === 'touch' && !C.cmd && !C.win && downAt.moved){ C.view.ox = downAt.ox + sx - downAt.sx; C.view.oy = downAt.oy + sy - downAt.sy; draw(); return; }
+  C.mouse.sx = sx; C.mouse.sy = sy; C.mouse.in = true; const w = toW(sx, sy); C.mouse.x = w[0]; C.mouse.y = w[1];
+  if(C.cmd || C.tool !== 'pan') snap(sx, sy); else C.snapPt = null;
+  overlay(); hud();
+}
+function onUp(e){
+  ptrs.delete(e.pointerId); if(pinch){ if(ptrs.size < 2) pinch = null; downAt = null; return; }
+  const [sx, sy] = rel(e); const d = downAt; downAt = null; if(!d) return;
+  if(d.pan) return;
+  if(C.win){ const a = C.win.a; C.win = null; if(d.moved){ const p1 = toW(Math.min(a[0],sx), Math.max(a[1],sy)), p2 = toW(Math.max(a[0],sx), Math.min(a[1],sy)), cross = sx < a[0];
+      if(!e.shiftKey) C.sel.clear();
+      C.ents.filter(x => layer(x.layer).v).forEach(x => { const b = bboxOf([x]); const inBox = b.x0 >= p1[0] && b.x1 <= p2[0] && b.y0 >= p1[1] && b.y1 <= p2[1]; const over = !(b.x1 < p1[0] || b.x0 > p2[0] || b.y1 < p1[1] || b.y0 > p2[1]); if(cross ? over : inBox) C.sel.add(x.id); });
+      log(C.sel.size + ' objet(s) sélectionné(s)'); draw(); return; } }
+  if(d.moved && e.pointerType === 'touch') return;
+  if(d.btn !== 0 && e.pointerType === 'mouse') return;
+  if(e.pointerType === 'touch'){ C.mouse.sx = sx; C.mouse.sy = sy; snap(sx, sy); }
+  if(C.cmd){ point(C.snapPt || toW(sx, sy)); return; }
+  if(C.tool === 'select'){ const x = pick([sx, sy]); if(!e.shiftKey) C.sel.clear(); if(x){ if(C.sel.has(x.id) && e.shiftKey) C.sel.delete(x.id); else C.sel.add(x.id); } draw(); }
+}
+function onKey(e){
+  const inCmd = e.target && e.target.id === 'cmdIn', inOther = e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName) && !inCmd;
+  if($('#ov')) return;
+  if(e.key === 'F8'){ e.preventDefault(); start('ORTHO'); return; }
+  if(e.key === 'F3'){ e.preventDefault(); start('ACCROCHAGE'); return; }
+  if(e.key === 'F7'){ e.preventDefault(); start('GRILLE'); return; }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); save(); return; }
+  if(inOther) return;
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){ e.preventDefault(); undo(); return; }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y'){ e.preventDefault(); redo(); return; }
+  if(e.key === 'Escape'){ e.preventDefault(); const had = !!C.cmd; cancel(); if(!had) C.sel.clear(); const i = $('#cmdIn'); if(i) i.value = ''; draw(); return; }
+  if((e.key === 'Delete' || e.key === 'Backspace') && !inCmd && C.sel.size){ e.preventDefault(); start('EFFACER'); return; }
+  if(e.key === ' ' && inCmd && !(C.cmd && C.cmd.n === 'TEXTE' && C.cmd.pts.length) && !(C.cmd && C.cmd.n === 'PIECE' && C.cmd.pts.length === 2)){ e.preventDefault(); const i = $('#cmdIn'); const v = i.value; i.value = ''; typed(v); return; }
+  if(!inCmd && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){ const i = $('#cmdIn'); if(i){ i.focus(); } }
+  if(!inCmd && e.key === 'Enter'){ e.preventDefault(); typed(''); }
+}
+A.on('submit', '#fCmd', () => { const i = $('#cmdIn'); const v = i.value; i.value = ''; typed(v); });
+A.on('click', '[data-ctool]', el => { const t = el.dataset.ctool; if(t === 'select' || t === 'pan') setTool(t); else { cancel(); start(t); } $('#cmdIn') && window.innerWidth > 960 && $('#cmdIn').focus(); });
+A.on('input', '#cName', el => { if(C){ C.name = el.value; C.dirty = true; } });
+A.on('click', '[data-cact]', async el => {
+  const a = el.dataset.cact;
+  if(a === 'save') return save();
+  if(a === 'undo') return undo(); if(a === 'redo') return redo();
+  if(a === 'zin') return zoomAt(vw/2, vh/2, 1.25); if(a === 'zout') return zoomAt(vw/2, vh/2, .8); if(a === 'zext') return zoomExt();
+  if(a === 'ortho' || a === 'osnap' || a === 'grid'){ start(a === 'ortho' ? 'ORTHO' : a === 'osnap' ? 'ACCROCHAGE' : 'GRILLE'); return; }
+  if(a === 'metre') return showMetre();
+  if(a === 'metreopen'){ A.closeWin(); return A.METRE.openDoc(metreDoc(data())); }
+  if(a === 'png') return exportPng();
+  if(a === 'svg') return A.download((C.name||'plan').replace(/[^\w-]+/g,'_') + '.svg', standalone(), 'image/svg+xml');
+  if(a === 'print') return printPlan();
+  if(a === 'props') return toggleProps();
+  if(a === 'help') return help();
+  if(a === 'new') return newDrawing();
+  if(a === 'open') return openDlg();
+  if(a === 'delsel'){ start('EFFACER'); return; }
+  if(a === 'flip'){ const e = C.ents.find(x => C.sel.has(x.id) && x.t === 'door'); if(e){ pushHist(); e.sw = -(e.sw||1); draw(); } return; }
+});
+A.on('change', '[data-pe]', el => { const k = el.dataset.pe; if(!C) return; pushHist(); C.ents.filter(e => C.sel.has(e.id)).forEach(e => { if(k === 'layer'){ if(el.value) e.layer = el.value; } else if(['ep','s','r','off'].includes(k)){ const v = parseFloat(el.value); if(!isNaN(v)) e[k] = v; } else e[k] = el.value; }); draw(); });
+A.on('change', '[data-cp]', el => { const k = el.dataset.cp, v = parseFloat(el.value); if(C && v > 0){ C[k] = v; draw(); } });
+A.on('change', '[data-cauto]', el => { if(C) C.auto = el.checked; });
+A.on('click', '[data-clayer]', (el, e) => { if(e.target.closest('[data-clvis]')) return; C.cur = el.dataset.clayer; C.auto = false; draw(); });
+A.on('click', '[data-clvis]', el => { const l = layer(el.dataset.clvis); l.v = !l.v; draw(); });
+function newDrawing(){ if(C && C.dirty && C.ents.length && !confirm('Le plan actuel n\'est pas enregistré. Continuer ?')) return; C = fresh(); if(location.hash !== '#/app/atelier/nouveau') A.go('#/app/atelier/nouveau'); else A.render(); }
+function openDlg(){
+  const mine = Object.entries(S.works||{}).filter(([,w]) => w.kind === 'dessin');
+  A.win({title:'Ouvrir un plan', body:`<b>Mes plans</b>${mine.length ? `<div class="stack s8">${mine.map(([id,w])=>`<a class="row between card" style="padding:12px;text-decoration:none" href="#/app/atelier/${id}"><b>${esc(w.data.name)}</b><span class="sub">${A.ago(w.updated_at)}</span></a>`).join('')}</div>` : '<p class="sub">Aucun plan enregistré.</p>'}
+   <b>Exemples (projets types)</b><div class="stack s8">${(A.AZ.projets||[]).flatMap(p => (p.niveaux||[p]).map((l,i)=>`<button class="btn b-line" style="justify-content:space-between" data-cadpj="${p.id}" data-li="${i}"><span>${esc(p.titre)}${p.niveaux&&p.niveaux.length>1?' · '+esc(l.nom):''}</span>${ic('chev')}</button>`)).join('')}</div>`});
+}
+A.on('click', '[data-cadpj]', el => { const pj = A.AZ.projets.find(p => p.id === el.dataset.cadpj); A.closeWin(); C = fresh(); Object.assign(C, fromProject(pj, +el.dataset.li)); C._fit = true; if(location.hash !== '#/app/atelier/nouveau') A.go('#/app/atelier/nouveau'); else A.render(); });
+function help(){
+  const rows = [['MUR / MU','Dessine des murs (épaisseur réglable : E 0.15)'],['LIGNE / L','Lignes successives'],['POLYLIGNE / PL','Polyligne (C pour clore)'],['RECTANGLE / REC','Rectangle par 2 coins'],['CERCLE / C','Centre puis rayon'],['PIECE / PI','Pièce : 2 coins puis le nom (surface calculée)'],['PORTE / PO','2 points sur le mur puis le côté d\'ouverture'],['FENETRE / FE','2 points sur le mur'],['COTE / COT','Cotation : 2 points puis position'],['TEXTE / T','Point puis texte'],['EFFACER / E','Efface la sélection ou les objets cliqués'],['DEPLACER / D, COPIER / CO','Sélection, point de base, destination'],['ROTATION / RO, MIROIR / MI','Sélection puis point de base / axe'],['ANNULER / U, RETABLIR / R','Ctrl+Z / Ctrl+Y'],['ZE','Zoom étendu (tout voir)'],['ORTHO / O (F8)','Traits horizontaux ou verticaux'],['ACC (F3), GRILLE / G (F7)','Accrochage aux objets, grille'],['EP / HT','Épaisseur des murs, hauteur pour le métré'],['METRE / MT','Métré du plan'],['ENR','Enregistrer (Ctrl+S)']];
+  A.win({title:'Aide de l\'atelier de dessin', wide:true, body:`<div class="note info">${ic('info')}<span>Les unités sont en <b>mètres</b>. L'axe Y monte vers le haut comme sur AutoCAD. Molette = zoom, bouton du milieu (ou outil main) = déplacer la vue. Entrée ou Espace répète la dernière commande.</span></div>
+   <div class="tw"><table class="t"><thead><tr><th>Commande</th><th>Effet</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+   <h3 style="font-size:16px">Saisie des points</h3><div class="tw"><table class="t"><tbody>
+   <tr><td class="mono"><b>3,2</b></td><td>Point absolu x = 3 m, y = 2 m</td></tr><tr><td class="mono"><b>@4,0</b></td><td>4 m vers la droite depuis le dernier point</td></tr>
+   <tr><td class="mono"><b>@3&lt;90</b></td><td>3 m dans la direction 90° (vers le haut)</td></tr><tr><td class="mono"><b>4.5</b></td><td>Distance directe : 4,50 m dans la direction du curseur</td></tr></tbody></table></div>
+   <h3 style="font-size:16px">Exemple : une chambre de 3,50 × 3,00 m</h3><ol class="sub" style="display:grid;gap:4px"><li>Tapez <b class="mono">MUR</b> puis Entrée, tapez <b class="mono">0,0</b> Entrée.</li><li>Tapez <b class="mono">@3.5,0</b>, puis <b class="mono">@0,3</b>, puis <b class="mono">@-3.5,0</b>, puis <b class="mono">C</b> pour fermer.</li><li>Tapez <b class="mono">PO</b>, cliquez 2 points sur un mur puis le côté d'ouverture.</li><li>Tapez <b class="mono">PI</b>, cliquez 2 coins intérieurs puis tapez « Chambre ».</li><li>Tapez <b class="mono">MT</b> pour voir le métré.</li></ol>`});
+}
+})();

@@ -1,0 +1,10 @@
+{
+  "name": "morata-academie-batiment",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Plateforme d'apprentissage du bâtiment : site statique (dossier public) + fonction Netlify pour l'assistant IA.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0"
+  }
+}
