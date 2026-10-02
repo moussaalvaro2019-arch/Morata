@@ -453,7 +453,7 @@ table.t{width:100%;border-collapse:collapse;font-size:14px}
 .ecard b{font-size:14.5px}
 .plantabs{display:flex;gap:6px;flex-wrap:wrap}
 .planbox{background:#FBFAF7;border:1px solid var(--line);border-radius:16px;padding:10px;overflow:auto}
-.planbox svg{display:block;width:100%;height:auto;min-width:560px}
+.planbox>svg{display:block;width:100%;height:auto;min-width:560px}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
 .legend span{display:inline-flex;gap:6px;align-items:center}
 .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
@@ -564,3 +564,26 @@ table.t.click td.mono b{color:var(--navy)}
 .achip .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none}
 .achip .ic .i{font-size:16px}
 .achip small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+
+/* ---------- 3D ---------- */
+.v3d{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px}
+.v3d-view{position:relative;height:min(68vh,620px);border-radius:14px;overflow:hidden;background:#DCE7F1;min-width:0}
+.v3d-load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);gap:8px;font-weight:600}
+.v3d-tools{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px}
+.v3d-tools .ibtn{background:rgba(255,255,255,.92)}
+.v3d-tools .ibtn.on{background:var(--or);color:#fff;border-color:var(--or)}
+.v3d-info{position:absolute;left:58px;right:10px;bottom:10px;background:rgba(255,255,255,.92);border-radius:10px;padding:7px 10px;font-size:12.5px;color:var(--ink);pointer-events:none}
+.v3d-side{display:grid;gap:10px;align-content:start;max-height:min(68vh,620px);overflow:auto;padding-right:2px;min-width:0}
+.v3d-sec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px}
+.v3d-sec>b{font-size:13px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px 9px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.v3mats{display:grid;gap:4px}
+.v3m{display:grid;grid-template-columns:minmax(0,1fr) 118px 34px;gap:6px;align-items:center;font-size:12.5px;padding:3px 4px;border-radius:8px}
+.v3m.on{background:#FFF4E8;outline:1px solid var(--or)}
+.v3m select.inp{padding:3px 6px;font-size:12px;height:30px}
+.v3m input[type=color]{width:34px;height:30px;border:1px solid var(--line);border-radius:6px;padding:1px;background:#fff;cursor:pointer}
+.planbox.p3d{padding:6px}
+@media(max-width:900px){.v3d{grid-template-columns:1fr}.v3d-view{height:56vh}.v3d-side{max-height:none}}
+.v3d-sec input[type=range]{width:100%}
