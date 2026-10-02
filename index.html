@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morata · Livres & Histoires</title>
+  <meta name="description" content="Les idées clés des grands livres de développement personnel et des histoires inspirantes par thème.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur entete__barre">
+      <a href="#/" class="logo">Morata</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#/" data-route="accueil">Accueil</a>
+        <a href="#/livres" data-route="livres">Livres</a>
+        <a href="#/histoires" data-route="histoires">Histoires</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app" class="conteneur" tabindex="-1"></main>
+
+  <footer class="pied">
+    <div class="conteneur">Morata · Lire moins, retenir plus.</div>
+  </footer>
+
+  <!-- Contenu : modifier ces fichiers pour ajouter des livres ou des histoires -->
+  <script src="data/livres.js"></script>
+  <script src="data/histoires.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
