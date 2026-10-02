@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Calculer les réactions d'appuis d'une structure isostatique","Tracer les diagrammes d'effort tranchant et de moment fléchissant","Calculer aire, centre de gravité, moment quadratique et module de flexion","Vérifier une pièce en traction, compression, flexion et cisaillement","Calculer une flèche et vérifier le flambement"],
  applications:["Choix d'un profilé métallique","Vérification d'un linteau ou d'une poutre en bois","Préalable au calcul du béton armé","Contrôle des résultats d'un logiciel"],
  chapitres:[
-{id:'rdm-1', titre:'Statique : appuis et réactions', duree:30, contenu:`## Les liaisons (appuis)
+{id:'rdm-1', niv:1, titre:'Statique : appuis et réactions', duree:30, contenu:`## Les liaisons (appuis)
 | Appui | Symbole | Inconnues de réaction |
 |---|---|---|
 | Appui simple (rouleau) | cercle | 1 (perpendiculaire à l'appui) |
@@ -41,7 +41,7 @@ Dans le plan, on dispose de **3 équations d'équilibre** : ΣFx = 0, ΣFy = 0, 
   {q:"Poutre de 4 m sur deux appuis, charge uniforme 10 kN/m : chaque réaction vaut :", o:["10 kN","20 kN","40 kN","5 kN"], r:1, e:"Total 40 kN réparti également : 20 kN."},
   {q:"Moment à l'encastrement d'une console de 3 m avec 5 kN en bout :", o:["5 kN·m","15 kN·m","8 kN·m","1,67 kN·m"], r:1, e:"M = 5 × 3 = 15 kN·m."}
  ]},
-{id:'rdm-2', titre:'Efforts internes : N, V et M', duree:35, contenu:`## La méthode des coupures
+{id:'rdm-2', niv:2, titre:'Efforts internes : N, V et M', duree:35, contenu:`## La méthode des coupures
 On coupe la poutre à l'abscisse x et on écrit l'équilibre d'un des deux tronçons. On obtient les **efforts internes** :
 - **N** : effort normal (traction ou compression le long de l'axe) ;
 - **V** : effort tranchant (perpendiculaire à l'axe) ;
@@ -81,7 +81,7 @@ $$ dV/dx = − q(x)        dM/dx = V(x)
   {q:"Le moment est maximal là où :", o:["La charge est maximale","L'effort tranchant s'annule","L'appui se trouve","x = 0"], r:1, e:"Car dM/dx = V."},
   {q:"M max d'une console de 2 m sous 10 kN/m :", o:["10 kN·m","20 kN·m","40 kN·m","5 kN·m"], r:1, e:"qL²/2 = 10 × 4 / 2 = 20 kN·m."}
  ]},
-{id:'rdm-3', titre:'Caractéristiques géométriques des sections', duree:30, contenu:`## Aire et centre de gravité
+{id:'rdm-3', niv:2, titre:'Caractéristiques géométriques des sections', duree:30, contenu:`## Aire et centre de gravité
 Pour une section composée de rectangles : yG = Σ(Aᵢ yᵢ) / Σ Aᵢ.
 
 ## Moment quadratique (inertie) I
@@ -124,7 +124,7 @@ La forme en **I** place la matière loin de l'axe : grande inertie pour peu de p
   {q:"Une poutre posée sur sa grande hauteur plutôt qu'à plat est :", o:["Moins résistante","Plus résistante en flexion","Identique","Plus lourde"], r:1, e:"I dépend de h³."},
   {q:"Le théorème de Huygens sert à :", o:["Calculer une flèche","Transporter un moment quadratique d'un axe à un axe parallèle","Calculer une réaction","Mesurer une pente"], r:1, e:"I(Δ) = I(G) + A d²."}
  ]},
-{id:'rdm-4', titre:'Traction, compression et cisaillement', duree:25, contenu:`## Traction et compression simples
+{id:'rdm-4', niv:1, titre:'Traction, compression et cisaillement', duree:25, contenu:`## Traction et compression simples
 $$ σ = N / A
 Condition de résistance : **σ ≤ σadmissible** (ou fy/γ en calcul aux états limites).
 Allongement (loi de Hooke) :
@@ -157,7 +157,7 @@ On ne travaille jamais à la limite de rupture : on **majore les charges** (× 1
   {q:"Un boulon travaille principalement en :", o:["Flexion","Cisaillement","Torsion","Flambement"], r:1, e:"Il empêche le glissement des pièces assemblées."},
   {q:"À l'ELU, on majore les charges d'exploitation par :", o:["1,0","1,35","1,5","2"], r:2, e:"1,35 G + 1,5 Q."}
  ]},
-{id:'rdm-5', titre:'Flexion simple et flèches', duree:35, contenu:`## Contraintes de flexion (formule de Navier)
+{id:'rdm-5', niv:2, titre:'Flexion simple et flèches', duree:35, contenu:`## Contraintes de flexion (formule de Navier)
 $$ σ = M × y / I        σmax = M / W
 La fibre supérieure est **comprimée**, la fibre inférieure **tendue** (poutre sur deux appuis) ; l'**axe neutre** n'est pas sollicité.
 
@@ -187,7 +187,7 @@ La contrainte de cisaillement est maximale au niveau de l'axe neutre : pour un r
   {q:"Limite de flèche courante pour un plancher :", o:["L/50","L/100","L/300","L/5 000"], r:2, e:"L/300 en général."},
   {q:"Si on double la portée, la flèche sous charge uniforme est multipliée par :", o:["2","4","8","16"], r:3, e:"f est proportionnelle à L⁴."}
  ]},
-{id:'rdm-6', titre:'Le flambement des éléments comprimés', duree:30, contenu:`## Le phénomène
+{id:'rdm-6', niv:3, titre:'Le flambement des éléments comprimés', duree:30, contenu:`## Le phénomène
 Un élément **élancé** et comprimé peut se dérober latéralement bien avant que le matériau ne s'écrase : c'est le **flambement**. Il est brutal et dangereux (étais, poteaux métalliques, poteaux fins).
 
 ## Charge critique d'Euler

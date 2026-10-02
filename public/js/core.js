@@ -99,7 +99,14 @@ A.cfg = () => Object.assign({}, A.DEF, (A.S.settings||{}).main || {});
 
 /* ---------- matières (remplies par data/matieres/*.js) ---------- */
 A.M = [];
-A.addMatiere = m => { m.chapitres = m.chapitres || []; m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.ordre = c.ordre ?? i; }); A.M.push(m); };
+/* 3 niveaux par matière : chaque chapitre porte niv = 1 (débutant), 2 (intermédiaire) ou 3 (avancé) */
+A.NIVEAUX = [
+  {id:1, n:'Débutant', d:'Les notions de base, sans prérequis', c:'#1E9B5E', bg:'#E7F5EE'},
+  {id:2, n:'Intermédiaire', d:'Méthodes de calcul et applications courantes', c:'#D9661F', bg:'#FDEEE2'},
+  {id:3, n:'Avancé', d:'Dimensionnement, cas complexes et approfondissements', c:'#C8363B', bg:'#FBE9E9'}
+];
+A.nivOf = c => Math.min(3, Math.max(1, +(c && c.niv) || 2));
+A.addMatiere = m => { m.chapitres = m.chapitres || []; m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.niv = A.nivOf(c); c._i = i; }); m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = c.ordre ?? i; }); A.M.push(m); };
 let catCache = null, catKey = '';
 A.catalog = function(all){
   const cont = A.S.contents || {};
@@ -120,7 +127,7 @@ A.catalog = function(all){
     mats.forEach(m => { const c = m.chapitres.find(x => x.id === cid); if(c){ found = c; Object.assign(c, d, {id:cid, mat:m.id, edited:true}); } });
     if(!found && d.mat){ const m = mats.find(x => x.id === d.mat); if(m) m.chapitres.push({...d, id:cid, custom:true}); }
   });
-  mats.forEach(m => { m.chapitres.sort((a,b) => (a.ordre??0) - (b.ordre??0)); if(!all) m.chapitres = m.chapitres.filter(c => !c.cache); });
+  mats.forEach(m => { m.chapitres.sort((a,b) => A.nivOf(a) - A.nivOf(b) || (a.ordre??0) - (b.ordre??0)); if(!all) m.chapitres = m.chapitres.filter(c => !c.cache); });
   const out = all ? mats : mats.filter(m => !m.cache);
   out.sort((a,b) => A.GROUPES.findIndex(g=>g.id===a.groupe) - A.GROUPES.findIndex(g=>g.id===b.groupe) || (a.ordre??50) - (b.ordre??50));
   catCache = out; catKey = key; return out;
@@ -132,6 +139,17 @@ A.matProgress = (m, prog) => {
   const total = m.chapitres.length, done = m.chapitres.filter(c => prog[c.id] && prog[c.id].done).length;
   return {done, total, pct: total ? Math.round(done/total*100) : 0};
 };
+A.addChapitres = (mid, list) => { const m = A.M.find(x => x.id === mid); if(!m) return; const n0 = m.chapitres.length;
+  list.forEach((c,i) => { c.mat = mid; c.niv = A.nivOf(c); c._i = 100 + n0 + i; m.chapitres.push(c); });
+  m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = i; }); };
+A.matLevels = (m, prog) => {
+  prog = prog || A.S.progress || {};
+  return A.NIVEAUX.map(N => { const ch = m.chapitres.filter(c => A.nivOf(c) === N.id), done = ch.filter(c => prog[c.id] && prog[c.id].done).length;
+    return {...N, ch, done, total:ch.length, pct:ch.length ? Math.round(done/ch.length*100) : 0, min:ch.reduce((a,c) => a + (c.duree||20), 0)}; });
+};
+A.myNiv = mid => { const d = A.S.me && A.S.me.data; return (d && d.niv && d.niv[mid]) || 0; };
+A.setNiv = async (mid, n) => { const S = A.S; const data = Object.assign({}, S.me.data, {niv:Object.assign({}, (S.me.data||{}).niv, {[mid]:n})}); return A.db.saveProfile(data); };
+A.nivPill = c => { const N = A.NIVEAUX[A.nivOf(c)-1]; return `<span class="pill" style="background:${N.bg};color:${N.c}">${'●'.repeat(N.id)} ${N.n}</span>`; };
 A.matIcon = m => `<span class="ic" style="background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span>`;
 A.matIconSm = m => `<span style="width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none;background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span>`;
 

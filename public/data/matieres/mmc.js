@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Comprendre les hypothèses du milieu continu","Décrire l'état de contrainte en un point et ses contraintes principales","Relier contraintes et déformations par la loi de Hooke généralisée","Utiliser le cercle de Mohr et les critères de Tresca, von Mises et Mohr-Coulomb"],
  applications:["Justification des formules de RDM","Résistance des sols (Mohr-Coulomb)","Vérification d'une pièce métallique sous efforts combinés","Lecture des résultats d'un logiciel aux éléments finis"],
  chapitres:[
-{id:'mmc-1', titre:'Hypothèses et notion de milieu continu', duree:20, contenu:`## Le milieu continu
+{id:'mmc-1', niv:1, titre:'Hypothèses et notion de milieu continu', duree:20, contenu:`## Le milieu continu
 La matière est en réalité faite de grains, de cristaux et de vides. À l'échelle d'une poutre ou d'un mur, on la modélise comme un **milieu continu** : les grandeurs (déplacements, contraintes) varient de façon continue d'un point à l'autre.
 
 ## Les hypothèses usuelles
@@ -31,7 +31,7 @@ Les hypothèses tombent quand le béton fissure (non-linéarité), quand l'acier
   {q:"Quel matériau est nettement anisotrope ?", o:["L'acier","Le verre","Le bois","L'eau"], r:2, e:"Sa résistance dépend du sens des fibres."},
   {q:"La RDM est :", o:["Sans rapport avec la MMC","Une simplification de la MMC pour les éléments élancés","Plus générale que la MMC","Une branche de la chimie"], r:1, e:"Elle travaille avec les efforts N, V, M."}
  ]},
-{id:'mmc-2', titre:'Les contraintes', duree:30, contenu:`## Vecteur contrainte
+{id:'mmc-2', niv:2, titre:'Les contraintes', duree:30, contenu:`## Vecteur contrainte
 Sur une petite facette de normale n, la force intérieure par unité de surface est le **vecteur contrainte** T. On le décompose en :
 - **contrainte normale σ** (perpendiculaire à la facette) : traction si σ > 0, compression si σ < 0 ;
 - **contrainte tangentielle τ** (cisaillement), dans le plan de la facette.
@@ -63,7 +63,7 @@ Toutes les facettes passant par un point sont représentées par un **cercle** d
   {q:"σx = 60, σy = 0, τ = 0 : la contrainte de cisaillement maximale vaut :", o:["60 MPa","30 MPa","0","120 MPa"], r:1, e:"τmax = (σ1 − σ2)/2 = 30 MPa."},
   {q:"Les fissures d'effort tranchant près des appuis sont inclinées d'environ :", o:["0°","45°","90°","10°"], r:1, e:"Elles suivent les directions de traction principale."}
  ]},
-{id:'mmc-3', titre:'Les déformations', duree:25, contenu:`## Déformation linéique
+{id:'mmc-3', niv:2, titre:'Les déformations', duree:25, contenu:`## Déformation linéique
 $$ ε = ΔL / L₀   (sans unité, souvent en ‰ ou en µm/m)
 Une barre de 5 m qui s'allonge de 1 mm : ε = 0,001/5 = 2 × 10⁻⁴ = **0,2 ‰**.
 
@@ -92,7 +92,7 @@ Les **jauges de déformation** collées sur l'acier ou le béton mesurent ε : o
   {q:"Le fluage est :", o:["Une déformation instantanée","Une déformation différée sous charge permanente","Une fissure","Un défaut de coulage"], r:1, e:"La flèche augmente avec le temps."},
   {q:"La distorsion mesure :", o:["Un allongement","La variation d'un angle droit","Un volume","Une température"], r:1, e:"Elle traduit le cisaillement."}
  ]},
-{id:'mmc-4', titre:'Loi de comportement élastique (Hooke)', duree:30, contenu:`## Loi de Hooke en traction simple
+{id:'mmc-4', niv:2, titre:'Loi de comportement élastique (Hooke)', duree:30, contenu:`## Loi de Hooke en traction simple
 $$ σ = E × ε
 E est le **module d'Young** (MPa) : il mesure la rigidité du matériau.
 
@@ -128,7 +128,7 @@ Au-delà de la **limite élastique** fe, l'acier se déforme de façon permanent
   {q:"Le coefficient de Poisson du béton vaut environ :", o:["0,5","0,2","1","0"], r:1, e:"ν ≈ 0,2 pour le béton."},
   {q:"G s'exprime en fonction de E et ν par :", o:["E/(1+ν)","E/(2(1+ν))","2E(1+ν)","E ν"], r:1, e:"G = E / (2(1 + ν))."}
  ]},
-{id:'mmc-5', titre:'Critères de résistance', duree:25, contenu:`## Pourquoi un critère ?
+{id:'mmc-5', niv:3, titre:'Critères de résistance', duree:25, contenu:`## Pourquoi un critère ?
 Dans un essai de traction simple, on connaît la limite fe. Mais dans une pièce réelle, plusieurs contraintes agissent en même temps. Un **critère** permet de comparer cet état complexe à la limite connue.
 
 ## Critère de Tresca (matériaux ductiles)

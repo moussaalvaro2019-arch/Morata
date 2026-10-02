@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Modéliser un problème de décision (variables, contraintes, objectif)","Résoudre graphiquement un programme linéaire","Construire un réseau PERT et trouver le chemin critique","Optimiser des transports, des affectations et des stocks"],
  applications:["Planning et délais d'un chantier","Répartition des camions entre carrières et chantiers","Affectation des équipes aux tâches","Quantité économique de commande de ciment"],
  chapitres:[
-{id:'ro-1', titre:'Modéliser un problème de décision', duree:20, contenu:`## Qu'est-ce que la recherche opérationnelle ?
+{id:'ro-1', niv:1, titre:'Modéliser un problème de décision', duree:20, contenu:`## Qu'est-ce que la recherche opérationnelle ?
 C'est l'ensemble des méthodes mathématiques qui aident à **prendre la meilleure décision** quand les ressources (argent, temps, matériel, main-d'œuvre) sont limitées.
 
 ## Les trois éléments d'un modèle
@@ -36,7 +36,7 @@ C'est l'ensemble des méthodes mathématiques qui aident à **prendre la meilleu
   {q:"Dans l'exemple, pourquoi produire 24 m³ en régie ?", o:["Parce que c'est moins cher","Parce que c'est plus rapide","Parce que c'est obligatoire","Au hasard"], r:0, e:"La régie coûte 95 000 F/m³ contre 115 000 F."},
   {q:"Une contrainte représente :", o:["Le bénéfice","Une limite à respecter","Une décision","Un résultat"], r:1, e:"Ressources limitées, délais, capacités…"}
  ]},
-{id:'ro-2', titre:'Programmation linéaire', duree:35, contenu:`## Forme d'un programme linéaire
+{id:'ro-2', niv:3, titre:'Programmation linéaire', duree:35, contenu:`## Forme d'un programme linéaire
 Maximiser (ou minimiser) **Z = c₁x₁ + c₂x₂ + …** sous des contraintes **linéaires** a₁x₁ + a₂x₂ ≤ b, avec x ≥ 0.
 
 ## Résolution graphique (2 variables)
@@ -69,7 +69,7 @@ La « valeur marginale » d'une contrainte indique combien rapporterait une unit
   {q:"L'algorithme du simplexe sert à :", o:["Dessiner un plan","Résoudre un programme linéaire à plusieurs variables","Calculer un moment","Faire un planning"], r:1, e:"Il parcourt les sommets du domaine."},
   {q:"Une contrainte « 2x + 3y ≤ 60 » est représentée par :", o:["Un point","Une droite et un demi-plan","Un cercle","Une parabole"], r:1, e:"La droite 2x + 3y = 60 limite un demi-plan."}
  ]},
-{id:'ro-3', titre:'Ordonnancement : le PERT et le chemin critique', duree:35, contenu:`## Le réseau PERT
+{id:'ro-3', niv:2, titre:'Ordonnancement : le PERT et le chemin critique', duree:35, contenu:`## Le réseau PERT
 Chaque tâche est une **flèche** ; les **nœuds** (étapes) marquent le début et la fin des tâches. Une tâche ne peut commencer que lorsque toutes celles qui la précèdent sont terminées.
 
 !fig:pert|Réseau PERT : le chemin critique est en rouge
@@ -106,7 +106,7 @@ La chaîne fouilles + semelles + élévation dure 4 + 5 + 20 = 29 jours, mais la
   {q:"Une tâche avec 3 jours de marge totale peut :", o:["Être supprimée","Être retardée de 3 jours sans retarder le projet","Commencer 3 jours plus tôt obligatoirement","Durer 3 jours de moins"], r:1, e:"C'est la définition de la marge totale."},
   {q:"Dans l'exemple, la durée totale du projet est :", o:["11 jours","14 jours","23 jours","8 jours"], r:1, e:"A + C + F = 3 + 5 + 6 = 14 jours."}
  ]},
-{id:'ro-4', titre:'Méthode des potentiels, Gantt et lissage', duree:25, contenu:`## La méthode des potentiels (MPM)
+{id:'ro-4', niv:2, titre:'Méthode des potentiels, Gantt et lissage', duree:25, contenu:`## La méthode des potentiels (MPM)
 Ici, les **tâches sont des nœuds** et les flèches représentent les liens d'antériorité. Elle évite les tâches fictives du PERT et permet facilement des liens « début-début » ou « fin-début avec décalage » (par exemple : décoffrer 21 jours après le coulage).
 
 ## Le diagramme de Gantt
@@ -136,7 +136,7 @@ Si plusieurs tâches demandent le même métier en même temps, le pic d'effecti
   {q:"Le lissage des ressources consiste à :", o:["Supprimer des tâches","Décaler les tâches qui ont de la marge","Allonger le chemin critique","Embaucher plus"], r:1, e:"On évite les pics d'effectif."},
   {q:"Un jalon est :", o:["Une tâche longue","Un événement clé de durée nulle","Un ouvrier","Un retard"], r:1, e:"Exemple : mise hors d'eau, réception."}
  ]},
-{id:'ro-5', titre:'Problèmes de transport et d\'affectation', duree:30, contenu:`## Le problème de transport
+{id:'ro-5', niv:3, titre:'Problèmes de transport et d\'affectation', duree:30, contenu:`## Le problème de transport
 Des **sources** (carrières, dépôts) livrent des **destinations** (chantiers) ; chaque liaison a un coût par unité. On cherche le plan de livraison de **coût total minimal** en respectant offres et demandes.
 
 > [!exemple] Gravier pour deux chantiers
@@ -166,7 +166,7 @@ Affecter n équipes à n tâches (une équipe par tâche) en minimisant le temps
   {q:"La méthode hongroise résout :", o:["Les transports","Les affectations","Les stocks","Les PERT"], r:1, e:"Elle sert au problème d'affectation."},
   {q:"Coût de 50 m³ à 3 000 F/m³ :", o:["15 000 F","150 000 F","1 500 000 F","53 000 F"], r:1, e:"50 × 3 000 = 150 000 F."}
  ]},
-{id:'ro-6', titre:'Gestion des stocks : la formule de Wilson', duree:25, contenu:`## Le dilemme des approvisionnements
+{id:'ro-6', niv:2, titre:'Gestion des stocks : la formule de Wilson', duree:25, contenu:`## Le dilemme des approvisionnements
 - Commander **souvent en petites quantités** : beaucoup de frais de commande et de transport, risque de rupture.
 - Commander **rarement en grandes quantités** : frais de stockage, immobilisation d'argent, pertes (ciment qui durcit, vols).
 

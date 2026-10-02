@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Calculer une pression et une poussée hydrostatique","Appliquer la conservation du débit et Bernoulli","Estimer les pertes de charge et choisir un diamètre","Dimensionner gouttières, descentes et caniveaux","Connaître les règles d'une fosse septique"],
  applications:["Réservoirs, bâches à eau et châteaux d'eau","Réseau d'alimentation d'une maison","Évacuation des eaux pluviales de toiture","Fosse septique et puisard"],
  chapitres:[
-{id:'mdf-1', titre:'Propriétés des fluides et pression', duree:20, contenu:`## Les fluides
+{id:'mdf-1', niv:1, titre:'Propriétés des fluides et pression', duree:20, contenu:`## Les fluides
 Un fluide (liquide ou gaz) se déforme sans résistance permanente et épouse la forme de son contenant.
 - **Masse volumique** de l'eau : ρ = 1 000 kg/m³.
 - **Viscosité** : résistance à l'écoulement. Eau à 20 °C : viscosité cinématique ν ≈ 1 × 10⁻⁶ m²/s ; le miel ou la boue sont beaucoup plus visqueux.
@@ -29,7 +29,7 @@ Unités pratiques : 1 bar = 100 000 Pa ≈ **10 m de colonne d'eau** (m CE). Un 
   {q:"Un réservoir 15 m au-dessus d'un robinet donne une pression statique de :", o:["0,15 bar","1,5 bar","15 bars","150 bars"], r:1, e:"15 m CE ≈ 1,5 bar."},
   {q:"Les manomètres de plomberie indiquent :", o:["La pression absolue","La pression relative","Le débit","La température"], r:1, e:"Par rapport à la pression atmosphérique."}
  ]},
-{id:'mdf-2', titre:'Hydrostatique : pression et poussées', duree:25, contenu:`## Loi fondamentale
+{id:'mdf-2', niv:1, titre:'Hydrostatique : pression et poussées', duree:25, contenu:`## Loi fondamentale
 Dans un liquide au repos, la pression augmente avec la profondeur h :
 $$ p = ρ g h
 La pression est la même à une profondeur donnée, quelle que soit la forme du récipient.
@@ -58,7 +58,7 @@ $$ FA = ρ g V
   {q:"La poussée d'Archimède est égale :", o:["Au poids de l'objet","Au poids du liquide déplacé","Au volume de l'objet","À la pression"], r:1, e:"FA = ρ g V."},
   {q:"Une citerne enterrée vide dans une nappe risque de :", o:["Couler","Remonter","Geler","Rouiller"], r:1, e:"La poussée d'Archimède peut dépasser son poids."}
  ]},
-{id:'mdf-3', titre:'Débit, continuité et Bernoulli', duree:30, contenu:`## Débit
+{id:'mdf-3', niv:2, titre:'Débit, continuité et Bernoulli', duree:30, contenu:`## Débit
 $$ Q = V × S   (m³/s)    V : vitesse moyenne, S : section
 1 L/s = 0,001 m³/s = 3,6 m³/h.
 
@@ -90,7 +90,7 @@ Ou en hauteurs (m) : **p/(ρg) + V²/(2g) + z = constante** (charge totale H).
   {q:"Selon Bernoulli, là où la vitesse augmente :", o:["La pression augmente","La pression baisse","L'altitude augmente","Le débit augmente"], r:1, e:"L'énergie cinétique se prend sur la pression."},
   {q:"Vitesse de vidange sous 5 m d'eau (Torricelli) :", o:["≈ 10 m/s","≈ 50 m/s","≈ 5 m/s","≈ 2 m/s"], r:0, e:"√(2 × 9,81 × 5) ≈ 9,9 m/s."}
  ]},
-{id:'mdf-4', titre:'Pertes de charge et réseaux d\'eau potable', duree:30, contenu:`## Régimes d'écoulement
+{id:'mdf-4', niv:2, titre:'Pertes de charge et réseaux d\'eau potable', duree:30, contenu:`## Régimes d'écoulement
 Le **nombre de Reynolds** Re = V D / ν indique le régime : laminaire si Re < 2 000, turbulent si Re > 4 000. Dans les réseaux d'eau, l'écoulement est presque toujours **turbulent**.
 
 ## Pertes de charge
@@ -122,7 +122,7 @@ L'eau perd de l'énergie par frottement :
   {q:"Le coefficient de simultanéité tient compte du fait que :", o:["Les tuyaux fuient","Tous les robinets ne sont pas ouverts ensemble","L'eau est chaude","La pression varie"], r:1, e:"Il réduit le débit de calcul."},
   {q:"Les pertes de charge augmentent avec :", o:["Le diamètre","La vitesse et la longueur","La pression","L'altitude"], r:1, e:"ΔH est proportionnel à L et à V²."}
  ]},
-{id:'mdf-5', titre:'Eaux pluviales et assainissement', duree:30, contenu:`## Débit des eaux pluviales (méthode rationnelle)
+{id:'mdf-5', niv:2, titre:'Eaux pluviales et assainissement', duree:30, contenu:`## Débit des eaux pluviales (méthode rationnelle)
 $$ Q (L/s) = C × i (mm/h) × A (m²) / 3 600
 - **C** : coefficient de ruissellement (toiture 0,9 à 1 ; voirie bitumée 0,9 ; pavés 0,6 ; jardin 0,1 à 0,3) ;
 - **i** : intensité de pluie de projet (en zone côtière tropicale, on retient couramment **150 à 200 mm/h** pour les toitures) ;

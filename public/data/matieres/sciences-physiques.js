@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Utiliser le système international d'unités","Distinguer masse, poids et masse volumique","Appliquer l'équilibre d'un solide (forces et moments)","Calculer énergie, puissance et grandeurs électriques","Comprendre la prise du ciment et la corrosion des aciers"],
  applications:["Poids propre des éléments (béton, acier, agglos)","Puissance d'une pompe ou d'une bétonnière","Choix d'une section de câble électrique","Protection des armatures contre la rouille"],
  chapitres:[
-{id:'sp-1', titre:'Grandeurs physiques et unités SI', duree:20, contenu:`## Le système international (SI)
+{id:'sp-1', niv:1, titre:'Grandeurs physiques et unités SI', duree:20, contenu:`## Le système international (SI)
 | Grandeur | Unité SI | Symbole |
 |---|---|---|
 | Longueur | mètre | m |
@@ -40,7 +40,7 @@ Une mesure au mètre ruban est précise à ±1 mm environ ; un résultat de calc
   {q:"Une formule est homogène si :", o:["Elle donne un nombre entier","Ses deux membres ont la même unité","Elle n'a pas d'unité","Elle contient g"], r:1, e:"C'est le principe de l'analyse dimensionnelle."},
   {q:"Le watt est l'unité de :", o:["L'énergie","La puissance","La pression","La force"], r:1, e:"1 W = 1 J/s."}
  ]},
-{id:'sp-2', titre:'Masse, poids et masse volumique', duree:25, contenu:`## Masse et poids
+{id:'sp-2', niv:1, titre:'Masse, poids et masse volumique', duree:25, contenu:`## Masse et poids
 - La **masse** m (kg) est la quantité de matière.
 - Le **poids** P (N) est la force exercée par la pesanteur : **P = m × g**.
 
@@ -79,7 +79,7 @@ C'est la raison pour laquelle 1 m³ de béton demande plus d'1 m³ de matériaux
   {q:"Poids propre d'une dalle de 20 cm :", o:["2 kN/m²","5 kN/m²","20 kN/m²","0,5 kN/m²"], r:1, e:"25 × 0,20 = 5 kN/m²."},
   {q:"La densité de l'acier est :", o:["7,85","785","0,785","78,5"], r:0, e:"ρ acier / ρ eau = 7 850 / 1 000 = 7,85."}
  ]},
-{id:'sp-3', titre:'Forces et équilibre d\'un solide', duree:30, contenu:`## Qu'est-ce qu'une force ?
+{id:'sp-3', niv:1, titre:'Forces et équilibre d\'un solide', duree:30, contenu:`## Qu'est-ce qu'une force ?
 Une force est une action mécanique caractérisée par son **point d'application**, sa **direction**, son **sens** et son **intensité** (en N). On la représente par un vecteur.
 
 ## Principe fondamental de la statique (PFS)
@@ -109,7 +109,7 @@ La force de frottement maximale vaut **f × N** (f : coefficient de frottement, 
   {q:"Poutre de 4 m, charge 20 kN à 1 m de A. La réaction en B vaut :", o:["5 kN","15 kN","10 kN","20 kN"], r:0, e:"RB × 4 = 20 × 1 → RB = 5 kN, RA = 15 kN."},
   {q:"La force de frottement maximale dépend :", o:["De la surface de contact","De l'effort normal et du coefficient f","De la vitesse","Du volume"], r:1, e:"Fmax = f × N."}
  ]},
-{id:'sp-4', titre:'Énergie, travail et puissance', duree:25, contenu:`## Travail d'une force
+{id:'sp-4', niv:2, titre:'Énergie, travail et puissance', duree:25, contenu:`## Travail d'une force
 $$ W = F × d × cos θ   (joules)
 Lever une charge de masse m d'une hauteur h demande un travail **W = m g h**.
 
@@ -139,7 +139,7 @@ L'énergie consommée s'exprime en **kWh** : E = P × t. Un climatiseur de 1,2 k
   {q:"Un appareil de 2 kW utilisé 5 h consomme :", o:["2,5 kWh","10 kWh","7 kWh","0,4 kWh"], r:1, e:"E = 2 × 5 = 10 kWh."},
   {q:"Le rendement d'une machine est :", o:["Toujours supérieur à 1","Égal à 1","Inférieur à 1","Négatif"], r:2, e:"Il y a toujours des pertes."}
  ]},
-{id:'sp-5', titre:'Électricité appliquée au bâtiment', duree:30, contenu:`## Grandeurs de base
+{id:'sp-5', niv:2, titre:'Électricité appliquée au bâtiment', duree:30, contenu:`## Grandeurs de base
 - **Tension U** (volts, V) : 230 V en monophasé, 400 V entre phases en triphasé (réseau CIE).
 - **Intensité I** (ampères, A).
 - **Résistance R** (ohms, Ω). Loi d'Ohm : **U = R × I**.
@@ -174,7 +174,7 @@ Les moteurs (pompes, climatiseurs) ont un cos φ inférieur à 1 (0,8 environ) :
   {q:"Intensité absorbée par un appareil de 1 150 W sous 230 V (cos φ = 1) :", o:["2 A","5 A","10 A","0,2 A"], r:1, e:"1 150 / 230 = 5 A."},
   {q:"Le différentiel 30 mA protège :", o:["Les câbles contre la surcharge","Les personnes contre les fuites de courant","Contre la foudre","Contre les coupures CIE"], r:1, e:"Il détecte un courant de fuite et coupe."}
  ]},
-{id:'sp-6', titre:'Chimie des matériaux : ciment, corrosion, durabilité', duree:25, contenu:`## L'hydratation du ciment
+{id:'sp-6', niv:2, titre:'Chimie des matériaux : ciment, corrosion, durabilité', duree:25, contenu:`## L'hydratation du ciment
 Le ciment Portland est surtout constitué de silicates de calcium (C₃S, C₂S). Mélangés à l'eau, ils forment des **silicates de calcium hydratés (C-S-H)**, la « colle » du béton, et de la **portlandite** Ca(OH)₂.
 - La réaction est **exothermique** : elle dégage de la chaleur (attention aux grands volumes coulés par temps chaud).
 - Elle a besoin d'eau pendant des jours : d'où l'importance de la **cure** (arrosage, protection contre le soleil et le vent).

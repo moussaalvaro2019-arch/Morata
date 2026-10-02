@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Distinguer conduction, convection et rayonnement","Calculer la résistance R et le coefficient U d'une paroi","Repérer et traiter les ponts thermiques","Limiter les apports solaires","Estimer la puissance de climatisation d'une pièce"],
  applications:["Choix d'un isolant de toiture","Comparaison agglos / BTC / brique","Dimensionnement des climatiseurs","Protections solaires des façades"],
  chapitres:[
-{id:'therm-1', titre:'Chaleur, température et modes de transfert', duree:20, contenu:`## Température et chaleur
+{id:'therm-1', niv:1, titre:'Chaleur, température et modes de transfert', duree:20, contenu:`## Température et chaleur
 - La **température** (°C ou K) mesure l'agitation des molécules. T(K) = T(°C) + 273,15.
 - La **chaleur** (J) est une énergie qui passe toujours du corps chaud vers le corps froid.
 - Le **flux thermique** Φ (W) est la quantité de chaleur transmise par seconde ; la **densité de flux** φ (W/m²) est le flux par m² de paroi.
@@ -28,7 +28,7 @@ La **capacité thermique massique** c (J/kg·K) indique l'énergie pour élever 
   {q:"25 °C correspondent à environ :", o:["25 K","298 K","248 K","100 K"], r:1, e:"T(K) = 25 + 273 = 298 K."},
   {q:"L'inertie thermique d'un mur dépend surtout :", o:["De sa couleur","De sa masse et de sa capacité thermique","De sa longueur","De sa peinture"], r:1, e:"Un mur lourd stocke la chaleur."}
  ]},
-{id:'therm-2', titre:'Conduction : résistance thermique et coefficient U', duree:30, contenu:`## Conductivité thermique λ
+{id:'therm-2', niv:2, titre:'Conduction : résistance thermique et coefficient U', duree:30, contenu:`## Conductivité thermique λ
 λ (W/m·K) indique la facilité avec laquelle un matériau conduit la chaleur. Plus λ est **faible**, plus le matériau est **isolant**.
 
 | Matériau | λ (W/m·K) |
@@ -70,7 +70,7 @@ $$ Flux : Φ = U × S × (θe − θi)
   {q:"Si R total vaut 0,5 m²·K/W, U vaut :", o:["0,5","2","5","0,2"], r:1, e:"U = 1 / R = 2 W/m²·K."},
   {q:"Flux à travers 10 m² de paroi avec U = 2 et un écart de 5 °C :", o:["20 W","100 W","50 W","10 W"], r:1, e:"Φ = 2 × 10 × 5 = 100 W."}
  ]},
-{id:'therm-3', titre:'Toitures, isolation et ponts thermiques', duree:25, contenu:`## La toiture, priorité absolue
+{id:'therm-3', niv:2, titre:'Toitures, isolation et ponts thermiques', duree:25, contenu:`## La toiture, priorité absolue
 En climat tropical, la toiture peut représenter **plus de la moitié** des apports de chaleur d'une maison de plain-pied.
 
 | Solution de toiture | Effet |
@@ -100,7 +100,7 @@ Traitements : isolant continu par l'extérieur, rupteurs de ponts thermiques, re
   {q:"Pourquoi ventiler les combles ?", o:["Pour faire du bruit","Pour évacuer l'air chaud sous la tôle","Pour la pluie","Pour l'éclairage"], r:1, e:"L'air extérieur emporte la chaleur accumulée."},
   {q:"Quel est l'élément à isoler en priorité ?", o:["Le plafond / la toiture","Le sol","La porte d'entrée","Les cloisons intérieures"], r:0, e:"C'est le poste le plus rentable."}
  ]},
-{id:'therm-4', titre:'Apports solaires et protections', duree:25, contenu:`## Le rayonnement solaire
+{id:'therm-4', niv:2, titre:'Apports solaires et protections', duree:25, contenu:`## Le rayonnement solaire
 Sous les tropiques, le soleil est presque à la verticale à midi. Une surface horizontale peut recevoir jusqu'à **1 000 W/m²** en plein soleil ; une façade ouest reçoit l'après-midi un rayonnement intense et rasant.
 
 ## Le facteur solaire
@@ -129,7 +129,7 @@ Un mur ou une tôle **clairs** absorbent 20 à 40 % du rayonnement, contre 80 à
   {q:"Les façades les plus difficiles à protéger sont :", o:["Nord et sud","Est et ouest","Toutes pareilles","Seulement le nord"], r:1, e:"Le soleil y est bas, il faut des protections verticales."},
   {q:"Une tôle claire par rapport à une tôle foncée :", o:["Chauffe plus","Chauffe moins","Ne change rien","Rouille plus"], r:1, e:"Elle absorbe beaucoup moins de rayonnement."}
  ]},
-{id:'therm-5', titre:'Bilan thermique et climatisation', duree:25, contenu:`## Les charges thermiques d'une pièce
+{id:'therm-5', niv:3, titre:'Bilan thermique et climatisation', duree:25, contenu:`## Les charges thermiques d'une pièce
 La puissance frigorifique à installer compense :
 1. les apports à travers les **parois** (U × S × Δθ, avec un Δθ équivalent plus élevé pour les parois ensoleillées) ;
 2. les apports **solaires** par les vitrages ;

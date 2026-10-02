@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Adapter un bâtiment au climat tropical humide","Prévenir la condensation et les remontées d'humidité","Dimensionner l'éclairage naturel et la ventilation","Connaître les principes de la sécurité incendie"],
  applications:["Orientation et protections solaires","Arases étanches et traitement de l'humidité","Taille des fenêtres","Évacuation et compartimentage des immeubles"],
  chapitres:[
-{id:'pb-1', titre:'Le bâtiment et son climat', duree:25, contenu:`## Le climat tropical humide
+{id:'pb-1', niv:1, titre:'Le bâtiment et son climat', duree:25, contenu:`## Le climat tropical humide
 Le sud de la Côte d'Ivoire (Abidjan, San-Pédro) a un climat **chaud et humide** : températures de 24 à 32 °C toute l'année, humidité relative de 70 à 90 %, pluies abondantes (1 500 à 2 000 mm/an) avec deux saisons des pluies. Le nord (Korhogo, Odienné) est plus **sec** avec de forts écarts jour/nuit et l'harmattan.
 
 ## Le confort thermique
@@ -28,7 +28,7 @@ Ici, l'**inertie thermique** (murs épais en terre ou en béton) amortit les éc
   {q:"La paroi la plus exposée au soleil est :", o:["La façade nord","Le sol","La toiture","La façade sud"], r:2, e:"Elle reçoit le soleil toute la journée."},
   {q:"L'inertie thermique est surtout utile :", o:["En climat sec à forts écarts jour/nuit","En climat humide","Sous l'équateur uniquement","Jamais"], r:0, e:"Elle amortit les écarts de température."}
  ]},
-{id:'pb-2', titre:'L\'humidité dans le bâtiment', duree:30, contenu:`## Humidité de l'air
+{id:'pb-2', niv:2, titre:'L\'humidité dans le bâtiment', duree:30, contenu:`## Humidité de l'air
 L'air contient de la vapeur d'eau. L'**humidité relative** (HR, en %) indique le rapport entre la vapeur présente et le maximum possible à cette température. L'air chaud peut contenir beaucoup plus d'eau que l'air froid.
 
 ## Le point de rosée et la condensation
@@ -63,7 +63,7 @@ L'eau du sol monte dans les maçonneries poreuses comme dans une mèche : salpê
   {q:"Les conduites d'eau froide ou de climatisation doivent être :", o:["Peintes en noir","Isolées","Enterrées","Laissées nues"], r:1, e:"Sinon elles condensent l'humidité de l'air."},
   {q:"Un appui de fenêtre doit avoir :", o:["Une pente vers l'intérieur","Une pente vers l'extérieur et une goutte d'eau","Aucune pente","Un trou"], r:1, e:"Pour évacuer l'eau loin de la façade."}
  ]},
-{id:'pb-3', titre:'Éclairage naturel et artificiel', duree:20, contenu:`## Grandeurs
+{id:'pb-3', niv:1, titre:'Éclairage naturel et artificiel', duree:20, contenu:`## Grandeurs
 - **Flux lumineux** (lumens, lm) : quantité de lumière émise par une lampe.
 - **Éclairement** (lux, lx) : flux reçu par m² de surface. 1 lx = 1 lm/m².
 - **Efficacité** d'une lampe (lm/W) : LED ≈ 100 à 150 lm/W, fluorescent ≈ 60 à 80, incandescence ≈ 12.
@@ -98,7 +98,7 @@ E : éclairement visé (lx), S : surface (m²), U : utilance (≈ 0,5), Fm : fac
   {q:"Les lampes les plus efficaces sont :", o:["À incandescence","Halogènes","LED","Bougies"], r:2, e:"100 à 150 lm/W."},
   {q:"Éclairement conseillé pour un bureau :", o:["50 lx","100 lx","300 à 500 lx","2 000 lx"], r:2, e:"Travail sur écran et papier."}
  ]},
-{id:'pb-4', titre:'Ventilation et qualité de l\'air', duree:20, contenu:`## Pourquoi ventiler ?
+{id:'pb-4', niv:2, titre:'Ventilation et qualité de l\'air', duree:20, contenu:`## Pourquoi ventiler ?
 - Évacuer l'humidité (cuisine, salles d'eau, respiration), les odeurs, le CO₂ et les polluants ;
 - Rafraîchir par le mouvement d'air ;
 - Éviter moisissures et condensation.
@@ -131,7 +131,7 @@ Un ventilateur extrait l'air des pièces humides ; l'air neuf entre par des bouc
   {q:"Le taux de renouvellement s'exprime en :", o:["m³","vol/h","m/s","lux"], r:1, e:"Nombre de fois que le volume d'air est renouvelé par heure."},
   {q:"Les impostes au-dessus des portes servent à :", o:["Décorer","Laisser passer l'air entre les pièces","Isoler du bruit","Éclairer la nuit"], r:1, e:"Elles favorisent la ventilation traversante."}
  ]},
-{id:'pb-5', titre:'Sécurité incendie', duree:25, contenu:`## Le triangle du feu
+{id:'pb-5', niv:2, titre:'Sécurité incendie', duree:25, contenu:`## Le triangle du feu
 Un feu a besoin de **combustible**, de **comburant** (oxygène) et d'une **source de chaleur**. Supprimer l'un des trois éteint le feu.
 
 ## Réaction et résistance au feu

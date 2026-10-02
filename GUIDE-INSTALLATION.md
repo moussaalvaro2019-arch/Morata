@@ -95,11 +95,16 @@ Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonctio
 - **Connexions** : qui s'est connecté, quand, sur quel appareil (téléphone / ordinateur), et qui est en ligne en ce moment. Export CSV.
 - **Apprenants** : fiche de chaque inscrit (contact, progression, quiz, connexions, travaux), boutons WhatsApp et e-mail, **suspendre** ou **supprimer** un compte.
 - **Progression & quiz** : taux d'engagement et moyenne par matière et par chapitre.
-- **Matières & cours** : modifier, masquer, réordonner les chapitres, ajouter des matières, **faire rédiger un chapitre par l'IA**, puis relire et publier.
+- **Matières & cours** : chaque matière est rangée en 3 niveaux (Débutant, Intermédiaire, Avancé). Modifier, masquer, réordonner les chapitres, changer le niveau d'un chapitre, ajouter un chapitre directement dans un niveau (« + Chapitre débutant / intermédiaire / avancé »), ajouter des matières, **faire rédiger un chapitre par l'IA**, puis relire et publier.
 - **Annonces** : messages affichés sur le tableau de bord des apprenants.
 - **Intelligence artificielle** : modèle, quota, journal d'utilisation.
 - **Travaux des apprenants** : plans dessinés et métrés (ouvrir une copie pour corriger).
 - **Paramètres** : nom de la plateforme, textes d'accueil, contacts (WhatsApp), ouverture des inscriptions, **bordereau des prix** du métré, **administrateurs** (inviter un collaborateur), exports.
+
+### Ce que voit l'apprenant
+- Sur chaque matière, les **trois niveaux** côte à côte : il choisit le sien (« Choisir comme mon niveau »), suit les chapitres dans l'ordre et passe au niveau suivant ; une **attestation** est délivrée pour chaque niveau terminé et pour la matière complète.
+- Dans **Construction A→Z**, chaque projet type ouvre ses plans de tous les niveaux, ses coupes, sa note de calcul (fiche de chaque poteau, poutre, dalle, semelle…), les 18 matières appliquées au projet et sa maquette 3D modifiable.
+- Dans l'**Atelier de dessin**, le bouton 3D (ou la vue partagée) affiche le dessin en volume ; les commandes 3D, matériaux et couleurs sont dans la barre de la vue 3D.
 
 ### Ajouter un administrateur
 Paramètres → Administrateurs → nom + e-mail → **Inviter**. La personne s'inscrit (ou se connecte) avec cet e-mail puis passe par **Espace direction** : elle devient administrateur.

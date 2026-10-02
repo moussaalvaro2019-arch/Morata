@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Identifier les intervenants et les étapes d'un projet","Distinguer les systèmes constructifs","Connaître les ouvrages de gros œuvre et leur rôle","Connaître les corps d'état du second œuvre"],
  applications:["Lire un descriptif de travaux","Comprendre un plan d'exécution","Organiser l'ordre d'intervention des corps d'état","Dialoguer avec architectes, bureaux d'études et artisans"],
  chapitres:[
-{id:'tech-1', titre:'Les acteurs et les étapes d\'un projet', duree:25, contenu:`## Les intervenants
+{id:'tech-1', niv:1, titre:'Les acteurs et les étapes d\'un projet', duree:25, contenu:`## Les intervenants
 | Acteur | Rôle |
 |---|---|
 | **Maître d'ouvrage** (MOA) | Le client : il finance, définit le besoin et reçoit l'ouvrage |
@@ -36,7 +36,7 @@ A.addMatiere({
   {q:"La toiture fait partie :", o:["Du second œuvre","Du gros œuvre","Des VRD","Des finitions"], r:1, e:"Elle assure le clos-couvert."},
   {q:"Le géomètre intervient pour :", o:["Peindre","Le bornage, les levés et l'implantation","Le ferraillage","L'électricité"], r:1, e:"Il mesure le terrain."}
  ]},
-{id:'tech-2', titre:'Les systèmes constructifs', duree:25, contenu:`## Murs porteurs
+{id:'tech-2', niv:1, titre:'Les systèmes constructifs', duree:25, contenu:`## Murs porteurs
 Les murs (maçonnerie de pierres, briques, agglos pleins ou BTC) **portent** les planchers et la toiture. Économique pour les petits bâtiments, mais peu d'ouvertures et des plans rigides. Chaînages obligatoires.
 
 ## Ossature poteaux-poutres (portiques)
@@ -63,7 +63,7 @@ Toute structure doit résister aux **efforts horizontaux** (vent, séisme). On u
   {q:"Pour un entrepôt de grande portée, on choisit souvent :", o:["Des murs porteurs en BTC","Une charpente métallique","Des voiles béton","Du bambou"], r:1, e:"Le métal franchit facilement de grandes portées."},
   {q:"Un voile est :", o:["Un rideau","Un mur en béton armé","Une poutre","Une fondation"], r:1, e:"Très rigide, il contrevente le bâtiment."}
  ]},
-{id:'tech-3', titre:'Fondations et infrastructure', duree:25, contenu:`## Rôle
+{id:'tech-3', niv:2, titre:'Fondations et infrastructure', duree:25, contenu:`## Rôle
 Transmettre les charges au **bon sol**, sans dépasser sa résistance ni provoquer de tassements nuisibles.
 
 ## Les familles de fondations
@@ -94,7 +94,7 @@ Sous-sols, citernes, fosses : murs en béton armé calculés pour la **poussée 
   {q:"Quel ouvrage relie les semelles entre elles ?", o:["Le linteau","La longrine","La poutre de toiture","Le chaînage vertical"], r:1, e:"Les longrines relient les semelles et portent le soubassement."},
   {q:"Les fourreaux doivent être posés :", o:["Après le carrelage","Avant de couler les longrines et le dallage","Jamais","Après la peinture"], r:1, e:"Sinon il faut casser le béton."}
  ]},
-{id:'tech-4', titre:'Maçonnerie et murs', duree:25, contenu:`## Les matériaux de maçonnerie
+{id:'tech-4', niv:1, titre:'Maçonnerie et murs', duree:25, contenu:`## Les matériaux de maçonnerie
 | Élément | Usage |
 |---|---|
 | Agglos creux de 10 | Cloisons intérieures |
@@ -128,7 +128,7 @@ Fondation filante, poteaux raidisseurs tous les 3 à 4 m, chaînage haut, joints
   {q:"Les joints verticaux d'une maçonnerie doivent être :", o:["Alignés","Décalés","Absents","De 5 cm"], r:1, e:"Appareillage en quinconce."},
   {q:"Les saignées électriques doivent être de préférence :", o:["Horizontales","Verticales","Diagonales","Dans les poteaux"], r:1, e:"Elles affaiblissent moins le mur."}
  ]},
-{id:'tech-5', titre:'Planchers, escaliers et toitures', duree:30, contenu:`## Les planchers
+{id:'tech-5', niv:2, titre:'Planchers, escaliers et toitures', duree:30, contenu:`## Les planchers
 - **Dalle pleine** en béton armé (12 à 20 cm).
 - **Plancher à corps creux** (hourdis + poutrelles + dalle de compression), le plus courant : 16+4, 20+4.
 - **Plancher-dalle** (sans poutres) pour les grands bâtiments.
@@ -161,7 +161,7 @@ Membranes bitumineuses (multicouche), résines liquides, membranes synthétiques
   {q:"La pente d'une toiture-terrasse est d'environ :", o:["0 %","1,5 à 2 %","15 %","30 %"], r:1, e:"Forme de pente vers les évacuations."},
   {q:"Les acrotères servent notamment à :", o:["Porter la charpente","Relever l'étanchéité en rive","Éclairer","Ventiler"], r:1, e:"Ils permettent les relevés d'étanchéité."}
  ]},
-{id:'tech-6', titre:'Le second œuvre', duree:25, contenu:`## Les corps d'état secondaires
+{id:'tech-6', niv:2, titre:'Le second œuvre', duree:25, contenu:`## Les corps d'état secondaires
 | Corps d'état | Travaux |
 |---|---|
 | Menuiserie | Portes, fenêtres, placards (bois, aluminium, PVC, métal) |

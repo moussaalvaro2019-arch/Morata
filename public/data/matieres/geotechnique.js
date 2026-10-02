@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Calculer les paramètres d'état d'un sol (w, γd, e, Sr)","Classer un sol par sa granulométrie et ses limites d'Atterberg","Contrôler un compactage (Proctor, CBR)","Estimer la contrainte admissible et les tassements","Choisir le type de fondation adapté"],
  applications:["Lecture d'un rapport d'étude de sol","Contrôle des remblais sous dallage","Dimensionnement des semelles","Sols difficiles : argiles gonflantes, remblais, zones lagunaires"],
  chapitres:[
-{id:'geo-1', titre:'Le sol : constituants et paramètres d\'état', duree:30, contenu:`## Un matériau à trois phases
+{id:'geo-1', niv:1, titre:'Le sol : constituants et paramètres d\'état', duree:30, contenu:`## Un matériau à trois phases
 Un sol est formé de **grains solides**, d'**eau** et d'**air** dans les vides. Ses propriétés dépendent des proportions de ces trois phases.
 
 ## Paramètres fondamentaux
@@ -41,7 +41,7 @@ $$ γd = γs / (1 + e)    (γs ≈ 26,5 kN/m³ pour les grains)
   {q:"Un sol saturé a un degré de saturation de :", o:["0 %","50 %","100 %","w %"], r:2, e:"Tous les vides sont remplis d'eau."},
   {q:"Quel sol est le plus risqué pour fonder sans étude ?", o:["Latérite compactée","Rocher sain","Vase lagunaire ou remblai récent","Sable dense"], r:2, e:"Compressibles et hétérogènes."}
  ]},
-{id:'geo-2', titre:'Identification et classification', duree:30, contenu:`## La granulométrie
+{id:'geo-2', niv:2, titre:'Identification et classification', duree:30, contenu:`## La granulométrie
 On fait passer le sol sur une série de **tamis** et on trace la **courbe granulométrique** (% de passant en fonction du diamètre, échelle logarithmique).
 !fig:granulo|Courbes granulométriques
 
@@ -82,7 +82,7 @@ Les classifications (GTR en France, USCS internationale, HRB pour les routes) re
   {q:"Un IP supérieur à 40 indique :", o:["Un sable propre","Une argile très plastique, souvent gonflante","Un rocher","Une grave"], r:1, e:"Risque de retrait-gonflement."},
   {q:"L'équivalent de sable mesure :", o:["La densité","La propreté (teneur en fines argileuses)","La couleur","La résistance"], r:1, e:"Un sable sale donne un mauvais béton."}
  ]},
-{id:'geo-3', titre:'Le compactage : Proctor et CBR', duree:25, contenu:`## Pourquoi compacter ?
+{id:'geo-3', niv:2, titre:'Le compactage : Proctor et CBR', duree:25, contenu:`## Pourquoi compacter ?
 Compacter, c'est **chasser l'air** pour rapprocher les grains : le sol devient plus dense, plus résistant, moins compressible et moins perméable. Indispensable pour les remblais sous dallage, les plates-formes et les routes.
 
 ## L'essai Proctor
@@ -110,7 +110,7 @@ Le **CBR** (California Bearing Ratio) mesure la portance d'un sol compacté par 
   {q:"Taux de compactage courant exigé :", o:["50 %","75 %","95 %","120 %"], r:2, e:"95 % de l'optimum Proctor."},
   {q:"Épaisseur conseillée des couches de remblai à compacter :", o:["1 m","15 à 25 cm","5 cm","50 à 80 cm"], r:1, e:"Le compacteur n'agit pas en profondeur."}
  ]},
-{id:'geo-4', titre:'Résistance des sols et capacité portante', duree:35, contenu:`## Résistance au cisaillement
+{id:'geo-4', niv:2, titre:'Résistance des sols et capacité portante', duree:35, contenu:`## Résistance au cisaillement
 Un sol se rompt par **glissement** le long de surfaces de rupture. Sa résistance suit le critère de **Mohr-Coulomb** :
 $$ τ = c + σ' tan φ
 - **c** : cohésion (kPa), importante pour les argiles ; nulle pour un sable sec.
@@ -153,7 +153,7 @@ Les facteurs Nγ, Nq, Nc dépendent de φ (pour φ = 30°, valeurs usuelles : N�
   {q:"L'essai le plus utilisé pour les petites constructions est :", o:["Le triaxial","Le pénétromètre dynamique","Le Proctor","L'œdomètre"], r:1, e:"Rapide et économique."},
   {q:"Une argile molle peut porter environ :", o:["Moins de 0,5 bar","3 bars","10 bars","50 bars"], r:0, e:"Elle est très compressible et peu résistante."}
  ]},
-{id:'geo-5', titre:'Tassements et choix des fondations', duree:30, contenu:`## Pourquoi un sol tasse
+{id:'geo-5', niv:3, titre:'Tassements et choix des fondations', duree:30, contenu:`## Pourquoi un sol tasse
 Sous une charge, les grains se rapprochent : le volume des vides diminue.
 - **Sables** : tassement **rapide** (pendant la construction), modéré.
 - **Argiles saturées** : l'eau doit s'échapper des pores, ce qui prend du temps : c'est la **consolidation**, qui peut durer des mois ou des années.

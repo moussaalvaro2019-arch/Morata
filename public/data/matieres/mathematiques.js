@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Maîtriser les puissances de 10, les unités et les conversions","Calculer aires, périmètres et volumes d'ouvrages","Utiliser Pythagore et la trigonométrie (pentes, toitures, escaliers)","Résoudre des équations et lire une échelle de plan"],
  applications:["Surfaces de carrelage et de peinture","Volumes de béton et de fouilles","Pente d'une toiture, d'une rampe ou d'une canalisation","Lecture des plans au 1/50 et au 1/100"],
  chapitres:[
-{id:'math-1', titre:'Calcul numérique, unités et conversions', duree:25, contenu:`## Les puissances de 10
+{id:'math-1', niv:1, titre:'Calcul numérique, unités et conversions', duree:25, contenu:`## Les puissances de 10
 Les ingénieurs manipulent des nombres très grands (charges en newtons) et très petits (déformations). On les écrit avec des **puissances de 10** :
 - 10³ = 1 000 ; 10⁶ = 1 000 000 ; 10⁻³ = 0,001.
 - **Notation scientifique** : 25 000 000 = 2,5 × 10⁷ ; 0,000 45 = 4,5 × 10⁻⁴.
@@ -47,7 +47,7 @@ Les ingénieurs manipulent des nombres très grands (charges en newtons) et trè
   {q:"Combien de litres dans 0,45 m³ de sable ?", o:["45 L","450 L","4 500 L","4,5 L"], r:1, e:"1 m³ = 1 000 L, donc 0,45 m³ = 450 L."},
   {q:"Pour commander 6,2 sacs de ciment calculés, on commande :", o:["6 sacs","6,2 sacs","7 sacs","5 sacs"], r:2, e:"Les quantités à commander s'arrondissent toujours par excès."}
  ]},
-{id:'math-2', titre:'Géométrie plane : aires et périmètres', duree:25, contenu:`## Les formules de base
+{id:'math-2', niv:1, titre:'Géométrie plane : aires et périmètres', duree:25, contenu:`## Les formules de base
 | Figure | Aire | Périmètre |
 |---|---|---|
 | Carré de côté a | a² | 4a |
@@ -86,7 +86,7 @@ $$ S = √( p (p − a)(p − b)(p − c) )
   {q:"Aire d'un disque de 2 m de diamètre :", o:["6,28 m²","3,14 m²","12,57 m²","1,57 m²"], r:1, e:"Rayon = 1 m, aire = π × 1² ≈ 3,14 m²."},
   {q:"Pour calculer les plinthes d'une pièce, on prend :", o:["La surface du sol","Le périmètre moins les portes","Le périmètre plus les portes","La hauteur des murs"], r:1, e:"Les plinthes se posent le long des murs, sauf au droit des portes."}
  ]},
-{id:'math-3', titre:'Pythagore et trigonométrie', duree:30, contenu:`## Le théorème de Pythagore
+{id:'math-3', niv:2, titre:'Pythagore et trigonométrie', duree:30, contenu:`## Le théorème de Pythagore
 Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés.
 !fig:triangle|Triangle rectangle : côtés et angle
 
@@ -129,7 +129,7 @@ Valeurs à connaître : sin 30° = 0,5 ; cos 60° = 0,5 ; sin 45° = cos 45° �
   {q:"tan α est égal à :", o:["opposé / hypoténuse","adjacent / hypoténuse","opposé / adjacent","adjacent / opposé"], r:2, e:"La tangente est le rapport du côté opposé sur le côté adjacent."},
   {q:"Une pente de 100 % correspond à un angle de :", o:["90°","100°","45°","60°"], r:2, e:"100 % signifie h = L, donc tan α = 1 et α = 45°."}
  ]},
-{id:'math-4', titre:'Volumes : béton, fouilles et déblais', duree:30, contenu:`## Formules des volumes
+{id:'math-4', niv:2, titre:'Volumes : béton, fouilles et déblais', duree:30, contenu:`## Formules des volumes
 | Solide | Volume |
 |---|---|
 | Parallélépipède (L × l × h) | L × l × h |
@@ -168,7 +168,7 @@ $$ V = 1,50 / 3 × (9 + 4 + √36) = 0,5 × 19 = 9,5 m³
   {q:"Le foisonnement signifie que :", o:["La terre se tasse","Le volume augmente une fois la terre remuée","Le béton gonfle en séchant","L'eau s'évapore"], r:1, e:"Une terre extraite occupe un volume plus grand qu'en place."},
   {q:"30 m de longrines 20 × 30 cm représentent :", o:["1,8 m³","18 m³","0,18 m³","6 m³"], r:0, e:"30 × 0,20 × 0,30 = 1,8 m³."}
  ]},
-{id:'math-5', titre:'Équations, fonctions et systèmes', duree:30, contenu:`## Équations du premier degré
+{id:'math-5', niv:2, titre:'Équations, fonctions et systèmes', duree:30, contenu:`## Équations du premier degré
 Résoudre a x + b = c : on isole x en effectuant la même opération des deux côtés : x = (c − b) / a.
 
 > [!exemple]
@@ -207,7 +207,7 @@ a x² + b x + c = 0. On calcule le discriminant **Δ = b² − 4ac** :
   {q:"Dans f(x) = 9 500 x + 450 000, le nombre 450 000 représente :", o:["La pente","Le coût fixe","Le coût par m²","La quantité"], r:1, e:"C'est l'ordonnée à l'origine : le coût quand x = 0."},
   {q:"Si Δ < 0, l'équation du second degré :", o:["A deux solutions","A une solution double","N'a pas de solution réelle","Est fausse"], r:2, e:"Un discriminant négatif signifie aucune racine réelle."}
  ]},
-{id:'math-6', titre:'Proportionnalité, échelles et statistiques', duree:25, contenu:`## La règle de trois
+{id:'math-6', niv:1, titre:'Proportionnalité, échelles et statistiques', duree:25, contenu:`## La règle de trois
 Si 1 m³ de béton dosé à 350 kg demande 7 sacs de ciment, alors 4,6 m³ demandent 4,6 × 7 = **32,2 sacs**, arrondis à 33.
 
 ## Les échelles de plans

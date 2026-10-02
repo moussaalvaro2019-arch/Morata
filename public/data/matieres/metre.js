@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Appliquer les règles et conventions du métré","Calculer les quantités de chaque lot avec la bonne unité","Établir le sous-détail des matériaux (ciment, sable, gravier, acier, agglos)","Construire un DQE et son récapitulatif"],
  applications:["Avant-métré d'une maison à partir des plans","Commande des matériaux","Vérification d'un devis d'entreprise","Utilisation de l'outil Métré de la plateforme"],
  chapitres:[
-{id:'metre-1', titre:'Principes et règles du métré', duree:25, contenu:`## Définitions
+{id:'metre-1', niv:1, titre:'Principes et règles du métré', duree:25, contenu:`## Définitions
 - **Métré** : mesure des quantités d'ouvrages à partir des plans (avant-métré) ou sur place (métré contradictoire / attachement).
 - **Avant-métré** : calcul des quantités avant les travaux, pour établir le devis.
 - **DQE** : devis quantitatif et estimatif = quantités × prix unitaires.
@@ -44,7 +44,7 @@ A.addMatiere({
   {q:"Les poutres se mesurent en général :", o:["Entre nus des poteaux","Axe à axe en recomptant les poteaux","Sans mesurer","En m²"], r:0, e:"Pour ne pas compter deux fois le béton aux intersections."},
   {q:"L'avant-métré est établi :", o:["Après les travaux","À partir des plans, avant les travaux","Par le notaire","Uniquement pour la peinture"], r:1, e:"Il sert à préparer le devis."}
  ]},
-{id:'metre-2', titre:'Terrassements et fondations', duree:30, contenu:`## Terrassements
+{id:'metre-2', niv:1, titre:'Terrassements et fondations', duree:30, contenu:`## Terrassements
 - **Décapage** de la terre végétale : surface de l'emprise + 1 à 2 m autour (m²).
 - **Fouilles en puits** (semelles) : nb × (A + 2 × 0,10 à 0,15) × (B + …) × profondeur (m³).
 - **Fouilles en rigole** (longrines, semelles filantes) : longueur × largeur × profondeur (m³). Longueur prise à l'axe, en déduisant les fouilles en puits déjà comptées.
@@ -81,7 +81,7 @@ Pour 1 m³ de béton armé dosé à 350 kg/m³ : **7 sacs**, **0,40 m³ de sable
   {q:"Pour 5 m³ de béton dosé à 350 kg/m³, il faut :", o:["5 sacs","35 sacs","70 sacs","17 sacs"], r:1, e:"5 × 7 = 35 sacs."},
   {q:"Nombre d'agglos pour 20 m² de soubassement :", o:["125","250","200","20"], r:1, e:"20 × 12,5 = 250."}
  ]},
-{id:'metre-3', titre:'Béton armé : bétons, coffrages et aciers', duree:35, contenu:`## Les bétons d'élévation
+{id:'metre-3', niv:2, titre:'Béton armé : bétons, coffrages et aciers', duree:35, contenu:`## Les bétons d'élévation
 - **Poteaux** : nb × a × b × hauteur (de dessus de dalle à dessous de poutre, ou hauteur d'étage si on exclut les poutres).
 - **Poutres et chaînages** : longueur entre nus de poteaux × largeur × retombée (hauteur sous la dalle si la dalle est comptée à part).
 - **Dalles** : surface × épaisseur (en déduisant les trémies d'escalier).
@@ -124,7 +124,7 @@ Surface de béton en contact avec le coffrage :
   {q:"Poids de 100 m de HA10 :", o:["61,7 kg","88,8 kg","617 kg","6,17 kg"], r:0, e:"100 × 0,617 = 61,7 kg."},
   {q:"Pourquoi majorer la commande d'acier de 5 à 10 % ?", o:["Pour la TVA","Pour les recouvrements et les chutes","Pour la rouille","Ce n'est pas utile"], r:1, e:"Barres de 12 m, recouvrements, coupes."}
  ]},
-{id:'metre-4', titre:'Maçonnerie et enduits', duree:30, contenu:`## Les murs
+{id:'metre-4', niv:1, titre:'Maçonnerie et enduits', duree:30, contenu:`## Les murs
 $$ Surface nette = Longueur × Hauteur − Ouvertures
 - **Longueur** : on mesure les murs en évitant de compter deux fois les angles (longueur extérieure d'un côté, intérieure de l'autre, ou à l'axe pour tous).
 - **Hauteur** : du dessus du soubassement (ou de la longrine) au dessous du chaînage.
@@ -156,7 +156,7 @@ Environ **0,015 m³ de mortier par m²** pour des agglos de 15 (0,010 pour des a
   {q:"Pour enduire un mur intérieur des deux côtés de 15 m², la surface d'enduit est :", o:["15 m²","30 m²","7,5 m²","45 m²"], r:1, e:"Deux faces."},
   {q:"Pourquoi ajouter 3 % aux agglos ?", o:["Pour la TVA","Pour la casse","Pour les poteaux","Pour le transport"], r:1, e:"Quelques agglos se cassent à la manutention et à la coupe."}
  ]},
-{id:'metre-5', titre:'Revêtements, menuiseries et peinture', duree:25, contenu:`## Revêtements de sol
+{id:'metre-5', niv:2, titre:'Revêtements, menuiseries et peinture', duree:25, contenu:`## Revêtements de sol
 - **Carrelage** : surface intérieure de chaque pièce (entre murs finis) + **5 à 10 % de chutes** (plus pour la pose en diagonale).
 - **Plinthes** : périmètre des pièces − largeurs des portes (ml).
 - **Chape** : surface × épaisseur si elle est prévue séparément.
@@ -191,7 +191,7 @@ Comptées à l'**unité** (points lumineux, prises, interrupteurs, appareils san
   {q:"Litres pour 100 m², 2 couches, rendement 10 m²/L :", o:["10 L","20 L","5 L","200 L"], r:1, e:"100 × 2 / 10 = 20 L."},
   {q:"Les portes intérieures se comptent :", o:["En m³","À l'unité par type","En kg","En ml"], r:1, e:"Par dimensions et types."}
  ]},
-{id:'metre-6', titre:'Du métré au devis quantitatif et estimatif', duree:30, contenu:`## Construire le DQE
+{id:'metre-6', niv:2, titre:'Du métré au devis quantitatif et estimatif', duree:30, contenu:`## Construire le DQE
 1. Reprendre les quantités du métré, **lot par lot**, avec la même désignation que le bordereau des prix.
 2. Multiplier chaque quantité par son **prix unitaire** (fourniture et pose).
 3. Faire le **sous-total de chaque lot**.

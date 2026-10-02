@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Décomposer le coût global d'une opération de construction","Établir un sous-détail de prix et un prix de vente","Estimer un projet aux différentes phases","Comprendre les marchés, les appels d'offres et la révision des prix","Évaluer la rentabilité d'une opération immobilière"],
  applications:["Budget d'une maison individuelle","Réponse à un appel d'offres","Contrôle des devis d'entreprises","Projet de location ou de vente d'appartements"],
  chapitres:[
-{id:'eco-1', titre:'Le coût global d\'une opération', duree:25, contenu:`## Ce que coûte réellement un projet
+{id:'eco-1', niv:1, titre:'Le coût global d\'une opération', duree:25, contenu:`## Ce que coûte réellement un projet
 Le coût des travaux n'est qu'une partie du coût total :
 | Poste | Part indicative |
 |---|---|
@@ -36,7 +36,7 @@ Sur 30 ans, le coût d'**exploitation** et d'**entretien** (électricité, clima
   {q:"Un investissement de 1 200 000 F qui économise 400 000 F/an se rembourse en :", o:["1 an","3 ans","12 ans","0,3 an"], r:1, e:"1 200 000 / 400 000 = 3 ans."},
   {q:"Les imprévus sont généralement estimés à :", o:["0 %","5 à 10 %","30 %","60 %"], r:1, e:"Provision prudente dans tout budget."}
  ]},
-{id:'eco-2', titre:'Le sous-détail de prix et le prix de vente', duree:35, contenu:`## Le déboursé sec (DS)
+{id:'eco-2', niv:2, titre:'Le sous-détail de prix et le prix de vente', duree:35, contenu:`## Le déboursé sec (DS)
 C'est ce que coûte **directement** un ouvrage à l'entreprise :
 - **matériaux** (avec pertes) ;
 - **main-d'œuvre** (salaires et charges) ;
@@ -77,7 +77,7 @@ Prix TTC = Prix HT × (1 + taux de TVA). En Côte d'Ivoire, le taux normal de TV
   {q:"Taux normal de TVA en Côte d'Ivoire :", o:["5 %","10 %","18 %","25 %"], r:2, e:"18 %."},
   {q:"Un prix anormalement bas signifie :", o:["Une bonne affaire assurée","Un risque de mauvaise qualité ou de défaillance","Une entreprise riche","Un prix TTC"], r:1, e:"Il est inférieur aux coûts réels."}
  ]},
-{id:'eco-3', titre:'Les méthodes d\'estimation', duree:30, contenu:`## Précision selon la phase
+{id:'eco-3', niv:2, titre:'Les méthodes d\'estimation', duree:30, contenu:`## Précision selon la phase
 | Phase | Méthode | Précision |
 |---|---|---|
 | Programme, esquisse | Ratio global (F/m²) | ± 20 à 30 % |
@@ -120,7 +120,7 @@ On répartit un montant global selon des pourcentages habituels :
   {q:"Ratio courant d'acier dans le béton armé :", o:["5 à 10 kg/m³","80 à 120 kg/m³","500 kg/m³","1 t/m³"], r:1, e:"Ordre de grandeur des bâtiments courants."},
   {q:"Coût estimé de 100 m² à 300 000 F/m² :", o:["3 millions","30 millions","300 millions","300 000"], r:1, e:"100 × 300 000 = 30 000 000 F."}
  ]},
-{id:'eco-4', titre:'Marchés, appels d\'offres et révision des prix', duree:30, contenu:`## Les formes de prix
+{id:'eco-4', niv:2, titre:'Marchés, appels d\'offres et révision des prix', duree:30, contenu:`## Les formes de prix
 - **Prix global et forfaitaire** : l'entreprise s'engage sur un montant total pour un ouvrage défini ; les erreurs de quantités sont à sa charge (sauf modification du projet).
 - **Prix unitaires** (BPU) : on paie les **quantités réellement exécutées** × prix unitaires ; adapté quand les quantités sont incertaines (terrassements, fondations).
 - **Régie** : on rembourse les dépenses contrôlées (main-d'œuvre, matériaux) + un coefficient ; pour les petits travaux imprévus.
@@ -152,7 +152,7 @@ I₀ et I : index des coûts au mois de référence et au mois des travaux.
   {q:"La caution de bonne exécution représente souvent :", o:["0,1 %","5 à 10 %","50 %","100 %"], r:1, e:"Elle garantit la bonne fin des travaux."},
   {q:"Avec a = 0,15 et un index qui passe de 100 à 110, le coefficient de révision vaut :", o:["1,10","1,085","1,15","0,85"], r:1, e:"0,15 + 0,85 × 1,10 = 1,085."}
  ]},
-{id:'eco-5', titre:'Rentabilité d\'un projet immobilier', duree:30, contenu:`## Le bilan d'une opération de promotion
+{id:'eco-5', niv:3, titre:'Rentabilité d\'un projet immobilier', duree:30, contenu:`## Le bilan d'une opération de promotion
 | Recettes / Dépenses | Montant |
 |---|---|
 | **Chiffre d'affaires** (ventes) | ventes des logements |

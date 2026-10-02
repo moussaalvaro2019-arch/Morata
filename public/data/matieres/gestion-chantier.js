@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Connaître les pièces d'un marché et les documents de chantier","Organiser l'installation de chantier","Établir un planning à partir des quantités et des rendements","Gérer main-d'œuvre, matériel et approvisionnements","Appliquer les règles de qualité, de sécurité et de suivi financier"],
  applications:["Préparer l'ouverture d'un chantier","Planifier une maison ou un petit immeuble","Tenir le journal et les réunions de chantier","Établir une situation de travaux"],
  chapitres:[
-{id:'chant-1', titre:'Les documents du marché et du chantier', duree:25, contenu:`## Les pièces du marché
+{id:'chant-1', niv:1, titre:'Les documents du marché et du chantier', duree:25, contenu:`## Les pièces du marché
 | Document | Contenu |
 |---|---|
 | **Acte d'engagement** | L'engagement de l'entreprise : montant, délai |
@@ -34,7 +34,7 @@ A.addMatiere({
   {q:"Les attachements servent à :", o:["Fixer les aciers","Constater contradictoirement les quantités exécutées","Payer les ouvriers","Commander le béton"], r:1, e:"Surtout pour les ouvrages qui seront cachés."},
   {q:"Le DQE contient :", o:["Les quantités et les prix","Les pénalités","Les plans","Le planning"], r:0, e:"Devis quantitatif et estimatif."}
  ]},
-{id:'chant-2', titre:'L\'installation de chantier', duree:25, contenu:`## Le plan d'installation de chantier (PIC)
+{id:'chant-2', niv:1, titre:'L\'installation de chantier', duree:25, contenu:`## Le plan d'installation de chantier (PIC)
 Il positionne sur le plan de masse :
 - les **accès** et la circulation des camions (entrée, sortie, aire de retournement) ;
 - la **clôture** et le gardiennage ;
@@ -62,7 +62,7 @@ Il positionne sur le plan de masse :
   {q:"Les stocks doivent être placés :", o:["Le plus loin possible","Près de leur utilisation sans gêner les travaux","Sur la voie publique","N'importe où"], r:1, e:"Pour limiter les manutentions."},
   {q:"Le coût d'installation d'un petit chantier représente environ :", o:["0,1 %","2 à 4 %","30 %","50 %"], r:1, e:"Ordre de grandeur courant."}
  ]},
-{id:'chant-3', titre:'Planification : rendements et durées', duree:30, contenu:`## De la quantité à la durée
+{id:'chant-3', niv:2, titre:'Planification : rendements et durées', duree:30, contenu:`## De la quantité à la durée
 $$ Durée (jours) = Quantité / (Rendement d'une équipe × Nombre d'équipes)
 
 ## Rendements indicatifs (main-d'œuvre locale, chantier bien organisé)
@@ -100,7 +100,7 @@ Chaque semaine : comparer **réalisé / prévu**, identifier les retards sur le 
   {q:"Un délai technique typique avant de peindre un enduit neuf :", o:["1 heure","1 jour","2 à 3 semaines","1 an"], r:2, e:"L'enduit doit sécher et se carbonater."},
   {q:"La marge pour aléas d'un planning est souvent de :", o:["0 %","10 à 15 %","50 %","100 %"], r:1, e:"Pluies, retards de livraison…"}
  ]},
-{id:'chant-4', titre:'Gestion des ressources et approvisionnements', duree:25, contenu:`## La main-d'œuvre
+{id:'chant-4', niv:2, titre:'Gestion des ressources et approvisionnements', duree:25, contenu:`## La main-d'œuvre
 - Constituer des équipes **équilibrées** (un maçon pour un ou deux manœuvres).
 - Éviter les pics d'effectif : **lisser** les tâches qui ont de la marge.
 - Tenir la feuille de présence quotidienne et suivre les rendements réels.
@@ -135,7 +135,7 @@ Location ou achat : on loue le matériel utilisé peu de temps, on achète celui
   {q:"À la réception d'une livraison d'aciers, on vérifie :", o:["La couleur","Les diamètres et les quantités","Le poids du camion","La météo"], r:1, e:"Un diamètre insuffisant réduit la section d'acier."},
   {q:"La date de commande se calcule par :", o:["Date de besoin − délai de livraison","Date de besoin + 1 mois","Au hasard","Date de fin du chantier"], r:0, e:"On anticipe le délai fournisseur."}
  ]},
-{id:'chant-5', titre:'Qualité, sécurité et environnement', duree:30, contenu:`## La qualité
+{id:'chant-5', niv:1, titre:'Qualité, sécurité et environnement', duree:30, contenu:`## La qualité
 Un chantier de qualité suit un **plan de contrôle** : pour chaque étape, ce qu'on vérifie, comment, par qui, et la trace écrite.
 | Étape | Point de contrôle |
 |---|---|
@@ -174,7 +174,7 @@ Mesures :
   {q:"Une fouille profonde de plus de 1,30 m doit être :", o:["Remplie d'eau","Talutée ou blindée","Couverte d'une bâche","Laissée ouverte sans précaution"], r:1, e:"Risque d'éboulement."},
   {q:"Quelles protections sont prioritaires ?", o:["Individuelles","Collectives","Aucune","Seulement les gants"], r:1, e:"Elles protègent tout le monde en permanence."}
  ]},
-{id:'chant-6', titre:'Suivi financier et réception des travaux', duree:25, contenu:`## Les situations de travaux
+{id:'chant-6', niv:2, titre:'Suivi financier et réception des travaux', duree:25, contenu:`## Les situations de travaux
 Chaque mois (ou à chaque étape), l'entreprise établit une **situation** : quantités réalisées × prix unitaires, cumulées depuis le début, moins les situations déjà payées.
 
 > [!exemple]

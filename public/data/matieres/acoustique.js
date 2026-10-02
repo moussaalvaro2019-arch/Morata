@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Calculer et additionner des niveaux sonores en décibels","Appliquer la loi de masse pour choisir une paroi","Traiter les bruits d'impact et d'équipements","Calculer un temps de réverbération (formule de Sabine)"],
  applications:["Isolation entre deux logements d'un immeuble","Chambre côté rue","Salle de classe, salle de réunion, lieu de culte","Bruit des groupes électrogènes et climatiseurs"],
  chapitres:[
-{id:'acou-1', titre:'Le son et les décibels', duree:25, contenu:`## Qu'est-ce que le son ?
+{id:'acou-1', niv:1, titre:'Le son et les décibels', duree:25, contenu:`## Qu'est-ce que le son ?
 Une vibration de l'air qui se propage à environ **340 m/s**. Il est caractérisé par :
 - sa **fréquence** f (Hz) : grave (< 250 Hz), médium, aigu (> 2 000 Hz). L'oreille entend de 20 à 20 000 Hz ;
 - sa **longueur d'onde** λ = c / f (à 100 Hz : 3,4 m ; à 1 000 Hz : 34 cm) ;
@@ -44,7 +44,7 @@ En champ libre, le niveau baisse de **6 dB à chaque doublement de distance** d'
   {q:"La longueur d'onde d'un son de 340 Hz vaut :", o:["1 m","34 m","0,34 m","3,4 m"], r:0, e:"λ = 340 / 340 = 1 m."},
   {q:"Une conversation normale fait environ :", o:["30 dB","60 dB","90 dB","120 dB"], r:1, e:"Environ 60 dB."}
  ]},
-{id:'acou-2', titre:'Isolation aux bruits aériens', duree:30, contenu:`## L'indice d'affaiblissement R
+{id:'acou-2', niv:2, titre:'Isolation aux bruits aériens', duree:30, contenu:`## L'indice d'affaiblissement R
 R (dB) mesure la capacité d'une paroi à arrêter le son. Si le bruit est de 80 dB d'un côté d'un mur de R = 45 dB, il reste environ 35 dB de l'autre (hors transmissions parasites).
 
 ## La loi de masse
@@ -82,7 +82,7 @@ L'isolement réel est limité par l'élément le plus faible :
   {q:"Quelle paroi isole le mieux ?", o:["Cloison plâtre","Agglo 10","Voile béton 16 cm","Contreplaqué"], r:2, e:"C'est la plus lourde."},
   {q:"Des prises électriques dos à dos dans une cloison :", o:["Améliorent l'isolement","Créent un pont acoustique","N'ont aucun effet","Sont obligatoires"], r:1, e:"Elles percent la paroi des deux côtés."}
  ]},
-{id:'acou-3', titre:'Bruits de choc et d\'équipements', duree:20, contenu:`## Les bruits d'impact
+{id:'acou-3', niv:2, titre:'Bruits de choc et d\'équipements', duree:20, contenu:`## Les bruits d'impact
 Pas, chutes d'objets, déplacements de meubles : le choc fait vibrer **directement la structure** (dalle), qui rayonne le bruit dans les pièces voisines, y compris en diagonale.
 - Une dalle pleine lourde transmet moins qu'un plancher léger.
 - Le carrelage collé directement sur la dalle est très bruyant.
@@ -109,7 +109,7 @@ Pas, chutes d'objets, déplacements de meubles : le choc fait vibrer **directeme
   {q:"Un climatiseur extérieur doit être posé :", o:["Directement sur la dalle","Sur des supports antivibratiles","Sous la fenêtre d'une chambre","Dans le salon"], r:1, e:"Pour ne pas transmettre les vibrations."},
   {q:"Un pont phonique est :", o:["Un isolant","Un contact rigide qui transmet les vibrations","Un type de fenêtre","Une poutre"], r:1, e:"Il annule l'effet de désolidarisation."}
  ]},
-{id:'acou-4', titre:'Correction acoustique et réverbération', duree:25, contenu:`## Isolation ou correction ?
+{id:'acou-4', niv:2, titre:'Correction acoustique et réverbération', duree:25, contenu:`## Isolation ou correction ?
 - **Isoler** : empêcher le bruit de passer d'un local à l'autre (parois lourdes).
 - **Corriger** : améliorer l'écoute **dans** un local en limitant les réflexions (matériaux absorbants).
 

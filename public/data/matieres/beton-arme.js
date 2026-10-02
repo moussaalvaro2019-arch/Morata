@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Comprendre le rôle respectif du béton et de l'acier","Faire une descente de charges et appliquer les combinaisons ELU / ELS","Respecter enrobages, ancrages, recouvrements et espacements","Dimensionner un poteau, une poutre, une dalle et une semelle"],
  applications:["Ferraillage des poteaux et poutres d'une maison R+1","Plans de ferraillage et nomenclatures d'aciers","Contrôle du ferraillage avant coulage","Lecture d'une note de calcul de bureau d'études"],
  chapitres:[
-{id:'ba-1', titre:'Principe du béton armé et matériaux', duree:30, contenu:`## Pourquoi armer le béton ?
+{id:'ba-1', niv:1, titre:'Principe du béton armé et matériaux', duree:30, contenu:`## Pourquoi armer le béton ?
 Le béton résiste très bien à la **compression** (25 MPa et plus) mais mal à la **traction** (environ 2 MPa) : une poutre en béton seul casse dès qu'elle fléchit. On place donc des **aciers dans les zones tendues** : le béton reprend la compression, l'acier la traction.
 
 !fig:poutre-coupe|Zone comprimée (béton) et zone tendue (aciers)
@@ -36,7 +36,7 @@ Le béton résiste très bien à la **compression** (25 MPa et plus) mais mal à
   {q:"fsu pour un acier Fe E500 vaut :", o:["500 MPa","435 MPa","348 MPa","200 MPa"], r:1, e:"500 / 1,15 = 435 MPa."},
   {q:"L'ELS vérifie :", o:["La rupture","L'aptitude au service (fissures, flèches)","Le prix","La couleur du béton"], r:1, e:"État limite de service."}
  ]},
-{id:'ba-2', titre:'Actions, combinaisons et descente de charges', duree:35, contenu:`## Les actions
+{id:'ba-2', niv:2, titre:'Actions, combinaisons et descente de charges', duree:35, contenu:`## Les actions
 **Charges permanentes G** (poids propres) :
 | Élément | Charge |
 |---|---|
@@ -82,7 +82,7 @@ On suit le chemin des charges : **dalle → poutres → poteaux → fondations �
   {q:"La surface d'influence d'un poteau sert à :", o:["Calculer sa hauteur","Calculer la charge qu'il reprend","Choisir son coffrage","Calculer le prix"], r:1, e:"On multiplie les charges au m² par cette surface."},
   {q:"Pu pour G = 100 kN et Q = 20 kN :", o:["120 kN","165 kN","135 kN","150 kN"], r:1, e:"1,35 × 100 + 1,5 × 20 = 165 kN."}
  ]},
-{id:'ba-3', titre:'Dispositions constructives : enrobage, ancrage, espacements', duree:30, contenu:`## L'enrobage
+{id:'ba-3', niv:1, titre:'Dispositions constructives : enrobage, ancrage, espacements', duree:30, contenu:`## L'enrobage
 Distance entre la surface de l'acier (cadres compris) et le parement le plus proche. Il protège de la corrosion et du feu et permet l'adhérence.
 !fig:enrobage|Enrobages usuels
 - BAEL : **1 cm** (locaux couverts et clos non exposés), **3 cm** (parois exposées aux intempéries ou à la condensation), **5 cm** (mer, atmosphère agressive).
@@ -113,7 +113,7 @@ Avec un **crochet normal** en bout de barre, la longueur droite nécessaire est 
   {q:"L'espacement entre barres doit permettre :", o:["D'économiser du béton","Au béton et aux granulats de passer","De plier les barres","De mettre des gaines"], r:1, e:"Au moins 1,5 fois le plus gros granulat."},
   {q:"Section minimale d'acier d'un poteau 20 × 20 (périmètre 0,8 m) :", o:["0,8 cm²","3,2 cm²","8 cm²","20 cm²"], r:1, e:"4 cm²/m × 0,8 m = 3,2 cm² (> 0,2 % × 400 = 0,8 cm²)."}
  ]},
-{id:'ba-4', titre:'Poteaux en compression centrée', duree:35, contenu:`## La formule du BAEL
+{id:'ba-4', niv:2, titre:'Poteaux en compression centrée', duree:35, contenu:`## La formule du BAEL
 $$ Nu ≤ α × [ Br × fc28 / (0,9 γb) + A × fe / γs ]
 - **Br** : section réduite = (a − 2 cm) × (b − 2 cm) ;
 - **A** : section des aciers longitudinaux ;
@@ -149,7 +149,7 @@ Si α × Br fc28/(0,9 γb) < Nu, on calcule : **A ≥ (Nu/α − Br fc28/(0,9 γ
   {q:"Dans l'exemple de la maison, le ferraillage du poteau est déterminé par :", o:["Le calcul de résistance","Les sections minimales","Le prix","L'architecte"], r:1, e:"Le béton seul suffit : on met le minimum."},
   {q:"On limite de préférence l'élancement des poteaux en béton armé à :", o:["10","50","150","500"], r:1, e:"Au-delà, le flambement devient prépondérant."}
  ]},
-{id:'ba-5', titre:'Poutres en flexion simple', duree:40, contenu:`## Démarche à l'ELU (section rectangulaire)
+{id:'ba-5', niv:2, titre:'Poutres en flexion simple', duree:40, contenu:`## Démarche à l'ELU (section rectangulaire)
 1. Moment ultime **Mu** (par exemple qu L²/8).
 2. Moment réduit :
 $$ µ = Mu / (b × d² × fbu)
@@ -190,7 +190,7 @@ $$ τu = Vu / (b × d)    ≤ τlim = min(0,2 fc28/γb ; 5 MPa) = 3,33 MPa (fiss
   {q:"Pour 4,21 cm² nécessaires, on choisit :", o:["2 HA10","3 HA14","2 HA8","1 HA20"], r:1, e:"3 HA14 = 4,62 cm²."},
   {q:"Près des appuis, les cadres doivent être :", o:["Plus espacés","Plus serrés","Supprimés","Remplacés par des chapeaux"], r:1, e:"L'effort tranchant y est maximal."}
  ]},
-{id:'ba-6', titre:'Les dalles', duree:35, contenu:`## Sens de portée
+{id:'ba-6', niv:3, titre:'Les dalles', duree:35, contenu:`## Sens de portée
 On note **lx** la petite portée et **ly** la grande, et **α = lx / ly**.
 - **α < 0,4** : la dalle porte dans **un seul sens** (le sens de lx) ; on la calcule comme une poutre de 1 m de large : M₀ = p lx² / 8.
 - **α ≥ 0,4** : la dalle porte dans **les deux sens**.
@@ -232,7 +232,7 @@ $$ Mx = µx × p × lx²        My = µy × Mx
   {q:"Épaisseur minimale courante d'une dalle pleine :", o:["5 cm","8 cm","12 cm","30 cm"], r:2, e:"12 cm, plutôt 15 cm pour l'acoustique."},
   {q:"Les chapeaux d'une dalle se placent :", o:["En nappe inférieure en travée","En partie haute au droit des appuis","Dans les poteaux","Dans les fondations"], r:1, e:"Ils reprennent les moments négatifs sur appuis."}
  ]},
-{id:'ba-7', titre:'Fondations superficielles : semelles', duree:35, contenu:`## Dimensions de la semelle isolée
+{id:'ba-7', niv:3, titre:'Fondations superficielles : semelles', duree:35, contenu:`## Dimensions de la semelle isolée
 1. **Surface** : A × B ≥ Nser / σsol (on ajoute environ 5 % pour le poids propre de la semelle et des terres).
 2. Semelle **homothétique** du poteau : A / B = a / b (carrée sous un poteau carré).
 3. **Hauteur utile** (méthode des bielles) : (A − a) / 4 ≤ d ≤ A − a. Hauteur totale h = d + 5 cm.

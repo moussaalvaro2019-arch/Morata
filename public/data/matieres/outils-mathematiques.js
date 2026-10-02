@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Dériver une fonction et trouver un extremum (moment maximal)","Intégrer pour obtenir une résultante, un centre de gravité, un moment d'inertie","Manipuler vecteurs, produits scalaire et vectoriel","Résoudre un système linéaire par la méthode de Gauss","Comprendre les équations différentielles de la déformée et des vibrations"],
  applications:["Position du moment maximal dans une poutre","Moment d'inertie d'une section","Moments des forces et équilibre","Calcul matriciel des structures (logiciels de calcul)"],
  chapitres:[
-{id:'om-1', titre:'Dérivées et recherche d\'extremum', duree:30, contenu:`## Définition
+{id:'om-1', niv:2, titre:'Dérivées et recherche d\'extremum', duree:30, contenu:`## Définition
 La dérivée f'(x) mesure la **vitesse de variation** de f au point x : c'est la pente de la tangente à la courbe.
 
 | Fonction f(x) | Dérivée f'(x) |
@@ -47,7 +47,7 @@ Pour une petite variation dx : **df ≈ f'(x) dx**. Exemple : si le diamètre d'
   {q:"Le moment maximal d'une poutre sur deux appuis sous charge uniforme q vaut :", o:["qL/2","qL²/2","qL²/8","qL²/12"], r:2, e:"Il est atteint à mi-portée : qL²/8."},
   {q:"Un extremum de f se trouve là où :", o:["f(x) = 0","f'(x) = 0","f''(x) = 1","x = 0"], r:1, e:"La tangente est horizontale : la dérivée s'annule."}
  ]},
-{id:'om-2', titre:'Intégrales : résultantes, centres de gravité, inerties', duree:35, contenu:`## Primitive et intégrale
+{id:'om-2', niv:2, titre:'Intégrales : résultantes, centres de gravité, inerties', duree:35, contenu:`## Primitive et intégrale
 F est une primitive de f si F' = f. L'intégrale de a à b vaut :
 $$ ∫ab f(x) dx = F(b) − F(a)
 Elle représente l'**aire algébrique** sous la courbe de f entre a et b.
@@ -86,7 +86,7 @@ Exemple : profondeurs relevées tous les 5 m : 0 ; 1,2 ; 1,8 ; 1,5 ; 0 → S ≈
   {q:"Si on double la hauteur d'une poutre rectangulaire, son inertie est multipliée par :", o:["2","4","8","16"], r:2, e:"I est proportionnel à h³ : 2³ = 8."},
   {q:"Une primitive de x² est :", o:["2x","x³/3","x³","3x²"], r:1, e:"La dérivée de x³/3 est x²."}
  ]},
-{id:'om-3', titre:'Vecteurs, forces et moments', duree:30, contenu:`## Vecteurs
+{id:'om-3', niv:1, titre:'Vecteurs, forces et moments', duree:30, contenu:`## Vecteurs
 Un vecteur possède une **direction**, un **sens** et une **norme**. Dans le plan : V = (Vx ; Vy), norme ‖V‖ = √(Vx² + Vy²).
 - Addition : (a ; b) + (c ; d) = (a + c ; b + d).
 - Une force F inclinée d'un angle α sur l'horizontale : Fx = F cos α, Fy = F sin α.
@@ -120,7 +120,7 @@ M = r ∧ F : vecteur perpendiculaire au plan (r, F), de norme r F sin θ. Il se
   {q:"Une force de 10 kN à 3 m d'un point produit un moment de :", o:["3,3 kN·m","13 kN·m","30 kN·m","7 kN·m"], r:2, e:"M = F × d = 10 × 3 = 30 kN·m."},
   {q:"La composante verticale d'une force F inclinée de α sur l'horizontale est :", o:["F cos α","F sin α","F tan α","F / sin α"], r:1, e:"Fy = F sin α."}
  ]},
-{id:'om-4', titre:'Matrices et systèmes linéaires', duree:30, contenu:`## Écriture matricielle
+{id:'om-4', niv:2, titre:'Matrices et systèmes linéaires', duree:30, contenu:`## Écriture matricielle
 Un système de n équations à n inconnues s'écrit **[K] {x} = {F}**. C'est exactement la forme résolue par les logiciels de calcul de structures : [K] est la **matrice de rigidité**, {x} les déplacements inconnus, {F} les forces.
 
 ## Déterminant 2 × 2
@@ -151,7 +151,7 @@ Deux ressorts en série de raideurs k₁ et k₂ : le calcul matriciel assemble 
   {q:"Si le déterminant d'un système est nul :", o:["Solution unique","Pas de solution unique","x = 0","Le système est faux"], r:1, e:"Le système n'a pas de solution unique (aucune ou une infinité)."},
   {q:"La matrice de rigidité relie :", o:["Les contraintes et les déformations","Les forces et les déplacements","Les moments et les flèches","Les charges et les poids"], r:1, e:"[K]{x} = {F} : forces et déplacements."}
  ]},
-{id:'om-5', titre:'Équations différentielles : déformées et vibrations', duree:30, contenu:`## Premier ordre : y' = k y
+{id:'om-5', niv:3, titre:'Équations différentielles : déformées et vibrations', duree:30, contenu:`## Premier ordre : y' = k y
 Solution : **y(t) = y₀ e^(k t)**. Elle décrit les croissances ou décroissances exponentielles.
 
 > [!exemple] Refroidissement

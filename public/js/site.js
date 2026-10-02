@@ -15,7 +15,7 @@ A.matCard = (m, opt={}) => {
   const p = opt.progress ? A.matProgress(m) : null;
   const href = opt.href ? opt.href(m) : `#/matiere/${m.id}`;
   return `<a class="mcard" href="${href}">${A.matIcon(m)}<b>${esc(m.titre)}</b><p>${esc(m.resume||'')}</p>
-   <div class="meta"><span>${ic('book')} ${m.chapitres.length} chapitres</span><span>${ic('clock')} ${m.heures||Math.max(1,Math.round(m.chapitres.reduce((a,c)=>a+(c.duree||20),0)/60))} h</span>${m.niveau?`<span class="pill p-mute">${esc(m.niveau)}</span>`:''}</div>
+   <div class="meta"><span>${ic('book')} ${m.chapitres.length} chapitres</span><span>${ic('clock')} ${Math.max(m.heures||0, Math.round(m.chapitres.reduce((a,c)=>a+(c.duree||20),0)/60))} h</span><span class="pill p-mute">3 niveaux</span></div>
    ${p?`<div class="row nw" style="gap:8px"><div class="grow">${A.bar(p.pct)}</div><span class="small mono">${p.pct}%</span></div>`:''}</a>`;
 };
 A.matGroups = (list, card) => A.GROUPES.map(g => {
@@ -105,17 +105,17 @@ A.page('matiere/:id', {space:'site', title:p => (A.mat(p.id)||{}).titre || 'Mati
    <a class="btn b-ghost b-sm" style="justify-self:start" href="#/matieres">${ic('back')}Toutes les matières</a>
    ${A.matHead(m)}
    <div class="cols"><div class="stack">
-    <h3 style="font-size:18px">Chapitres</h3>
-    <div class="chlist">${m.chapitres.map((c,i) => i < pv
+    <h3 style="font-size:18px">Trois niveaux, à suivre dans l'ordre</h3>
+    ${A.matLevels(m, {}).map(L => `<div class="card lvbox" style="--lc:${L.c}"><div class="row between"><b style="color:${L.c}">${'●'.repeat(L.id)} ${L.n}</b><span class="sub">${L.total} chapitres · ${Math.max(1, Math.round(L.min/60))} h</span></div><p class="sub" style="margin:2px 0 8px">${L.d}</p><div class="chlist">${L.ch.map((c,i) => i < pv
       ? `<a class="chap" href="#/cours/${c.id}"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · aperçu gratuit</span></span><span class="pill p-ok">Ouvert</span></a>`
-      : `<a class="chap locked" href="#/inscription"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions</span></span>${ic('lock')}</a>`).join('')}</div>
+      : `<a class="chap locked" href="#/inscription"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions</span></span>${ic('lock')}</a>`).join('') || '<p class="sub">Chapitres en préparation.</p>'}</div></div>`).join('')}
    </div><div class="stack">
     ${m.objectifs?`<div class="card"><h3>Objectifs</h3><ul style="margin:0;padding-left:18px;display:grid;gap:6px">${m.objectifs.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>`:''}
     <div class="card" style="background:var(--navy);color:#fff;border:0"><h3 style="color:#fff">Accès complet gratuit</h3><p style="color:#B7C3D3;margin-bottom:12px">Créez votre compte pour lire tous les chapitres, passer les quiz, suivre votre progression et poser vos questions à l'IA.</p><a class="btn b-pri b-full" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div>
    </div></div>
   </section></div>`;
 }});
-A.matHead = m => `<div class="mhead" style="background:linear-gradient(130deg,${esc(m.couleur||'#22344D')},#0E1A2B 140%)"><span class="ic">${ic(m.icone||'book')}</span><div><span class="kick" style="color:rgba(255,255,255,.75)">${esc((A.GROUPES.find(g=>g.id===m.groupe)||{}).n||'')}</span><h2>${esc(m.titre)}</h2><p>${esc(m.resume||'')}</p></div><div class="stack s8" style="text-align:right"><span class="pill" style="background:rgba(255,255,255,.15);color:#fff">${m.chapitres.length} chapitres</span>${m.niveau?`<span class="pill" style="background:rgba(255,255,255,.15);color:#fff">${esc(m.niveau)}</span>`:''}</div></div>`;
+A.matHead = m => `<div class="mhead" style="background:linear-gradient(130deg,${esc(m.couleur||'#22344D')},#0E1A2B 140%)"><span class="ic">${ic(m.icone||'book')}</span><div><span class="kick" style="color:rgba(255,255,255,.75)">${esc((A.GROUPES.find(g=>g.id===m.groupe)||{}).n||'')}</span><h2>${esc(m.titre)}</h2><p>${esc(m.resume||'')}</p></div><div class="stack s8" style="text-align:right"><span class="pill" style="background:rgba(255,255,255,.15);color:#fff">${m.chapitres.length} chapitres · 3 niveaux</span><span class="pill" style="background:rgba(255,255,255,.15);color:#fff">${A.NIVEAUX.map(N=>'●'.repeat(N.id)+' '+N.n).join(' → ')}</span></div></div>`;
 
 /* ---------- Cours (aperçu public) ---------- */
 A.page('cours/:id', {space:'site', title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', render(p){

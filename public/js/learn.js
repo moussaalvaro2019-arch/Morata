@@ -72,18 +72,24 @@ A.page('app/matieres', {space:'app', title:'Matières', crumb:'Programme complet
 }});
 A.on('input', '#mQ', el => { mQ = el.value; A.refresh(); });
 
+let mLv = {};
 A.page('app/matiere/:id', {space:'app', title:p => (A.mat(p.id)||{}).titre || 'Matière', crumb:'<a href="#/app/matieres">Matières</a>', render(p){
   const m = A.mat(p.id); if(!m) return A.empty('book','Matière introuvable.');
-  const pr = A.matProgress(m);
-  const nx = m.chapitres.find(c => !(S.progress[c.id] && S.progress[c.id].done)) || m.chapitres[0];
+  const pr = A.matProgress(m), LV = A.matLevels(m), mine = A.myNiv(m.id);
+  const cur = mLv[m.id] || mine || (LV.find(l => l.total && l.pct < 100) || LV[0]).id, lv = LV[cur-1], nxtL = LV.slice(cur).find(l => l.total);
+  const nx = lv.ch.find(c => !(S.progress[c.id] && S.progress[c.id].done)) || lv.ch[0];
   const qz = (S.quiz||[]).filter(q => q.mat === m.id);
   const pre = (m.prerequis||[]).map(id => A.mat(id)).filter(Boolean);
   return `${A.matHead(m)}
   <div class="cols"><div class="stack">
-   <div class="card row between"><div class="row">${A.ring(pr.pct)}<div><b>${pr.done} / ${pr.total} chapitres terminés</b><div class="sub">${qz.length} quiz passés dans cette matière</div></div></div>
-    <div class="row">${nx?`<a class="btn b-pri" href="#/app/cours/${nx.id}">${ic('play')}${pr.done?'Continuer':'Commencer'}</a>`:''}${pr.pct===100?`<a class="btn b-amber" href="#/app/attestation/${m.id}">${ic('award')}Mon attestation</a>`:''}</div></div>
-   <div class="chlist">${m.chapitres.map((c,i) => { const d = S.progress[c.id] && S.progress[c.id].done; const best = qz.filter(q=>q.chap===c.id).reduce((a,q)=>Math.max(a,Math.round(q.score/q.total*100)),-1);
-     return `<a class="chap ${d?'done':''}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${ic('chev')}</a>`; }).join('') || A.empty('book','Aucun chapitre pour le moment.')}</div>
+   <div class="card stack"><div class="row between"><div><b style="font-size:16px">Choisissez votre niveau</b><div class="sub">Commencez au niveau qui vous correspond, puis progressez : Débutant → Intermédiaire → Avancé.</div></div><div class="row">${A.ring(pr.pct)}<div class="sub">${pr.done} / ${pr.total} chapitres<br>${qz.length} quiz passés</div></div></div>
+    <div class="lvcards">${LV.map(l => `<button class="lvcard ${l.id===cur?'on':''}" style="--lc:${l.c};--lb:${l.bg}" data-mlv="${l.id}" data-m="${m.id}"><span class="row between"><b>${'●'.repeat(l.id)} ${l.n}</b>${mine===l.id?'<span class="pill" style="background:var(--lc);color:#fff">Mon niveau</span>':l.pct===100?`<span class="pill p-ok">${ic('check')}Terminé</span>`:''}</span><span class="sub">${l.d}</span><span class="small">${l.total} chapitres · ${Math.max(1, Math.round(l.min/60))} h</span>${A.bar(l.pct)}<span class="small mono">${l.done}/${l.total} terminés</span></button>`).join('')}</div></div>
+   <div class="card stack"><div class="row between"><h3 style="margin:0;color:${lv.c}">${'●'.repeat(lv.id)} Niveau ${lv.n}</h3><div class="row">${nx?`<a class="btn b-pri" href="#/app/cours/${nx.id}">${ic('play')}${lv.done?'Continuer':'Commencer'}</a>`:''}${mine!==lv.id?`<button class="btn b-line" data-setniv="${lv.id}" data-m="${m.id}">${ic('flag')}Choisir comme mon niveau</button>`:''}</div></div>
+    <div class="chlist">${lv.ch.map((c,i) => { const d = S.progress[c.id] && S.progress[c.id].done; const best = qz.filter(q=>q.chap===c.id).reduce((a,q)=>Math.max(a,Math.round(q.score/q.total*100)),-1);
+     return `<a class="chap ${d?'done':''}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${(c.quiz||[]).length} questions${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${ic('chev')}</a>`; }).join('') || A.empty('book','Aucun chapitre à ce niveau pour le moment.')}</div>
+    ${lv.pct===100 && lv.total ? `<div class="note ok">${ic('award')}<span>Niveau ${lv.n} terminé. <a href="#/app/attestation/${m.id}?n=${lv.id}">Voir mon attestation de niveau</a>${nxtL?` · <a href="#" data-mlv="${nxtL.id}" data-m="${m.id}">Passer au niveau ${nxtL.n} →</a>`:''}</span></div>` : ''}
+   </div>
+   ${pr.pct===100?`<a class="btn b-amber" style="justify-self:start" href="#/app/attestation/${m.id}">${ic('award')}Attestation complète de la matière</a>`:''}
   </div><div class="stack">
    ${m.objectifs?`<div class="card"><h3>Objectifs</h3><ul style="margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px">${m.objectifs.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>`:''}
    ${pre.length?`<div class="card"><h3>Prérequis conseillés</h3><div class="stack s8">${pre.map(x=>`<a class="who" style="text-decoration:none" href="#/app/matiere/${x.id}">${A.matIconSm(x)}<b>${esc(x.titre)}</b></a>`).join('')}</div></div>`:''}
@@ -91,6 +97,8 @@ A.page('app/matiere/:id', {space:'app', title:p => (A.mat(p.id)||{}).titre || 'M
    <div class="aipanel"><div class="hd">${ic('spark')}Une question sur cette matière ?</div><p class="sub">L'assistant IA connaît tout le programme de ${esc(m.titre)}.</p><a class="btn b-blue b-sm" style="justify-self:start" href="#/app/ia?m=${m.id}">${ic('chat')}Demander à l'IA</a></div>
   </div></div>`;
 }});
+A.on('click', '[data-mlv]', (el, e) => { e.preventDefault(); mLv[el.dataset.m] = +el.dataset.mlv; A.refresh(); });
+A.on('click', '[data-setniv]', async el => { const n = +el.dataset.setniv; if(await A.setNiv(el.dataset.m, n)){ toast('Niveau ' + A.NIVEAUX[n-1].n + ' choisi pour cette matière', 'flag'); A.refresh(); } });
 
 /* ---------- Lecteur de cours + quiz ---------- */
 let QZ = null;
@@ -107,7 +115,7 @@ A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titr
   return `<div class="reader">
    <div class="stack s20" style="min-width:0">
     <article class="lesson">
-     <div class="row between" style="margin-bottom:6px"><span class="kick">Chapitre ${idx+1} sur ${list.length} · ${c.duree||20} min</span>${done?`<span class="pill p-ok dot">Terminé</span>`:''}</div>
+     <div class="row between" style="margin-bottom:6px"><span class="kick">${(() => { const L = list.filter(x => A.nivOf(x) === A.nivOf(c)); return `${A.nivPill(c)} Chapitre ${L.findIndex(x => x.id === c.id) + 1} sur ${L.length} · ${c.duree||20} min`; })()}</span>${done?`<span class="pill p-ok dot">Terminé</span>`:''}</div>
      <h1 style="font-size:clamp(24px,3vw,34px);margin-bottom:18px">${esc(c.titre)}</h1>
      ${md.html}
     </article>
@@ -119,7 +127,7 @@ A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titr
     <section class="lesson noprint" id="quiz">${quizHtml(c)}</section>
     <div class="lnav noprint">
      ${prev?`<a class="btn b-line" href="#/app/cours/${prev.id}">${ic('back')}${esc(prev.titre)}</a>`:'<span></span>'}
-     <div class="row">${done?'':`<button class="btn b-ok" data-done="${c.id}">${ic('check')}Marquer comme terminé</button>`}${next?`<a class="btn b-pri" href="#/app/cours/${next.id}">Chapitre suivant ${ic('arrow')}</a>`:`<a class="btn b-dark" href="#/app/matiere/${m.id}">Fin de la matière ${ic('flag')}</a>`}</div>
+     <div class="row">${done?'':`<button class="btn b-ok" data-done="${c.id}">${ic('check')}Marquer comme terminé</button>`}${next?(A.nivOf(next) > A.nivOf(c) ? `<a class="btn b-amber" href="#/app/cours/${next.id}">Niveau ${A.NIVEAUX[A.nivOf(next)-1].n} ${ic('arrow')}</a>` : `<a class="btn b-pri" href="#/app/cours/${next.id}">Chapitre suivant ${ic('arrow')}</a>`):`<a class="btn b-dark" href="#/app/matiere/${m.id}">Fin de la matière ${ic('flag')}</a>`}</div>
     </div>
    </div>
    <aside class="toc noprint">
@@ -183,7 +191,8 @@ A.page('app/profil', {space:'app', title:'Mon profil', crumb:'Compte', render(){
   </div><div class="stack">
    <div class="card stack" style="justify-items:center;text-align:center">${A.avatar(d.name||me.email,'lg')}<div><b style="font-size:18px">${esc(d.name||'')}</b><div class="sub">${esc(d.profil||'Apprenant')} · inscrit le ${fd(me.created_at)}</div></div>
     <div class="g3" style="width:100%"><div><b style="font-family:var(--fd);font-size:22px">${st.done}</b><div class="small faint">chapitres</div></div><div><b style="font-family:var(--fd);font-size:22px">${st.quiz}</b><div class="small faint">quiz</div></div><div><b style="font-family:var(--fd);font-size:22px">${st.avg}%</b><div class="small faint">moyenne</div></div></div></div>
-   <div class="card"><h3>Mes attestations <small>${certs.length}</small></h3>${certs.length?`<div class="stack s8">${certs.map(m=>`<a class="row between" style="text-decoration:none" href="#/app/attestation/${m.id}"><span class="row">${ic('award')}<b style="font-size:14px">${esc(m.titre)}</b></span>${ic('chev')}</a>`).join('')}</div>`:'<p class="sub">Terminez tous les chapitres d\'une matière pour obtenir son attestation.</p>'}</div>
+   ${(() => { const lvc = cat.flatMap(m => A.matLevels(m).filter(l => l.total && l.pct === 100).map(l => ({m, l}))); const n = certs.length + lvc.length;
+     return `<div class="card"><h3>Mes attestations <small>${n}</small></h3>${n?`<div class="stack s8">${certs.map(m=>`<a class="row between" style="text-decoration:none" href="#/app/attestation/${m.id}"><span class="row">${ic('award')}<b style="font-size:14px">${esc(m.titre)}</b><span class="pill p-or">Matière complète</span></span>${ic('chev')}</a>`).join('')}${lvc.map(({m,l})=>`<a class="row between" style="text-decoration:none" href="#/app/attestation/${m.id}?n=${l.id}"><span class="row">${ic('award')}<b style="font-size:14px">${esc(m.titre)}</b><span class="pill" style="background:${l.bg};color:${l.c}">${l.n}</span></span>${ic('chev')}</a>`).join('')}</div>`:'<p class="sub">Terminez tous les chapitres d\'un niveau (ou d\'une matière) pour obtenir son attestation.</p>'}</div>`; })()}
    <div class="card"><h3>Progression par matière</h3><div class="bars">${cat.map(m=>{const p=A.matProgress(m);return `<div class="brow"><span>${esc(m.court||m.titre)}</span><span class="mono small">${p.done}/${p.total}</span>${A.bar(p.pct)}</div>`}).join('')}</div></div>
   </div></div>`;
 }});
@@ -194,13 +203,15 @@ A.on('submit', '#fProf', async () => {
 
 /* ---------- Attestation ---------- */
 A.page('app/attestation/:id', {space:'app', title:'Attestation', crumb:'<a href="#/app/profil">Mon profil</a>', actions:()=>`<button class="btn b-pri b-sm" data-act="print">${ic('print')}Imprimer / PDF</button>`, render(p){
-  const m = A.mat(p.id); if(!m) return A.empty('award','Matière introuvable.');
+  const m0 = A.mat(p.id); if(!m0) return A.empty('award','Matière introuvable.');
+  const nq = +A.query().get('n') || 0, NV = nq ? A.NIVEAUX[nq-1] : null;
+  const m = NV ? {...m0, chapitres:m0.chapitres.filter(c => A.nivOf(c) === nq), titre:m0.titre + ' · niveau ' + NV.n, heures:null} : m0;
   const pr = A.matProgress(m);
   if(pr.pct < 100) return `<div class="card stack" style="max-width:560px">${ic('lock')}<h2>Attestation pas encore disponible</h2><p class="muted">Terminez les ${pr.total - pr.done} chapitre(s) restant(s) de ${esc(m.titre)} pour l'obtenir.</p><a class="btn b-pri" style="justify-self:start" href="#/app/matiere/${m.id}">Continuer la matière</a></div>`;
   const qz = (S.quiz||[]).filter(q => q.mat === m.id);
   const avg = qz.length ? Math.round(qz.reduce((a,q)=>a+q.score/q.total,0)/qz.length*100) : null;
   const last = Math.max(...m.chapitres.map(c => (S.progress[c.id]||{}).at || 0));
-  const ref = 'MRT-' + m.id.toUpperCase() + '-' + String(S.me.id).replace(/\W/g,'').slice(-6).toUpperCase();
+  const ref = 'MRT-' + m.id.toUpperCase() + (nq ? '-N' + nq : '') + '-' + String(S.me.id).replace(/\W/g,'').slice(-6).toUpperCase();
   const c = A.cfg();
   return `<div class="cert"><div class="row" style="justify-content:center">${A.lockup(false)}</div>
    <span class="kick">Attestation de formation</span><h2>Attestation de réussite</h2><p class="muted">Nous attestons que</p>

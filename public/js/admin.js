@@ -166,9 +166,10 @@ A.page('admin/contenus/:mat', {space:'admin', title:p => (A.mat(p.mat)||{}).titr
   return `${A.matHead(m)}
   <div class="aipanel"><div class="hd">${ic('spark')}Rédiger un nouveau chapitre avec l'IA</div><p class="sub">Indiquez le titre du chapitre : l'IA rédige le cours complet (notions, formules, exemples chiffrés, encadrés) et un quiz de 5 questions. Vous relisez et publiez.</p>
    <form class="row nw" id="fAiChap"><input class="inp" id="aiChapT" placeholder="Ex. : Calcul des semelles excentrées" required><button class="btn b-blue">${ic('spark')}Rédiger</button></form></div>
-  <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>#</th><th>Chapitre</th><th class="r">Durée</th><th class="r">Quiz</th><th>État</th><th></th></tr></thead><tbody>
-  ${m.chapitres.map((c,i)=>`<tr><td class="mono">${i+1}</td><td><b>${esc(c.titre)}</b></td><td class="r sub">${c.duree||20} min</td><td class="r mono">${(c.quiz||[]).length}</td><td class="nowrap">${c.cache?'<span class="pill p-mute">Masqué</span>':'<span class="pill p-ok dot">En ligne</span>'}${c.custom?' <span class="pill p-or">Ajouté</span>':c.edited?' <span class="pill p-info">Modifié</span>':''}</td>
-   <td class="r nowrap"><button class="ibtn" style="width:30px;height:30px" data-chmove="${c.id}" data-d="-1" title="Monter">${ic('chevd').replace('<svg','<svg style="transform:rotate(180deg)"')}</button><button class="ibtn" style="width:30px;height:30px" data-chmove="${c.id}" data-d="1" title="Descendre">${ic('chevd')}</button><button class="ibtn" style="width:30px;height:30px" data-chhide="${c.id}" title="${c.cache?'Afficher':'Masquer'}">${ic(c.cache?'eye':'eyeoff')}</button><a class="btn b-line b-xs" href="#/admin/chapitre/${c.id}">${ic('edit')}Modifier</a></td></tr>`).join('') || `<tr><td colspan="6">${A.empty('book','Aucun chapitre. Ajoutez-en un ou demandez à l\'IA de le rédiger.')}</td></tr>`}
+  ${A.matLevels(m, {}).map(L => `<div class="row between" style="margin-top:6px"><b style="color:${L.c}">${'●'.repeat(L.id)} Niveau ${L.n} <span class="sub">(${L.total} chapitres)</span></b><a class="btn b-line b-xs" href="#/admin/chapitre/nouveau?mat=${m.id}&n=${L.id}">${ic('plus')}Chapitre ${L.n.toLowerCase()}</a></div>`).join('')}
+  <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>#</th><th>Chapitre</th><th>Niveau</th><th class="r">Durée</th><th class="r">Quiz</th><th>État</th><th></th></tr></thead><tbody>
+  ${m.chapitres.map((c,i)=>`<tr><td class="mono">${i+1}</td><td><b>${esc(c.titre)}</b></td><td>${A.nivPill(c)}</td><td class="r sub">${c.duree||20} min</td><td class="r mono">${(c.quiz||[]).length}</td><td class="nowrap">${c.cache?'<span class="pill p-mute">Masqué</span>':'<span class="pill p-ok dot">En ligne</span>'}${c.custom?' <span class="pill p-or">Ajouté</span>':c.edited?' <span class="pill p-info">Modifié</span>':''}</td>
+   <td class="r nowrap"><button class="ibtn" style="width:30px;height:30px" data-chmove="${c.id}" data-d="-1" title="Monter">${ic('chevd').replace('<svg','<svg style="transform:rotate(180deg)"')}</button><button class="ibtn" style="width:30px;height:30px" data-chmove="${c.id}" data-d="1" title="Descendre">${ic('chevd')}</button><button class="ibtn" style="width:30px;height:30px" data-chhide="${c.id}" title="${c.cache?'Afficher':'Masquer'}">${ic(c.cache?'eye':'eyeoff')}</button><a class="btn b-line b-xs" href="#/admin/chapitre/${c.id}">${ic('edit')}Modifier</a></td></tr>`).join('') || `<tr><td colspan="7">${A.empty('book','Aucun chapitre. Ajoutez-en un ou demandez à l\'IA de le rédiger.')}</td></tr>`}
   </tbody></table></div></div>`;
  }
 });
@@ -195,7 +196,7 @@ A.on('click', '[data-matedit]', el => {
    <label class="fld"><span>Titre</span><input class="inp" id="mtT" value="${esc(m.titre)}"></label>
    <div class="g2"><label class="fld"><span>Titre court</span><input class="inp" id="mtC" value="${esc(m.court||'')}"></label><label class="fld"><span>Groupe</span><select class="inp" id="mtG">${A.GROUPES.map(g=>`<option value="${g.id}" ${g.id===m.groupe?'selected':''}>${esc(g.n)}</option>`).join('')}</select></label></div>
    <label class="fld"><span>Résumé</span><textarea class="inp" id="mtR" rows="3">${esc(m.resume||'')}</textarea></label>
-   <div class="g3"><label class="fld"><span>Niveau</span><input class="inp" id="mtN" value="${esc(m.niveau||'')}"></label><label class="fld"><span>Heures</span><input class="inp" id="mtH" type="number" value="${esc(m.heures||'')}"></label><label class="fld"><span>Couleur</span><input class="inp" id="mtK" type="color" value="${esc(m.couleur||'#2F6FDB')}" style="height:42px;padding:4px"></label></div>
+   <div class="g3"><label class="fld"><span>Public visé</span><input class="inp" id="mtN" value="${esc(m.niveau||'')}"></label><label class="fld"><span>Heures</span><input class="inp" id="mtH" type="number" value="${esc(m.heures||'')}"></label><label class="fld"><span>Couleur</span><input class="inp" id="mtK" type="color" value="${esc(m.couleur||'#2F6FDB')}" style="height:42px;padding:4px"></label></div>
    <label class="fld"><span>Icône</span><div class="row" id="mtI">${ICONS.map(n=>`<button type="button" class="ibtn ${n===m.icone?'on':''}" data-mticon="${n}">${ic(n)}</button>`).join('')}</div></label>
    <label class="fld"><span>Objectifs (un par ligne)</span><textarea class="inp" id="mtO" rows="4">${esc((m.objectifs||[]).join('\n'))}</textarea></label>
    ${id?`<label class="check"><input type="checkbox" id="mtX" ${m.cache?'checked':''}>Masquer cette matière aux apprenants</label>`:''}
@@ -224,11 +225,11 @@ A.page('admin/chapitre/:id', {space:'admin', title:() => CE && CE.titre ? CE.tit
   const draft = A.ls.get('aiDraft', null);
   if(p.id === 'nouveau'){
     const mat = A.query().get('mat') || (draft && draft.mat);
-    if(!CE || CE.id || CE.mat !== mat) CE = {id:null, mat, titre:'', duree:25, contenu:'', quiz:[], preview:false};
+    if(!CE || CE.id || CE.mat !== mat) CE = {id:null, mat, titre:'', duree:25, contenu:'', quiz:[], preview:false, niv:+A.query().get('n') || 1};
     if(draft && draft.mat === mat){ CE.titre = draft.titre; CE.autoAi = draft.auto; A.ls.del('aiDraft'); }
   } else if(!CE || CE.id !== p.id){
     const f = A.chap(p.id); if(!f) return A.empty('book','Chapitre introuvable.');
-    CE = {id:p.id, mat:f.m.id, titre:f.c.titre, duree:f.c.duree||25, contenu:f.c.contenu||'', quiz:JSON.parse(JSON.stringify(f.c.quiz||[])), custom:!!f.c.custom, edited:!!f.c.edited, cache:!!f.c.cache, preview:false};
+    CE = {id:p.id, mat:f.m.id, titre:f.c.titre, duree:f.c.duree||25, contenu:f.c.contenu||'', quiz:JSON.parse(JSON.stringify(f.c.quiz||[])), custom:!!f.c.custom, edited:!!f.c.edited, cache:!!f.c.cache, preview:false, niv:A.nivOf(f.c)};
   }
   return ceHtml();
  },
@@ -238,7 +239,7 @@ A.page('admin/chapitre/:id', {space:'admin', title:() => CE && CE.titre ? CE.tit
 function ceHtml(){
   const m = A.mat(CE.mat) || {titre:''};
   return `<div class="cols"><div class="stack" style="min-width:0">
-   <div class="card stack"><div class="g3" style="grid-template-columns:2fr 1fr 1fr"><label class="fld"><span>Titre du chapitre</span><input class="inp" id="ceT" value="${esc(CE.titre)}"></label><label class="fld"><span>Durée (min)</span><input class="inp" type="number" id="ceD" value="${esc(CE.duree)}"></label><label class="fld"><span>Matière</span><input class="inp" value="${esc(m.titre)}" disabled></label></div>
+   <div class="card stack"><div class="g3" style="grid-template-columns:2fr 1fr 1fr"><label class="fld"><span>Titre du chapitre</span><input class="inp" id="ceT" value="${esc(CE.titre)}"></label><label class="fld"><span>Niveau</span><select class="inp" id="ceNv">${A.NIVEAUX.map(N => `<option value="${N.id}" ${(CE.niv||1)===N.id?'selected':''}>${N.n}</option>`).join('')}</select></label><label class="fld"><span>Durée (min)</span><input class="inp" type="number" id="ceD" value="${esc(CE.duree)}"></label><label class="fld"><span>Matière</span><input class="inp" value="${esc(m.titre)}" disabled></label></div>
     ${CE.preview ? `<div class="lesson" style="padding:18px">${A.mdHtml(CE.contenu)}</div>` : `<label class="fld"><span>Contenu du cours (voir l'aide de mise en forme à droite)</span><textarea class="inp mono" id="ceC" rows="26" style="font-size:13px;min-height:420px">${esc(CE.contenu)}</textarea></label>`}</div>
    <div class="card stack"><h3>Quiz <small>${CE.quiz.length} question(s)</small><button class="btn b-line b-xs" data-act="ceqadd">${ic('plus')}Question</button></h3>
     ${CE.quiz.map((q,i)=>`<div class="qq" data-qi2="${i}"><div class="row nw"><b class="mono">${i+1}.</b><input class="inp" data-qe="q" value="${esc(q.q)}" placeholder="Question"><button class="ibtn" data-qdel="${i}" title="Supprimer">${ic('trash')}</button></div>
@@ -269,7 +270,7 @@ $$ σ = N / A        (formule en bloc)
 (figures : ${Object.keys(A.FIG||{}).slice(0,12).join(', ')}…)</div></div>
   </div></div>`;
 }
-const ceSync = () => { if($('#ceT')) CE.titre = A.val('ceT'); if($('#ceD')) CE.duree = +A.val('ceD') || 25; if($('#ceC')) CE.contenu = A.val('ceC'); if($('#ceH')) CE.cache = $('#ceH').checked; };
+const ceSync = () => { if($('#ceNv')) CE.niv = +A.val('ceNv') || 1; if($('#ceT')) CE.titre = A.val('ceT'); if($('#ceD')) CE.duree = +A.val('ceD') || 25; if($('#ceC')) CE.contenu = A.val('ceC'); if($('#ceH')) CE.cache = $('#ceH').checked; };
 const reCe = () => { ceSync(); const pg = $('#pg'); if(pg) pg.innerHTML = ceHtml(); };
 A.on('input', '[data-qe]', el => { const i = +el.closest('[data-qi2]').dataset.qi2; CE.quiz[i][el.dataset.qe] = el.value; });
 A.on('input', '[data-qo]', el => { const i = +el.closest('[data-qi2]').dataset.qi2; CE.quiz[i].o[+el.dataset.qo] = el.value; });
@@ -285,7 +286,7 @@ async function aiWrite(){
   CE.preview = false; ceCtrl = new AbortController(); reCe();
   const st = () => $('#ceAiSt'); if(st()) st().innerHTML = `<span class="row">${ic('spark')}Rédaction en cours <span class="typing"><i></i><i></i><i></i></span></span>`;
   const autres = m.chapitres ? m.chapitres.map(c => c.titre).join(' ; ') : '';
-  const r = await A.IA.chapter({mat:CE.mat, matTitre:m.titre, titre:CE.titre, notes:A.val('ceN'), autres, niveau:m.niveau}, t => { const ta = $('#ceC'); const sp = A.IA.splitChapter(t); if(ta){ ta.value = sp.contenu; ta.scrollTop = ta.scrollHeight; } if(st()) st().textContent = F(t.length) + ' caractères reçus…'; }, ceCtrl.signal);
+  const r = await A.IA.chapter({mat:CE.mat, matTitre:m.titre, titre:CE.titre, notes:A.val('ceN'), autres, niveau:A.NIVEAUX[(CE.niv||1)-1].n + ' (' + A.NIVEAUX[(CE.niv||1)-1].d.toLowerCase() + ')'}, t => { const ta = $('#ceC'); const sp = A.IA.splitChapter(t); if(ta){ ta.value = sp.contenu; ta.scrollTop = ta.scrollHeight; } if(st()) st().textContent = F(t.length) + ' caractères reçus…'; }, ceCtrl.signal);
   ceCtrl = null;
   if(r.text){ const sp = A.IA.splitChapter(r.text); CE.contenu = sp.contenu; if(sp.quiz.length) CE.quiz = sp.quiz; }
   reCe();
@@ -300,10 +301,10 @@ A.on('click', '[data-act="cesave"]', async () => {
   if(!id){
     const m = A.catalog(true).find(x => x.id === CE.mat);
     id = CE.mat + '-x' + Date.now().toString(36);
-    await A.db.saveContent('chap:' + id, {mat:CE.mat, titre:CE.titre.trim(), duree:CE.duree, contenu:CE.contenu, quiz, ordre:(m ? m.chapitres.length : 99), cache:false});
+    await A.db.saveContent('chap:' + id, {mat:CE.mat, titre:CE.titre.trim(), duree:CE.duree, contenu:CE.contenu, quiz, niv:CE.niv || 1, ordre:(m ? m.chapitres.length : 99), cache:false});
   } else {
     const f = A.chap(id);
-    await saveChapPatch(f.c, {titre:CE.titre.trim(), duree:CE.duree, contenu:CE.contenu, quiz, cache:CE.cache});
+    await saveChapPatch(f.c, {titre:CE.titre.trim(), duree:CE.duree, contenu:CE.contenu, quiz, cache:CE.cache, niv:CE.niv || 1});
   }
   toast('Chapitre publié'); CE = null; A.go('#/admin/contenus/' + (A.chap(id) ? A.chap(id).m.id : ''));
 });

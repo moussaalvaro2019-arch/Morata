@@ -606,3 +606,13 @@ table.t.click td.mono b{color:var(--navy)}
 .c3d canvas{display:block}
 .ctools .tsep{font:600 9.5px var(--fm);color:#6F86A3;letter-spacing:.1em;padding:6px 0 2px;border-top:1px solid #1E3150;width:100%;text-align:center}
 #cLv{width:auto;max-width:150px}
+
+/* ---------- Niveaux des matières ---------- */
+.lvcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lvcard{display:grid;gap:6px;text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:12px;cursor:pointer;color:var(--ink);font:inherit}
+.lvcard b{color:var(--lc);font-size:15px}
+.lvcard:hover{border-color:var(--lc)}
+.lvcard.on{border-color:var(--lc);background:var(--lb);box-shadow:0 0 0 3px color-mix(in srgb, var(--lc) 18%, transparent)}
+.lvcard .bar i{background:var(--lc)}
+.lvbox{border-left:4px solid var(--lc)}
+@media(max-width:700px){.lvcards{grid-template-columns:1fr}}

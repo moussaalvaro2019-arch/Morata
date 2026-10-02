@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Choisir et contrôler les granulats","Connaître les ciments et leurs classes","Doser un béton, un mortier et un enduit","Contrôler la qualité des agglos et des aciers","Utiliser les bois et matériaux locaux"],
  applications:["Commande des matériaux d'une maison","Contrôle à la réception (sable, ciment, fers)","Fabrication des agglos sur chantier","Choix d'un bois de charpente"],
  chapitres:[
-{id:'mat-1', titre:'Les granulats : sable et gravier', duree:25, contenu:`## Définitions
+{id:'mat-1', niv:1, titre:'Les granulats : sable et gravier', duree:25, contenu:`## Définitions
 Les **granulats** forment le squelette du béton (70 à 80 % de son volume).
 | Granulat | Dimensions (d/D en mm) |
 |---|---|
@@ -38,7 +38,7 @@ Sur une aire propre (dalle ou bâche), en tas séparés par nature, à l'abri de
   {q:"Pourquoi refuser le sable de mer non lavé ?", o:["Couleur","Sel : corrosion des aciers","Trop gros","Trop cher"], r:1, e:"Les chlorures attaquent les armatures."},
   {q:"Un équivalent de sable correct pour béton est :", o:["≥ 70 à 80","< 30","Exactement 50","Sans importance"], r:0, e:"Plus il est élevé, plus le sable est propre."}
  ]},
-{id:'mat-2', titre:'Les liants : ciments, chaux et plâtre', duree:25, contenu:`## Le ciment Portland
+{id:'mat-2', niv:1, titre:'Les liants : ciments, chaux et plâtre', duree:25, contenu:`## Le ciment Portland
 Il est fabriqué en cuisant à environ **1 450 °C** un mélange de calcaire (80 %) et d'argile (20 %). On obtient le **clinker**, broyé finement avec un peu de gypse (régulateur de prise).
 
 ## Les types de ciments (norme NF EN 197-1)
@@ -71,7 +71,7 @@ Le ciment le plus courant en Côte d'Ivoire est un **CEM II 32,5** (anciennement
   {q:"Un sac de ciment contenant des grumeaux durs est :", o:["Meilleur","Éventé par l'humidité","Normal","Plus résistant"], r:1, e:"Il a commencé à s'hydrater : à refuser."},
   {q:"Le plâtre convient :", o:["Aux fondations","Aux usages intérieurs","Aux façades exposées","Aux piscines"], r:1, e:"Il craint l'eau."}
  ]},
-{id:'mat-3', titre:'Le béton : composition et contrôle', duree:35, contenu:`## Les constituants
+{id:'mat-3', niv:2, titre:'Le béton : composition et contrôle', duree:35, contenu:`## Les constituants
 Ciment + sable + gravier + eau (+ éventuellement adjuvants). La pâte de ciment enrobe les granulats et les colle entre eux.
 
 ## Dosages courants pour 1 m³ de béton
@@ -110,7 +110,7 @@ Ciment + sable + gravier + eau (+ éventuellement adjuvants). La pâte de ciment
   {q:"Durée minimale de cure humide d'un béton :", o:["1 heure","1 jour","7 jours","28 jours"], r:2, e:"Pour une bonne hydratation en surface."},
   {q:"La résistance à la traction du béton est environ :", o:["Égale à la compression","10 fois plus faible","2 fois plus forte","Nulle"], r:1, e:"D'où la nécessité des aciers dans les zones tendues."}
  ]},
-{id:'mat-4', titre:'Mortiers, enduits et agglos', duree:30, contenu:`## Les mortiers
+{id:'mat-4', niv:1, titre:'Mortiers, enduits et agglos', duree:30, contenu:`## Les mortiers
 Mortier = ciment + sable + eau (sans gravier).
 | Usage | Dosage (kg de ciment par m³ de sable) |
 |---|---|
@@ -146,7 +146,7 @@ Blocs en béton vibré fabriqués sur place ou en usine : creux de **10, 15, 20*
   {q:"Combien d'agglos de 15 par sac de ciment pour une bonne qualité ?", o:["10 à 15","30 à 40","70 à 80","100"], r:1, e:"Au-delà de 45, ils deviennent friables."},
   {q:"Les joints verticaux d'une maçonnerie doivent être :", o:["Alignés","Décalés d'un demi-bloc","Absents","Remplis de plâtre"], r:1, e:"Le décalage répartit les efforts et évite les fissures."}
  ]},
-{id:'mat-5', titre:'Les aciers pour béton armé', duree:25, contenu:`## Les types d'aciers
+{id:'mat-5', niv:2, titre:'Les aciers pour béton armé', duree:25, contenu:`## Les types d'aciers
 - **Ronds lisses** (RL, Fe E235) : anciens, adhérence faible, encore utilisés pour certains crochets.
 - **Haute adhérence (HA)** : nervures en relief qui assurent l'adhérence au béton. Nuances **Fe E400** (fe = 400 MPa) et **Fe E500 / B500** (fe = 500 MPa).
 - **Treillis soudés** : panneaux pour dallages et dalles de compression (ex. ST25 : HA de 7 mm environ en mailles de 15 cm).
@@ -184,7 +184,7 @@ Formule : **poids (kg/m) = d² / 162** (d en mm). Les barres sont livrées en lo
   {q:"Pour plier une barre HA, on doit :", o:["La chauffer au rouge","La plier à froid à la cintreuse","La couper","La tremper dans l'eau"], r:1, e:"Le chauffage dégrade l'acier."},
   {q:"Section d'une barre HA16 :", o:["1,13 cm²","2,01 cm²","3,14 cm²","1,54 cm²"], r:1, e:"π × 1,6² / 4 = 2,01 cm²."}
  ]},
-{id:'mat-6', titre:'Bois, métaux, verre et matériaux locaux', duree:25, contenu:`## Le bois
+{id:'mat-6', niv:2, titre:'Bois, métaux, verre et matériaux locaux', duree:25, contenu:`## Le bois
 - Matériau **anisotrope** : beaucoup plus résistant dans le sens des fibres.
 - Essences ivoiriennes courantes : **iroko** (durable, menuiseries extérieures), **framiré**, **fraké / limba** (coffrages, charpentes protégées), **samba / ayous** (léger, intérieur), **teck** (durable), **azobé** (très dur, très durable, ouvrages exposés).
 - Ennemis : **termites**, champignons, humidité. Traiter les bois de charpente (traitement insecticide et fongicide) et éviter tout contact avec le sol.

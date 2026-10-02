@@ -4,7 +4,7 @@ A.addMatiere({
  objectifs:["Utiliser les unités d'angles (degrés, grades) et les systèmes de coordonnées","Réaliser et calculer un nivellement","Calculer gisements, distances et surfaces par coordonnées","Implanter un bâtiment et contrôler l'implantation","Calculer des cubatures de terrassement"],
  applications:["Plan de bornage et levé de terrain","Niveau ±0,00 du bâtiment","Implantation des axes et des poteaux","Volumes de déblais et de remblais"],
  chapitres:[
-{id:'topo-1', titre:'Notions de base : échelles, angles et coordonnées', duree:20, contenu:`## La topographie
+{id:'topo-1', niv:1, titre:'Notions de base : échelles, angles et coordonnées', duree:20, contenu:`## La topographie
 Elle a pour but de **représenter le terrain** (planimétrie et altimétrie) et d'**implanter** les ouvrages. Ses métiers : géomètre-expert, topographe, technicien.
 
 ## Unités d'angles
@@ -30,7 +30,7 @@ L'œil distingue environ 0,2 mm sur un plan. À l'échelle 1/500, cela représen
   {q:"Le gisement est compté à partir :", o:["De l'Est","Du Nord, dans le sens horaire","Du Sud","De la station"], r:1, e:"Par convention topographique."},
   {q:"L'axe Y d'un système de coordonnées topographiques pointe vers :", o:["L'Est","Le Nord","Le haut","L'Ouest"], r:1, e:"X vers l'Est, Y vers le Nord."}
  ]},
-{id:'topo-2', titre:'Mesure des distances et des angles', duree:25, contenu:`## Mesure des distances
+{id:'topo-2', niv:1, titre:'Mesure des distances et des angles', duree:25, contenu:`## Mesure des distances
 - **Ruban** (décamètre, 20 à 50 m) : tendu horizontalement ; erreurs possibles : ruban non horizontal, mal tendu, mauvaise lecture. Précision de quelques mm à 1 cm.
 - **Distancemètre laser** de poche : rapide pour les intérieurs.
 - **Station totale** (mesure électronique des distances) : précision de quelques mm sur plusieurs centaines de mètres.
@@ -58,7 +58,7 @@ Les récepteurs GNSS donnent directement les coordonnées. En mode **RTK** (avec
   {q:"En GNSS RTK, la précision atteint environ :", o:["10 m","1 m","1 à 2 cm","1 mm"], r:2, e:"Grâce aux corrections en temps réel."},
   {q:"Une distance inclinée doit être ramenée :", o:["À l'horizontale","À la verticale","À zéro","Au nord"], r:0, e:"Les plans représentent des distances horizontales."}
  ]},
-{id:'topo-3', titre:'Le nivellement', duree:30, contenu:`## Principe du nivellement direct
+{id:'topo-3', niv:2, titre:'Le nivellement', duree:30, contenu:`## Principe du nivellement direct
 Le **niveau** donne une ligne de visée **horizontale**. On lit une **mire** graduée posée sur chaque point.
 !fig:nivellement|Lecture arrière, lecture avant et dénivelée
 
@@ -92,7 +92,7 @@ On revient toujours sur un point connu (cheminement fermé) : l'écart est l'**e
   {q:"Le contrôle d'un carnet de nivellement compare :", o:["ΣLAR − ΣLAV et l'écart d'altitude","Les distances","Les angles","La météo"], r:0, e:"Les deux doivent être égaux."},
   {q:"Un niveau laser rotatif matérialise :", o:["Une verticale","Un plan horizontal","Une distance","Un angle droit uniquement"], r:1, e:"Utile pour les fonds de fouilles et dallages."}
  ]},
-{id:'topo-4', titre:'Calculs topographiques', duree:35, contenu:`## Du terrain aux coordonnées (calcul direct)
+{id:'topo-4', niv:2, titre:'Calculs topographiques', duree:35, contenu:`## Du terrain aux coordonnées (calcul direct)
 Connaissant A (XA ; YA), le gisement G et la distance D vers B :
 $$ XB = XA + D × sin G
 $$ YB = YA + D × cos G
@@ -133,7 +133,7 @@ $$ 2S = Σ Xi × (Yi+1 − Yi−1)
   {q:"XB = XA + D × sin G : pour G = 100 gon, B est situé :", o:["Au nord de A","À l'est de A","Au sud de A","À l'ouest de A"], r:1, e:"sin 100 gon = 1, cos 100 gon = 0 : plein Est."},
   {q:"La formule 2S = Σ Xi (Yi+1 − Yi−1) donne :", o:["Un périmètre","Une surface","Un gisement","Une altitude"], r:1, e:"Formule de Gauss (dite « des trapèzes »)."}
  ]},
-{id:'topo-5', titre:'Implantation, levés et cubatures', duree:30, contenu:`## Implanter un bâtiment
+{id:'topo-5', niv:2, titre:'Implantation, levés et cubatures', duree:30, contenu:`## Implanter un bâtiment
 1. Retrouver les **bornes** et la **ligne de recul** imposée.
 2. Implanter les **axes principaux** (souvent une façade) par alignement et mesure de distances.
 3. Créer les angles droits (station totale, équerre optique ou méthode 3-4-5).
