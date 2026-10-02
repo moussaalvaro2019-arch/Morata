@@ -1,7 +1,8 @@
 // Fonction Netlify : annonces de la boutique, gardées dans Netlify Blobs.
-// Lire : ouvert à tous. Ajouter ou retirer : il faut le code vendeur,
-// défini dans Netlify > Site configuration > Environment variables > BOUTIQUE_CODE.
+// Lire : ouvert à tous. Ajouter ou retirer : il faut le mot de passe de l'espace PDG
+// (variable Netlify ADMIN_CODE au départ, puis celui choisi dans l'espace PDG).
 import { getStore } from "@netlify/blobs";
+import { configure, codeValide } from "../lib/acces.mjs";
 
 const CLE = "livres";
 const TAILLE_PHOTO_MAX = 300000; // environ 300 Ko en texte
@@ -39,11 +40,11 @@ export default async (req) => {
   if (req.method === "GET") return json({ livres: await lire() });
 
   if (req.method !== "POST" && req.method !== "DELETE") return json({ erreur: "Méthode non autorisée." }, 405);
-  if (!process.env.BOUTIQUE_CODE) return json({ erreur: "La boutique n'est pas encore configurée (BOUTIQUE_CODE manquant)." }, 503);
+  if (!configure()) return json({ erreur: "La boutique n'est pas encore configurée (ADMIN_CODE manquant)." }, 503);
 
   let corps;
   try { corps = await req.json(); } catch { return json({ erreur: "Requête invalide." }, 400); }
-  if (String(corps.code || "") !== process.env.BOUTIQUE_CODE) return json({ erreur: "Code vendeur incorrect." }, 403);
+  if (!(await codeValide(corps.code))) return json({ erreur: "Mot de passe PDG incorrect." }, 403);
 
   const livres = await lire();
   if (req.method === "POST") {

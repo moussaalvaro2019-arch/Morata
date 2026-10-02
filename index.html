@@ -13,7 +13,8 @@
 <body>
   <header class="entete">
     <div class="conteneur entete__barre">
-      <a href="#/" class="logo"><span class="logo__marque" aria-hidden="true">M</span>Morata</a>
+      <a href="#/" class="logo"><span class="logo__marque" aria-hidden="true">M</span>Morata<span class="logo__pdg">Espace PDG</span></a>
+      <a href="#/" class="entete__retour">Voir le site</a>
       <nav class="nav-haut" aria-label="Navigation principale">
         <a href="#/" data-route="accueil">Accueil</a>
         <a href="#/livres" data-route="livres">Livres</a>
@@ -27,7 +28,7 @@
   <main id="app" class="conteneur" tabindex="-1"></main>
 
   <footer class="pied">
-    <div class="conteneur">Morata · Lire moins, retenir plus. Couvertures de livres : <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a>.</div>
+    <div class="conteneur">Morata · Lire moins, retenir plus. Couvertures de livres : <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a>. <a class="pied__pdg" href="#/pdg">Espace PDG</a></div>
   </footer>
 
   <nav class="nav-bas" aria-label="Navigation">
@@ -58,11 +59,13 @@
   <script src="data/chapitres-livres.js"></script>
   <script src="data/histoires.js"></script>
   <script src="data/series.js"></script>
+  <script src="js/contenu.js"></script>
   <script src="js/illustrations.js"></script>
   <script src="js/couvertures.js"></script>
   <script src="js/ia.js"></script>
   <script src="js/boutique.js"></script>
   <script src="js/coach.js"></script>
+  <script src="js/pdg.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

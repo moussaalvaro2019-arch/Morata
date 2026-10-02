@@ -18,6 +18,14 @@
     "amitie": ["#2d5f9a", "#163357"], "spiritualite": ["#136c84", "#0a3a47"]
   };
 
+  // Textes de l'accueil par défaut (modifiables dans l'espace PDG > Page d'accueil).
+  const ACCUEIL_DEFAUT = window.ACCUEIL_DEFAUT = {
+    titre: "Les grands livres et les belles histoires, chapitre par chapitre.",
+    texte: "Des résumés détaillés avec des exemples de chez nous, des histoires en série à suivre chaque jour, et un coach IA pour aller plus loin.",
+    boutiqueTitre: "Achetez les livres de l'auteur",
+    boutiqueTexte: "Commandez directement sur WhatsApp, livraison ou PDF selon le livre."
+  };
+
   // Filtres mémorisés pendant la visite.
   const etat = {
     livres: { recherche: "", filtre: "tous" },
@@ -71,9 +79,22 @@
 
   // ---------- Éléments réutilisables ----------
 
+  // Image choisie par le PDG (window.IMAGES, voir js/contenu.js) ou, à défaut, illustration dessinée.
+  function image(cle) {
+    const src = (window.IMAGES || {})[cle];
+    return src ? `<img src="${echapper(src)}" alt="" loading="lazy">` : "";
+  }
+  function dessin(...cles) {
+    if (!window.ILLUSTRATION) return "";
+    for (const c of cles) { const svg = c && window.ILLUSTRATION(c); if (svg) return svg; }
+    return "";
+  }
+
   // Couverture dessinée ; pour un livre, data-couverture permet d'afficher la vraie couverture (js/couvertures.js).
   function couverture(titre, sousTitre, cleCouleur, livreId) {
     const [c1, c2] = COULEURS[cleCouleur] || ["#0f5c4d", "#0a3f35"];
+    const photo = livreId ? image("livre-" + livreId) : "";
+    if (photo) return `<div class="couverture couverture--photo" aria-hidden="true">${photo}<span class="couverture__titre">${echapper(titre)}</span></div>`;
     return `<div class="couverture" style="--c1:${c1};--c2:${c2}" aria-hidden="true"${livreId ? ` data-couverture="${echapper(livreId)}"` : ""}>
       <span class="couverture__titre">${echapper(titre)}</span>
       <span class="couverture__auteur">${echapper(sousTitre)}</span>
@@ -81,15 +102,15 @@
   }
 
   // Couverture illustrée (séries et thèmes) : un dessin avec le titre par-dessus.
-  function couvertureIllustree(titre, sousTitre, cleIllustration) {
+  function couvertureIllustree(titre, sousTitre, cleImage, ...clesDessin) {
     return `<div class="couverture couverture--illustree" aria-hidden="true">
-      ${window.ILLUSTRATION ? window.ILLUSTRATION(cleIllustration) : ""}
+      ${image(cleImage) || dessin(...clesDessin)}
       <span class="couverture__titre">${echapper(titre)}</span>
       <span class="couverture__auteur">${echapper(sousTitre)}</span>
     </div>`;
   }
-  function bandeau(cleIllustration) {
-    const svg = window.ILLUSTRATION ? window.ILLUSTRATION(cleIllustration) : "";
+  function bandeau(clesImage, ...clesDessin) {
+    const svg = clesImage.map(image).find(Boolean) || dessin(...clesDessin);
     return svg ? `<div class="bandeau" aria-hidden="true">${svg}</div>` : "";
   }
 
@@ -107,11 +128,11 @@
 
   function carteSerie(s) {
     const t = theme(s.theme);
-    const nb = s.chapitres.length;
+    const nb = (s.chapitres || []).length;
     const faits = nbLus("serie:" + s.id);
     return `
       <a class="carte carte--serie" href="#/serie/${echapper(s.id)}">
-        ${couvertureIllustree(s.titre, t.nom, s.id)}
+        ${couvertureIllustree(s.titre, t.nom, "serie-" + s.id, s.id, s.theme)}
         <span class="carte--serie__corps">
           <span class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${nb} chapitres</span></span>
           <h3>${echapper(s.titre)}</h3>
@@ -125,7 +146,7 @@
     const t = theme(h.theme);
     return `
       <a class="carte carte--histoire" href="#/histoires/${echapper(h.id)}">
-        <span class="vignette" aria-hidden="true">${window.ILLUSTRATION ? window.ILLUSTRATION(h.theme) : ""}</span>
+        <span class="vignette" aria-hidden="true">${image("histoire-" + h.id) || image("theme-" + h.theme) || dessin(h.theme)}</span>
         <span class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${h.tempsLecture} min</span></span>
         <h3>${echapper(h.titre)}</h3>
         <p>${echapper(h.resume)}</p>
@@ -138,10 +159,12 @@
     const dernier = lireStockage("morata-dernier", null);
     const livresChapitres = LIVRES.filter(l => chapitresLivre(l.id).length);
     const autresLivres = LIVRES.filter(l => !chapitresLivre(l.id).length);
+    const accueil = { ...ACCUEIL_DEFAUT, ...((window.SITE || {}).accueil || {}) };
     app.innerHTML = `
-      <section class="banniere motif">
-        <h1>Les grands livres et les belles histoires, chapitre par chapitre.</h1>
-        <p>Des résumés détaillés avec des exemples de chez nous, des histoires en série à suivre chaque jour, et un coach IA pour aller plus loin.</p>
+      <section class="banniere motif${image("banniere") ? " banniere--photo" : ""}">
+        ${image("banniere")}
+        <h1>${echapper(accueil.titre)}</h1>
+        <p>${echapper(accueil.texte)}</p>
         <div class="banniere__actions">
           <a class="bouton bouton--clair" href="#/livres">Lire un résumé</a>
           <a class="bouton bouton--accent" href="#/histoires">Suivre une histoire</a>
@@ -160,7 +183,7 @@
       <div class="categories">
         ${THEMES.map(t => `
           <a class="categorie" href="#/histoires/theme/${echapper(t.id)}">
-            <span class="categorie__icone" aria-hidden="true">${window.ILLUSTRATION ? window.ILLUSTRATION(t.id) : t.emoji}</span>${echapper(t.nom)}
+            <span class="categorie__icone" aria-hidden="true">${image("theme-" + t.id) || dessin(t.id) || echapper(t.emoji)}</span>${echapper(t.nom)}
           </a>`).join("")}
       </div>
 
@@ -175,8 +198,8 @@
 
       <div class="section-titre"><h2>Boutique</h2><a href="#/boutique">Voir</a></div>
       <a class="carte" href="#/boutique">
-        <h3>Achetez les livres de l'auteur</h3>
-        <p>Commandez directement sur WhatsApp. Vous êtes l'auteur ? Mettez votre livre en vente en quelques minutes.</p>
+        <h3>${echapper(accueil.boutiqueTitre)}</h3>
+        <p>${echapper(accueil.boutiqueTexte)}</p>
       </a>
 
       ${autresLivres.length ? `
@@ -243,7 +266,7 @@
       placeholder: "Rechercher un titre, un auteur, une idée…",
       filtres: categories.map(c => ({ id: c, nom: c })),
       valeurFiltre: l => l.categorie,
-      texteRecherche: l => [l.titre, l.auteur, l.categorie, l.accroche, ...l.idees.map(i => i.titre + " " + i.texte),
+      texteRecherche: l => [l.titre, l.auteur, l.categorie, l.accroche, ...(l.idees || []).map(i => i.titre + " " + i.texte),
         ...chapitresLivre(l.id).map(c => c.titre)].join(" "),
       rendre: garder => {
         const liste = LIVRES.filter(garder);
@@ -332,7 +355,7 @@
           </a></li>`).join("")}</ol>`;
       } else {
         zone.innerHTML = `
-          ${l.idees.map(i => `<section class="idee"><h3>${echapper(i.titre)}</h3><p>${echapper(i.texte)}</p></section>`).join("")}
+          ${(l.idees || []).map(i => `<section class="idee"><h3>${echapper(i.titre)}</h3><p>${echapper(i.texte)}</p></section>`).join("")}
           ${l.aRetenir ? `<div class="encadre"><strong>À retenir</strong><p>${echapper(l.aRetenir)}</p></div>` : ""}
           ${l.questions && l.questions.length ? `
             <section class="reflexion"><h3>Pour réfléchir</h3><ol>${l.questions.map(q => `<li>${echapper(q)}</li>`).join("")}</ol></section>` : ""}
@@ -387,13 +410,14 @@
     if (!s) return pageIntrouvable();
     const t = theme(s.theme);
     const cle = "serie:" + id;
-    const mots = s.chapitres.reduce((n, c) => n + c.sections.reduce((m, x) => m + motsDe(x.texte), 0), 0);
+    s.chapitres = s.chapitres || [];
+    const mots = s.chapitres.reduce((n, c) => n + (c.sections || []).reduce((m, x) => m + motsDe(x.texte), 0), 0);
     document.title = `${s.titre} · Morata`;
     app.innerHTML = `
       <a class="retour" href="#/histoires">← Histoires</a>
       <article class="fiche">
         <div class="fiche__tete">
-          ${couvertureIllustree(s.titre, t.nom, s.id)}
+          ${couvertureIllustree(s.titre, t.nom, "serie-" + s.id, s.id, s.theme)}
           <div>
             <span class="etiquette">${t.emoji} ${echapper(t.nom)}</span>
             <h1>${echapper(s.titre)}</h1>
@@ -428,7 +452,7 @@
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/serie/${echapper(id)}">← ${echapper(s.titre)}</a>
-        ${n === 1 ? bandeau(s.id) : ""}
+        ${n === 1 ? bandeau(["serie-" + s.id], s.id, s.theme) : ""}
         <div class="progression" aria-label="Chapitre ${n} sur ${s.chapitres.length}"><span style="width:${Math.round(n / s.chapitres.length * 100)}%"></span></div>
         <p class="lecteur__surtitre">Chapitre ${n} sur ${s.chapitres.length}</p>
         <h1>${echapper(c.titre)}</h1>
@@ -437,7 +461,7 @@
             <h2><span>${i + 1}</span>${echapper(x.titre)}</h2>
             ${paragraphes(x.texte)}
           </section>`).join("")}
-        ${c.lecon ? `
+        ${c.lecon && c.lecon.texte ? `
           <div class="encadre"><strong>La leçon du chapitre</strong>${paragraphes(c.lecon.texte)}</div>
           ${c.lecon.exemple ? `<div class="exemple"><strong>Dans votre vie</strong>${paragraphes(c.lecon.exemple)}</div>` : ""}` : ""}
         ${navigationChapitres(`#/serie/${echapper(id)}`, n, s.chapitres.length, s.chapitres.map(x => x.titre))}
@@ -453,7 +477,7 @@
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/histoires">← Histoires</a>
-        ${bandeau(h.theme)}
+        ${bandeau(["histoire-" + h.id, "theme-" + h.theme], h.theme)}
         <div class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${h.tempsLecture} min de lecture</span></div>
         <h1>${echapper(h.titre)}</h1>
         <div class="texte-histoire">${paragraphes(h.texte)}</div>
@@ -474,6 +498,7 @@
     const n = parseInt(arg, 10);
     document.title = "Morata · Livres & Histoires";
     const routeActive = section === "serie" ? "histoires" : (section || "accueil");
+    document.body.classList.toggle("mode-pdg", section === "pdg");
     document.querySelectorAll("[data-route]").forEach(a => a.classList.toggle("actif", a.dataset.route === routeActive));
 
     if (!section) pageAccueil();
@@ -482,6 +507,7 @@
     else if (section === "serie") n ? pageChapitreSerie(id, n) : pageSerie(id);
     else if (section === "boutique") window.pageBoutique(app, id);
     else if (section === "coach") window.pageCoach(app, id, arg);
+    else if (section === "pdg") window.pagePDG(app, id, arg, parties[3]);
     else pageIntrouvable();
 
     if (window.COUVERTURES) window.COUVERTURES.appliquer(app);
@@ -489,5 +515,15 @@
   }
 
   window.addEventListener("hashchange", router);
-  router();
+
+  // Premier affichage : on attend un peu les modifications du PDG pour éviter un changement visible.
+  // Si elles arrivent plus tard, la page lecteur est simplement réaffichée.
+  let premierAffichage = false;
+  const afficherUneFois = () => { if (!premierAffichage) { premierAffichage = true; router(); } };
+  const pret = window.CONTENU ? window.CONTENU.pret : Promise.resolve(false);
+  pret.then(change => {
+    if (!premierAffichage) afficherUneFois();
+    else if (change && !location.hash.startsWith("#/pdg")) router();
+  });
+  setTimeout(afficherUneFois, 1500);
 })();

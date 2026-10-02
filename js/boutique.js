@@ -1,7 +1,8 @@
 // Boutique : livres mis en vente par le propriétaire du site.
 // Où sont gardées les annonces (essayé dans l'ordre) :
 //  1. Dans Claude (aperçu publié) : la base de données de l'artefact.
-//  2. Sur Netlify : la fonction netlify/functions/boutique.mjs (code vendeur dans BOUTIQUE_CODE).
+//  2. Sur Netlify : la fonction netlify/functions/boutique.mjs (mot de passe PDG).
+// Les lecteurs voient les annonces ; ajouter ou retirer un livre se fait dans l'espace PDG.
 //  3. Sinon : le navigateur de cet appareil seulement.
 (function () {
   const CLE_LOCALE = "morata-boutique";
@@ -146,49 +147,46 @@
       </article>`;
   }
 
+  // Page des lecteurs : les annonces, sans bouton d'ajout ni de retrait.
   async function pageBoutique(app, sous) {
-    if (sous === "vendre") return pageVendre(app);
+    if (sous === "vendre") { location.hash = "#/pdg/boutique/nouveau"; return; }
     app.innerHTML = `
       <h1 class="page-titre">Boutique</h1>
-      <p class="page-sous-titre">Les livres de l'auteur, disponibles à la commande.</p>
-      <a class="bouton bouton--accent" href="#/boutique/vendre">+ Mettre mon livre en vente</a>
-      <div class="section-titre"><h2>Livres en vente</h2></div>
-      <div class="grille grille--large" id="annonces"><p class="vide">Chargement…</p></div>
-      <div id="note-stockage"></div>`;
-    const zone = app.querySelector("#annonces");
+      <p class="page-sous-titre">Les livres de l'auteur, disponibles à la commande sur WhatsApp.</p>
+      <div class="grille grille--large" id="annonces"><p class="vide">Chargement…</p></div>`;
+    await remplirAnnonces(app.querySelector("#annonces"), false);
+  }
+
+  // Liste des annonces ; avec gestion = true, chaque annonce a un bouton « Retirer » (espace PDG).
+  async function remplirAnnonces(zone, gestion, apresRetrait) {
     const s = await obtenirStockage();
     let liste = [];
     try { liste = await s.lister(); }
-    catch { zone.innerHTML = `<p class="vide">Impossible de charger la boutique pour le moment.</p>`; return; }
-    if (!document.body.contains(zone)) return;
+    catch { zone.innerHTML = `<p class="vide">Impossible de charger la boutique pour le moment.</p>`; return 0; }
+    if (!document.body.contains(zone)) return liste.length;
     zone.innerHTML = liste.length
-      ? liste.map(l => carteAnnonce(l, s.peutAjouter)).join("")
+      ? liste.map(l => carteAnnonce(l, gestion)).join("")
       : `<div class="carte vide" style="grid-column:1/-1">
            <h3>Aucun livre en vente pour le moment</h3>
-           <p>Ajoutez votre premier livre : titre, prix, photo de couverture et numéro WhatsApp pour recevoir les commandes.</p>
+           <p>${gestion ? "Ajoutez votre premier livre : titre, prix, photo de couverture et numéro WhatsApp pour recevoir les commandes." : "Revenez bientôt : de nouveaux livres arrivent."}</p>
          </div>`;
-    if (s.nom === "local") {
-      app.querySelector("#note-stockage").innerHTML = `<p class="note">Sur cette version du site, les annonces sont enregistrées seulement sur cet appareil. Une fois le site publié sur Netlify avec la boutique activée, elles seront visibles par tous.</p>`;
-    }
     zone.querySelectorAll("[data-supprimer]").forEach(b => b.addEventListener("click", async () => {
       if (b.dataset.confirme !== "1") { b.dataset.confirme = "1"; b.textContent = "Confirmer le retrait"; return; }
-      let code;
-      if (s.demandeCode) {
-        code = window.prompt ? window.prompt("Code vendeur") : null;
-        if (!code) { b.textContent = "Retirer de la vente"; b.dataset.confirme = ""; return; }
-      }
       b.disabled = true;
-      try { await s.supprimer(b.dataset.supprimer, code); pageBoutique(app); }
+      try { await s.supprimer(b.dataset.supprimer, codePDG()); if (apresRetrait) apresRetrait(); }
       catch (e) { b.disabled = false; b.textContent = e.message || "Échec du retrait"; }
     }));
+    return liste.length;
   }
 
-  async function pageVendre(app) {
+  const codePDG = () => (window.CONTENU ? window.CONTENU.code() : "");
+
+  // Formulaire d'ajout, affiché dans l'espace PDG.
+  async function formulaireVente(app, retour) {
     const s = await obtenirStockage();
     app.innerHTML = `
-      <a class="retour" href="#/boutique">← Boutique</a>
       <h1 class="page-titre">Mettre un livre en vente</h1>
-      <p class="page-sous-titre">Votre annonce apparaîtra dans la boutique. Les acheteurs vous contactent sur WhatsApp.</p>
+      <p class="page-sous-titre">L'annonce apparaîtra dans la boutique. Les acheteurs vous contactent sur WhatsApp.</p>
       ${s.peutAjouter === false ? `<p class="message message--erreur">Seul le propriétaire du site peut ajouter des livres.</p>` : `
       <form class="formulaire" id="form-vente" novalidate>
         <label class="champ" for="v-titre">Titre du livre
@@ -218,11 +216,6 @@
           <input id="v-photo" name="photo" type="file" accept="image/*">
         </label>
         <img class="apercu-photo" id="v-apercu" alt="" hidden>
-        ${s.demandeCode ? `
-        <label class="champ" for="v-code">Code vendeur
-          <input id="v-code" name="code" type="password" required autocomplete="off">
-          <small>Le code défini dans les réglages Netlify (BOUTIQUE_CODE).</small>
-        </label>` : ""}
         <div id="v-message" aria-live="polite"></div>
         <button class="bouton bouton--accent" type="submit" id="v-envoyer">Publier l'annonce</button>
       </form>`}`;
@@ -263,8 +256,8 @@
       bouton.disabled = true;
       bouton.textContent = "Publication…";
       try {
-        await s.ajouter(livre, d.get("code"));
-        location.hash = "#/boutique";
+        await s.ajouter(livre, codePDG());
+        location.hash = retour;
       } catch (e) {
         afficher(e && e.code === "invalid_argument" ? "Vous n'avez pas le droit d'ajouter des livres ici." : (e.message || "La publication a échoué."), true);
         bouton.disabled = false;
@@ -274,4 +267,5 @@
   }
 
   window.pageBoutique = pageBoutique;
+  window.BOUTIQUE = { remplirAnnonces, formulaireVente, stockage: obtenirStockage };
 })();
