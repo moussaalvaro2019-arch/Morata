@@ -98,27 +98,41 @@ A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", group
   {id:"eco-8", niv:3, titre:"Financement : actualisation, VAN et TRI", duree:35, nq:4, nex:0},
   {id:"eco-9", niv:3, titre:"Contrôle des coûts : valeur acquise, avenants et réclamations", duree:35, nq:4, nex:0}
  ]});
-A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"sol", icone:"mountain", couleur:"#8B5A2B", niveau:"Intermédiaire", heures:24, ordre:1, prerequis:["mmc", "sp"], resume:"Identification et classification des sols, compactage, résistance au cisaillement, capacité portante, tassements et choix du type de fondation.", objectifs:[
-  "Calculer les paramètres d'état d'un sol (w, γd, e, Sr)",
-  "Classer un sol par sa granulométrie et ses limites d'Atterberg",
-  "Contrôler un compactage (Proctor, CBR)",
-  "Estimer la contrainte admissible et les tassements",
-  "Choisir le type de fondation adapté"
+A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"sol", icone:"mountain", couleur:"#8B5A2B", niveau:"Intermédiaire", heures:75, ordre:1, prerequis:["mmc", "sp"], resume:"Connaître le sol pour bien fonder : paramètres d'état, sols tropicaux et lagunaires, reconnaissance, identification et classification, compactage, contraintes et eau dans le sol, cisaillement, capacité portante, tassements, essais in situ, pieux, poussée des terres, stabilité des pentes et amélioration des sols, avec applications et exercices corrigés.", objectifs:[
+  "Calculer les paramètres d'état d'un sol (w, γ, γd, e, n, Sr)",
+  "Reconnaître les principaux sols de Côte d'Ivoire et leurs pièges",
+  "Identifier et classer un sol (granulométrie, Atterberg, VBS)",
+  "Spécifier et contrôler un compactage (Proctor, CBR)",
+  "Calculer les contraintes effectives et l'effet de l'eau",
+  "Calculer la capacité portante et les tassements d'une fondation",
+  "Interpréter les essais in situ et un rapport d'étude de sol",
+  "Calculer la poussée des terres et vérifier un talus",
+  "Choisir le type de fondation ou d'amélioration de sol adapté"
  ], applications:[
   "Lecture d'un rapport d'étude de sol",
-  "Contrôle des remblais sous dallage",
-  "Dimensionnement des semelles",
-  "Sols difficiles : argiles gonflantes, remblais, zones lagunaires"
- ], src:"data/cours/geo.js?v=cdd3e3d4", chapitres:[
-  {id:"geo-1", niv:1, titre:"Le sol : constituants et paramètres d'état", duree:30, nq:4, nex:0},
-  {id:"geo-6", niv:1, titre:"Reconnaître les sols et les essais simples sur le terrain", duree:25, nq:4, nex:0},
-  {id:"geo-7", niv:1, titre:"L'eau dans le sol : nappe, perméabilité et drainage", duree:25, nq:4, nex:0},
-  {id:"geo-2", niv:2, titre:"Identification et classification", duree:30, nq:4, nex:0},
-  {id:"geo-3", niv:2, titre:"Le compactage : Proctor et CBR", duree:25, nq:4, nex:0},
-  {id:"geo-4", niv:2, titre:"Résistance des sols et capacité portante", duree:35, nq:4, nex:0},
-  {id:"geo-5", niv:3, titre:"Tassements et choix des fondations", duree:30, nq:4, nex:0},
-  {id:"geo-8", niv:3, titre:"Les fondations profondes : pieux", duree:35, nq:4, nex:0},
-  {id:"geo-9", niv:3, titre:"Murs de soutènement et poussée des terres", duree:35, nq:4, nex:0}
+  "Contrôle des remblais et des couches de forme",
+  "Dimensionnement des semelles et choix des fondations",
+  "Fouilles sous la nappe et rabattement",
+  "Sols difficiles : vases lagunaires, argiles gonflantes, remblais, talus instables"
+ ], src:"data/cours/geo.js?v=bc9e1ed3", chapitres:[
+  {id:"geo-1", niv:1, titre:"Le sol : origine, constituants et paramètres d'état", duree:60, nq:5, nex:4},
+  {id:"geo-10", niv:1, titre:"Les sols de Côte d'Ivoire et les sols difficiles", duree:45, nq:5, nex:3},
+  {id:"geo-6", niv:1, titre:"Reconnaître les sols sur le terrain : puits, sondages et essais simples", duree:50, nq:5, nex:3},
+  {id:"geo-7", niv:1, titre:"L'eau dans le sol : nappe, capillarité et drainage", duree:45, nq:5, nex:3},
+  {id:"geo-2", niv:2, titre:"Identification des sols : granulométrie, Atterberg, VBS, équivalent de sable", duree:65, nq:5, nex:4},
+  {id:"geo-11", niv:2, titre:"Classification des sols pour les terrassements et les chaussées", duree:50, nq:5, nex:3},
+  {id:"geo-3", niv:2, titre:"Le compactage : essais Proctor, CBR et contrôle sur chantier", duree:65, nq:5, nex:4},
+  {id:"geo-12", niv:2, titre:"Contraintes dans le sol : poids des terres, contrainte effective et diffusion des charges", duree:65, nq:5, nex:4},
+  {id:"geo-13", niv:2, titre:"Écoulements, perméabilité et rabattement de nappe", duree:60, nq:5, nex:3},
+  {id:"geo-4", niv:2, titre:"Résistance au cisaillement des sols", duree:65, nq:5, nex:4},
+  {id:"geo-14", niv:3, titre:"Capacité portante des fondations superficielles", duree:70, nq:5, nex:5},
+  {id:"geo-5", niv:3, titre:"Tassements et consolidation des sols", duree:70, nq:5, nex:5},
+  {id:"geo-15", niv:3, titre:"Les essais in situ : pénétromètres, SPT, pressiomètre et essai de plaque", duree:65, nq:5, nex:5},
+  {id:"geo-8", niv:3, titre:"Fondations profondes : pieux et micropieux", duree:70, nq:5, nex:5},
+  {id:"geo-9", niv:3, titre:"Poussée et butée des terres, murs de soutènement", duree:70, nq:5, nex:5},
+  {id:"geo-16", niv:3, titre:"Stabilité des talus et des pentes", duree:65, nq:5, nex:5},
+  {id:"geo-17", niv:3, titre:"Amélioration et renforcement des sols", duree:60, nq:5, nex:5},
+  {id:"geo-18", niv:3, titre:"La mission géotechnique et le rapport de sol", duree:50, nq:5, nex:5}
  ]});
 A.addMatiere({id:"mat", titre:"Matériaux de construction", court:"Matériaux", groupe:"constr", icone:"brick", couleur:"#B85C38", niveau:"Débutant", heures:24, ordre:1, prerequis:["sp"], resume:"Granulats, ciments, bétons, mortiers, agglos, aciers, bois et matériaux locaux : choisir, doser, contrôler et bien mettre en œuvre.", objectifs:[
   "Choisir et contrôler les granulats",
