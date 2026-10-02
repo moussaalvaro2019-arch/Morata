@@ -366,26 +366,40 @@ A.addMatiere({id:"sp", titre:"Sciences physiques", court:"Physique-chimie", grou
   {id:"sp-8", niv:3, titre:"Chaleur, changements d'état et dilatation", duree:25, nq:4, nex:0},
   {id:"sp-9", niv:3, titre:"Ondes : le son et la lumière", duree:25, nq:4, nex:0}
  ]});
-A.addMatiere({id:"tech", titre:"Technologie de construction", court:"Technologie", groupe:"constr", icone:"hammer", couleur:"#E8752A", niveau:"Débutant", heures:26, ordre:2, resume:"Les acteurs d'un projet, les systèmes constructifs, fondations, maçonnerie, planchers, escaliers, toitures et second œuvre : comment se construit un bâtiment.", objectifs:[
+A.addMatiere({id:"tech", titre:"Technologie de construction", court:"Technologie", groupe:"constr", icone:"hammer", couleur:"#E8752A", niveau:"Débutant", heures:70, ordre:2, resume:"Comment se construit un bâtiment, du terrain nu à la réception : acteurs et étapes, systèmes constructifs, implantation, fondations, maçonnerie, béton armé sur chantier, planchers, escaliers, toitures, étanchéité, menuiseries, finitions, équipements, immeubles, ossatures métal et bois, construction durable, pathologies et contrôles, avec applications et exercices corrigés.", objectifs:[
   "Identifier les intervenants et les étapes d'un projet",
-  "Distinguer les systèmes constructifs",
-  "Connaître les ouvrages de gros œuvre et leur rôle",
-  "Connaître les corps d'état du second œuvre"
- ], applications:[
-  "Lire un descriptif de travaux",
-  "Comprendre un plan d'exécution",
+  "Nommer et situer tous les ouvrages d'un bâtiment",
+  "Choisir un système constructif et des fondations adaptés",
+  "Connaître la mise en œuvre et les règles de l'art de chaque ouvrage",
   "Organiser l'ordre d'intervention des corps d'état",
-  "Dialoguer avec architectes, bureaux d'études et artisans"
- ], src:"data/cours/tech.js?v=40d4f876", chapitres:[
-  {id:"tech-1", niv:1, titre:"Les acteurs et les étapes d'un projet", duree:25, nq:4, nex:0},
-  {id:"tech-2", niv:1, titre:"Les systèmes constructifs", duree:25, nq:4, nex:0},
-  {id:"tech-4", niv:1, titre:"Maçonnerie et murs", duree:25, nq:4, nex:0},
-  {id:"tech-3", niv:2, titre:"Fondations et infrastructure", duree:25, nq:4, nex:0},
-  {id:"tech-5", niv:2, titre:"Planchers, escaliers et toitures", duree:30, nq:4, nex:0},
-  {id:"tech-6", niv:2, titre:"Le second œuvre", duree:25, nq:4, nex:0},
-  {id:"tech-7", niv:3, titre:"L'étanchéité : terrasses, salles d'eau et sous-sols", duree:30, nq:4, nex:0},
-  {id:"tech-8", niv:3, titre:"Construire en hauteur : immeubles et organisation technique", duree:35, nq:4, nex:0},
-  {id:"tech-9", niv:3, titre:"Pathologies, diagnostic et réhabilitation", duree:35, nq:4, nex:0}
+  "Diagnostiquer les désordres courants et contrôler l'exécution"
+ ], applications:[
+  "Lire un descriptif de travaux et un plan d'exécution",
+  "Implanter et suivre un chantier de maison",
+  "Dimensionner un escalier, une pente de toiture, une forme de pente",
+  "Dialoguer avec architectes, bureaux d'études et artisans",
+  "Réceptionner des ouvrages et rédiger des réserves"
+ ], src:"data/cours/tech.js?v=f27b1140", chapitres:[
+  {id:"tech-1", niv:1, titre:"Les acteurs et les étapes d'un projet de construction", duree:50, nq:5, nex:5},
+  {id:"tech-10", niv:1, titre:"Anatomie d'un bâtiment : vocabulaire et ouvrages", duree:45, nq:5, nex:5},
+  {id:"tech-2", niv:1, titre:"Les systèmes constructifs", duree:50, nq:5, nex:5},
+  {id:"tech-11", niv:1, titre:"Le terrain, l'installation de chantier et l'implantation", duree:50, nq:5, nex:5},
+  {id:"tech-3", niv:1, titre:"Les fondations superficielles et l'infrastructure d'une maison", duree:55, nq:5, nex:5},
+  {id:"tech-4", niv:1, titre:"La maçonnerie : murs, chaînages et ouvertures", duree:55, nq:5, nex:5},
+  {id:"tech-12", niv:2, titre:"Le béton armé sur le chantier : coffrage, ferraillage, bétonnage", duree:60, nq:5, nex:5},
+  {id:"tech-5", niv:2, titre:"Les planchers et les dalles", duree:55, nq:5, nex:5},
+  {id:"tech-13", niv:2, titre:"Les escaliers : vocabulaire, tracé et mise en œuvre", duree:55, nq:5, nex:5},
+  {id:"tech-14", niv:2, titre:"Les toitures inclinées : charpente et couverture", duree:55, nq:5, nex:5},
+  {id:"tech-7", niv:2, titre:"L'étanchéité : toitures-terrasses, salles d'eau et ouvrages enterrés", duree:55, nq:5, nex:5},
+  {id:"tech-15", niv:2, titre:"Les menuiseries extérieures et intérieures", duree:50, nq:5, nex:5},
+  {id:"tech-16", niv:2, titre:"Les finitions : enduits, chapes, carrelages, faux plafonds et peintures", duree:55, nq:5, nex:5},
+  {id:"tech-6", niv:2, titre:"Les équipements techniques : électricité, plomberie et assainissement", duree:60, nq:5, nex:5},
+  {id:"tech-17", niv:3, titre:"Fondations profondes, radiers et ouvrages enterrés", duree:55, nq:5, nex:5},
+  {id:"tech-8", niv:3, titre:"Construire en hauteur : immeubles et organisation technique", duree:60, nq:5, nex:5},
+  {id:"tech-18", niv:3, titre:"Les ossatures métalliques et en bois", duree:55, nq:5, nex:5},
+  {id:"tech-19", niv:3, titre:"Construire durable en climat tropical : bioclimatique et matériaux locaux", duree:55, nq:5, nex:5},
+  {id:"tech-9", niv:3, titre:"Pathologies du bâtiment, diagnostic et réhabilitation", duree:60, nq:5, nex:5},
+  {id:"tech-20", niv:3, titre:"Contrôles d'exécution, réception des travaux et garanties", duree:50, nq:5, nex:5}
  ]});
 A.addMatiere({id:"therm", titre:"Thermique du bâtiment", court:"Thermique", groupe:"phys", icone:"thermo", couleur:"#C8363B", niveau:"Intermédiaire", heures:18, ordre:2, prerequis:["sp", "pb"], resume:"Transferts de chaleur, résistance thermique des parois, ponts thermiques, apports solaires et climatisation : construire des bâtiments frais et économes.", objectifs:[
   "Distinguer conduction, convection et rayonnement",
