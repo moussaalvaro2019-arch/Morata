@@ -71,19 +71,33 @@
 
   // ---------- Éléments réutilisables ----------
 
-  function couverture(titre, sousTitre, cleCouleur) {
+  // Couverture dessinée ; pour un livre, data-couverture permet d'afficher la vraie couverture (js/couvertures.js).
+  function couverture(titre, sousTitre, cleCouleur, livreId) {
     const [c1, c2] = COULEURS[cleCouleur] || ["#0f5c4d", "#0a3f35"];
-    return `<div class="couverture" style="--c1:${c1};--c2:${c2}" aria-hidden="true">
+    return `<div class="couverture" style="--c1:${c1};--c2:${c2}" aria-hidden="true"${livreId ? ` data-couverture="${echapper(livreId)}"` : ""}>
       <span class="couverture__titre">${echapper(titre)}</span>
       <span class="couverture__auteur">${echapper(sousTitre)}</span>
     </div>`;
+  }
+
+  // Couverture illustrée (séries et thèmes) : un dessin avec le titre par-dessus.
+  function couvertureIllustree(titre, sousTitre, cleIllustration) {
+    return `<div class="couverture couverture--illustree" aria-hidden="true">
+      ${window.ILLUSTRATION ? window.ILLUSTRATION(cleIllustration) : ""}
+      <span class="couverture__titre">${echapper(titre)}</span>
+      <span class="couverture__auteur">${echapper(sousTitre)}</span>
+    </div>`;
+  }
+  function bandeau(cleIllustration) {
+    const svg = window.ILLUSTRATION ? window.ILLUSTRATION(cleIllustration) : "";
+    return svg ? `<div class="bandeau" aria-hidden="true">${svg}</div>` : "";
   }
 
   function carteLivre(l) {
     const nb = chapitresLivre(l.id).length;
     return `
       <a class="livre-carte" href="#/livres/${echapper(l.id)}">
-        ${couverture(l.titre, l.auteur, l.categorie)}
+        ${couverture(l.titre, l.auteur, l.categorie, l.id)}
         <span class="livre-carte__infos">
           <span class="livre-carte__titre">${echapper(l.titre)}</span>
           <span class="livre-carte__meta">${nb ? `${nb} chapitres` : `${l.tempsLecture} min`} · ${echapper(l.categorie)}</span>
@@ -97,7 +111,7 @@
     const faits = nbLus("serie:" + s.id);
     return `
       <a class="carte carte--serie" href="#/serie/${echapper(s.id)}">
-        ${couverture(s.titre, t.nom, s.theme)}
+        ${couvertureIllustree(s.titre, t.nom, s.id)}
         <span class="carte--serie__corps">
           <span class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${nb} chapitres</span></span>
           <h3>${echapper(s.titre)}</h3>
@@ -110,7 +124,8 @@
   function carteHistoire(h) {
     const t = theme(h.theme);
     return `
-      <a class="carte" href="#/histoires/${echapper(h.id)}">
+      <a class="carte carte--histoire" href="#/histoires/${echapper(h.id)}">
+        <span class="vignette" aria-hidden="true">${window.ILLUSTRATION ? window.ILLUSTRATION(h.theme) : ""}</span>
         <span class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${h.tempsLecture} min</span></span>
         <h3>${echapper(h.titre)}</h3>
         <p>${echapper(h.resume)}</p>
@@ -124,7 +139,7 @@
     const livresChapitres = LIVRES.filter(l => chapitresLivre(l.id).length);
     const autresLivres = LIVRES.filter(l => !chapitresLivre(l.id).length);
     app.innerHTML = `
-      <section class="banniere">
+      <section class="banniere motif">
         <h1>Les grands livres et les belles histoires, chapitre par chapitre.</h1>
         <p>Des résumés détaillés avec des exemples de chez nous, des histoires en série à suivre chaque jour, et un coach IA pour aller plus loin.</p>
         <div class="banniere__actions">
@@ -145,7 +160,7 @@
       <div class="categories">
         ${THEMES.map(t => `
           <a class="categorie" href="#/histoires/theme/${echapper(t.id)}">
-            <span class="categorie__icone" aria-hidden="true">${t.emoji}</span>${echapper(t.nom)}
+            <span class="categorie__icone" aria-hidden="true">${window.ILLUSTRATION ? window.ILLUSTRATION(t.id) : t.emoji}</span>${echapper(t.nom)}
           </a>`).join("")}
       </div>
 
@@ -208,6 +223,7 @@
         (e.filtre === "tous" || config.valeurFiltre(el) === e.filtre) &&
         (!q || normaliser(config.texteRecherche(el)).includes(q))
       ) || `<p class="vide">Aucun résultat. Essayez un autre mot ou un autre filtre.</p>`;
+      if (window.COUVERTURES) window.COUVERTURES.appliquer(resultats);
     }
     champ.addEventListener("input", () => { e.recherche = champ.value; afficher(); });
     app.querySelectorAll(".puce").forEach(b => b.addEventListener("click", () => {
@@ -276,7 +292,7 @@
       <a class="retour" href="#/livres">← Livres</a>
       <article class="fiche">
         <div class="fiche__tete">
-          ${couverture(l.titre, l.auteur, l.categorie)}
+          ${couverture(l.titre, l.auteur, l.categorie, l.id)}
           <div>
             <span class="etiquette">${echapper(l.categorie)}</span>
             <h1>${echapper(l.titre)}</h1>
@@ -377,7 +393,7 @@
       <a class="retour" href="#/histoires">← Histoires</a>
       <article class="fiche">
         <div class="fiche__tete">
-          ${couverture(s.titre, t.nom, s.theme)}
+          ${couvertureIllustree(s.titre, t.nom, s.id)}
           <div>
             <span class="etiquette">${t.emoji} ${echapper(t.nom)}</span>
             <h1>${echapper(s.titre)}</h1>
@@ -412,6 +428,7 @@
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/serie/${echapper(id)}">← ${echapper(s.titre)}</a>
+        ${n === 1 ? bandeau(s.id) : ""}
         <div class="progression" aria-label="Chapitre ${n} sur ${s.chapitres.length}"><span style="width:${Math.round(n / s.chapitres.length * 100)}%"></span></div>
         <p class="lecteur__surtitre">Chapitre ${n} sur ${s.chapitres.length}</p>
         <h1>${echapper(c.titre)}</h1>
@@ -436,6 +453,7 @@
     app.innerHTML = `
       <article class="lecteur">
         <a class="retour" href="#/histoires">← Histoires</a>
+        ${bandeau(h.theme)}
         <div class="meta"><span class="etiquette">${t.emoji} ${echapper(t.nom)}</span><span>${h.tempsLecture} min de lecture</span></div>
         <h1>${echapper(h.titre)}</h1>
         <div class="texte-histoire">${paragraphes(h.texte)}</div>
@@ -466,6 +484,7 @@
     else if (section === "coach") window.pageCoach(app, id, arg);
     else pageIntrouvable();
 
+    if (window.COUVERTURES) window.COUVERTURES.appliquer(app);
     window.scrollTo(0, 0);
   }
 
