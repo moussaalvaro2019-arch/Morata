@@ -59,20 +59,42 @@
       </section>
       <div class="choix">
         <a href="#/livres">
-          <div class="grand">📚</div>
+          <div class="grand">${LIVRES.length}</div>
           <h2>Livres</h2>
-          <p>${LIVRES.length} résumés des idées essentielles, à lire en quelques minutes.</p>
+          <p>Résumés des idées essentielles, à lire en quelques minutes.</p>
         </a>
         <a href="#/histoires">
-          <div class="grand">📖</div>
+          <div class="grand">${HISTOIRES.length}</div>
           <h2>Histoires</h2>
-          <p>${HISTOIRES.length} histoires sur l'amour, la philosophie, la finance et bien plus.</p>
+          <p>Histoires sur l'amour, la philosophie, la finance et bien plus.</p>
+        </a>
+        <a href="#/coach">
+          <div class="grand">IA</div>
+          <h2>Coach IA</h2>
+          <p>Réfléchir à une situation, approfondir un livre ou inventer une histoire avec l'IA.</p>
         </a>
       </div>
+      ${blocExerciceDuJour()}
       <div class="section-titre"><h2>Derniers résumés</h2><a href="#/livres">Tout voir →</a></div>
       <div class="grille">${LIVRES.slice(0, 3).map(carteLivre).join("")}</div>
       <div class="section-titre"><h2>Histoires à découvrir</h2><a href="#/histoires">Tout voir →</a></div>
-      <div class="grille">${HISTOIRES.slice(0, 3).map(carteHistoire).join("")}</div>`;
+      <div class="grille">${["amour", "developpement-personnel", "finance"].map(t => HISTOIRES.find(h => h.theme === t)).filter(Boolean).map(carteHistoire).join("")}</div>`;
+  }
+
+  // Une question différente chaque jour, tirée des livres.
+  function blocExerciceDuJour() {
+    const toutes = [];
+    LIVRES.forEach(l => (l.questions || []).forEach(q => toutes.push({ q, l })));
+    if (!toutes.length) return "";
+    const jour = Math.floor(Date.now() / 86400000);
+    const { q, l } = toutes[jour % toutes.length];
+    return `
+      <section class="encadre jour">
+        <strong>Question du jour</strong>
+        <p class="jour__question">${echapper(q)}</p>
+        <p class="jour__source">Inspirée de <a href="#/livres/${echapper(l.id)}">${echapper(l.titre)}</a></p>
+        <a class="bouton" href="#/coach/livre/${echapper(l.id)}">En parler avec le coach IA</a>
+      </section>`;
   }
 
   // Page liste générique (livres ou histoires) avec recherche et filtres.
@@ -159,6 +181,13 @@
             <p>${echapper(i.texte)}</p>
           </section>`).join("")}
         ${l.aRetenir ? `<div class="encadre"><strong>À retenir</strong>${echapper(l.aRetenir)}</div>` : ""}
+        ${l.questions && l.questions.length ? `
+          <section class="reflexion">
+            <h2>Pour réfléchir</h2>
+            <ol>${l.questions.map(q => `<li>${echapper(q)}</li>`).join("")}</ol>
+          </section>` : ""}
+        ${l.action ? `<div class="encadre"><strong>Passer à l'action</strong>${echapper(l.action)}</div>` : ""}
+        <a class="bouton bouton--large" href="#/coach/livre/${echapper(l.id)}">🧠 Approfondir ce livre avec le coach IA</a>
       </article>`;
   }
 
@@ -176,6 +205,7 @@
           ${h.texte.split(/\n\s*\n/).map(p => `<p>${echapper(p)}</p>`).join("")}
         </div>
         ${h.morale ? `<div class="encadre"><strong>Morale</strong>${echapper(h.morale)}</div>` : ""}
+        <a class="bouton bouton--large" href="#/coach/histoire/${echapper(h.theme)}">✨ Inventer une nouvelle histoire « ${echapper(t.nom)} » avec l'IA</a>
       </article>`;
   }
 
@@ -190,7 +220,7 @@
   // ---------- Navigation ----------
 
   function router() {
-    const [section, id] = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
+    const [section, id, arg] = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
     document.title = "Morata · Livres & Histoires";
     document.querySelectorAll(".nav a").forEach(a =>
       a.classList.toggle("actif", a.dataset.route === (section || "accueil"))
@@ -199,6 +229,7 @@
     if (!section) pageAccueil();
     else if (section === "livres") id ? pageLivre(id) : pageLivres();
     else if (section === "histoires") id ? pageHistoire(id) : pageHistoires();
+    else if (section === "coach") window.pageCoach(app, id, arg);
     else pageIntrouvable();
 
     window.scrollTo(0, 0);

@@ -85,5 +85,68 @@ window.HISTOIRES = [
     resume: "Un professeur vient apprendre auprès d'un maître zen.",
     texte: "Un professeur réputé rendit visite à un maître zen pour qu'il lui enseigne le zen. Pendant que le maître préparait le thé, le professeur parlait sans arrêt de ses connaissances et de ses opinions.\n\nLe maître commença à verser le thé dans la tasse de son invité. La tasse fut bientôt pleine, mais il continua de verser. Le thé déborda sur la table.\n\n« Arrêtez, elle est pleine ! » s'écria le professeur.\n\n« Comme cette tasse, répondit le maître, vous êtes plein de vos opinions. Comment pourrais-je vous enseigner quoi que ce soit si vous ne videz pas d'abord votre tasse ? »",
     morale: "Pour apprendre, il faut d'abord accepter de ne pas tout savoir."
+  },
+  {
+    id: "les-lettres-du-mardi",
+    titre: "Les lettres du mardi",
+    theme: "amour",
+    tempsLecture: 4,
+    resume: "Une lettre par semaine, pendant deux ans, pour un amour séparé par la mer.",
+    texte: "Quand Aïcha partit étudier à Lyon, Youssouf resta à Abidjan. Les appels coûtaient cher et la connexion coupait sans arrêt. Alors ils firent un pacte : chaque mardi, chacun écrirait une vraie lettre, sur du papier.\n\nAu début, les lettres parlaient de manque. Puis elles parlèrent de tout : le prix du garba qui augmentait, la neige qu'Aïcha voyait pour la première fois, les doutes, les petites victoires. Youssouf découvrit qu'il connaissait mieux Aïcha par écrit qu'en face, parce qu'on ose écrire ce qu'on n'ose pas dire.\n\nUn mardi, aucune lettre n'arriva. Ni le suivant. Youssouf crut que tout était fini. Le troisième mardi, on frappa à sa porte. C'était Aïcha, une valise à la main, ses études terminées un mois plus tôt que prévu.\n\nElle lui tendit une enveloppe : « C'est la lettre de ce mardi. Je voulais te la donner en main propre. » À l'intérieur, une seule phrase : « Toutes ces lettres m'ont appris que je ne voulais pas d'autre destinataire que toi. »",
+    morale: "La distance n'éteint pas l'amour quand on prend le temps de se parler vraiment."
+  },
+  {
+    id: "le-parapluie-jaune",
+    titre: "Le parapluie jaune",
+    theme: "amour",
+    tempsLecture: 3,
+    resume: "Elle oubliait toujours son parapluie. Il en avait toujours un de trop.",
+    texte: "Chaque matin, à l'arrêt de bus, Fatou oubliait son parapluie. Et chaque matin de pluie, un jeune homme silencieux lui tendait un parapluie jaune, puis montait dans le bus sans un mot.\n\nElle le lui rendait le soir, à la descente du bus. « Merci. » « De rien. » Ce fut toute leur conversation pendant trois mois.\n\nUn jour, elle remarqua qu'il était trempé : il n'avait qu'un seul parapluie, et il le lui donnait. Elle lui demanda pourquoi. Il rougit : « Parce que c'est la seule façon que j'ai trouvée pour vous parler deux fois par jour. »\n\nLe lendemain, il pleuvait. Fatou arriva avec son propre parapluie, l'ouvrit, et lui fit une place dessous. « Comme ça, on pourra parler pendant tout le trajet. »",
+    morale: "Les plus belles histoires commencent souvent par de petits gestes répétés avec sincérité."
+  },
+  {
+    id: "les-deux-jardins",
+    titre: "Les deux jardins",
+    theme: "amour",
+    tempsLecture: 3,
+    resume: "Un vieux jardinier explique à un jeune marié pourquoi son amour se fane.",
+    texte: "Six mois après son mariage, Koffi se plaignait à son grand-père : « Au début, tout était facile. Maintenant on se dispute pour rien. L'amour s'en va. »\n\nLe grand-père l'emmena dans son jardin. D'un côté, des fleurs magnifiques. De l'autre, des herbes sèches. « J'ai planté les mêmes graines des deux côtés, le même jour. »\n\n« Alors pourquoi celui-ci est mort ? » demanda Koffi.\n\n« Parce que je ne l'ai arrosé qu'au début. Je pensais qu'une fois les fleurs sorties, elles pousseraient toutes seules. L'amour, c'est pareil. Le jour du mariage, on plante. Mais chaque jour, il faut arroser : un mot gentil, un merci, une écoute, un pardon. »\n\nCe soir-là, Koffi rentra avec des fleurs, et surtout avec une question pour sa femme : « Qu'est-ce que je pourrais faire pour que tu te sentes mieux aimée ? »",
+    morale: "L'amour ne meurt pas d'un coup : il se dessèche quand on oublie de l'entretenir."
+  },
+  {
+    id: "la-promesse-du-pecheur",
+    titre: "La promesse du pêcheur",
+    theme: "amour",
+    tempsLecture: 3,
+    resume: "Pendant une tempête, une femme allume une lampe chaque nuit.",
+    texte: "Dans un village au bord de la mer, un pêcheur partit un matin. Le soir, une tempête se leva et son bateau ne revint pas. Tout le village le crut perdu.\n\nSa femme, Mariam, refusa de pleurer. Chaque nuit, elle allumait une lampe à huile à la fenêtre qui donnait sur la mer. Les voisins lui disaient d'accepter la réalité. Elle répondait : « Il m'a promis de rentrer. Je lui ai promis de l'attendre. Je tiens ma part. »\n\nAu bout de neuf nuits, un bateau abîmé apparut au loin. Son mari avait été poussé sur une île et avait réparé sa barque avec ce qu'il trouvait. Pour retrouver le village dans le noir, il avait suivi une petite lumière, toujours au même endroit.\n\n« Sans ta lampe, lui dit-il, je me serais perdu à quelques mètres de la maison. »",
+    morale: "La fidélité et l'espérance sont parfois la lumière qui ramène ceux qu'on aime."
+  },
+  {
+    id: "la-caverne",
+    titre: "Les prisonniers de la caverne",
+    theme: "philosophie",
+    tempsLecture: 3,
+    resume: "La célèbre allégorie de Platon : et si ce que nous voyons n'était que des ombres ?",
+    texte: "Imaginez des hommes enchaînés depuis leur naissance au fond d'une caverne, face à un mur. Derrière eux brûle un feu. Entre le feu et eux passent des objets, et ils n'en voient que les ombres sur le mur. Pour eux, ces ombres sont la réalité.\n\nUn jour, l'un d'eux est libéré. Il se retourne, voit le feu, et la lumière lui fait mal aux yeux. On le traîne dehors, au soleil. D'abord ébloui, il découvre peu à peu les arbres, le ciel, le vrai monde.\n\nPlein de joie, il redescend pour libérer ses compagnons. Mais ses yeux, habitués au soleil, ne voient plus bien dans l'obscurité. Les autres se moquent de lui : « Tu vois, sortir t'a abîmé les yeux ! » Et ils refusent de le suivre.",
+    morale: "Apprendre fait parfois mal et nous éloigne des idées confortables. Mais la vérité vaut toujours mieux que les ombres."
+  },
+  {
+    id: "le-mendiant-assis-sur-un-tresor",
+    titre: "Le mendiant assis sur un trésor",
+    theme: "developpement-personnel",
+    tempsLecture: 2,
+    resume: "Trente ans à mendier assis sur une vieille caisse.",
+    texte: "Un mendiant était assis au bord d'une route depuis plus de trente ans. Un jour, un voyageur passa. « Une petite pièce ? » demanda le mendiant. « Je n'ai rien à vous donner, répondit le voyageur. Mais sur quoi êtes-vous assis ? »\n\n« Rien, juste une vieille caisse. Je suis assis dessus depuis toujours. »\n\n« Avez-vous déjà regardé à l'intérieur ? » « Non, à quoi bon ? Elle est vide. » « Regardez quand même. »\n\nLe mendiant força le couvercle. La caisse était remplie d'or.",
+    morale: "Nous cherchons souvent à l'extérieur ce que nous possédons déjà en nous : des talents, des idées, une force. Il faut oser ouvrir la caisse."
+  },
+  {
+    id: "le-boulanger-et-les-pieces",
+    titre: "Le boulanger et les pièces",
+    theme: "finance",
+    tempsLecture: 2,
+    resume: "Une pièce de côté chaque jour : bêtise ou génie ?",
+    texte: "Un jeune boulanger gagnait peu. Chaque soir, il mettait une seule pièce dans une jarre. Ses amis riaient : « Avec une pièce par jour, tu ne seras jamais riche ! »\n\nAu bout d'un an, la jarre lui permit d'acheter un second four. Il fit deux fois plus de pain, et mit alors deux pièces par jour. La deuxième année, il embaucha un apprenti. La troisième, il ouvrit une seconde boulangerie.\n\nSes amis, eux, gagnaient autant que lui au départ, mais dépensaient tout au marché chaque semaine. Dix ans plus tard, ils travaillaient dans ses boulangeries.",
+    morale: "La richesse ne vient pas d'un coup de chance mais d'une petite discipline répétée et réinvestie."
   }
 ];

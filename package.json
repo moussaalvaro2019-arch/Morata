@@ -1,0 +1,10 @@
+{
+  "name": "morata",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Morata : résumés des grands livres de développement personnel, histoires par thème et coach IA.",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0"
+  }
+}
