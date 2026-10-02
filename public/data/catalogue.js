@@ -375,20 +375,41 @@ A.addMatiere({id:"therm", titre:"Thermique du bâtiment", court:"Thermique", gro
   {id:"therm-8", niv:3, titre:"Régime variable : inertie, déphasage et amortissement", duree:30, nq:4, nex:0},
   {id:"therm-9", niv:3, titre:"Performance énergétique et consommation de climatisation", duree:30, nq:4, nex:0}
  ]});
-A.addMatiere({id:"topo", titre:"Topographie", court:"Topographie", groupe:"sol", icone:"map", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:22, ordre:2, prerequis:["math"], resume:"Mesures de distances, d'angles et d'altitudes, calculs de coordonnées, nivellement, implantation des bâtiments, levés et cubatures.", objectifs:[
-  "Utiliser les unités d'angles (degrés, grades) et les systèmes de coordonnées",
-  "Réaliser et calculer un nivellement",
-  "Calculer gisements, distances et surfaces par coordonnées",
+A.addMatiere({id:"topo", titre:"Topographie", court:"Topographie", groupe:"sol", icone:"map", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:80, ordre:2, prerequis:["math"], resume:"Mesurer, calculer et implanter : unités et échelles, instruments, distances, nivellement, angles, gisements et coordonnées, surfaces, implantation des bâtiments, profils, polygonation, station totale, GNSS, tracé routier et cubatures, avec applications et exercices corrigés.", objectifs:[
+  "Utiliser les unités d'angles (grades, degrés) et les échelles des plans",
+  "Mettre en station et utiliser niveau, théodolite, station totale et GNSS",
+  "Mesurer des distances et appliquer les corrections",
+  "Réaliser, calculer et compenser un nivellement",
+  "Calculer gisements, distances, coordonnées et surfaces",
   "Implanter un bâtiment et contrôler l'implantation",
-  "Calculer des cubatures de terrassement"
- ], applications:["Plan de bornage et levé de terrain", "Niveau ±0,00 du bâtiment", "Implantation des axes et des poteaux", "Volumes de déblais et de remblais"], src:"data/cours/topo.js?v=2a661ebe", chapitres:[
-  {id:"topo-1", niv:1, titre:"Notions de base : échelles, angles et coordonnées", duree:20, nq:4, nex:0},
-  {id:"topo-2", niv:1, titre:"Mesure des distances et des angles", duree:25, nq:4, nex:0},
-  {id:"topo-6", niv:1, titre:"Lire un plan topographique et un plan de lotissement", duree:25, nq:4, nex:0},
-  {id:"topo-3", niv:2, titre:"Le nivellement", duree:30, nq:4, nex:0},
-  {id:"topo-4", niv:2, titre:"Calculs topographiques", duree:35, nq:4, nex:0},
-  {id:"topo-5", niv:2, titre:"Implantation, levés et cubatures", duree:30, nq:4, nex:0},
-  {id:"topo-7", niv:3, titre:"GNSS (GPS) et systèmes de coordonnées", duree:30, nq:4, nex:0},
-  {id:"topo-8", niv:3, titre:"Tracé routier : courbes et profils", duree:35, nq:4, nex:0},
-  {id:"topo-9", niv:3, titre:"Polygonation et compensation des erreurs", duree:35, nq:4, nex:0}
+  "Calculer et compenser une polygonale",
+  "Établir des profils et calculer des cubatures de terrassement",
+  "Implanter une courbe circulaire de route"
+ ], applications:[
+  "Levé et plan topographique d'une parcelle",
+  "Report du niveau ±0,00 et des niveaux de plateforme",
+  "Implantation des axes et des poteaux d'un bâtiment",
+  "Profils de route et de canalisation",
+  "Volumes de déblais et de remblais",
+  "Lotissement et bornage"
+ ], src:"data/cours/topo.js?v=b548bf5b", chapitres:[
+  {id:"topo-1", niv:1, titre:"Notions de base : unités, échelles et coordonnées", duree:55, nq:5, nex:5},
+  {id:"topo-10", niv:1, titre:"Les instruments du topographe et la mise en station", duree:50, nq:5, nex:4},
+  {id:"topo-2", niv:1, titre:"Mesure des distances et corrections", duree:55, nq:5, nex:4},
+  {id:"topo-6", niv:1, titre:"Lire un plan topographique, un plan de lotissement et un dossier foncier", duree:50, nq:5, nex:4},
+  {id:"topo-11", niv:1, titre:"Courbes de niveau, relief et profil en long simple", duree:50, nq:5, nex:4},
+  {id:"topo-3", niv:2, titre:"Le nivellement direct : principe, cheminement et compensation", duree:70, nq:5, nex:4},
+  {id:"topo-12", niv:2, titre:"Le nivellement sur le chantier : repères, plateformes et pentes", duree:55, nq:5, nex:4},
+  {id:"topo-13", niv:2, titre:"Mesure des angles au théodolite", duree:55, nq:5, nex:4},
+  {id:"topo-4", niv:2, titre:"Gisements, distances et coordonnées", duree:70, nq:5, nex:4},
+  {id:"topo-14", niv:2, titre:"Calcul des surfaces et division des parcelles", duree:55, nq:5, nex:4},
+  {id:"topo-5", niv:2, titre:"Implantation d'un bâtiment", duree:70, nq:5, nex:4},
+  {id:"topo-15", niv:2, titre:"Profils en long, profils en travers et lignes de projet", duree:60, nq:5, nex:4},
+  {id:"topo-9", niv:3, titre:"Polygonation : cheminement, fermetures et compensation", duree:80, nq:5, nex:4},
+  {id:"topo-16", niv:3, titre:"Tachéométrie et levé de détails à la station totale", duree:60, nq:5, nex:3},
+  {id:"topo-17", niv:3, titre:"Intersection, relèvement et densification du canevas", duree:50, nq:5, nex:3},
+  {id:"topo-7", niv:3, titre:"GNSS (GPS) et systèmes de coordonnées", duree:55, nq:5, nex:3},
+  {id:"topo-8", niv:3, titre:"Tracé routier : courbes circulaires et implantation", duree:70, nq:5, nex:4},
+  {id:"topo-18", niv:3, titre:"Cubatures et mouvements des terres", duree:70, nq:5, nex:4},
+  {id:"topo-19", niv:3, titre:"Erreurs, précision et tolérances des mesures", duree:55, nq:5, nex:4}
  ]});
