@@ -379,26 +379,41 @@ A.addMatiere({id:"rdm", titre:"Résistance des matériaux", court:"RDM", groupe:
   {id:"rdm-21", niv:3, titre:"La méthode de Cross (distribution des moments)", duree:75, nq:5, nex:4},
   {id:"rdm-22", niv:3, titre:"Lignes d'influence et charges mobiles", duree:55, nq:5, nex:5}
  ]});
-A.addMatiere({id:"ro", titre:"Recherche opérationnelle", court:"Recherche op.", groupe:"fond", icone:"network", couleur:"#8E4FD1", niveau:"Intermédiaire", heures:20, ordre:4, prerequis:["math"], resume:"Modéliser et optimiser : programmation linéaire, ordonnancement PERT et MPM, chemin critique, transport, affectation et gestion des stocks appliqués au chantier.", objectifs:[
-  "Modéliser un problème de décision (variables, contraintes, objectif)",
-  "Résoudre graphiquement un programme linéaire",
-  "Construire un réseau PERT et trouver le chemin critique",
-  "Optimiser des transports, des affectations et des stocks"
+A.addMatiere({id:"ro", titre:"Recherche opérationnelle", court:"Recherche op.", groupe:"fond", icone:"network", couleur:"#8E4FD1", niveau:"Intermédiaire", heures:60, ordre:4, prerequis:["math"], resume:"Les méthodes pour décider et optimiser sur un chantier ou dans une entreprise du bâtiment : modélisation, graphes (plus court chemin, réseaux de longueur minimale), planification PERT et MPM, marges, lissage, délais probabilistes, compression des délais, gestion des stocks, programmation linéaire et simplexe, transport, affectation, files d'attente, décision dans l'incertain et renouvellement du matériel.", objectifs:[
+  "Traduire un problème de chantier en variables, contraintes et objectif",
+  "Trouver un plus court chemin et un réseau de longueur minimale",
+  "Construire un planning PERT ou MPM, calculer dates, marges et chemin critique",
+  "Lisser les ressources et réduire un délai au moindre coût",
+  "Estimer la probabilité de respecter un délai",
+  "Calculer la quantité économique de commande et le point de commande",
+  "Résoudre un programme linéaire graphiquement et par le simplexe",
+  "Optimiser des transports et des affectations",
+  "Analyser une file d'attente de camions et choisir dans l'incertain"
  ], applications:[
-  "Planning et délais d'un chantier",
+  "Itinéraires de livraison et réseaux de VRD d'un lotissement",
+  "Planning, délais et pénalités d'un chantier",
+  "Approvisionnement en ciment et en aciers",
   "Répartition des camions entre carrières et chantiers",
   "Affectation des équipes aux tâches",
-  "Quantité économique de commande de ciment"
- ], src:"data/cours/ro.js?v=465c2111", chapitres:[
-  {id:"ro-1", niv:1, titre:"Modéliser un problème de décision", duree:20, nq:4, nex:0},
-  {id:"ro-7", niv:1, titre:"Organiser des tâches : antériorités et Gantt", duree:25, nq:4, nex:0},
-  {id:"ro-8", niv:1, titre:"Graphes et plus court chemin", duree:25, nq:4, nex:0},
-  {id:"ro-3", niv:2, titre:"Ordonnancement : le PERT et le chemin critique", duree:35, nq:4, nex:0},
-  {id:"ro-4", niv:2, titre:"Méthode des potentiels, Gantt et lissage", duree:25, nq:4, nex:0},
-  {id:"ro-6", niv:2, titre:"Gestion des stocks : la formule de Wilson", duree:25, nq:4, nex:0},
-  {id:"ro-2", niv:3, titre:"Programmation linéaire", duree:35, nq:4, nex:0},
-  {id:"ro-5", niv:3, titre:"Problèmes de transport et d'affectation", duree:30, nq:4, nex:0},
-  {id:"ro-9", niv:3, titre:"Décider dans l'incertain : risques et simulation", duree:30, nq:4, nex:0}
+  "Choix du matériel, de son nombre et de sa date de renouvellement"
+ ], src:"data/cours/ro.js?v=be291008", chapitres:[
+  {id:"ro-1", niv:1, titre:"Modéliser un problème de décision", duree:45, nq:5, nex:5},
+  {id:"ro-7", niv:1, titre:"Organiser des tâches : antériorités, niveaux et diagramme de Gantt", duree:45, nq:5, nex:5},
+  {id:"ro-8", niv:1, titre:"Graphes et plus court chemin", duree:45, nq:5, nex:5},
+  {id:"ro-10", niv:1, titre:"Arbre couvrant minimal : réseaux d'eau, d'électricité et de pistes", duree:40, nq:5, nex:5},
+  {id:"ro-11", niv:1, titre:"Choisir entre plusieurs solutions : analyse multicritère et seuil de rentabilité", duree:40, nq:5, nex:5},
+  {id:"ro-3", niv:2, titre:"Ordonnancement PERT : dates, marges et chemin critique", duree:55, nq:5, nex:5},
+  {id:"ro-4", niv:2, titre:"Méthode des potentiels (MPM), Gantt et lissage des ressources", duree:50, nq:5, nex:5},
+  {id:"ro-12", niv:2, titre:"PERT probabiliste : la probabilité de tenir un délai", duree:45, nq:5, nex:5},
+  {id:"ro-13", niv:2, titre:"Réduire la durée d'un projet au moindre coût", duree:45, nq:5, nex:5},
+  {id:"ro-6", niv:2, titre:"Gestion des stocks : quantité économique et point de commande", duree:45, nq:5, nex:5},
+  {id:"ro-2", niv:2, titre:"Programmation linéaire : résolution graphique", duree:55, nq:5, nex:5},
+  {id:"ro-14", niv:3, titre:"La méthode du simplexe", duree:60, nq:5, nex:5},
+  {id:"ro-5", niv:3, titre:"Le problème de transport", duree:60, nq:5, nex:5},
+  {id:"ro-15", niv:3, titre:"Le problème d'affectation : la méthode hongroise", duree:50, nq:5, nex:5},
+  {id:"ro-16", niv:3, titre:"Files d'attente : camions, chargeuses et pompes à béton", duree:50, nq:5, nex:5},
+  {id:"ro-9", niv:3, titre:"Décider dans l'incertain : critères, arbres de décision et simulation", duree:55, nq:5, nex:5},
+  {id:"ro-17", niv:3, titre:"Renouvellement du matériel : quand remplacer un engin ?", duree:45, nq:5, nex:5}
  ]});
 A.addMatiere({id:"sp", titre:"Sciences physiques", court:"Physique-chimie", groupe:"fond", icone:"atom", couleur:"#0E8C95", niveau:"Débutant", heures:60, ordre:3, resume:"La physique et la chimie utiles au technicien du bâtiment : unités, masse et poids, mouvements, forces et équilibre, machines simples, dynamique, énergie et puissance, électricité continue, alternative et triphasée, réactions chimiques, pH, chimie du ciment, de la chaux et du plâtre, corrosion des armatures, chaleur et dilatation, ondes, moteurs et transformateurs.", objectifs:[
   "Utiliser correctement les unités du système international et les conversions",
