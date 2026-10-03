@@ -345,21 +345,21 @@ A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", grou
   "Flèche d'une poutre et fréquence propre d'un plancher",
   "Volumes de terrassement par Simpson",
   "Vérification des résultats d'un logiciel de calcul"
- ], src:"data/cours/om.js?v=a08cb8be", chapitres:[
-  {id:"om-3", niv:1, titre:"Vecteurs, forces et moments", duree:45, nq:5, nex:5},
-  {id:"om-6", niv:1, titre:"Fonctions usuelles et lecture de graphiques", duree:40, nq:5, nex:5},
-  {id:"om-7", niv:1, titre:"Taux de variation et notion de dérivée", duree:40, nq:5, nex:5},
-  {id:"om-10", niv:1, titre:"Angles en radians et fonctions trigonométriques", duree:40, nq:5, nex:5},
-  {id:"om-1", niv:2, titre:"Dérivées et recherche d'extremum", duree:50, nq:5, nex:5},
-  {id:"om-11", niv:2, titre:"Exponentielle, logarithme népérien et phénomènes d'évolution", duree:45, nq:5, nex:5},
-  {id:"om-2", niv:2, titre:"Intégrales : résultantes, centres de gravité et inerties", duree:55, nq:5, nex:5},
-  {id:"om-12", niv:2, titre:"Intégration en RDM : diagrammes et déformées", duree:55, nq:5, nex:5},
-  {id:"om-4", niv:2, titre:"Matrices et systèmes linéaires", duree:50, nq:5, nex:5},
-  {id:"om-5", niv:3, titre:"Équations différentielles : refroidissement, déformées et vibrations", duree:55, nq:5, nex:5},
-  {id:"om-8", niv:3, titre:"Méthodes numériques : dichotomie, Newton, trapèzes, Simpson, Euler", duree:55, nq:5, nex:5},
-  {id:"om-9", niv:3, titre:"Calcul matriciel des structures : la méthode des déplacements", duree:60, nq:5, nex:5},
-  {id:"om-13", niv:3, titre:"Statistiques et régression linéaire appliquées aux essais", duree:50, nq:5, nex:5},
-  {id:"om-14", niv:3, titre:"Approximations, ordres de grandeur et incertitudes", duree:45, nq:5, nex:5}
+ ], src:"data/cours/om.js?v=1a652453", chapitres:[
+  {id:"om-3", niv:1, titre:"Vecteurs, forces et moments", duree:45, nq:5, nex:5, ns:1},
+  {id:"om-6", niv:1, titre:"Fonctions usuelles et lecture de graphiques", duree:40, nq:5, nex:5, ns:1},
+  {id:"om-7", niv:1, titre:"Taux de variation et notion de dérivée", duree:40, nq:5, nex:5, ns:1},
+  {id:"om-10", niv:1, titre:"Angles en radians et fonctions trigonométriques", duree:40, nq:5, nex:5, ns:1},
+  {id:"om-1", niv:2, titre:"Dérivées et recherche d'extremum", duree:50, nq:5, nex:5, ns:1},
+  {id:"om-11", niv:2, titre:"Exponentielle, logarithme népérien et phénomènes d'évolution", duree:45, nq:5, nex:5, ns:1},
+  {id:"om-2", niv:2, titre:"Intégrales : résultantes, centres de gravité et inerties", duree:55, nq:5, nex:5, ns:1},
+  {id:"om-12", niv:2, titre:"Intégration en RDM : diagrammes et déformées", duree:55, nq:5, nex:5, ns:1},
+  {id:"om-4", niv:2, titre:"Matrices et systèmes linéaires", duree:50, nq:5, nex:5, ns:1},
+  {id:"om-5", niv:3, titre:"Équations différentielles : refroidissement, déformées et vibrations", duree:55, nq:5, nex:5, ns:1},
+  {id:"om-8", niv:3, titre:"Méthodes numériques : dichotomie, Newton, trapèzes, Simpson, Euler", duree:55, nq:5, nex:5, ns:1},
+  {id:"om-9", niv:3, titre:"Calcul matriciel des structures : la méthode des déplacements", duree:60, nq:5, nex:5, ns:1},
+  {id:"om-13", niv:3, titre:"Statistiques et régression linéaire appliquées aux essais", duree:50, nq:5, nex:5, ns:1},
+  {id:"om-14", niv:3, titre:"Approximations, ordres de grandeur et incertitudes", duree:45, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", groupe:"phys", icone:"sun", couleur:"#D9921B", niveau:"Intermédiaire", heures:55, ordre:1, prerequis:["sp"], resume:"Concevoir des bâtiments sains, frais, lumineux et sûrs en climat tropical : climats de Côte d'Ivoire, course du soleil et protections solaires, confort, éclairage naturel et artificiel, eau et humidité, air humide et condensation, ventilation naturelle et qualité de l'air, sécurité et résistance au feu, énergie solaire photovoltaïque.", objectifs:[
   "Lire les données climatiques et adapter le bâtiment au climat",
