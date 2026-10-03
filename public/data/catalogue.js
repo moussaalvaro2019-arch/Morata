@@ -231,22 +231,37 @@ A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", i
   {id:"math-15", niv:3, titre:"Probabilités et contrôle par échantillonnage", duree:45, nq:5, nex:5},
   {id:"math-8", niv:3, titre:"Mathématiques financières : intérêts, actualisation et amortissements", duree:45, nq:5, nex:5}
  ]});
-A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", groupe:"phys", icone:"wave", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:20, ordre:4, prerequis:["sp", "math"], resume:"Pression, hydrostatique, débit, Bernoulli, pertes de charge, réseaux d'eau potable, eaux pluviales et assainissement autonome.", objectifs:[
-  "Calculer une pression et une poussée hydrostatique",
-  "Appliquer la conservation du débit et Bernoulli",
-  "Estimer les pertes de charge et choisir un diamètre",
-  "Dimensionner gouttières, descentes et caniveaux",
-  "Connaître les règles d'une fosse septique"
- ], applications:["Réservoirs, bâches à eau et châteaux d'eau", "Réseau d'alimentation d'une maison", "Évacuation des eaux pluviales de toiture", "Fosse septique et puisard"], src:"data/cours/mdf.js?v=bb741b88", chapitres:[
-  {id:"mdf-1", niv:1, titre:"Propriétés des fluides et pression", duree:20, nq:4, nex:0},
-  {id:"mdf-2", niv:1, titre:"Hydrostatique : pression et poussées", duree:25, nq:4, nex:0},
-  {id:"mdf-6", niv:1, titre:"L'eau dans la maison : réseaux, appareils et règles simples", duree:25, nq:4, nex:0},
-  {id:"mdf-3", niv:2, titre:"Débit, continuité et Bernoulli", duree:30, nq:4, nex:0},
-  {id:"mdf-4", niv:2, titre:"Pertes de charge et réseaux d'eau potable", duree:30, nq:4, nex:0},
-  {id:"mdf-5", niv:2, titre:"Eaux pluviales et assainissement", duree:30, nq:4, nex:0},
-  {id:"mdf-7", niv:3, titre:"Pompes et surpresseurs : HMT, courbes et choix", duree:30, nq:4, nex:0},
-  {id:"mdf-8", niv:3, titre:"Écoulements à surface libre : caniveaux et dalots", duree:30, nq:4, nex:0},
-  {id:"mdf-9", niv:3, titre:"Coup de bélier et protection des réseaux", duree:25, nq:4, nex:0}
+A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", groupe:"phys", icone:"wave", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:55, ordre:4, prerequis:["sp", "math"], resume:"L'eau dans et autour du bâtiment : pression et hydrostatique, poussées et sous-pressions, débits, Bernoulli, régimes d'écoulement et pertes de charge, réseaux d'eau potable, eaux pluviales et eaux usées, pompes et surpresseurs, caniveaux, buses et dalots, coup de bélier, réservoirs, assainissement autonome et hydrologie urbaine.", objectifs:[
+  "Calculer des pressions, des poussées hydrostatiques et des sous-pressions",
+  "Calculer débits, vitesses et appliquer la conservation du débit",
+  "Appliquer le théorème de Bernoulli avec pertes de charge",
+  "Dimensionner un réseau d'eau potable et vérifier la pression aux robinets",
+  "Dimensionner gouttières, descentes, canalisations d'eaux usées et caniveaux",
+  "Choisir une pompe ou un surpresseur et protéger un réseau du coup de bélier",
+  "Dimensionner un réservoir, une fosse septique et un ouvrage de drainage"
+ ], applications:[
+  "Bâches à eau, cuves enterrées et châteaux d'eau",
+  "Réseau d'alimentation d'une villa ou d'un immeuble",
+  "Évacuation des eaux pluviales de toiture et de parcelle",
+  "Réseaux d'eaux usées, fosse septique et épandage",
+  "Caniveaux, buses et dalots de voirie"
+ ], src:"data/cours/mdf.js?v=b4de012f", chapitres:[
+  {id:"mdf-1", niv:1, titre:"Propriétés des fluides et pression", duree:40, nq:5, nex:5},
+  {id:"mdf-2", niv:1, titre:"Hydrostatique : pression en profondeur et poussées sur les parois", duree:50, nq:5, nex:5},
+  {id:"mdf-10", niv:1, titre:"Poussée d'Archimède, flottaison et sous-pressions", duree:40, nq:5, nex:5},
+  {id:"mdf-11", niv:1, titre:"Débits et vitesses d'écoulement", duree:40, nq:5, nex:5},
+  {id:"mdf-6", niv:1, titre:"L'eau dans la maison : alimentation, évacuation et règles simples", duree:45, nq:5, nex:5},
+  {id:"mdf-3", niv:2, titre:"Le théorème de Bernoulli et ses applications", duree:50, nq:5, nex:5},
+  {id:"mdf-12", niv:2, titre:"Régimes d'écoulement : nombre de Reynolds et rugosité", duree:40, nq:5, nex:5},
+  {id:"mdf-4", niv:2, titre:"Pertes de charge et dimensionnement des réseaux d'eau potable", duree:55, nq:5, nex:5},
+  {id:"mdf-5", niv:2, titre:"Eaux pluviales : toitures, gouttières, descentes et parcelles", duree:50, nq:5, nex:5},
+  {id:"mdf-13", niv:2, titre:"Évacuation des eaux usées : réseaux, pentes et diamètres", duree:45, nq:5, nex:5},
+  {id:"mdf-7", niv:3, titre:"Pompes et surpresseurs : HMT, courbes et choix", duree:55, nq:5, nex:5},
+  {id:"mdf-8", niv:3, titre:"Écoulements à surface libre : caniveaux, fossés, buses et dalots", duree:55, nq:5, nex:5},
+  {id:"mdf-9", niv:3, titre:"Coup de bélier et protection des réseaux", duree:45, nq:5, nex:5},
+  {id:"mdf-14", niv:3, titre:"Réservoirs et châteaux d'eau : volume, hauteur et fonctionnement", duree:45, nq:5, nex:5},
+  {id:"mdf-15", niv:3, titre:"Assainissement autonome : fosse septique, épandage et puisards", duree:50, nq:5, nex:5},
+  {id:"mdf-16", niv:3, titre:"Hydrologie urbaine : débit de projet et ouvrages de drainage", duree:55, nq:5, nex:5}
  ]});
 A.addMatiere({id:"metre", titre:"Métré", court:"Métré", groupe:"gest", icone:"list", couleur:"#2D6FB5", niveau:"Débutant", heures:70, ordre:3, prerequis:["math", "tech"], resume:"Mesurer les ouvrages sur plans et sur chantier, de la fouille à la peinture : règles du métré, lecture des plans, géométrie utile, terrassements, fondations, maçonneries, béton armé et aciers, planchers, toitures, revêtements, lots techniques et VRD, jusqu'au sous-détail de prix, au devis quantitatif et estimatif et aux situations de travaux, avec applications chiffrées et exercices corrigés.", objectifs:[
   "Appliquer les règles et conventions du métré et lire les plans",
