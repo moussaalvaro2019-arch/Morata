@@ -82,24 +82,24 @@ A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Ge
   "Organiser un bétonnage ou un terrassement important",
   "Tenir les réunions, le journal et les tableaux de bord",
   "Établir une situation et analyser les écarts de coût"
- ], src:"data/cours/chant.js?v=ceb2a39b", chapitres:[
-  {id:"chant-1", niv:1, titre:"Les documents du marché et du chantier", duree:45, nq:5, nex:5},
-  {id:"chant-10", niv:1, titre:"Les intervenants du chantier et l'organisation de l'équipe", duree:45, nq:5, nex:5},
-  {id:"chant-2", niv:1, titre:"L'installation de chantier", duree:45, nq:5, nex:5},
-  {id:"chant-5", niv:1, titre:"Qualité, sécurité et environnement", duree:50, nq:5, nex:5},
-  {id:"chant-11", niv:1, titre:"La préparation de chantier", duree:50, nq:5, nex:5},
-  {id:"chant-3", niv:2, titre:"Rendements, temps unitaires et durées", duree:50, nq:5, nex:5},
-  {id:"chant-12", niv:2, titre:"Le planning : Gantt, liens, marges et chemin critique", duree:60, nq:5, nex:5},
-  {id:"chant-4", niv:2, titre:"Les ressources : main-d'œuvre, stocks et approvisionnements", duree:55, nq:5, nex:5},
-  {id:"chant-13", niv:2, titre:"Le matériel et les engins de chantier", duree:55, nq:5, nex:5},
-  {id:"chant-14", niv:2, titre:"Organiser les grandes opérations : terrassements et bétonnages", duree:55, nq:5, nex:5},
-  {id:"chant-6", niv:2, titre:"Le suivi financier du chantier : budget, coûts et trésorerie", duree:55, nq:5, nex:5},
-  {id:"chant-15", niv:2, titre:"Le suivi quotidien : réunions, comptes rendus et tableaux de bord", duree:45, nq:5, nex:5},
-  {id:"chant-7", niv:3, titre:"Management de projet : équipes, réunions et litiges", duree:50, nq:5, nex:5},
-  {id:"chant-8", niv:3, titre:"Méthodes de construction : coffrages, rotations et cadences", duree:50, nq:5, nex:5},
-  {id:"chant-9", niv:3, titre:"Gestion des risques, HSE et sinistres", duree:50, nq:5, nex:5},
-  {id:"chant-16", niv:3, titre:"Piloter par la valeur acquise : délais et coûts", duree:50, nq:5, nex:5},
-  {id:"chant-17", niv:3, titre:"Étude de cas : préparer et piloter le chantier d'une villa", duree:70, nq:5, nex:5}
+ ], src:"data/cours/chant.js?v=55f65dc3", chapitres:[
+  {id:"chant-1", niv:1, titre:"Les documents du marché et du chantier", duree:45, nq:5, nex:5, ns:1},
+  {id:"chant-10", niv:1, titre:"Les intervenants du chantier et l'organisation de l'équipe", duree:45, nq:5, nex:5, ns:1},
+  {id:"chant-2", niv:1, titre:"L'installation de chantier", duree:45, nq:5, nex:5, ns:1},
+  {id:"chant-5", niv:1, titre:"Qualité, sécurité et environnement", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-11", niv:1, titre:"La préparation de chantier", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-3", niv:2, titre:"Rendements, temps unitaires et durées", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-12", niv:2, titre:"Le planning : Gantt, liens, marges et chemin critique", duree:60, nq:5, nex:5, ns:1},
+  {id:"chant-4", niv:2, titre:"Les ressources : main-d'œuvre, stocks et approvisionnements", duree:55, nq:5, nex:5, ns:1},
+  {id:"chant-13", niv:2, titre:"Le matériel et les engins de chantier", duree:55, nq:5, nex:5, ns:1},
+  {id:"chant-14", niv:2, titre:"Organiser les grandes opérations : terrassements et bétonnages", duree:55, nq:5, nex:5, ns:1},
+  {id:"chant-6", niv:2, titre:"Le suivi financier du chantier : budget, coûts et trésorerie", duree:55, nq:5, nex:5, ns:1},
+  {id:"chant-15", niv:2, titre:"Le suivi quotidien : réunions, comptes rendus et tableaux de bord", duree:45, nq:5, nex:5, ns:1},
+  {id:"chant-7", niv:3, titre:"Management de projet : équipes, réunions et litiges", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-8", niv:3, titre:"Méthodes de construction : coffrages, rotations et cadences", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-9", niv:3, titre:"Gestion des risques, HSE et sinistres", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-16", niv:3, titre:"Piloter par la valeur acquise : délais et coûts", duree:50, nq:5, nex:5, ns:1},
+  {id:"chant-17", niv:3, titre:"Étude de cas : préparer et piloter le chantier d'une villa", duree:70, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", groupe:"gest", icone:"coins", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:60, ordre:2, prerequis:["metre"], resume:"Comprendre et maîtriser l'argent de la construction : coûts, prix, marges et TVA, coût global d'une opération, devis et appels d'offres, budget d'un particulier, sous-détail de prix, estimation, marchés et révision des prix, emprunts et intérêts, gestion de l'entreprise de BTP, garanties et assurances, rentabilité immobilière, VAN et TRI, coût global énergétique et contrôle des coûts, avec applications et exercices corrigés.", objectifs:[
   "Calculer prix, marges, TVA, pourcentages et indices",
