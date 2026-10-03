@@ -101,6 +101,50 @@ Avec 4 % d'inflation par an, 30 M F disponibles dans 3 ans n'auront le pouvoir d
 > - Variation d'un indice : I/I₀ − 1.
 > - Inflation : × (1 + i)ⁿ.
 > - Coût ≠ prix ≠ valeur.`,
+ sujet:{titre:"Pourcentages, indices et inflation appliqués aux prix du bâtiment", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le prix des matériaux change vite. Un maître d'ouvrage vous demande d'actualiser son budget.
+
+**Données**
+- Barre de HA12 à **6 800 F** : hausse de **15 %**, puis baisse de **8 %** ;
+- Index du bâtiment : **118** à la date du devis, **127** aujourd'hui ; devis initial **32 M F** ;
+- Coût de construction actuel : **250 000 F/m²** ; inflation prévue **5 %** par an ;
+- Variations successives d'un prix sur trois ans : **+ 12 %**, **− 4 %**, **+ 6 %** ;
+- Un carrelage affiché **11 800 F TTC** le m² (TVA **18 %**) ;
+- Le gros œuvre représente **45 %** d'un budget de **60 M F**.
+
+### Partie A — Pourcentages (6 points)
+1. Calculer le prix de la barre après les deux variations. La variation globale est-elle de + 7 % ? (3 pts)
+2. Calculer le montant du gros œuvre. (1 pt)
+3. Calculer le prix HT du carrelage. Pourquoi ne retire-t-on pas simplement 18 % au prix TTC ? (2 pts)
+
+### Partie B — Indices (6 points)
+4. Calculer la variation de l'index en %. (2 pts)
+5. Actualiser le devis de 32 M F. (2 pts)
+6. Quelle différence entre « + 9 points d'index » et « + 9 % » ? (2 pts)
+
+### Partie C — Inflation (8 points)
+7. Calculer le coût au m² dans 4 ans. (2 pts)
+8. Calculer la variation globale des trois hausses et baisses successives et le taux moyen annuel. (4 pts)
+9. Le client hésite à construire maintenant ou dans 4 ans. Que lui conseiller ? (2 pts)`,
+  corrige:`### Partie A — Pourcentages (6 pts)
+1. 6 800 × 1,15 = 7 820 F puis × 0,92 = **7 194 F** ; variation globale : 7 194 / 6 800 = 1,058 → **+ 5,8 %**, et non + 7 % : les pourcentages successifs se **multiplient**, ils ne s'additionnent pas. *(3 pts)*
+2. 0,45 × 60 = **27 M F**. *(1 pt)*
+3. HT = 11 800 / 1,18 = **10 000 F**. La TVA est calculée **sur le HT** : 18 % de 10 000 = 1 800 ; retirer 18 % de 11 800 donnerait 9 676 F, ce qui est faux. *(2 pts)*
+
+### Partie B — Indices (6 pts)
+4. 127 / 118 − 1 = **+ 7,6 %**. *(2 pts)*
+5. 32 × 127 / 118 = **34,44 M F**. *(2 pts)*
+6. + 9 points est une différence d'index (127 − 118) ; en pourcentage, cela fait + 7,6 % ici, car on rapporte à la valeur de départ 118. *(2 pts)*
+
+### Partie C — Inflation (8 pts)
+7. 250 000 × 1,05⁴ = **303 877 F/m²** (+ 21,6 %). *(2 pts)*
+8. × 1,12 × 0,96 × 1,06 = × 1,1397 → **+ 14,0 %** ; taux moyen : 1,1397^(1/3) − 1 = **4,5 % par an**. *(4 pts)*
+9. Sauf si ses revenus ou son épargne augmentent plus vite, attendre coûte cher (+ 22 % en 4 ans) : construire dès que le financement est prêt, éventuellement par **tranches** (gros œuvre d'abord), en achetant les matériaux sensibles au bon moment. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner des pourcentages successifs.
+> - Calculer la TVA « à l'envers » en retirant 18 % au TTC.
+> - Confondre points d'index et pourcentage.`},
  exercices:[
   {t:"Variations successives", d:1, e:`Le prix du fer à béton augmente de 8 % en janvier puis de 6 % en juin. Quelle est la hausse totale ? Un HA12 à 9 000 F la barre coûte combien après ces hausses ?`, c:`Coefficient : 1,08 × 1,06 = **1,1448** → hausse de **14,48 %** (et non 14 %).
 Barre : 9 000 × 1,1448 = **10 303 F**.`},
@@ -176,6 +220,44 @@ Le marché local paie un m² de maçonnerie **12 000 F HT**. Avec un coefficient
 > - PV HT = DS × K ; TTC = HT × 1,18 ; HT = TTC / 1,18.
 > - Marge sur le coût, marque sur le prix de vente.
 > - TVA à reverser = TVA collectée − TVA déductible.`,
+ sujet:{titre:"Déboursé sec, coefficient de vente, marge et TVA d'une entreprise", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise de second œuvre de Bouaké fixe le prix d'une **chape de 5 cm** et fait sa déclaration de TVA.
+
+**Données**
+- Déboursé sec d'un m² de chape : matériaux **2 800 F** ; main-d'œuvre **1 400 F** ; matériel **300 F** ;
+- Frais de chantier **8 %** ; frais généraux **10 %** ; bénéfice et aléas **8 %** ;
+- TVA **18 %** ;
+- Mois de mars : factures émises **75 M F HT** ; achats **42 M F HT**.
+
+### Partie A — Coûts et prix (9 points)
+1. Définir déboursé sec, frais de chantier, frais généraux, bénéfice. (3 pts)
+2. Calculer le DS, le coefficient K et le prix de vente HT. (4 pts)
+3. Calculer le prix TTC. (2 pts)
+
+### Partie B — Marges (5 points)
+4. Calculer la marge brute par m² (PV − DS) et le taux de marge sur le prix de vente. (3 pts)
+5. Pourquoi le bénéfice réel est-il bien plus faible que cette marge brute ? (2 pts)
+
+### Partie C — TVA (6 points)
+6. Calculer la TVA collectée, la TVA déductible et la TVA à reverser pour mars. (4 pts)
+7. Pourquoi dit-on que la TVA « ne coûte rien » à l'entreprise ? Qui la paie réellement ? (2 pts)`,
+  corrige:`### Partie A — Prix (9 pts)
+1. **DS** : coût direct de l'ouvrage (matériaux, main-d'œuvre, matériel) ; **frais de chantier** : encadrement, installations, gardiennage… propres au chantier ; **frais généraux** : siège, administration, assurances, études ; **bénéfice** : rémunération de l'entreprise et couverture des aléas. *(3 pts)*
+2. DS = 2 800 + 1 400 + 300 = **4 500 F** ; K = 1,08 × 1,10 × 1,08 = **1,283** ; PV = 4 500 × 1,283 = **5 774 F/m² HT**. *(4 pts)*
+3. 5 774 × 1,18 = **6 813 F/m² TTC**. *(2 pts)*
+
+### Partie B — Marges (5 pts)
+4. 5 774 − 4 500 = **1 274 F/m²** ; 1 274 / 5 774 = **22 %** du prix de vente. *(3 pts)*
+5. La marge brute doit d'abord payer les **frais de chantier** et les **frais généraux** ; il ne reste que le bénéfice (environ 8 % ici), qui doit encore couvrir les **aléas** (pertes, reprises, retards). *(2 pts)*
+
+### Partie C — TVA (6 pts)
+6. Collectée : 75 × 0,18 = **13,5 M** ; déductible : 42 × 0,18 = **7,56 M** ; à reverser : **5,94 M F**. *(4 pts)*
+7. L'entreprise **récupère** la TVA payée sur ses achats et **reverse** celle encaissée sur ses ventes : elle ne fait que la collecter. C'est le **client final** (particulier, État…) qui la supporte. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les pourcentages de frais au lieu de multiplier les coefficients.
+> - Intégrer la TVA dans les sous-détails de prix (on travaille en HT).
+> - Confondre marge brute et bénéfice.`},
  exercices:[
   {t:"HT et TTC", d:1, e:`a) Convertir en TTC : 2 500 000 F HT. b) Convertir en HT : 4 720 000 F TTC. c) Quelle est la TVA contenue dans 1 180 000 F TTC ?`, c:`a) 2 500 000 × 1,18 = **2 950 000 F TTC** ; b) 4 720 000 / 1,18 = **4 000 000 F HT** ; c) HT = 1 000 000 F → TVA = **180 000 F**.`},
   {t:"Coefficient de vente", d:1, e:`Le déboursé sec d'un m³ de béton armé est 128 000 F. L'entreprise applique K = 1,32. Calculer le prix HT, puis TTC.`, c:`HT : 128 000 × 1,32 = **168 960 F** ; TTC : 168 960 × 1,18 = **199 373 F**.`},
@@ -244,6 +326,50 @@ Il permet de comparer des projets de tailles différentes : la villa de l'exempl
 > - Coût de l'opération = terrain + études + taxes et branchements + travaux + frais financiers + imprévus.
 > - Raisonner en coût global : le moins cher à construire n'est pas forcément le moins cher à posséder.
 > - Temps de retour = surcoût / économie annuelle.`,
+ sujet:{titre:"Coût total d'une villa : travaux, frais annexes, terrain et coût global sur 30 ans", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un couple prépare la construction d'une villa à Bingerville et veut connaître le vrai coût de son projet.
+
+**Données**
+- Travaux : **62 M F TTC** ;
+- Études et suivi (architecte, BET, contrôle) : **8 %** des travaux ; permis, branchements et taxes : **3 %** ; imprévus : **7 %** ;
+- Terrain de **500 m²** à **30 000 F/m²**, frais d'acquisition (notaire, ACD, bornage) : **10 %** du prix du terrain ;
+- Exploitation : entretien **1 %** des travaux par an ; énergie et eau : **1,2 M F/an** ; durée d'étude : **30 ans** (sans actualisation).
+
+### Partie A — Coût de l'opération (8 points)
+1. Calculer chaque poste annexe et le coût total hors terrain. (4 pts)
+2. Calculer le coût du terrain et le coût total de l'opération. (2 pts)
+3. Quelle part représentent les travaux dans le coût total ? (2 pts)
+
+### Partie B — Coût global (8 points)
+4. Définir le coût global d'un bâtiment. (2 pts)
+5. Calculer les dépenses d'exploitation sur 30 ans. (2 pts)
+6. Calculer le coût global sur 30 ans et la part de la construction. Conclure. (4 pts)
+
+### Partie C — Économiser (4 points)
+7. Proposer deux choix de conception qui augmentent un peu l'investissement mais réduisent le coût global. (2 pts)
+8. Proposer deux économies à éviter car elles augmentent le coût global. (2 pts)`,
+  corrige:`### Partie A — Opération (8 pts)
+1. *(4 pts)*
+   - Études et suivi : 0,08 × 62 = **4,96 M** ;
+   - Permis, branchements : 0,03 × 62 = **1,86 M** ;
+   - Imprévus : 0,07 × 62 = **4,34 M** ;
+   - Total hors terrain : 62 + 11,16 = **73,16 M F**.
+2. Terrain : 500 × 30 000 = 15 M + 10 % = **16,5 M** → total : **89,66 M F**. *(2 pts)*
+3. 62 / 89,66 = **69 %** : près d'un tiers du budget n'est pas « du béton ». *(2 pts)*
+
+### Partie B — Coût global (8 pts)
+4. Somme de **toutes** les dépenses sur la vie du bâtiment : terrain, études, construction, puis **exploitation** (énergie, eau), **entretien**, réparations, et éventuellement déconstruction. *(2 pts)*
+5. Par an : 0,01 × 62 + 1,2 = 1,82 M → 30 ans : **54,6 M F**. *(2 pts)*
+6. 89,66 + 54,6 = **144,3 M F** ; la construction (62 M) n'en représente que **43 %**. Les choix faits à la conception (isolation, orientation, matériaux durables) pèsent lourd sur les dépenses futures. *(4 pts)*
+
+### Partie C — Économiser (4 pts)
+7. **Isolation** et faux plafond ventilé (moins de climatisation) ; protections solaires et ventilation naturelle ; **chauffe-eau solaire** ; matériaux durables (menuiseries alu de qualité, carrelage grès) ; récupération des eaux de pluie. *(2 pts)*
+8. Réduire l'**étude de sol** ou les fondations ; supprimer l'étanchéité ou le drainage ; enrobages et dosages réduits ; menuiseries ou peintures bas de gamme à refaire vite. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Budgéter uniquement les travaux.
+> - Oublier les frais d'acquisition du terrain.
+> - Choisir systématiquement l'investissement le moins cher.`},
  exercices:[
   {t:"Budget complet", d:1, e:`Travaux : 35 M F TTC ; études 8 % ; permis et branchements 3 % ; imprévus 7 % (pourcentages des travaux) ; terrain de 450 m² à 20 000 F/m² + 10 % de frais d'acquisition. Calculer le coût total.`, c:`Études 2,8 M ; permis et branchements 1,05 M ; imprévus 2,45 M ; terrain 9 M + frais 0,9 M.
 Total : 35 + 2,8 + 1,05 + 2,45 + 9,9 = **51,2 M F**.`},
@@ -327,6 +453,50 @@ L'offre C ayant été écartée comme anormalement basse, l'offre B est la **mie
 > - Vérifier calculs, quantités, prix, inclusions, échéancier, assurances.
 > - Une offre très inférieure à l'estimation doit être justifiée.
 > - Payer à l'avancement, garder une retenue jusqu'à la levée des réserves.`,
+ sujet:{titre:"Lire un devis et comparer quatre offres pour le gros œuvre d'un immeuble", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour le gros œuvre d'un immeuble R+2 à Abobo, l'estimation du maître d'œuvre est de **34 M F HT**. Quatre entreprises ont répondu.
+
+**Offres (HT)** : A **31,8 M** ; B **36,1 M** ; C **25,2 M** ; D **33,4 M**.
+
+**Extrait du devis de D**
+
+| N° | Désignation | U | Qté | P.U. (F) | Montant (F) |
+|---|---|---|---|---|---|
+| 3.2 | Maçonnerie d'agglos de 15 | m² | 145 | 12 000 | 1 470 000 |
+| 3.3 | Béton armé des poteaux | m³ | 8,4 | 185 000 | 1 554 000 |
+| 3.4 | Enduit extérieur | m² | 310 | 3 500 | 1 085 000 |
+
+L'offre C ne comporte pas de ligne « toiture-terrasse et étanchéité » (estimée à **3,5 M**).
+
+### Partie A — Lire un devis (6 points)
+1. Quelles informations doit contenir un devis complet ? (3 pts)
+2. Vérifier les lignes de l'extrait du devis D et corriger l'erreur éventuelle. (3 pts)
+
+### Partie B — Comparer les offres (8 points)
+3. Calculer l'écart de chaque offre par rapport à l'estimation. (4 pts)
+4. Que penser de l'offre C ? Que faire avant de la retenir ou de l'écarter ? (4 pts)
+
+### Partie C — Choisir (6 points)
+5. Corriger l'offre C de l'oubli de la toiture. Change-t-elle de rang ? (2 pts)
+6. Citer quatre critères autres que le prix pour choisir une entreprise. (2 pts)
+7. Pourquoi l'offre la moins chère n'est-elle pas toujours la plus économique ? (2 pts)`,
+  corrige:`### Partie A — Devis (6 pts)
+1. Identité de l'entreprise (raison sociale, RCCM, compte contribuable), date et **durée de validité** ; désignation précise de chaque ouvrage, **unités**, **quantités**, **prix unitaires**, montants ; total HT, **TVA**, total TTC ; délai d'exécution ; conditions de paiement ; ce qui est inclus ou exclu. *(3 pts)*
+2. 3.2 : 145 × 12 000 = **1 740 000 F** (et non 1 470 000 : chiffres inversés) ; 3.3 : 8,4 × 185 000 = 1 554 000 ✔ ; 3.4 : 310 × 3 500 = 1 085 000 ✔. Le total de D est sous-estimé de **270 000 F** (offre corrigée : 33,67 M). *(3 pts)*
+
+### Partie B — Comparer (8 pts)
+3. A : **− 6,5 %** ; B : **+ 6,2 %** ; C : **− 25,9 %** ; D : **− 1,8 %**. *(4 pts)*
+4. C est **anormalement basse** (− 26 %) : oubli de postes, quantités sous-estimées, dosages réduits, ou entreprise en difficulté qui « achète » le marché. On lui demande le **détail** et des justifications ; si l'offre ne tient pas, on l'écarte. *(4 pts)*
+
+### Partie C — Choisir (6 pts)
+5. 25,2 + 3,5 = **28,7 M** : elle reste la moins chère (− 16 %), mais toujours très basse : il faut vérifier les autres postes avant toute décision. *(2 pts)*
+6. **Références** de chantiers similaires, **moyens** humains et matériels, **délai** proposé, qualité de la note méthodologique, santé **financière**, assurances, respect des règles de sécurité. *(2 pts)*
+7. Une offre trop basse se traduit souvent par des **malfaçons**, des **retards**, des **avenants** et des réclamations, voire l'abandon du chantier : le coût final dépasse alors celui d'une offre sérieuse. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Comparer des totaux sans vérifier les calculs et les postes manquants.
+> - Retenir automatiquement le moins-disant.
+> - Négocier un prix sans négocier le contenu.`},
  exercices:[
   {t:"Vérifier les calculs d'un devis", d:1, e:`Lignes : 12,6 m³ de béton armé à 180 000 F = 2 268 000 F ; 85 m² de carrelage à 14 000 F = 1 090 000 F ; 640 kg d'acier à 1 000 F = 640 000 F. Total HT annoncé : 3 998 000 F. Trouver l'erreur.`, c:`Béton : 12,6 × 180 000 = 2 268 000 ✔ ; carrelage : 85 × 14 000 = **1 190 000** (et non 1 090 000) ✘ ; acier ✔.
 Total exact : 2 268 000 + 1 190 000 + 640 000 = **4 098 000 F HT** (le total annoncé, 3 998 000, reprend l'erreur de 100 000 F).`},
@@ -404,6 +574,48 @@ Les deux colonnes doivent être **égales** ; sinon, on réduit le projet ou on 
 > - Mensualité ≤ 1/3 des revenus ; capital = m × [1 − (1 + i)⁻ⁿ] / i.
 > - Construire par tranches en mettant d'abord le bâtiment hors d'eau.
 > - Comparer le coût du crédit à l'inflation et au loyer économisé.`,
+ sujet:{titre:"Financer sa maison : capacité d'emprunt, apport et coût du crédit", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un fonctionnaire de Yamoussoukro veut faire construire sa maison et vous demande combien il peut emprunter.
+
+**Données**
+- Revenus nets : **750 000 F/mois** ; crédit en cours (moto) : **60 000 F/mois** ;
+- Règle de la banque : total des mensualités ≤ **1/3** des revenus ;
+- Crédit immobilier sur **12 ans** à **9 %** par an, mensualités constantes ; facteur pour 1 F de mensualité : (1 − (1 + i)⁻ⁿ) / i, avec i = taux mensuel ;
+- Apport personnel : **5 M F** ; frais de dossier, assurance et garanties : **3 %** du budget.
+
+### Partie A — Capacité de remboursement (5 points)
+1. Calculer la mensualité maximale disponible pour le crédit immobilier. (2 pts)
+2. Pourquoi la banque limite-t-elle l'endettement au tiers des revenus ? (1 pt)
+3. Que se passerait-il si le crédit moto était soldé avant la demande ? (2 pts)
+
+### Partie B — Capacité d'emprunt (9 points)
+4. Calculer le taux mensuel, le nombre de mensualités et le facteur. (3 pts)
+5. Calculer le capital empruntable. (2 pts)
+6. Calculer le budget total de construction (apport compris, frais déduits). (2 pts)
+7. Calculer le coût total du crédit (intérêts). (2 pts)
+
+### Partie C — Adapter le projet (6 points)
+8. Le projet de maison coûte **28 M F**. Proposer trois solutions pour le rendre finançable. (3 pts)
+9. Pourquoi est-il dangereux de construire sans financement complet (« on verra pour la suite ») ? (3 pts)`,
+  corrige:`### Partie A — Remboursement (5 pts)
+1. 750 000 / 3 = 250 000 F ; − 60 000 = **190 000 F/mois**. *(2 pts)*
+2. Pour qu'il reste assez de revenus pour vivre et faire face aux imprévus : au-delà, le risque d'impayés augmente fortement. *(1 pt)*
+3. Mensualité disponible de 250 000 F : capital empruntable plus élevé d'environ un tiers (≈ 22 M au lieu de 16,7 M). *(2 pts)*
+
+### Partie B — Emprunt (9 pts)
+4. i = 0,09 / 12 = **0,75 %** ; n = 12 × 12 = **144** ; facteur = (1 − 1,0075⁻¹⁴⁴) / 0,0075 = **87,87**. *(3 pts)*
+5. 190 000 × 87,87 = **16,70 M F**. *(2 pts)*
+6. Ressources : 16,70 + 5 = 21,70 M ; budget de construction : 21,70 / 1,03 = **≈ 21,1 M F**. *(2 pts)*
+7. Remboursé : 190 000 × 144 = 27,36 M → intérêts : 27,36 − 16,70 = **10,66 M F**. *(2 pts)*
+
+### Partie C — Adapter (6 pts)
+8. Réduire la surface ou le standing ; construire **par tranches** (gros œuvre et toiture d'abord) ; augmenter l'apport (épargne, aide familiale) ; allonger la durée du crédit (mensualité plus faible mais plus d'intérêts) ; solder le crédit moto ; matériaux locaux moins chers (BTC). *(3 pts)*
+9. Le chantier s'arrête, les ouvrages restent exposés (aciers en attente qui rouillent, maçonneries non protégées), les prix augmentent pendant l'attente, et des malfaçons apparaissent à la reprise : la maison coûte plus cher et dure moins. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les crédits en cours dans la capacité de remboursement.
+> - Confondre taux annuel et taux mensuel.
+> - Oublier les frais du crédit dans le budget.`},
  exercices:[
   {t:"Capacité d'emprunt", d:2, e:`Un ménage gagne 600 000 F par mois. Mensualité maximale à 33 % ? Capital empruntable sur 15 ans à 8 % (facteur 104,64) ?`, c:`Mensualité : 0,33 × 600 000 = **198 000 F** ; capital : 198 000 × 104,64 = **≈ 20,7 M F**.`},
   {t:"Planifier des tranches", d:2, e:`Maison estimée à 30 M F ; apport 8 M ; épargne 500 000 F par mois. Tranche 1 (gros œuvre + toiture) : 55 % du coût. Dans combien de mois peut-on lancer la tranche 1 ? Combien de mois d'épargne pour la suite ?`, c:`Tranche 1 : 0,55 × 30 = **16,5 M** → il manque 16,5 − 8 = 8,5 M → **17 mois** d'épargne.
@@ -490,6 +702,60 @@ Si l'équipe ne fait que 20 m²/jour (support irrégulier, échafaudage mal pré
 > - DS = matériaux (avec pertes) + main-d'œuvre (Tu × coût horaire chargé) + matériel.
 > - PV HT = DS × K, K = (1 + FC)(1 + FG)(1 + B).
 > - Prix nouveau : sous-détail sur les bases du marché, accepté avant exécution.`,
+ sujet:{titre:"Sous-détail du prix d'un m² de carrelage posé collé", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise de carrelage d'Abidjan répond à un appel d'offres et établit le prix d'un m² de carrelage 40 × 40 posé collé.
+
+**Données**
+- Carreaux : **7 500 F/m²**, **8 %** de chutes et casse ;
+- Colle : **5 kg/m²**, sac de **25 kg** à **6 250 F** ; joint : **0,3 kg/m²** à **600 F/kg** ;
+- Main-d'œuvre : un carreleur et un aide posent **12 m²** par journée de **8 h** ;
+- Carreleur : salaire brut **180 000 F/mois**, charges patronales **22 %**, **173 h** payées par mois, **12 %** d'heures non productives ; aide : **800 F/h** chargé et productif ;
+- Petit matériel : **150 F/m²** ;
+- Coefficients : frais de chantier **8 %**, frais généraux **12 %**, bénéfice et aléas **7 %**.
+
+### Partie A — Taux horaire (4 points)
+1. Calculer le coût horaire chargé du carreleur, puis par heure productive. On arrondira à **1 450 F/h**. (4 pts)
+
+### Partie B — Déboursé sec (9 points)
+2. Calculer le coût des matériaux par m². (4 pts)
+3. Calculer le temps unitaire et le coût de main-d'œuvre par m². (3 pts)
+4. En déduire le déboursé sec. (2 pts)
+
+### Partie C — Prix de vente (4 points)
+5. Calculer K et le prix de vente HT au m². (3 pts)
+6. Quelle est la part des matériaux dans le DS ? Conséquence pour la négociation avec les fournisseurs ? (1 pt)
+
+### Partie D — Analyse (3 points)
+7. Le maître d'ouvrage impose des carreaux à **12 000 F/m²**. Calculer le nouveau prix de vente. (2 pts)
+8. Pourquoi un rendement mal estimé fausse-t-il fortement le prix ? (1 pt)`,
+  corrige:`### Partie A — Taux horaire (4 pts)
+1. 180 000 × 1,22 / 173 = **1 269 F/h** payée ; par heure productive : 1 269 / 0,88 = **1 442 F/h ≈ 1 450 F/h**. *(4 pts)*
+
+### Partie B — DS (9 pts)
+2. *(4 pts)*
+
+| Poste | Calcul | F/m² |
+|---|---|---|
+| Carreaux | 1,08 × 7 500 | 8 100 |
+| Colle | 5 × 6 250 / 25 | 1 250 |
+| Joint | 0,3 × 600 | 180 |
+| **Matériaux** | | **9 530** |
+
+3. 8 h / 12 m² = **0,667 h/m²** pour chacun → (1 450 + 800) × 0,667 = **1 500 F/m²**. *(3 pts)*
+4. DS = 9 530 + 1 500 + 150 = **11 180 F/m²**. *(2 pts)*
+
+### Partie C — Prix (4 pts)
+5. K = 1,08 × 1,12 × 1,07 = **1,294** ; PV = 11 180 × 1,294 = **14 470 F/m² HT**. *(3 pts)*
+6. 9 530 / 11 180 = **85 %** : le prix d'achat des carreaux est déterminant ; une remise de 10 % chez le fournisseur vaut plus que tout gain sur la main-d'œuvre. *(1 pt)*
+
+### Partie D — Analyse (3 pts)
+7. Carreaux : 1,08 × 12 000 = 12 960 → DS = 11 180 + 4 860 = 16 040 → PV = 16 040 × 1,294 = **≈ 20 760 F/m² HT**. *(2 pts)*
+8. La main-d'œuvre est proportionnelle au temps unitaire : si l'équipe ne pose que 8 m²/jour, le coût de main-d'œuvre augmente de 50 % et la marge disparaît. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Prendre le salaire brut sans les charges ni les heures non productives.
+> - Oublier la casse et les chutes.
+> - Calculer K en additionnant les pourcentages.`},
  exercices:[
   {t:"Coût horaire chargé", d:1, e:`Un ferrailleur gagne 150 000 F brut par mois ; charges patronales 20 % ; 173 heures payées ; 12 % d'heures non productives. Calculer le coût par heure productive.`, c:`Coût mensuel : 150 000 × 1,2 = **180 000 F** → 180 000 / 173 = 1 040 F/h → × 1,12 = **≈ 1 165 F par heure productive**.`},
   {t:"Calculer K", d:1, e:`Frais de chantier 8 %, frais généraux 14 %, bénéfice et aléas 7 %. Calculer K, puis le prix de vente d'un ouvrage dont le DS vaut 2 400 000 F.`, c:`K = 1,08 × 1,14 × 1,07 = **1,317** → PV = 2 400 000 × 1,317 = **≈ 3 162 000 F HT**.`},
@@ -578,6 +844,64 @@ Ratio : 38,25 M / 120 m² = **318 750 F/m²**, cohérent avec l'estimation par r
 > - La précision croît avec l'avancement des études (± 30 % → ± 5 %).
 > - Ratio global, répartition par lots, éléments, métré détaillé.
 > - Les ratios techniques servent surtout à **contrôler** les devis.`,
+ sujet:{titre:"Estimer un projet à chaque phase : ratios, analogie et ventilation par lots", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un bureau d'études doit donner des estimations à différents stades de deux projets à Abidjan.
+
+**Données**
+- Maison de **150 m²** de moyen standing : ratio **330 000 F/m²** (précision **± 25 %** au stade esquisse) ;
+- Immeuble de bureaux de **900 m²** ; un immeuble comparable de **850 m²** a coûté **280 M F** quand l'index valait **110** ; il vaut aujourd'hui **121** ;
+- Répartition indicative par lots (maison) : gros œuvre **45 %** ; toiture **10 %** ; menuiseries **10 %** ; électricité **7 %** ; plomberie **8 %** ; revêtements et peinture **15 %** ; VRD **5 %**.
+
+### Partie A — Les méthodes (6 points)
+1. Présenter les méthodes d'estimation (ratio au m², analogie, par éléments ou ouvrages élémentaires, métré détaillé) et leur précision selon la phase du projet. (4 pts)
+2. Pourquoi la précision s'améliore-t-elle au fil des études ? (2 pts)
+
+### Partie B — Maison (7 points)
+3. Calculer l'estimation par ratio et sa fourchette. (3 pts)
+4. Ventiler l'estimation par lots. (4 pts)
+
+### Partie C — Immeuble par analogie (5 points)
+5. Actualiser le coût de l'immeuble comparable. (2 pts)
+6. Ajuster à la surface du nouveau projet. (2 pts)
+7. Quelles différences entre les deux projets peuvent fausser l'analogie ? (1 pt)
+
+### Partie D — Usage (2 points)
+8. Pourquoi faut-il annoncer au client la précision de l'estimation ? (2 pts)`,
+  corrige:`### Partie A — Méthodes (6 pts)
+1. *(4 pts)*
+   - **Ratio au m²** (programme, esquisse) : rapide, ± 20 à 30 % ;
+   - **Analogie** avec un projet réalisé, actualisé par index : ± 15 à 20 % ;
+   - **Par éléments** (fondations, murs, planchers… avec des prix composés, APS-APD) : ± 10 % ;
+   - **Métré détaillé** × prix unitaires (DCE) : ± 5 %.
+2. Les plans se précisent (dimensions, matériaux, équipements) : on remplace des ratios par des **quantités** mesurées et des prix réels. *(2 pts)*
+
+### Partie B — Maison (7 pts)
+3. 150 × 330 000 = **49,5 M F**, fourchette **37 à 62 M F** (± 25 %). *(3 pts)*
+4. *(4 pts)*
+
+| Lot | % | M F |
+|---|---|---|
+| Gros œuvre | 45 | 22,28 |
+| Toiture | 10 | 4,95 |
+| Menuiseries | 10 | 4,95 |
+| Électricité | 7 | 3,46 |
+| Plomberie | 8 | 3,96 |
+| Revêtements, peinture | 15 | 7,42 |
+| VRD | 5 | 2,48 |
+| **Total** | 100 | **49,50** |
+
+### Partie C — Analogie (5 pts)
+5. 280 × 121 / 110 = **308 M F**. *(2 pts)*
+6. 308 × 900 / 850 = **326 M F** (≈ 362 000 F/m²). *(2 pts)*
+7. Sol et fondations, nombre de niveaux, standing des finitions, équipements (ascenseur, climatisation centrale), contraintes du site et époque des prix. *(1 pt)*
+
+### Partie D — Usage (2 pts)
+8. Pour qu'il prévoie une **marge** de financement et ne prenne pas de décision définitive sur un chiffre encore incertain ; cela évite les mauvaises surprises et les conflits. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser un ratio ancien sans l'actualiser.
+> - Présenter une estimation de programme comme un prix ferme.
+> - Oublier les VRD et les frais annexes.`},
  exercices:[
   {t:"Fourchette d'estimation", d:1, e:`Une villa de 160 m² est envisagée en moyen standing (ratio 330 000 F/m², précision ± 25 % au stade esquisse). Calculer l'estimation et sa fourchette.`, c:`160 × 330 000 = **52,8 M F** ; fourchette : 52,8 × 0,75 = **39,6 M** à 52,8 × 1,25 = **66 M F**.`},
   {t:"Répartition par lots", d:1, e:`Répartir 52,8 M F : fondations 15 %, élévation 26 %, toiture 12 %, menuiseries 11 %, électricité 8 %, plomberie 8 %, revêtements 13 %, peinture et VRD 7 %.`, c:`Fondations **7,92 M** ; élévation **13,73 M** ; toiture **6,34 M** ; menuiseries **5,81 M** ; électricité **4,22 M** ; plomberie **4,22 M** ; revêtements **6,86 M** ; peinture et VRD **3,70 M** (total 52,8 M).`},
@@ -625,6 +949,48 @@ Une formule peut combiner plusieurs index pondérés : P = P₀ × (0,15 + 0,35 
 > - Forfait si le projet est bien défini, prix unitaires si les quantités sont incertaines.
 > - Appel d'offres : DAO, offres, analyse (erreurs, prix anormalement bas, notation), attribution.
 > - Révision : P = P₀ (a + b I/I₀).`,
+ sujet:{titre:"Marchés, jugement des offres et révision des prix", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une mairie lance un appel d'offres pour un marché de construction d'école. Vous êtes membre de la commission d'analyse puis vous suivez la révision des prix.
+
+**Données**
+- Notation : technique sur **30**, financière sur **70** ; note financière = 70 × offre la plus basse / offre ;
+- Offres : A **64 M F** (technique **25/30**) ; B **58 M F** (**20/30**) ; C **61 M F** (**27/30**) ;
+- Révision des prix : P = P0 × (0,15 + 0,85 × I / I0) ; I0 = **104** ; situation du mois de juin **12 M F** aux conditions initiales, index de juin **112**.
+
+### Partie A — Les marchés (6 points)
+1. Distinguer marché à prix global et forfaitaire, et marché à prix unitaires. (2 pts)
+2. Présenter les procédures : appel d'offres ouvert, appel d'offres restreint, gré à gré (entente directe). (3 pts)
+3. Qu'est-ce qu'un marché à prix fermes et à prix révisables ? (1 pt)
+
+### Partie B — Jugement des offres (7 points)
+4. Calculer la note globale de chaque offre. Laquelle est retenue ? (5 pts)
+5. Pourquoi ne pas retenir automatiquement l'offre la moins chère ? (2 pts)
+
+### Partie C — Révision des prix (7 points)
+6. Calculer le coefficient de révision et le montant révisé de la situation de juin. (4 pts)
+7. Expliquer le rôle de la partie fixe 0,15. (1 pt)
+8. Dans quel cas un marché doit-il prévoir une révision ? (2 pts)`,
+  corrige:`### Partie A — Marchés (6 pts)
+1. **Forfaitaire** : prix global fixé pour l'ouvrage décrit, quelles que soient les quantités réelles (sauf modification du projet) ; **prix unitaires** : on paie les quantités **réellement exécutées** au prix du bordereau. *(2 pts)*
+2. **Ouvert** : toute entreprise peut répondre (publicité) ; **restreint** : seules les entreprises présélectionnées sont invitées ; **gré à gré** : négociation directe avec une entreprise, réservée aux cas prévus (urgence, petit montant, spécialité unique). *(3 pts)*
+3. **Ferme** : le prix ne bouge pas (parfois actualisé au démarrage) ; **révisable** : le prix évolue selon une formule d'index pendant l'exécution. *(1 pt)*
+
+### Partie B — Jugement (7 pts)
+4. *(5 pts)*
+   - A : 25 + 70 × 58 / 64 = 25 + 63,4 = **88,4** ;
+   - B : 20 + 70 = **90,0** ;
+   - C : 27 + 70 × 58 / 61 = 27 + 66,6 = **93,6** → **C est retenue**.
+5. La note technique traduit la capacité à bien faire (moyens, méthodes, références) : une offre moins chère mais techniquement faible présente plus de risques de retard et de malfaçons. *(2 pts)*
+
+### Partie C — Révision (7 pts)
+6. Coefficient : 0,15 + 0,85 × 112 / 104 = **1,0654** → P = 12 × 1,0654 = **12,785 M F** (révision **+ 0,785 M**). *(4 pts)*
+7. Elle représente la part des coûts **non sujette aux variations** (frais fixes, marge) : seuls 85 % du prix suivent l'index. *(1 pt)*
+8. Quand la durée du chantier est **longue** (plus de quelques mois) ou les prix **instables** : sans révision, l'entreprise prend un risque qu'elle inclut dans son prix (plus cher) ou qu'elle ne peut plus assumer. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la note financière avec l'offre la plus haute en référence.
+> - Appliquer la révision à toute la valeur sans partie fixe.
+> - Réviser des travaux réalisés en retard par la faute de l'entreprise avec l'index le plus défavorable au maître d'ouvrage.`},
  exercices:[
   {t:"Choisir la forme de prix", d:1, e:`Choisir : a) construction d'un bâtiment scolaire type dont les plans sont complets ; b) terrassements d'une route avec un sol mal connu ; c) petites réparations imprévues après un orage.`, c:`a) **Prix global et forfaitaire** ; b) **prix unitaires** (quantités réellement exécutées) ; c) **régie** (dépenses contrôlées + coefficient) ou bons de commande à prix unitaires.`},
   {t:"Corriger une erreur arithmétique", d:1, e:`Dans une offre : « 85 m³ de béton à 182 000 F = 15 740 000 F ». Corriger, sachant que le prix unitaire fait foi. Le total de l'offre était 64 250 000 F : nouveau total ?`, c:`85 × 182 000 = **15 470 000 F** (l'offre a inversé deux chiffres : + 270 000 F).
@@ -695,6 +1061,58 @@ $$ CRD = m × [1 − (1 + i)^−(n − k)] / i
 > - Simples : C t n ; composés : C (1 + t)ⁿ.
 > - Annuité constante : a = C i / [1 − (1 + i)⁻ⁿ] ; intérêts sur le capital restant dû.
 > - Coût du crédit = total remboursé − capital (+ frais).`,
+ sujet:{titre:"Emprunt immobilier : mensualité, tableau d'amortissement et capital restant dû", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un promoteur emprunte **35 M F** pour terminer un petit immeuble, sur **15 ans** à **8,5 %** par an, remboursable par mensualités constantes.
+
+**Données**
+- Mensualité : m = C × i / [1 − (1 + i)⁻ⁿ] (i : taux mensuel ; n : nombre de mensualités) ;
+- Capital restant dû après k mensualités : CRD = m × [1 − (1 + i)^−(n − k)] / i ;
+- Par ailleurs, il dispose de **5 M F** placés à **6 %** par an (intérêts composés) pendant 4 ans.
+
+### Partie A — Intérêts simples et composés (4 points)
+1. Distinguer intérêts simples et composés. (2 pts)
+2. Calculer la valeur du placement au bout de 4 ans. (2 pts)
+
+### Partie B — Mensualité (6 points)
+3. Calculer i et n. (1 pt)
+4. Calculer la mensualité. (3 pts)
+5. Calculer le total remboursé et le coût total des intérêts. (2 pts)
+
+### Partie C — Tableau d'amortissement (6 points)
+6. Établir les deux premières lignes du tableau (intérêts, amortissement du capital, capital restant dû). (4 pts)
+7. Pourquoi la part d'intérêts diminue-t-elle à chaque échéance ? (2 pts)
+
+### Partie D — Remboursement anticipé (4 points)
+8. Calculer le capital restant dû après 7 ans. Quelle part du capital a été remboursée ? (3 pts)
+9. Le promoteur vend un appartement à ce moment-là : est-il intéressant de rembourser par anticipation ? (1 pt)`,
+  corrige:`### Partie A — Intérêts (4 pts)
+1. **Simples** : intérêts calculés chaque période sur le seul capital initial ; **composés** : les intérêts s'ajoutent au capital et produisent à leur tour des intérêts. *(2 pts)*
+2. 5 × 1,06⁴ = **6,31 M F**. *(2 pts)*
+
+### Partie B — Mensualité (6 pts)
+3. i = 0,085 / 12 = **0,7083 %** ; n = 15 × 12 = **180**. *(1 pt)*
+4. $$ m = 35 000 000 × 0,007083 / [1 − 1,007083⁻¹⁸⁰] = 344 659 F
+   *(3 pts)*
+5. Total : 344 659 × 180 = **62,04 M F** ; intérêts : **27,04 M F** (77 % du capital emprunté). *(2 pts)*
+
+### Partie C — Tableau (6 pts)
+6. *(4 pts)*
+
+| Mois | Intérêts | Amortissement | Capital restant dû |
+|---|---|---|---|
+| 1 | 35 000 000 × 0,007083 = 247 917 | 344 659 − 247 917 = 96 742 | 34 903 258 |
+| 2 | 247 231 | 97 427 | 34 805 830 |
+
+7. Les intérêts sont calculés sur le **capital restant dû**, qui baisse chaque mois : la mensualité étant constante, la part d'amortissement augmente. *(2 pts)*
+
+### Partie D — Anticipé (4 pts)
+8. CRD après 84 mensualités : 344 659 × [1 − 1,007083⁻⁹⁶] / 0,007083 = **23,95 M F** → capital remboursé : 35 − 23,95 = **11,05 M**, soit **32 %** en près de la moitié de la durée. *(3 pts)*
+9. Oui en général : le capital remboursé tôt supprime tous les intérêts futurs à 8,5 %, plus que ce que rapporterait un placement à 6 % (vérifier les **pénalités** de remboursement anticipé du contrat). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser le taux annuel avec un nombre de mois.
+> - Croire qu'à mi-durée on a remboursé la moitié du capital.
+> - Oublier les indemnités de remboursement anticipé.`},
  exercices:[
   {t:"Intérêts simples et composés", d:1, e:`On place 8 M F à 7 % par an pendant 4 ans. Calculer la valeur finale avec des intérêts simples, puis composés.`, c:`Simples : 8 + 8 × 0,07 × 4 = **10,24 M F**.
 Composés : 8 × 1,07⁴ = 8 × 1,3108 = **10,49 M F** (+ 0,25 M grâce à la capitalisation).`},
@@ -776,6 +1194,48 @@ Si le CA augmente de 10 % (330 M), la MCV passe à 66 M et le résultat à 66 �
 > - Charges variables (suivent l'activité) et fixes.
 > - Résultat = MCV − charges fixes ; SR = CF / taux de MCV.
 > - BFR = clients + stocks − fournisseurs : à financer.`,
+ sujet:{titre:"L'entreprise de BTP : marge sur coûts variables, seuil de rentabilité et BFR", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une PME de gros œuvre de Daloa analyse ses comptes de l'année.
+
+**Données**
+- Chiffre d'affaires (CA) : **380 M F** ; charges fixes annuelles (siège, encadrement, amortissements) : **54 M F** ;
+- Taux de marge sur coûts variables (MCV / CA) : **18 %** ;
+- CA mensuel : **32 M F** ; clients payant à **75 jours** ; stocks moyens : **10 M F** ; achats mensuels **18 M F** payés à **45 jours** ;
+- En période creuse, on lui propose un chantier de **14 M F HT** dont les charges variables s'élèveraient à **12,9 M F**.
+
+### Partie A — Charges (4 points)
+1. Distinguer charges fixes et charges variables ; donner deux exemples de chaque dans une entreprise de BTP. (4 pts)
+
+### Partie B — Rentabilité (8 points)
+2. Calculer la marge sur coûts variables et le résultat de l'année. (3 pts)
+3. Calculer le seuil de rentabilité et la marge de sécurité (en M F et en %). (3 pts)
+4. Interpréter ces résultats. (2 pts)
+
+### Partie C — Le chantier en période creuse (3 points)
+5. Faut-il accepter le chantier de 14 M F ? Justifier. Quelle est la limite de ce raisonnement ? (3 pts)
+
+### Partie D — Besoin en fonds de roulement (5 points)
+6. Calculer les créances clients, les dettes fournisseurs et le BFR. (3 pts)
+7. Proposer deux moyens de réduire le BFR. (2 pts)`,
+  corrige:`### Partie A — Charges (4 pts)
+1. **Fixes** : ne dépendent pas du volume de travaux (loyers du siège, salaires de l'encadrement et de l'administration, amortissements, assurances) ; **variables** : proportionnelles à l'activité (matériaux, main-d'œuvre de chantier, sous-traitance, carburant, locations de matériel). *(4 pts)*
+
+### Partie B — Rentabilité (8 pts)
+2. MCV = 0,18 × 380 = **68,4 M** ; résultat = 68,4 − 54 = **14,4 M F**. *(3 pts)*
+3. SR = 54 / 0,18 = **300 M F** ; marge de sécurité = 380 − 300 = **80 M F**, soit **21 %** du CA. *(3 pts)*
+4. L'entreprise est bénéficiaire, mais une baisse d'activité de plus de **21 %** la ferait passer en perte : il faut surveiller le carnet de commandes et les charges fixes. *(2 pts)*
+
+### Partie C — Chantier (3 pts)
+5. MCV = 14 − 12,9 = **1,1 M F** > 0 : les charges fixes sont payées de toute façon, ce chantier **améliore le résultat de 1,1 M** → l'accepter. Limite : ne jamais descendre sous les **charges variables**, et ne pas en faire une habitude (les prix bas finissent par ne plus couvrir les charges fixes). *(3 pts)*
+
+### Partie D — BFR (5 pts)
+6. Créances : 32 × 75 / 30 = **80 M** ; dettes fournisseurs : 18 × 45 / 30 = **27 M** ; BFR = 80 + 10 − 27 = **63 M F**. *(3 pts)*
+7. Facturer et **relancer** plus vite (situations mensuelles à jour, avances de démarrage) ; négocier des délais fournisseurs plus longs ; réduire les **stocks** (livraisons au fil du chantier). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre marge sur coûts variables et bénéfice.
+> - Accepter des chantiers sous les charges variables « pour faire du chiffre ».
+> - Oublier que le BFR doit être financé (fonds propres, crédit).`},
  exercices:[
   {t:"Seuil de rentabilité", d:1, e:`Une PME réalise 180 M F de CA ; charges variables 75 % du CA ; charges fixes 36 M. Calculer le résultat, le seuil de rentabilité et la marge de sécurité.`, c:`MCV = 25 % × 180 = 45 M → résultat : 45 − 36 = **9 M F**.
 SR = 36 / 0,25 = **144 M F** ; marge de sécurité : 180 − 144 = **36 M** (20 % du CA).`},
@@ -853,6 +1313,45 @@ Bloquer 4 M F pendant 18 mois coûte à l'entreprise, si elle doit les emprunter
 > - Cautions : soumission (1–2 %), bonne exécution (5–10 %), restitution d'avance (= avance), retenue de garantie (5 %).
 > - Une caution coûte une commission annuelle mais préserve la trésorerie.
 > - RC, TRC, décennale : exiger les attestations.`,
+ sujet:{titre:"Cautions, retenue de garantie et assurances d'un marché de travaux", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise remporte un marché de **120 M F HT** pour un centre de santé à Abengourou et doit fournir des garanties. Pendant les travaux, un sinistre survient.
+
+**Données**
+- Caution de soumission **2 %** ; caution de bonne exécution **5 %** ; avance de démarrage **20 %** (garantie par une caution de restitution) ; retenue de garantie **5 %**, remplaçable par une caution bancaire à **2 % par an** pendant **15 mois** ;
+- Sinistre : un orage fait tomber un mur en cours d'élévation : **9 M F** de dégâts ; franchise de l'assurance TRC : **10 %** des dommages, minimum **750 000 F**.
+
+### Partie A — Cautions (8 points)
+1. À quoi sert chaque caution (soumission, bonne exécution, restitution d'avance) ? Calculer leur montant. (5 pts)
+2. Calculer la retenue de garantie et le coût de la caution qui la remplace. Quel est l'intérêt pour l'entreprise ? (3 pts)
+
+### Partie B — Assurances (7 points)
+3. Présenter l'assurance tous risques chantier, la responsabilité civile et l'assurance décennale. (3 pts)
+4. Calculer la franchise et l'indemnité versée pour le sinistre. (2 pts)
+5. Quelle assurance jouerait si le mur était tombé sur un passant ? (2 pts)
+
+### Partie C — Après réception (5 points)
+6. Rappeler les trois garanties légales après réception et leur durée. (3 pts)
+7. Huit ans après la réception, des fissures graves rendent une salle inutilisable : qui est responsable et quelle assurance intervient ? (2 pts)`,
+  corrige:`### Partie A — Cautions (8 pts)
+1. *(5 pts)*
+   - **Soumission** (2 % = **2,4 M**) : garantit que l'entreprise signera le marché si elle est retenue ;
+   - **Bonne exécution** (5 % = **6 M**) : garantit l'exécution correcte du marché ;
+   - **Restitution d'avance** (**24 M**) : garantit le remboursement de l'avance de 20 % si l'entreprise ne réalise pas les travaux.
+2. Retenue : 5 % × 120 = **6 M F** ; caution : 6 M × 2 % × 15 / 12 = **150 000 F**. Pour 150 000 F, l'entreprise **récupère 6 M de trésorerie** au lieu de les attendre jusqu'à la fin de la garantie de parfait achèvement. *(3 pts)*
+
+### Partie B — Assurances (7 pts)
+3. **TRC** : dommages à l'ouvrage **en cours de construction** (effondrement, incendie, intempéries, vol) ; **RC** : dommages causés **aux tiers** (voisins, passants) ; **décennale** : désordres graves **après réception** (solidité, destination) pendant 10 ans. *(3 pts)*
+4. Franchise : 10 % × 9 M = 0,9 M (> 0,75 M) → **0,9 M** ; indemnité : 9 − 0,9 = **8,1 M F**. *(2 pts)*
+5. La **responsabilité civile** de l'entreprise (dommages corporels à un tiers). *(2 pts)*
+
+### Partie C — Après réception (5 pts)
+6. **Parfait achèvement** : 1 an (tous les désordres signalés) ; **bon fonctionnement** : 2 ans (équipements dissociables) ; **décennale** : 10 ans (solidité, impropriété à la destination). *(3 pts)*
+7. Les **constructeurs** (entreprise, et selon les causes architecte, BET) sont responsables de plein droit pendant 10 ans : c'est leur **assurance décennale** qui finance les réparations (le maître d'ouvrage peut aussi être couvert par une assurance dommages-ouvrage qui préfinance). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre TRC (pendant les travaux) et décennale (après réception).
+> - Oublier la franchise dans le calcul d'une indemnité.
+> - Laisser expirer une caution ou une assurance pendant le chantier.`},
  exercices:[
   {t:"Montants des cautions", d:1, e:`Pour un marché de 120 M F avec une avance de 15 %, calculer : caution de soumission (1 %), de bonne exécution (5 %), de restitution d'avance et retenue de garantie (5 %).`, c:`Soumission : **1,2 M** ; bonne exécution : **6 M** ; restitution d'avance : 15 % × 120 = **18 M** ; retenue de garantie : **6 M** (au total, sur toute la durée du marché).`},
   {t:"Coût d'une caution", d:1, e:`La caution de bonne exécution de 6 M F coûte 2 % par an ; elle est maintenue 14 mois. Calculer son coût.`, c:`6 000 000 × 0,02 × 14 / 12 = **140 000 F** (à intégrer dans les frais du chantier).`},
@@ -929,6 +1428,49 @@ Une baisse de 10 % du prix de vente divise la marge par deux : le **prix de vent
 > - CA minimal = coût / (1 − m).
 > - Rendement brut = loyers / coût ; net après vacance, entretien, gestion, impôts.
 > - Tester la sensibilité aux hypothèses.`,
+ sujet:{titre:"Promotion ou location : rentabilité d'un immeuble de 8 appartements", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un investisseur possède un terrain à Cocody-Angré et hésite entre vendre les appartements d'un immeuble R+3 (promotion) ou les louer.
+
+**Données**
+- Terrain : **48 M F** ; travaux : **264 M F** ; honoraires et études : **8 %** des travaux ; frais financiers, commercialisation et taxes : **18 M F** ;
+- Vente : **8 appartements** à **52 M F** ;
+- Location : **220 000 F/mois** par appartement ; vacance locative **8 %** ; entretien et gestion **12 %** des loyers ; impôt foncier **1,2 M F/an**.
+
+### Partie A — Coût de l'opération (4 points)
+1. Calculer les honoraires et le coût total de l'opération. (2 pts)
+2. Calculer le prix de revient par appartement. (2 pts)
+
+### Partie B — Promotion (5 points)
+3. Calculer le chiffre d'affaires, la marge et le taux de marge sur le CA. (3 pts)
+4. Quels risques le promoteur prend-il ? (2 pts)
+
+### Partie C — Location (8 points)
+5. Calculer les loyers annuels et le rendement brut. (3 pts)
+6. Calculer le revenu net annuel et le rendement net. (3 pts)
+7. Calculer le temps de retour simple. (2 pts)
+
+### Partie D — Décision (3 points)
+8. Comparer les deux stratégies (gain, durée, risques, patrimoine) et conseiller l'investisseur. (3 pts)`,
+  corrige:`### Partie A — Coût (4 pts)
+1. Honoraires : 0,08 × 264 = **21,12 M** ; total : 48 + 264 + 21,12 + 18 = **351,12 M F**. *(2 pts)*
+2. 351,12 / 8 = **43,9 M F** par appartement. *(2 pts)*
+
+### Partie B — Promotion (5 pts)
+3. CA = 8 × 52 = **416 M** ; marge = 416 − 351,12 = **64,88 M** ; taux : **15,6 %** du CA. *(3 pts)*
+4. Mévente ou baisse des prix, retard du chantier (frais financiers), dépassement des coûts, défaillance d'entreprise, recours contre le permis. *(2 pts)*
+
+### Partie C — Location (8 pts)
+5. 8 × 220 000 × 12 = **21,12 M F/an** → rendement brut : 21,12 / 351,12 = **6,0 %**. *(3 pts)*
+6. Net : 21,12 × (1 − 0,08 − 0,12) − 1,2 = 16,90 − 1,2 = **15,70 M F/an** → rendement net : **4,5 %**. *(3 pts)*
+7. 351,12 / 15,70 = **22,4 ans**. *(2 pts)*
+
+### Partie D — Décision (3 pts)
+8. **Promotion** : gain rapide (≈ 65 M en 2 à 3 ans), mais risque commercial et pas de patrimoine. **Location** : revenu régulier et patrimoine qui prend de la valeur, mais rendement net modeste (4,5 %) et retour très long. Si l'investisseur a besoin de liquidités ou d'un autre projet : vendre ; s'il cherche un revenu de long terme et dispose des fonds propres : louer (ou une solution mixte : vendre une partie pour rembourser, louer le reste). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer le rendement sur le seul coût des travaux.
+> - Oublier la vacance, l'entretien et les impôts dans le rendement net.
+> - Confondre marge sur le CA et marge sur le coût.`},
  exercices:[
   {t:"Bilan d'une petite promotion", d:2, e:`8 logements : terrain 40 M ; travaux 260 M ; honoraires 8 % des travaux ; frais financiers, commercialisation et taxes 18 M. Vente : 50 M par logement. Calculer le coût total, la marge et son taux.`, c:`Honoraires : 20,8 M → coût total : 40 + 260 + 20,8 + 18 = **338,8 M F**.
 CA : 8 × 50 = **400 M** → marge : **61,2 M F**, soit **15,3 %** du CA.`},
@@ -1002,6 +1544,52 @@ Le levier amplifie dans les deux sens.
 > - Actualiser : F / (1 + a)ⁿ ; flux constants : F [1 − (1 + a)⁻ⁿ] / a.
 > - VAN > 0 → rentable au taux a ; TRI : taux qui annule la VAN (interpolation).
 > - Levier : favorable si rentabilité du projet > coût du crédit.`,
+ sujet:{titre:"Choisir un investissement : actualisation, VAN et TRI d'un immeuble de rapport", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une société envisage d'acheter et rénover un immeuble de bureaux à Marcory.
+
+**Données**
+- Investissement total : **250 M F** (année 0) ;
+- Loyers nets : **24 M F/an** pendant **20 ans** (en fin d'année) ;
+- Valeur de revente estimée dans 20 ans : **150 M F** ;
+- Taux d'actualisation exigé par la société : **9 %** ; on étudiera aussi **8 %** ;
+- Valeur actuelle d'une suite de n flux constants F : F × [1 − (1 + a)⁻ⁿ] / a ; d'un flux unique : F / (1 + a)ⁿ.
+
+### Partie A — Actualisation (4 points)
+1. Expliquer pourquoi 1 F reçu dans 20 ans vaut moins qu'1 F aujourd'hui. (2 pts)
+2. Calculer la valeur actuelle de 150 M F reçus dans 20 ans à 9 %. (2 pts)
+
+### Partie B — VAN (8 points)
+3. Calculer la valeur actuelle des loyers à 9 %. (2 pts)
+4. Calculer la VAN à 9 %. Le projet est-il acceptable ? (3 pts)
+5. Calculer la VAN à 8 %. (3 pts)
+
+### Partie C — TRI (5 points)
+6. Définir le taux de rendement interne. (2 pts)
+7. Estimer le TRI par interpolation linéaire entre 8 % et 9 %. Conclure. (3 pts)
+
+### Partie D — Sensibilité (3 points)
+8. Quels paramètres faut-il tester avant de décider (au moins trois) ? (3 pts)`,
+  corrige:`### Partie A — Actualisation (4 pts)
+1. Un franc disponible aujourd'hui peut être **placé** et rapporter des intérêts ; il y a aussi l'**inflation** et le **risque** : un flux futur doit être ramené à sa valeur d'aujourd'hui. *(2 pts)*
+2. 150 / 1,09²⁰ = 150 / 5,604 = **26,8 M F**. *(2 pts)*
+
+### Partie B — VAN (8 pts)
+3. Facteur : (1 − 1,09⁻²⁰) / 0,09 = **9,129** → 24 × 9,129 = **219,1 M F**. *(2 pts)*
+4. VAN = − 250 + 219,1 + 26,8 = **− 4,2 M F** < 0 → **non rentable** au taux exigé de 9 %. *(3 pts)*
+5. Facteur à 8 % : 9,818 → loyers 235,6 M ; revente : 150 / 4,661 = 32,2 M → VAN = − 250 + 235,6 + 32,2 = **+ 17,8 M F**. *(3 pts)*
+
+### Partie C — TRI (5 pts)
+6. Taux d'actualisation pour lequel la **VAN est nulle** : c'est la rentabilité propre du projet. *(2 pts)*
+7. $$ TRI ≈ 8 + 17,8 / (17,8 + 4,2) = 8,8 %
+   Il est **inférieur** aux 9 % exigés : le projet ne rémunère pas assez le capital (il faudrait négocier le prix d'achat, augmenter les loyers ou réduire les travaux). *(3 pts)*
+
+### Partie D — Sensibilité (3 pts)
+8. Niveau des **loyers** et taux d'occupation, **coût des travaux** (dépassements), **valeur de revente**, taux d'intérêt et d'actualisation, durée, charges d'entretien et impôts. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les loyers sans les actualiser (480 M F « en apparence »).
+> - Oublier la valeur de revente.
+> - Comparer le TRI à un taux qui ne tient pas compte du risque.`},
  exercices:[
   {t:"Valeur actuelle", d:1, e:`Quelle est la valeur actuelle, au taux de 10 %, de : a) 5 M F reçus dans 3 ans ; b) 1 M F reçu chaque année pendant 8 ans (facteur 5,335) ?`, c:`a) 5 / 1,1³ = 5 / 1,331 = **3,76 M F** ; b) 1 × 5,335 = **5,34 M F** (et non 8 M).`},
   {t:"VAN d'un projet", d:2, e:`Un petit immeuble coûte 50 M F ; il rapporte 9 M F nets par an pendant 8 ans, puis il est revendu 20 M F. Calculer la VAN à 10 % (facteur 5,335 ; 1,1⁸ = 2,144).`, c:`Loyers : 9 × 5,335 = **48,01 M** ; revente : 20 / 2,144 = **9,33 M**.
@@ -1069,6 +1657,52 @@ Diviser le surcoût par le nombre total de kWh économisés (éventuellement act
 > - Coût global = investissement + exploitation + entretien + remplacements.
 > - Temps de retour = surcoût / économie annuelle ; VAN de l'économie sur la durée de vie.
 > - Priorité : toiture, protections solaires, ventilation, équipements efficaces.`,
+ sujet:{titre:"Coût global et investissements économes en énergie : isolation, climatisation, chauffe-eau", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le maître d'ouvrage d'un immeuble de bureaux à Yamoussoukro hésite à payer plus cher des équipements économes en énergie.
+
+**Données**
+- Isolation renforcée de la toiture : surcoût **1,8 M F** ; économie de climatisation **4 200 kWh/an** à **85 F/kWh** ; durée **20 ans** ;
+- Climatiseurs inverter pour 10 bureaux : surcoût **120 000 F** par appareil ; économie **500 kWh/an** par appareil ; durée **8 ans** ;
+- Chauffe-eau solaire contre électrique : surcoût **500 000 F** ; économie d'électricité **144 000 F/an**, appoint **24 000 F/an**, entretien **10 000 F/an** ; durée **12 ans** ;
+- Taux d'actualisation **8 %** ; facteurs (1 − 1,08⁻ⁿ) / 0,08 : n = 8 : **5,747** ; n = 12 : **7,536** ; n = 20 : **9,818**.
+
+### Partie A — Coût global (4 points)
+1. Définir le coût global et expliquer pourquoi il faut comparer les solutions sur toute leur durée de vie. (2 pts)
+2. Distinguer temps de retour simple et VAN. (2 pts)
+
+### Partie B — Isolation (5 points)
+3. Calculer l'économie annuelle et le temps de retour simple. (2 pts)
+4. Calculer la VAN de l'isolation. (3 pts)
+
+### Partie C — Climatiseurs (5 points)
+5. Calculer l'économie annuelle par appareil, le temps de retour et la VAN pour un appareil puis pour les 10. (5 pts)
+
+### Partie D — Chauffe-eau solaire (4 points)
+6. Calculer l'économie nette annuelle et la VAN. (4 pts)
+
+### Partie E — Synthèse (2 points)
+7. Classer les trois investissements et conseiller le maître d'ouvrage. (2 pts)`,
+  corrige:`### Partie A — Coût global (4 pts)
+1. Somme actualisée de l'investissement et de **toutes les dépenses futures** (énergie, entretien, remplacement). Une solution moins chère à l'achat peut coûter beaucoup plus pendant son utilisation. *(2 pts)*
+2. **Temps de retour** : surcoût / économie annuelle (simple, sans actualisation) ; **VAN** : gain total actualisé sur toute la durée de vie (− surcoût + économies actualisées). *(2 pts)*
+
+### Partie B — Isolation (5 pts)
+3. 4 200 × 85 = **357 000 F/an** ; retour : 1 800 000 / 357 000 = **5,0 ans**. *(2 pts)*
+4. VAN = − 1 800 000 + 357 000 × 9,818 = − 1 800 000 + 3 505 000 = **+ 1,705 M F** ✔. *(3 pts)*
+
+### Partie C — Climatiseurs (5 pts)
+5. Économie : 500 × 85 = **42 500 F/an** ; retour : 120 000 / 42 500 = **2,8 ans** ; VAN = − 120 000 + 42 500 × 5,747 = **+ 124 250 F** par appareil → **+ 1,24 M F** pour 10. *(5 pts)*
+
+### Partie D — Chauffe-eau (4 pts)
+6. Économie nette : 144 000 − 24 000 − 10 000 = **110 000 F/an** ; VAN = − 500 000 + 110 000 × 7,536 = **+ 329 000 F**. *(4 pts)*
+
+### Partie E — Synthèse (2 pts)
+7. Les trois VAN sont **positives** : les trois investissements sont rentables. Par gain total : isolation (1,71 M) > climatiseurs (1,24 M pour 10) > chauffe-eau (0,33 M) ; par rapidité de retour : climatiseurs (2,8 ans). Conseil : **tout réaliser**, en priorité l'isolation (qui réduit aussi la puissance des climatiseurs à installer). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Comparer des solutions sur leur seul prix d'achat.
+> - Oublier les coûts d'entretien et d'appoint dans l'économie.
+> - Utiliser un facteur d'actualisation qui ne correspond pas à la durée de vie.`},
  exercices:[
   {t:"Isolation de toiture", d:2, e:`Isoler la toiture d'une maison coûte 2,5 M F de plus et économise 400 000 F de climatisation par an pendant 20 ans. Calculer le temps de retour et la VAN à 8 % (facteur 9,818).`, c:`Temps de retour : 2,5 / 0,4 = **6,3 ans**.
 VAN = − 2 500 000 + 400 000 × 9,818 = **+ 1 427 000 F** → investissement rentable.`},
@@ -1142,6 +1776,43 @@ Les dépassements du terrassement et du gros œuvre sont couverts par la provisi
 > - IPC et IPD pour piloter coûts et délais.
 > - Avenant avant exécution : objet, prix, délai.
 > - Réclamation : écrite, chiffrée, justifiée, dans les délais.`,
+ sujet:{titre:"Contrôler les coûts d'un marché : indices, avenants et réclamation pour arrêt de chantier", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Marché de **280 M F HT** pour un lycée à Gagnoa ; vous êtes conducteur de travaux à la semaine 22.
+
+**Données**
+- Valeur planifiée **VP = 110 M** ; valeur acquise **VA = 95 M** ; coût réel **CR = 104 M** ;
+- Avenants signés : **+ 14 M** (salle informatique), **+ 6 M** (clôture), **− 4 M** (suppression d'un préau) ; plafond réglementaire des avenants : **20 %** du marché ;
+- Arrêt de **4 jours** faute de plans d'exécution du BET : équipe immobilisée **104 000 F/jour** ; matériel loué **35 000 F/jour** ; frais fixes de chantier **60 000 F/jour**.
+
+### Partie A — Indicateurs (8 points)
+1. Calculer l'indice de performance des coûts (IPC = VA / CR) et l'indice de performance des délais (IPD = VA / VP). Interpréter. (4 pts)
+2. Calculer la prévision à terminaison (PAT = budget / IPC) et le dépassement prévisible. (2 pts)
+3. Proposer deux actions correctives. (2 pts)
+
+### Partie B — Avenants (6 points)
+4. Qu'est-ce qu'un avenant ? Quand est-il nécessaire ? (2 pts)
+5. Calculer le cumul des avenants, son pourcentage et le nouveau montant du marché. Le plafond est-il respecté ? (4 pts)
+
+### Partie C — Réclamation (6 points)
+6. Calculer le préjudice direct de l'arrêt de 4 jours. (3 pts)
+7. Quelles pièces joindre à la réclamation et quand la présenter ? (3 pts)`,
+  corrige:`### Partie A — Indicateurs (8 pts)
+1. IPC = 95 / 104 = **0,91** < 1 → **dépassement de coûts** ; IPD = 95 / 110 = **0,86** < 1 → **retard**. *(4 pts)*
+2. PAT = 280 / 0,913 = **306,5 M** → dépassement prévisible **≈ 26,5 M F (9,5 %)**. *(2 pts)*
+3. Analyser les postes en dérive (rendements, pertes, achats), renforcer les tâches critiques, revoir les méthodes, accélérer les approvisionnements, faire valoir les travaux supplémentaires non encore régularisés. *(2 pts)*
+
+### Partie B — Avenants (6 pts)
+4. Acte écrit, signé par les deux parties, qui **modifie le marché** (montant, délai, contenu) : nécessaire dès qu'on ajoute, supprime ou modifie des travaux de façon significative. *(2 pts)*
+5. + 14 + 6 − 4 = **+ 16 M F**, soit **5,7 %** ; nouveau montant : **296 M F HT** ; 5,7 % < 20 % ✔. *(4 pts)*
+
+### Partie C — Réclamation (6 pts)
+6. 4 × (104 000 + 35 000 + 60 000) = 4 × 199 000 = **796 000 F**, plus une **prolongation de délai** de 4 jours. *(3 pts)*
+7. Courriers et comptes rendus prouvant la demande de plans et leur retard ; **journal de chantier** (équipes présentes et inactives) ; factures de location ; décompte détaillé. À présenter **rapidement** (dans le délai fixé par le CCAP), sans attendre le décompte final. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Exécuter des travaux supplémentaires sans avenant ni ordre de service écrit.
+> - Réclamer sans preuves datées.
+> - Confondre retard (IPD) et dépassement (IPC).`},
  exercices:[
   {t:"Indices de performance", d:2, e:`Chantier de 200 M F, mois 5 : VP = 90 M ; VA = 81 M ; CR = 86 M. Calculer IPC, IPD et la PAT. Conclure.`, c:`IPC = 81 / 86 = **0,94** (dépassement de coûts) ; IPD = 81 / 90 = **0,90** (retard).
 PAT ≈ 200 / 0,94 = **212,3 M F** (≈ 12 M de dépassement) : analyser les causes et agir sur les lots en dérive.`},
@@ -1210,6 +1881,61 @@ Une conception plus compacte économisant 8 % des travaux (− 26,9 M F) ramène
 
 > [!retenir]
 > Un bon projet immobilier se juge sur sa **rentabilité intrinsèque** (rendement, VAN, TRI) **et** sur son **financement** (cash-flow, apport, risques). Un rendement de 5 % ne permet pas de financer l'essentiel par un crédit à 8 % sur 15 ans.`,
+ sujet:{titre:"Étude de cas : montage financier d'un immeuble de rapport", duree:180, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un investisseur veut construire à Yopougon un immeuble de rapport : **6 appartements F3** et **2 commerces** au rez-de-chaussée.
+
+**Données**
+- Terrain : **70 M F** ; surface de plancher : **720 m²** à **380 000 F/m²** ;
+- Honoraires et études : **9 %** des travaux ; frais divers (permis, branchements, assurances) : **4 %** des travaux ;
+- Loyers : F3 **250 000 F/mois** ; commerce **400 000 F/mois** ;
+- Charges non récupérables (vacance, entretien, gestion, impôts) : **20 %** des loyers ;
+- Financement : apport **30 %**, emprunt pour le reste à **8 %** sur **15 ans**, annuités constantes : a = C × i / [1 − (1 + i)⁻ⁿ] ;
+- Variantes : emprunt sur **20 ans** ; ou apport de **50 %**.
+
+### Partie A — Coût du projet (5 points)
+1. Calculer le coût des travaux, des honoraires, des frais divers et le coût total. (5 pts)
+
+### Partie B — Revenus (5 points)
+2. Calculer les loyers bruts annuels et le rendement brut. (3 pts)
+3. Calculer le revenu net et le rendement net. (2 pts)
+
+### Partie C — Financement (6 points)
+4. Calculer l'apport, l'emprunt et l'annuité sur 15 ans. (3 pts)
+5. Calculer le flux de trésorerie annuel (revenu net − annuité). Conclure. (3 pts)
+
+### Partie D — Variantes et conseil (4 points)
+6. Calculer l'annuité et le flux annuel pour un emprunt sur 20 ans, puis avec un apport de 50 % sur 15 ans. (3 pts)
+7. Quel montage conseiller ? (1 pt)`,
+  corrige:`### Partie A — Coût (5 pts)
+1. *(5 pts)*
+
+| Poste | Calcul | M F |
+|---|---|---|
+| Terrain | | 70,00 |
+| Travaux | 720 × 380 000 | 273,60 |
+| Honoraires | 9 % | 24,62 |
+| Frais divers | 4 % | 10,94 |
+| **Total** | | **379,17** |
+
+### Partie B — Revenus (5 pts)
+2. 6 × 250 000 × 12 + 2 × 400 000 × 12 = 18,0 + 9,6 = **27,6 M F/an** → rendement brut : 27,6 / 379,17 = **7,3 %**. *(3 pts)*
+3. Net : 27,6 × 0,80 = **22,08 M F/an** → **5,8 %**. *(2 pts)*
+
+### Partie C — Financement (6 pts)
+4. Apport : 0,30 × 379,17 = **113,75 M** ; emprunt : **265,42 M** ; annuité : $$ a = 265,42 × 0,08 / (1 − 1,08⁻¹⁵) = 31,01 M F/an
+   *(3 pts)*
+5. 22,08 − 31,01 = **− 8,93 M F/an** : les loyers ne couvrent pas l'annuité ; l'investisseur doit ajouter près de 9 M chaque année pendant 15 ans. Montage **non viable** tel quel. *(3 pts)*
+
+### Partie D — Variantes (4 pts)
+6. *(3 pts)*
+   - 20 ans : a = 265,42 × 0,08 / (1 − 1,08⁻²⁰) = **27,03 M** → flux **− 4,95 M/an** ;
+   - apport 50 % (emprunt 189,58 M) sur 15 ans : a = **22,15 M** → flux **≈ − 0,07 M/an** (quasi équilibre).
+7. Augmenter l'**apport** (≈ 50 %) et/ou allonger la durée, ou réduire le coût (surface, standing) ; ne lancer le projet que si le flux est proche de l'équilibre, avec une réserve pour la vacance et les imprévus. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Comparer le loyer brut à l'annuité sans retirer les charges.
+> - Oublier les frais annexes dans le coût total.
+> - Ignorer le risque de vacance des commerces.`},
  exercices:[
   {t:"Cash-flow avec crédit", d:2, e:`Vérifier l'annuité d'un emprunt de 221,5 M F à 7 % sur 20 ans (facteur d'annuité 0,09439) et le cash-flow annuel avec 24 M F de loyers nets.`, c:`Annuité : 221,5 × 0,09439 = **20,91 M F** → cash-flow : 24 − 20,91 = **+ 3,09 M F/an**.`},
   {t:"Rentabilité des fonds propres", d:2, e:`Dans l'option à 50 % de crédit, l'investisseur apporte 221,5 M F et reçoit 3,09 M F par an. Calculer ce rendement « en trésorerie ». Pourquoi est-il trompeur à lui seul ?`, c:`3,09 / 221,5 = **1,4 %** par an en trésorerie.

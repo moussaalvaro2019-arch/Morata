@@ -114,23 +114,23 @@ A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", group
   "Contrôle des devis d'entreprises",
   "Montage d'un projet de location ou de vente d'appartements",
   "Choix d'investissements économes en énergie"
- ], src:"data/cours/eco.js?v=67f8ff69", chapitres:[
-  {id:"eco-10", niv:1, titre:"Les notions de base : pourcentages, indices et inflation", duree:45, nq:5, nex:5},
-  {id:"eco-6", niv:1, titre:"Prix, coûts, marges et TVA", duree:50, nq:5, nex:5},
-  {id:"eco-1", niv:1, titre:"Le coût global d'une opération de construction", duree:45, nq:5, nex:5},
-  {id:"eco-7", niv:1, titre:"Lire un devis et comparer des offres", duree:45, nq:5, nex:5},
-  {id:"eco-11", niv:1, titre:"Le budget d'un particulier : financer sa maison", duree:45, nq:5, nex:5},
-  {id:"eco-2", niv:2, titre:"Le sous-détail de prix et le prix de vente", duree:55, nq:5, nex:5},
-  {id:"eco-3", niv:2, titre:"Les méthodes d'estimation", duree:50, nq:5, nex:5},
-  {id:"eco-4", niv:2, titre:"Marchés, appels d'offres et révision des prix", duree:55, nq:5, nex:5},
-  {id:"eco-12", niv:2, titre:"Mathématiques financières : intérêts, emprunts et amortissements", duree:55, nq:5, nex:5},
-  {id:"eco-13", niv:2, titre:"L'entreprise de BTP : charges, résultat et seuil de rentabilité", duree:50, nq:5, nex:5},
-  {id:"eco-14", niv:2, titre:"Garanties, cautions et assurances de la construction", duree:45, nq:5, nex:5},
-  {id:"eco-5", niv:3, titre:"Rentabilité d'un projet immobilier : promotion et location", duree:55, nq:5, nex:5},
-  {id:"eco-8", niv:3, titre:"Choisir un investissement : actualisation, VAN et TRI", duree:55, nq:5, nex:5},
-  {id:"eco-15", niv:3, titre:"Coût global et choix d'investissements économes en énergie", duree:45, nq:5, nex:5},
-  {id:"eco-9", niv:3, titre:"Contrôle des coûts, avenants et réclamations", duree:50, nq:5, nex:5},
-  {id:"eco-16", niv:3, titre:"Étude de cas : montage financier d'un immeuble de rapport", duree:60, nq:5, nex:5}
+ ], src:"data/cours/eco.js?v=8030332a", chapitres:[
+  {id:"eco-10", niv:1, titre:"Les notions de base : pourcentages, indices et inflation", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-6", niv:1, titre:"Prix, coûts, marges et TVA", duree:50, nq:5, nex:5, ns:1},
+  {id:"eco-1", niv:1, titre:"Le coût global d'une opération de construction", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-7", niv:1, titre:"Lire un devis et comparer des offres", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-11", niv:1, titre:"Le budget d'un particulier : financer sa maison", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-2", niv:2, titre:"Le sous-détail de prix et le prix de vente", duree:55, nq:5, nex:5, ns:1},
+  {id:"eco-3", niv:2, titre:"Les méthodes d'estimation", duree:50, nq:5, nex:5, ns:1},
+  {id:"eco-4", niv:2, titre:"Marchés, appels d'offres et révision des prix", duree:55, nq:5, nex:5, ns:1},
+  {id:"eco-12", niv:2, titre:"Mathématiques financières : intérêts, emprunts et amortissements", duree:55, nq:5, nex:5, ns:1},
+  {id:"eco-13", niv:2, titre:"L'entreprise de BTP : charges, résultat et seuil de rentabilité", duree:50, nq:5, nex:5, ns:1},
+  {id:"eco-14", niv:2, titre:"Garanties, cautions et assurances de la construction", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-5", niv:3, titre:"Rentabilité d'un projet immobilier : promotion et location", duree:55, nq:5, nex:5, ns:1},
+  {id:"eco-8", niv:3, titre:"Choisir un investissement : actualisation, VAN et TRI", duree:55, nq:5, nex:5, ns:1},
+  {id:"eco-15", niv:3, titre:"Coût global et choix d'investissements économes en énergie", duree:45, nq:5, nex:5, ns:1},
+  {id:"eco-9", niv:3, titre:"Contrôle des coûts, avenants et réclamations", duree:50, nq:5, nex:5, ns:1},
+  {id:"eco-16", niv:3, titre:"Étude de cas : montage financier d'un immeuble de rapport", duree:60, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"sol", icone:"mountain", couleur:"#8B5A2B", niveau:"Intermédiaire", heures:75, ordre:1, prerequis:["mmc", "sp"], resume:"Connaître le sol pour bien fonder : paramètres d'état, sols tropicaux et lagunaires, reconnaissance, identification et classification, compactage, contraintes et eau dans le sol, cisaillement, capacité portante, tassements, essais in situ, pieux, poussée des terres, stabilité des pentes et amélioration des sols, avec applications et exercices corrigés.", objectifs:[
   "Calculer les paramètres d'état d'un sol (w, γ, γd, e, n, Sr)",
