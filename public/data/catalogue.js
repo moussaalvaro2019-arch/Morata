@@ -82,7 +82,7 @@ A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Ge
   "Organiser un bétonnage ou un terrassement important",
   "Tenir les réunions, le journal et les tableaux de bord",
   "Établir une situation et analyser les écarts de coût"
- ], src:"data/cours/chant.js?v=1e532ba2", chapitres:[
+ ], src:"data/cours/chant.js?v=ceb2a39b", chapitres:[
   {id:"chant-1", niv:1, titre:"Les documents du marché et du chantier", duree:45, nq:5, nex:5},
   {id:"chant-10", niv:1, titre:"Les intervenants du chantier et l'organisation de l'équipe", duree:45, nq:5, nex:5},
   {id:"chant-2", niv:1, titre:"L'installation de chantier", duree:45, nq:5, nex:5},

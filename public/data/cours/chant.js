@@ -327,6 +327,29 @@ La qualification et la motivation des équipes, l'organisation (approvisionnemen
 ## Mesurer un rendement réel
 Rendement réel = quantité réalisée / (nombre d'équipes × jours). Exemple : 2 binômes posent 54 m² en 3 jours → 54 / (2 × 3) = **9 m²/jour par binôme**. Si le planning prévoyait 10, il faut corriger les durées restantes ou agir (approvisionnement, organisation).
 
+## Application : les durées du gros œuvre d'une villa
+| Tâche | Quantité | Rendement par équipe | Équipes | Durée calculée | Durée retenue |
+|---|---|---|---|---|---|
+| Fouilles manuelles | 45 m³ | 3 m³/j | 4 manœuvres | 3,75 j | **4 j** |
+| Coffrage poteaux et poutres | 120 m² | 8 m²/j | 2 | 7,5 j | **8 j** |
+| Ferraillage | 1 800 kg | 200 kg/j | 1 | 9 j | **9 j** |
+| Bétonnage (par phases) | 25 m³ | 8 m³/j | 1 | 3,1 j | **4 j** |
+| Maçonnerie d'agglos | 260 m² | 10 m²/j | 3 | 8,7 j | **9 j** |
+| Enduits 2 faces | 520 m² | 16 m²/j | 3 | 10,8 j | **11 j** |
+Ces durées ne s'additionnent pas toutes : certaines tâches se chevauchent (le ferraillage avance pendant le coffrage). Leur enchaînement se fait sur le planning.
+
+## Passer du rendement au temps unitaire par ouvrier
+Un binôme qui pose 10 m²/jour en 8 h consomme 2 × 8 = 16 heures d'ouvrier pour 10 m² : **Tu = 1,6 h par m²** et par ouvrier. Pour 260 m² : 260 × 1,6 = 416 h ; avec 6 ouvriers à 8 h/jour : 416 / 48 = **8,7 jours** (même résultat que par le rendement).
+
+## Corriger un rendement selon les conditions
+On applique un **coefficient** au rendement de référence : travail à l'étage sur échafaudage × 0,85 ; forte chaleur × 0,90 ; petites surfaces avec nombreuses ouvertures × 0,80. Maçonnerie à l'étage : 10 × 0,85 = **8,5 m²/jour** par binôme.
+
+> [!attention] Erreurs fréquentes
+> - Confondre le temps unitaire de l'équipe et celui d'un ouvrier.
+> - Additionner les durées de tâches qui se font en parallèle.
+> - Garder un rendement de catalogue alors que le chantier mesure autre chose.
+> - Arrondir une durée au jour inférieur.
+
 > [!retenir]
 > - Durée = quantité / (rendement × équipes) = quantité × Tu / (ouvriers × heures).
 > - Rendements indicatifs à remplacer par vos rendements mesurés.
@@ -431,6 +454,30 @@ Le délai de séchage devient critique : la fin recule de **11 jours**. Pour l'�
 
 > [!attention]
 > Les pertes et vols de matériaux peuvent atteindre 5 à 10 % sur un chantier mal tenu : magasin fermé, inventaires, bons de sortie signés.
+
+## Application : l'histogramme et le volume de main-d'œuvre
+Avec l'exemple de lissage ci-dessus, le volume total est le même avant et après : 6 × 6 + 4 × 4 + 2 × 4 = **60 jours-ouvriers** sur 10 jours, soit **6 ouvriers** en moyenne. Le lissage ne réduit pas le travail : il supprime les pics (10 ouvriers) qui obligeraient à embaucher pour quelques jours et à mal encadrer.
+
+## Application : le stock moyen et son coût
+Avec 120 sacs commandés à chaque fois et un stock de sécurité de 24 sacs (2 jours), le stock évolue en « dents de scie » entre 24 et 144 sacs. **Stock moyen** ≈ sécurité + commande / 2 = 24 + 60 = **84 sacs**, soit 84 × 5 500 = **462 000 F** immobilisés en permanence. Commander plus souvent par petites quantités réduit ce montant, mais augmente les frais de transport.
+
+> [!exemple] Quand commander les aciers ?
+> Le ferraillage des poteaux commence au jour 15 ; délai de livraison 7 jours ; marge de sécurité 3 jours.
+> Date de commande : 15 − 7 − 3 = **jour 5**.
+> On inscrit cette date sur le planning des approvisionnements.
+
+## Méthode : planning des approvisionnements
+1. Pour chaque matériau, relever la **date de besoin** sur le planning des travaux ;
+2. Retrancher le **délai de livraison** et une **marge** ;
+3. Calculer la **quantité** (métré + pertes) et la fractionner selon la capacité de stockage ;
+4. Passer commande et suivre la livraison ;
+5. Réceptionner, stocker correctement (ciment sur palettes à l'abri, aciers sur cales), tenir l'inventaire.
+
+> [!attention] Erreurs fréquentes
+> - Commander au dernier moment, sans tenir compte du délai de livraison.
+> - Stocker le ciment à même le sol ou sous une bâche percée.
+> - Accepter une livraison sans contrôle ni bon signé.
+> - Embaucher pour un pic d'effectif qu'un simple décalage aurait évité.
 
 > [!retenir]
 > - Histogramme des effectifs ; lisser grâce aux marges.
@@ -752,6 +799,30 @@ Les étais d'un plancher restent en place **21 à 28 jours**. Si l'on coule un p
 - Faire travailler les équipes **en parallèle** sur des zones différentes (**travail à la chaîne** : coffreurs, ferrailleurs, bétonneurs se succèdent de zone en zone) ;
 - Ne jamais réduire les délais de **décoffrage** et de **cure** pour gagner du temps.
 
+## Application : combien de jeux d'étais ?
+Nombre de jeux = durée de maintien / cadence (arrondie au-dessus) + 1 jeu en préparation. Avec un maintien de 28 jours et un plancher tous les 10 jours : 28 / 10 = 2,8 → 3 jeux en place + 1 = **4 jeux**. Pour un plancher de 200 m² étayé à raison d'un étai par m² : **800 étais** à prévoir (achat ou location).
+
+## Application : le cycle d'un étage en 10 jours
+| Jours | Travaux |
+|---|---|
+| J1 – J2 | Implantation, ferraillage et coffrage des poteaux |
+| J3 | Coulage des poteaux |
+| J4 – J6 | Étaiement, coffrage des poutres et du plancher |
+| J7 – J8 | Ferraillage, réservations des réseaux, contrôle |
+| J9 | Coulage du plancher |
+| J10 | Cure, décoffrage des joues de poutres, préparation du niveau suivant |
+Chaque équipe (coffreurs, ferrailleurs, bétonneurs) retrouve le même travail au même moment du cycle : les rendements s'améliorent d'étage en étage.
+
+## Application : bétonner une dalle de 45 m³
+- À la **bétonnière** (2,5 m³/h) : 45 / 2,5 = **18 heures** de coulage, soit plus de deux journées : il faut prévoir des **reprises de bétonnage** à des endroits choisis par le bureau d'études ;
+- À la **pompe** (30 m³/h) avec du BPE : 45 / 30 = **1,5 heure** de pompage (plus l'installation) : la dalle est coulée d'un seul tenant.
+
+> [!attention] Erreurs fréquentes
+> - Retirer les étais avant le délai pour récupérer du matériel.
+> - Couler une grande dalle à la bétonnière sans plan de reprises.
+> - Choisir un coffrage industriel pour un ouvrage peu répétitif.
+> - Oublier les réservations (gaines, fourreaux) avant le coulage.
+
 > [!retenir]
 > - Coffrage : comparer le coût par utilisation ; industriel si répétitif.
 > - Étais : 21 à 28 jours → plusieurs jeux en rotation.
@@ -865,6 +936,34 @@ En traçant VP, VA et CR cumulés en fonction du temps, on obtient des courbes e
 - Mesurer l'avancement **physiquement** (métrés, pourcentages par lot) et non d'après les dépenses ;
 - Mettre à jour chaque mois, analyser les causes des écarts, décider d'actions et suivre leurs effets ;
 - Présenter les résultats simplement au maître d'ouvrage et à la direction (indices et courbes).
+
+## Application : calculer la valeur acquise par lot
+Avec le chantier de 60 M F de l'exemple (fin du mois 4), on mesure l'avancement physique de chaque lot :
+| Lot | Budget (M F) | Avancement mesuré | Valeur acquise (M F) |
+|---|---|---|---|
+| Terrassements | 6 | 100 % | 6 |
+| Fondations | 12 | 100 % | 12 |
+| Élévation | 20 | 10 % | 2 |
+| Toiture | 10 | 0 % | 0 |
+| Second œuvre | 12 | 0 % | 0 |
+| **Total (BAC)** | **60** | | **VA = 20** |
+
+## Plusieurs prévisions à l'achèvement
+| Hypothèse | Formule | Résultat |
+|---|---|---|
+| L'écart est accidentel | EAA = CR + (BAC − VA) | 22 + 40 = **62 M** |
+| L'efficacité reste la même | EAA = BAC / CPI | **66 M** |
+| Coûts et retards pèsent ensemble | EAA = CR + (BAC − VA) / (CPI × SPI) | **74,8 M** |
+La fourchette (62 à 75 M) montre l'enjeu des décisions à prendre maintenant.
+
+## L'effort à fournir
+Pour finir dans le budget, le reste des travaux (60 − 20 = 40 M au budget) doit coûter au plus 60 − 22 = 38 M : l'indice à atteindre est **TCPI = 40 / 38 = 1,05**. Il faut travailler 5 % plus efficacement que prévu jusqu'à la fin, alors qu'on est à 0,91 : c'est irréaliste sans changer d'organisation.
+
+> [!attention] Erreurs fréquentes
+> - Calculer la valeur acquise à partir des dépenses au lieu de l'avancement physique.
+> - Mélanger des montants HT et TTC.
+> - Oublier de mettre à jour le BAC après un avenant.
+> - Constater les écarts sans décider d'actions correctives.
 
 > [!retenir]
 > - VP (prévu), VA (fait, au prix du budget), CR (coût réel).
