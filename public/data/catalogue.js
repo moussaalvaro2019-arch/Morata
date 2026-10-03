@@ -212,24 +212,24 @@ A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", i
   "Lecture des plans au 1/50 et au 1/100",
   "Contrôle statistique des résistances du béton",
   "Calculs topographiques et financiers"
- ], src:"data/cours/math.js?v=29cf3356", chapitres:[
-  {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, nq:5, nex:5},
-  {id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, nq:5, nex:5},
-  {id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, nq:5, nex:5},
-  {id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:45, nq:5, nex:5},
-  {id:"math-11", niv:1, titre:"Angles, triangles, Thalès et constructions", duree:45, nq:5, nex:5},
-  {id:"math-3", niv:2, titre:"Pythagore et trigonométrie dans le triangle rectangle", duree:50, nq:5, nex:5},
-  {id:"math-4", niv:2, titre:"Géométrie dans l'espace : volumes et surfaces", duree:50, nq:5, nex:5},
-  {id:"math-5", niv:2, titre:"Équations, inéquations et systèmes", duree:50, nq:5, nex:5},
-  {id:"math-12", niv:2, titre:"Fonctions affines, graphiques et interpolation", duree:45, nq:5, nex:5},
-  {id:"math-13", niv:2, titre:"Le second degré : paraboles et optimisation", duree:45, nq:5, nex:5},
-  {id:"math-9", niv:2, titre:"Statistiques et contrôle qualité", duree:50, nq:5, nex:5},
-  {id:"math-7", niv:3, titre:"Trigonométrie dans les triangles quelconques", duree:50, nq:5, nex:5},
-  {id:"math-16", niv:3, titre:"Repérage, coordonnées et vecteurs", duree:45, nq:5, nex:5},
-  {id:"math-14", niv:3, titre:"Les suites numériques", duree:45, nq:5, nex:5},
-  {id:"math-17", niv:3, titre:"Logarithmes et exponentielles", duree:45, nq:5, nex:5},
-  {id:"math-15", niv:3, titre:"Probabilités et contrôle par échantillonnage", duree:45, nq:5, nex:5},
-  {id:"math-8", niv:3, titre:"Mathématiques financières : intérêts, actualisation et amortissements", duree:45, nq:5, nex:5}
+ ], src:"data/cours/math.js?v=e9e89274", chapitres:[
+  {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, nq:5, nex:5, ns:1},
+  {id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-11", niv:1, titre:"Angles, triangles, Thalès et constructions", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-3", niv:2, titre:"Pythagore et trigonométrie dans le triangle rectangle", duree:50, nq:5, nex:5, ns:1},
+  {id:"math-4", niv:2, titre:"Géométrie dans l'espace : volumes et surfaces", duree:50, nq:5, nex:5, ns:1},
+  {id:"math-5", niv:2, titre:"Équations, inéquations et systèmes", duree:50, nq:5, nex:5, ns:1},
+  {id:"math-12", niv:2, titre:"Fonctions affines, graphiques et interpolation", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-13", niv:2, titre:"Le second degré : paraboles et optimisation", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-9", niv:2, titre:"Statistiques et contrôle qualité", duree:50, nq:5, nex:5, ns:1},
+  {id:"math-7", niv:3, titre:"Trigonométrie dans les triangles quelconques", duree:50, nq:5, nex:5, ns:1},
+  {id:"math-16", niv:3, titre:"Repérage, coordonnées et vecteurs", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-14", niv:3, titre:"Les suites numériques", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-17", niv:3, titre:"Logarithmes et exponentielles", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-15", niv:3, titre:"Probabilités et contrôle par échantillonnage", duree:45, nq:5, nex:5, ns:1},
+  {id:"math-8", niv:3, titre:"Mathématiques financières : intérêts, actualisation et amortissements", duree:45, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", groupe:"phys", icone:"wave", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:55, ordre:4, prerequis:["sp", "math"], resume:"L'eau dans et autour du bâtiment : pression et hydrostatique, poussées et sous-pressions, débits, Bernoulli, régimes d'écoulement et pertes de charge, réseaux d'eau potable, eaux pluviales et eaux usées, pompes et surpresseurs, caniveaux, buses et dalots, coup de bélier, réservoirs, assainissement autonome et hydrologie urbaine.", objectifs:[
   "Calculer des pressions, des poussées hydrostatiques et des sous-pressions",
