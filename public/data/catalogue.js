@@ -376,23 +376,23 @@ A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", gr
   "Débits de ventilation des logements, classes et bureaux",
   "Dégagements et compartimentage des immeubles",
   "Kit solaire d'un logement ou d'un dispensaire"
- ], src:"data/cours/pb.js?v=38ba2dc6", chapitres:[
-  {id:"pb-1", niv:1, titre:"Le bâtiment et son climat", duree:40, nq:5, nex:5},
-  {id:"pb-10", niv:1, titre:"Le soleil et le bâtiment : course, orientation et ombres", duree:45, nq:5, nex:5},
-  {id:"pb-6", niv:1, titre:"Le confort de l'occupant : chaleur, humidité, air et lumière", duree:45, nq:5, nex:5},
-  {id:"pb-3", niv:1, titre:"Éclairage naturel et artificiel : les bases", duree:45, nq:5, nex:5},
-  {id:"pb-11", niv:1, titre:"L'eau et le bâtiment : pluie, sol et remontées capillaires", duree:45, nq:5, nex:5},
-  {id:"pb-2", niv:2, titre:"L'humidité dans le bâtiment : diagnostic et traitements", duree:50, nq:5, nex:5},
-  {id:"pb-12", niv:2, titre:"Dimensionner les protections solaires : débords, brise-soleil et masques", duree:50, nq:5, nex:5},
-  {id:"pb-4", niv:2, titre:"Ventilation et qualité de l'air intérieur", duree:50, nq:5, nex:5},
-  {id:"pb-13", niv:2, titre:"Éclairage artificiel : la méthode des flux", duree:45, nq:5, nex:5},
-  {id:"pb-5", niv:2, titre:"Sécurité incendie : réaction au feu, compartimentage et évacuation", duree:55, nq:5, nex:5},
-  {id:"pb-7", niv:3, titre:"Air humide, point de rosée et condensation", duree:55, nq:5, nex:5},
-  {id:"pb-15", niv:3, titre:"Migration de vapeur dans les parois : la méthode de Glaser", duree:55, nq:5, nex:5},
-  {id:"pb-16", niv:3, titre:"Ventilation naturelle : effet du vent et tirage thermique", duree:50, nq:5, nex:5},
-  {id:"pb-8", niv:3, titre:"Conception bioclimatique en climat tropical : méthode et vérifications", duree:55, nq:5, nex:5},
-  {id:"pb-17", niv:3, titre:"Résistance au feu des structures : béton, acier et bois", duree:50, nq:5, nex:5},
-  {id:"pb-9", niv:3, titre:"Énergie solaire photovoltaïque : dimensionner une installation", duree:55, nq:5, nex:5}
+ ], src:"data/cours/pb.js?v=5dc8e6cc", chapitres:[
+  {id:"pb-1", niv:1, titre:"Le bâtiment et son climat", duree:40, nq:5, nex:5, ns:1},
+  {id:"pb-10", niv:1, titre:"Le soleil et le bâtiment : course, orientation et ombres", duree:45, nq:5, nex:5, ns:1},
+  {id:"pb-6", niv:1, titre:"Le confort de l'occupant : chaleur, humidité, air et lumière", duree:45, nq:5, nex:5, ns:1},
+  {id:"pb-3", niv:1, titre:"Éclairage naturel et artificiel : les bases", duree:45, nq:5, nex:5, ns:1},
+  {id:"pb-11", niv:1, titre:"L'eau et le bâtiment : pluie, sol et remontées capillaires", duree:45, nq:5, nex:5, ns:1},
+  {id:"pb-2", niv:2, titre:"L'humidité dans le bâtiment : diagnostic et traitements", duree:50, nq:5, nex:5, ns:1},
+  {id:"pb-12", niv:2, titre:"Dimensionner les protections solaires : débords, brise-soleil et masques", duree:50, nq:5, nex:5, ns:1},
+  {id:"pb-4", niv:2, titre:"Ventilation et qualité de l'air intérieur", duree:50, nq:5, nex:5, ns:1},
+  {id:"pb-13", niv:2, titre:"Éclairage artificiel : la méthode des flux", duree:45, nq:5, nex:5, ns:1},
+  {id:"pb-5", niv:2, titre:"Sécurité incendie : réaction au feu, compartimentage et évacuation", duree:55, nq:5, nex:5, ns:1},
+  {id:"pb-7", niv:3, titre:"Air humide, point de rosée et condensation", duree:55, nq:5, nex:5, ns:1},
+  {id:"pb-15", niv:3, titre:"Migration de vapeur dans les parois : la méthode de Glaser", duree:55, nq:5, nex:5, ns:1},
+  {id:"pb-16", niv:3, titre:"Ventilation naturelle : effet du vent et tirage thermique", duree:50, nq:5, nex:5, ns:1},
+  {id:"pb-8", niv:3, titre:"Conception bioclimatique en climat tropical : méthode et vérifications", duree:55, nq:5, nex:5, ns:1},
+  {id:"pb-17", niv:3, titre:"Résistance au feu des structures : béton, acier et bois", duree:50, nq:5, nex:5, ns:1},
+  {id:"pb-9", niv:3, titre:"Énergie solaire photovoltaïque : dimensionner une installation", duree:55, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"rdm", titre:"Résistance des matériaux", court:"RDM", groupe:"struct", icone:"beam", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:90, ordre:2, prerequis:["math", "sp", "om"], resume:"Des charges aux contraintes : équilibre, réactions d'appuis, efforts N, V, M, diagrammes, flexion, flèches, flambement, structures hyperstatiques, portiques et méthode de Cross, avec applications et exercices corrigés.", objectifs:[
   "Évaluer les charges qui s'appliquent sur un ouvrage et les transmettre jusqu'aux appuis",
