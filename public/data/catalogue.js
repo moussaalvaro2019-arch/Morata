@@ -1,25 +1,35 @@
 /* Fichier généré par outils/catalogue.mjs — ne pas modifier à la main.
    Liste des matières et des chapitres ; le contenu est dans data/cours/<matière>.js */
-A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", groupe:"phys", icone:"sound", couleur:"#0E8C95", niveau:"Intermédiaire", heures:14, ordre:3, prerequis:["sp"], resume:"Le son et les décibels, isolation aux bruits aériens et aux bruits de choc, correction acoustique des salles et bonnes pratiques de conception.", objectifs:[
-  "Calculer et additionner des niveaux sonores en décibels",
-  "Appliquer la loi de masse pour choisir une paroi",
-  "Traiter les bruits d'impact et d'équipements",
-  "Calculer un temps de réverbération (formule de Sabine)"
+A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", groupe:"phys", icone:"sound", couleur:"#0E8C95", niveau:"Intermédiaire", heures:50, ordre:3, prerequis:["sp"], resume:"Le son et les décibels, propagation et mesure du bruit, gêne et santé, isolation aux bruits aériens (loi de masse, parois doubles et composites), bruits de choc et d'équipements, réverbération et acoustique des salles, bruit des chantiers, de la circulation et des groupes électrogènes, conception de bâtiments calmes.", objectifs:[
+  "Calculer, additionner et soustraire des niveaux sonores en décibels",
+  "Prévoir la décroissance du bruit avec la distance et derrière un écran",
+  "Mesurer un niveau équivalent et évaluer l'exposition des travailleurs",
+  "Choisir une paroi avec la loi de masse et traiter les points faibles",
+  "Réduire les bruits de choc et les vibrations des équipements",
+  "Calculer un temps de réverbération et corriger une salle",
+  "Concevoir un plan qui protège du bruit"
  ], applications:[
   "Isolation entre deux logements d'un immeuble",
-  "Chambre côté rue",
+  "Chambre côté rue, façade sur une voie à fort trafic",
   "Salle de classe, salle de réunion, lieu de culte",
-  "Bruit des groupes électrogènes et climatiseurs"
- ], src:"data/cours/acou.js?v=730f3f60", chapitres:[
-  {id:"acou-1", niv:1, titre:"Le son et les décibels", duree:25, nq:4, nex:0},
-  {id:"acou-5", niv:1, titre:"Les bruits du quotidien et la gêne", duree:20, nq:4, nex:0},
-  {id:"acou-6", niv:1, titre:"Choisir ses matériaux pour le confort acoustique", duree:20, nq:4, nex:0},
-  {id:"acou-2", niv:2, titre:"Isolation aux bruits aériens", duree:30, nq:4, nex:0},
-  {id:"acou-3", niv:2, titre:"Bruits de choc et d'équipements", duree:20, nq:4, nex:0},
-  {id:"acou-4", niv:2, titre:"Correction acoustique et réverbération", duree:25, nq:4, nex:0},
-  {id:"acou-7", niv:3, titre:"Isolement entre locaux : transmissions latérales et DnT", duree:30, nq:4, nex:0},
-  {id:"acou-8", niv:3, titre:"Acoustique des salles : classes, lieux de culte, auditoriums", duree:30, nq:4, nex:0},
-  {id:"acou-9", niv:3, titre:"Bruit de l'environnement : routes, chantiers et protections", duree:30, nq:4, nex:0}
+  "Groupes électrogènes, climatiseurs et pompes",
+  "Bruit de chantier et protection auditive"
+ ], src:"data/cours/acou.js?v=0ac2b990", chapitres:[
+  {id:"acou-1", niv:1, titre:"Le son et les décibels", duree:45, nq:5, nex:5},
+  {id:"acou-10", niv:1, titre:"La propagation du son : distance, obstacles et réflexions", duree:40, nq:5, nex:5},
+  {id:"acou-11", niv:1, titre:"Mesurer le bruit : sonomètre, niveau équivalent et indicateurs", duree:40, nq:5, nex:5},
+  {id:"acou-5", niv:1, titre:"Les bruits du quotidien et la gêne : santé et bonnes pratiques", duree:40, nq:5, nex:5},
+  {id:"acou-6", niv:1, titre:"Absorber ou isoler ? Choisir ses matériaux", duree:40, nq:5, nex:5},
+  {id:"acou-2", niv:2, titre:"Isolation aux bruits aériens : loi de masse et parois doubles", duree:55, nq:5, nex:5},
+  {id:"acou-12", niv:2, titre:"Parois composites : fenêtres, portes, entrées d'air et fuites", duree:45, nq:5, nex:5},
+  {id:"acou-3", niv:2, titre:"Bruits de choc et bruits d'équipements", duree:45, nq:5, nex:5},
+  {id:"acou-4", niv:2, titre:"Correction acoustique : réverbération et formule de Sabine", duree:50, nq:5, nex:5},
+  {id:"acou-15", niv:2, titre:"Le bruit des chantiers et la protection des travailleurs", duree:45, nq:5, nex:5},
+  {id:"acou-7", niv:3, titre:"Isolement entre locaux : transmissions latérales et DnT", duree:50, nq:5, nex:5},
+  {id:"acou-8", niv:3, titre:"Acoustique des salles : classes, salles polyvalentes, lieux de culte", duree:50, nq:5, nex:5},
+  {id:"acou-9", niv:3, titre:"Bruit de l'environnement : circulation, écrans et urbanisme", duree:50, nq:5, nex:5},
+  {id:"acou-14", niv:3, titre:"Équipements techniques : niveaux de puissance, capotages et antivibratiles", duree:50, nq:5, nex:5},
+  {id:"acou-16", niv:3, titre:"Concevoir un bâtiment calme : méthode de synthèse", duree:45, nq:5, nex:5}
  ]});
 A.addMatiere({id:"ba", titre:"Béton armé", court:"Béton armé", groupe:"struct", icone:"column", couleur:"#14202E", niveau:"Intermédiaire", heures:100, ordre:3, prerequis:["rdm", "mat"], resume:"Du principe du béton armé au plan de ferraillage : matériaux, états limites, descente de charges, dispositions constructives, tirants, poteaux, poutres (ELU, ELS, sections en T, effort tranchant), dalles, fondations, poutres continues, escaliers, voiles, flexion composée et étude complète d'un bâtiment, selon le BAEL 91 et l'Eurocode 2.", objectifs:[
   "Connaître les caractéristiques de calcul du béton et des aciers",
