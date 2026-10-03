@@ -299,26 +299,38 @@ A.addMatiere({id:"metre", titre:"Métré", court:"Métré", groupe:"gest", icone
   {id:"metre-9", niv:3, titre:"Attachements, situations de travaux et décomptes", duree:55, nq:5, nex:5},
   {id:"metre-22", niv:3, titre:"Étude de cas : avant-métré et devis complet d'une maison", duree:75, nq:5, nex:5}
  ]});
-A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", groupe:"struct", icone:"cube", couleur:"#5B6B7F", niveau:"Avancé", heures:20, ordre:1, prerequis:["om", "sp"], resume:"Contraintes, déformations, loi de Hooke, cercle de Mohr et critères de résistance : la base théorique de la RDM, du béton armé et de la géotechnique.", objectifs:[
-  "Comprendre les hypothèses du milieu continu",
+A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", groupe:"struct", icone:"cube", couleur:"#5B6B7F", niveau:"Avancé", heures:55, ordre:1, prerequis:["om", "sp"], resume:"Les bases théoriques communes à la RDM, au béton armé, à la construction métallique et à la géotechnique : contraintes et déformations, essais des matériaux, loi de Hooke, contraintes dans les poutres, torsion, cercle de Mohr, critères de résistance, contraintes effectives dans les sols, énergie de déformation, plasticité, rupture et éléments finis.", objectifs:[
+  "Comprendre les hypothèses du milieu continu et de l'élasticité",
+  "Calculer contraintes et déformations en traction, compression et cisaillement",
+  "Interpréter un essai de traction ou de compression",
   "Décrire l'état de contrainte en un point et ses contraintes principales",
   "Relier contraintes et déformations par la loi de Hooke généralisée",
-  "Utiliser le cercle de Mohr et les critères de Tresca, von Mises et Mohr-Coulomb"
+  "Calculer les contraintes de flexion, de cisaillement et de torsion dans une poutre",
+  "Appliquer les critères de Tresca, von Mises et Mohr-Coulomb",
+  "Utiliser l'énergie de déformation et lire un calcul aux éléments finis"
  ], applications:[
-  "Justification des formules de RDM",
-  "Résistance des sols (Mohr-Coulomb)",
+  "Justification des formules de RDM et de béton armé",
   "Vérification d'une pièce métallique sous efforts combinés",
-  "Lecture des résultats d'un logiciel aux éléments finis"
- ], src:"data/cours/mmc.js?v=db256138", chapitres:[
-  {id:"mmc-1", niv:1, titre:"Hypothèses et notion de milieu continu", duree:20, nq:4, nex:0},
-  {id:"mmc-6", niv:1, titre:"Forces, contraintes et déformations en traction simple", duree:25, nq:4, nex:0},
-  {id:"mmc-7", niv:1, titre:"Comportement des matériaux : essais de traction et de compression", duree:25, nq:4, nex:0},
-  {id:"mmc-2", niv:2, titre:"Les contraintes", duree:30, nq:4, nex:0},
-  {id:"mmc-3", niv:2, titre:"Les déformations", duree:25, nq:4, nex:0},
-  {id:"mmc-4", niv:2, titre:"Loi de comportement élastique (Hooke)", duree:30, nq:4, nex:0},
-  {id:"mmc-5", niv:3, titre:"Critères de résistance", duree:25, nq:4, nex:0},
-  {id:"mmc-8", niv:3, titre:"Contraintes planes et cercle de Mohr appliqué", duree:35, nq:4, nex:0},
-  {id:"mmc-9", niv:3, titre:"Introduction aux éléments finis", duree:30, nq:4, nex:0}
+  "Résistance des sols et des fondations (Mohr-Coulomb)",
+  "Appareils d'appui, assemblages boulonnés, jauges de déformation",
+  "Contrôle des résultats d'un logiciel aux éléments finis"
+ ], src:"data/cours/mmc.js?v=1355dd73", chapitres:[
+  {id:"mmc-1", niv:1, titre:"Hypothèses et notion de milieu continu", duree:40, nq:5, nex:5},
+  {id:"mmc-6", niv:1, titre:"Forces, contraintes et déformations en traction simple", duree:45, nq:5, nex:5},
+  {id:"mmc-7", niv:1, titre:"Comportement des matériaux : essais de traction et de compression", duree:45, nq:5, nex:5},
+  {id:"mmc-10", niv:1, titre:"Cisaillement simple et contraintes tangentielles", duree:40, nq:5, nex:5},
+  {id:"mmc-11", niv:1, titre:"Efforts intérieurs : coupure et torseur de cohésion", duree:40, nq:5, nex:5},
+  {id:"mmc-2", niv:2, titre:"L'état de contrainte en un point : vecteur et tenseur des contraintes", duree:50, nq:5, nex:5},
+  {id:"mmc-3", niv:2, titre:"Les déformations : allongements, distorsions et jauges", duree:45, nq:5, nex:5},
+  {id:"mmc-4", niv:2, titre:"Loi de Hooke généralisée et déformations thermiques", duree:50, nq:5, nex:5},
+  {id:"mmc-12", niv:2, titre:"Contraintes dans les poutres : flexion et cisaillement", duree:55, nq:5, nex:5},
+  {id:"mmc-13", niv:2, titre:"Torsion et sollicitations composées", duree:50, nq:5, nex:5},
+  {id:"mmc-8", niv:3, titre:"Contraintes principales et cercle de Mohr", duree:50, nq:5, nex:5},
+  {id:"mmc-5", niv:3, titre:"Critères de résistance : Rankine, Tresca, von Mises et Mohr-Coulomb", duree:50, nq:5, nex:5},
+  {id:"mmc-14", niv:3, titre:"Contraintes dans les sols : contraintes effectives et rupture", duree:55, nq:5, nex:5},
+  {id:"mmc-15", niv:3, titre:"Énergie de déformation et méthodes énergétiques", duree:50, nq:5, nex:5},
+  {id:"mmc-16", niv:3, titre:"Plasticité, concentrations de contraintes, fatigue et rupture", duree:50, nq:5, nex:5},
+  {id:"mmc-9", niv:3, titre:"La méthode des éléments finis : principe et contrôle des résultats", duree:50, nq:5, nex:5}
  ]});
 A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", groupe:"fond", icone:"fx", couleur:"#5B45A8", niveau:"Intermédiaire", heures:55, ordre:2, prerequis:["math"], resume:"Les outils mathématiques de l'ingénieur et du technicien supérieur : vecteurs et moments, fonctions, dérivées et extremums, exponentielle et logarithme, intégrales (résultantes, centres de gravité, inerties, déformées), matrices et systèmes, équations différentielles, méthodes numériques, calcul matriciel des structures, régression et incertitudes, avec applications à la RDM et exercices corrigés.", objectifs:[
   "Manipuler vecteurs, produits scalaires et moments",
