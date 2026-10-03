@@ -59,27 +59,37 @@ A.addMatiere({id:"ba", titre:"Béton armé", court:"Béton armé", groupe:"struc
   {id:"ba-22", niv:3, titre:"Flèches et durabilité : vérifications de service", duree:60, nq:5, nex:4},
   {id:"ba-23", niv:3, titre:"Étude complète d'un bâtiment : du plan au ferraillage (BAEL et Eurocode 2)", duree:80, nq:5, nex:4}
  ]});
-A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Gestion chantier", groupe:"gest", icone:"clip", couleur:"#B8700A", niveau:"Intermédiaire", heures:24, ordre:1, prerequis:["tech"], resume:"Documents du marché, installation de chantier, planification, rendements, gestion des ressources et approvisionnements, qualité, sécurité, environnement et suivi financier.", objectifs:[
-  "Connaître les pièces d'un marché et les documents de chantier",
-  "Organiser l'installation de chantier",
+A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Gestion chantier", groupe:"gest", icone:"clip", couleur:"#B8700A", niveau:"Intermédiaire", heures:65, ordre:1, prerequis:["tech"], resume:"Préparer, organiser et piloter un chantier : documents du marché, intervenants, installation, qualité, sécurité et environnement, préparation, rendements et planning, ressources, approvisionnements, matériel et engins, terrassements et bétonnages, suivi financier et quotidien, management, cadences, HSE, valeur acquise, avec applications et exercices corrigés.", objectifs:[
+  "Connaître les pièces d'un marché, les documents et les intervenants du chantier",
+  "Préparer un chantier et organiser son installation",
   "Établir un planning à partir des quantités et des rendements",
-  "Gérer main-d'œuvre, matériel et approvisionnements",
-  "Appliquer les règles de qualité, de sécurité et de suivi financier"
+  "Dimensionner les équipes, le matériel, les engins et les approvisionnements",
+  "Appliquer les règles de qualité, de sécurité et d'environnement",
+  "Suivre l'avancement, les coûts et la trésorerie d'un chantier"
  ], applications:[
-  "Préparer l'ouverture d'un chantier",
-  "Planifier une maison ou un petit immeuble",
-  "Tenir le journal et les réunions de chantier",
-  "Établir une situation de travaux"
- ], src:"data/cours/chant.js?v=115734f5", chapitres:[
-  {id:"chant-1", niv:1, titre:"Les documents du marché et du chantier", duree:25, nq:4, nex:0},
-  {id:"chant-2", niv:1, titre:"L'installation de chantier", duree:25, nq:4, nex:0},
-  {id:"chant-5", niv:1, titre:"Qualité, sécurité et environnement", duree:30, nq:4, nex:0},
-  {id:"chant-3", niv:2, titre:"Planification : rendements et durées", duree:30, nq:4, nex:0},
-  {id:"chant-4", niv:2, titre:"Gestion des ressources et approvisionnements", duree:25, nq:4, nex:0},
-  {id:"chant-6", niv:2, titre:"Suivi financier et réception des travaux", duree:25, nq:4, nex:0},
-  {id:"chant-7", niv:3, titre:"Management de projet : équipes, réunions et litiges", duree:30, nq:4, nex:0},
-  {id:"chant-8", niv:3, titre:"Méthodes de construction : coffrages, rotations et cadences", duree:30, nq:4, nex:0},
-  {id:"chant-9", niv:3, titre:"Gestion des risques, HSE et sinistres", duree:30, nq:4, nex:0}
+  "Préparer l'ouverture d'un chantier de villa ou d'immeuble",
+  "Planifier et suivre l'avancement chaque semaine",
+  "Organiser un bétonnage ou un terrassement important",
+  "Tenir les réunions, le journal et les tableaux de bord",
+  "Établir une situation et analyser les écarts de coût"
+ ], src:"data/cours/chant.js?v=1e532ba2", chapitres:[
+  {id:"chant-1", niv:1, titre:"Les documents du marché et du chantier", duree:45, nq:5, nex:5},
+  {id:"chant-10", niv:1, titre:"Les intervenants du chantier et l'organisation de l'équipe", duree:45, nq:5, nex:5},
+  {id:"chant-2", niv:1, titre:"L'installation de chantier", duree:45, nq:5, nex:5},
+  {id:"chant-5", niv:1, titre:"Qualité, sécurité et environnement", duree:50, nq:5, nex:5},
+  {id:"chant-11", niv:1, titre:"La préparation de chantier", duree:50, nq:5, nex:5},
+  {id:"chant-3", niv:2, titre:"Rendements, temps unitaires et durées", duree:50, nq:5, nex:5},
+  {id:"chant-12", niv:2, titre:"Le planning : Gantt, liens, marges et chemin critique", duree:60, nq:5, nex:5},
+  {id:"chant-4", niv:2, titre:"Les ressources : main-d'œuvre, stocks et approvisionnements", duree:55, nq:5, nex:5},
+  {id:"chant-13", niv:2, titre:"Le matériel et les engins de chantier", duree:55, nq:5, nex:5},
+  {id:"chant-14", niv:2, titre:"Organiser les grandes opérations : terrassements et bétonnages", duree:55, nq:5, nex:5},
+  {id:"chant-6", niv:2, titre:"Le suivi financier du chantier : budget, coûts et trésorerie", duree:55, nq:5, nex:5},
+  {id:"chant-15", niv:2, titre:"Le suivi quotidien : réunions, comptes rendus et tableaux de bord", duree:45, nq:5, nex:5},
+  {id:"chant-7", niv:3, titre:"Management de projet : équipes, réunions et litiges", duree:50, nq:5, nex:5},
+  {id:"chant-8", niv:3, titre:"Méthodes de construction : coffrages, rotations et cadences", duree:50, nq:5, nex:5},
+  {id:"chant-9", niv:3, titre:"Gestion des risques, HSE et sinistres", duree:50, nq:5, nex:5},
+  {id:"chant-16", niv:3, titre:"Piloter par la valeur acquise : délais et coûts", duree:50, nq:5, nex:5},
+  {id:"chant-17", niv:3, titre:"Étude de cas : préparer et piloter le chantier d'une villa", duree:70, nq:5, nex:5}
  ]});
 A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", groupe:"gest", icone:"coins", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:20, ordre:2, prerequis:["metre"], resume:"Coût global d'une opération, sous-détail des prix, coefficient de vente, estimations par ratios, marchés et appels d'offres, rentabilité d'un projet immobilier.", objectifs:[
   "Décomposer le coût global d'une opération de construction",
