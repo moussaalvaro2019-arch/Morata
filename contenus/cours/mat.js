@@ -70,6 +70,52 @@ Ex. : 520 g de sable humide donnant 500 g après séchage → w = 20 / 500 = **4
 > - w = (Mh − Ms)/Ms ; absorption de même forme.
 > - σ = F/A ; flexion : 3FL/(2bh²) ; E = σ/ε.
 > - ΔL = α L ΔT ; λ faible = isolant.`,
+ sujet:{titre:"Propriétés générales des matériaux : masses volumiques, absorption, résistances, dilatation", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le laboratoire d'une entreprise à Yamoussoukro réceptionne des matériaux pour un chantier d'école. Vous exploitez les mesures.
+
+**Données**
+- Gravier sec : **2 000 g** remplissent un récipient de **1,25 L** ; masse volumique absolue des grains **2,68 t/m³** ;
+- Agglo plein : masse sèche **17,2 kg**, masse après immersion 24 h **18,4 kg** ;
+- Cube de béton de **15 cm** écrasé sous **720 kN** ;
+- Prisme de mortier **4 × 4 × 16 cm**, appuis à **10 cm**, rupture en flexion sous **3,1 kN** (σ = 3 F L / (2 b h²)) ;
+- Dalle de béton de **20 m** de long, α = **10 × 10⁻⁶ /°C**, variation de température **30 °C**.
+
+### Partie A — Masses volumiques et porosité (6 points)
+1. Définir masse volumique apparente et masse volumique absolue. (2 pts)
+2. Calculer la masse volumique apparente du gravier et la porosité (vides entre grains). (3 pts)
+3. Quel rôle joue ce volume de vides dans un béton ? (1 pt)
+
+### Partie B — Absorption (3 points)
+4. Calculer le coefficient d'absorption d'eau de l'agglo. Pourquoi est-ce important ? (3 pts)
+
+### Partie C — Résistances (7 points)
+5. Calculer la résistance en compression du cube. (2 pts)
+6. Calculer la résistance en flexion du prisme. (3 pts)
+7. Comparer les deux et en déduire une propriété fondamentale des matériaux pierreux. (2 pts)
+
+### Partie D — Dilatation (4 points)
+8. Calculer l'allongement de la dalle. Quelle disposition constructive en déduire ? (4 pts)`,
+  corrige:`### Partie A — Masses volumiques (6 pts)
+1. **Apparente** : masse d'un volume de matériau **vides compris** (grains + vides entre grains) ; **absolue** (réelle) : masse du volume de **matière seule**. *(2 pts)*
+2. ρ = 2,000 / 1,25 = **1,60 t/m³** ; porosité p = 1 − 1,60 / 2,68 = **0,40** (40 % de vides). *(3 pts)*
+3. Les vides du gravier doivent être remplis par le sable et la pâte de ciment : ils conditionnent les dosages. *(1 pt)*
+
+### Partie B — Absorption (3 pts)
+4. Ab = (18,4 − 17,2) / 17,2 = **7,0 %**. Un matériau très absorbant boit l'eau du mortier (mauvaise adhérence) et se dégrade à l'humidité : on humidifie les agglos avant la pose. *(3 pts)*
+
+### Partie C — Résistances (7 pts)
+5. σ = 720 000 / (150 × 150) = **32 MPa**. *(2 pts)*
+6. $$ σ = 3 × 3 100 × 100 / (2 × 40 × 40²) = 7,3 MPa
+   *(3 pts)*
+7. La résistance en traction (flexion) est environ **4 à 10 fois plus faible** qu'en compression : bétons et mortiers résistent bien à la compression, mal à la traction — d'où les **armatures** du béton armé. *(2 pts)*
+
+### Partie D — Dilatation (4 pts)
+8. ΔL = 10 × 10⁻⁶ × 30 × 20 000 = **6 mm**. Il faut des **joints de dilatation** (et de retrait) pour que la dalle puisse bouger sans fissurer ni pousser les murs. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre masse volumique apparente et absolue.
+> - Oublier de convertir les cm en mm dans le calcul des contraintes.
+> - Négliger la dilatation des grandes dalles et terrasses en climat chaud.`},
  exercices:[
   {t:"Masse volumique et porosité d'une brique", d:1, e:`Une brique pleine de 22 × 10,5 × 6,5 cm pèse 2,40 kg sèche ; la masse volumique absolue de sa matière est 2,60 t/m³. Calculer sa masse volumique apparente et sa porosité. Saturée d'eau, elle pèse 2,64 kg : calculer son absorption.`, c:`V = 0,22 × 0,105 × 0,065 = **0,001 502 m³** → ρ = 2,40 / 0,001 502 = **1 598 kg/m³**.
 p = 1 − 1 598 / 2 600 = **0,385** (38,5 % de vides).
@@ -137,6 +183,53 @@ Sur une aire propre (dalle ou bâche), en tas séparés par nature et par classe
 > - d/D ; roulés ou concassés ; pas de sable salé en béton armé.
 > - Granulométrie continue ; Mf de 2,2 à 2,8 pour un sable à béton.
 > - ES ≥ 75 ; LA faible = granulat dur ; le sable humide foisonne.`,
+ sujet:{titre:"Contrôler les granulats livrés : granulométrie, module de finesse, propreté et foisonnement", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un camion de sable de lagune et un camion de gravier concassé arrivent sur un chantier d'immeuble à Abobo. Vous contrôlez la livraison.
+
+**Données — sable (1 000 g)** : refus cumulés : 5 mm **3 %** ; 2,5 mm **15 %** ; 1,25 mm **34 %** ; 0,63 mm **58 %** ; 0,315 mm **82 %** ; 0,16 mm **96 %**.
+Module de finesse : Mf = Σ des refus cumulés (%) sur les tamis 0,16 – 0,315 – 0,63 – 1,25 – 2,5 – 5 / 100.
+
+**Équivalent de sable** : hauteur totale (sable + floculat) **12,5 cm** ; hauteur de sable (au piston) **9,8 cm**.
+
+**Gravier** : bon de livraison « 5/25 concassé » ; un tamisage montre **12 %** de grains > 25 mm.
+
+**Foisonnement** : 1 m³ de sable sec pèse **1 550 kg** ; humide à 5 %, la même masse sèche occupe **1,22 m³**.
+
+### Partie A — Granulats (4 points)
+1. Définir granulat, classe d/D, sable, gravillon. Différence entre roulé et concassé ? (4 pts)
+
+### Partie B — Sable (9 points)
+2. Calculer le module de finesse et conclure (sable à béton : 2,2 à 2,8 ; idéal ≈ 2,5). (3 pts)
+3. Calculer l'équivalent de sable et conclure (béton : ES ≥ 75). (2 pts)
+4. Quel risque présente un sable de lagune ou de mer ? Comment le traiter ? (2 pts)
+5. Calculer le foisonnement et la masse volumique apparente du sable humide. Conséquence pour un dosage « à la brouette » ? (2 pts)
+
+### Partie C — Gravier (4 points)
+6. Le gravier est-il conforme à sa classe 5/25 ? (2 pts)
+7. Pourquoi limite-t-on D selon l'enrobage et l'espacement des armatures ? (2 pts)
+
+### Partie D — Stockage (3 points)
+8. Donner trois règles de stockage des granulats sur chantier. (3 pts)`,
+  corrige:`### Partie A — Granulats (4 pts)
+1. Grains minéraux (sables, graviers) entrant dans les mortiers et bétons. **d/D** : plus petite et plus grande dimension (en mm). **Sable** : 0/4 (ou 0/5) ; **gravillon** : d ≥ 2 et D ≤ 63 mm. **Roulé** : grains arrondis (rivière, plus maniable) ; **concassé** : anguleux (carrière, meilleure adhérence à la pâte). *(4 pts)*
+
+### Partie B — Sable (9 pts)
+2. Mf = (3 + 15 + 34 + 58 + 82 + 96) / 100 = **2,88** : un peu **grossier** (au-dessus de 2,8) → béton moins maniable ; corriger avec un peu de sable fin. *(3 pts)*
+3. ES = 100 × 9,8 / 12,5 = **78** ≥ 75 → **propre**, convient pour le béton. *(2 pts)*
+4. **Sels** (chlorures) qui font rouiller les armatures, et coquillages : il faut le **laver** à l'eau douce (et contrôler la teneur en chlorures) ou utiliser un sable de carrière. *(2 pts)*
+5. Foisonnement : 1,22 − 1 = **22 %** ; masse volumique apparente humide : 1 550 × 1,05 / 1,22 = **1 334 kg/m³**. Mesuré humide au volume, on met **moins de sable** que prévu : il faut corriger les volumes (ou doser en masse). *(2 pts)*
+
+### Partie C — Gravier (4 pts)
+6. Pour un 5/25, on tolère environ 10 % de surclassés (> D) : **12 % > 10 %** → non conforme ; réclamer ou recribler. *(2 pts)*
+7. Les gros grains doivent passer entre les barres et entre les barres et le coffrage, sinon nids de cailloux et mauvais enrobage. *(2 pts)*
+
+### Partie D — Stockage (3 pts)
+8. Sur une aire propre et dure (pas sur la terre) ; **séparer** les classes (cloisons) ; protéger de la pollution et des feuilles ; éviter la ségrégation des gros grains ; garder une humidité régulière (bâche). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser du sable de mer non lavé pour le béton armé.
+> - Doser le sable humide au volume sans tenir compte du foisonnement.
+> - Stocker le gravier sur la terre : il se salit d'argile.`},
  exercices:[
   {t:"Analyse granulométrique", d:2, e:`On tamise 1 000 g de sable sec. Refus partiels : 5 mm : 35 g ; 2,5 mm : 120 g ; 1,25 mm : 190 g ; 0,63 mm : 230 g ; 0,315 mm : 210 g ; 0,16 mm : 140 g ; fond : 75 g. Calculer les refus cumulés, les tamisats et le module de finesse. Conclure.`, c:`| Tamis (mm) | Refus cumulé (g) | Refus cumulé (%) | Tamisat (%) |
 |---|---|---|---|
@@ -201,6 +294,53 @@ Vérifier la **date** de fabrication, l'absence de grumeaux (ciment **éventé**
 > - CEM I à V ; classes 32,5 – 42,5 – 52,5 (N ou R).
 > - Début de prise ≥ 45 – 75 min ; 65 – 70 % de la résistance à 7 jours.
 > - Stocker au sec, piles de 10, utiliser dans le mois.`,
+ sujet:{titre:"Choisir, réceptionner et stocker les liants d'un chantier", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous êtes magasinier-chef d'un chantier de lycée à Odienné, loin des fournisseurs. Vous gérez les ciments et la chaux.
+
+**Données**
+- Ciments disponibles : **CEM I 52,5 R**, **CEM II/A-L 42,5 N**, **CEM II/B-L 32,5 R**, **CEM III/A 42,5 N** ;
+- Consommation prévue : **25 m³** de béton dosé à 350 kg par semaine, approvisionnement toutes les **3 semaines** ;
+- Une palette livrée contient des sacs durs et pleins de grumeaux, datés de **4 mois**.
+
+### Partie A — Fabrication et composition (5 points)
+1. Décrire la fabrication du ciment Portland (matières, cuisson, clinker, gypse). (3 pts)
+2. Quel est le rôle du gypse ? (1 pt)
+3. Que signifie « 42,5 N » ? (1 pt)
+
+### Partie B — Choix des ciments (6 points)
+4. Décoder chacun des quatre ciments (type, ajouts, classe, vitesse). (4 pts)
+5. Lequel choisir pour : (a) les poteaux et dalles courants, (b) la préfabrication de poutrelles avec décoffrage rapide, (c) un ouvrage en bord de lagune, (d) les enduits et la maçonnerie ? (2 pts)
+
+### Partie C — Prise et durcissement (3 points)
+6. Distinguer prise et durcissement. Pourquoi ne faut-il jamais « rebattre » un béton qui a commencé sa prise ? (3 pts)
+
+### Partie D — Gestion du stock (6 points)
+7. Calculer le nombre de sacs par semaine et par livraison, et le nombre de piles de 10 sacs. (3 pts)
+8. Que faire de la palette de sacs durcis ? Donner les règles de stockage du ciment. (3 pts)`,
+  corrige:`### Partie A — Fabrication (5 pts)
+1. Calcaire (≈ 80 %) et argile (≈ 20 %) broyés, cuits vers **1 450 °C** → **clinker** ; broyé très finement avec un peu de **gypse** et éventuellement des **ajouts** (calcaire, laitier, pouzzolane, cendres). *(3 pts)*
+2. Le gypse **régule la prise** (sans lui, le ciment prendrait presque instantanément). *(1 pt)*
+3. Résistance minimale de **42,5 MPa** à 28 jours sur mortier normalisé ; **N** : montée en résistance normale. *(1 pt)*
+
+### Partie B — Choix (6 pts)
+4. *(4 pts)*
+   - **CEM I 52,5 R** : ≥ 95 % de clinker, très résistant, rapide ;
+   - **CEM II/A-L 42,5 N** : clinker + 6 à 20 % de calcaire, usage courant ;
+   - **CEM II/B-L 32,5 R** : 21 à 35 % de calcaire, maçonnerie et bétons peu sollicités ;
+   - **CEM III/A 42,5 N** : ciment au **laitier** (36 à 65 %), chaleur faible, bonne résistance aux milieux agressifs.
+5. (a) CEM II/A 42,5 ; (b) CEM I 52,5 R ; (c) CEM III/A ; (d) CEM II/B 32,5. *(2 pts)*
+
+### Partie C — Prise (3 pts)
+6. **Prise** : la pâte raidit (quelques heures) ; **durcissement** : la résistance augmente pendant des semaines (≈ 65 % à 7 j, 100 % à 28 j). Remanier ou ajouter de l'eau après le début de prise casse les cristaux en formation et affaiblit définitivement le béton. *(3 pts)*
+
+### Partie D — Stock (6 pts)
+7. 25 × 7 = **175 sacs/semaine** ; par livraison : **525 sacs** (≈ 26 t) ; **53 piles** de 10 sacs. *(3 pts)*
+8. Ciment **éventé** (hydraté par l'humidité) : on le **refuse** pour les bétons de structure (au mieux pour des usages non structurels après tamisage, ou on le jette). Règles : sur **palettes**, à l'abri de la pluie et de l'humidité du sol, piles de **10 sacs** maximum, **premier entré, premier sorti**, durée de stockage limitée (≈ 1 mois sur chantier). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser un ciment à grumeaux pour un poteau.
+> - Stocker les sacs à même la dalle ou la terre.
+> - Choisir un ciment uniquement sur son prix sans regarder sa classe.`},
  exercices:[
   {t:"Lire une désignation", d:1, e:`Expliquer les désignations : a) CEM I 52,5 R ; b) CEM II/A-P 42,5 N ; c) CEM III/A 32,5 N. Lequel choisir pour des poutres préfabriquées décoffrées le lendemain ? pour un radier massif ?`, c:`a) Ciment Portland pur (≥ 95 % de clinker), classe 52,5, à durcissement **rapide** ;
 b) Portland composé à 6 – 20 % de **pouzzolane**, classe 42,5, durcissement normal ;
@@ -255,6 +395,44 @@ Humidifier les agglos par temps chaud, joints de 1 à 1,5 cm bien garnis et déc
 > - Mortier de pose 250 – 300 kg/m³ ; enduit : gobetis 500, corps 350 – 400, finition 300 – 350.
 > - 12,5 agglos/m² ; 30 à 40 agglos par sac ; 7 jours d'arrosage.
 > - B40 : 4 MPa sur section brute (320 kN pour un agglo de 40 × 20).`,
+ sujet:{titre:"Mortiers, enduits et agglos : dosages, quantités et contrôle de résistance", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le chantier d'un centre de santé à Séguéla, vous préparez les mortiers, contrôlez une briqueterie locale d'agglos et commandez le ciment des enduits.
+
+**Données**
+- Mortier de pose des agglos : **0,85 m³** dosé à **300 kg/m³** ;
+- Enduit trois couches sur **120 m²** : gobetis **0,004 m³/m²** dosé à **500** ; corps d'enduit **0,012 m³/m²** dosé à **400** ; finition **0,005 m³/m²** dosée à **330 kg/m³** ;
+- Fabrication des agglos creux de 15 : **35 agglos par sac** ;
+- Essai de 3 agglos creux de 15 (section brute **40 × 20 cm**) : ruptures à **345 kN**, **298 kN**, **336 kN** ; classe B40 exigée : **moyenne ≥ 4 MPa** et aucune valeur **< 3,5 MPa**.
+
+### Partie A — Mortiers (6 points)
+1. Donner le dosage usuel pour : pose d'agglos, chape, gobetis, corps d'enduit, scellements. (3 pts)
+2. Calculer le ciment et le sable du mortier de pose. (3 pts)
+
+### Partie B — Enduits (5 points)
+3. Décrire le rôle de chaque couche de l'enduit. (2 pts)
+4. Calculer le ciment nécessaire pour les 120 m² et le volume de sable. (3 pts)
+
+### Partie C — Agglos (9 points)
+5. Combien de sacs pour fabriquer 1 000 agglos ? Que risque-t-on à fabriquer 50 agglos par sac ? (3 pts)
+6. Calculer la résistance de chaque agglo et la moyenne. Le lot est-il accepté en classe B40 ? (4 pts)
+7. Quelle cure appliquer aux agglos et après combien de temps les utiliser ? (2 pts)`,
+  corrige:`### Partie A — Mortiers (6 pts)
+1. Pose d'agglos **250 à 300** ; chape **300 à 400** ; gobetis **500** ; corps d'enduit **350 à 400** ; scellements **400 à 500 kg/m³**. *(3 pts)*
+2. Ciment : 0,85 × 300 = **255 kg = 5,1 sacs** (6 sacs) ; sable ≈ **0,85 m³** (1 m³ de sable donne environ 1 m³ de mortier). *(3 pts)*
+
+### Partie B — Enduits (5 pts)
+3. **Gobetis** : accrochage (mortier riche, projeté) ; **corps d'enduit** : dressage, planéité, imperméabilité ; **finition** : aspect (taloché, lissé, gratté), plus maigre pour éviter les fissures. *(2 pts)*
+4. Par m² : 0,004 × 500 + 0,012 × 400 + 0,005 × 330 = 2 + 4,8 + 1,65 = **8,45 kg** → 120 m² : **1 014 kg ≈ 20,3 → 21 sacs** ; sable : 120 × 0,021 = **2,52 m³**. *(3 pts)*
+
+### Partie C — Agglos (9 pts)
+5. 1 000 / 35 = **28,6 → 29 sacs**. À 50 agglos par sac, le béton est trop maigre : agglos **friables**, faible résistance, forte absorption. *(3 pts)*
+6. Section 80 000 mm² : **4,31 ; 3,73 ; 4,20 MPa** ; moyenne **4,08 MPa** ≥ 4 ✔ et minimum 3,73 ≥ 3,5 ✔ → **accepté** (de justesse : surveiller la fabrication). *(4 pts)*
+7. **Arroser 2 fois par jour pendant 7 jours**, à l'ombre ; utiliser après **14 à 28 jours**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser le même mortier maigre pour tout (gobetis compris).
+> - Accepter des agglos sur leur aspect sans essai pour une maçonnerie porteuse.
+> - Laisser sécher les agglos au soleil dès le démoulage.`},
  exercices:[
   {t:"Ciment d'un enduit trois couches", d:2, e:`Façade de 100 m² : gobetis de 3 mm dosé à 500 kg/m³, corps d'enduit de 15 mm dosé à 350 kg/m³, finition de 5 mm dosée à 300 kg/m³. Calculer le ciment nécessaire.`, c:`Par m² : 0,003 × 500 + 0,015 × 350 + 0,005 × 300 = 1,5 + 5,25 + 1,5 = **8,25 kg**.
 Pour 100 m² : **825 kg = 16,5 sacs** (17 sacs, plus les pertes).`},
@@ -305,6 +483,50 @@ Très résistant en traction, léger, à croissance rapide ; utilisé pour les s
 > - Graveleux latéritique : remblais et chaussées (contrôle Proctor, CBR).
 > - BTC : terre + 5 à 8 % de ciment, comprimée ; 2 à 6 MPa ; à protéger de la pluie.
 > - Terre cuite, pierres, bambou : matériaux locaux durables bien employés.`,
+ sujet:{titre:"Terre, latérite et BTC : choisir la terre, stabiliser et contrôler les briques", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une coopérative de Katiola veut produire des **briques de terre comprimée (BTC)** pour une école. Vous l'accompagnez.
+
+**Données**
+- Test du bocal (sédimentation) sur la terre du site : graviers **15 %**, sables **50 %**, limons **17 %**, argiles **18 %** ;
+- BTC de **29,5 × 14 × 9,5 cm**, masse **7,5 kg** ; stabilisation à **7 %** de ciment (en masse) ;
+- Essai de compression d'une BTC : rupture à **150 kN** sur la face 29,5 × 14 cm ;
+- **31 BTC par m²** de mur ; murs de l'école : **180 m²**.
+
+### Partie A — Les matériaux en terre (5 points)
+1. Citer trois matériaux de construction à base de terre et la latérite ; leurs usages. (3 pts)
+2. Avantages et limites des BTC. (2 pts)
+
+### Partie B — Choix de la terre (5 points)
+3. Interpréter le test du bocal. La terre convient-elle (argile idéale ≈ 10 à 25 %) ? (3 pts)
+4. Que faire d'une terre trop argileuse ? D'une terre trop sableuse ? (2 pts)
+
+### Partie C — Production (6 points)
+5. Calculer le ciment par BTC et le nombre de BTC par sac de 50 kg. (3 pts)
+6. Calculer le nombre de BTC et de sacs pour les murs de l'école. (3 pts)
+
+### Partie D — Contrôle (4 points)
+7. Calculer la résistance de la BTC. Convient-elle pour des murs porteurs (≥ 2 à 4 MPa selon les charges) ? (2 pts)
+8. Décrire la cure et le séchage des BTC. (2 pts)`,
+  corrige:`### Partie A — Matériaux (5 pts)
+1. **BTC** (murs porteurs), **adobe** (briques crues moulées), **pisé / banco** (terre damée ou modelée), **briques et tuiles cuites** ; **latérite** : graveleux pour remblais, couches de chaussée, et terre de fabrication des BTC. *(3 pts)*
+2. Avantages : matériau local, **peu de ciment**, bon confort thermique (inertie), coût réduit, emplois locaux. Limites : sensibles à l'**eau** (soubassement et débords indispensables), contrôle de qualité nécessaire, résistance plus faible que le béton. *(2 pts)*
+
+### Partie B — Terre (5 pts)
+3. Argiles 18 % (dans 10 – 25 %) et beaucoup de sable : terre **sablo-argileuse**, bien adaptée aux BTC stabilisées au ciment. *(3 pts)*
+4. Trop argileuse : ajouter du **sable** (et stabiliser plutôt à la chaux) — sinon retrait et fissures ; trop sableuse : ajouter de la terre argileuse, sinon les briques s'effritent. *(2 pts)*
+
+### Partie C — Production (6 pts)
+5. 7,5 × 0,07 = **0,525 kg** de ciment par BTC → 50 / 0,525 = **95 BTC par sac**. *(3 pts)*
+6. 180 × 31 = **5 580 BTC** (+ 3 % de casse ≈ 5 750) → 5 750 × 0,525 = 3 019 kg → **61 sacs** environ. *(3 pts)*
+
+### Partie D — Contrôle (4 pts)
+7. Section 295 × 140 = 41 300 mm² → σ = 150 000 / 41 300 = **3,6 MPa** : convient pour les murs porteurs d'une école de plain-pied. *(2 pts)*
+8. Stocker **à l'ombre**, sous bâche, humidifier pendant **7 à 14 jours** (cure du ciment), puis séchage lent ; utiliser après **28 jours**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Poser des BTC au contact du sol sans soubassement.
+> - Faire sécher les briques au soleil : fissures et ciment non hydraté.
+> - Choisir la terre sans essai.`},
  exercices:[
   {t:"Résistance de BTC", d:1, e:`Deux BTC de 29,5 × 14 cm se rompent à 165 kN (essai à sec) et à 99 kN (après 24 h d'immersion). Calculer les deux résistances et le rapport humide/sec. Commenter.`, c:`Section : 41 300 mm².
 Sèche : 165 000 / 41 300 = **4,0 MPa** ; humide : 99 000 / 41 300 = **2,4 MPa**.
@@ -374,6 +596,52 @@ Le ciment n'a besoin que d'environ **25 %** de son poids d'eau pour s'hydrater ;
 > - Cône d'Abrams : S2 = 5 à 9 cm pour un béton vibré.
 > - fcj = j/(4,76 + 0,83 j) × fc28 ; traction ≈ fc/10.
 > - E/C bas = béton résistant et durable.`,
+ sujet:{titre:"Le béton : dosages, consistance, résistance au jeune âge et rôle de l'eau", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un béton de classe **fc28 = 30 MPa** est prévu pour les poteaux d'un immeuble à Abidjan. Vous expliquez son comportement au chef de chantier.
+
+**Données**
+- Évolution de la résistance (BAEL) : fcj = j / (4,76 + 0,83 j) × fc28 ;
+- Bolomey : fm = G × σ'c × (C/E − 0,5), avec G = **0,5**, σ'c = **45 MPa** ;
+- Formule prévue : C = **350 kg**, E = **175 L** ; un ouvrier rajoute **35 L** d'eau par m³ « pour que ça coule mieux » ;
+- Traction : ft28 = 0,6 + 0,06 fc28.
+
+### Partie A — Composition (5 points)
+1. Donner la composition d'un béton armé courant pour 1 m³ (ciment, sable, gravier, eau). (2 pts)
+2. Quel est le rôle de chaque constituant ? (3 pts)
+
+### Partie B — Béton frais (4 points)
+3. Décrire l'essai au cône d'Abrams et donner les classes S1 à S4. Quelle classe pour un poteau vibré ? (4 pts)
+
+### Partie C — Béton durci (7 points)
+4. Calculer la résistance à 3, 7 et 14 jours. (3 pts)
+5. Le coffrage d'une poutre ne peut être retiré qu'à **15 MPa** (avec étais de sécurité) : à partir de quel jour, environ ? (2 pts)
+6. Calculer ft28. (2 pts)
+
+### Partie D — L'eau (4 points)
+7. Calculer la résistance moyenne prévue avec 175 L puis avec 210 L d'eau. Conclure. (4 pts)`,
+  corrige:`### Partie A — Composition (5 pts)
+1. **350 kg** de ciment (7 sacs), **400 L** de sable, **800 L** de gravier, **≈ 175 L** d'eau. *(2 pts)*
+2. **Ciment** + eau = pâte qui durcit et colle les grains ; **sable** : remplit les vides du gravier ; **gravier** : squelette résistant et économique ; **eau** : hydrate le ciment et donne la maniabilité. *(3 pts)*
+
+### Partie B — Béton frais (4 pts)
+3. On remplit le cône en 3 couches piquées 25 fois, on le soulève et on mesure l'**affaissement**. S1 : 1 – 4 cm (ferme) ; S2 : 5 – 9 (plastique) ; S3 : 10 – 15 (très plastique) ; S4 : 16 – 21 (fluide, avec superplastifiant). Poteau vibré : **S2 à S3**. *(4 pts)*
+
+### Partie C — Béton durci (7 pts)
+4. *(3 pts)*
+   - fc3 = 3 / (4,76 + 2,49) × 30 = **12,4 MPa** ;
+   - fc7 = 7 / (4,76 + 5,81) × 30 = **19,9 MPa** ;
+   - fc14 = 14 / (4,76 + 11,62) × 30 = **25,6 MPa**.
+5. 15 MPa est atteint entre 3 et 7 jours : $$ j / (4,76 + 0,83 j) = 0,5 → j = 4,76 / (2 − 0,83) ≈ 4,1 jours
+   → à partir du **5e jour** (avec étais de sécurité). *(2 pts)*
+6. ft28 = 0,6 + 0,06 × 30 = **2,4 MPa** (12 fois moins qu'en compression). *(2 pts)*
+
+### Partie D — L'eau (4 pts)
+7. E = 175 L : C/E = 2,00 → fm = 0,5 × 45 × 1,50 = **33,8 MPa** ✔ ; E = 210 L : C/E = 1,67 → fm = 0,5 × 45 × 1,17 = **26,3 MPa** < 30 ✘ : **35 L d'eau en plus font perdre 7,5 MPa** et rendent le béton non conforme. On utilise un **plastifiant** si l'on veut plus de fluidité. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre prise (quelques heures) et durcissement (semaines).
+> - Rajouter de l'eau sur le chantier.
+> - Décoffrer les fonds de poutres sans étais de sécurité.`},
  exercices:[
   {t:"Décoffrer au bon moment", d:2, e:`Une dalle en béton fc28 = 25 MPa peut être décoffrée quand le béton atteint 15 MPa. À partir de quel âge ? Combien vaut fc7 ?`, c:`On cherche j tel que j / (4,76 + 0,83 j) = 15 / 25 = 0,6 → j = 0,6 × 4,76 / (1 − 0,6 × 0,83) = **5,7 jours** → décoffrage possible à partir de **6 jours** (avec étais de sécurité), si la cure a été correcte.
 fc7 = **16,6 MPa**.`},
@@ -430,6 +698,45 @@ Formule de **Bolomey** : fm = G × σ'c × (C/E − 0,5) (G ≈ 0,5 ; σ'c : cla
 > - Adjuvants dosés en % du ciment : plastifiants, superplastifiants, accélérateurs, retardateurs, hydrofuges.
 > - Réduire l'eau = augmenter C/E = augmenter la résistance (Bolomey).
 > - Toujours retrancher l'eau apportée par les granulats.`,
+ sujet:{titre:"Eau de gâchage, granulats humides et superplastifiant", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une centrale à béton de chantier à San-Pédro (climat chaud, près de la mer) prépare un béton de plancher. Vous réglez l'eau et les adjuvants.
+
+**Composition pour 1 m³ (granulats secs)** : ciment **375 kg** ; eau **185 L** ; sable **700 kg** ; gravier **1 120 kg**.
+- Humidité mesurée : sable **4 %**, gravier **1,5 %** ;
+- Bolomey : fm = 0,5 × 45 × (C/E − 0,5) ;
+- Superplastifiant à **1 %** du poids de ciment, permettant **18 %** d'eau en moins à ouvrabilité égale.
+
+### Partie A — L'eau de gâchage (5 points)
+1. Quelles eaux peut-on utiliser ? Pourquoi l'eau de mer est-elle interdite en béton armé ? (3 pts)
+2. Quels sont les deux rôles de l'eau dans le béton ? Pourquoi un excès d'eau est-il nuisible ? (2 pts)
+
+### Partie B — Granulats humides (6 points)
+3. Calculer l'eau apportée par les granulats et l'eau à verser. (3 pts)
+4. Calculer les masses de sable et de gravier humides à peser. (2 pts)
+5. Que se passerait-il si on ne faisait pas cette correction ? (1 pt)
+
+### Partie C — Adjuvants (9 points)
+6. Donner le rôle des adjuvants : plastifiant, superplastifiant, retardateur, accélérateur, hydrofuge. Lequel choisir par forte chaleur pour un long transport ? (4 pts)
+7. Calculer la masse de superplastifiant par m³. (1 pt)
+8. Calculer la résistance moyenne sans adjuvant puis avec le superplastifiant (eau réduite). Conclure. (4 pts)`,
+  corrige:`### Partie A — L'eau (5 pts)
+1. Eau **potable** ou eau propre analysée (sans argile, sans matières organiques, sans sels en excès). L'eau de mer apporte des **chlorures** qui font rouiller les armatures : interdite en béton armé (tolérée seulement pour certains bétons non armés). *(3 pts)*
+2. **Hydrater** le ciment (≈ 25 % de son poids suffit) et donner l'**ouvrabilité**. L'eau en excès s'évapore en laissant des **pores** : résistance plus faible, retrait et fissures, durabilité réduite. *(2 pts)*
+
+### Partie B — Granulats humides (6 pts)
+3. Eau apportée : 700 × 0,04 + 1 120 × 0,015 = 28,0 + 16,8 = **44,8 L** → eau à verser : 185 − 44,8 = **140,2 L**. *(3 pts)*
+4. Sable humide : 700 × 1,04 = **728 kg** ; gravier humide : 1 120 × 1,015 = **1 137 kg**. *(2 pts)*
+5. Le béton recevrait près de 45 L d'eau de trop : plus fluide, **moins résistant** (et moins de granulats secs que prévu). *(1 pt)*
+
+### Partie C — Adjuvants (9 pts)
+6. **Plastifiant** : améliore la maniabilité à eau égale (ou réduit l'eau) ; **superplastifiant** : forte réduction d'eau, bétons fluides ou à hautes performances ; **retardateur** : retarde la prise (chaleur, long transport, grandes masses) ; **accélérateur** : accélère prise et durcissement (temps froid, décoffrage rapide) ; **hydrofuge** : réduit l'absorption d'eau. Par forte chaleur et long transport : **retardateur** (ou plastifiant-retardateur). *(4 pts)*
+7. 375 × 0,01 = **3,75 kg/m³**. *(1 pt)*
+8. Sans adjuvant : C/E = 375 / 185 = 2,03 → fm = 22,5 × 1,53 = **34,4 MPa**. Avec : E = 185 × 0,82 = 151,7 L → C/E = 2,47 → fm = 22,5 × 1,97 = **44,4 MPa** : **+ 10 MPa** à maniabilité égale, et un béton plus compact donc plus durable en bord de mer. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Gâcher à l'eau de mer ou à l'eau boueuse.
+> - Oublier de corriger l'eau quand le sable est mouillé par la pluie.
+> - Surdoser un adjuvant (retards de prise, ségrégation).`},
  exercices:[
   {t:"Dosage d'un adjuvant", d:1, e:`Un plastifiant est dosé à 0,8 % du poids de ciment ; densité 1,18. Pour 25 m³ de béton dosé à 350 kg/m³, quelle masse et quel volume d'adjuvant prévoir ?`, c:`Par m³ : 350 × 0,008 = **2,8 kg** ; pour 25 m³ : **70 kg**.
 Volume : 70 / 1,18 = **59,3 L** (environ 3 bidons de 20 L).`},
@@ -484,6 +791,51 @@ Pour une série de 3 résultats sur cylindres et une classe de résistance carac
 > - Durci : éprouvettes 16 × 32, essais à 7 et 28 jours, σ = F/A.
 > - Conformité simplifiée : fcm ≥ fck + 4 et fci ≥ fck − 4.
 > - Fendage : 2F/(πdL) ; scléromètre indicatif ; carottes en cas de doute.`,
+ sujet:{titre:"Contrôle du béton : livraison, éprouvettes et conformité des résultats", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous êtes chargé du contrôle béton sur un chantier d'hôpital à Bouaké (béton prêt à l'emploi).
+
+**Données**
+- Bon de livraison : « C25/30 — S3 — XC2 — 8 m³ — chargé à 9 h 10 » ; arrivée sur chantier à **10 h 55** ; délai maximal de mise en place : **1 h 30** après chargement ;
+- Série 1 (dalle, fck = **25 MPa**) : cylindres 16 × 32 rompus à 28 jours sous **600 kN**, **620 kN**, **575 kN** ;
+- Série 2 (poteaux, fck = **30 MPa**) : **640 kN**, **690 kN**, **590 kN** ;
+- Critères : moyenne **fcm ≥ fck + 4** ; chaque valeur **fci ≥ fck − 4** ;
+- Essai de fendage : rupture à **165 kN** sur cylindre 16 × 32 ; ft = 2 F / (π d L).
+
+### Partie A — À la livraison (5 points)
+1. Que vérifier sur le bon de livraison ? Décoder « C25/30 — S3 — XC2 ». (3 pts)
+2. Le camion doit-il être accepté ? Que faire ? (2 pts)
+
+### Partie B — Éprouvettes (4 points)
+3. Décrire la confection et la conservation des éprouvettes. Combien de séries prévoir ? (3 pts)
+4. Pourquoi écrase-t-on aussi à 7 jours ? (1 pt)
+
+### Partie C — Conformité (9 points)
+5. Calculer la section d'un cylindre 16 × 32 et les résistances de la série 1. Conclure. (4 pts)
+6. Même travail pour la série 2. Que faire ? (4 pts)
+7. Calculer la résistance au fendage. (1 pt)
+
+### Partie D — Essais complémentaires (2 points)
+8. Citer deux essais non destructifs ou semi-destructifs pour vérifier un ouvrage déjà coulé. (2 pts)`,
+  corrige:`### Partie A — Livraison (5 pts)
+1. Classe de résistance, consistance, exposition, volume, **heure de chargement**, formule et adjuvants, adresse et ouvrage. **C25/30** : 25 MPa sur cylindre / 30 MPa sur cube ; **S3** : affaissement 10 à 15 cm ; **XC2** : carbonatation, environnement humide rarement sec. *(3 pts)*
+2. 10 h 55 − 9 h 10 = **1 h 45 > 1 h 30** : béton trop vieux (début de prise possible) → **refuser** le camion (ou ne l'accepter que pour un usage non structurel, sans ajout d'eau), et le noter. *(2 pts)*
+
+### Partie B — Éprouvettes (4 pts)
+3. Prélèvement au déchargement ; moules 16 × 32 remplis en 2 ou 3 couches piquées ou vibrées ; arasés, identifiés ; 24 h à l'abri, démoulage, **cure dans l'eau** jusqu'à l'essai ; au moins **une série de 3 par journée et par type d'ouvrage**. *(3 pts)*
+4. Résultat d'**alerte** précoce (≈ 65 % de fc28 attendus) pour réagir avant que trop d'ouvrages soient coulés. *(1 pt)*
+
+### Partie C — Conformité (9 pts)
+5. A = π × 160² / 4 = **20 106 mm²** ; σ = **29,8 ; 30,8 ; 28,6 MPa** ; moyenne **29,8 ≥ 29** ✔ ; minimum 28,6 ≥ 21 ✔ → **conforme**. *(4 pts)*
+6. σ = **31,8 ; 34,3 ; 29,3 MPa** ; moyenne **31,8 < 34** ✘ (chaque valeur ≥ 26 ✔) → **non conforme** : informer le BET (vérification de la structure avec la résistance réelle), essais complémentaires (carottages, scléromètre), renforcer le contrôle de fabrication. *(4 pts)*
+7. ft = 2 × 165 000 / (π × 160 × 320) = **2,05 MPa**. *(1 pt)*
+
+### Partie D — Essais (2 pts)
+8. **Scléromètre** (indice de rebond), **auscultation sonique** (ultrasons), **carottage** puis écrasement, détecteur d'armatures (enrobage). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Laisser les éprouvettes au soleil sur le chantier.
+> - Juger sur une seule éprouvette.
+> - Accepter un béton hors délai en le « rafraîchissant » à l'eau.`},
  exercices:[
   {t:"Résultats d'écrasement", d:1, e:`Trois cylindres 16 × 32 d'un béton C25/30 se rompent à 610, 655 et 590 kN. Calculer les résistances et conclure sur la conformité (critère simplifié).`, c:`A = 20 106 mm² → **30,3 ; 32,6 ; 29,3 MPa**.
 Moyenne : **30,7 MPa** ≥ 29 ✔ ; chaque valeur ≥ 21 ✔ → **conforme**.`},
@@ -544,6 +896,54 @@ Une barre est tirée jusqu'à la rupture ; on mesure :
 > - HA Fe E400 / B500 ; section π d²/4 ; poids d²/162 kg/m.
 > - Traction : fe, fu, allongement ; acier ductile.
 > - Contrôler diamètre et poids ; plier à froid, jamais en chauffant.`,
+ sujet:{titre:"Aciers pour béton armé : essai de traction, contrôle des livraisons et façonnage", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un lot de barres « HA14 FeE500 » arrive sur un chantier à Gagnoa. Vous contrôlez le lot avant usage.
+
+**Données**
+- Essai de traction sur une éprouvette HA14 : force à la limite d'élasticité **79,3 kN** ; force maximale **90,5 kN** ; longueur entre repères **L0 = 70 mm**, après rupture **Lu = 80,5 mm** ;
+- Exigences B500B : fe ≥ **500 MPa**, fu/fe ≥ **1,08**, allongement ≥ **5 %** (sous charge maximale) — on prendra ici A ≥ **12 %** à rupture ;
+- Pesée : **1 m** de barre pèse **1,180 kg** ; masse nominale **d² / 162** kg/m ; tolérance **± 4,5 %** ;
+- Un autre fournisseur propose des « HA14 » qui mesurent **13 mm** au pied à coulisse.
+
+### Partie A — Les aciers (4 points)
+1. Distinguer ronds lisses, aciers HA et treillis soudés ; usages. (2 pts)
+2. Pourquoi le béton a-t-il besoin d'armatures ? Pourquoi les nervures ? (2 pts)
+
+### Partie B — Essai de traction (8 points)
+3. Calculer la section nominale A0. (1 pt)
+4. Calculer fe, fu, le rapport fu/fe et l'allongement A. (5 pts)
+5. Le lot est-il conforme ? Que signifie un acier ductile ? (2 pts)
+
+### Partie C — Contrôle de masse et de diamètre (5 points)
+6. Calculer la masse nominale et l'écart de la pesée. Conforme ? (3 pts)
+7. Calculer la perte de section des barres de 13 mm. Conséquence ? (2 pts)
+
+### Partie D — Façonnage et stockage (3 points)
+8. Donner trois règles de façonnage et deux règles de stockage des aciers. (3 pts)`,
+  corrige:`### Partie A — Les aciers (4 pts)
+1. **Ronds lisses** (Fe E235) : faible adhérence, épingles, crochets ; **HA** (Fe E400, E500) : nervures, armatures principales ; **treillis soudés** : panneaux pour dallages, dalles de compression, voiles minces. *(2 pts)*
+2. Le béton résiste mal à la **traction** (≈ 10 fois moins qu'en compression) : les aciers reprennent les efforts de traction. Les **nervures** assurent l'**adhérence** acier-béton (transfert des efforts). *(2 pts)*
+
+### Partie B — Traction (8 pts)
+3. A0 = π × 14² / 4 = **153,9 mm²**. *(1 pt)*
+4. *(5 pts)*
+   - fe = 79 300 / 153,9 = **515 MPa** ;
+   - fu = 90 500 / 153,9 = **588 MPa** ;
+   - fu / fe = **1,14** ;
+   - A = (80,5 − 70) / 70 = **15 %**.
+5. fe ≥ 500 ✔ ; fu/fe ≥ 1,08 ✔ ; A ≥ 12 % ✔ → **conforme**. Un acier **ductile** s'allonge beaucoup avant de rompre : la structure se déforme et **prévient** avant la ruine. *(2 pts)*
+
+### Partie C — Masse et diamètre (5 pts)
+6. 14² / 162 = **1,210 kg/m** ; (1,180 − 1,210) / 1,210 = **− 2,5 %** dans la tolérance ± 4,5 % ✔. *(3 pts)*
+7. (13 / 14)² = 0,862 → **− 14 % de section** : à refuser — l'ouvrage serait sous-armé de 14 %. *(2 pts)*
+
+### Partie D — Façonnage et stockage (3 pts)
+8. Façonnage : respecter les **diamètres de mandrin** (≈ 4 Ø pour les cadres), plier **à froid** (jamais chauffer), ne pas redresser une barre pliée, cotes du bordereau. Stockage : sur **cales** hors du sol, par diamètre et repère, à l'abri des salissures (terre, huile) ; la rouille superficielle adhérente est tolérée, pas la rouille feuilletée. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Accepter des barres sans contrôle du diamètre et de la masse.
+> - Chauffer une barre pour la plier.
+> - Stocker les aciers dans la boue.`},
  exercices:[
   {t:"Exploiter un essai de traction", d:2, e:`Un HA16 (L0 = 80 mm) donne : charge à la limite élastique 103 kN, charge maximale 118 kN, longueur après rupture 92 mm. Calculer fe, fu, A % et fu/fe. L'acier est-il un B500 ductile ?`, c:`A0 = π × 16² / 4 = **201,1 mm²**.
 fe = 103 000 / 201,1 = **512 MPa** ; fu = 118 000 / 201,1 = **587 MPa** ; A = (92 − 80) / 80 = **15 %** ; fu/fe = **1,15**.
@@ -604,6 +1004,50 @@ Les bois de structure sont classés selon leur résistance : résineux **C18, C2
 > - Bois anisotrope, léger ; essences locales selon l'usage et la durabilité.
 > - H = (Mh − M0)/M0 ; retrait sous 30 % ; < 20 % pour la charpente.
 > - Classes C (résineux) et D (feuillus) ; traitement contre termites et champignons.`,
+ sujet:{titre:"Le bois sur chantier : humidité, retrait, essences locales et protection", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous recevez du bois pour la charpente et les menuiseries d'un hôtel à Assinie (climat chaud et humide).
+
+**Données**
+- Une planche de **250 mm** de large pèse **2,10 kg** ; séchée à l'étuve, **1,60 kg** ;
+- Point de saturation des fibres : **30 %** ; retrait tangentiel : **0,3 %** par % d'humidité (en dessous de 30 %) ;
+- Humidité d'équilibre dans le bâtiment : **15 %** ;
+- Chevrons **8 × 16 cm** de **4,00 m** en iroko (masse volumique ≈ **650 kg/m³**).
+
+### Partie A — Le matériau (5 points)
+1. Expliquer pourquoi le bois est anisotrope et ce que cela implique. (2 pts)
+2. Associer à chaque usage une essence ivoirienne : menuiseries extérieures, coffrages, ouvrages très exposés (pont, quai), contreplaqué léger, terrasse extérieure. (3 pts)
+
+### Partie B — Humidité et retrait (8 points)
+3. Calculer l'humidité de la planche. Qualifier ce bois. (2 pts)
+4. Calculer le retrait en largeur quand la planche sèche jusqu'à 15 %. (4 pts)
+5. À quelle humidité poser une charpente et une menuiserie ? Conséquences d'un bois trop humide ? (2 pts)
+
+### Partie C — Quantités (2 points)
+6. Calculer la masse d'un chevron. (2 pts)
+
+### Partie D — Protection (5 points)
+7. Quels sont les ennemis du bois en Côte d'Ivoire ? À partir de quelle humidité les champignons se développent-ils ? (2 pts)
+8. Décrire les moyens de protection (choix, traitement, conception). (3 pts)`,
+  corrige:`### Partie A — Matériau (5 pts)
+1. Les **fibres** sont orientées dans le sens du tronc : le bois est bien plus résistant **dans le sens des fibres** et se déforme différemment selon les directions (retrait tangentiel > radial ≫ axial). On sollicite les pièces dans le sens des fibres et on tient compte des variations de dimensions. *(2 pts)*
+2. Menuiseries extérieures : **iroko** ; coffrages : **fraké** ; ouvrages très exposés : **azobé** ; contreplaqué léger : **samba (ayous)** ; terrasse : **teck**. *(3 pts)*
+
+### Partie B — Humidité (8 pts)
+3. H = (2,10 − 1,60) / 1,60 = **31 %** : au-dessus du point de saturation → bois **vert / humide**. *(2 pts)*
+4. Le retrait ne commence qu'en dessous de **30 %** : de 30 % à 15 %, soit 15 points × 0,3 % = **4,5 %** → 250 × 0,045 = **11 mm** de retrait. *(4 pts)*
+5. Charpente **< 20 %** ; menuiseries **12 à 15 %**. Un bois posé trop humide se **fend**, se **voile**, les assemblages se desserrent et les menuiseries ferment mal. *(2 pts)*
+
+### Partie C — Quantités (2 pts)
+6. 0,08 × 0,16 × 4,00 = 0,0512 m³ × 650 = **33 kg**. *(2 pts)*
+
+### Partie D — Protection (5 pts)
+7. **Termites** (très actifs), insectes à larves, **champignons** (pourriture) au-delà de **20 %** d'humidité. *(2 pts)*
+8. **Essences durables** ; **traitement** insecticide-fongicide (autoclave de préférence) ; **conception** : éviter le contact avec le sol et l'eau stagnante, ventiler, débords de toiture, pieds de poteaux sur socles ; finitions (lasure, peinture microporeuse) entretenues. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter le retrait à partir de l'humidité initiale au lieu du point de saturation (30 %).
+> - Poser des menuiseries en bois vert.
+> - Laisser le bois de charpente toucher la maçonnerie humide sans protection.`},
  exercices:[
   {t:"Humidité d'un lot de bois", d:1, e:`Un échantillon de chevron pèse 845 g ; après séchage à l'étuve, 650 g. Calculer l'humidité. Peut-on le mettre en œuvre en charpente ?`, c:`H = (845 − 650) / 650 = **30 %** : bois encore humide (point de saturation).
 Non : il faut attendre un séchage sous **20 %**, sinon le chevron va se rétracter, se déformer et desserrer les assemblages.`},
@@ -655,6 +1099,46 @@ Fabriqué par fusion de sable siliceux, soude et chaux, puis étalé sur un bain
 > - Aluminium léger, ne rouille pas, dilate deux fois plus que l'acier.
 > - Éviter les couples galvaniques ; galvaniser en bord de mer.
 > - Verre : trempé, feuilleté (sécurité), contrôle solaire ; 6 mm = 15 kg/m².`,
+ sujet:{titre:"Acier, aluminium et verre : déformations, dilatation et choix des vitrages", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour le hall d'un immeuble à Plateau, l'architecte prévoit un tirant métallique, des menuiseries aluminium et une grande baie vitrée.
+
+**Données**
+- Tirant : effort **F = 80 kN**, longueur **5 m**, section **400 mm²** ; E acier = **210 000 MPa** ; E aluminium = **70 000 MPa** ; acier S235 ;
+- Dilatation : acier **12 × 10⁻⁶ /°C** ; aluminium **23 × 10⁻⁶ /°C** ; écart de température **40 °C** ; montant de menuiserie de **3,00 m** ;
+- Verre : masse volumique **2 500 kg/m³** ; baie de **2,40 × 2,20 m** en vitrage de **6 mm** ;
+- Fixations de la menuiserie alu prévues en vis acier ordinaire.
+
+### Partie A — Le tirant (7 points)
+1. Calculer la contrainte dans le tirant et vérifier l'acier S235. (2 pts)
+2. Calculer l'allongement du tirant en acier, puis s'il était en aluminium. Conclure. (5 pts)
+
+### Partie B — Dilatation (4 points)
+3. Calculer l'allongement d'un montant de 3,00 m en aluminium et en acier. Quelle disposition de pose en déduire ? (4 pts)
+
+### Partie C — Corrosion (3 points)
+4. Pourquoi faut-il éviter le contact direct aluminium – acier ordinaire en milieu humide ? Solution ? (3 pts)
+
+### Partie D — Verre (6 points)
+5. Calculer la masse du vitrage de la baie. (2 pts)
+6. Distinguer verre float, trempé et feuilleté. Lequel pour : porte vitrée du hall, garde-corps de mezzanine, cabine de douche ? (4 pts)`,
+  corrige:`### Partie A — Tirant (7 pts)
+1. σ = 80 000 / 400 = **200 MPa** ≤ 235 MPa ✔ (sans coefficient de sécurité ; en calcul réglementaire, on vérifierait avec les coefficients). *(2 pts)*
+2. ΔL = F L / (E A) : acier : 80 000 × 5 000 / (210 000 × 400) = **4,8 mm** ; aluminium : 80 000 × 5 000 / (70 000 × 400) = **14,3 mm**. L'aluminium est **3 fois plus déformable** : pour une même rigidité, il faut une section 3 fois plus grande. *(5 pts)*
+
+### Partie B — Dilatation (4 pts)
+3. Alu : 23 × 10⁻⁶ × 40 × 3 000 = **2,8 mm** ; acier : **1,4 mm**. Prévoir des **jeux de dilatation** et des fixations à trous oblongs, des joints souples (mastic) entre menuiserie et maçonnerie. *(4 pts)*
+
+### Partie C — Corrosion (3 pts)
+4. Deux métaux différents en contact avec un électrolyte (eau, air salin) forment une **pile** : le plus « faible » (aluminium) se corrode (**corrosion galvanique**). Utiliser des vis **inox** ou isoler les métaux (rondelles, bandes isolantes). *(3 pts)*
+
+### Partie D — Verre (6 pts)
+5. Masse surfacique : 2 500 × 0,006 = 15 kg/m² → 2,40 × 2,20 × 15 = **79,2 kg**. *(2 pts)*
+6. **Float** : verre ordinaire, se brise en éclats coupants ; **trempé** : 4 à 5 fois plus résistant, se brise en petits morceaux peu coupants ; **feuilleté** : verres collés par des films, **reste en place** quand il casse. Porte vitrée : **trempé** ; garde-corps : **feuilleté** (anti-chute) ; douche : **trempé**. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les jeux de dilatation des menuiseries alu exposées au soleil.
+> - Visser l'aluminium avec de l'acier ordinaire en bord de mer.
+> - Utiliser du verre ordinaire dans une zone de choc.`},
  exercices:[
   {t:"Allongement d'un tirant", d:2, e:`Un tirant de charpente de 6 m, en rond d'acier de 20 mm (A = 314 mm²), reprend 40 kN. Calculer la contrainte et l'allongement. Est-ce acceptable pour un acier S235 ?`, c:`σ = 40 000 / 314 = **127 MPa** < 235 MPa ✔.
 ΔL = 40 000 × 6 000 / (210 000 × 314) = **3,6 mm** : acceptable (l'allongement reste élastique ; on règle le tirant avec un tendeur).`},
@@ -714,6 +1198,50 @@ Classés selon leur **absorption d'eau** : **grès cérame** (≤ 0,5 %, très r
 > - Peinture : rendement = 10 × ESV / épaisseur sèche (µm).
 > - PVC pour les évacuations, PPR pour l'eau chaude, PEHD enterré ; protéger des UV.
 > - Grès cérame (absorption ≤ 0,5 %) pour les sols ; faïence pour les murs intérieurs.`,
+ sujet:{titre:"Matériaux de second œuvre : isolants, peintures, carrelages et plastiques", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous comparez des offres de matériaux de second œuvre pour un immeuble de bureaux à Cocody.
+
+**Données**
+- Isolants : laine de roche **8 cm** (λ = **0,040 W/(m·K)**) ; polystyrène expansé **6 cm** (λ = **0,035**) ; R = e / λ ;
+- Peinture A : extrait sec en volume (ESV) **45 %**, **4 500 F/L** ; peinture B : ESV **25 %**, **2 800 F/L** ; film sec visé **35 µm** par couche ; rendement (m²/L) = 10 × ESV / épaisseur sèche ; surface **400 m²**, **2 couches** ;
+- Carrelages proposés : grès cérame (absorption ≤ 0,5 %), faïence (> 10 %) ;
+- Tube PVC d'évacuation de **6 m** exposé au soleil, α = **80 × 10⁻⁶ /°C**, écart de température **30 °C**.
+
+### Partie A — Isolants (5 points)
+1. Calculer la résistance thermique de chaque isolant. Lequel isole le mieux ? (3 pts)
+2. Pourquoi un isolant mouillé ou écrasé perd-il son efficacité ? (2 pts)
+
+### Partie B — Peintures (8 points)
+3. Calculer le rendement de chaque peinture par couche. (2 pts)
+4. Calculer les litres nécessaires et le coût total de chaque peinture. Conclure. (4 pts)
+5. Décrire le système de peinture d'un mur enduit neuf. (2 pts)
+
+### Partie C — Carrelages et plâtre (4 points)
+6. Quel carrelage pour : sol d'entrée et terrasse, mur de toilettes ? Pourquoi ? (2 pts)
+7. Quelle plaque de plâtre pour une salle d'eau ? Pour un local à protéger du feu ? (2 pts)
+
+### Partie D — Plastiques (3 points)
+8. Calculer l'allongement du tube PVC. Quelle disposition prendre ? (3 pts)`,
+  corrige:`### Partie A — Isolants (5 pts)
+1. Laine : R = 0,08 / 0,040 = **2,0 m²·K/W** ; PSE : 0,06 / 0,035 = **1,71** → la **laine de 8 cm** isole mieux (l'épaisseur compte autant que λ). *(3 pts)*
+2. Un isolant isole grâce à l'**air immobile** dans ses cellules ou fibres : l'eau (bien plus conductrice) ou l'écrasement chasse cet air. *(2 pts)*
+
+### Partie B — Peintures (8 pts)
+3. A : 10 × 45 / 35 = **12,9 m²/L** ; B : 10 × 25 / 35 = **7,1 m²/L**. *(2 pts)*
+4. 800 m² à couvrir (2 couches) : A : 800 / 12,9 = **62,2 L** → **280 000 F** ; B : 800 / 7,1 = **112 L** → **313 600 F**. La peinture « chère » revient **moins cher** et demande moins de main-d'œuvre : on compare au **m² peint**, pas au litre. *(4 pts)*
+5. Support sec (plusieurs semaines), propre, rebouché, poncé → **impression** → **deux couches** de finition croisées, en respectant le séchage. *(2 pts)*
+
+### Partie C — Carrelages et plâtre (4 pts)
+6. Sol d'entrée et terrasse : **grès cérame** (très peu absorbant, résistant à l'usure et aux intempéries) ; mur de toilettes : **faïence** (mur intérieur, décoratif, peu sollicité). *(2 pts)*
+7. Salle d'eau : plaque **hydrofuge** (H) ; protection incendie : plaque **coupe-feu** (F). *(2 pts)*
+
+### Partie D — Plastiques (3 pts)
+8. ΔL = 80 × 10⁻⁶ × 30 × 6 000 = **14,4 mm**. Prévoir des **manchons de dilatation**, des colliers permettant le glissement, et protéger le PVC des UV (peinture, gaine). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Comparer les peintures au prix du litre.
+> - Poser une faïence au sol.
+> - Bloquer un tube PVC entre deux points fixes au soleil.`},
  exercices:[
   {t:"Résistance thermique d'un faux plafond", d:1, e:`Calculer R pour : a) 8 cm de laine de verre (λ = 0,035) ; b) 4 cm de polyuréthane (λ = 0,025) ; c) 2 cm de staff (λ = 0,35). Lequel isole le mieux ?`, c:`a) 0,08 / 0,035 = **2,29** ; b) 0,04 / 0,025 = **1,60** ; c) 0,02 / 0,35 = **0,06** m²·K/W.
 La laine de 8 cm isole le mieux ; le staff seul n'isole presque pas : il faut lui ajouter un isolant.`},
@@ -774,6 +1302,55 @@ $$ Vgranulats = 1 000 − C/ρc − E − air      (ρc ≈ 3,1 ; air occlus ≈
 > - Ciment par l'abaque (≈ 350 kg), E = C/(C/E).
 > - Volumes absolus : granulats = 1 000 − C/3,1 − E − air ; partage sable/gravier par la courbe de référence.
 > - Correction d'eau et gâchée d'essai.`,
+ sujet:{titre:"Formuler un béton de 30 MPa par la méthode de Dreux-Gorisse", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Pour les poteaux et poutres d'un immeuble R+4 à Yamoussoukro, vous formulez un béton **fc28 = 30 MPa**, plastique, avec un gravier concassé 5/25 et un sable 0/4.
+
+**Données**
+- Ciment **CEM II 42,5** (classe vraie **σ'c = 45 MPa**, ρc = **3,1**) ; coefficient granulaire **G = 0,5** ;
+- Résistance moyenne visée : **fm = 1,15 fc28** ; Bolomey : C/E = fm / (G σ'c) + 0,5 ;
+- L'abaque de Dreux donne, pour ce C/E et un béton plastique : **C = 375 kg/m³** ;
+- Air occlus : **15 L/m³** ; masse volumique des grains : **2,65** ;
+- Ligne de partage (courbe de référence) : **sable 38 %**, **gravier 62 %** en volume absolu ;
+- Humidité du sable sur chantier : **4 %** (gravier sec) ;
+- Gâchée à la bétonnière : **1 sac de 50 kg**.
+
+### Partie A — Résistance et rapport C/E (5 points)
+1. Pourquoi viser une résistance moyenne supérieure à fc28 ? Calculer fm. (2 pts)
+2. Calculer C/E. (2 pts)
+3. Calculer le dosage en eau E. (1 pt)
+
+### Partie B — Volumes absolus (7 points)
+4. Calculer le volume absolu du ciment et le volume des granulats. (3 pts)
+5. Calculer les volumes absolus puis les masses de sable et de gravier. (3 pts)
+6. Calculer la masse volumique théorique du béton frais. (1 pt)
+
+### Partie C — Corrections et gâchée (6 points)
+7. Corriger l'eau et la masse de sable pour un sable à 4 %. (3 pts)
+8. Calculer les quantités pour une gâchée d'un sac de ciment (formule sèche). (3 pts)
+
+### Partie D — Validation (2 points)
+9. Pourquoi faut-il une gâchée d'essai ? Que faire si le béton est trop ferme ? (2 pts)`,
+  corrige:`### Partie A — C/E (5 pts)
+1. La fabrication a une **dispersion** : en visant la moyenne, la moitié des gâchées serait sous 30 MPa. fm = 1,15 × 30 = **34,5 MPa**. *(2 pts)*
+2. C/E = 34,5 / (0,5 × 45) + 0,5 = 1,533 + 0,5 = **2,03**. *(2 pts)*
+3. E = 375 / 2,03 = **184 L**. *(1 pt)*
+
+### Partie B — Volumes absolus (7 pts)
+4. Ciment : 375 / 3,1 = **121 L** ; granulats : 1 000 − 121 − 184 − 15 = **680 L**. *(3 pts)*
+5. Sable : 0,38 × 680 = 258 L → × 2,65 = **684 kg** ; gravier : 0,62 × 680 = 421 L → × 2,65 = **1 117 kg**. *(3 pts)*
+6. 375 + 184 + 684 + 1 117 = **2 360 kg/m³**. *(1 pt)*
+
+### Partie C — Corrections (6 pts)
+7. Eau apportée : 684 × 0,04 = **27 L** → eau à verser : 184 − 27 = **157 L** ; sable humide à peser : 684 × 1,04 = **711 kg**. *(3 pts)*
+8. Coefficient 50 / 375 = 0,133 : ciment **50 kg** ; eau **24,6 L** ; sable **91 kg** ; gravier **149 kg** (à convertir en volumes ou en seaux tarés pour le chantier). *(3 pts)*
+
+### Partie D — Validation (2 pts)
+9. La méthode est **approchée** : il faut vérifier l'affaissement réel et la résistance (éprouvettes à 7 et 28 jours). Trop ferme : ajouter un **plastifiant** (ou revoir la granulométrie), **jamais de l'eau** seule. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier l'air occlus ou le volume du ciment dans le bilan des 1 000 L.
+> - Confondre pourcentages en volume absolu et en masse.
+> - Négliger l'eau apportée par le sable humide.`},
  exercices:[
   {t:"Rapport C/E pour un béton de 30 MPa", d:2, e:`On veut fc28 = 30 MPa avec un ciment de classe vraie 45 MPa (G = 0,5). Calculer fm, C/E, puis l'eau si l'abaque donne C = 375 kg/m³.`, c:`fm = 1,15 × 30 = **34,5 MPa**.
 C/E = 34,5 / (0,5 × 45) + 0,5 = **2,03**.
@@ -828,6 +1405,50 @@ Bord de mer, lagune, ouvrages portuaires : béton **compact** (ciment ≥ 350 à
 > - BAP : sans vibration, contrôle par l'étalement ; BHP : E/C < 0,40, superplastifiant.
 > - Légers, lourds, fibrés, projetés, cyclopéens, précontraints : à chaque besoin son béton.
 > - Milieu marin : compact, E/C ≤ 0,45, enrobage 4 à 5 cm.`,
+ sujet:{titre:"Bétons spéciaux : BPE, béton haute performance, cyclopéen, léger et béton en milieu marin", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Plusieurs ouvrages d'un complexe portuaire et hôtelier à San-Pédro demandent des bétons particuliers.
+
+**Données**
+- Poteaux d'une tour : béton visé **fc28 = 55 MPa** ; CEM I 52,5 (σ'c ≈ **55 MPa**) ; granulats de qualité **G = 0,55** ; fm = 1,15 fc28 ; dosage retenu **C = 480 kg/m³** ;
+- Mur de soutènement massif de **12 m³** en béton **cyclopéen** avec **30 %** de moellons ; béton de remplissage dosé à **250 kg/m³** ;
+- Quai : béton exposé à l'eau de mer ;
+- Planchers d'une extension à alléger.
+
+### Partie A — Béton prêt à l'emploi (4 points)
+1. Avantages du BPE et éléments de la commande. (2 pts)
+2. Qu'est-ce qu'un béton autoplaçant ? Où l'utiliser ? (2 pts)
+
+### Partie B — Béton haute performance (7 points)
+3. Calculer fm et le rapport C/E nécessaire. (3 pts)
+4. Calculer l'eau et le rapport E/C. Peut-on mettre ce béton en place sans adjuvant ? Quel autre ajout améliore la compacité ? (4 pts)
+
+### Partie C — Béton cyclopéen (4 points)
+5. Calculer le volume de béton de remplissage et le nombre de sacs. (2 pts)
+6. Règles de mise en œuvre des moellons. (2 pts)
+
+### Partie D — Milieu marin et béton léger (5 points)
+7. Quelles exigences pour le béton du quai (ciment, E/C, enrobage) ? (3 pts)
+8. Proposer un béton léger pour les planchers et donner son intérêt. (2 pts)`,
+  corrige:`### Partie A — BPE (4 pts)
+1. Fabrication en **centrale** (pesées, régularité, contrôles), gros volumes, pompage, gain de main-d'œuvre. Commande : **classe de résistance**, **consistance**, **classe d'exposition**, Dmax, volume, heure et cadence de livraison. *(2 pts)*
+2. Béton très fluide qui se met en place **sous son seul poids**, sans vibration (beaucoup de fines + superplastifiant) : zones très ferraillées, formes complexes, parements soignés, réduction du bruit. *(2 pts)*
+
+### Partie B — BHP (7 pts)
+3. fm = 1,15 × 55 = **63,3 MPa** ; C/E = 63,3 / (0,55 × 55) + 0,5 = **2,59**. *(3 pts)*
+4. E = 480 / 2,59 = **185 L** → E/C = **0,39** : trop ferme pour être mis en place sans **superplastifiant** ; on ajoute souvent de la **fumée de silice** (grains très fins qui comblent les vides). *(4 pts)*
+
+### Partie C — Cyclopéen (4 pts)
+5. Béton : 12 × 0,70 = **8,4 m³** → 8,4 × 250 = 2 100 kg = **42 sacs**. *(2 pts)*
+6. Moellons **propres et humidifiés**, durs, non gélifs ; posés à la main (pas jetés), **sans contact** entre eux ni avec le coffrage (≥ 5 à 10 cm de béton autour), béton vibré entre les moellons. *(2 pts)*
+
+### Partie D — Marin et léger (5 pts)
+7. Béton **compact** : ciment ≥ **350 à 400 kg/m³**, **E/C ≤ 0,45**, ciment résistant aux chlorures et sulfates (**CEM III** au laitier), **enrobage 4 à 5 cm**, vibration et cure soignées, sable et eau sans sel. *(3 pts)*
+8. Béton de **granulats légers** (argile expansée, pierre ponce) ou béton cellulaire : 600 à 1 800 kg/m³ → planchers et remplissages plus légers, meilleure isolation (mais résistance plus faible). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Fabriquer un BHP sans superplastifiant en ajoutant de l'eau.
+> - Laisser les moellons se toucher dans un béton cyclopéen.
+> - Utiliser un enrobage de 2 cm sur un ouvrage en bord de mer.`},
  exercices:[
   {t:"Béton cyclopéen", d:2, e:`Un mur poids de 18 m³ est réalisé en béton cyclopéen avec 40 % de moellons et un béton dosé à 350 kg/m³. Calculer le volume de béton, les sacs de ciment et l'économie par rapport à un béton plein.`, c:`Béton : 18 × 0,60 = **10,8 m³** ; moellons : **7,2 m³**.
 Ciment : 10,8 × 7 = **75,6 sacs** au lieu de 18 × 7 = 126 sacs → économie de **50 sacs** (40 %), en plus d'une chaleur d'hydratation plus faible.`},
@@ -887,6 +1508,49 @@ La rouille occupe **plusieurs fois le volume** de l'acier : elle fait éclater l
 > - Chlorures (mer), sulfates (sols, eaux usées), alcali-réaction, acides.
 > - Classes d'exposition XC, XS, XD, XA → résistance, E/C, ciment, enrobage.
 > - Durabilité = béton compact + enrobage suffisant + bonne cure.`,
+ sujet:{titre:"Durabilité du béton armé : carbonatation, chlorures, enrobage et réparation", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un immeuble de 30 ans à Treichville présente des éclatements de béton en sous-face de balcons. On vous demande d'expliquer et de prévenir ces désordres.
+
+**Données**
+- Carbonatation : x = K √t (x en mm, t en années) ; béton courant **K = 4** ; béton poreux **K = 7** ; béton compact **K = 2,5** ;
+- Enrobages mesurés au détecteur : **20 mm** (balcons) ; enrobage du projet neuf : **35 mm** ;
+- Pour un ouvrage neuf en bord de lagune, on vise une durée d'utilisation de **100 ans** pour les éléments principaux.
+
+### Partie A — Mécanismes (6 points)
+1. Expliquer la carbonatation et pourquoi elle fait rouiller les armatures. (3 pts)
+2. Expliquer l'action des chlorures. Où les rencontre-t-on en Côte d'Ivoire ? (2 pts)
+3. Pourquoi la rouille fait-elle éclater le béton ? (1 pt)
+
+### Partie B — Calculs de carbonatation (7 points)
+4. Au bout de combien d'années le front de carbonatation atteint-il les aciers des balcons (20 mm), pour un béton courant ? Pour un béton poreux ? (3 pts)
+5. Même calcul avec 35 mm d'enrobage et un béton courant. Conclure sur l'effet de l'enrobage. (2 pts)
+6. Quel enrobage faudrait-il, avec un béton compact, pour atteindre 100 ans ? (2 pts)
+
+### Partie C — Classes d'exposition (3 points)
+7. Expliquer XC, XS et XD et classer : poteau intérieur sec, façade exposée à la pluie, quai en zone de marnage. (3 pts)
+
+### Partie D — Diagnostic et réparation (4 points)
+8. Décrire la démarche de diagnostic et la méthode de réparation des balcons. (4 pts)`,
+  corrige:`### Partie A — Mécanismes (6 pts)
+1. Le **CO₂** de l'air pénètre dans le béton et réagit avec la chaux : le **pH** baisse de 13 à 9 environ. Les aciers, protégés par le milieu basique (passivation), ne le sont plus quand le front atteint l'enrobage : ils rouillent en présence d'eau et d'oxygène. *(3 pts)*
+2. Les **chlorures** (sel marin, embruns) détruisent localement la couche protectrice des aciers : corrosion par piqûres, rapide. En bord de **mer** et de **lagune** (Abidjan, Grand-Bassam, San-Pédro), et avec des sables de mer non lavés. *(2 pts)*
+3. La rouille occupe un volume **plusieurs fois supérieur** à l'acier : elle pousse le béton d'enrobage, qui se fissure puis éclate. *(1 pt)*
+
+### Partie B — Carbonatation (7 pts)
+4. t = (x / K)² : béton courant : (20 / 4)² = **25 ans** ; béton poreux : (20 / 7)² = **8 ans**. Les désordres observés à 30 ans sont donc normaux pour 20 mm d'enrobage. *(3 pts)*
+5. (35 / 4)² = **77 ans** : 1,75 fois plus d'enrobage donne **3 fois plus** de durée (le temps varie comme le carré de l'enrobage). *(2 pts)*
+6. x = 2,5 × √100 = **25 mm** de carbonatation → enrobage **≥ 30 à 35 mm** avec marge ; en ambiance chlorée, on retient **40 à 50 mm**. *(2 pts)*
+
+### Partie C — Exposition (3 pts)
+7. **XC** : carbonatation ; **XS** : eau de mer ; **XD** : chlorures d'autre origine. Poteau intérieur sec : **XC1** ; façade à la pluie : **XC4** ; quai en marnage : **XS3**. *(3 pts)*
+
+### Partie D — Réparation (4 pts)
+8. Relevé des désordres, mesure de la **profondeur de carbonatation** (phénolphtaléine), de l'**enrobage**, des **chlorures**, de la résistance. Réparation : **purger** le béton dégradé, dégager et **brosser** les aciers (remplacer ceux qui ont perdu de la section), **passiver**, reconstituer au **mortier de réparation**, puis **protéger** (revêtement anti-carbonatation, hydrofuge) et traiter les causes (gouttes d'eau, étanchéité). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Reboucher au mortier ordinaire sans traiter les aciers.
+> - Négliger les cales d'enrobage sur le chantier : c'est là que se joue la durabilité.
+> - Utiliser du sable de mer non lavé.`},
  exercices:[
   {t:"Durée de protection des aciers", d:1, e:`Pour un béton de coefficient K = 5 mm/an^½, combien d'années pour que la carbonatation atteigne un enrobage de 20 mm ? de 40 mm ?`, c:`20 mm : (20 / 5)² = **16 ans** ; 40 mm : (40 / 5)² = **64 ans**.`},
   {t:"Mesure à la phénolphtaléine", d:2, e:`Sur un poteau de 9 ans, la zone grise (carbonatée) mesure 12 mm. a) Estimer K. b) L'enrobage mesuré est de 25 mm : dans combien de temps la carbonatation l'atteindra-t-elle ?`, c:`a) K = x / √t = 12 / √9 = **4 mm/an^½**.
@@ -941,6 +1605,54 @@ Un PV indique : l'identification de l'échantillon, la norme d'essai, les résul
 > - Échantillon représentatif (quartage).
 > - LA = 100 m / M (chocs) ; MDE (usure) ; pycnomètre pour ρs ; absorption WA.
 > - Lire un PV : bon échantillon, comparaison aux spécifications, décision.`,
+ sujet:{titre:"Essais de laboratoire sur granulats et lecture critique d'un procès-verbal", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une carrière propose ses gravillons pour un chantier routier et un immeuble à Bouaké. Vous exploitez le dossier d'essais et le procès-verbal.
+
+**Données**
+- **Los Angeles** : 5 000 g de gravillons ; après l'essai, **1 550 g** passent au tamis de 1,6 mm ; LA = 100 × m / M ;
+- **Micro-Deval** : 500 g ; **72 g** passent au tamis de 1,6 mm ;
+- **Pycnomètre** : échantillon sec **600 g** ; pycnomètre plein d'eau **1 480 g** ; pycnomètre + échantillon + eau **1 850 g** ;
+- **Absorption** : 600 g secs → **607,2 g** après imbibition 24 h (surface sèche) ;
+- **Équivalent de sable** du sable associé : h1 = **12,5 cm**, h2 = **9,8 cm** ;
+- Spécifications du CCTP : béton : LA ≤ **40** ; couche de roulement : LA ≤ **25** et MDE ≤ **20** ; absorption ≤ **2,5 %** ; ES ≥ **75**.
+
+### Partie A — Résistance des gravillons (7 points)
+1. Expliquer le principe de l'essai Los Angeles et du Micro-Deval. (2 pts)
+2. Calculer LA et MDE. (3 pts)
+3. Le gravillon convient-il pour le béton ? Pour la couche de roulement ? (2 pts)
+
+### Partie B — Masse volumique et absorption (6 points)
+4. Calculer le volume des grains et la masse volumique réelle. (3 pts)
+5. Calculer le coefficient d'absorption. Conforme ? (2 pts)
+6. Pourquoi l'absorption intéresse-t-elle le formulateur du béton ? (1 pt)
+
+### Partie C — Sable (2 points)
+7. Calculer l'ES et conclure. (2 pts)
+
+### Partie D — Lecture d'un PV (5 points)
+8. Décrire la démarche de lecture critique d'un procès-verbal d'essais. (3 pts)
+9. Le PV d'un lot porte une date de prélèvement antérieure à l'ouverture de la carrière exploitée. Que faire ? (2 pts)`,
+  corrige:`### Partie A — Gravillons (7 pts)
+1. **Los Angeles** : les gravillons tournent dans un tambour avec des boulets d'acier → résistance aux **chocs** ; **Micro-Deval** : rotation avec de l'eau et de petites billes → résistance à l'**usure** par frottement. Plus la valeur est faible, meilleur est le granulat. *(2 pts)*
+2. LA = 100 × 1 550 / 5 000 = **31** ; MDE = 100 × 72 / 500 = **14,4**. *(3 pts)*
+3. Béton : 31 ≤ 40 ✔ ; couche de roulement : LA 31 > 25 ✘ (MDE 14,4 ✔) → **refusé pour la couche de roulement**. *(2 pts)*
+
+### Partie B — Masse volumique (6 pts)
+4. V = 600 + 1 480 − 1 850 = **230 cm³** → ρs = 600 / 230 = **2,61 g/cm³**. *(3 pts)*
+5. Ab = (607,2 − 600) / 600 = **1,2 %** ≤ 2,5 % ✔. *(2 pts)*
+6. Un granulat sec absorbe une partie de l'eau de gâchage : il faut en tenir compte dans la correction d'eau (sinon béton trop sec). *(1 pt)*
+
+### Partie C — Sable (2 pts)
+7. ES = 100 × 9,8 / 12,5 = **78** ≥ 75 ✔ → sable propre. *(2 pts)*
+
+### Partie D — PV (5 pts)
+8. Vérifier qu'il s'agit **du bon matériau**, du bon lot et de la bonne provenance (dates, lieu de prélèvement, laboratoire) ; comparer **chaque résultat** à la spécification du CCTP ; repérer les valeurs **hors tolérance** et leurs conséquences ; **décider** : accepter, refuser, demander une contre-expertise ou des essais complémentaires. *(3 pts)*
+9. Le PV ne peut pas concerner le matériau livré : il est **non recevable**. Demander de **nouveaux essais** sur des échantillons prélevés contradictoirement sur le stock livré. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Juger un granulat sur un seul critère.
+> - Accepter un PV sans vérifier dates et provenance.
+> - Confondre LA (chocs) et MDE (usure).`},
  exercices:[
   {t:"Los Angeles et Micro-Deval", d:1, e:`Un gravillon donne à l'essai Los Angeles 1 150 g passant à 1,6 mm (M = 5 000 g) et à l'essai Micro-Deval 260 g passant à 1,6 mm (M = 500 g). Calculer LA et MDE. Le CCTP d'une couche de roulement exige LA ≤ 25 et MDE ≤ 20 : conforme ?`, c:`LA = 100 × 1 150 / 5 000 = **23** ✔ ; MDE = 100 × 260 / 500 = **52** ✘.
 Le granulat résiste bien aux chocs mais **s'use trop** : non conforme pour une couche de roulement (utilisable en béton ou en couche de base selon les spécifications).`},
@@ -990,6 +1702,53 @@ Un matériau « écologique » qui doit être remplacé souvent ne l'est pas : i
 > - Ciment : ≈ 0,85 t de CO₂ par tonne de clinker ; préférer les ciments composés et bien doser.
 > - BTC, bois, terre cuite, matériaux locaux : moins de transport et de carbone.
 > - Raisonner sur tout le cycle de vie : fabrication, usage, entretien, fin de vie.`,
+ sujet:{titre:"Construire bas carbone : ciments, murs en BTC et bilan d'une maison", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un promoteur veut afficher une maison « bas carbone » à Bingerville. Vous comparez des solutions.
+
+**Données**
+- CO₂ émis par la fabrication du clinker : **0,85 kg par kg de clinker** ;
+- Taux de clinker : CEM I **95 %** ; CEM II/B-L **70 %** ; CEM III/A **40 %** ;
+- Maison : **40 m³** de béton dosé à **350 kg/m³** ; **180 m²** de murs ;
+- Ciment par m² de mur : agglos creux de 15 (blocs + mortier) **33,5 kg/m²** ; BTC (29,5 × 14 × 9,5) **16 kg/m²** ; facteur moyen pour ces ciments : **0,6 kg de CO₂ par kg de ciment**.
+
+### Partie A — Pourquoi bas carbone (4 points)
+1. Pourquoi le ciment pèse-t-il autant dans le bilan carbone d'un bâtiment ? (2 pts)
+2. Citer quatre leviers pour réduire l'empreinte carbone d'une construction. (2 pts)
+
+### Partie B — Choix du ciment (8 points)
+3. Calculer le CO₂ d'un m³ de béton avec chacun des trois ciments. (3 pts)
+4. Calculer le CO₂ des 40 m³ pour chaque ciment et l'économie par rapport au CEM I. (3 pts)
+5. Quelle précaution prendre avec un ciment à forte teneur en laitier (décoffrage, cure) ? (2 pts)
+
+### Partie C — Murs (5 points)
+6. Calculer le ciment des murs en agglos et en BTC, puis l'économie de CO₂. (3 pts)
+7. Quels autres avantages et quelles conditions pour les BTC ? (2 pts)
+
+### Partie D — Autres matériaux (3 points)
+8. Proposer trois autres choix bas carbone pour cette maison (structure, toiture, isolation, chantier). (3 pts)`,
+  corrige:`### Partie A — Enjeux (4 pts)
+1. La cuisson du clinker à **1 450 °C** consomme beaucoup d'énergie et la **décarbonatation** du calcaire libère du CO₂ : le ciment est l'un des premiers émetteurs industriels, et le béton le matériau le plus utilisé. *(2 pts)*
+2. Ciments à **ajouts** (moins de clinker) ; **dosages justes** (pas de surdosage) ; **matériaux locaux** (terre, BTC, bois) et moins de transport ; **conception bioclimatique** (moins de climatisation) ; réemploi et recyclage ; durabilité (ouvrages qui durent). *(2 pts)*
+
+### Partie B — Ciment (8 pts)
+3. *(3 pts)*
+   - CEM I : 350 × 0,95 × 0,85 = **283 kg CO₂/m³** ;
+   - CEM II/B-L : 350 × 0,70 × 0,85 = **208 kg** ;
+   - CEM III/A : 350 × 0,40 × 0,85 = **119 kg**.
+4. 40 m³ : CEM I **11,3 t** ; CEM II/B **8,3 t** (− 3,0 t, − 26 %) ; CEM III/A **4,8 t** (− 6,5 t, − 58 %). *(3 pts)*
+5. Montée en résistance plus **lente** : délais de décoffrage plus longs, **cure humide prolongée** (plus sensible à la dessiccation au jeune âge). *(2 pts)*
+
+### Partie C — Murs (5 pts)
+6. Agglos : 180 × 33,5 = **6 030 kg** de ciment ; BTC : 180 × 16 = **2 880 kg** → 3 150 kg de ciment en moins × 0,6 = **≈ 1,9 t de CO₂** évitées. *(3 pts)*
+7. Confort thermique (inertie), terre locale, emplois locaux ; conditions : terre adaptée et testée, presse et contrôle de qualité, **protection contre l'eau** (soubassement, débords). *(2 pts)*
+
+### Partie D — Autres choix (3 pts)
+8. Charpente en **bois local** certifié et traité ; isolation en **fibres végétales** (coco, typha) ; toiture claire et ventilée ; **chauffe-eau solaire** et panneaux photovoltaïques ; récupération des eaux de pluie ; tri des déchets de chantier ; approvisionnement local. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Croire qu'un matériau « naturel » est toujours meilleur : il faut le bilan complet (transport, durabilité).
+> - Réduire le ciment au détriment de la résistance ou de la durabilité exigée.
+> - Oublier la cure plus longue des ciments à ajouts.`},
  exercices:[
   {t:"Carbone du béton d'une maison", d:2, e:`Une maison utilise 30 m³ de béton dosé à 350 kg/m³. Comparer les émissions de CO₂ du ciment avec un CEM I (95 % de clinker) et un CEM II/B (70 % de clinker), à 0,85 t de CO₂ par tonne de clinker.`, c:`CEM I : 30 × 350 × 0,95 × 0,85 = **8 479 kg ≈ 8,5 t** de CO₂.
 CEM II/B : 30 × 350 × 0,70 × 0,85 = **6 248 kg ≈ 6,2 t** → économie de **2,2 t** (− 26 %), pour un béton de structure courant tout à fait adapté.`},
