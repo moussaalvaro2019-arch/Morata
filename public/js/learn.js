@@ -129,6 +129,7 @@ A.page('app/cours/:id', {space:'app', free:true, title:p => ((A.chap(p.id)||{}).
      ${md.html}
     </article>
     ${A.exosHtml(c)}
+    ${A.sujetHtml(c)}
     <div class="aipanel noprint" id="aiBox">
      <div class="hd">${ic('spark')}Besoin d'aide sur ce chapitre ?</div>
      <div class="sugg"><button data-iaq="simple">${ic('chat')} Expliquer plus simplement</button><button data-iaq="exemple">${ic('calc')} Un exemple chiffré</button><button data-iaq="exercice">${ic('edit')} Un exercice corrigé</button><button data-iaq="chantier">${ic('hat')} Application sur chantier</button><button data-iaq="resume">${ic('list')} Fiche résumé</button></div>
@@ -159,6 +160,53 @@ A.exosHtml = c => {
    <div class="exos">${L.map((x, i) => { const d = EXD[x.d] || EXD[2]; return `<div class="exo"><div class="row between nw" style="align-items:flex-start"><b>Exercice ${i + 1} · ${esc(x.t)}</b><span class="pill" style="background:${d[2]};color:${d[1]};flex:none">${d[0]}</span></div>
     ${A.mdHtml(x.e)}<details class="cor"><summary>${ic('check')}Voir le corrigé détaillé</summary>${A.mdHtml(x.c)}</details></div>`; }).join('')}</div></section>`;
 };
+
+/* Sujet type examen du chapitre : énoncé complet, puis corrigé détaillé et barème à ouvrir */
+A.sujetHtml = (c, opt={}) => {
+  const s = c.sujet; if(!s || !s.enonce) return '';
+  return `<section class="lesson sujet" id="sujet"><div class="row between nw" style="align-items:flex-start"><div style="min-width:0"><span class="kick">${ic('doc')} Sujet type examen</span><h2 style="font-size:22px;margin:4px 0 6px">${esc(s.titre)}</h2></div>${opt.full ? '' : `<a class="btn b-line b-sm noprint" style="flex:none" href="#/app/sujet/${c.id}">${ic('clock')}Mode examen</a>`}</div>
+   <div class="row" style="gap:8px;margin-bottom:12px"><span class="pill p-info">${ic('clock')} ${s.duree || 60} min</span><span class="pill p-mute">Noté sur ${s.bareme || 20}</span>${s.niveau ? `<span class="pill p-or">${esc(s.niveau)}</span>` : ''}</div>
+   <div class="sujet-e">${A.mdHtml(s.enonce)}</div>
+   ${opt.full ? '' : `<details class="cor"><summary>${ic('check')}Voir le corrigé détaillé et le barème</summary>${A.mdHtml(s.corrige)}</details>`}</section>`;
+};
+
+/* ---------- Mode examen : chronomètre, énoncé, corrigé à la fin ---------- */
+let SJ = null, sjTimer = 0;
+const sjFmt = t => { t = Math.max(0, Math.round(t/1000)); const h = Math.floor(t/3600), m = Math.floor(t%3600/60), s = t%60; return (h ? h + ' h ' : '') + String(m).padStart(2, '0') + ' min ' + String(s).padStart(2, '0') + ' s'; };
+const sjLeft = () => !SJ ? 0 : SJ.total - (SJ.run ? SJ.used + (Date.now() - SJ.t0) : SJ.used);
+function sjTick(){ const el = $('#sjT'); if(!el || !SJ){ clearInterval(sjTimer); return; } const l = sjLeft(); el.textContent = sjFmt(l); el.classList.toggle('late', l <= 0); }
+A.page('app/sujet/:id', {space:'app', free:true, title:p => (((A.chap(p.id)||{}).c||{}).sujet||{}).titre || 'Sujet d\'examen', crumb:p => { const f = A.chap(p.id); return f ? `<a href="#/app/exercices/${f.m.id}">Exercices</a> › <a href="#/app/cours/${f.c.id}">${esc(f.c.titre)}</a>` : ''; },
+ actions:() => `<button class="ibtn noprint" data-act="print" title="Imprimer le sujet">${ic('print')}</button>`,
+ render(p){
+  const f0 = A.chap(p.id); if(!f0) return A.empty('doc', 'Sujet introuvable.');
+  if(!A.hasAccess() && !A.isFree(p.id)) return A.lockedChapter(f0.c, A.mat(f0.m.id) || f0.m);
+  if(!A.chapReady(f0)) return A.chapLoading();
+  const f = A.chap(p.id), c = f.c, s = c.sujet; if(c.verrou) return A.lockedChapter(c, f.m);
+  if(!s) return A.empty('doc', 'Ce chapitre n\'a pas encore de sujet d\'examen.');
+  if(!SJ || SJ.id !== c.id) SJ = {id:c.id, total:(s.duree || 60)*60000, used:0, run:false, t0:0, show:false};
+  const note = A.ls.get('sjNote:' + c.id, '');
+  return `<div class="reader"><div class="stack s20" style="min-width:0">
+   <div class="sjbar noprint"><div class="row nw"><span class="ic">${ic('clock')}</span><div><b id="sjT" class="mono">${sjFmt(sjLeft())}</b><div class="small faint">temps restant sur ${s.duree || 60} min</div></div></div>
+    <div class="row">${SJ.run ? `<button class="btn b-line b-sm" data-sj="pause">${ic('clock')}Pause</button>` : `<button class="btn b-pri b-sm" data-sj="go">${ic('play')}${SJ.used ? 'Reprendre' : 'Démarrer l\'épreuve'}</button>`}<button class="btn b-ghost b-sm" data-sj="reset">${ic('refresh')}Recommencer</button></div></div>
+   ${A.sujetHtml(c, {full:true})}
+   <section class="lesson noprint"><div class="row between"><div><span class="kick">Après l'épreuve</span><h2 style="font-size:20px">Correction</h2></div>${SJ.show ? '' : `<button class="btn b-ok" data-sj="cor">${ic('check')}Afficher le corrigé et le barème</button>`}</div>
+    ${SJ.show ? `<div style="margin-top:12px">${A.mdHtml(s.corrige)}</div>
+     <div class="row" style="margin-top:14px"><label class="fld" style="max-width:220px"><span>Ma note (auto-correction)</span><input class="inp" id="sjNote" type="number" min="0" max="${s.bareme || 20}" step="0.5" value="${esc(note)}" placeholder="sur ${s.bareme || 20}"></label><button class="btn b-line" data-sj="note">${ic('save')}Enregistrer</button></div>` : '<p class="sub" style="margin-top:8px">Rédigez votre copie sur une feuille dans le temps imparti, puis ouvrez le corrigé pour vous noter avec le barème.</p>'}</section>
+   <div class="lnav noprint"><a class="btn b-line" href="#/app/cours/${c.id}">${ic('back')}Revoir le cours</a><a class="btn b-pri" href="#/app/exercices/${f.m.id}">${ic('doc')}Autres sujets de ${esc(f.m.court || f.m.titre)}</a></div>
+  </div></div>`;
+ },
+ mount(){ clearInterval(sjTimer); sjTimer = setInterval(sjTick, 1000); sjTick(); },
+ unmount(){ clearInterval(sjTimer); }
+});
+A.on('click', '[data-sj]', el => {
+  if(!SJ) return; const a = el.dataset.sj;
+  if(a === 'go'){ SJ.run = true; SJ.t0 = Date.now(); }
+  if(a === 'pause'){ SJ.used += Date.now() - SJ.t0; SJ.run = false; }
+  if(a === 'reset'){ SJ.used = 0; SJ.run = false; SJ.show = false; }
+  if(a === 'cor'){ if(SJ.run){ SJ.used += Date.now() - SJ.t0; SJ.run = false; } SJ.show = true; }
+  if(a === 'note'){ const v = A.val('sjNote'); A.ls.set('sjNote:' + SJ.id, v); toast('Note enregistrée : ' + v, 'check'); return; }
+  A.refresh();
+});
 
 function quizHtml(c){
   const items = QZ.items;

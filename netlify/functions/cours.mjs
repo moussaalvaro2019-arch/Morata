@@ -30,13 +30,14 @@ function contentDir() {
 const CACHE = new Map();
 function matiere(id) {
   if (!/^[a-z0-9-]{1,24}$/.test(id)) return null;
-  if (CACHE.has(id)) return CACHE.get(id);
   const d = contentDir(); if (!d) throw new Error("Dossier contenus/cours introuvable");
   const f = path.join(d, id + ".js"); if (!fs.existsSync(f)) return null;
+  const mt = fs.statSync(f).mtimeMs, hit = CACHE.get(id);
+  if (hit && hit.mt === mt) return hit.m;
   let out = null;
   new Function("A", fs.readFileSync(f, "utf8"))({ addMatiere: (m) => { out = m; } });
   if (out) { out.chapitres = (out.chapitres || []).map((c, i) => ({ ...c, _i: i })).sort((a, b) => (a.niv || 2) - (b.niv || 2) || a._i - b._i).map(({ _i, ...c }) => c); }
-  CACHE.set(id, out); return out;
+  CACHE.set(id, { m: out, mt }); return out;
 }
 
 /* Paramètres Supabase : variables Netlify, sinon lecture de /config.js du site */

@@ -144,6 +144,65 @@ La **portée de calcul** d'une poutre est en général la distance entre les axe
 
 > [!attention] Erreurs fréquentes
 > Oublier le poids propre de la poutre, compter deux fois la dalle dans la retombée de la poutre, confondre kN/m² et kN/m, ou oublier de convertir des centimètres en mètres.`,
+ sujet:{titre:"Charges d'un plancher de villa et d'une poutre porteuse", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Dans une villa en construction à Bingerville, le bureau d'études vous demande d'évaluer les charges d'un plancher et de la poutre qui le porte, avant le calcul du ferraillage.
+
+**Données**
+- Dalle pleine en béton armé de **16 cm** d'épaisseur, poids volumique **25 kN/m³** ;
+- Carrelage + chape : **1,0 kN/m²** ; enduit sous plafond : **0,3 kN/m²** ; cloisons légères : **1,0 kN/m²** ;
+- Charge d'exploitation (habitation) : **1,5 kN/m²** ;
+- La poutre, de section **20 × 40 cm** et de portée **5,00 m** (deux appuis simples), reprend une **bande de plancher de 4,00 m** de largeur ;
+- On prendra g ≈ 10 m/s².
+
+### Partie A — Unités et conversions (4 points)
+1. Exprimer en kN la masse de 2,5 t, puis en N/mm² une contrainte de 25 MPa. (1 pt)
+2. Calculer le volume et la masse d'un panneau de dalle de 5,00 × 4,00 m. (2 pts)
+3. Exprimer une charge de 45,72 kN/m en N/mm. (1 pt)
+
+### Partie B — Charges surfaciques (5 points)
+4. Calculer la charge permanente G du plancher en kN/m², en détaillant chaque poste. (3 pts)
+5. Indiquer la charge d'exploitation Q et expliquer la différence entre G et Q. (2 pts)
+
+### Partie C — Charges sur la poutre (7 points)
+6. Calculer la charge permanente linéique sur la poutre, poids propre compris. (3 pts)
+7. Calculer la charge d'exploitation linéique. (1 pt)
+8. Calculer la charge de calcul à l'ELU (1,35 G + 1,5 Q) et la charge de service (G + Q). (3 pts)
+
+### Partie D — Réactions (4 points)
+9. Calculer la charge totale ELU sur la poutre et la réaction de chaque appui. (3 pts)
+10. Quelle charge (en kN) chaque poteau devra-t-il au minimum recevoir de cette poutre ? (1 pt)`,
+  corrige:`### Partie A — Unités (4 pts)
+1. 2,5 t = 2 500 kg → poids ≈ 2 500 × 10 = 25 000 N = **25 kN** ; 25 MPa = **25 N/mm²** (1 MPa = 1 N/mm²). *(1 pt)*
+2. V = 5,00 × 4,00 × 0,16 = **3,20 m³** ; masse = 3,20 × 2,5 t/m³ = **8,0 t** (≈ 80 kN). *(2 pts)*
+3. 45,72 kN/m = 45 720 N / 1 000 mm = **45,72 N/mm** (les deux unités ont la même valeur numérique). *(1 pt)*
+
+### Partie B — Charges surfaciques (5 pts)
+4. Charge permanente : *(3 pts)*
+
+| Poste | Calcul | kN/m² |
+|---|---|---|
+| Dalle 16 cm | 0,16 × 25 | 4,00 |
+| Carrelage + chape | donné | 1,00 |
+| Enduit plafond | donné | 0,30 |
+| Cloisons | donné | 1,00 |
+| **G** | | **6,30** |
+
+5. **Q = 1,5 kN/m²**. G est permanente (poids propre, revêtements, toujours présents) ; Q est variable (occupants, meubles), définie par le règlement selon l'usage du local. *(2 pts)*
+
+### Partie C — Charges linéiques (7 pts)
+6. Plancher : 6,30 × 4,00 = 25,2 kN/m ; poids propre de la poutre : 0,20 × 0,40 × 25 = 2,0 kN/m → **G = 27,2 kN/m**. *(3 pts)*
+7. **Q = 1,5 × 4,00 = 6,0 kN/m**. *(1 pt)*
+8. ELU : $$ pu = 1,35 × 27,2 + 1,5 × 6,0 = 36,72 + 9,00 = 45,72 kN/m
+   ELS : **pser = 27,2 + 6,0 = 33,2 kN/m**. *(3 pts)*
+
+### Partie D — Réactions (4 pts)
+9. Charge totale ELU : 45,72 × 5,00 = **228,6 kN** ; poutre symétrique : **RA = RB = 114,3 kN**. *(3 pts)*
+10. Chaque poteau reçoit au moins **114,3 kN** (ELU) de cette poutre, auxquels s'ajoutent les autres poutres et son poids propre (descente de charges). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le poids propre de la poutre (2 kN/m, soit 7 % de G ici).
+> - Multiplier par la largeur de la bande seulement une partie des charges.
+> - Appliquer 1,35 à Q ou 1,5 à G.`},
  exercices:[
   {t:"Conversions d'unités", d:1, e:`Convertir :
 1. 2 500 kg en kN (prendre g = 10 m/s²) ;
@@ -274,6 +333,52 @@ On exige en général **Ms / Mr ≥ 1,5**.
 > - Une charge répartie se remplace par l'aire de son diagramme, placée au centre de gravité.
 > - Triangle : R = q a / 2 à a/3 du côté le plus chargé.
 > - Équilibre plan : 3 équations ; toujours vérifier avec une équation supplémentaire.`,
+ sujet:{titre:"Stabilité d'un panneau de chantier sur massif en béton", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un panneau d'affichage de chantier est fixé sur un mât encastré dans un massif en béton posé sur le sol. Vous devez vérifier qu'il ne basculera pas sous le vent.
+
+**Données**
+- Panneau rectangulaire de **2,00 × 1,50 m** (largeur × hauteur), son bord inférieur à **2,50 m** du sol ;
+- Pression du vent sur le panneau : **0,60 kN/m²** (on néglige le vent sur le mât) ;
+- Massif en béton de **1,20 × 1,20 × 0,80 m** (enterré, le dessus au niveau du sol), poids volumique **25 kN/m³** ;
+- Poids du mât et du panneau : **1,0 kN**, appliqué dans l'axe du massif.
+
+### Partie A — Action du vent (5 points)
+1. Calculer la résultante F du vent sur le panneau. (2 pts)
+2. Préciser son point d'application (hauteur au-dessus du sol) et justifier. (2 pts)
+3. Calculer le moment de F au pied du mât (niveau du sol). (1 pt)
+
+### Partie B — Équilibre au basculement (9 points)
+4. Calculer le poids W de l'ensemble (massif + mât + panneau). (2 pts)
+5. Calculer le moment de renversement de F autour de l'arête inférieure du massif (sous le sol). (2 pts)
+6. Calculer le moment stabilisant de W autour de la même arête. (2 pts)
+7. Calculer le coefficient de sécurité au renversement et conclure (on exige 1,5). (3 pts)
+
+### Partie C — Répartition des pressions sous le massif (6 points)
+8. Calculer l'excentricité e de la résultante par rapport au centre de la base. (2 pts)
+9. La résultante passe-t-elle dans le tiers central ? Conclure sur la forme du diagramme de pressions. (2 pts)
+10. Calculer la pression maximale sur le sol (diagramme triangulaire : p max = 2W / [3 b (B/2 − e)]). (2 pts)`,
+  corrige:`### Partie A — Vent (5 pts)
+1. Surface : 2,00 × 1,50 = 3,00 m² → **F = 0,60 × 3,00 = 1,80 kN**. *(2 pts)*
+2. La pression est uniforme : la résultante passe par le **centre du panneau**, à 2,50 + 1,50 / 2 = **3,25 m** du sol. *(2 pts)*
+3. **M = 1,80 × 3,25 = 5,85 kN·m** au niveau du sol. *(1 pt)*
+
+### Partie B — Basculement (9 pts)
+4. Massif : 1,20 × 1,20 × 0,80 × 25 = 28,8 kN ; **W = 28,8 + 1,0 = 29,8 kN**. *(2 pts)*
+5. Bras de levier jusqu'à l'arête inférieure : 3,25 + 0,80 = 4,05 m → **Mr = 1,80 × 4,05 = 7,29 kN·m**. *(2 pts)*
+6. W passe par le centre : bras = 1,20 / 2 = 0,60 m → **Ms = 29,8 × 0,60 = 17,88 kN·m**. *(2 pts)*
+7. $$ FS = Ms / Mr = 17,88 / 7,29 = 2,45 ≥ 1,5
+   Le panneau **ne bascule pas**. *(3 pts)*
+
+### Partie C — Pressions (6 pts)
+8. Moment au centre de la base : 7,29 kN·m (W n'y crée pas de moment) → **e = 7,29 / 29,8 = 0,245 m**. *(2 pts)*
+9. Tiers central : B / 6 = 1,20 / 6 = 0,20 m. **e = 0,245 > 0,20 m** : la résultante sort du tiers central ; une partie de la base se soulève et le diagramme des pressions est **triangulaire** (pas de traction possible avec le sol). *(2 pts)*
+10. $$ p max = 2 × 29,8 / [3 × 1,20 × (0,60 − 0,245)] = 59,6 / 1,278 = 46,6 kPa
+    C'est faible pour un sol courant (100 à 200 kPa) : le sol tient. Pour rester dans le tiers central, on élargirait le massif ou on l'alourdirait. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre le bras de levier au niveau du sol au lieu de l'arête du massif.
+> - Oublier que la pression du vent agit sur la surface du panneau (kN/m² × m²).
+> - Confondre stabilité au renversement et contrainte sur le sol : ce sont deux vérifications distinctes.`},
  exercices:[
   {t:"Moments de plusieurs forces", d:1, e:`Une poutre AB de 6 m est soumise à :
 - une force verticale de 15 kN vers le bas à 1,5 m de A ;
@@ -398,6 +503,51 @@ Une **poutre Gerber** comporte des rotules intérieures qui la rendent isostatiq
 > - h = r − 3 (− 1 par rotule intérieure) : 0 = isostatique, > 0 = hyperstatique, < 0 = mécanisme.
 > - Moments en un appui d'abord, puis ΣFy, puis vérification.
 > - Une réaction négative est un résultat, pas une erreur : elle change simplement de sens.`,
+ sujet:{titre:"Réactions d'une poutre en console avec charges mixtes", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de rive ABC porte une dalle et l'about d'une poutre de balcon. Elle repose sur une **articulation en A** et un **appui simple en B** ; elle se prolonge en **console jusqu'en C**.
+
+**Données** (abscisses depuis A)
+- AB = **6,00 m** ; BC = **1,50 m** (C à x = 7,50 m) ;
+- Charge uniforme **q = 12 kN/m** sur AB uniquement ;
+- Charge ponctuelle **F1 = 15 kN** à x = 2,00 m ;
+- Charge ponctuelle **F2 = 20 kN** en C (about de la poutre de balcon) ;
+- Effort horizontal de **8 kN** (freinage d'un engin pendant les travaux) appliqué en C, dirigé de C vers A.
+
+### Partie A — Modélisation (5 points)
+1. Représenter les liaisons en A et en B et indiquer les inconnues de chacune. (2 pts)
+2. La poutre est-elle isostatique ? Justifier. (1 pt)
+3. Combien d'inconnues et quel degré d'hyperstaticité si l'appui simple B était remplacé par une articulation ? (2 pts)
+
+### Partie B — Calcul des réactions (11 points)
+4. Remplacer la charge répartie par sa résultante et préciser son point d'application. (2 pts)
+5. Écrire l'équation des moments en A et en déduire la réaction verticale en B. (3 pts)
+6. Écrire l'équation des forces verticales et en déduire la réaction verticale en A. (2 pts)
+7. Calculer la réaction horizontale en A. (1 pt)
+8. Vérifier vos résultats par l'équation des moments en B. (3 pts)
+
+### Partie C — Exploitation (4 points)
+9. Que se passerait-il en A si la charge F2 en bout de console devenait très grande ? Calculer la valeur de F2 qui annule RA. (4 pts)`,
+  corrige:`### Partie A — Modélisation (5 pts)
+1. **A : articulation** (appui double) → 2 inconnues HA et VA ; **B : appui simple** → 1 inconnue VB (perpendiculaire à l'appui). *(2 pts)*
+2. 3 inconnues pour 3 équations d'équilibre dans le plan : **isostatique**. *(1 pt)*
+3. Articulation en B : 2 + 2 = **4 inconnues**, degré d'hyperstaticité **h = 4 − 3 = 1**. *(2 pts)*
+
+### Partie B — Réactions (11 pts)
+4. Résultante : 12 × 6,00 = **72 kN**, appliquée au milieu de AB, **x = 3,00 m**. *(2 pts)*
+5. $$ Σ M/A = 0 : VB × 6,00 = 72 × 3,00 + 15 × 2,00 + 20 × 7,50 = 216 + 30 + 150 = 396
+   **VB = 66 kN**. *(3 pts)*
+6. VA + VB = 72 + 15 + 20 = 107 kN → **VA = 107 − 66 = 41 kN**. *(2 pts)*
+7. Seul effort horizontal : 8 kN vers A → **HA = 8 kN**, dirigé de A vers C (sens opposé). *(1 pt)*
+8. $$ Σ M/B = 0 : VA × 6,00 = 72 × 3,00 + 15 × 4,00 − 20 × 1,50 = 216 + 60 − 30 = 246
+   VA = 41 kN ✔ (F2 est de l'autre côté de B : son moment est de signe opposé). *(3 pts)*
+
+### Partie C — Exploitation (4 pts)
+9. Une grosse charge en console **soulève** l'appui A (la poutre bascule autour de B) ; il faudrait alors un ancrage. Moments en B avec F2 inconnue : VA × 6 = 216 + 60 − 1,5 F2. VA = 0 pour **F2 = 276 / 1,5 = 184 kN**. Au-delà, A se soulève. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le signe opposé du moment d'une charge en console.
+> - Mettre la résultante de q au milieu de la poutre entière (3,75 m) au lieu du milieu de AB.
+> - Oublier la réaction horizontale quand un effort horizontal existe.`},
  exercices:[
   {t:"Poutre avec une charge ponctuelle", d:1, e:`Une poutre AB de 5 m (articulation en A, appui simple en B) porte une charge ponctuelle de 30 kN à 2 m de A. Calculer les réactions et vérifier.`, c:`ΣM/A = 0 : 5 RB − 30 × 2 = 0 → **RB = 12 kN**.
 ΣFy = 0 : RA = 30 − 12 = **18 kN**.
@@ -522,6 +672,44 @@ Le coefficient couvre les incertitudes sur les charges, sur la qualité du maté
 
 > [!attention]
 > Les unités ! Si N est en kN et A en cm², σ est en kN/cm² (1 kN/cm² = 10 MPa). Le plus sûr est de tout convertir en **N** et en **mm²** pour obtenir directement des MPa.`,
+ sujet:{titre:"Tirant de charpente et poteau en béton : contraintes et allongements", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une halle de stockage comporte des fermes métalliques dont l'entrait est un **tirant rond** en acier, et des poteaux en béton armé. On vérifie les contraintes et les déformations de ces éléments.
+
+**Données**
+- Tirant : rond plein **Ø 20 mm**, longueur **6,00 m**, effort de traction de service **N = 45 kN** ; acier S235 : **E = 210 000 MPa**, **fy = 235 MPa**, coefficient de Poisson **ν = 0,3** ;
+- Poteau : section **25 × 25 cm**, hauteur **3,00 m**, effort de compression de service **600 kN**, module du béton **E = 30 000 MPa**.
+
+### Partie A — Le tirant (10 points)
+1. Calculer la section du tirant et la contrainte normale. (2 pts)
+2. Calculer la déformation ε et l'allongement ΔL. (3 pts)
+3. On majore l'effort de 1,5 (ELU) : vérifier la résistance (σ ≤ fy). (2 pts)
+4. Calculer la variation du diamètre du tirant (effet Poisson) et commenter. (3 pts)
+
+### Partie B — Le poteau (6 points)
+5. Calculer la contrainte de compression dans le poteau. (2 pts)
+6. Calculer son raccourcissement instantané. (2 pts)
+7. Pourquoi le raccourcissement réel à long terme sera-t-il plus grand ? (2 pts)
+
+### Partie C — Dimensionnement (4 points)
+8. Un autre tirant doit reprendre **80 kN** avec une contrainte limitée à **160 MPa**. Diamètres disponibles : 20, 22, 25, 28, 32 mm. Choisir le diamètre et calculer la contrainte obtenue. (4 pts)`,
+  corrige:`### Partie A — Tirant (10 pts)
+1. A = π × 20² / 4 = **314,2 mm²** ; σ = 45 000 / 314,2 = **143,2 MPa**. *(2 pts)*
+2. ε = σ / E = 143,2 / 210 000 = **6,82 × 10⁻⁴** (0,68 ‰) ; ΔL = ε × L = 6,82 × 10⁻⁴ × 6 000 = **4,09 mm**. *(3 pts)*
+3. σu = 1,5 × 143,2 = **214,9 MPa ≤ 235 MPa** ✔ : le tirant résiste. *(2 pts)*
+4. Δd = − ν × ε × d = − 0,3 × 6,82 × 10⁻⁴ × 20 = **− 0,0041 mm** : le tirant s'amincit de 4 µm, effet négligeable en pratique (mais il existe : c'est l'effet Poisson). *(3 pts)*
+
+### Partie B — Poteau (6 pts)
+5. A = 250 × 250 = 62 500 mm² ; **σ = 600 000 / 62 500 = 9,6 MPa**. *(2 pts)*
+6. ΔL = σ L / E = 9,6 × 3 000 / 30 000 = **0,96 mm** (raccourcissement). *(2 pts)*
+7. Le béton **flue** sous charge permanente et subit le **retrait** : à long terme, la déformation peut atteindre 2 à 3 fois la déformation instantanée (module différé ≈ E / 3). *(2 pts)*
+
+### Partie C — Dimensionnement (4 pts)
+8. A min = 80 000 / 160 = **500 mm²** → d min = √(4 × 500 / π) = 25,2 mm. Le Ø 25 (491 mm²) est insuffisant : on retient le **Ø 28** (615,8 mm²), σ = 80 000 / 615,8 = **129,9 MPa ≤ 160** ✔. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la section avec le diamètre au lieu du rayon (π d² / 4 ou π r²).
+> - Laisser L en mètres avec E en MPa : tout en N et mm.
+> - Arrondir un diamètre vers le bas.`},
  exercices:[
   {t:"Contrainte dans une suspente", d:1, e:`Une suspente en plat d'acier de 40 × 8 mm supporte un effort de traction de 45 kN. Calculer la contrainte. L'acier est un S235 : la suspente résiste-t-elle (coefficient γM0 = 1,0) ?`, c:`A = 40 × 8 = 320 mm².
 σ = 45 000 / 320 = **140,6 MPa**.
@@ -635,6 +823,46 @@ Autour d'un **trou**, d'une **entaille** ou d'un changement brusque de section, 
 > - ΔL = N L / (E A) ; on additionne les allongements des tronçons.
 > - Barre bloquée chauffée : σ = E α ΔT → joints de dilatation.
 > - Section mixte : Ah = Ab + n As, σs = n σb.`,
+ sujet:{titre:"Suspentes d'un auvent et poteau court comprimé", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** L'entrée d'un centre de santé est protégée par un auvent suspendu par **4 suspentes** en acier à une poutre haute. Les poteaux de l'auvent voisin sont en béton.
+
+**Données**
+- Charge totale de l'auvent à l'ELU : **96 kN**, répartie également entre les 4 suspentes ; à l'ELS : **68 kN** ;
+- Suspentes : acier S235, **fy = 235 MPa**, **E = 210 000 MPa**, longueur **3,50 m** ;
+- Diamètres disponibles : 10, 12, 14, 16 mm ;
+- Poteau béton **20 × 20 cm**, hauteur 2,80 m, effort de service **Nser = 350 kN** ; béton **fc28 = 25 MPa** ; module différé du béton **Ev = 11 000 MPa** ;
+- Coefficient de dilatation de l'acier : **α = 1,2 × 10⁻⁵ /°C**.
+
+### Partie A — Suspentes (10 points)
+1. Calculer l'effort ELU dans une suspente. (1 pt)
+2. Calculer la section minimale et choisir le diamètre. (4 pts)
+3. Calculer l'allongement d'une suspente à l'ELS. (3 pts)
+4. Pourquoi faut-il que les 4 suspentes aient exactement la même longueur ? (2 pts)
+
+### Partie B — Poteau en compression (6 points)
+5. Calculer la contrainte de compression et la comparer à la limite de service 0,6 fc28. (3 pts)
+6. Calculer le raccourcissement à long terme. (3 pts)
+
+### Partie C — Effet thermique (4 points)
+7. Une barre d'acier bloquée entre deux massifs subit une hausse de température de 30 °C. Calculer la contrainte de compression qui apparaît. Commenter. (4 pts)`,
+  corrige:`### Partie A — Suspentes (10 pts)
+1. **Nu = 96 / 4 = 24 kN**. *(1 pt)*
+2. A min = 24 000 / 235 = **102,1 mm²** ; Ø 12 : π × 12² / 4 = **113,1 mm² ≥ 102,1** ✔ → **Ø 12** (le Ø 10, 78,5 mm², est insuffisant). *(4 pts)*
+3. Nser = 68 / 4 = 17 kN ; $$ ΔL = N L / (E A) = 17 000 × 3 500 / (210 000 × 113,1) = 2,51 mm *(3 pts)*
+4. Si une suspente est plus courte, elle se met en tension la première et reprend plus que sa part : elle peut être surchargée pendant que les autres sont détendues. On règle les longueurs (tendeurs). *(2 pts)*
+
+### Partie B — Poteau (6 pts)
+5. σ = 350 000 / (200 × 200) = **8,75 MPa** ; limite 0,6 × 25 = **15 MPa** → **8,75 ≤ 15** ✔. *(3 pts)*
+6. ΔL = σ L / Ev = 8,75 × 2 800 / 11 000 = **2,23 mm**. *(3 pts)*
+
+### Partie C — Thermique (4 pts)
+7. Allongement libre empêché : ε = α Δt = 1,2 × 10⁻⁵ × 30 = 3,6 × 10⁻⁴ ; $$ σ = E ε = 210 000 × 3,6 × 10⁻⁴ = 75,6 MPa
+   La contrainte ne dépend **ni de la longueur ni de la section** ; elle est importante (un tiers de fy) : d'où les **joints de dilatation** et les appuis glissants. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Choisir le diamètre qui donne la section juste inférieure.
+> - Utiliser l'effort ELU pour calculer une déformation (on vérifie les déformations à l'ELS).
+> - Oublier que la contrainte thermique d'une barre bloquée ne dépend pas de sa longueur.`},
  exercices:[
   {t:"Dimensionner une suspente", d:1, e:`Une suspente en acier rond S235 doit porter 60 kN (ELU). Diamètres disponibles : 16, 18, 20, 22, 25 mm. Choisir le diamètre et calculer la contrainte obtenue.`, c:`A ≥ 60 000 / 235 = **255,3 mm²**.
 Ø16 : 201 mm² (insuffisant) ; Ø18 : 254,5 mm² (insuffisant de peu) ; **Ø20 : 314,2 mm²** ✔.
@@ -736,6 +964,45 @@ $$ Qu ≤ 0,045 × uc × h × fc28 / γb
 > - Classe 8.8 ≈ deux fois plus résistante que 4.6.
 > - Soudure : τ = F / (a l) ; on raisonne en longueur utile de cordon.
 > - Poinçonnement : Qu ≤ 0,045 uc h fc28 / γb.`,
+ sujet:{titre:"Assemblages d'une charpente métallique : axe, boulons et poinçonnage", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour la charpente métallique d'un hangar agricole, on vérifie trois assemblages travaillant au cisaillement.
+
+**Données**
+- **Axe d'articulation** de pied de poteau : Ø **30 mm**, travaillant en **double cisaillement**, effort **F = 90 kN** ; contrainte admissible de cisaillement **τadm = 100 MPa** ;
+- **Boulons** M16 classe 8.8 : fub = **800 MPa**, section résistante **As = 157 mm²**, γM2 = **1,25** ; résistance au cisaillement par plan : **Fv,Rd = 0,6 fub As / γM2** ;
+- Effort à transmettre par l'éclissage d'un entrait : **150 kN** (un plan de cisaillement par boulon) ;
+- **Poinçonnage** : trou Ø **20 mm** dans une tôle de **10 mm**, résistance à la rupture en cisaillement de la tôle **τr = 300 MPa**.
+
+### Partie A — Axe en double cisaillement (6 points)
+1. Expliquer ce qu'est le double cisaillement à l'aide d'un croquis. (2 pts)
+2. Calculer la contrainte de cisaillement dans l'axe et conclure. (4 pts)
+
+### Partie B — Boulonnage (8 points)
+3. Calculer Fv,Rd pour un boulon M16 8.8. (3 pts)
+4. Calculer le nombre de boulons nécessaires pour transmettre 150 kN. (3 pts)
+5. Que changerait un boulonnage en double cisaillement (couvre-joints des deux côtés) ? (2 pts)
+
+### Partie C — Poinçonnage (6 points)
+6. Calculer la surface cisaillée lors du poinçonnage du trou. (3 pts)
+7. Calculer l'effort minimal que doit fournir la poinçonneuse. (3 pts)`,
+  corrige:`### Partie A — Axe (6 pts)
+1. L'axe traverse une chape (deux flasques) et une platine centrale : il est coupé selon **deux sections** ; chaque section reprend la moitié de l'effort. *(2 pts)*
+2. Section de l'axe : π × 30² / 4 = 706,9 mm² ; $$ τ = F / (2 A) = 90 000 / (2 × 706,9) = 63,7 MPa ≤ 100 MPa
+   L'axe **résiste** (taux de travail 64 %). *(4 pts)*
+
+### Partie B — Boulons (8 pts)
+3. $$ Fv,Rd = 0,6 × 800 × 157 / 1,25 = 60 288 N ≈ 60,3 kN *(3 pts)*
+4. n = 150 / 60,3 = 2,49 → **3 boulons M16 8.8** (on arrondit toujours au-dessus). *(3 pts)*
+5. En double cisaillement, chaque boulon offre **deux plans** : 2 × 60,3 = 120,6 kN par boulon → **2 boulons** suffiraient. *(2 pts)*
+
+### Partie C — Poinçonnage (6 pts)
+6. La surface cisaillée est le pourtour du trou sur l'épaisseur : S = π × d × e = π × 20 × 10 = **628,3 mm²**. *(3 pts)*
+7. **F = 628,3 × 300 = 188 500 N ≈ 188,5 kN** (environ 19 t) : la poinçonneuse doit dépasser cette force. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le facteur 2 du double cisaillement.
+> - Arrondir le nombre de boulons vers le bas.
+> - Prendre la surface du trou (π d²/4) au lieu de la surface latérale cisaillée (π d e) pour le poinçonnage.`},
  exercices:[
   {t:"Axe d'articulation en double cisaillement", d:1, e:`Un axe de diamètre 25 mm articule une bielle prise entre deux flasques (double cisaillement). L'effort transmis vaut 70 kN. Calculer la contrainte de cisaillement dans l'axe.`, c:`A = π × 25² / 4 = 490,9 mm². Deux plans cisaillés :
 τ = 70 000 / (2 × 490,9) = **71,3 MPa**.`},
@@ -852,6 +1119,52 @@ La forme en I place la matière loin de l'axe, dans les **semelles** : c'est la 
 
 > [!attention]
 > Dans Huygens, la distance d se mesure entre le centre du **morceau** et le centre de gravité de la **section entière**, pas l'axe de référence de départ. Et les unités : 1 cm⁴ = 10 000 mm⁴.`,
+ sujet:{titre:"Section en T d'une poutre de plancher : centre de gravité et inertie", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de plancher coulée avec la dalle travaille comme une **section en T**. Le bureau d'études vous demande ses caractéristiques géométriques pour le calcul en flexion, et de les comparer à celles de la poutre seule.
+
+**Données** (cotes en cm)
+- Table de compression : **60 × 12** (largeur × épaisseur), en partie haute ;
+- Nervure (âme) : **20 × 38**, sous la table ; hauteur totale **50 cm** ;
+- Pour comparaison : poutre rectangulaire seule de **20 × 50** ;
+- Poteau métallique voisin : tube rond **168,3 × 7,1 mm**.
+
+### Partie A — Centre de gravité (6 points)
+1. Décomposer la section en rectangles et calculer l'aire de chacun et l'aire totale. (2 pts)
+2. Calculer la position du centre de gravité yG, mesurée depuis la face inférieure. (4 pts)
+
+### Partie B — Moment quadratique (8 points)
+3. Énoncer le théorème de Huygens. (1 pt)
+4. Calculer le moment quadratique IGz de la section en T par rapport à l'axe horizontal passant par G (présenter un tableau). (5 pts)
+5. Calculer les modules de flexion W = I / v pour la fibre supérieure et pour la fibre inférieure. (2 pts)
+
+### Partie C — Comparaisons (6 points)
+6. Calculer I et W de la poutre rectangulaire 20 × 50 et comparer avec la section en T. Conclure sur l'intérêt de la table. (3 pts)
+7. Calculer l'aire, le moment quadratique et le rayon de giration du tube 168,3 × 7,1. (3 pts)`,
+  corrige:`### Partie A — Centre de gravité (6 pts)
+1. Table : A1 = 60 × 12 = **720 cm²**, centre à y1 = 38 + 6 = **44 cm** ; nervure : A2 = 20 × 38 = **760 cm²**, y2 = **19 cm** ; total **1 480 cm²**. *(2 pts)*
+2. $$ yG = (720 × 44 + 760 × 19) / 1 480 = (31 680 + 14 440) / 1 480 = 31,16 cm
+   G est à 31,16 cm du bas, soit à **18,84 cm** de la face supérieure. *(4 pts)*
+
+### Partie B — Inertie (8 pts)
+3. Huygens : I(Δ) = I(G) + A × d², où d est la distance entre l'axe Δ et l'axe parallèle passant par le centre de gravité propre. *(1 pt)*
+4. *(5 pts)*
+
+| Partie | Inertie propre b h³ / 12 | d = yi − yG | A d² | Total |
+|---|---|---|---|---|
+| Table | 60 × 12³ / 12 = 8 640 | 12,84 | 720 × 164,9 = 118 700 | 127 340 |
+| Nervure | 20 × 38³ / 12 = 91 453 | − 12,16 | 760 × 147,9 = 112 380 | 203 833 |
+| **Section** | | | | **IGz ≈ 331 170 cm⁴** |
+
+5. W sup = 331 170 / 18,84 = **17 580 cm³** ; W inf = 331 170 / 31,16 = **10 630 cm³**. La fibre inférieure, plus éloignée de G, est la plus sollicitée. *(2 pts)*
+
+### Partie C — Comparaisons (6 pts)
+6. Rectangle 20 × 50 : I = 20 × 50³ / 12 = **208 333 cm⁴**, W = 20 × 50² / 6 = **8 333 cm³**. La section en T est **1,59 fois plus rigide** (331 170 / 208 333) et 1,28 fois plus résistante côté tendu, pour 480 cm² de béton en plus : la dalle « travaille » avec la poutre. *(3 pts)*
+7. A = π (16,83² − 15,41²) / 4 = **35,96 cm²** ; I = π (16,83⁴ − 15,41⁴) / 64 = **1 170 cm⁴** ; i = √(I / A) = √(1 170 / 35,96) = **5,70 cm**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mesurer les yi depuis des origines différentes.
+> - Oublier les inerties propres b h³/12 et ne garder que A d².
+> - Diviser I par la mauvaise distance v (toujours la distance de G à la fibre considérée).`},
  exercices:[
   {t:"Madrier à plat ou sur chant", d:1, e:`Un madrier de bois mesure 7,5 × 22,5 cm.
 1. Calculer I et W lorsqu'il est posé sur chant (hauteur 22,5 cm).
@@ -968,6 +1281,53 @@ L'effort normal apparaît quand des forces ont une composante **parallèle** à 
 > - dM/dx = V : le moment est extrême là où V s'annule.
 > - Charge uniforme : V linéaire, M parabolique ; sans charge : V constant, M linéaire.
 > - Poutre sur deux appuis + charge uniforme : Mmax = qL² / 8 ; console : M = −qL² / 2.`,
+ sujet:{titre:"Efforts internes d'une poutre de chaînage et d'une console inclinée", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de **6,00 m** sur deux appuis simples A (x = 0) et B (x = 6 m) supporte la dalle et un poteau naissant.
+
+**Données**
+- Charge uniforme **q = 10 kN/m** sur toute la longueur ;
+- Charge ponctuelle **P = 30 kN** à **x = 4,00 m** (poteau naissant) ;
+- Console voisine : longueur **2,00 m**, encastrée, chargée en bout par une force **F = 20 kN inclinée de 30°** sur l'horizontale (vers le bas, en direction de l'encastrement).
+
+### Partie A — Réactions (4 points)
+1. Calculer les réactions RA et RB. (4 pts)
+
+### Partie B — Méthode des coupures (10 points)
+2. Pour 0 < x < 4 m, isoler la partie gauche et établir V(x) et M(x). (3 pts)
+3. Pour 4 < x < 6 m, établir V(x) et M(x). Vérifier M(6) = 0. (3 pts)
+4. Calculer V et M en x = 0, 4⁻, 4⁺ et 6 m. Où le moment est-il maximal ? Le calculer. (4 pts)
+
+### Partie C — Console inclinée (6 points)
+5. Décomposer F en composantes parallèle et perpendiculaire à la console. (2 pts)
+6. En déduire N, V et M dans la section d'encastrement. (4 pts)`,
+  corrige:`### Partie A — Réactions (4 pts)
+1. Σ M/B : RA × 6 = 10 × 6 × 3 + 30 × 2 = 180 + 60 = 240 → **RA = 40 kN** ; RB = 60 + 30 − 40 = **50 kN**. Contrôle Σ M/A : RB × 6 = 180 + 120 = 300 → 50 ✔. *(4 pts)*
+
+### Partie B — Coupures (10 pts)
+2. 0 < x < 4 m (partie gauche : RA et la charge q sur x) : *(3 pts)*
+$$ V(x) = 40 − 10 x      M(x) = 40 x − 5 x²
+3. 4 < x < 6 m (on ajoute P) : *(3 pts)*
+$$ V(x) = 40 − 10 x − 30 = 10 − 10 x      M(x) = 40 x − 5 x² − 30 (x − 4) = − 5 x² + 10 x + 120
+   M(6) = − 180 + 60 + 120 = **0** ✔ (appui simple).
+4. *(4 pts)*
+
+| x (m) | V (kN) | M (kN·m) |
+|---|---|---|
+| 0 | 40 | 0 |
+| 4⁻ | 0 | 80 |
+| 4⁺ | − 30 | 80 |
+| 6 | − 50 | 0 |
+
+V s'annule (et change de signe) en **x = 4 m** : **M max = 40 × 4 − 5 × 16 = 80 kN·m**, sous le poteau naissant. Le saut de V en x = 4 m vaut P = 30 kN.
+
+### Partie C — Console (6 pts)
+5. Parallèle (axe) : 20 cos 30° = **17,32 kN** ; perpendiculaire : 20 sin 30° = **10,0 kN**. *(2 pts)*
+6. À l'encastrement : **N = 17,32 kN** (compression, la force pousse vers l'encastrement), **V = 10,0 kN**, **M = 10,0 × 2,00 = 20,0 kN·m** (la composante axiale passe par l'axe et ne crée pas de moment). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de découper la poutre sous la charge ponctuelle.
+> - Prendre la force inclinée entière pour calculer le moment.
+> - Chercher le maximum de M ailleurs que là où V s'annule ou change de signe.`},
  exercices:[
   {t:"Efforts internes en une section", d:1, e:`Une poutre de 8 m sur deux appuis porte une charge uniforme de 12 kN/m. Calculer V et M en x = 2 m, x = 4 m et x = 6 m.`, c:`RA = RB = 12 × 8 / 2 = 48 kN.
 - x = 2 m : V = 48 − 24 = **24 kN** ; M = 48 × 2 − 12 × 2² / 2 = 96 − 24 = **72 kN·m**.
@@ -1078,6 +1438,44 @@ V s'annule pour x = L / √3 = 0,577 L, et Mmax = qL² / (9√3) ≈ **0,0642 qL
 > - Mmax là où V change de signe ; ΔM = aire de V.
 > - Formulaire : qL²/8, PL/4, Pab/L, −qL²/2, −PL.
 > - Porte-à-faux → moment négatif sur l'appui → aciers en haut.`,
+ sujet:{titre:"Poutre avec porte-à-faux : diagrammes de V et M", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de façade ABC repose sur deux appuis simples A et B et se prolonge en **porte-à-faux BC** pour porter un balcon.
+
+**Données**
+- AB = **6,00 m**, BC = **2,00 m** ;
+- Charge uniforme **q = 15 kN/m** sur toute la longueur AC (ELU).
+
+### Partie A — Réactions (4 points)
+1. Calculer RA et RB. (4 pts)
+
+### Partie B — Équations (8 points)
+2. Établir V(x) et M(x) dans la travée AB (0 ≤ x ≤ 6). (3 pts)
+3. Établir V et M dans le porte-à-faux (on pourra prendre l'abscisse u depuis C). (3 pts)
+4. Calculer V juste à gauche et juste à droite de B. (2 pts)
+
+### Partie C — Diagrammes et valeurs remarquables (8 points)
+5. Calculer le moment maximal en travée et sa position. (3 pts)
+6. Calculer le moment sur l'appui B. (1 pt)
+7. Calculer la position du point de moment nul dans la travée. (2 pts)
+8. Tracer les diagrammes de V et M et indiquer où placer les aciers supérieurs et inférieurs. (2 pts)`,
+  corrige:`### Partie A — Réactions (4 pts)
+1. Charge totale 15 × 8 = 120 kN au milieu de AC (x = 4 m). Σ M/A : RB × 6 = 120 × 4 = 480 → **RB = 80 kN** ; **RA = 120 − 80 = 40 kN**. *(4 pts)*
+
+### Partie B — Équations (8 pts)
+2. Travée : **V(x) = 40 − 15 x** ; **M(x) = 40 x − 7,5 x²**. *(3 pts)*
+3. Porte-à-faux, u depuis C : **V(u) = 15 u** (partie droite) ; **M(u) = − 7,5 u²** ; en B (u = 2) : M = − 30 kN·m. *(3 pts)*
+4. À gauche de B : V = 40 − 90 = **− 50 kN** ; à droite : − 50 + 80 = **+ 30 kN** (= 15 × 2, la charge du porte-à-faux). Le saut vaut RB = 80 kN. *(2 pts)*
+
+### Partie C — Diagrammes (8 pts)
+5. V = 0 pour x = 40 / 15 = **2,67 m** ; $$ M max = 40 × 2,667 − 7,5 × 2,667² = 53,3 kN·m *(3 pts)*
+6. **MB = 40 × 6 − 7,5 × 36 = − 30 kN·m** (identique au calcul par le porte-à-faux ✔). *(1 pt)*
+7. M(x) = 0 → x (40 − 7,5 x) = 0 → **x = 5,33 m**. *(2 pts)*
+8. V : droite de + 40 à − 50 sur AB (zéro à 2,67 m), saut de 80 en B, droite de + 30 à 0 sur BC. M : parabole positive sur AB jusqu'à 53,3 kN·m, nulle à 5,33 m, négative jusqu'à − 30 kN·m en B, puis remontant à 0 en C. **Aciers inférieurs** de A jusqu'à environ 5,33 m (plus l'ancrage) ; **aciers supérieurs** de part et d'autre de B, sur le porte-à-faux et environ 0,7 m dans la travée (plus l'ancrage). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le porte-à-faux dans le calcul de RB.
+> - Croire que le moment est maximal au milieu de AB (ici 2,67 m, pas 3 m).
+> - Oublier les aciers supérieurs sur l'appui B : le moment y est négatif.`},
  exercices:[
   {t:"Charge ponctuelle centrée", d:1, e:`Une poutre de 4 m sur deux appuis porte une force de 24 kN en son milieu.
 1. Calculer les réactions.
@@ -1188,6 +1586,50 @@ Pour une même aire, le profil en I est le plus efficace (matière loin de l'axe
 
 > [!attention]
 > Erreur classique : mélanger kN·m et N·mm. 1 kN·m = 10⁶ N·mm ; avec W en mm³, σ = M (N·mm) / W (mm³) donne des MPa.`,
+ sujet:{titre:"Choix d'un profilé IPE et d'une poutre en bois en flexion", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On doit franchir une ouverture de **5,00 m** dans un mur porteur avec une poutre métallique, et dimensionner une poutre en bois pour un auvent.
+
+**Données**
+- Poutre métallique sur deux appuis simples, portée **L = 5,00 m**, charge ELU **pu = 18 kN/m** ; acier S235 (**fy = 235 MPa**, γM0 = 1) ;
+- Extrait du catalogue IPE :
+
+| Profilé | h (mm) | I (cm⁴) | Wel (cm³) |
+|---|---|---|---|
+| IPE 200 | 200 | 1 943 | 194 |
+| IPE 220 | 220 | 2 772 | 252 |
+| IPE 240 | 240 | 3 892 | 324 |
+
+- Poutre en bois : portée 5,00 m, charge de service **12 kN/m**, contrainte admissible **σadm = 10 MPa**, largeur imposée **b = 15 cm** ; hauteurs commerciales : 30, 35, 40, 45 cm.
+
+### Partie A — Poutre métallique (10 points)
+1. Calculer le moment fléchissant maximal. (2 pts)
+2. Calculer le module de flexion minimal et choisir le profilé. (4 pts)
+3. Calculer la contrainte maximale dans le profilé choisi et le taux de travail. (2 pts)
+4. Représenter la répartition des contraintes sur la hauteur de la section (axe neutre, traction, compression). (2 pts)
+
+### Partie B — Poutre en bois (7 points)
+5. Calculer le moment de service et le module W nécessaire. (3 pts)
+6. En déduire la hauteur minimale et choisir la section commerciale. (4 pts)
+
+### Partie C — Réflexion (3 points)
+7. Pourquoi met-on la plus grande dimension d'une poutre dans le sens vertical ? Justifier avec W = b h² / 6. (3 pts)`,
+  corrige:`### Partie A — Poutre métallique (10 pts)
+1. $$ M max = pu L² / 8 = 18 × 5² / 8 = 56,25 kN·m *(2 pts)*
+2. W min = M / fy = 56,25 × 10⁶ / 235 = 239 400 mm³ = **239 cm³** → l'IPE 200 (194) est insuffisant ; **IPE 220 (252 cm³)** convient. *(4 pts)*
+3. σ = M / W = 56,25 × 10⁶ / 252 000 = **223,2 MPa ≤ 235 MPa** ; taux de travail 223,2 / 235 = **95 %**. *(2 pts)*
+4. Contrainte nulle sur l'axe neutre (mi-hauteur), **compression en haut**, **traction en bas**, variation linéaire, maximum ± 223 MPa sur les fibres extrêmes (σ = M y / I). *(2 pts)*
+
+### Partie B — Poutre en bois (7 pts)
+5. M ser = 12 × 25 / 8 = **37,5 kN·m** ; W ≥ 37,5 × 10⁶ / 10 = **3,75 × 10⁶ mm³**. *(3 pts)*
+6. b h² / 6 ≥ 3,75 × 10⁶ → h² ≥ 6 × 3,75 × 10⁶ / 150 = 150 000 → **h ≥ 387 mm** → section **15 × 40 cm** (W = 150 × 400² / 6 = 4,0 × 10⁶ mm³ ✔). *(4 pts)*
+
+### Partie C — Réflexion (3 pts)
+7. W croît comme **h²** mais seulement comme b : une planche 5 × 20 cm posée de chant a W = 50 × 200² / 6 = 333 cm³, à plat W = 200 × 50² / 6 = 83 cm³, soit **4 fois moins** pour la même quantité de matière. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mélanger kN·m et N·mm (1 kN·m = 10⁶ N·mm).
+> - Choisir le profilé juste au-dessous du W nécessaire.
+> - Oublier qu'il faudra aussi vérifier la flèche (souvent dimensionnante pour l'acier).`},
  exercices:[
   {t:"Contrainte maximale dans un chevron", d:1, e:`Un chevron de 6 × 8 cm (hauteur 8 cm), de portée 2,40 m, porte une charge uniforme de 1,2 kN/m. Calculer la contrainte maximale de flexion.`, c:`M = 1,2 × 2,4² / 8 = **0,864 kN·m** = 0,864 × 10⁶ N·mm.
 W = 60 × 80² / 6 = **64 000 mm³**.
@@ -1267,6 +1709,48 @@ Le produit **f = τ × b = V × S / I** (en N/mm) est le **flux de cisaillement*
 > - Rectangle : τmax = 1,5 V / (b h).
 > - Profilé en I : τ ≈ V / Av (âme) ; Vpl,Rd = Av fy / (√3 γM0).
 > - Flux de cisaillement f = V S / I pour les liaisons et coutures.`,
+ sujet:{titre:"Cisaillement dans une poutre béton, un IPE et une poutre en bois composée", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Après la flexion, on vérifie le cisaillement (contraintes tangentielles) de trois poutres d'un même chantier.
+
+**Données**
+- Poutre béton rectangulaire **b × h = 20 × 50 cm**, effort tranchant **V = 120 kN** ;
+- Profilé **IPE 300** (h = 300 mm, tf = 10,7 mm, tw = 7,1 mm), **V = 150 kN**, acier S235 ;
+- Poutre en bois formée de **deux madriers 8 × 20 cm superposés** (section totale 8 × 40 cm), **V = 20 kN**, assemblés par des boulons résistant chacun à **6 kN** en cisaillement.
+
+### Partie A — Section rectangulaire (8 points)
+1. Rappeler la formule de Jourawski et la valeur de τmax pour une section rectangulaire. (2 pts)
+2. Calculer τmax dans la poutre béton. (2 pts)
+3. Calculer τ à 12,5 cm au-dessus de l'axe neutre (moment statique S, inertie I). (4 pts)
+
+### Partie B — Profilé IPE (5 points)
+4. Calculer l'aire de cisaillement de l'âme Aw = (h − 2 tf) tw et la contrainte moyenne. (3 pts)
+5. Comparer à fy / √3 et conclure. (2 pts)
+
+### Partie C — Poutre composée (7 points)
+6. Calculer τ au niveau du joint entre les deux madriers. (2 pts)
+7. En déduire l'effort de glissement par millimètre de joint (flux de cisaillement). (2 pts)
+8. Calculer l'espacement maximal des boulons. (3 pts)`,
+  corrige:`### Partie A — Rectangle (8 pts)
+1. $$ τ(y) = V × S(y) / (I × b)
+   Pour un rectangle, τ max (sur l'axe neutre) = **1,5 V / (b h)**. *(2 pts)*
+2. τ max = 1,5 × 120 000 / (200 × 500) = **1,80 MPa**. *(2 pts)*
+3. S = b × (h/2 − y) × (h/2 + y) / 2 = 200 × 125 × 375 / 2 = **4,69 × 10⁶ mm³** ; I = 200 × 500³ / 12 = **2,083 × 10⁹ mm⁴** ;
+$$ τ = 120 000 × 4,69 × 10⁶ / (2,083 × 10⁹ × 200) = 1,35 MPa
+   (soit 75 % de τ max : la répartition est parabolique). *(4 pts)*
+
+### Partie B — IPE 300 (5 pts)
+4. Aw = (300 − 2 × 10,7) × 7,1 = **1 978 mm²** ; τ = 150 000 / 1 978 = **75,8 MPa**. *(3 pts)*
+5. fy / √3 = 235 / 1,732 = **135,7 MPa** ≥ 75,8 MPa ✔ : l'âme reprend presque tout l'effort tranchant. *(2 pts)*
+
+### Partie C — Madriers (7 pts)
+6. Le joint est sur l'axe neutre : τ = 1,5 × 20 000 / (80 × 400) = **0,94 MPa**. *(2 pts)*
+7. Flux : q = τ × b = 0,9375 × 80 = **75 N/mm** (75 kN par mètre de joint). *(2 pts)*
+8. Un boulon reprend 6 000 N : espacement e ≤ 6 000 / 75 = **80 mm**. Sans liaison, les deux madriers glisseraient l'un sur l'autre et la poutre serait 2 fois moins résistante. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre τ = V / A (valeur moyenne) au lieu de 1,5 V / A pour un rectangle.
+> - Oublier que le cisaillement est maximal sur l'axe neutre, là où σ est nulle.
+> - Confondre la largeur b au niveau considéré (âme mince d'un IPE) et la largeur des ailes.`},
  exercices:[
   {t:"Cisaillement maximal d'une poutre rectangulaire", d:1, e:`Une poutre de 15 × 40 cm subit un effort tranchant de 36 kN. Calculer la contrainte tangentielle moyenne et maximale.`, c:`τmoy = 36 000 / (150 × 400) = **0,6 MPa**.
 **τmax = 1,5 × 0,6 = 0,9 MPa** sur l'axe neutre.`},
@@ -1365,6 +1849,46 @@ Pour une poutre en béton armé, I dépend de la **fissuration** (le béton tend
 > - f = 5qL⁴/(384EI) ; PL³/(48EI) ; qL⁴/(8EI) ; PL³/(3EI).
 > - Vérifier à l'ELS (G + Q) ; limites usuelles L/300 à L/500.
 > - La flèche varie comme L⁴ et 1/I : la hauteur est la meilleure arme.`,
+ sujet:{titre:"Vérification des flèches : poutre IPE, console et choix d'inertie", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** La poutre IPE 220 choisie pour franchir une ouverture de 5,00 m (sujet de flexion) doit maintenant être vérifiée en déformation, ainsi qu'une console de balcon.
+
+**Données**
+- E acier = **210 000 MPa** ;
+- Poutre : L = **5,00 m**, charge de **service q = 12 kN/m** ; IPE 220 : **I = 2 772 cm⁴** ; IPE 240 : 3 892 cm⁴ ; IPE 270 : 5 790 cm⁴ ;
+- Flèche admissible sous cloisons : **L/300** ; sous cloisons fragiles (carreaux de plâtre, vitrages) : **L/500** ;
+- Console IPE 160 (**I = 869 cm⁴**), longueur **1,50 m**, charge en bout **P = 8 kN** ; flèche admissible d'une console : **2 L / 300** ;
+- Formules : deux appuis, charge uniforme f = 5 q L⁴ / (384 E I) ; console, charge en bout f = P L³ / (3 E I).
+
+### Partie A — Poutre sur deux appuis (9 points)
+1. Calculer la flèche de l'IPE 220 et la flèche admissible L/300. Conclure. (4 pts)
+2. Si la vérification échoue, proposer le profilé suivant et vérifier. (3 pts)
+3. Pourquoi l'IPE 220, qui résiste en flexion, peut-il être refusé ? (2 pts)
+
+### Partie B — Console (5 points)
+4. Calculer la flèche en bout de console et vérifier. (5 pts)
+
+### Partie C — Cloisons fragiles (6 points)
+5. Calculer l'inertie minimale pour respecter L/500 sur la poutre de 5,00 m. (4 pts)
+6. Choisir le profilé correspondant. (2 pts)`,
+  corrige:`### Partie A — Deux appuis (9 pts)
+1. En N et mm : q = 12 N/mm, L = 5 000 mm, I = 2,772 × 10⁷ mm⁴.
+$$ f = 5 × 12 × 5 000⁴ / (384 × 210 000 × 2,772 × 10⁷) = 16,78 mm
+   L / 300 = 16,67 mm → **16,78 > 16,67 : vérification non satisfaite** (de peu). *(4 pts)*
+2. IPE 240 : f = 16,78 × 2 772 / 3 892 = **11,95 mm ≤ 16,67** ✔ (la flèche est inversement proportionnelle à I). *(3 pts)*
+3. La résistance (σ ≤ fy) et la rigidité (flèche) sont deux critères indépendants ; pour l'acier, très résistant mais avec un E fixe, c'est souvent la **flèche** qui dimensionne. *(2 pts)*
+
+### Partie B — Console (5 pts)
+4. $$ f = 8 000 × 1 500³ / (3 × 210 000 × 8,69 × 10⁶) = 4,93 mm
+   Admissible : 2 × 1 500 / 300 = **10 mm** → **4,93 ≤ 10** ✔. *(5 pts)*
+
+### Partie C — Cloisons fragiles (6 pts)
+5. f ≤ 5 000 / 500 = 10 mm → $$ I ≥ 5 × 12 × 5 000⁴ / (384 × 210 000 × 10) = 4,65 × 10⁷ mm⁴ = 4 650 cm⁴ *(4 pts)*
+6. IPE 240 (3 892) insuffisant → **IPE 270 (5 790 cm⁴)**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la flèche avec la charge ELU (on prend la charge de service).
+> - Oublier la puissance 4 de L : une portée 10 % plus longue donne 46 % de flèche en plus.
+> - Mélanger cm⁴ et mm⁴ (1 cm⁴ = 10⁴ mm⁴).`},
  exercices:[
   {t:"Flèche sous une charge ponctuelle", d:1, e:`Un IPE 200 (I = 1 943 cm⁴, E = 210 000 MPa) de 4 m porte une force de 20 kN (ELS) en son milieu. Calculer la flèche et la comparer à L/300.`, c:`f = P L³ / (48 E I) = 20 000 × 4 000³ / (48 × 210 000 × 1,943 × 10⁷) = **6,5 mm**.
 L/300 = 13,3 mm : **6,5 mm ≤ 13,3 mm** ✔ (L/f = 615).`},
@@ -1461,6 +1985,50 @@ Ces barres ne sont pas inutiles : elles **raccourcissent la longueur de flambeme
 > - Isostatique si b + r = 2n.
 > - Nœuds : 2 inconnues max par nœud ; Ritter : moments autour de l'intersection des deux autres barres.
 > - Membrures ≈ M / h ; diagonales ≈ V / sin θ.`,
+ sujet:{titre:"Ferme triangulaire de hangar : efforts dans les barres", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un hangar de stockage est couvert par des fermes métalliques triangulaires. On étudie une ferme isostatique simple.
+
+**Données** (repère : x horizontal, y vertical, en m)
+- Nœuds : A (0 ; 0) sur **articulation**, B (8 ; 0) sur **appui simple**, C (4 ; 2) au faîtage, D (4 ; 0) au milieu de l'entrait ;
+- Barres : arbalétriers AC et CB, entrait AD et DB, poinçon CD ;
+- Charges nodales (verticales, vers le bas) : **5 kN en A**, **10 kN en C**, **5 kN en B** (couverture), **4 kN en D** (faux plafond suspendu) ;
+- Les barres sont articulées à leurs extrémités et les charges appliquées aux nœuds.
+
+### Partie A — Généralités (4 points)
+1. Vérifier que la ferme est isostatique (relation b + r = 2 n). (2 pts)
+2. Calculer les réactions d'appui. (2 pts)
+
+### Partie B — Méthode des nœuds (10 points)
+3. Calculer l'angle θ des arbalétriers et leur longueur. (2 pts)
+4. Isoler le nœud A et calculer les efforts dans AC et AD. Préciser traction ou compression. (4 pts)
+5. Isoler le nœud D et calculer les efforts dans DB et CD. (2 pts)
+6. Vérifier l'équilibre du nœud C. (2 pts)
+
+### Partie C — Méthode de Ritter et dimensionnement (6 points)
+7. Par une coupe verticale juste à gauche de D, retrouver l'effort dans AD en écrivant les moments en C. (3 pts)
+8. L'entrait est un plat en acier S235 (fy = 235 MPa) ; calculer sa section minimale à l'ELU avec un coefficient global de 1,4 sur les efforts. Quel risque faut-il vérifier pour les arbalétriers ? (3 pts)`,
+  corrige:`### Partie A — Généralités (4 pts)
+1. b = 5 barres, r = 3 réactions (2 en A, 1 en B), n = 4 nœuds : b + r = 8 = 2 × 4 → **isostatique**. *(2 pts)*
+2. Charges totales : 5 + 10 + 5 + 4 = 24 kN, disposition symétrique → **RA = RB = 12 kN**, HA = 0. *(2 pts)*
+
+### Partie B — Nœuds (10 pts)
+3. tan θ = 2 / 4 → **θ = 26,57°** (sin θ = 0,447, cos θ = 0,894) ; longueur AC = √(4² + 2²) = **4,47 m**. *(2 pts)*
+4. Nœud A : force verticale nette 12 − 5 = 7 kN vers le haut. *(4 pts)*
+$$ Σ Fy = 0 : 7 + N_AC × sin θ = 0 → N_AC = − 7 / 0,447 = − 15,65 kN
+   **Compression de 15,65 kN** dans AC ; $$ Σ Fx = 0 : N_AD + N_AC cos θ = 0 → N_AD = 15,65 × 0,894 = 14,0 kN
+   **Traction de 14,0 kN** dans AD.
+5. Nœud D : horizontalement **N_DB = N_AD = 14,0 kN** (traction) ; verticalement N_CD = 4 kN → poinçon **tendu de 4 kN** (il « porte » le faux plafond). *(2 pts)*
+6. Nœud C : composantes verticales des arbalétriers comprimés 2 × 15,65 × 0,447 = 14,0 kN vers le haut ; vers le bas : poinçon 4 kN + charge 10 kN = 14 kN ✔ ; horizontalement les deux arbalétriers s'équilibrent (symétrie). *(2 pts)*
+
+### Partie C — Ritter (6 pts)
+7. Partie gauche : RA = 12 kN et 5 kN en A, efforts N_AC et N_AD coupés. Moments en C (N_AC passe par C) :
+$$ N_AD × 2 − 12 × 4 + 5 × 4 = 0 → N_AD = 28 / 2 = 14,0 kN ✔ *(3 pts)*
+8. N_Ed = 1,4 × 14,0 = 19,6 kN → A ≥ 19 600 / 235 = **83 mm²** (par exemple un plat 40 × 5 mm = 200 mm², en tenant compte des trous de boulons). Les arbalétriers sont **comprimés** : il faut vérifier leur **flambement** sur 4,47 m. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la charge appliquée directement sur le nœud d'appui.
+> - Inverser les signes : un effort négatif dans la convention « traction positive » est une compression.
+> - Dimensionner une barre comprimée seulement en section (le flambement gouverne).`},
  exercices:[
   {t:"Isostaticité d'un treillis", d:1, e:`Une poutre-treillis comporte 7 nœuds et 11 barres ; elle repose sur une articulation et un appui simple.
 1. Est-elle isostatique ?
@@ -1551,6 +2119,45 @@ La torsion se reprend par des **cadres fermés** (bien ancrés) et des **armatur
 > - Tube = meilleur rapport résistance / poids en torsion.
 > - T = P / ω.
 > - Béton armé : section creuse équivalente e = a/6, τu = Tu / (2 Ω e), cadres fermés.`,
+ sujet:{titre:"Arbre de bétonnière et poutre de rive d'un balcon en torsion", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Deux cas de torsion sur un chantier : l'arbre d'entraînement d'une bétonnière et la poutre de rive qui porte un balcon en console.
+
+**Données**
+- Moteur : puissance utile **P = 4 kW**, vitesse de l'arbre **30 tr/min** ;
+- Acier de l'arbre : **τadm = 40 MPa**, **G = 80 000 MPa**, longueur entre poulie et tambour **1,20 m** ;
+- Diamètres pleins disponibles : 50, 55, 60 mm ; tube possible : **70 / 55 mm** (diamètres extérieur / intérieur) ;
+- Balcon en console de **1,50 m** de débord, charge totale **10 kN/m²**, fixé sur une poutre de rive de **4,00 m** encastrée en torsion à ses deux extrémités (poteaux).
+
+### Partie A — Couple transmis (4 points)
+1. Calculer la vitesse angulaire ω et le couple C transmis par l'arbre. (4 pts)
+
+### Partie B — Arbre plein (8 points)
+2. Calculer le diamètre minimal de l'arbre (τ = 16 C / (π d³)) et choisir. (4 pts)
+3. Calculer l'angle de torsion entre poulie et tambour (θ = C L / (G I0), I0 = π d⁴ / 32), en radians puis en degrés. (4 pts)
+
+### Partie C — Arbre creux (4 points)
+4. Calculer I0 et τmax pour le tube 70 / 55 et comparer la masse au plein Ø 55. Conclure. (4 pts)
+
+### Partie D — Poutre de rive (4 points)
+5. Calculer le moment de torsion réparti m (kN·m/m) apporté par le balcon, puis le moment de torsion maximal dans la poutre. (4 pts)`,
+  corrige:`### Partie A — Couple (4 pts)
+1. ω = 2 π × 30 / 60 = **3,14 rad/s** ; $$ C = P / ω = 4 000 / 3,14 = 1 273 N·m *(4 pts)*
+
+### Partie B — Arbre plein (8 pts)
+2. d³ ≥ 16 C / (π τadm) = 16 × 1,273 × 10⁶ / (π × 40) = 162 080 mm³ → d ≥ **54,5 mm** → **Ø 55** (τ = 16 × 1,273 × 10⁶ / (π × 55³) = 39,0 MPa ✔). *(4 pts)*
+3. I0 = π × 55⁴ / 32 = **898 360 mm⁴** ; $$ θ = 1,273 × 10⁶ × 1 200 / (80 000 × 898 360) = 0,0213 rad = 1,22°
+   Rotation acceptable pour un arbre de transmission. *(4 pts)*
+
+### Partie C — Tube (4 pts)
+4. I0 = π (70⁴ − 55⁴) / 32 = **1 458 800 mm⁴** ; τmax = C × 35 / I0 = 1,273 × 10⁶ × 35 / 1 458 800 = **30,5 MPa** (au lieu de 39). Masse : (70² − 55²) / 55² = **0,62** → le tube est **38 % plus léger** et moins sollicité : la matière près de l'axe travaille peu en torsion. *(4 pts)*
+
+### Partie D — Poutre de rive (4 pts)
+5. Par mètre de poutre : charge du balcon 10 × 1,50 = 15 kN/m appliquée à 0,75 m de l'axe → **m = 15 × 0,75 = 11,25 kN·m/m**. Poutre encastrée en torsion aux deux bouts : **T max = m L / 2 = 11,25 × 4 / 2 = 22,5 kN·m** aux encastrements. D'où des cadres fermés et des aciers longitudinaux de torsion. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre la vitesse en tr/min au lieu de rad/s dans C = P / ω.
+> - Utiliser I (flexion, π d⁴ / 64) au lieu de I0 (polaire, π d⁴ / 32).
+> - Oublier la torsion des poutres de rive : c'est une cause classique de fissures en biais.`},
  exercices:[
   {t:"Contrainte dans un arbre", d:1, e:`Un arbre plein de 30 mm de diamètre transmet un couple de 150 N·m. Calculer la contrainte tangentielle maximale.`, c:`J = π × 30⁴ / 32 = **79 520 mm⁴**.
 τmax = T R / J = 150 000 × 15 / 79 520 = **28,3 MPa**.`},
@@ -1633,6 +2240,48 @@ La contrainte maximale apparaît à un **coin** de la section, où les deux term
 > - Noyau central : e ≤ h/6 (rectangle), e ≤ d/8 (disque) → pas de traction.
 > - Semelle : σ = (N/BL)(1 ± 6e/B) si e ≤ B/6.
 > - Flexion déviée : on décompose selon les axes principaux et on additionne au coin le plus sollicité.`,
+ sujet:{titre:"Poteau en flexion composée, semelle excentrée et panne en flexion déviée", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur un bâtiment industriel, trois éléments sont soumis à des sollicitations composées.
+
+**Données**
+- **Poteau** 30 × 30 cm : effort normal de compression **N = 400 kN**, moment **M = 30 kN·m** (dû au vent) ;
+- **Semelle** carrée **1,50 × 1,50 m** sous ce poteau (on néglige son poids) ; contrainte admissible du sol **220 kPa** ; contrainte de référence σref = (3 σmax + σmin) / 4 ;
+- **Panne en bois** 8 × 18 cm (b × h), portée **4,00 m** sur deux appuis, charge verticale **q = 1,2 kN/m**, posée sur une toiture inclinée à **20°** (la panne suit la pente) ; σadm du bois = **10 MPa**.
+
+### Partie A — Poteau (7 points)
+1. Calculer A et W de la section. (2 pts)
+2. Calculer les contraintes extrêmes σ = N/A ± M/W (compression positive). (3 pts)
+3. Calculer l'excentricité e = M/N et la comparer au noyau central h/6. Conclure. (2 pts)
+
+### Partie B — Semelle (6 points)
+4. La résultante reste-t-elle dans le tiers central de la semelle ? (2 pts)
+5. Calculer σmax et σmin sous la semelle, puis σref ; vérifier le sol. (4 pts)
+
+### Partie C — Panne en flexion déviée (7 points)
+6. Calculer le moment maximal dû à q. (1 pt)
+7. Le décomposer selon les deux axes principaux de la panne. (2 pts)
+8. Calculer les modules de flexion Wy et Wz, puis la contrainte maximale σ = My/Wy + Mz/Wz. Conclure. (4 pts)`,
+  corrige:`### Partie A — Poteau (7 pts)
+1. A = 0,30 × 0,30 = **0,090 m²** ; W = b h² / 6 = 0,30³ / 6 = **0,0045 m³**. *(2 pts)*
+2. N/A = 400 / 0,090 = 4 444 kPa = 4,44 MPa ; M/W = 30 / 0,0045 = 6 667 kPa = 6,67 MPa → **σmax = 11,11 MPa** (compression), **σmin = − 2,22 MPa** (traction). *(3 pts)*
+3. **e = 30 / 400 = 0,075 m = 7,5 cm > h / 6 = 5 cm** : l'effort sort du noyau central, une face est **tendue** → aciers indispensables de ce côté. *(2 pts)*
+
+### Partie B — Semelle (6 pts)
+4. B / 6 = 1,50 / 6 = 0,25 m ; e = 0,075 m < 0,25 m → **oui**, toute la semelle reste comprimée. *(2 pts)*
+5. σ moyenne = 400 / 1,5² = 177,8 kPa ; 6e/B = 0,3 → **σmax = 177,8 × 1,3 = 231,1 kPa**, **σmin = 177,8 × 0,7 = 124,4 kPa** ;
+$$ σref = (3 × 231,1 + 124,4) / 4 = 204,4 kPa ≤ 220 kPa ✔ *(4 pts)*
+
+### Partie C — Panne (7 pts)
+6. M = q L² / 8 = 1,2 × 16 / 8 = **2,40 kN·m**. *(1 pt)*
+7. My = M cos 20° = **2,255 kN·m** (flexion autour du grand axe) ; Mz = M sin 20° = **0,821 kN·m** (dans le plan du versant). *(2 pts)*
+8. Wy = 80 × 180² / 6 = **432 000 mm³** ; Wz = 180 × 80² / 6 = **192 000 mm³** ;
+$$ σ = 2,255 × 10⁶ / 432 000 + 0,821 × 10⁶ / 192 000 = 5,22 + 4,28 = 9,50 MPa ≤ 10 MPa ✔
+   Taux de travail 95 % : la flexion déviée, souvent oubliée, ajoute ici 82 % à la contrainte. On réduit Mz avec des **liernes** à mi-portée. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner des contraintes de signes opposés sans réfléchir à la face concernée.
+> - Oublier la composante dans le plan du versant pour une panne inclinée.
+> - Vérifier le sol avec σmax au lieu de σref lorsque le règlement le permet (ou l'inverse selon la règle imposée).`},
  exercices:[
   {t:"Charge centrée ou excentrée", d:1, e:`Un poteau de 25 × 25 cm porte 250 kN.
 1. Calculer la contrainte si la charge est centrée.
@@ -1748,6 +2397,43 @@ puis Nu ≤ α [Br fc28 / (0,9 γb) + A fe / γs] (voir le cours de béton armé
 
 > [!attention]
 > Une erreur sur Lf est grave : la charge critique varie comme 1/Lf². Passer d'un encastrement supposé à une articulation réelle (Lf doublé) divise la résistance au flambement par **4**.`,
+ sujet:{titre:"Flambement d'un poteau en bois et d'un poteau en béton armé", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un auvent d'école est porté par des poteaux en bois ; le bâtiment voisin a des poteaux en béton armé. On étudie le risque de flambement.
+
+**Données**
+- Poteau bois **15 × 15 cm**, hauteur **3,00 m**, **E = 11 000 MPa** ;
+- Longueurs de flambement : articulé aux deux extrémités lf = L ; encastré en pied et libre en tête lf = 2 L ; encastré en pied et articulé en tête lf = 0,7 L ;
+- Poteau béton **25 × 25 cm**, hauteur 3,00 m, **lf = 0,7 L** ; coefficient BAEL α = 0,85 / [1 + 0,2 (λ/35)²] pour λ ≤ 50.
+
+### Partie A — Euler (8 points)
+1. Calculer le moment quadratique minimal et le rayon de giration i du poteau bois. (3 pts)
+2. Poteau articulé aux deux extrémités : calculer l'élancement λ et la charge critique d'Euler Pcr = π² E I / lf². (5 pts)
+
+### Partie B — Conditions d'appui (5 points)
+3. Le même poteau est encastré en pied et libre en tête (auvent sans contreventement). Calculer λ et Pcr. Conclure. (3 pts)
+4. Proposer deux solutions pour augmenter la charge critique. (2 pts)
+
+### Partie C — Poteau béton armé (7 points)
+5. Calculer lf, i et l'élancement λ. (3 pts)
+6. Calculer le coefficient α et expliquer son rôle dans la formule de l'effort résistant. (4 pts)`,
+  corrige:`### Partie A — Euler (8 pts)
+1. Section carrée : I = 150⁴ / 12 = **4,22 × 10⁷ mm⁴** ; i = a / √12 = 150 / 3,464 = **43,3 mm**. *(3 pts)*
+2. lf = 3 000 mm → **λ = 3 000 / 43,3 = 69,3** ;
+$$ Pcr = π² × 11 000 × 4,22 × 10⁷ / 3 000² = 508 900 N ≈ 509 kN *(5 pts)*
+
+### Partie B — Appuis (5 pts)
+3. lf = 2 × 3 = 6 m → **λ = 138,6** et **Pcr = 509 / 4 = 127 kN** (Pcr varie comme 1 / lf²) : la charge critique est **divisée par 4**. Une console verticale est très sensible au flambement. *(3 pts)*
+4. Bloquer la tête (contreventement, liaison à une poutre ou à un mur) pour revenir à lf = L ou 0,7 L ; augmenter la section (I croît comme a⁴) ; ajouter des entretoises intermédiaires. *(2 pts)*
+
+### Partie C — Béton armé (7 pts)
+5. lf = 0,7 × 3,00 = **2,10 m** ; i = 0,25 / √12 = **0,0722 m** ; **λ = 2,10 / 0,0722 = 29,1**. *(3 pts)*
+6. $$ α = 0,85 / [1 + 0,2 × (29,1 / 35)²] = 0,85 / 1,138 = 0,747
+   α **réduit** l'effort résistant Nu = α [Br fc28 / (0,9 γb) + A fe / γs] pour tenir compte du flambement : plus le poteau est élancé, plus α est petit. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre l'inertie maximale au lieu de l'inertie minimale (le poteau flambe dans le plan le plus faible).
+> - Oublier que lf dépend des liaisons aux extrémités.
+> - Dépasser λ = 50 en béton armé sans précaution (la formule change, le dimensionnement devient défavorable).`},
  exercices:[
   {t:"Charge critique d'Euler", d:1, e:`Un tube carré en acier de 60 × 60 × 3 mm (A = 6,61 cm², I = 35,1 cm⁴), longueur 3 m, est articulé à ses deux extrémités. E = 210 000 MPa.
 1. Calculer Ncr.
@@ -1840,6 +2526,50 @@ Si un appui d'une poutre hyperstatique **s'enfonce** de Δ, la compatibilité ch
 > - Encastrée-appuyée : MA = −qL²/8, Mt = 9qL²/128 ; bi-encastrée : −qL²/12 et qL²/24.
 > - Deux travées égales : appui central 1,25 qL et M = −qL²/8.
 > - L'hyperstaticité réduit les moments mais rend sensible aux tassements.`,
+ sujet:{titre:"Poutre encastrée-appuyée : résolution par la méthode des forces", duree:75, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une poutre de **6,00 m** est **encastrée en A** dans un voile et **simplement appuyée en B** sur un poteau. Elle porte une charge uniforme **q = 20 kN/m** (ELU). EI est constant.
+
+**Formulaire** (poutre console de longueur L encastrée en A, extrémité libre B) :
+- charge uniforme q : flèche en B = q L⁴ / (8 E I) ;
+- force R en B : flèche en B = R L³ / (3 E I).
+
+### Partie A — Degré d'hyperstaticité (3 points)
+1. Calculer le nombre d'inconnues de liaison et le degré d'hyperstaticité. (3 pts)
+
+### Partie B — Méthode des forces (8 points)
+2. Choisir l'inconnue hyperstatique (réaction en B) et définir la structure isostatique associée. (2 pts)
+3. Écrire la condition de compatibilité des déplacements en B. (2 pts)
+4. En déduire RB, puis RA et le moment d'encastrement MA. (4 pts)
+
+### Partie C — Sollicitations (6 points)
+5. Établir M(x) (x depuis B) et calculer la position et la valeur du moment maximal en travée. (4 pts)
+6. Tracer l'allure du diagramme des moments. (2 pts)
+
+### Partie D — Comparaison (3 points)
+7. Comparer avec une poutre isostatique sur deux appuis simples de même portée et même charge. Quel est l'intérêt de l'encastrement ? (3 pts)`,
+  corrige:`### Partie A (3 pts)
+1. Encastrement en A : 3 inconnues ; appui simple en B : 1 inconnue → 4 inconnues pour 3 équations → **h = 1**. *(3 pts)*
+
+### Partie B — Méthode des forces (8 pts)
+2. On supprime l'appui B et on le remplace par une force inconnue RB : la structure associée est une **console** encastrée en A, chargée par q et par RB. *(2 pts)*
+3. Le point B ne se déplace pas : flèche due à q (vers le bas) = flèche due à RB (vers le haut). *(2 pts)*
+$$ q L⁴ / (8 E I) = RB L³ / (3 E I)
+4. **RB = 3 q L / 8 = 3 × 20 × 6 / 8 = 45 kN** ; **RA = q L − RB = 120 − 45 = 75 kN** ;
+$$ MA = RB × L − q L² / 2 = 45 × 6 − 20 × 36 / 2 = 270 − 360 = − 90 kN·m
+   (soit − q L² / 8). *(4 pts)*
+
+### Partie C — Sollicitations (6 pts)
+5. Depuis B : M(x) = 45 x − 10 x² ; V = 45 − 20 x = 0 pour **x = 2,25 m** (3L/8) ;
+$$ M max = 45 × 2,25 − 10 × 2,25² = 50,6 kN·m *(4 pts)*
+6. Parabole nulle en B, maximale (+ 50,6) à 2,25 m de B, nulle à 4,50 m de B, puis négative jusqu'à − 90 kN·m à l'encastrement A. *(2 pts)*
+
+### Partie D — Comparaison (3 pts)
+7. Sur deux appuis simples : M max = q L² / 8 = **90 kN·m** en travée et flèche 5 q L⁴/(384 EI). Encastrée-appuyée : **50,6 kN·m** en travée (− 44 %) et flèche environ 2,4 fois plus faible, au prix d'un moment de 90 kN·m sur l'encastrement (aciers supérieurs) et d'un voile capable de le reprendre. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier que la compatibilité porte sur un déplacement réellement nul.
+> - Confondre RA (75 kN) et RB (45 kN) : l'encastrement attire la charge.
+> - Oublier les aciers supérieurs au voile.`},
  exercices:[
   {t:"Poutre encastrée-appuyée", d:2, e:`Une poutre de 6 m, encastrée en A et simplement appuyée en B, porte 15 kN/m.
 1. Calculer les réactions et le moment d'encastrement.
@@ -1922,6 +2652,48 @@ Les charges permanentes G sont toujours présentes partout. Les méthodes du BAE
 > - Deux travées égales : −qL²/8 ; trois travées égales : −qL²/10.
 > - Réactions par travée : qL/2 ± (différence des moments d'appui) / L.
 > - Charger une travée sur deux pour le maximum en travée ; les deux travées adjacentes pour le maximum sur appui.`,
+ sujet:{titre:"Poutres continues à deux travées : théorème des trois moments", duree:75, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une poutre continue ABC sur trois appuis simples porte un plancher. On compare deux implantations des poteaux.
+
+**Données**
+- Charge uniforme **q = 16 kN/m** (ELU) sur les deux travées, EI constant ;
+- **Cas 1** : deux travées égales AB = BC = **5,00 m** ;
+- **Cas 2** : travées inégales AB = **4,00 m**, BC = **6,00 m** ;
+- Théorème des trois moments (appuis de rive libres MA = MC = 0, charges uniformes) :
+$$ 2 MB (L1 + L2) = − (q L1³ + q L2³) / 4
+
+### Partie A — Cas 1 (9 points)
+1. Calculer le moment sur appui MB. (2 pts)
+2. Calculer les réactions RA, RB, RC. (3 pts)
+3. Calculer le moment maximal en travée et sa position. (3 pts)
+4. Comparer avec deux poutres isostatiques indépendantes de 5 m. (1 pt)
+
+### Partie B — Cas 2 (9 points)
+5. Calculer MB. (2 pts)
+6. Calculer les réactions. (3 pts)
+7. Calculer les moments maximaux de chaque travée. (4 pts)
+
+### Partie C — Conclusion (2 points)
+8. Quelle implantation conseiller ? Justifier. (2 pts)`,
+  corrige:`### Partie A — Travées égales (9 pts)
+1. $$ 2 MB × 10 = − 16 × (125 + 125) / 4 = − 1 000 → MB = − 50 kN·m
+   (on retrouve − q L² / 8). *(2 pts)*
+2. Travée AB isolée : RA = q L / 2 + MB / L = 40 − 50/5 = **30 kN** ; par symétrie **RC = 30 kN** ; **RB = 160 − 60 = 100 kN** (= 2 × (40 + 10)). *(3 pts)*
+3. V = 30 − 16 x = 0 pour **x = 1,875 m** ; **M max = 30 × 1,875 − 8 × 1,875² = 28,1 kN·m**. *(3 pts)*
+4. Isostatique : 16 × 25 / 8 = 50 kN·m en travée. La continuité réduit le moment en travée (28,1) mais crée − 50 kN·m sur l'appui B. *(1 pt)*
+
+### Partie B — Travées inégales (9 pts)
+5. $$ 2 MB × 10 = − 16 × (64 + 216) / 4 = − 1 120 → MB = − 56 kN·m *(2 pts)*
+6. RA = 16 × 4 / 2 − 56 / 4 = 32 − 14 = **18 kN** ; RC = 16 × 6 / 2 − 56 / 6 = 48 − 9,33 = **38,67 kN** ; RB = 160 − 18 − 38,67 = **103,33 kN**. *(3 pts)*
+7. Travée AB : x = 18 / 16 = 1,125 m → **M = 18 × 1,125 − 8 × 1,125² = 10,1 kN·m** ; travée BC (depuis C) : x = 38,67 / 16 = 2,417 m → **M = 38,67 × 2,417 − 8 × 2,417² = 46,7 kN·m**. *(4 pts)*
+
+### Partie C — Conclusion (2 pts)
+8. Le cas 1 équilibre les moments (28 kN·m en travée, 50 sur appui) ; le cas 2 concentre l'effort dans la grande travée (46,7 kN·m) et laisse la petite travée peu sollicitée, avec un risque de **soulèvement** de A si la grande travée seule est chargée. On préfère des **travées voisines** (rapport ≤ 1,25 environ). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier que MB est négatif (aciers en haut sur l'appui).
+> - Calculer les réactions comme pour des travées isostatiques en oubliant MB / L.
+> - Chercher le maximum en travée au milieu de la travée.`},
  exercices:[
   {t:"Deux travées égales", d:1, e:`Poutre continue de deux travées de 5 m sous 20 kN/m. Calculer le moment sur l'appui central par l'équation des trois moments, puis les réactions.`, c:`2 MB (5 + 5) = − (20 × 125 / 4 + 20 × 125 / 4) = −1 250 → **MB = −62,5 kN·m** (= qL²/8 ✔).
 Travée AB : RA = 50 − 62,5/5 = **37,5 kN** ; RB,gauche = 50 + 12,5 = 62,5 kN. Par symétrie : **RB = 125 kN**, **RC = 37,5 kN**.`},
@@ -2027,6 +2799,44 @@ C'est exactement la condition de compatibilité de la méthode des forces : ∫ 
 > - Castigliano : δ = ∂U/∂F ; charge unité : δ = ∫ M m dx / EI + Σ N n L / EA.
 > - Tableau de Mohr : parabole × triangle symétrique = 5LMm/12 ; triangles même côté = LMm/3.
 > - Menabrea : ∂U/∂X = 0 ⇔ compatibilité de la méthode des forces.`,
+ sujet:{titre:"Flèches et réactions par les méthodes énergétiques", duree:75, niveau:"Licence", bareme:20,
+  enonce:`**Contexte.** Une console en IPE 220 porte un auvent. On utilise les méthodes énergétiques pour calculer ses déplacements, puis pour lever l'hyperstaticité quand on ajoute un appui.
+
+**Données**
+- Console de longueur **L = 3,00 m** encastrée en A, extrémité libre B ;
+- IPE 220 : **I = 2 772 cm⁴** ; **E = 210 000 MPa** ;
+- Cas 1 : force **P = 10 kN** en B ; cas 2 : charge uniforme **q = 5 kN/m** ;
+- On néglige l'effort tranchant dans l'énergie de déformation.
+
+### Partie A — Castigliano (8 points)
+1. Exprimer M(x) dans la console sous P (x depuis B) et l'énergie de déformation W = ∫ M² dx / (2EI). (4 pts)
+2. En déduire la flèche en B par le théorème de Castigliano et la calculer. (4 pts)
+
+### Partie B — Intégrale de Mohr (6 points)
+3. Sous q, calculer la rotation en B à l'aide d'un couple unitaire fictif. (3 pts)
+4. Calculer la flèche en B sous q avec une force unitaire fictive. (3 pts)
+
+### Partie C — Ménabréa (6 points)
+5. On ajoute un appui simple en B sous q. Écrire que ∂W/∂RB = 0 et en déduire RB. (4 pts)
+6. Conclure sur l'effet de l'appui ajouté. (2 pts)`,
+  corrige:`### Partie A — Castigliano (8 pts)
+1. M(x) = − P x ; $$ W = ∫₀ᴸ P² x² dx / (2 E I) = P² L³ / (6 E I) *(4 pts)*
+2. f = ∂W/∂P = **P L³ / (3 E I)**. EI = 210 000 × 2,772 × 10⁷ = 5,821 × 10¹² N·mm² ;
+$$ f = 10 000 × 3 000³ / (3 × 5,821 × 10¹²) = 15,5 mm
+   Admissible pour une console (2L/300 = 20 mm) ✔. *(4 pts)*
+
+### Partie B — Mohr (6 pts)
+3. M(x) = − q x² / 2, couple unitaire : m(x) = − 1 → $$ θ = ∫ M m dx / (E I) = q L³ / (6 E I) = 5 × 3 000³ / (6 × 5,821 × 10¹²) = 3,87 × 10⁻³ rad *(3 pts)*
+4. Force unitaire : m(x) = − x → $$ f = ∫ (q x² / 2) x dx / (E I) = q L⁴ / (8 E I) = 5 × 3 000⁴ / (8 × 5,821 × 10¹²) = 8,70 mm *(3 pts)*
+
+### Partie C — Ménabréa (6 pts)
+5. M(x) = RB x − q x² / 2 ; ∂W/∂RB = ∫ M × x dx / (EI) = 0 → RB L³ / 3 − q L⁴ / 8 = 0 → **RB = 3 q L / 8 = 3 × 5 × 3 / 8 = 5,63 kN**. *(4 pts)*
+6. La flèche en B devient nulle, le moment d'encastrement passe de q L²/2 = 22,5 kN·m à q L²/8 = 5,63 kN·m (÷ 4). Un poteau en bout de console soulage fortement l'encastrement. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de dériver par rapport à la force appliquée au point où l'on cherche le déplacement.
+> - Mélanger les unités dans EI (N·mm² avec q en N/mm et L en mm).
+> - Prendre un moment unitaire pour une flèche (il faut une force unitaire).`},
  exercices:[
   {t:"Flèche sous une force centrée par les intégrales de Mohr", d:2, e:`Poutre sur deux appuis, portée L, force P au milieu. Retrouver la flèche à mi-portée avec le tableau des intégrales de Mohr.`, c:`M : triangle symétrique de maximum PL/4. m (force unité au milieu) : triangle symétrique de maximum L/4.
 Tableau : triangle symétrique × triangle symétrique = L M m / 3.
@@ -2109,6 +2919,48 @@ C'est le rôle des portiques de **contreventement** : reprendre le vent par la r
 > - Nœuds tendus à l'extérieur sous charges verticales.
 > - Deux articulations : H = qL² / (4h(2k+3)), k = (It/Ip)(h/L).
 > - Les pieds reprennent une poussée : fondations ou tirant.`,
+ sujet:{titre:"Portique isostatique d'un atelier sous charge et vent", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un petit atelier est formé de portiques en acier : deux poteaux de **4,00 m** et une traverse de **8,00 m**, assemblés rigidement en C et D. Le pied A est **articulé**, le pied B repose sur un **appui à rouleau** (glissant horizontalement).
+
+**Données**
+- Charge uniforme sur la traverse CD : **q = 12 kN/m** ;
+- Vent : force horizontale **W = 6 kN** appliquée en C, dirigée de C vers D ;
+- Repère : A (0 ; 0), C (0 ; 4), D (8 ; 4), B (8 ; 0).
+
+### Partie A — Réactions (6 points)
+1. Vérifier que le portique est isostatique. (1 pt)
+2. Calculer HA, VA et VB. (5 pts)
+
+### Partie B — Moments dans les poteaux (5 points)
+3. Calculer le moment fléchissant en tête du poteau AC (en C). (3 pts)
+4. Quel est le moment dans le poteau BD ? Justifier. (2 pts)
+
+### Partie C — Moments dans la traverse (7 points)
+5. Établir M(x) dans la traverse (x depuis C) en isolant la partie gauche (poteau AC + tronçon de traverse). (3 pts)
+6. Calculer la position et la valeur du moment maximal ; vérifier M en D. (4 pts)
+
+### Partie D — Efforts normaux (2 points)
+7. Donner l'effort normal dans chaque poteau et dans la traverse. (2 pts)`,
+  corrige:`### Partie A — Réactions (6 pts)
+1. Articulation (2 inconnues) + rouleau (1) = 3 inconnues, structure d'un seul tenant : **isostatique**. *(1 pt)*
+2. Σ Fx : **HA = 6 kN** dirigé vers la gauche (opposé au vent). Σ M/A : VB × 8 = 12 × 8 × 4 + 6 × 4 = 384 + 24 = 408 → **VB = 51 kN** ; **VA = 96 − 51 = 45 kN**. *(5 pts)*
+
+### Partie B — Poteaux (5 pts)
+3. Le poteau AC reçoit en pied HA = 6 kN : **MC = 6 × 4 = 24 kN·m** (fibres intérieures tendues). *(3 pts)*
+4. **M = 0** dans BD : le rouleau ne transmet aucun effort horizontal, la seule force est verticale et passe par l'axe du poteau. *(2 pts)*
+
+### Partie C — Traverse (7 pts)
+5. Moments à l'abscisse x (en convention « fibres inférieures tendues positives ») : VA crée + 45 x, HA (6 kN, 4 m plus bas) crée + 24, la charge crée − 6 x², le vent en C est sur la ligne de la traverse (moment nul) : *(3 pts)*
+$$ M(x) = 24 + 45 x − 6 x²
+6. V = 45 − 12 x = 0 pour **x = 3,75 m** → **M max = 24 + 168,75 − 84,38 = 108,4 kN·m**. En D : M(8) = 24 + 360 − 384 = **0** ✔ (cohérent avec le poteau BD). *(4 pts)*
+
+### Partie D — Efforts normaux (2 pts)
+7. Poteau AC : compression **45 kN** ; poteau BD : compression **51 kN** ; traverse : **N = 0**. Au nœud C, le vent (6 kN vers la droite) est équilibré par l'effort tranchant du poteau AC (6 kN), qui le descend jusqu'à l'articulation A : rien ne passe dans la traverse, puisque le rouleau B ne peut rien reprendre horizontalement. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le moment de la réaction horizontale HA dans la traverse.
+> - Croire que le rouleau reprend une partie du vent.
+> - Prendre le moment maximal au milieu de la traverse (ici 3,75 m à cause du vent).`},
  exercices:[
   {t:"Degré d'hyperstaticité de portiques", d:1, e:`Donner le degré d'hyperstaticité :
 1. portique à pieds encastrés ;
@@ -2208,6 +3060,53 @@ Pour un portique à nœuds fixes (symétrique sous charges symétriques, ou cont
 > - Transmission ½ vers un bout encastré, 0 vers un bout articulé.
 > - MEP : ∓qL²/12, ∓PL/8 ; ∓qL²/8 pour une barre encastrée-articulée.
 > - Bloquer, répartir le déséquilibre, transmettre, recommencer, additionner.`,
+ sujet:{titre:"Poutre continue encastrée à ses extrémités : méthode de Cross", duree:90, niveau:"Licence", bareme:20,
+  enonce:`**Contexte.** Une poutre de plancher ABC est **encastrée en A et en C** (voiles) et repose sur un appui intermédiaire **B**. EI est constant.
+
+**Données**
+- AB = **6,00 m**, BC = **4,00 m** ;
+- Charge uniforme **q = 20 kN/m** sur les deux travées ;
+- Moments d'encastrement parfait (barre bi-encastrée sous charge uniforme) : ± q L² / 12 ;
+- Rigidité d'une barre encastrée à l'autre extrémité : k = 4 EI / L ; coefficient de transmission ½.
+
+### Partie A — Préparation (7 points)
+1. Calculer les moments d'encastrement parfait de chaque travée. (2 pts)
+2. Calculer les rigidités k_BA et k_BC et les coefficients de répartition au nœud B. (3 pts)
+3. Pourquoi un seul cycle de répartition suffit-il ici ? (2 pts)
+
+### Partie B — Répartition (8 points)
+4. Dresser le tableau de Cross (moments initiaux, répartition, transmission, moments finaux). (6 pts)
+5. Vérifier l'équilibre du nœud B. (2 pts)
+
+### Partie C — Exploitation (5 points)
+6. Calculer le moment à mi-travée de AB et de BC (méthode : moment isostatique moins la moyenne des moments sur appuis). (4 pts)
+7. Où placer les chapeaux (aciers supérieurs) ? (1 pt)`,
+  corrige:`### Partie A — Préparation (7 pts)
+1. AB : q L² / 12 = 20 × 36 / 12 = **60 kN·m** ; BC : 20 × 16 / 12 = **26,67 kN·m**. Convention (moments d'extrémité, sens horaire positif) : M_AB = − 60, M_BA = + 60, M_BC = − 26,67, M_CB = + 26,67. *(2 pts)*
+2. k_BA = 4EI/6 = 0,667 EI ; k_BC = 4EI/4 = 1,0 EI ; total 1,667 EI → **r_BA = 0,40**, **r_BC = 0,60**. *(3 pts)*
+3. Seul le nœud B peut tourner (A et C sont encastrés) : après une répartition en B et la transmission vers A et C, aucun nœud n'est déséquilibré. *(2 pts)*
+
+### Partie B — Tableau (8 pts)
+4. Déséquilibre en B : + 60 − 26,67 = + 33,33 → on applique − 33,33 au nœud. *(6 pts)*
+
+| | A (AB) | B (BA) | B (BC) | C (CB) |
+|---|---|---|---|---|
+| Coefficients | — | 0,40 | 0,60 | — |
+| Encastrement parfait | − 60,00 | + 60,00 | − 26,67 | + 26,67 |
+| Répartition | | − 13,33 | − 20,00 | |
+| Transmission (½) | − 6,67 | | | − 10,00 |
+| **Moments finaux** | **− 66,67** | **+ 46,67** | **− 46,67** | **+ 16,67** |
+
+5. En B : + 46,67 − 46,67 = 0 ✔. *(2 pts)*
+
+### Partie C — Exploitation (5 pts)
+6. AB : M0 = 20 × 36 / 8 = 90 → **M(mi-travée) = 90 − (66,67 + 46,67) / 2 = 33,3 kN·m** ; BC : M0 = 40 → **M = 40 − (46,67 + 16,67) / 2 = 8,3 kN·m**. *(4 pts)*
+7. Chapeaux en A (66,7 kN·m), de part et d'autre de B (46,7) et en C (16,7), sur environ 1/4 à 1/5 de la portée de chaque côté. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la transmission ½ vers les extrémités encastrées.
+> - Se tromper de signe en écrivant le déséquilibre du nœud.
+> - Calculer les coefficients de répartition avec les longueurs au lieu des rigidités.`},
  exercices:[
   {t:"Coefficients de répartition", d:1, e:`À un nœud B arrivent : une travée BA de 5 m dont A est un appui simple de rive, une travée BC de 4 m dont C est encastré, et un poteau BD de 3 m encastré en pied. Même EI partout. Calculer les coefficients de répartition.`, c:`kBA = 3EI/5 = 0,600 EI ; kBC = 4EI/4 = 1,000 EI ; kBD = 4EI/3 = 1,333 EI. Σk = 2,933 EI.
 **rBA = 0,205 ; rBC = 0,341 ; rBD = 0,455** (somme = 1 ✔). Le poteau court et encastré est la barre la plus raide : il « attire » le plus de moment.`},
@@ -2285,6 +3184,46 @@ L'effort tranchant est maximal près de l'appui : on place la charge la plus lou
 > - E = Σ P η + q × aire.
 > - LI de M à mi-portée : triangle de sommet L/4 ; en S : sommet ab/L.
 > - Barré : milieu de la poutre à égale distance de la charge et de la résultante.`,
+ sujet:{titre:"Pont-roulant ou camion sur une poutre : lignes d'influence", duree:75, niveau:"Licence", bareme:20,
+  enonce:`**Contexte.** Une poutre de **10,00 m** sur deux appuis simples A et B supporte le passage d'un camion de chantier à deux essieux (ou d'un pont-roulant). On cherche les positions les plus défavorables.
+
+**Données**
+- Essieu avant **P1 = 60 kN**, essieu arrière **P2 = 40 kN**, distance entre essieux **d = 3,00 m** ; le convoi peut circuler dans les deux sens ;
+- Poids propre de la poutre négligé.
+
+### Partie A — Lignes d'influence (6 points)
+1. Tracer la ligne d'influence de la réaction RA et donner son équation. (2 pts)
+2. Tracer la ligne d'influence du moment à mi-portée (section S à 5 m) et donner l'ordonnée maximale. (4 pts)
+
+### Partie B — Réaction maximale (4 points)
+3. Placer le convoi pour obtenir RA maximale et la calculer. (4 pts)
+
+### Partie C — Moment à mi-portée (5 points)
+4. Calculer le moment en S quand l'essieu de 60 kN est en S (l'autre à 3 m), puis quand c'est l'essieu de 40 kN. Retenir le plus défavorable. (5 pts)
+
+### Partie D — Moment maximal absolu (5 points)
+5. Position de la résultante R du convoi par rapport à l'essieu de 60 kN. (2 pts)
+6. Appliquer le théorème : la section médiane partage l'intervalle entre R et l'essieu le plus lourd. Calculer le moment maximal absolu. (3 pts)`,
+  corrige:`### Partie A — Lignes d'influence (6 pts)
+1. Charge unité en x : **RA = 1 − x / L = 1 − x / 10** (droite de 1 en A à 0 en B). *(2 pts)*
+2. Triangle de sommet en S : ordonnée **a b / L = 5 × 5 / 10 = 2,5 m** ; η(x) = x / 2 pour x ≤ 5, η(x) = (10 − x)/2 pour x ≥ 5. *(4 pts)*
+
+### Partie B — RA max (4 pts)
+3. L'essieu lourd sur A, l'autre en x = 3 m : **RA = 60 × 1 + 40 × (1 − 0,3) = 60 + 28 = 88 kN**. *(4 pts)*
+
+### Partie C — M en S (5 pts)
+4. 60 kN en S (η = 2,5), 40 kN à 3 m (η = 2,5 × 2/5 = 1,0) : **M = 150 + 40 = 190 kN·m** ; 40 kN en S, 60 kN à 3 m : M = 100 + 60 = 160 kN·m → **190 kN·m** retenu. *(5 pts)*
+
+### Partie D — Moment absolu (5 pts)
+5. R = 100 kN, à 40 × 3 / 100 = **1,20 m** de l'essieu de 60 kN (côté 40 kN). *(2 pts)*
+6. On place le milieu de la poutre au milieu de l'intervalle (0,60 m) : essieu de 60 kN à x = 5 − 0,60 = **4,40 m**. Moment sous cet essieu :
+$$ M max = R (L/2 − 0,60)² / L = 100 × 4,40² / 10 = 193,6 kN·m
+   (légèrement supérieur aux 190 kN·m à mi-portée). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre ligne d'influence (effet d'une charge unité qui se déplace) et diagramme des moments (charges fixes).
+> - Oublier les deux sens de circulation.
+> - Supposer que le moment maximal absolu est toujours à mi-portée.`},
  exercices:[
   {t:"Lignes d'influence des réactions", d:1, e:`Poutre de 8 m sur deux appuis. Une charge de 50 kN se déplace. Calculer RA et RB quand la charge est à 2 m, à 4 m et à 7 m de A.`, c:`RA = 50 (8 − x) / 8 ; RB = 50 x / 8.
 - x = 2 m : **RA = 37,5 kN ; RB = 12,5 kN**.
