@@ -132,6 +132,34 @@ Un groupe électrogène de Lw = 100 dB(A) donne 100 − 20 − 8 = **72 dB(A)** 
 ## À l'intérieur d'un local
 Dans une pièce, le son direct s'ajoute au **son réfléchi** par les parois (réverbération). Dans un local aux parois dures (carrelage, béton, vitrages), le niveau reste élevé même loin de la source : d'où l'intérêt des matériaux absorbants (voir chapitre Réverbération).
 
+## Application : respecter une limite en bord de propriété
+Un groupe électrogène produit **80 dB(A) à 10 m** ; on veut au plus **55 dB(A)** chez le voisin.
+1. Atténuation nécessaire : 80 − 55 = 25 dB ;
+2. Par la seule distance : 20 log(r / 10) = 25 → r = 10 × 10^1,25 = **178 m** : irréaliste sur une parcelle ;
+3. Avec un **capot insonorisant** de 15 dB : 65 dB(A) à 10 m → il ne reste que 10 dB à gagner : r = 10 × 10^0,5 = **32 m**.
+On combine toujours plusieurs moyens : capot, distance, écran, orientation de l'échappement.
+
+> [!exemple] À partir du niveau de puissance
+> Groupe de Lw = 100 dB(A) posé au sol ; à quelle distance obtient-on 55 dB(A) ?
+> 100 − 20 log r − 8 = 55 → log r = 1,85 → r = **71 m**.
+
+## Les effets des surfaces voisines
+- Source posée **contre un mur** : le son ne rayonne plus que dans un demi-espace, le niveau augmente d'environ **3 dB** ;
+- Source dans un **angle** de deux murs : environ **+ 6 dB**. On n'installe donc pas une machine bruyante dans un angle de cour ;
+- Deux sources identiques au même endroit : **+ 3 dB** (pas le double de décibels).
+
+## Méthode
+1. Identifier le type de source (ponctuelle ou linéique) et le niveau de référence ;
+2. Calculer l'atténuation nécessaire ;
+3. Évaluer ce que la distance apporte ;
+4. Compléter par des protections (capot, écran, bâtiment-écran, orientation) ;
+5. Vérifier le résultat avec les règles de calcul des décibels.
+
+> [!attention] Erreurs fréquentes
+> - Appliquer − 6 dB par doublement à une route (c'est − 3 dB pour une source linéique).
+> - Additionner les décibels arithmétiquement.
+> - Compter sur une haie pour réduire le bruit de façon notable.
+
 > [!retenir]
 > - Source ponctuelle : − 6 dB par doublement de distance ; source linéique : − 3 dB.
 > - Lp = Lw − 20 log r − 8 (source au sol).

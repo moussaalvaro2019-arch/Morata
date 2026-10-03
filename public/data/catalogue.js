@@ -14,7 +14,7 @@ A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", gr
   "Salle de classe, salle de réunion, lieu de culte",
   "Groupes électrogènes, climatiseurs et pompes",
   "Bruit de chantier et protection auditive"
- ], src:"data/cours/acou.js?v=0ac2b990", chapitres:[
+ ], src:"data/cours/acou.js?v=8bff7663", chapitres:[
   {id:"acou-1", niv:1, titre:"Le son et les décibels", duree:45, nq:5, nex:5},
   {id:"acou-10", niv:1, titre:"La propagation du son : distance, obstacles et réflexions", duree:40, nq:5, nex:5},
   {id:"acou-11", niv:1, titre:"Mesurer le bruit : sonomètre, niveau équivalent et indicateurs", duree:40, nq:5, nex:5},
@@ -245,7 +245,7 @@ A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", 
   "Évacuation des eaux pluviales de toiture et de parcelle",
   "Réseaux d'eaux usées, fosse septique et épandage",
   "Caniveaux, buses et dalots de voirie"
- ], src:"data/cours/mdf.js?v=b4de012f", chapitres:[
+ ], src:"data/cours/mdf.js?v=ccc4fb6f", chapitres:[
   {id:"mdf-1", niv:1, titre:"Propriétés des fluides et pression", duree:40, nq:5, nex:5},
   {id:"mdf-2", niv:1, titre:"Hydrostatique : pression en profondeur et poussées sur les parois", duree:50, nq:5, nex:5},
   {id:"mdf-10", niv:1, titre:"Poussée d'Archimède, flottaison et sous-pressions", duree:40, nq:5, nex:5},
@@ -314,7 +314,7 @@ A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", gr
   "Résistance des sols et des fondations (Mohr-Coulomb)",
   "Appareils d'appui, assemblages boulonnés, jauges de déformation",
   "Contrôle des résultats d'un logiciel aux éléments finis"
- ], src:"data/cours/mmc.js?v=1355dd73", chapitres:[
+ ], src:"data/cours/mmc.js?v=dea99f46", chapitres:[
   {id:"mmc-1", niv:1, titre:"Hypothèses et notion de milieu continu", duree:40, nq:5, nex:5},
   {id:"mmc-6", niv:1, titre:"Forces, contraintes et déformations en traction simple", duree:45, nq:5, nex:5},
   {id:"mmc-7", niv:1, titre:"Comportement des matériaux : essais de traction et de compression", duree:45, nq:5, nex:5},

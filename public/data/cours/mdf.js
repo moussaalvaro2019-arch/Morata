@@ -73,6 +73,35 @@ En plomberie, on raisonne souvent en **mètres de colonne d'eau** : « 3 bars »
 - Elle s'exerce **perpendiculairement** aux parois ;
 - Elle ne dépend que de la **profondeur** (voir chapitre suivant).
 
+## Application : la même charge, des pressions très différentes
+Un réservoir contient **2 m³** d'eau : masse 2 000 kg, poids 2 000 × 9,81 = **19,62 kN** (on néglige le poids de la cuve).
+- Posé sur 4 pieds de 10 × 10 cm (S = 0,04 m²) : p = 19,62 / 0,04 = **490 kPa ≈ 0,49 MPa** sous les pieds ;
+- Posé à plat sur une base de 1,50 × 1,50 m (S = 2,25 m²) : p = 19,62 / 2,25 = **8,7 kPa**.
+La même charge exerce une pression 56 fois plus forte sous les pieds : il faut vérifier la dalle (poinçonnement) ou interposer un socle de répartition.
+
+## Conversions pas à pas
+- 3,5 bar = 3,5 × 10⁵ Pa = 350 kPa = 350 000 / 9 810 = **35,7 mCE** ;
+- 25 mCE = 25 × 9 810 = 245 250 Pa = **2,45 bar** ;
+- 0,6 MPa = **6 bar** (pression d'épreuve courante d'un réseau d'eau) ;
+- Un manomètre indique 2,5 bar : pression absolue = 2,5 + 1,01 = **3,51 bar**.
+
+> [!astuce] Repères faciles à retenir
+> 1 bar ≈ 10 m d'eau ≈ 100 kPa.
+> 1 m d'eau ≈ 10 kPa ≈ 0,1 bar.
+> Un château d'eau de 30 m donne environ 3 bars au pied.
+
+## Méthode
+1. Identifier la **force** (poids d'un liquide, effort d'une pompe) en newtons ;
+2. Identifier la **surface** d'appui en m² ;
+3. Calculer p = F / S en Pa, puis convertir dans l'unité utile (kPa, bar, mCE) ;
+4. Préciser s'il s'agit d'une pression **relative** ou **absolue**.
+
+> [!attention] Erreurs fréquentes
+> - Confondre bar et MPa : 1 MPa = 10 bar.
+> - Confondre masse (kg) et poids (N) : multiplier par g = 9,81.
+> - Additionner une pression relative et une pression absolue.
+> - Oublier de convertir les cm² en m² (1 cm² = 10⁻⁴ m²).
+
 > [!retenir]
 > - Eau : ρ = 1 000 kg/m³ ; γ ≈ 10 kN/m³ ; incompressible.
 > - p = F/S ; 1 bar = 10⁵ Pa ≈ 10,2 mCE.
@@ -242,6 +271,36 @@ Tous les appareils ne fonctionnent pas en même temps : on applique un **coeffic
 $$ y = 0,8 / √(n − 1)     (n : nombre d'appareils, n ≥ 2)
 > [!exemple] Maison de 8 appareils
 > Somme des débits de base : 1,57 L/s ; y = 0,8/√7 = 0,30 → débit probable : 1,57 × 0,30 = **0,47 L/s**.
+
+## Application : choisir le diamètre d'un tube
+Débit probable de la maison : 0,47 L/s ; vitesse limitée à 1,5 m/s.
+1. Section minimale : S = Q / v = 0,000 47 / 1,5 = **3,13 × 10⁻⁴ m²** (3,13 cm²) ;
+2. Diamètre intérieur minimal : D = √(4 S / π) = **20,0 mm** ;
+3. On choisit le tube de diamètre intérieur immédiatement supérieur : **20,4 mm** (tube PER 25 × 2,3) ;
+4. Vérification : v = 0,000 47 / 3,27 × 10⁻⁴ = **1,44 m/s** ≤ 1,5 m/s ✔.
+
+> [!exemple] Temps de remplissage d'une citerne
+> Citerne de 1 000 L alimentée à 0,4 L/s.
+> Durée : 1 000 / 0,4 = 2 500 s ≈ **42 min**.
+
+> [!exemple] Réduction de diamètre
+> Un tuyau de 50 mm où l'eau circule à 1 m/s se réduit à 25 mm.
+> La section est divisée par 4 : v₂ = 4 × 1 = **4 m/s** (trop rapide pour un réseau intérieur).
+
+> [!exemple] Débit d'un caniveau
+> Caniveau rectangulaire de 30 cm de large, 10 cm d'eau, vitesse 1,2 m/s.
+> Q = (0,30 × 0,10) × 1,2 = 0,036 m³/s = **36 L/s**.
+
+## Méthode
+1. Convertir le débit en m³/s et les diamètres en m ;
+2. Utiliser le diamètre **intérieur** (le diamètre nominal d'un tube plastique est souvent le diamètre extérieur) ;
+3. Appliquer Q = S v dans le sens demandé (vitesse, débit ou diamètre) ;
+4. Comparer à la vitesse admissible et choisir le diamètre commercial supérieur.
+
+> [!attention] Erreurs fréquentes
+> - Oublier de convertir les mm en m (16 mm = 0,016 m) ou les L/s en m³/s.
+> - Prendre le diamètre extérieur d'un tube PER ou PVC.
+> - Additionner les débits de tous les appareils sans coefficient de simultanéité.
 
 > [!retenir]
 > - Q = V/t = S × v ; 1 L/s = 3,6 m³/h.

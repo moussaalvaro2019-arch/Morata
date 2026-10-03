@@ -127,6 +127,33 @@ $$ ε(transversale) = − ν × ε(longitudinale)
 ## Rigidité d'une barre
 L'allongement s'écrit aussi ΔL = N L/(E A) : la **rigidité axiale** EA/L est la « raideur de ressort » de la barre (voir le calcul matriciel des structures).
 
+## Application : dimensionner un tirant
+Un tirant en acier S235 doit reprendre **N = 120 kN** ; la contrainte ne doit pas dépasser fy = 235 MPa.
+1. Section minimale : A ≥ N / fy = 120 000 / 235 = **511 mm²** ;
+2. Diamètre minimal : d = √(4 × 511 / π) = **25,5 mm** ;
+3. On choisit un rond de **Ø 26 mm** (A = 531 mm²) ;
+4. On vérifie ensuite l'allongement (ΔL = N L / (E A)) si la déformation est limitée.
+
+## Le diagramme contrainte-déformation de l'acier
+| Phase | Ce qui se passe |
+|---|---|
+| Élastique (σ < fy) | Droite de pente E : la barre reprend sa longueur si on décharge |
+| Palier plastique (σ = fy) | La barre s'allonge sans effort supplémentaire : déformation permanente |
+| Écrouissage puis rupture | La contrainte remonte jusqu'à fu, puis la barre se rompt |
+Pour un acier HA 500 : déformation à la limite élastique εy = fy / E = 500 / 200 000 = **2,5 ‰**.
+
+> [!exemple] Poteau en béton armé : partage de l'effort
+> Poteau 25 × 25 cm avec 4 HA12 (As = 452 mm²) ; N = 800 kN ; béton et acier ont la **même déformation**.
+> n = Es / Eb = 200 000 / 30 000 = 6,67 ; section homogène : 62 500 − 452 + 6,67 × 452 = **65 064 mm²**.
+> σ béton = 800 000 / 65 064 = **12,3 MPa** ; σ acier = 6,67 × 12,3 = **82 MPa**.
+> Les aciers soulagent un peu le béton (12,3 au lieu de 12,8 MPa).
+
+> [!attention] Erreurs fréquentes
+> - Mélanger kN et N, m et mm : σ en MPa impose N en newtons et A en mm².
+> - Utiliser le diamètre au lieu du rayon dans π r².
+> - Confondre ‰ et % pour les déformations.
+> - Appliquer la loi de Hooke au-delà de la limite élastique.
+
 > [!retenir]
 > - σ = N/A ; ε = ΔL/L ; σ = E ε ; ΔL = N L/(E A).
 > - E : acier 210 000 MPa ; béton ≈ 30 000 MPa ; bois ≈ 11 000 MPa.
@@ -283,6 +310,34 @@ La RDM fournit les relations inverses : σ = N/A + M y/I ; τ = V S/(I b) (voir 
 
 ## Les relations différentielles
 Le long d'une poutre chargée par q(x) : **dV/dx = − q** et **dM/dx = V** (selon les conventions). Le moment est maximal là où l'effort tranchant s'annule.
+
+## Application : poutre sur deux appuis avec une charge ponctuelle
+Poutre AB de 6 m ; P = 30 kN à 2 m de A. Réactions : RB = 30 × 2 / 6 = **10 kN** ; RA = **20 kN**.
+| Tronçon | Partie isolée | V(x) | M(x) |
+|---|---|---|---|
+| 0 < x < 2 m | gauche (RA seule) | 20 kN | 20 x |
+| 2 < x < 6 m | gauche (RA et P) | 20 − 30 = − 10 kN | 20 x − 30 (x − 2) = 60 − 10 x |
+- En x = 2 m : M = **40 kN·m** (maximum) : c'est là que V change de signe ;
+- En x = 6 m : M = 60 − 60 = 0 ✔ (appui simple) ;
+- Sous une charge ponctuelle, V fait un **saut** égal à la charge (de + 20 à − 10 kN).
+
+## Méthode des coupures
+1. Calculer les **réactions d'appui** (équilibre global) ;
+2. Découper la poutre en **tronçons** limités par les charges ponctuelles, les appuis et les changements de charge répartie ;
+3. Pour chaque tronçon, couper en x et isoler la partie la **plus simple** ;
+4. Écrire l'équilibre pour obtenir N(x), V(x), M(x) avec une convention de signe fixée ;
+5. Calculer les valeurs aux extrémités des tronçons, tracer les diagrammes et contrôler (M = 0 aux appuis simples et aux bouts libres).
+
+> [!astuce] Contrôles rapides
+> L'aire du diagramme de V entre deux points égale la variation de M.
+> Ici, de 0 à 2 m : 20 × 2 = 40 kN·m.
+> Le moment passe bien de 0 à 40 kN·m.
+
+> [!attention] Erreurs fréquentes
+> - Oublier les réactions d'appui dans la partie isolée.
+> - Changer de convention de signe en cours de calcul.
+> - Ne pas découper aux charges ponctuelles (un seul tronçon pour toute la poutre).
+> - Oublier le saut de l'effort tranchant sous une charge concentrée.
 
 > [!retenir]
 > - Couper, isoler, écrire l'équilibre : efforts intérieurs N, V, M (et T en 3D).
