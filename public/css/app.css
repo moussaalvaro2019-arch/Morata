@@ -653,6 +653,10 @@ table.t.click td.mono b{color:var(--navy)}
 .sstep.cur .sn{background:var(--or)}
 .sstep .md{font-size:14.5px}
 .sstep .md table{font-size:13px}
+.ssteps>*,.sstep>*,.sstep .md>*{min-width:0;max-width:100%}
+.sstep .md{overflow-wrap:anywhere}
+.sstep .md table{max-width:100%}
+.sstep .sres .sav{max-width:100%;flex-wrap:wrap}
 .sq{font-weight:500;color:var(--ink2)}
 .sasks{display:flex;flex-wrap:wrap;gap:10px}
 .sask{display:grid;gap:4px;min-width:150px}
@@ -740,3 +744,5 @@ table.t.click td.mono b{color:var(--navy)}
 .sjbar #sjT.late{color:#FFB4A8}
 .sjbar .small{color:#B7C3D3}
 .fx.fxi{display:block;margin:8px 0}
+.studies .stud{border:1px solid var(--line);border-radius:12px;padding:12px 14px;gap:10px;flex-wrap:wrap;background:var(--card)}
+.studies .stud .row{flex-wrap:wrap}

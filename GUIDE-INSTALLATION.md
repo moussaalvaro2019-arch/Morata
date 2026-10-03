@@ -161,6 +161,7 @@ Les apprenants envoient la photo d'un exercice depuis **Résoudre en photo**. Ch
 - Dans **Construction A→Z**, chaque projet type ouvre ses plans de tous les niveaux, ses coupes, sa note de calcul (fiche de chaque poteau, poutre, dalle, semelle…), les 18 matières appliquées au projet et sa maquette 3D modifiable.
 - Dans l'**Atelier de dessin**, le bouton 3D (ou la vue partagée) affiche le dessin en volume ; les commandes 3D, matériaux et couleurs sont dans la barre de la vue 3D. La commande **RDM** ouvre l'étude complète de la poutre sélectionnée.
 - **Exercices & annales** : solveurs guidés (l'apprenant répond à chaque étape, la plateforme corrige), exercices corrigés type BTS et Licence, épreuves d'entraînement chronométrées, annales publiées.
+- **Études progressives** : à la fin des chapitres sur les poteaux, les dalles, les fondations et les poutres, la carte « Appliquer ce cours pas à pas » ouvre l'étude complète de l'élément (de la charge jusqu'au plan de ferraillage et à la nomenclature), en mode guidé ou en corrigé complet. Dans un projet type, chaque poteau, dalle et semelle a aussi son bouton « Étude pas à pas ».
 - **Résoudre en photo** : photo de l'exercice → résolution pas à pas, guidage, vérification de la réponse ou explication de l'énoncé.
 
 ### Ajouter un administrateur
