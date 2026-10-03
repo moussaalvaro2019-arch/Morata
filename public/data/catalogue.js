@@ -487,24 +487,24 @@ A.addMatiere({id:"sp", titre:"Sciences physiques", court:"Physique-chimie", grou
   "Bilan de puissance d'un logement et choix des sections de câbles",
   "Choix d'une eau de gâchage et d'un béton en milieu agressif",
   "Enrobage et durabilité des armatures, joints de dilatation, bétonnage par temps chaud"
- ], src:"data/cours/sp.js?v=f9f0d0df", chapitres:[
-  {id:"sp-1", niv:1, titre:"Grandeurs physiques, unités SI et conversions", duree:45, nq:5, nex:5},
-  {id:"sp-2", niv:1, titre:"Masse, poids, masse volumique et poussée d'Archimède", duree:45, nq:5, nex:5},
-  {id:"sp-10", niv:1, titre:"Mouvements : vitesse et accélération", duree:45, nq:5, nex:5},
-  {id:"sp-3", niv:1, titre:"Forces et équilibre d'un solide", duree:50, nq:5, nex:5},
-  {id:"sp-11", niv:1, titre:"Machines simples : leviers, poulies, plan incliné et frottement", duree:45, nq:5, nex:5},
-  {id:"sp-12", niv:1, titre:"Électricité : circuits en courant continu", duree:50, nq:5, nex:5},
-  {id:"sp-13", niv:2, titre:"Lois de Newton : dynamique du levage et des engins", duree:50, nq:5, nex:5},
-  {id:"sp-4", niv:2, titre:"Travail, énergie, puissance et rendement", duree:50, nq:5, nex:5},
-  {id:"sp-5", niv:2, titre:"Courant alternatif monophasé et installation électrique d'un logement", duree:55, nq:5, nex:5},
-  {id:"sp-14", niv:2, titre:"Atomes, molécules et réactions chimiques : la chimie de la chaux", duree:50, nq:5, nex:5},
-  {id:"sp-15", niv:2, titre:"Acides, bases et pH : eaux et sols agressifs pour le béton", duree:45, nq:5, nex:5},
-  {id:"sp-6", niv:2, titre:"Chimie des liants : plâtre, chaux et ciment", duree:55, nq:5, nex:5},
-  {id:"sp-16", niv:3, titre:"Oxydoréduction et corrosion des armatures", duree:55, nq:5, nex:5},
-  {id:"sp-7", niv:3, titre:"Électricité avancée : triphasé, moteurs, chute de tension et protections", duree:55, nq:5, nex:5},
-  {id:"sp-8", niv:3, titre:"Chaleur, changements d'état et dilatation", duree:50, nq:5, nex:5},
-  {id:"sp-9", niv:3, titre:"Ondes : son, ultrasons et lumière", duree:45, nq:5, nex:5},
-  {id:"sp-17", niv:3, titre:"Magnétisme, transformateurs et moteurs électriques", duree:50, nq:5, nex:5}
+ ], src:"data/cours/sp.js?v=fd0ad2eb", chapitres:[
+  {id:"sp-1", niv:1, titre:"Grandeurs physiques, unités SI et conversions", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-2", niv:1, titre:"Masse, poids, masse volumique et poussée d'Archimède", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-10", niv:1, titre:"Mouvements : vitesse et accélération", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-3", niv:1, titre:"Forces et équilibre d'un solide", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-11", niv:1, titre:"Machines simples : leviers, poulies, plan incliné et frottement", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-12", niv:1, titre:"Électricité : circuits en courant continu", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-13", niv:2, titre:"Lois de Newton : dynamique du levage et des engins", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-4", niv:2, titre:"Travail, énergie, puissance et rendement", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-5", niv:2, titre:"Courant alternatif monophasé et installation électrique d'un logement", duree:55, nq:5, nex:5, ns:1},
+  {id:"sp-14", niv:2, titre:"Atomes, molécules et réactions chimiques : la chimie de la chaux", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-15", niv:2, titre:"Acides, bases et pH : eaux et sols agressifs pour le béton", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-6", niv:2, titre:"Chimie des liants : plâtre, chaux et ciment", duree:55, nq:5, nex:5, ns:1},
+  {id:"sp-16", niv:3, titre:"Oxydoréduction et corrosion des armatures", duree:55, nq:5, nex:5, ns:1},
+  {id:"sp-7", niv:3, titre:"Électricité avancée : triphasé, moteurs, chute de tension et protections", duree:55, nq:5, nex:5, ns:1},
+  {id:"sp-8", niv:3, titre:"Chaleur, changements d'état et dilatation", duree:50, nq:5, nex:5, ns:1},
+  {id:"sp-9", niv:3, titre:"Ondes : son, ultrasons et lumière", duree:45, nq:5, nex:5, ns:1},
+  {id:"sp-17", niv:3, titre:"Magnétisme, transformateurs et moteurs électriques", duree:50, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"tech", titre:"Technologie de construction", court:"Technologie", groupe:"constr", icone:"hammer", couleur:"#E8752A", niveau:"Débutant", heures:70, ordre:2, resume:"Comment se construit un bâtiment, du terrain nu à la réception : acteurs et étapes, systèmes constructifs, implantation, fondations, maçonnerie, béton armé sur chantier, planchers, escaliers, toitures, étanchéité, menuiseries, finitions, équipements, immeubles, ossatures métal et bois, construction durable, pathologies et contrôles, avec applications et exercices corrigés.", objectifs:[
   "Identifier les intervenants et les étapes d'un projet",
