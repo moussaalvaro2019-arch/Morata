@@ -85,6 +85,57 @@ La recherche opérationnelle (RO) regroupe les **méthodes mathématiques qui ai
 > - Modéliser = variables + contraintes + objectif.
 > - Maximiser un bénéfice ou minimiser un coût, un délai, une distance.
 > - Choisir la méthode selon la famille du problème ; toujours interpréter la solution.`,
+ sujet:{titre:"Modéliser la production d'un atelier d'agglos", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un petit atelier de fabrication d'agglos à Daloa produit des **agglos creux de 15** et des **agglos pleins de 15**. Le gérant veut savoir combien en fabriquer chaque jour pour gagner le plus.
+
+**Données (par jour)**
+- Bénéfice : **120 F** par agglo creux ; **200 F** par agglo plein ;
+- Ciment disponible : **840 kg** ; un creux consomme **1,5 kg**, un plein **2 kg** ;
+- Temps de presse disponible : **480 min** ; un creux demande **1 min**, un plein **1,5 min** ;
+- La clientèle n'achète pas plus de **240 agglos pleins** par jour.
+
+### Partie A — Modélisation (8 points)
+1. Définir les variables de décision. (1 pt)
+2. Écrire la fonction objectif. (2 pts)
+3. Écrire toutes les contraintes, y compris les contraintes de signe. (5 pts)
+
+### Partie B — Tester des solutions (8 points)
+4. Pour chacun des plans suivants, vérifier s'il est réalisable et calculer le bénéfice : (480 ; 0), (300 ; 120), (120 ; 240), (0 ; 240), (400 ; 120). (6 pts)
+5. Quel plan est le meilleur parmi ceux testés ? Quelle contrainte n'est jamais « saturée » ? (2 pts)
+
+### Partie C — Réflexion (4 points)
+6. Calculer le bénéfice par minute de presse pour chaque produit. Pourquoi faut-il produire d'abord des agglos pleins ? (2 pts)
+7. Citer deux limites de ce modèle par rapport à la réalité. (2 pts)`,
+  corrige:`### Partie A — Modélisation (8 pts)
+1. **x** : nombre d'agglos creux par jour ; **y** : nombre d'agglos pleins par jour. *(1 pt)*
+2. Maximiser **Z = 120 x + 200 y** (F/jour). *(2 pts)*
+3. *(5 pts)*
+   - Ciment : **1,5 x + 2 y ≤ 840** ;
+   - Presse : **x + 1,5 y ≤ 480** ;
+   - Marché : **y ≤ 240** ;
+   - Signe : **x ≥ 0 ; y ≥ 0** (et entiers).
+
+### Partie B — Tests (8 pts)
+4. *(6 pts)*
+
+| Plan (x ; y) | Ciment (kg) | Presse (min) | y ≤ 240 | Réalisable | Z (F) |
+|---|---|---|---|---|---|
+| (480 ; 0) | 720 | 480 | oui | oui | 57 600 |
+| (300 ; 120) | 690 | 480 | oui | oui | 60 000 |
+| (120 ; 240) | 660 | 480 | oui | oui | **62 400** |
+| (0 ; 240) | 480 | 360 | oui | oui | 48 000 |
+| (400 ; 120) | 840 | 580 | oui | **non** (presse) | — |
+
+5. **(120 ; 240)** avec **62 400 F/jour**. La contrainte de **ciment** n'est jamais saturée (il reste du ciment) : c'est le temps de presse et le marché qui limitent. *(2 pts)*
+
+### Partie C — Réflexion (4 pts)
+6. Creux : 120 / 1 = **120 F/min** ; plein : 200 / 1,5 = **133 F/min**. La presse étant la ressource rare, on la consacre d'abord au produit qui rapporte le plus par minute (les pleins), jusqu'à la limite du marché. *(2 pts)*
+7. Bénéfices et temps supposés constants ; pas de casse ni de pannes ; demande des creux supposée illimitée ; stockage, séchage et cure ignorés. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les contraintes de signe ou de marché.
+> - Retenir un plan non réalisable parce qu'il rapporte plus.
+> - Raisonner sur le bénéfice unitaire au lieu du bénéfice par unité de ressource rare.`},
  exercices:[
   {t:"Fabrication de parpaings", d:1, e:`Une briqueterie fabrique des parpaings de 15 (marge 50 F) et de 20 (marge 70 F). Un parpaing de 15 consomme 1,4 kg de ciment, un parpaing de 20 en consomme 1,8 kg. On dispose de 700 kg de ciment par jour et la presse produit au plus 450 parpaings par jour.
 Écrire le modèle (variables, objectif, contraintes).`, c:`Variables : x = nombre de parpaings de 15 ; y = nombre de parpaings de 20 (par jour).
@@ -170,6 +221,64 @@ Le Gantt est très lisible mais il montre mal les **liens** entre tâches et les
 > - Niveaux : une tâche est classée quand toutes ses antériorités le sont.
 > - Gantt : barres à l'échelle, au plus tôt ; une tâche commence quand toutes ses antériorités sont finies.
 > - Durée du projet = date de fin de la dernière tâche.`,
+ sujet:{titre:"Antériorités, niveaux et diagramme de Gantt d'un petit bâtiment", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Construction d'un local commercial à Abobo (durées en jours ouvrés).
+
+| Tâche | Désignation | Durée | Antériorités |
+|---|---|---|---|
+| A | Installation de chantier | 2 | — |
+| B | Terrassements | 3 | A |
+| C | Fondations | 5 | B |
+| D | Commande des menuiseries | 15 | A |
+| E | Élévation | 8 | C |
+| F | Toiture | 4 | E |
+| G | Réseaux encastrés | 5 | E |
+| H | Pose des menuiseries | 2 | D, F |
+| I | Enduits | 6 | F, G |
+| J | Peinture et finitions | 4 | H, I |
+
+### Partie A — Niveaux (6 points)
+1. Établir le tableau des successeurs. (2 pts)
+2. Déterminer le niveau (rang) de chaque tâche. (4 pts)
+
+### Partie B — Dates (8 points)
+3. Calculer les dates de début et de fin au plus tôt de chaque tâche et la durée du projet. (5 pts)
+4. Quelles tâches ne peuvent pas être retardées sans retarder la fin du chantier ? (3 pts)
+
+### Partie C — Gantt (6 points)
+5. Tracer le diagramme de Gantt au plus tôt. (4 pts)
+6. De combien de jours la commande des menuiseries peut-elle être retardée ? Quel intérêt pour la trésorerie ? (2 pts)`,
+  corrige:`### Partie A — Niveaux (6 pts)
+1. A → B, D ; B → C ; C → E ; D → H ; E → F, G ; F → H, I ; G → I ; H → J ; I → J ; J → (fin). *(2 pts)*
+2. Niveau 0 : **A** ; niveau 1 : **B, D** ; niveau 2 : **C** ; niveau 3 : **E** ; niveau 4 : **F, G** ; niveau 5 : **H, I** ; niveau 6 : **J**. *(4 pts)*
+
+### Partie B — Dates (8 pts)
+3. *(5 pts)*
+
+| Tâche | Début | Fin |
+|---|---|---|
+| A | 0 | 2 |
+| B | 2 | 5 |
+| D | 2 | 17 |
+| C | 5 | 10 |
+| E | 10 | 18 |
+| F | 18 | 22 |
+| G | 18 | 23 |
+| H | 22 | 24 |
+| I | 23 | 29 |
+| J | 29 | 33 |
+
+Durée : **33 jours**.
+4. Chemin critique : **A – B – C – E – G – I – J** (F a 1 jour de marge, H 5 jours, D 10 jours). *(3 pts)*
+
+### Partie C — Gantt (6 pts)
+5. Une barre par tâche aux dates calculées, les tâches critiques en couleur ; les marges de D, F et H en pointillés. *(4 pts)*
+6. D a **10 jours** de marge : on peut commander les menuiseries jusqu'au jour 12 sans retarder le chantier, ce qui décale le paiement de l'acompte au fournisseur (sans aller jusqu'au bout de la marge, par prudence). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Faire commencer une tâche après le premier de ses prédécesseurs terminé au lieu du dernier.
+> - Oublier les tâches d'approvisionnement (commandes) dans le planning.
+> - Consommer toute la marge d'une tâche « par confort ».`},
  exercices:[
   {t:"Classer par niveaux", d:1, e:`Classer par niveaux les tâches suivantes : A (—), B (A), C (A), D (B), E (B, C), F (D, E), G (C), H (F, G).`, c:`Niveau 0 : **A**.
 Niveau 1 : **B, C** (leurs antériorités sont de niveau 0).
@@ -248,6 +357,52 @@ Dans un planning, on cherche au contraire le **plus long chemin** du début à l
 > - Dijkstra : fixer le sommet le plus proche, mettre à jour ses voisins, recommencer.
 > - Les prédécesseurs permettent de reconstituer le chemin.
 > - Dans un planning, le chemin critique est le plus long chemin.`,
+ sujet:{titre:"Plus court chemin : itinéraire des toupies de la centrale au chantier", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une centrale à béton D doit livrer un chantier S à Abidjan. Le réseau de routes praticables (distances en km) est :
+**D–A 7 ; D–B 3 ; B–A 2 ; A–C 4 ; B–C 8 ; B–E 6 ; C–E 1 ; C–S 5 ; E–S 7 ; E–F 3 ; F–S 3**.
+
+Une toupie doit arriver en moins de **90 minutes** après chargement ; vitesse moyenne en ville **20 km/h** ; durée de chargement et de déchargement non comptée.
+
+### Partie A — Le graphe (4 points)
+1. Dessiner le graphe (sommets et arêtes valuées). (2 pts)
+2. Pourquoi ce graphe est-il non orienté ? Dans quel cas faudrait-il l'orienter ? (2 pts)
+
+### Partie B — Algorithme de Dijkstra (10 points)
+3. Appliquer l'algorithme de Dijkstra depuis D en présentant le tableau des étapes. (7 pts)
+4. Donner le plus court chemin de D à S et sa longueur. (3 pts)
+
+### Partie C — Exploitation (6 points)
+5. Calculer la durée du trajet. Le délai de 90 minutes est-il respecté ? (2 pts)
+6. La route A–C est coupée par des travaux. Quel est le nouveau plus court chemin ? (3 pts)
+7. Pourquoi faut-il parfois préférer un chemin un peu plus long ? (1 pt)`,
+  corrige:`### Partie A — Graphe (4 pts)
+1. 7 sommets (D, A, B, C, E, F, S) et 11 arêtes valuées par les distances. *(2 pts)*
+2. Les routes se parcourent dans les deux sens. On l'orienterait pour des **sens uniques**. *(2 pts)*
+
+### Partie B — Dijkstra (10 pts)
+3. *(7 pts)*
+
+| Étape | Sommet fixé | A | B | C | E | F | S |
+|---|---|---|---|---|---|---|---|
+| 1 | D (0) | 7 (D) | 3 (D) | ∞ | ∞ | ∞ | ∞ |
+| 2 | B (3) | 5 (B) | ✔ | 11 (B) | 9 (B) | ∞ | ∞ |
+| 3 | A (5) | ✔ | ✔ | 9 (A) | 9 (B) | ∞ | ∞ |
+| 4 | C (9) | ✔ | ✔ | ✔ | 9 (B) | ∞ | 14 (C) |
+| 5 | E (9) | ✔ | ✔ | ✔ | ✔ | 12 (E) | 14 (C) |
+| 6 | F (12) | | | | | ✔ | 14 (C) |
+| 7 | S (14) | | | | | | ✔ |
+
+4. Prédécesseurs : S ← C ← A ← B ← D → **D – B – A – C – S = 14 km**. *(3 pts)*
+
+### Partie C — Exploitation (6 pts)
+5. 14 / 20 = 0,7 h = **42 min** < 90 min ✔ (marge pour les embouteillages). *(2 pts)*
+6. Sans A–C : D – B – E – … : E à 9 ; S par E–S : 16 ; par E–F–S : 9 + 3 + 3 = 15 ; par E–C–S : 9 + 1 + 5 = **15** → deux chemins de **15 km** (D – B – E – C – S ou D – B – E – F – S). *(3 pts)*
+7. Le plus court en distance n'est pas toujours le plus rapide (embouteillages, ponts limités en tonnage, routes non bitumées en saison des pluies) : on peut valuer le graphe en **temps** ou en coût. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Fixer un sommet avant d'avoir comparé toutes les distances provisoires.
+> - Oublier de mettre à jour un sommet quand on trouve un chemin plus court.
+> - Lire le chemin dans le mauvais sens (on remonte les prédécesseurs depuis l'arrivée).`},
  exercices:[
   {t:"Lire un graphe", d:1, e:`Pour le graphe de l'exemple du cours, donner : a) le nombre de sommets et d'arêtes ; b) le degré de B et de F ; c) deux chemins différents de C à E et leurs longueurs.`, c:`a) **6 sommets** (C, A, B, D, E, F) et **9 arêtes**.
 b) B est relié à C, A, D, E : **degré 4** ; F est relié à D et E : **degré 2**.
@@ -326,6 +481,51 @@ Les deux méthodes donnent la même longueur totale minimale.
 > - Kruskal : liaisons par ordre croissant, rejeter celles qui forment un cycle.
 > - Prim : faire grandir le réseau en ajoutant la liaison la plus courte vers un nouveau sommet.
 > - Remplacer les longueurs par les coûts réels quand le terrain l'impose.`,
+ sujet:{titre:"Arbre couvrant minimal : réseau électrique d'un village et de son école", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un village proche de Katiola doit être raccordé au poste P. Les lignes possibles (longueurs en m) entre le poste et les sites 1 à 5 (école, centre de santé, forage, marché, mosquée) sont :
+**P–1 120 ; P–2 200 ; 1–2 90 ; 1–3 150 ; 2–3 110 ; 2–4 180 ; 3–4 100 ; 3–5 170 ; 4–5 80 ; P–3 210**.
+
+Coût d'une ligne basse tension : **15 000 F/m** (poteaux, câble, pose).
+
+### Partie A — Le problème (4 points)
+1. Pourquoi cherche-t-on un **arbre** (sans cycle) qui relie tous les sites ? (2 pts)
+2. Combien d'arêtes comporte un arbre reliant 6 sommets ? (2 pts)
+
+### Partie B — Kruskal (9 points)
+3. Ranger les arêtes par longueur croissante. (2 pts)
+4. Appliquer l'algorithme de Kruskal en justifiant chaque arête gardée ou rejetée. (5 pts)
+5. Donner la longueur totale et le coût du réseau. (2 pts)
+
+### Partie C — Vérification et variantes (7 points)
+6. Retrouver le même arbre par l'algorithme de Prim en partant de P. (4 pts)
+7. Le centre de santé (site 3) exige une alimentation de secours par un second chemin. Quelle arête ajouter au moindre coût ? Coût supplémentaire ? (3 pts)`,
+  corrige:`### Partie A — Le problème (4 pts)
+1. Tous les sites doivent être alimentés (graphe **connexe**) au moindre coût : un cycle ajouterait une ligne inutile pour la simple desserte. *(2 pts)*
+2. **n − 1 = 5 arêtes**. *(2 pts)*
+
+### Partie B — Kruskal (9 pts)
+3. 4–5 (80) ; 1–2 (90) ; 3–4 (100) ; 2–3 (110) ; P–1 (120) ; 1–3 (150) ; 3–5 (170) ; 2–4 (180) ; P–2 (200) ; P–3 (210). *(2 pts)*
+4. *(5 pts)*
+
+| Arête | Longueur | Décision |
+|---|---|---|
+| 4–5 | 80 | gardée |
+| 1–2 | 90 | gardée |
+| 3–4 | 100 | gardée |
+| 2–3 | 110 | gardée (relie {1, 2} à {3, 4, 5}) |
+| P–1 | 120 | gardée → 5 arêtes, terminé |
+| 1–3, 3–5, 2–4, P–2, P–3 | | rejetées (cycles) |
+
+5. 80 + 90 + 100 + 110 + 120 = **500 m** → 500 × 15 000 = **7 500 000 F**. *(2 pts)*
+
+### Partie C — Prim et variante (7 pts)
+6. Depuis P : P–1 (120) ; 1–2 (90) ; 2–3 (110) ; 3–4 (100) ; 4–5 (80) → **même arbre, 500 m** ✔. *(4 pts)*
+7. Le site 3 est relié par 2–3 ; un second chemin passant par une autre arête de 3 : la moins chère hors arbre est **1–3 (150 m)**, qui crée la boucle 1–2–3 → **+ 2 250 000 F**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Garder une arête qui ferme un cycle.
+> - S'arrêter avant d'avoir n − 1 arêtes.
+> - Confondre arbre couvrant minimal (relier tout au moindre coût) et plus court chemin (aller d'un point à un autre).`},
  exercices:[
   {t:"Kruskal : éclairage d'une cour", d:2, e:`Six candélabres A à F doivent être reliés par un câble enterré. Liaisons possibles (m) : A–B 50 ; A–C 80 ; B–C 40 ; B–D 70 ; C–D 60 ; C–E 90 ; D–E 30 ; D–F 100 ; E–F 50 ; B–E 110.
 Déterminer l'arbre couvrant minimal par Kruskal et son coût à 15 000 F/m.`, c:`Ordre croissant : D–E 30 ✔ ; B–C 40 ✔ ; A–B 50 ✔ ; E–F 50 ✔ ; C–D 60 ✔ (5 liaisons pour 6 sommets : fini) ; les suivantes (B–D 70, A–C 80…) formeraient des cycles.
@@ -396,6 +596,53 @@ Comparer seulement les prix d'achat est trompeur : on compare les **coûts globa
 > - Éliminer les solutions dominées.
 > - Point d'équivalence : égaliser coûts fixes + variables des deux solutions.
 > - Raisonner en coût global, pas en prix d'achat.`,
+ sujet:{titre:"Analyse multicritère et seuil de rentabilité : choisir un groupe électrogène", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise de BTP de Bouaké doit équiper ses chantiers d'un groupe électrogène et hésite entre louer et acheter.
+
+**Critères et poids** : prix **35 %** ; consommation **25 %** ; fiabilité et service après-vente **25 %** ; niveau de bruit **15 %**.
+
+| Groupe | Prix | Consommation | Fiabilité/SAV | Bruit |
+|---|---|---|---|---|
+| G1 | 7 | 6 | 8 | 5 |
+| G2 | 9 | 5 | 6 | 6 |
+| G3 | 6 | 8 | 8 | 8 |
+
+(notes sur 10, 10 = meilleur)
+
+**Louer ou acheter le groupe retenu** : location **25 000 F/jour** ; achat **3 000 000 F** + **5 000 F/jour** d'entretien et de frais ; utilisation prévue **120 jours/an** pendant 2 ans.
+
+### Partie A — Analyse multicritère (9 points)
+1. Calculer la note pondérée de chaque groupe. (5 pts)
+2. Quel groupe retenir ? Est-ce le moins cher ? (2 pts)
+3. Si le prix pesait 60 % (les autres poids réduits en proportion), le choix changerait-il ? Calculer. (2 pts)
+
+### Partie B — Seuil de rentabilité (8 points)
+4. Exprimer le coût de la location et de l'achat en fonction du nombre de jours n. (2 pts)
+5. Calculer le seuil de rentabilité de l'achat. (3 pts)
+6. Que conseiller pour 240 jours d'utilisation sur 2 ans ? (3 pts)
+
+### Partie C — Limites (3 points)
+7. Citer trois éléments que ces calculs simples ne prennent pas en compte. (3 pts)`,
+  corrige:`### Partie A — Multicritère (9 pts)
+1. *(5 pts)*
+   - G1 : 0,35 × 7 + 0,25 × 6 + 0,25 × 8 + 0,15 × 5 = 2,45 + 1,50 + 2,00 + 0,75 = **6,70** ;
+   - G2 : 3,15 + 1,25 + 1,50 + 0,90 = **6,80** ;
+   - G3 : 2,10 + 2,00 + 2,00 + 1,20 = **7,30**.
+2. **G3** (7,30), bien qu'il soit le **plus cher** (note prix 6) : sa faible consommation et sa fiabilité compensent. *(2 pts)*
+3. Autres poids : 0,40 × (25/65) ≈ 0,154 chacun pour consommation et fiabilité, 0,40 × (15/65) ≈ 0,092 pour le bruit. G1 : 4,20 + 0,92 + 1,23 + 0,46 = 6,81 ; G2 : 5,40 + 0,77 + 0,92 + 0,55 = **7,64** ; G3 : 3,60 + 1,23 + 1,23 + 0,74 = 6,80 → **G2** passerait devant : le résultat dépend fortement des poids, qu'il faut justifier. *(2 pts)*
+
+### Partie B — Seuil (8 pts)
+4. Location : **CL = 25 000 n** ; achat : **CA = 3 000 000 + 5 000 n**. *(2 pts)*
+5. 25 000 n = 3 000 000 + 5 000 n ⇔ 20 000 n = 3 000 000 ⇔ **n = 150 jours**. *(3 pts)*
+6. 240 jours > 150 : **acheter** ; coût : 3 000 000 + 1 200 000 = 4,2 M contre 6,0 M en location (économie de 1,8 M), et le groupe garde une valeur de revente. *(3 pts)*
+
+### Partie C — Limites (3 pts)
+7. Valeur de **revente**, coût du **capital** (intérêts, trésorerie), **pannes** et immobilisation, transport, gardiennage, assurances, évolution des besoins. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de multiplier les notes par les poids.
+> - Choisir sur un seul critère (le prix).
+> - Comparer un coût d'achat à un coût de location sans tenir compte de la durée d'utilisation.`},
  exercices:[
   {t:"Choisir un sous-traitant d'étanchéité", d:1, e:`Critères et poids : prix 35 % ; références 25 % ; délai 20 % ; garantie 20 %.
 Notes sur 10 — E1 : 7, 8, 6, 9 ; E2 : 9, 5, 7, 6 ; E3 : 6, 9, 8, 8.
@@ -493,6 +740,60 @@ Les tâches de **marge totale nulle** forment le **chemin critique** : c'est le 
 > - Aller : début tôt = max des fins tôt des antériorités ; retour : fin tard = min des débuts tard des successeurs.
 > - MT = début tard − début tôt ; ML = début tôt du successeur − fin tôt.
 > - Chemin critique = tâches à MT nulle = plus long chemin.`,
+ sujet:{titre:"Ordonnancement PERT : dates, marges et chemin critique d'un entrepôt", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Construction d'un entrepôt à charpente métallique à Vridi (durées en semaines).
+
+| Tâche | Désignation | Durée | Antériorités |
+|---|---|---|---|
+| A | Études d'exécution | 3 | — |
+| B | Terrassements | 2 | — |
+| C | Fondations | 4 | A, B |
+| D | Commande et fabrication de la charpente | 8 | A |
+| E | Élévation des murs | 6 | C |
+| F | Montage de la charpente | 3 | D, E |
+| G | Réseaux | 4 | E |
+| H | Couverture | 2 | F |
+| I | Finitions | 5 | G, H |
+
+### Partie A — Réseau (5 points)
+1. Construire le graphe PERT (ou potentiels-tâches). (5 pts)
+
+### Partie B — Dates et marges (11 points)
+2. Calculer les dates au plus tôt et la durée du projet. (4 pts)
+3. Calculer les dates au plus tard. (3 pts)
+4. Calculer la marge totale et la marge libre de chaque tâche. (4 pts)
+
+### Partie C — Analyse (4 points)
+5. Donner le chemin critique. (2 pts)
+6. La fabrication de la charpente (D) prend 3 semaines de retard. Conséquence ? (2 pts)`,
+  corrige:`### Partie A — Réseau (5 pts)
+1. Début → A, B ; A, B → C ; A → D ; C → E ; D, E → F ; E → G ; F → H ; G, H → I → Fin. *(5 pts)*
+
+### Partie B — Dates et marges (11 pts)
+2. à 4. *(11 pts)*
+
+| Tâche | Début tôt | Fin tôt | Début tard | Fin tard | Marge totale | Marge libre |
+|---|---|---|---|---|---|---|
+| A | 0 | 3 | 0 | 3 | 0 | 0 |
+| B | 0 | 2 | 1 | 3 | 1 | 1 |
+| C | 3 | 7 | 3 | 7 | 0 | 0 |
+| D | 3 | 11 | 5 | 13 | 2 | 2 |
+| E | 7 | 13 | 7 | 13 | 0 | 0 |
+| F | 13 | 16 | 13 | 16 | 0 | 0 |
+| G | 13 | 17 | 14 | 18 | 1 | 1 |
+| H | 16 | 18 | 16 | 18 | 0 | 0 |
+| I | 18 | 23 | 18 | 23 | 0 | 0 |
+
+Durée du projet : **23 semaines**.
+
+### Partie C — Analyse (4 pts)
+5. **A – C – E – F – H – I** (marges nulles). *(2 pts)*
+6. Retard de 3 semaines sur D, qui n'a que **2 semaines** de marge → F commence en semaine 14 au lieu de 13 : **le chantier finit 1 semaine plus tard** (24 semaines) ; D devient critique. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer les dates au plus tard de gauche à droite (on part de la fin).
+> - Confondre marge totale (retard sans décaler la fin du projet) et marge libre (sans décaler les successeurs).
+> - Oublier que la fabrication en usine est souvent sur le chemin critique.`},
  exercices:[
   {t:"Durée d'un petit projet", d:1, e:`Tâches : A 4 j (—) ; B 3 j (A) ; C 5 j (A) ; D 2 j (B, C).
 Calculer les dates au plus tôt, la durée du projet et la marge de B.`, c:`A : 0 → 4 ; B : 4 → 7 ; C : 4 → 9 ; D : max(7 ; 9) = 9 → **11 j**.
@@ -575,6 +876,59 @@ On utilise les **marges** des tâches non critiques pour les **décaler** et ren
 > - MPM : tâches dans les nœuds, pas de tâche fictive, liens avec délais ou chevauchements.
 > - Gantt au plus tôt + marges ; histogramme des ressources jour par jour.
 > - Lissage : décaler les tâches non critiques dans leurs marges pour écrêter les pics.`,
+ sujet:{titre:"Méthode des potentiels, chevauchements et lissage d'une équipe", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous planifiez la réalisation d'un plancher et l'emploi d'une équipe sur un chantier de Bingerville (durées en jours).
+
+**Partie plancher (liens avec décalage)**
+- Coffrage **C** : 4 j ; ferraillage **F** : 3 j, peut commencer **2 jours après le début** de C ; bétonnage **B** : 1 j, après la **fin** de C et de F ; décoffrage **D** : 2 j, au moins **10 jours après la fin** de B (étais en place).
+
+**Partie équipe**
+
+| Tâche | Durée | Antériorités | Ouvriers |
+|---|---|---|---|
+| A | 2 | — | 4 |
+| B | 4 | A | 5 |
+| C | 3 | A | 3 |
+| D | 3 | B | 4 |
+| E | 2 | C | 4 |
+| F | 2 | D, E | 3 |
+
+### Partie A — Potentiels avec décalages (6 points)
+1. Calculer les dates de début et de fin de C, F, B et D. Durée totale ? (4 pts)
+2. Que deviendrait la durée sans chevauchement (F après la fin de C) ? (2 pts)
+
+### Partie B — Ordonnancement de l'équipe (6 points)
+3. Calculer les dates au plus tôt, la durée et les marges de chaque tâche. (6 pts)
+
+### Partie C — Lissage (8 points)
+4. Tracer l'histogramme des effectifs au plus tôt, jour par jour, et donner le pic. (4 pts)
+5. Proposer un décalage dans les marges pour réduire le pic, sans allonger le projet. Nouvel histogramme et nouveau pic. (4 pts)`,
+  corrige:`### Partie A — Potentiels (6 pts)
+1. C : 0 → 4 ; F : 0 + 2 = **2 → 5** ; B : max(4 ; 5) = **5 → 6** ; D : 6 + 10 = **16 → 18** → durée **18 jours**. *(4 pts)*
+2. F : 4 → 7 ; B : 7 → 8 ; D : 18 → 20 → **20 jours** : le chevauchement fait gagner 2 jours. *(2 pts)*
+
+### Partie B — Équipe (6 pts)
+3. *(6 pts)*
+
+| Tâche | Début | Fin | Marge totale |
+|---|---|---|---|
+| A | 0 | 2 | 0 |
+| B | 2 | 6 | 0 |
+| C | 2 | 5 | 2 |
+| D | 6 | 9 | 0 |
+| E | 5 | 7 | 2 |
+| F | 9 | 11 | 0 |
+
+Durée : **11 jours** ; chemin critique A – B – D – F.
+
+### Partie C — Lissage (8 pts)
+4. Jours 1-2 : 4 ; jours 3-5 : B + C = **8** ; jour 6 : B + E = **9** ; jour 7 : D + E = 8 ; jours 8-9 : 4 ; jours 10-11 : 3 → **pic de 9 ouvriers**. *(4 pts)*
+5. Décaler **E d'un jour** (6 → 8, dans sa marge de 2 jours) : jours 3-5 : 8 ; jour 6 : B seul = **5** ; jours 7-8 : D + E = **8** ; jour 9 : 4 ; jours 10-11 : 3 → **pic ramené à 8**, durée inchangée (11 jours). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le délai minimal après bétonnage (décoffrage).
+> - Décaler une tâche au-delà de sa marge.
+> - Lisser en allongeant le chemin critique sans le voir.`},
  exercices:[
   {t:"Liens avec délais", d:1, e:`Chape C : 2 jours. Carrelage K : 5 jours, au plus tôt 21 jours après la fin de la chape. Plinthes P : 1 jour, après le carrelage.
 Calculer la date de fin.`, c:`C : 0 → 2 ; K : 2 + 21 = 23 → 28 ; P : 28 → **29 jours**.
@@ -652,6 +1006,58 @@ Pour z négatif : Φ(− z) = 1 − Φ(z).
 > - te = (a + 4m + b)/6 ; σ = (b − a)/6.
 > - T = Σ te critiques ; σ(T) = √(Σ σ²) ; loi normale.
 > - P(≤ D) = Φ((D − T)/σ(T)) ; délai sûr à 95 % : T + 1,645 σ(T).`,
+ sujet:{titre:"PERT probabiliste : quelle chance de livrer à temps ?", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le chemin critique d'un immeuble à Cocody comporte cinq tâches dont les durées sont incertaines (en jours) : estimation optimiste a, la plus probable m, pessimiste b.
+
+| Tâche | a | m | b |
+|---|---|---|---|
+| Terrassement | 4 | 5 | 9 |
+| Fondations | 8 | 10 | 15 |
+| Gros œuvre | 30 | 36 | 48 |
+| Toiture | 10 | 12 | 17 |
+| Finitions | 20 | 24 | 34 |
+
+Formules : te = (a + 4m + b) / 6 ; σ = (b − a) / 6 ; durée du projet T = Σ te ; σ(T) = √(Σ σ²) ; on admet que T suit une loi normale.
+Valeurs de la loi normale centrée réduite : Φ(− 1,30) = 0,097 ; Φ(− 0,12) = 0,453 ; Φ(1,06) = 0,856 ; z(90 %) = 1,282 ; z(95 %) = 1,645.
+
+### Partie A — Durées moyennes (8 points)
+1. Calculer te, σ et σ² pour chaque tâche. (5 pts)
+2. Calculer la durée moyenne du projet et son écart-type. (3 pts)
+
+### Partie B — Probabilités (8 points)
+3. Calculer la probabilité de finir en 95 jours au plus. (3 pts)
+4. Calculer la probabilité de finir en 90 jours, puis en 85 jours. (3 pts)
+5. Quel délai annoncer au client pour être sûr à 95 % ? (2 pts)
+
+### Partie C — Analyse (4 points)
+6. Quelle tâche contribue le plus à l'incertitude ? Que faire pour la réduire ? (2 pts)
+7. Pourquoi faut-il rester prudent avec ce calcul (chemins presque critiques) ? (2 pts)`,
+  corrige:`### Partie A — Durées (8 pts)
+1. *(5 pts)*
+
+| Tâche | te | σ | σ² |
+|---|---|---|---|
+| Terrassement | 5,5 | 0,83 | 0,69 |
+| Fondations | 10,5 | 1,17 | 1,36 |
+| Gros œuvre | 37,0 | 3,00 | 9,00 |
+| Toiture | 12,5 | 1,17 | 1,36 |
+| Finitions | 25,0 | 2,33 | 5,44 |
+
+2. T = **90,5 jours** ; Σ σ² = 17,86 → **σ(T) = 4,23 jours**. *(3 pts)*
+
+### Partie B — Probabilités (8 pts)
+3. z = (95 − 90,5) / 4,23 = 1,06 → P = **85,6 %**. *(3 pts)*
+4. 90 jours : z = − 0,12 → **45 %** ; 85 jours : z = − 1,30 → **9,7 %** seulement. *(3 pts)*
+5. D = 90,5 + 1,645 × 4,23 = **97,5 jours** → annoncer **98 jours**. *(2 pts)*
+
+### Partie C — Analyse (4 pts)
+6. Le **gros œuvre** (σ² = 9, la moitié de la variance) : sécuriser ses approvisionnements, ses effectifs, ses méthodes (et les finitions ensuite). *(2 pts)*
+7. Un chemin presque critique avec beaucoup d'incertitude peut devenir critique ; le calcul ne regarde qu'un seul chemin et suppose les tâches indépendantes (une saison des pluies retarde plusieurs tâches à la fois). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les écarts-types au lieu des variances.
+> - Annoncer la durée moyenne comme délai : on n'a qu'une chance sur deux de la tenir.
+> - Oublier les chemins non critiques mais très incertains.`},
  exercices:[
   {t:"Durée moyenne d'une tâche", d:1, e:`Le coulage des voiles d'un sous-sol est estimé à 6 jours au mieux, 8 jours le plus probablement et 16 jours au pire (saison des pluies).
 Calculer te et σ.`, c:`te = (6 + 4 × 8 + 16)/6 = 54/6 = **9 jours** (et non 8 : le risque de pluie tire la moyenne vers le haut).
@@ -721,6 +1127,49 @@ Le coût total passe par un **minimum** : c'est la **durée optimale**.
 > - On ne raccourcit que des tâches critiques, la moins chère d'abord.
 > - Plusieurs chemins critiques : raccourcir tous les chemins en même temps.
 > - On s'arrête quand un jour gagné coûte plus qu'il ne rapporte (indirects + pénalités).`,
+ sujet:{titre:"Réduire la durée d'un projet au moindre coût", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un projet de construction comprend deux chemins (durées en jours ; coûts en milliers de F) :
+- **A** (5 j) puis **B** (8 j) puis **D** (4 j) ;
+- **A** puis **C** (6 j) puis **D**.
+
+| Tâche | Jours gagnables | Coût marginal par jour gagné |
+|---|---|---|
+| A | 1 | 120 |
+| B | 3 | 70 |
+| C | 2 | 50 |
+| D | 1 | 150 |
+
+Coûts directs à durée normale : **5 000** ; coûts indirects (encadrement, installations, location du matériel) : **100 par jour**.
+
+### Partie A — Situation normale (4 points)
+1. Calculer la durée des deux chemins, le chemin critique et le coût total à durée normale. (4 pts)
+
+### Partie B — Accélération (12 points)
+2. Quelle tâche réduire en premier ? Pourquoi est-ce rentable ? Nouveau coût total à 16 jours. (3 pts)
+3. Continuer jusqu'à ce que les deux chemins deviennent critiques. Coût total à 15 jours. (3 pts)
+4. Pour descendre à 14 jours, comparer les possibilités (A seule, B + C ensemble, D seule) et calculer le coût total. (4 pts)
+5. Quelle est la durée optimale du projet ? (2 pts)
+
+### Partie C — Réflexion (4 points)
+6. Pourquoi ne faut-il pas réduire une tâche non critique ? (2 pts)
+7. Citer deux moyens concrets de réduire la durée d'une tâche de chantier. (2 pts)`,
+  corrige:`### Partie A — Normal (4 pts)
+1. A-B-D = **17 j** (critique) ; A-C-D = 15 j ; coût : 5 000 + 17 × 100 = **6 700**. *(4 pts)*
+
+### Partie B — Accélération (12 pts)
+2. Tâche critique la moins chère : **B** (70 < 100 de coûts indirects économisés) → B = 7 j, projet **16 j**, coût 6 700 + 70 − 100 = **6 670**. *(3 pts)*
+3. B encore : B = 6 j → les deux chemins font **15 j** ; coût **6 640**. *(3 pts)*
+4. Il faut réduire les deux chemins à la fois : A seule (120) ; B + C (70 + 50 = 120) ; D seule (150). Au mieux **120 > 100** : coût à 14 j = 6 640 + 120 − 100 = **6 660**. *(4 pts)*
+5. **15 jours** (coût minimal 6 640) : au-delà, chaque jour gagné coûte plus qu'il ne fait économiser. *(2 pts)*
+
+### Partie C — Réflexion (4 pts)
+6. Elle a de la marge : la réduire ne raccourcit pas le projet et coûte pour rien. *(2 pts)*
+7. Renforcer les **équipes**, travailler en **2 postes** ou le samedi, changer de **méthode** (préfabrication, béton prêt à l'emploi, coffrages-outils), louer un engin plus puissant. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Réduire sans comparer au coût indirect économisé.
+> - Oublier qu'un second chemin devient critique en cours de réduction.
+> - Accélérer au-delà de l'optimum « parce que le client est pressé » sans le chiffrer.`},
  exercices:[
   {t:"Coût marginal", d:1, e:`Le gros œuvre d'un bâtiment dure normalement 40 jours pour 18 M F. Avec une deuxième équipe, il peut durer 32 jours pour 19,6 M F.
 Calculer le coût marginal d'accélération. Est-ce intéressant si les coûts indirects du chantier sont de 250 000 F par jour ?`, c:`Coût marginal = (19,6 − 18)/(40 − 32) = 1,6 M/8 = **200 000 F par jour**.
@@ -794,6 +1243,50 @@ Le **stock de sécurité** couvre les aléas (retard du fournisseur, consommatio
 > - À l'optimum : coût de passation = coût de possession.
 > - Point de commande = consommation pendant le délai + stock de sécurité.
 > - Vérifier durée de vie, capacité de stockage et remises.`,
+ sujet:{titre:"Gestion des stocks de ciment : quantité économique et point de commande", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise de construction de Yamoussoukro consomme régulièrement du ciment sur ses chantiers.
+
+**Données**
+- Consommation annuelle : **D = 9 600 sacs** ; **300 jours** de travail par an ;
+- Prix d'un sac : **6 000 F** ; taux de possession : **20 %** par an ;
+- Coût de passation d'une commande (transport, administration, réception) : **Cc = 40 000 F** ;
+- Délai de livraison : **6 jours** ; stock de sécurité : **3 jours** de consommation ;
+- Formule de Wilson : Q* = √(2 D Cc / Cp).
+
+### Partie A — Les coûts (5 points)
+1. Expliquer le coût de passation et le coût de possession. Comment varient-ils avec la quantité commandée ? (3 pts)
+2. Calculer le coût de possession unitaire Cp (par sac et par an). (2 pts)
+
+### Partie B — Quantité économique (8 points)
+3. Calculer Q*, le nombre de commandes par an et la période entre deux commandes. (4 pts)
+4. Calculer le coût annuel de passation, de possession et le coût total. (4 pts)
+
+### Partie C — Point de commande (5 points)
+5. Calculer la consommation journalière et le point de commande. (3 pts)
+6. Le fournisseur propose une remise de 2 % pour des commandes de 1 600 sacs. Calculer le nouveau coût total (achats compris) et conclure. (2 pts)
+
+### Partie D — Pratique (2 points)
+7. Quelle contrainte de chantier peut empêcher d'appliquer Q* ? (2 pts)`,
+  corrige:`### Partie A — Coûts (5 pts)
+1. **Passation** : coût fixe à chaque commande ; il **diminue** quand on commande plus gros (moins de commandes). **Possession** : coût de garder le stock (capital immobilisé, magasin, assurance, pertes, éventement) ; il **augmente** avec la quantité stockée. Q* équilibre les deux. *(3 pts)*
+2. Cp = 0,20 × 6 000 = **1 200 F/sac/an**. *(2 pts)*
+
+### Partie B — Quantité économique (8 pts)
+3. $$ Q* = √(2 × 9 600 × 40 000 / 1 200) = √640 000 = 800 sacs
+   N = 9 600 / 800 = **12 commandes/an**, soit une par mois (≈ 25 jours ouvrés). *(4 pts)*
+4. Passation : 12 × 40 000 = **480 000 F** ; possession : (800 / 2) × 1 200 = **480 000 F** ; total **960 000 F/an** (les deux coûts sont égaux à l'optimum). *(4 pts)*
+
+### Partie C — Point de commande (5 pts)
+5. 9 600 / 300 = **32 sacs/jour** ; point de commande : 32 × (6 + 3) = **288 sacs**. *(3 pts)*
+6. Q = 1 600 : passation 6 × 40 000 = 240 000 ; possession 800 × 1 176 = 940 800 (Cp = 20 % × 5 880) ; achats 9 600 × 5 880 = 56 448 000 → total **57 628 800 F** contre 9 600 × 6 000 + 960 000 = **58 560 000 F** → la remise fait **gagner ≈ 931 000 F** : l'accepter si le magasin peut stocker 1 600 sacs à l'abri (et si le ciment ne s'évente pas en deux mois). *(2 pts)*
+
+### Partie D — Pratique (2 pts)
+7. La **capacité du magasin**, la **durée de conservation** du ciment (risque d'éventement au-delà d'un mois), la trésorerie, la taille des camions. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre le prix du sac comme coût de possession (c'est un pourcentage).
+> - Oublier le stock de sécurité dans le point de commande.
+> - Comparer une remise sans intégrer le coût d'achat.`},
  exercices:[
   {t:"Quantité économique de ciment", d:1, e:`Une entreprise consomme 9 000 sacs de ciment par an. Une commande coûte 20 000 F ; un sac vaut 5 000 F et le taux de possession est de 20 %/an.
 Calculer Q*, le nombre de commandes et le coût de gestion annuel.`, c:`Cp = 0,20 × 5 000 = **1 000 F/sac/an**.
@@ -881,6 +1374,54 @@ On peut aussi tracer les **droites d'iso-bénéfice** 4 000 x + 3 000 y = consta
 > - L'optimum est sur un sommet : on calcule Z en chaque sommet.
 > - Contraintes saturées = ressources entièrement utilisées.
 > - Variables entières : vérifier les points entiers voisins de l'optimum.`,
+ sujet:{titre:"Programmation linéaire : résolution graphique d'un plan de préfabrication", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une unité de préfabrication à Abidjan produit des **poutrelles** (x par semaine) et des **prédalles** (y par semaine).
+
+**Données**
+- Bénéfice : **40 000 F** par poutrelle (lot) ; **30 000 F** par prédalle ;
+- Ciment : 3 unités par poutrelle, 2 par prédalle, **120 unités** disponibles ;
+- Main-d'œuvre : 1 h par poutrelle, 2 h par prédalle, **80 h** disponibles ;
+- Le banc de précontrainte limite les poutrelles à **30** par semaine.
+
+### Partie A — Modèle (4 points)
+1. Écrire la fonction objectif et les contraintes. (4 pts)
+
+### Partie B — Résolution graphique (10 points)
+2. Tracer les droites des contraintes et hachurer le domaine réalisable (1 cm = 5 unités). (4 pts)
+3. Déterminer les coordonnées des sommets du domaine. (3 pts)
+4. Calculer Z en chaque sommet et donner la solution optimale. (3 pts)
+
+### Partie C — Analyse (6 points)
+5. Quelles contraintes sont saturées à l'optimum ? Que reste-t-il de la ressource non saturée ? (2 pts)
+6. Le bénéfice des prédalles passe à 60 000 F. Le plan optimal change-t-il ? (2 pts)
+7. Tracer une droite d'isobénéfice et expliquer la méthode graphique. (2 pts)`,
+  corrige:`### Partie A — Modèle (4 pts)
+1. Max **Z = 40 x + 30 y** (milliers de F) ; **3x + 2y ≤ 120** ; **x + 2y ≤ 80** ; **x ≤ 30** ; x, y ≥ 0. *(4 pts)*
+
+### Partie B — Graphique (10 pts)
+2. Droites 3x + 2y = 120 (passe par (40 ; 0) et (0 ; 60)), x + 2y = 80 ((80 ; 0), (0 ; 40)), x = 30 ; domaine sous les trois droites, dans le quart positif. *(4 pts)*
+3. Sommets : **(0 ; 0)**, **(0 ; 40)**, intersection ciment / main-d'œuvre : 3x + 2y = 120 et x + 2y = 80 → 2x = 40 → **(20 ; 30)** ; intersection ciment / x = 30 : **(30 ; 15)** ; **(30 ; 0)**. *(3 pts)*
+4. *(3 pts)*
+
+| Sommet | Z (milliers de F) |
+|---|---|
+| (0 ; 0) | 0 |
+| (0 ; 40) | 1 200 |
+| (20 ; 30) | **1 700** |
+| (30 ; 15) | 1 650 |
+| (30 ; 0) | 1 200 |
+
+Optimum : **20 poutrelles et 30 prédalles**, **1 700 000 F/semaine**.
+
+### Partie C — Analyse (6 pts)
+5. **Ciment** (60 + 60 = 120) et **main-d'œuvre** (20 + 60 = 80) saturés ; le banc a **10 poutrelles** de capacité libre. *(2 pts)*
+6. Z = 40 x + 60 y : (0 ; 40) → 2 400 ; (20 ; 30) → 2 600 ; (30 ; 15) → 2 100 → l'optimum reste **(20 ; 30)** avec 2,6 M F. *(2 pts)*
+7. Les droites 40 x + 30 y = k sont parallèles ; on déplace cette droite dans le sens où k augmente jusqu'au dernier point du domaine touché : c'est l'optimum (un sommet). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Hachurer le mauvais côté d'une droite.
+> - Chercher l'optimum à l'intérieur du domaine : il est toujours sur un sommet (ou une arête).
+> - Mal calculer l'intersection de deux droites.`},
  exercices:[
   {t:"Résoudre graphiquement", d:2, e:`Maximiser Z = 3 x + 2 y avec x + y ≤ 8 ; x + 3 y ≤ 18 ; x ≤ 6 ; x, y ≥ 0.
 Déterminer les sommets du domaine et l'optimum.`, c:`Sommets : O (0 ; 0) ; (6 ; 0) ; (6 ; 2) [x = 6 et x + y = 8] ; (3 ; 5) [x + y = 8 et x + 3y = 18 → 2y = 10] ; (0 ; 6).
@@ -984,6 +1525,65 @@ Si une heure supplémentaire coûte moins de 1 000 F, il est rentable de l'achet
 > - Entrante : plus grand coefficient positif de la ligne Z ; sortante : plus petit rapport positif.
 > - Optimum quand la ligne Z n'a plus de coefficient positif.
 > - Prix fictifs : valeur d'une unité supplémentaire de chaque ressource.`,
+ sujet:{titre:"Méthode du simplexe : optimiser la production d'une centrale de préfabrication", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une centrale fabrique deux produits A (x unités) et B (y unités). On veut maximiser **Z = 5x + 4y** (centaines de milliers de F) sous les contraintes :
+- **6x + 4y ≤ 24** (heures de malaxeur) ;
+- **x + 2y ≤ 6** (heures de moulage) ;
+- x, y ≥ 0.
+
+### Partie A — Forme standard (4 points)
+1. Introduire les variables d'écart e1 et e2 et écrire le programme sous forme standard. (2 pts)
+2. Écrire le tableau initial du simplexe. Quelle est la solution de base initiale ? (2 pts)
+
+### Partie B — Itérations (10 points)
+3. Choisir la variable entrante et la variable sortante (test des rapports). (2 pts)
+4. Effectuer le premier pivotage et donner le nouveau tableau, la solution et Z. (4 pts)
+5. Effectuer le second pivotage. Le tableau est-il optimal ? Donner la solution. (4 pts)
+
+### Partie C — Vérification et interprétation (6 points)
+6. Vérifier graphiquement le résultat en calculant Z aux sommets du domaine. (3 pts)
+7. Interpréter les coefficients des variables d'écart dans la ligne Z finale (valeurs marginales). (3 pts)`,
+  corrige:`### Partie A — Forme standard (4 pts)
+1. 6x + 4y + e1 = 24 ; x + 2y + e2 = 6 ; x, y, e1, e2 ≥ 0 ; max Z = 5x + 4y. *(2 pts)*
+2. *(2 pts)*
+
+| Base | x | y | e1 | e2 | Valeur |
+|---|---|---|---|---|---|
+| e1 | 6 | 4 | 1 | 0 | 24 |
+| e2 | 1 | 2 | 0 | 1 | 6 |
+| Z | 5 | 4 | 0 | 0 | 0 |
+
+Solution de base : x = y = 0, e1 = 24, e2 = 6, Z = 0.
+
+### Partie B — Itérations (10 pts)
+3. Entrante : **x** (plus grand coefficient, 5) ; rapports 24/6 = **4** et 6/1 = 6 → **e1 sort** (pivot 6). *(2 pts)*
+4. *(4 pts)*
+
+| Base | x | y | e1 | e2 | Valeur |
+|---|---|---|---|---|---|
+| x | 1 | 2/3 | 1/6 | 0 | 4 |
+| e2 | 0 | 4/3 | − 1/6 | 1 | 2 |
+| Z | 0 | 2/3 | − 5/6 | 0 | Z = 20 |
+
+Solution (4 ; 0), Z = 20.
+5. y entre (2/3 > 0) ; rapports 4 / (2/3) = 6 et 2 / (4/3) = **1,5** → e2 sort. *(4 pts)*
+
+| Base | x | y | e1 | e2 | Valeur |
+|---|---|---|---|---|---|
+| x | 1 | 0 | 1/4 | − 1/2 | 3 |
+| y | 0 | 1 | − 1/8 | 3/4 | 1,5 |
+| Z | 0 | 0 | − 3/4 | − 1/2 | Z = 21 |
+
+Tous les coefficients de la ligne Z sont ≤ 0 : **optimal** → **x = 3, y = 1,5, Z = 21**.
+
+### Partie C — Vérification (6 pts)
+6. Sommets : (0 ; 0) → 0 ; (4 ; 0) → 20 ; (0 ; 3) → 12 ; (3 ; 1,5) → **21** ✔. *(3 pts)*
+7. Une heure de malaxeur supplémentaire ferait gagner **0,75** ; une heure de moulage, **0,5** (centaines de milliers de F) : ce sont les **valeurs marginales** (prix maximaux à payer pour une heure de plus). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Choisir la variable sortante sans le test des rapports (on peut sortir du domaine).
+> - Oublier de diviser la ligne du pivot par le pivot.
+> - S'arrêter alors qu'il reste un coefficient positif dans la ligne Z.`},
  exercices:[
   {t:"Mettre sous forme standard", d:1, e:`Écrire sous forme standard : maximiser Z = 3x + 2y avec x + y ≤ 8 ; x + 3y ≤ 18 ; x ≤ 6 ; x, y ≥ 0. Donner la solution de base de départ.`, c:`x + y + e₁ = 8 ; x + 3y + e₂ = 18 ; x + e₃ = 6 ; toutes les variables ≥ 0.
 Base de départ : x = y = 0 ; **e₁ = 8, e₂ = 18, e₃ = 6** ; Z = 0.`},
@@ -1066,6 +1666,48 @@ Une solution de base doit comporter **m + n − 1** cases remplies (ici 5). S'il
 > - Départ : coin nord-ouest (simple) ou moindre coût (meilleur) ; m + n − 1 cases de base.
 > - MODI : uᵢ + vⱼ = cᵢⱼ sur les cases remplies ; Δ = cᵢⱼ − uᵢ − vⱼ sur les vides ; optimum si tous Δ ≥ 0.
 > - Améliorer par un cycle + / − en déplaçant la plus petite quantité « − ».`,
+ sujet:{titre:"Problème de transport : approvisionner trois chantiers depuis trois carrières", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une entreprise routière doit livrer du gravier depuis trois carrières K1, K2, K3 vers trois chantiers C1, C2, C3 de la région de Bouaké. Coûts de transport en F/m³ :
+
+| | C1 | C2 | C3 | Offre (m³) |
+|---|---|---|---|---|
+| K1 | 5 000 | 3 500 | 4 000 | 400 |
+| K2 | 3 000 | 4 500 | 3 500 | 300 |
+| K3 | 4 500 | 2 500 | 5 000 | 300 |
+| Demande (m³) | 250 | 400 | 350 | 1 000 |
+
+### Partie A — Le problème (3 points)
+1. Le problème est-il équilibré ? Combien de variables et de contraintes comporte-t-il ? Combien de cases occupées dans une solution de base ? (3 pts)
+
+### Partie B — Solutions de départ (8 points)
+2. Construire une solution par la méthode du coin nord-ouest et calculer son coût. (4 pts)
+3. Construire une solution par la méthode du moindre coût et calculer son coût. (4 pts)
+
+### Partie C — Optimalité (MODI) (9 points)
+4. Pour la solution du moindre coût, calculer les potentiels ui (lignes) et vj (colonnes) avec u1 = 0 et ui + vj = cij sur les cases occupées. (4 pts)
+5. Calculer les coûts réduits δij = cij − ui − vj des cases vides. La solution est-elle optimale ? (4 pts)
+6. Quelle économie apporte cette solution par rapport au coin nord-ouest ? (1 pt)`,
+  corrige:`### Partie A — Le problème (3 pts)
+1. Offre totale = demande totale = **1 000 m³** → équilibré. 9 variables (xij), 3 + 3 = 6 contraintes (dont une redondante) ; une solution de base occupe **m + n − 1 = 5 cases**. *(3 pts)*
+
+### Partie B — Solutions de départ (8 pts)
+2. Coin nord-ouest : K1→C1 **250** ; K1→C2 **150** ; K2→C2 **250** ; K2→C3 **50** ; K3→C3 **300**. Coût : 1 250 000 + 525 000 + 1 125 000 + 175 000 + 1 500 000 = **4 575 000 F**. *(4 pts)*
+3. Moindre coût (cases dans l'ordre des coûts croissants) : K3→C2 **300** (2 500) ; K2→C1 **250** (3 000) ; K1→C2 **100** (3 500) ; K2→C3 **50** (3 500) ; K1→C3 **300** (4 000). Coût : 750 000 + 750 000 + 350 000 + 175 000 + 1 200 000 = **3 225 000 F**. *(4 pts)*
+
+### Partie C — MODI (9 pts)
+4. u1 = 0 ; K1C2 : v2 = 3 500 ; K1C3 : v3 = 4 000 ; K2C3 : u2 = − 500 ; K2C1 : v1 = 3 500 ; K3C2 : u3 = − 1 000. *(4 pts)*
+5. *(4 pts)*
+   - δ11 = 5 000 − 0 − 3 500 = **+ 1 500** ;
+   - δ22 = 4 500 + 500 − 3 500 = **+ 1 500** ;
+   - δ31 = 4 500 + 1 000 − 3 500 = **+ 2 000** ;
+   - δ33 = 5 000 + 1 000 − 4 000 = **+ 2 000**.
+   Tous positifs : la solution du moindre coût est **optimale** (et unique).
+6. 4 575 000 − 3 225 000 = **1 350 000 F** d'économie (− 30 %). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de vérifier l'équilibre offre / demande (sinon ajouter une ligne ou une colonne fictive).
+> - Calculer les potentiels avec les cases vides.
+> - Conclure à l'optimalité avec un coût réduit négatif.`},
  exercices:[
   {t:"Coin nord-ouest", d:1, e:`Deux dépôts D1 (250 m³) et D2 (350 m³) livrent trois chantiers C1 (200), C2 (150), C3 (250). Coûts (milliers de F/m³) : D1 : 3 ; 5 ; 4 — D2 : 6 ; 2 ; 3.
 Construire la solution du coin nord-ouest et calculer son coût.`, c:`D1→C1 : 200 (C1 servi) ; D1→C2 : 50 (D1 vide) ; D2→C2 : 100 ; D2→C3 : 250.
@@ -1142,6 +1784,63 @@ Retrancher une même valeur à toute une ligne (ou une colonne) ne change pas l'
 > - Réduire lignes puis colonnes ; couvrir les zéros avec le minimum de traits.
 > - n traits : affecter sur les zéros ; sinon, retrancher le plus petit non couvert, l'ajouter aux intersections.
 > - Maximisation : travailler sur (max − a) ; tableau non carré : ligne ou colonne fictive.`,
+ sujet:{titre:"Affecter quatre équipes à quatre chantiers : la méthode hongroise", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une entreprise dispose de quatre équipes E1 à E4 à affecter à quatre chantiers C1 à C4 (une équipe par chantier). Le tableau donne la durée estimée (en jours) de chaque équipe sur chaque chantier :
+
+| | C1 | C2 | C3 | C4 |
+|---|---|---|---|---|
+| E1 | 11 | 5 | 8 | 5 |
+| E2 | 13 | 7 | 9 | 11 |
+| E3 | 7 | 13 | 6 | 14 |
+| E4 | 9 | 13 | 15 | 7 |
+
+On veut **minimiser la durée totale** (somme des durées).
+
+### Partie A — Le problème (3 points)
+1. Combien d'affectations possibles ? Pourquoi ne pas toutes les essayer pour un problème de 10 équipes ? (3 pts)
+
+### Partie B — Méthode hongroise (13 points)
+2. Soustraire le minimum de chaque ligne, puis de chaque colonne. (4 pts)
+3. Peut-on trouver 4 zéros indépendants (un par ligne et par colonne) ? Couvrir les zéros avec le nombre minimal de droites. (3 pts)
+4. Modifier le tableau (plus petit élément non couvert soustrait aux cases non couvertes, ajouté aux intersections). (3 pts)
+5. Trouver l'affectation optimale et la durée totale. (3 pts)
+
+### Partie C — Vérification (4 points)
+6. Comparer à l'affectation « intuitive » qui donne à chaque équipe son chantier le plus court dans l'ordre E1, E2, E3, E4. (2 pts)
+7. Comment traiter un problème de maximisation (rendements) ou une affectation interdite ? (2 pts)`,
+  corrige:`### Partie A — Le problème (3 pts)
+1. 4! = **24** affectations ; pour 10 équipes, 10! = 3 628 800 : impossible à la main, d'où une méthode systématique. *(3 pts)*
+
+### Partie B — Hongroise (13 pts)
+2. Minima des lignes : 5, 7, 6, 7 ; puis minimum de la colonne C1 : 1 (les autres colonnes contiennent déjà un zéro). *(4 pts)*
+
+| | C1 | C2 | C3 | C4 |
+|---|---|---|---|---|
+| E1 | 5 | 0 | 3 | 0 |
+| E2 | 5 | 0 | 2 | 4 |
+| E3 | 0 | 7 | 0 | 8 |
+| E4 | 1 | 6 | 8 | 0 |
+
+3. E2 doit prendre C2 (seul zéro), E4 doit prendre C4, E1 n'a alors plus de zéro libre : seulement **3 zéros indépendants**. Couverture minimale : colonne **C2**, colonne **C4**, ligne **E3** (3 droites). *(3 pts)*
+4. Plus petit non couvert : **1** (E4, C1). On le retire des cases non couvertes et on l'ajoute aux intersections (E3, C2) et (E3, C4) : *(3 pts)*
+
+| | C1 | C2 | C3 | C4 |
+|---|---|---|---|---|
+| E1 | 4 | 0 | 2 | 0 |
+| E2 | 4 | 0 | 1 | 4 |
+| E3 | 0 | 8 | 0 | 9 |
+| E4 | 0 | 6 | 7 | 0 |
+
+5. E2 → C2 ; E1 → C4 ; E4 → C1 ; E3 → C3 : 7 + 5 + 9 + 6 = **27 jours**. *(3 pts)*
+
+### Partie C — Vérification (4 pts)
+6. Intuitive : E1 → C2 (5) ; E2 → C3 (9) ; E3 → C1 (7) ; E4 → C4 (7) = **28 jours** (1 jour de plus) — et l'ordre de choix change le résultat. *(2 pts)*
+7. **Maximisation** : remplacer chaque valeur par (maximum − valeur) puis minimiser ; **affectation interdite** : mettre un coût très grand dans la case. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la réduction des colonnes après celle des lignes.
+> - Couvrir les zéros avec plus de droites que nécessaire.
+> - Choisir les zéros au hasard : commencer par les lignes ou colonnes qui n'en ont qu'un.`},
  exercices:[
   {t:"Affectation directe", d:1, e:`Trois équipes doivent réaliser trois ouvrages ; durées (jours) — E1 : 6 ; 9 ; 5 — E2 : 7 ; 4 ; 8 — E3 : 5 ; 6 ; 7.
 Trouver l'affectation optimale.`, c:`Réduction des lignes (5 ; 4 ; 5) : E1 : 1 ; 4 ; **0** — E2 : 3 ; **0** ; 4 — E3 : **0** ; 1 ; 2. Colonnes : minimums nuls.
@@ -1219,6 +1918,43 @@ Pour une pompe, l'attente a un coût **technique** en plus du coût financier : 
 > - Loi de Little : L = λ W.
 > - L'attente explose quand ρ approche de 1.
 > - Coût total = coût d'attente des clients + coût du poste : choisir le minimum.`,
+ sujet:{titre:"Files d'attente : camions devant une chargeuse, faut-il un engin plus rapide ?", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Sur un chantier de terrassement à Anyama, les camions arrivent au hasard devant une chargeuse unique.
+
+**Données** (modèle M/M/1)
+- Arrivées : **λ = 6 camions/h** en moyenne ; chargeuse actuelle : **μ = 8 camions/h** ;
+- Formules : ρ = λ/μ ; L = ρ/(1 − ρ) ; Lq = ρ²/(1 − ρ) ; W = 1/(μ − λ) ; Wq = ρ/(μ − λ) ; P0 = 1 − ρ ;
+- Coût d'un camion immobilisé (chauffeur, engin) : **25 000 F/h** ;
+- Chargeuse actuelle : **40 000 F/h** ; chargeuse plus puissante (μ = **10 camions/h**) : **55 000 F/h**.
+
+### Partie A — Le modèle (4 points)
+1. Que représentent λ, μ et ρ ? Que se passe-t-il si λ ≥ μ ? (4 pts)
+
+### Partie B — Chargeuse actuelle (8 points)
+2. Calculer ρ, P0, L, Lq, W et Wq. (6 pts)
+3. Interpréter ces résultats pour le conducteur de travaux. (2 pts)
+
+### Partie C — Chargeuse plus puissante (8 points)
+4. Recalculer ρ, L, W et Wq avec μ = 10. (4 pts)
+5. Calculer le coût horaire total (chargeuse + camions présents dans le système) des deux solutions. Conclure. (4 pts)`,
+  corrige:`### Partie A — Modèle (4 pts)
+1. **λ** : taux moyen d'**arrivée** des camions ; **μ** : taux moyen de **service** (camions chargés par heure) ; **ρ** : taux d'**occupation** de la chargeuse. Si λ ≥ μ, la file **s'allonge sans fin** : il faut ajouter une chargeuse ou réduire les arrivées. *(4 pts)*
+
+### Partie B — Actuelle (8 pts)
+2. *(6 pts)*
+   - ρ = 6/8 = **0,75** ; P0 = **0,25** (chargeuse inactive 25 % du temps) ;
+   - L = 0,75/0,25 = **3 camions** dans le système ; Lq = 0,5625/0,25 = **2,25 camions** en attente ;
+   - W = 1/(8 − 6) = **0,5 h** (30 min) ; Wq = 0,75/2 = **0,375 h** (22,5 min).
+3. Un camion passe en moyenne 30 minutes sur place dont 22,5 à attendre, alors que la chargeuse est inoccupée un quart du temps : l'aléa des arrivées crée des **files** même quand la capacité semble suffisante. *(2 pts)*
+
+### Partie C — Plus puissante (8 pts)
+4. ρ = **0,6** ; L = 0,6/0,4 = **1,5** ; W = 1/4 = **0,25 h** (15 min) ; Wq = 0,6/4 = **0,15 h** (9 min). *(4 pts)*
+5. Actuelle : 40 000 + 25 000 × 3 = **115 000 F/h** ; puissante : 55 000 + 25 000 × 1,5 = **92 500 F/h** → la chargeuse plus puissante, plus chère à l'heure, fait **économiser 22 500 F/h** grâce aux camions moins immobilisés. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Croire qu'une chargeuse occupée à 75 % n'entraîne pas d'attente.
+> - Oublier le coût des camions immobilisés dans la comparaison.
+> - Appliquer le modèle avec λ ≥ μ.`},
  exercices:[
   {t:"Indicateurs d'une file", d:1, e:`Des camions arrivent à un poste de lavage de roues au rythme de 6 par heure ; le poste en traite 8 par heure.
 Calculer ρ, P₀, L, Lq, W et Wq.`, c:`ρ = 6/8 = **0,75** ; P₀ = **25 %** du temps libre.
@@ -1293,6 +2029,48 @@ Quand le problème est trop complexe (planning avec des dizaines de durées ince
 > - Wald (prudent), maximax (optimiste), Laplace (moyenne), Hurwicz (α), Savage (regrets).
 > - Avec probabilités : espérance ; VIP = espérance avec information parfaite − meilleure espérance.
 > - Arbre de décision : calcul de droite à gauche ; simulation de Monte-Carlo pour les cas complexes.`,
+ sujet:{titre:"Décider dans l'incertain : bétonner avant ou après la saison des pluies ?", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un entrepreneur doit décider comment réaliser le gros œuvre d'un bâtiment à Gagnoa à l'approche de la saison des pluies. Gains nets (en millions de F) selon la pluviométrie :
+
+| Décision | S1 : pluies fortes | S2 : pluies moyennes | S3 : pluies faibles |
+|---|---|---|---|
+| D1 : bétonner tout de suite | − 6 | 4 | 10 |
+| D2 : attendre la saison sèche | 2 | 3 | 4 |
+| D3 : bétonner sous abri provisoire | 1 | 6 | 7 |
+
+La météo donne les probabilités : S1 **0,3** ; S2 **0,5** ; S3 **0,2**.
+
+### Partie A — Sans probabilités (10 points)
+1. Appliquer le critère de Wald (maximin). (2 pts)
+2. Appliquer le critère du maximax. (2 pts)
+3. Appliquer le critère de Laplace (moyenne). (2 pts)
+4. Appliquer le critère de Hurwicz avec α = 0,6 (optimisme). (2 pts)
+5. Construire la matrice des regrets et appliquer le critère de Savage. (2 pts)
+
+### Partie B — Avec probabilités (6 points)
+6. Calculer l'espérance de gain de chaque décision. Quelle décision prendre ? (3 pts)
+7. Calculer la valeur de l'information parfaite (EVPI). Combien l'entrepreneur pourrait-il payer au maximum une prévision météo parfaite ? (3 pts)
+
+### Partie C — Synthèse (4 points)
+8. Comparer les décisions conseillées par les différents critères et expliquer le lien avec l'attitude face au risque. (4 pts)`,
+  corrige:`### Partie A — Sans probabilités (10 pts)
+1. Minima : D1 − 6 ; D2 2 ; D3 1 → **D2** (prudent). *(2 pts)*
+2. Maxima : 10 ; 4 ; 7 → **D1** (optimiste). *(2 pts)*
+3. Moyennes : D1 2,67 ; D2 3,00 ; D3 4,67 → **D3**. *(2 pts)*
+4. 0,6 × max + 0,4 × min : D1 0,6 × 10 − 0,4 × 6 = 3,6 ; D2 3,2 ; D3 0,6 × 7 + 0,4 × 1 = **4,6** → **D3**. *(2 pts)*
+5. Regrets (meilleur de la colonne − gain) : D1 (8 ; 2 ; 0) ; D2 (0 ; 3 ; 6) ; D3 (1 ; 0 ; 3) ; regrets maximaux 8 ; 6 ; **3** → **D3**. *(2 pts)*
+
+### Partie B — Probabilités (6 pts)
+6. E(D1) = − 1,8 + 2,0 + 2,0 = **2,2** ; E(D2) = 0,6 + 1,5 + 0,8 = **2,9** ; E(D3) = 0,3 + 3,0 + 1,4 = **4,7** → **D3**. *(3 pts)*
+7. Avec information parfaite : 0,3 × 2 + 0,5 × 6 + 0,2 × 10 = 5,6 → EVPI = 5,6 − 4,7 = **0,9 M F** : on ne paierait pas plus de 900 000 F une prévision parfaite. *(3 pts)*
+
+### Partie C — Synthèse (4 pts)
+8. Le prudent (Wald) attend (D2) ; le joueur (maximax) bétonne tout de suite (D1) ; la plupart des critères équilibrés et l'espérance conseillent **D3 (abri provisoire)**, qui limite la perte en cas de fortes pluies tout en gardant de bons gains : c'est une décision **robuste**. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Construire les regrets par ligne au lieu de par colonne.
+> - Oublier les signes négatifs dans les espérances.
+> - Croire qu'un critère est « le bon » : il traduit une attitude face au risque.`},
  exercices:[
   {t:"Critères de Wald et maximax", d:1, e:`Coûts (millions de F, à minimiser) de trois techniques de plancher selon le prix de l'acier (bas ; moyen ; haut) — T1 : 20 ; 24 ; 30 — T2 : 22 ; 23 ; 25 — T3 : 18 ; 25 ; 33.
 Quelle technique choisir selon le critère prudent ? Selon le critère optimiste ?`, c:`Pour des **coûts**, on inverse : prudent = minimiser le pire coût (minimax) ; optimiste = minimiser le meilleur coût (minimin).
@@ -1364,6 +2142,54 @@ Le principe reste le même : on choisit la durée (ou l'engin) qui minimise le c
 > - C(n) = [A − R(n) + Σ Eₖ]/n ; remplacer à la durée qui minimise C(n).
 > - Coût marginal de l'année k : R(k − 1) − R(k) + Eₖ ; remplacer quand il dépasse le coût moyen minimal.
 > - Comparer des engins de durées différentes par leur coût annuel ; actualiser pour les longues durées.`,
+ sujet:{titre:"Renouvellement du matériel : quand remplacer une chargeuse ?", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une entreprise de terrassement de Bouaké a acheté une chargeuse **40 M F**. Elle se demande au bout de combien d'années la remplacer.
+
+| Année k | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| Valeur de revente en fin d'année k (M F) | 28 | 20 | 14 | 10 | 7 | 5 |
+| Entretien et réparations de l'année k (M F) | 2 | 3 | 5 | 7 | 10 | 13 |
+
+On néglige l'actualisation et l'inflation.
+
+### Partie A — Coûts cumulés (8 points)
+1. Pour une durée de détention de k ans, exprimer le coût total : achat − revente + entretiens cumulés. (2 pts)
+2. Calculer ce coût total pour k = 1 à 6. (6 pts)
+
+### Partie B — Durée optimale (6 points)
+3. Calculer le coût moyen annuel pour chaque durée. (3 pts)
+4. En déduire la durée optimale de remplacement. (3 pts)
+
+### Partie C — Discussion (6 points)
+5. Pourquoi le coût moyen annuel commence-t-il par diminuer puis augmente-t-il ? (2 pts)
+6. Quels éléments non chiffrés peuvent pousser à remplacer plus tôt (ou plus tard) ? (2 pts)
+7. Comment intégrer l'actualisation dans ce calcul ? (2 pts)`,
+  corrige:`### Partie A — Coûts (8 pts)
+1. **CT(k) = 40 − R(k) + Σ entretiens des années 1 à k**. *(2 pts)*
+2. *(6 pts)*
+
+| k | Revente | Entretiens cumulés | Coût total | Coût moyen annuel |
+|---|---|---|---|---|
+| 1 | 28 | 2 | 14 | 14,00 |
+| 2 | 20 | 5 | 25 | 12,50 |
+| 3 | 14 | 10 | 36 | 12,00 |
+| 4 | 10 | 17 | 47 | **11,75** |
+| 5 | 7 | 27 | 60 | 12,00 |
+| 6 | 5 | 40 | 75 | 12,50 |
+
+### Partie B — Optimum (6 pts)
+3. Voir la dernière colonne. *(3 pts)*
+4. Coût moyen minimal : **11,75 M F/an** pour **k = 4 ans** → remplacer la chargeuse **au bout de 4 ans**. *(3 pts)*
+
+### Partie C — Discussion (6 pts)
+5. Au début, la perte de valeur (achat − revente) est **étalée** sur plus d'années ; ensuite, les **entretiens** qui augmentent vite l'emportent. *(2 pts)*
+6. Plus tôt : pannes qui immobilisent les chantiers, nouvelles normes, technologie plus économe, image de l'entreprise ; plus tard : trésorerie insuffisante, faible utilisation de l'engin, bon état réel. *(2 pts)*
+7. On ramène toutes les dépenses et la revente à la date d'achat (valeurs actuelles), puis on compare des **annuités équivalentes** (coût annuel constant de même valeur actuelle). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la valeur de revente.
+> - Comparer des coûts totaux au lieu de coûts moyens annuels.
+> - Garder un engin « parce qu'il est payé » sans compter ses réparations et ses pannes.`},
  exercices:[
   {t:"Coût moyen d'une année donnée", d:1, e:`Une bétonnière achetée 12 M F est revendue 4,5 M F après 3 ans ; l'entretien a coûté 0,5 ; 1 et 1,8 M F les trois années.
 Calculer son coût moyen annuel sur 3 ans.`, c:`C(3) = (12 − 4,5 + 0,5 + 1 + 1,8)/3 = (7,5 + 3,3)/3 = 10,8/3 = **3,6 M F par an**.`},
