@@ -100,6 +100,46 @@ R = √(5,76² + 3,76²) = **6,87 kN**, inclinée de arctan(3,76 / 5,76) = **33,
 > - Résultante = somme des vecteurs ; Fx = F cos α, Fy = F sin α.
 > - Produit scalaire : U·V = ‖U‖‖V‖ cos θ ; nul si perpendiculaires.
 > - Moment = force × bras de levier ; équilibre : Σ F = 0 et Σ M = 0.`,
+ sujet:{titre:"Vecteurs, forces et moments : résultante sur un gousset et moment d'une console", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un gousset de charpente métallique reçoit deux efforts de barres ; une console de balcon reçoit une charge inclinée.
+
+**Données**
+- F1 = **12 kN** à **30°** de l'horizontale ; F2 = **8 kN** à **120°** (angles mesurés depuis l'axe x horizontal, sens trigonométrique) ;
+- Console de **1,50 m** ; à son extrémité, une force de **20 kN** inclinée à **60°** par rapport à l'horizontale (vers le bas) ;
+- Produit scalaire : U · V = Ux Vx + Uy Vy = ‖U‖ ‖V‖ cos θ ; moment : M = F × d (d : bras de levier perpendiculaire).
+
+### Partie A — Composantes (6 points)
+1. Calculer les composantes de F1 et F2. (4 pts)
+2. Représenter les deux forces dans un repère (échelle 1 cm = 2 kN). (2 pts)
+
+### Partie B — Résultante (6 points)
+3. Calculer les composantes de la résultante R, son intensité et sa direction. (4 pts)
+4. Calculer le produit scalaire F1 · F2. Que peut-on dire des deux barres ? (2 pts)
+
+### Partie C — Moment (8 points)
+5. Décomposer la force de 20 kN en composantes horizontale et verticale. (2 pts)
+6. Calculer le moment de cette force par rapport à l'encastrement de la console. Quelle composante ne crée pas de moment et pourquoi ? (4 pts)
+7. Pourquoi une console est-elle armée en partie haute ? (2 pts)`,
+  corrige:`### Partie A — Composantes (6 pts)
+1. *(4 pts)*
+   - F1 : (12 cos 30° ; 12 sin 30°) = **(10,39 ; 6,00) kN** ;
+   - F2 : (8 cos 120° ; 8 sin 120°) = **(− 4,00 ; 6,93) kN**.
+2. Vecteurs de 6 cm (F1) et 4 cm (F2) depuis l'origine, orientés à 30° et 120°. *(2 pts)*
+
+### Partie B — Résultante (6 pts)
+3. R = (6,39 ; 12,93) kN ; ‖R‖ = √(6,39² + 12,93²) = **14,42 kN** ; direction : arctan(12,93 / 6,39) = **63,7°**. *(4 pts)*
+4. F1 · F2 = 10,39 × (− 4,00) + 6,00 × 6,93 = **0** → les barres sont **perpendiculaires** (θ = 90°, cohérent avec 120° − 30°). *(2 pts)*
+
+### Partie C — Moment (8 pts)
+5. H = 20 cos 60° = **10 kN** ; V = 20 sin 60° = **17,32 kN**. *(2 pts)*
+6. $$ M = 17,32 × 1,50 = 25,98 kN·m
+   La composante **horizontale** passe par l'axe de la console (au niveau de l'encastrement) : son bras de levier est nul, elle ne crée pas de moment (elle comprime ou tend la console). *(4 pts)*
+7. La console fléchit vers le bas : la fibre **supérieure** est **tendue** (moment négatif) ; c'est là que le béton a besoin d'aciers. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les intensités des forces au lieu des vecteurs.
+> - Multiplier la force entière par la longueur sans prendre la composante perpendiculaire.
+> - Placer les aciers d'une console en partie basse.`},
  exercices:[
   {t:"Résultante de trois forces", d:2, e:`Trois forces s'appliquent en un point : F1 = 10 kN à 0°, F2 = 8 kN à 60°, F3 = 6 kN à 135° (angles mesurés depuis l'horizontale). Calculer la résultante (norme et angle).`, c:`Rx = 10 + 8 cos 60° + 6 cos 135° = 10 + 4 − 4,24 = **9,76 kN** ; Ry = 0 + 8 sin 60° + 6 sin 135° = 6,93 + 4,24 = **11,17 kN**.
 R = √(9,76² + 11,17²) = **14,83 kN** ; angle : arctan(11,17 / 9,76) = **48,9°**.`},
@@ -172,6 +212,52 @@ Sur la courbe de durcissement, on lit qu'à 7 jours le béton n'a que 66 % de sa
 > - Affine : y = ax + b ; linéaire : y = ax.
 > - y = x² : effet « au carré » ; y = k/x : proportionnalité inverse.
 > - Intersection de deux courbes = point d'équilibre.`,
+ sujet:{titre:"Fonctions usuelles et graphiques : section d'un poteau, flèche d'une poutre et température", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Plusieurs relations du bâtiment s'expriment par des fonctions usuelles.
+
+**Données**
+- Section nécessaire d'un poteau : A = N / σ, avec N = **600 kN** et σ la contrainte admissible (de **5** à **20 MPa**) ;
+- Flèche d'une poutre sous charge uniforme : f = 5 q L⁴ / (384 E I) ;
+- Coût d'un forage d'eau : **300 000 F** de mobilisation + **25 000 F** par mètre ;
+- Température de l'air sur une journée : T(t) = 28 + 5 sin(π (t − 9) / 12) (t en heures).
+
+### Partie A — Fonction inverse (6 points)
+1. Exprimer A en fonction de σ (A en m², σ en kN/m²). Quelle est la nature de cette fonction ? (2 pts)
+2. Calculer A pour σ = 5, 10 et 20 MPa ; tracer l'allure de la courbe. (3 pts)
+3. Que se passe-t-il si l'on double la résistance du béton ? (1 pt)
+
+### Partie B — Fonction puissance (5 points)
+4. Comment varie la flèche si la portée est multipliée par 2 ? par 1,5 ? (3 pts)
+5. Conséquence pour le dimensionnement des grandes portées. (2 pts)
+
+### Partie C — Fonction affine (4 points)
+6. Exprimer le coût C(p) d'un forage de profondeur p ; calculer C(60). (2 pts)
+7. Quelle profondeur pour un budget de 2 M F ? (2 pts)
+
+### Partie D — Fonction sinusoïdale (5 points)
+8. Calculer la température à 9 h, 12 h, 15 h et 3 h. (3 pts)
+9. Quelles sont la température maximale, la minimale et l'heure du maximum ? Conséquence pour l'organisation d'un bétonnage ? (2 pts)`,
+  corrige:`### Partie A — Inverse (6 pts)
+1. **A(σ) = 600 / σ** : fonction **inverse** (hyperbole). *(2 pts)*
+2. σ = 5 000 kN/m² → **0,12 m²** ; 10 000 → **0,06 m²** ; 20 000 → **0,03 m²** ; la courbe décroît de plus en plus lentement. *(3 pts)*
+3. La section nécessaire est **divisée par 2**. *(1 pt)*
+
+### Partie B — Puissance (5 pts)
+4. f est proportionnelle à L⁴ : × 2⁴ = **× 16** ; × 1,5⁴ = **× 5,06**. *(3 pts)*
+5. Une petite augmentation de portée fait exploser la flèche : il faut augmenter fortement l'inertie (hauteur de poutre, I ∝ h³) — c'est souvent la flèche, plus que la résistance, qui dimensionne les grandes portées. *(2 pts)*
+
+### Partie C — Affine (4 pts)
+6. **C(p) = 300 000 + 25 000 p** ; C(60) = **1 800 000 F**. *(2 pts)*
+7. 300 000 + 25 000 p = 2 000 000 → **p = 68 m**. *(2 pts)*
+
+### Partie D — Sinusoïde (5 pts)
+8. T(9) = **28 °C** ; T(12) = 28 + 5 sin(π/4) = **31,5 °C** ; T(15) = 28 + 5 = **33 °C** ; T(3) = 28 − 5 = **23 °C**. *(3 pts)*
+9. Max **33 °C** à **15 h** ; min **23 °C** à 3 h. Bétonner **tôt le matin** (prise moins rapide, moins de fissures de retrait) et protéger le béton aux heures chaudes (cure). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de convertir les MPa en kN/m² (× 1 000).
+> - Croire que la flèche double quand la portée double.
+> - Calculatrice en degrés pour une fonction avec π.`},
  exercices:[
   {t:"Fonction de coût", d:1, e:`Un fournisseur de gravier facture 30 000 F de livraison et 22 000 F par m³. Écrire C(x) et calculer le coût de 8 m³ et de 15 m³. Quel est le coût moyen par m³ dans chaque cas ?`, c:`C(x) = 22 000 x + 30 000 ; C(8) = **206 000 F** (25 750 F/m³) ; C(15) = **360 000 F** (24 000 F/m³) : la livraison fixe pèse moins sur une grosse commande.`},
   {t:"Proportionnalité inverse", d:1, e:`Un travail de 240 heures-ouvrier est confié à n ouvriers. Écrire la durée t(n) et calculer t(4), t(6), t(8).`, c:`t(n) = 240 / n → t(4) = **60 h** ; t(6) = **40 h** ; t(8) = **30 h** (en supposant que les ouvriers ne se gênent pas).`},
@@ -249,6 +335,48 @@ La tangente au point d'abscisse a a pour équation **y = f'(a) (x − a) + f(a)*
 > - Taux moyen : Δf/Δx ; dérivée : pente de la tangente.
 > - (xⁿ)' = n xⁿ⁻¹ ; (u + v)' = u' + v'.
 > - Là où la dérivée s'annule, la fonction passe par un maximum ou un minimum.`,
+ sujet:{titre:"Taux de variation et dérivée : pente d'un profil de route et remplissage d'une citerne", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le profil en long d'une voie de lotissement à Anyama est modélisé par une fonction ; on étudie aussi le remplissage d'une citerne.
+
+**Données**
+- Altitude du terrain le long de l'axe : z(x) = 50 + 0,08 x − 0,0004 x² (x en m, de 0 à 200 m ; z en m) ;
+- Pente maximale admise pour la voie : **6 %** ;
+- Citerne cylindrique de rayon **1,50 m** remplie par une pompe de **2,4 m³/h**.
+
+### Partie A — Taux de variation (6 points)
+1. Calculer z(0), z(100), z(150) et z(200). (2 pts)
+2. Calculer le taux de variation moyen (pente moyenne) entre 0 et 100 m, puis entre 100 et 200 m. (2 pts)
+3. Le terrain est-il plus haut au milieu ? Où est le point le plus haut ? (2 pts)
+
+### Partie B — Dérivée (8 points)
+4. Calculer z'(x) et l'interpréter. (2 pts)
+5. Calculer la pente en x = 0, 50, 100 et 150 m. Où la pente dépasse-t-elle 6 % ? (3 pts)
+6. Trouver le point le plus haut par la dérivée. (1 pt)
+7. Donner l'équation de la tangente au profil en x = 50 m. (2 pts)
+
+### Partie C — Citerne (6 points)
+8. Exprimer le volume V en fonction de la hauteur d'eau h. (2 pts)
+9. À quelle vitesse (en cm/h) monte le niveau de l'eau ? Cette vitesse dépend-elle de h ? (4 pts)`,
+  corrige:`### Partie A — Taux de variation (6 pts)
+1. z(0) = **50,00** ; z(100) = 50 + 8 − 4 = **54,00** ; z(150) = 50 + 12 − 9 = **53,00** ; z(200) = 50 + 16 − 16 = **50,00 m**. *(2 pts)*
+2. (54 − 50) / 100 = **+ 4 %** ; (50 − 54) / 100 = **− 4 %**. *(2 pts)*
+3. Oui : le profil monte puis redescend (bosse) ; le sommet est à x = 100 m (par symétrie de la parabole). *(2 pts)*
+
+### Partie B — Dérivée (8 pts)
+4. **z'(x) = 0,08 − 0,0008 x** : c'est la **pente** du terrain au point x (en m/m). *(2 pts)*
+5. z'(0) = **8 %** ; z'(50) = **4 %** ; z'(100) = **0** ; z'(150) = **− 4 %**. La pente dépasse 6 % en valeur absolue si |0,08 − 0,0008 x| > 0,06 → **x < 25 m** ou **x > 175 m** : prévoir des terrassements aux deux extrémités. *(3 pts)*
+6. z'(x) = 0 ⇔ **x = 100 m** → sommet à **54,00 m**. *(1 pt)*
+7. $$ y = z'(50) × (x − 50) + z(50) = 0,04 (x − 50) + 53   →   y = 0,04 x + 51
+   *(2 pts)*
+
+### Partie C — Citerne (6 pts)
+8. **V(h) = π × 1,5² × h = 7,07 h** (m³). *(2 pts)*
+9. dV/dt = 7,07 × dh/dt = 2,4 → dh/dt = 2,4 / 7,07 = 0,34 m/h = **34 cm/h**, **constante** (section du cylindre constante, contrairement à un réservoir conique). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre pente moyenne entre deux points et pente en un point.
+> - Oublier le signe de la pente (montée ou descente).
+> - Oublier les unités (une pente de 0,04 = 4 %).`},
  exercices:[
   {t:"Taux de variation moyen", d:1, e:`La résistance d'un béton passe de 16,6 MPa à 7 jours à 25 MPa à 28 jours. Quel est le gain moyen par jour entre ces deux dates ?`, c:`(25 − 16,6) / (28 − 7) = 8,4 / 21 = **0,4 MPa par jour**.`},
   {t:"Calculer des dérivées", d:1, e:`Dériver : a) f(x) = 5 x³ − 2 x + 7 ; b) g(x) = 0,5 x² + 3 x ; c) h(x) = 4 ; d) M(x) = 15 x − 2,5 x².`, c:`a) f'(x) = **15 x² − 2** ; b) g'(x) = **x + 3** ; c) h'(x) = **0** ; d) M'(x) = **15 − 5 x**.`},
@@ -320,6 +448,50 @@ Une bétonnière tournant à 20 tr/min a une vitesse angulaire ω = 2π × 20 / 
 > - 180° = π rad = 200 gon.
 > - Arc = R θ (θ en radians) ; petits angles : sin x ≈ x.
 > - Oscillation : f = ω/(2π), T = 1/f.`,
+ sujet:{titre:"Radians et fonctions trigonométriques : courbe de route, bétonnière et température", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Les angles en radians et les fonctions sinus et cosinus interviennent dans le tracé des routes, les machines tournantes et les phénomènes périodiques.
+
+**Données**
+- Courbe de route de rayon **R = 120 m**, angle au centre **0,8 rad** ;
+- Tambour de bétonnière de rayon **0,60 m** tournant à **20 tr/min** ;
+- Température : T(t) = 28 + 5 sin(π (t − 9) / 12) (t en heures) ;
+- Rayon solaire faisant un angle **α** avec l'horizontale ; ombre portée d'un débord de **0,80 m**.
+
+### Partie A — Conversions (4 points)
+1. Convertir 0,8 rad en degrés, 45° et 120° en radians. (3 pts)
+2. Pourquoi utilise-t-on les radians pour les longueurs d'arc ? (1 pt)
+
+### Partie B — Arc et rotation (7 points)
+3. Calculer la longueur de l'arc de la courbe. (2 pts)
+4. Calculer la vitesse angulaire du tambour en rad/s. (2 pts)
+5. Calculer la vitesse d'un point de la périphérie du tambour. (3 pts)
+
+### Partie C — Température (5 points)
+6. Calculer la période de T(t), sa valeur maximale et minimale. (3 pts)
+7. Calculer T à 12 h. (2 pts)
+
+### Partie D — Ombre (4 points)
+8. Exprimer la hauteur protégée sous le débord en fonction de α et la calculer pour α = **60°** et α = **75°**. (4 pts)`,
+  corrige:`### Partie A — Conversions (4 pts)
+1. 0,8 × 180 / π = **45,8°** ; 45° = **π/4 = 0,785 rad** ; 120° = **2π/3 = 2,094 rad**. *(3 pts)*
+2. En radians, la longueur d'arc vaut simplement **L = R × θ** (et les dérivées de sin et cos sont plus simples). *(1 pt)*
+
+### Partie B — Rotation (7 pts)
+3. L = 120 × 0,8 = **96 m**. *(2 pts)*
+4. ω = 20 × 2π / 60 = **2,09 rad/s**. *(2 pts)*
+5. v = ω × r = 2,09 × 0,60 = **1,26 m/s**. *(3 pts)*
+
+### Partie C — Température (5 pts)
+6. Période : 2π / (π/12) = **24 h** ; max **33 °C** ; min **23 °C**. *(3 pts)*
+7. T(12) = 28 + 5 sin(π/4) = 28 + 3,54 = **31,5 °C**. *(2 pts)*
+
+### Partie D — Ombre (4 pts)
+8. **h = 0,80 × tan α** : α = 60° → **1,39 m** ; α = 75° → **2,99 m**. Plus le soleil est haut, plus le débord protège une grande hauteur de façade. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer L = R × θ avec θ en degrés.
+> - Confondre tours par minute et radians par seconde.
+> - Calculatrice mal réglée (degrés / radians).`},
  exercices:[
   {t:"Conversions d'angles", d:1, e:`Convertir : a) 45° en radians et en gon ; b) 150 gon en degrés ; c) 1,2 rad en degrés ; d) 3π/2 rad en degrés.`, c:`a) π/4 = **0,785 rad** = **50 gon** ; b) 150 × 0,9 = **135°** ; c) 1,2 × 180/π = **68,75°** ; d) **270°**.`},
   {t:"Longueur d'arc", d:1, e:`Une bordure de trottoir suit un arc de cercle de rayon 12 m sur un angle de 0,5 rad. Quelle est sa longueur ? Combien de bordures droites de 1 m faut-il environ ?`, c:`s = 12 × 0,5 = **6 m** → environ **6 bordures** (ou des bordures courbes adaptées au rayon).`},
@@ -400,6 +572,45 @@ Pour une petite variation dx : **df ≈ f'(x) dx**. Ex. : section d'une barre A 
 > - (uv)' = u'v + uv' ; (u/v)' = (u'v − uv')/v².
 > - Extremum : f'(x) = 0 avec changement de signe.
 > - df ≈ f'(x) dx pour les petites variations.`,
+ sujet:{titre:"Dérivées et optimisation : bac de rétention, citerne économique et poutre", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un atelier de chaudronnerie et un bureau d'études cherchent des dimensions optimales.
+
+**Données**
+- Bac de rétention fabriqué dans une tôle de **2,00 × 1,00 m** : on découpe un carré de côté x à chaque coin et on relève les bords ; V(x) = x (2 − 2x)(1 − 2x) ;
+- Citerne cylindrique fermée de volume **V = 10 m³** : on veut minimiser la surface de tôle S = 2π r² + 2 V / r ;
+- Poutre sur deux appuis, portée **6 m**, charge **15 kN/m** : M(x) = 45 x − 7,5 x².
+
+### Partie A — Bac de rétention (8 points)
+1. Développer V(x) et préciser le domaine de x. (2 pts)
+2. Calculer V'(x) et résoudre V'(x) = 0. (3 pts)
+3. En déduire les dimensions du bac de volume maximal et ce volume. (3 pts)
+
+### Partie B — Citerne (7 points)
+4. Justifier l'expression de S(r). (2 pts)
+5. Calculer S'(r) et le rayon qui minimise la surface. (3 pts)
+6. En déduire la hauteur et la surface minimale. Que remarque-t-on entre h et r ? (2 pts)
+
+### Partie C — Poutre (5 points)
+7. Calculer M'(x) ; à quoi correspond-elle physiquement ? (2 pts)
+8. Trouver l'abscisse et la valeur du moment maximal. (3 pts)`,
+  corrige:`### Partie A — Bac (8 pts)
+1. **V(x) = 4x³ − 6x² + 2x**, avec **0 < x < 0,5 m** (la largeur 1 − 2x doit rester positive). *(2 pts)*
+2. V'(x) = 12x² − 12x + 2 = 0 ; Δ = 144 − 96 = 48 → x = (12 ± 6,93) / 24 → **x = 0,211 m** (l'autre racine, 0,789, est hors domaine). *(3 pts)*
+3. Hauteur **0,211 m**, longueur 2 − 0,423 = **1,577 m**, largeur 1 − 0,423 = **0,577 m** ; **Vmax = 0,192 m³ ≈ 192 L**. *(3 pts)*
+
+### Partie B — Citerne (7 pts)
+4. Deux fonds : 2π r² ; paroi : 2π r h avec h = V / (π r²) → 2π r × V / (π r²) = 2V / r. *(2 pts)*
+5. S'(r) = 4π r − 2V / r² = 0 ⇔ r³ = V / (2π) = 1,592 → **r = 1,168 m**. *(3 pts)*
+6. h = 10 / (π × 1,168²) = **2,335 m** = 2r : la citerne la plus économique a une **hauteur égale à son diamètre** ; Smin = **25,7 m²**. *(2 pts)*
+
+### Partie C — Poutre (5 pts)
+7. M'(x) = 45 − 15x : c'est l'**effort tranchant** V(x) (dM/dx = V). *(2 pts)*
+8. M'(x) = 0 ⇔ **x = 3 m** (milieu) ; Mmax = 45 × 3 − 7,5 × 9 = **67,5 kN·m** = qL²/8 ✔. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Garder une solution hors du domaine physique.
+> - Oublier de vérifier qu'il s'agit d'un maximum (ou d'un minimum).
+> - Oublier que le moment est maximal là où l'effort tranchant s'annule.`},
  exercices:[
   {t:"Calculer des dérivées", d:1, e:`Dériver : a) f(x) = x² (3 x + 1) ; b) g(x) = (2 x + 1)/(x − 1) ; c) h(x) = √x ; d) k(x) = 4 sin(2 x).`, c:`a) f(x) = 3x³ + x² → **f'(x) = 9x² + 2x** ; b) g'(x) = [2(x − 1) − (2x + 1)]/(x − 1)² = **− 3/(x − 1)²** ; c) **h'(x) = 1/(2√x)** ; d) **k'(x) = 8 cos(2x)**.`},
   {t:"Moment maximal", d:1, e:`Poutre sur deux appuis de 5 m, charge uniforme de 20 kN/m. Écrire M(x), V(x), trouver l'abscisse du maximum et sa valeur.`, c:`M(x) = 50 x − 10 x² ; V(x) = **50 − 20 x** = 0 → **x = 2,5 m** ; M max = 125 − 62,5 = **62,5 kN·m** (= q L²/8 ✔).`},
@@ -465,6 +676,46 @@ Au cœur d'une dalle épaisse, avec l'air à 30 °C, on mesure 50 °C à t = 2 h
 > - (e^(kx))' = k e^(kx) ; (ln x)' = 1/x ; ln(ab) = ln a + ln b.
 > - y' = k y ⇔ y = y₀ e^(kt).
 > - e^(kx) = b ⇔ x = ln b / k.`,
+ sujet:{titre:"Exponentielle et logarithme : croissance d'une ville et dissipation des pressions d'eau", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** La planification des logements et le suivi d'un remblai sur sol compressible font intervenir des évolutions exponentielles.
+
+**Données**
+- Population d'une agglomération : **5,6 millions** en 2025, croissance continue de **3 %** par an : P(t) = 5,6 e^(0,03 t) ;
+- Surpression de l'eau sous un remblai (consolidation) : u(t) = 80 e^(− t / 120) (u en kPa, t en jours) ; on peut construire quand u ≤ **10 kPa** ;
+- Propriétés : ln(e^a) = a ; ln(ab) = ln a + ln b ; e^(ln a) = a.
+
+### Partie A — Croissance urbaine (8 points)
+1. Calculer la population en 2035. (2 pts)
+2. En quelle année atteindra-t-on 8 millions d'habitants ? (3 pts)
+3. Calculer le temps de doublement. (2 pts)
+4. Si un logement abrite 5 personnes, combien de logements faut-il construire en moyenne par an entre 2025 et 2035 ? (1 pt)
+
+### Partie B — Consolidation (8 points)
+5. Calculer u au départ, après 30 jours et après 120 jours. (3 pts)
+6. Au bout de combien de jours pourra-t-on construire ? (3 pts)
+7. Que représente la constante 120 jours ? (2 pts)
+
+### Partie C — Propriétés (4 points)
+8. Simplifier ln(e³), e^(ln 5), ln 8 − ln 2, et résoudre e^(2x) = 9. (4 pts)`,
+  corrige:`### Partie A — Croissance (8 pts)
+1. P(10) = 5,6 e^0,3 = 5,6 × 1,35 = **7,56 millions**. *(2 pts)*
+2. $$ 5,6 e^(0,03 t) = 8   ⇔   t = ln(8 / 5,6) / 0,03 = 11,9 ans
+   → vers **2037**. *(3 pts)*
+3. ln 2 / 0,03 = **23,1 ans**. *(2 pts)*
+4. (7,56 − 5,6) M / 5 = 392 000 logements en 10 ans → **≈ 39 000 par an**. *(1 pt)*
+
+### Partie B — Consolidation (8 pts)
+5. u(0) = **80 kPa** ; u(30) = 80 e^(−0,25) = **62,3 kPa** ; u(120) = 80 e^(−1) = **29,4 kPa**. *(3 pts)*
+6. 80 e^(−t/120) ≤ 10 ⇔ t ≥ 120 ln 8 = **250 jours** (environ 8 mois). *(3 pts)*
+7. C'est la **constante de temps** : en 120 jours, la surpression est divisée par e ≈ 2,72 (elle perd 63 %). *(2 pts)*
+
+### Partie C — Propriétés (4 pts)
+8. ln(e³) = **3** ; e^(ln 5) = **5** ; ln 8 − ln 2 = ln 4 = **1,386** ; e^(2x) = 9 ⇔ 2x = ln 9 ⇔ **x = ln 3 = 1,099**. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre croissance continue (e^(0,03t)) et croissance annuelle composée (1,03^t) — proches mais différentes.
+> - Oublier de changer le sens de l'inégalité en multipliant par un nombre négatif.
+> - Construire avant la dissipation des pressions d'eau : tassements et ruptures.`},
  exercices:[
   {t:"Équations exponentielles", d:1, e:`Résoudre : a) eˣ = 20 ; b) e^(2x) = 9 ; c) ln x = 2 ; d) 50 e^(− 0,2 t) = 10.`, c:`a) x = ln 20 = **3,00** ; b) 2x = ln 9 → **x = 1,10** ; c) x = e² = **7,39** ; d) e^(− 0,2 t) = 0,2 → t = − ln 0,2 / 0,2 = **8,05**.`},
   {t:"Dérivées", d:1, e:`Dériver : a) f(t) = 30 + 30 e^(− 0,1 t) ; b) g(x) = x eˣ ; c) h(x) = ln(3x + 1).`, c:`a) **f'(t) = − 3 e^(− 0,1 t)** (le béton se refroidit de 3 °C/h au départ) ; b) **g'(x) = eˣ (1 + x)** ; c) **h'(x) = 3/(3x + 1)**.`},
@@ -540,6 +791,47 @@ On somme les colonnes : yG = Σ Aᵢ yᵢ / Σ Aᵢ, puis I = Σ (IGᵢ + Aᵢ d
 > - ∫ₐᵇ f = F(b) − F(a) ; aire sous la courbe.
 > - Résultante = ∫ q dx, au centre de gravité de la charge.
 > - yG = Σ Aᵢ yᵢ / Σ Aᵢ ; I rectangle = b h³/12 ; Huygens : I = IG + A d².`,
+ sujet:{titre:"Intégrales : résultante d'une charge triangulaire, centre de gravité et inertie d'une section en T", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le calcul intégral sert à trouver les résultantes des charges réparties et les caractéristiques des sections.
+
+**Données**
+- Mur de soutènement : poussée de l'eau répartie de façon triangulaire, q(x) = 2 x (kN/m par m de hauteur, x de 0 à 6 m depuis le haut) ;
+- Section en T : table **60 × 10 cm** au-dessus d'une âme **15 × 40 cm** (hauteur totale **50 cm**) ;
+- Inertie d'un rectangle par rapport à son axe central : I = ∫ y² dA = b h³ / 12 ; théorème de Huygens : I = IG + A d².
+
+### Partie A — Charge triangulaire (7 points)
+1. Calculer la résultante R = ∫₀⁶ q(x) dx. (3 pts)
+2. Calculer la position de la résultante x_R = (∫ x q(x) dx) / R. (3 pts)
+3. Retrouver ces résultats par la géométrie du triangle. (1 pt)
+
+### Partie B — Inertie d'un rectangle (5 points)
+4. Démontrer par intégration que I = b h³ / 12 pour un rectangle b × h. (3 pts)
+5. Pourquoi une poutre est-elle plus rigide posée « sur chant » que « à plat » ? Illustrer avec une planche de 5 × 20 cm. (2 pts)
+
+### Partie C — Section en T (8 points)
+6. Calculer la position du centre de gravité (depuis la base). (3 pts)
+7. Calculer l'inertie de la section par rapport à son axe central horizontal. (5 pts)`,
+  corrige:`### Partie A — Charge triangulaire (7 pts)
+1. $$ R = ∫₀⁶ 2x dx = [x²]₀⁶ = 36 kN
+   *(3 pts)*
+2. ∫₀⁶ x × 2x dx = [2x³/3]₀⁶ = 144 → x_R = 144 / 36 = **4 m** depuis le haut (soit à 2 m de la base). *(3 pts)*
+3. Triangle de base 12 kN/m et de hauteur 6 m : aire = 6 × 12 / 2 = 36 kN, centre de gravité aux 2/3 depuis la pointe ✔. *(1 pt)*
+
+### Partie B — Rectangle (5 pts)
+4. dA = b dy, y de − h/2 à + h/2 : I = ∫ b y² dy = b [y³/3] = b (h³/24 + h³/24) = **b h³ / 12**. *(3 pts)*
+5. I dépend du **cube de la hauteur** : sur chant 5 × 20³ / 12 = **3 333 cm⁴** ; à plat 20 × 5³ / 12 = **208 cm⁴** → **16 fois** plus rigide sur chant. *(2 pts)*
+
+### Partie C — Section en T (8 pts)
+6. Table : A1 = 600 cm², y1 = 45 cm ; âme : A2 = 600 cm², y2 = 20 cm → **yG = (600 × 45 + 600 × 20) / 1 200 = 32,5 cm**. *(3 pts)*
+7. *(5 pts)*
+   - Table : 60 × 10³ / 12 + 600 × (45 − 32,5)² = 5 000 + 93 750 = 98 750 cm⁴ ;
+   - Âme : 15 × 40³ / 12 + 600 × (32,5 − 20)² = 80 000 + 93 750 = 173 750 cm⁴ ;
+   - **I = 272 500 cm⁴**.
+
+> [!attention] Erreurs à éviter
+> - Placer la résultante d'une charge triangulaire au milieu.
+> - Oublier le terme de Huygens A d² pour les parties décalées.
+> - Mesurer les distances depuis un axe différent pour chaque partie.`},
  exercices:[
   {t:"Calculs d'intégrales", d:1, e:`Calculer : a) ∫₀² (4x + 1) dx ; b) ∫₁³ x² dx ; c) ∫₀^π sin x dx.`, c:`a) [2x² + x]₀² = 8 + 2 = **10** ; b) [x³/3]₁³ = 9 − 1/3 = **8,67** ; c) [− cos x]₀^π = 1 + 1 = **2**.`},
   {t:"Poussée de l'eau sur une paroi", d:2, e:`Une paroi de cuve retient 3 m d'eau : la pression vaut p(z) = 10 z kPa (z mesuré depuis la surface). Calculer la poussée par mètre de paroi et son point d'application.`, c:`R = ∫₀³ 10 z dz = 5 z² |₀³ = **45 kN/m**, appliquée aux 2/3 de la hauteur depuis la surface, soit **1 m au-dessus du fond**.`},
@@ -612,6 +904,48 @@ En élasticité linéaire, les flèches dues à plusieurs charges **s'additionne
 > - dV/dx = − q ; dM/dx = V ; EI y'' = − M.
 > - Intégrer deux fois et utiliser les conditions d'appui.
 > - f = 5qL⁴/(384EI), PL³/(48EI), qL⁴/(8EI), PL³/(3EI).`,
+ sujet:{titre:"Intégrer pour trouver l'effort tranchant, le moment et la flèche d'une poutre", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** On étudie une poutre en béton armé de **25 × 50 cm** sur deux appuis simples, portée **L = 6 m**, sous une charge uniforme **q = 15 kN/m**.
+
+**Données**
+- Relations : dV/dx = − q ; dM/dx = V ; E I y''(x) = − M(x) ;
+- E = **30 000 MPa** ; I = b h³ / 12 ;
+- Flèche admissible : **L / 500**.
+
+### Partie A — Efforts (7 points)
+1. Calculer les réactions d'appui. (1 pt)
+2. En intégrant dV/dx = − q, établir V(x) (avec V(0) = RA). (2 pts)
+3. En intégrant dM/dx = V, établir M(x) (avec M(0) = 0). Calculer Mmax. (4 pts)
+
+### Partie B — Déformée (9 points)
+4. Calculer I et le produit E I en kN·m². (2 pts)
+5. Intégrer deux fois E I y'' = − M(x) ; déterminer les constantes avec y(0) = y(L) = 0. (5 pts)
+6. Calculer la flèche à mi-portée et la comparer à 5 q L⁴ / (384 E I). (2 pts)
+
+### Partie C — Vérification (4 points)
+7. La flèche est-elle admissible ? (2 pts)
+8. Comment varierait la flèche si la hauteur passait de 50 à 40 cm ? (2 pts)`,
+  corrige:`### Partie A — Efforts (7 pts)
+1. RA = RB = 15 × 6 / 2 = **45 kN**. *(1 pt)*
+2. V(x) = − 15 x + C ; V(0) = 45 → **V(x) = 45 − 15 x**. *(2 pts)*
+3. M(x) = 45 x − 7,5 x² + C ; M(0) = 0 → **M(x) = 45 x − 7,5 x²** ; maximum en x = 3 m : **Mmax = 67,5 kN·m**. *(4 pts)*
+
+### Partie B — Déformée (9 pts)
+4. I = 0,25 × 0,50³ / 12 = **2,604 × 10⁻³ m⁴** ; E I = 30 × 10⁶ kN/m² × 2,604 × 10⁻³ = **78 125 kN·m²**. *(2 pts)*
+5. *(5 pts)*
+   - E I y' = − 22,5 x² + 2,5 x³ + C1 ;
+   - E I y = − 7,5 x³ + 0,625 x⁴ + C1 x + C2 ;
+   - y(0) = 0 → C2 = 0 ; y(6) = 0 → − 1 620 + 810 + 6 C1 = 0 → **C1 = 135**.
+6. E I y(3) = − 202,5 + 50,625 + 405 = 253,1 → **y(3) = 253,1 / 78 125 = 3,24 mm** (vers le bas) = 5 × 15 × 6⁴ / (384 × 78 125) ✔. *(2 pts)*
+
+### Partie C — Vérification (4 pts)
+7. L / 500 = 6 000 / 500 = **12 mm** ≥ 3,24 mm ✔ (calcul en section non fissurée ; la flèche réelle à long terme est plus grande). *(2 pts)*
+8. I ∝ h³ : (50 / 40)³ = 1,95 → flèche **× 1,95** ≈ **6,3 mm**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les constantes d'intégration et leurs conditions aux limites.
+> - Mélanger MPa et kN/m² dans E I.
+> - Juger une flèche sans tenir compte du fluage du béton.`},
  exercices:[
   {t:"Diagrammes par intégration", d:1, e:`Poutre sur deux appuis de 8 m, q = 12 kN/m. Calculer les réactions, V(x), M(x) et le moment maximal.`, c:`RA = RB = 48 kN ; V(x) = **48 − 12 x** ; M(x) = **48 x − 6 x²** ; V = 0 en x = 4 m → **M max = 96 kN·m** (= qL²/8 ✔).`},
   {t:"Flèche d'une poutre de plancher", d:2, e:`Poutre 20 × 40 cm (EI = 3,2 × 10⁷ N·m²), portée 6 m, charge uniforme 15 kN/m. Vérifier la flèche (limite L/500) et calculer la rotation sur appui.`, c:`f = 5 × 15 000 × 1 296 / (384 × 3,2 × 10⁷) = **7,9 mm** < 12 mm ✔.
@@ -678,6 +1012,48 @@ det = − 0,866 × 0,866 − 0,5 × 0,5 = − 1 ; Cramer : N1 = (0 × 0,866 − 
 > - [K]{x} = {F} : forme de tous les calculs de structures.
 > - det 2 × 2 = ad − bc ; Cramer ; inverse = (1/det)(d − b ; − c a).
 > - Pivot de Gauss pour les systèmes plus grands.`,
+ sujet:{titre:"Matrices et systèmes : équilibre d'un nœud de treillis et prix de trois matériaux", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un nœud de charpente et un problème de prix se ramènent à des systèmes linéaires.
+
+**Données — nœud**
+- Charge verticale de **20 kN** vers le bas au nœud ; barre 1 inclinée à **45°**, barre 2 à **60°** de l'horizontale, de part et d'autre ;
+- Équilibre : **− N1 cos 45° + N2 cos 60° = 0** et **N1 sin 45° + N2 sin 60° = 20**.
+
+**Données — matériaux** (x : prix d'un sac de ciment ; y : prix d'un m³ de sable ; z : prix d'un m³ de gravier)
+- 10 x + 2 y + 3 z = **154 000** ; 20 x + 3 y + 5 z = **271 000** ; 5 x + y + 2 z = **89 500**.
+
+### Partie A — Nœud de treillis (8 points)
+1. Écrire le système sous forme matricielle A × N = B. (2 pts)
+2. Calculer le déterminant de A. (2 pts)
+3. Résoudre par la méthode de Cramer ou par substitution. (4 pts)
+
+### Partie B — Système 3 × 3 (9 points)
+4. Écrire la matrice du système et calculer son déterminant. (3 pts)
+5. Résoudre le système (Cramer ou pivot de Gauss). (5 pts)
+6. Vérifier la solution dans une équation. (1 pt)
+
+### Partie C — Interprétation (3 points)
+7. Que signifierait un déterminant nul pour le nœud ? Pour les factures ? (3 pts)`,
+  corrige:`### Partie A — Nœud (8 pts)
+1. A = ( − 0,707  0,5 ; 0,707  0,866 ), N = (N1 ; N2), B = (0 ; 20). *(2 pts)*
+2. det A = − 0,707 × 0,866 − 0,5 × 0,707 = **− 0,966**. *(2 pts)*
+3. *(4 pts)*
+   - N1 = (0 × 0,866 − 0,5 × 20) / (− 0,966) = **10,35 kN** ;
+   - N2 = (− 0,707 × 20 − 0 × 0,707) / (− 0,966) = **14,64 kN** ;
+   - vérification : − 10,35 × 0,707 + 14,64 × 0,5 = 0 ✔ ; 10,35 × 0,707 + 14,64 × 0,866 = 20 ✔.
+
+### Partie B — 3 × 3 (9 pts)
+4. A = ( 10 2 3 ; 20 3 5 ; 5 1 2 ) ; det A = 10 (6 − 5) − 2 (40 − 25) + 3 (20 − 15) = 10 − 30 + 15 = **− 5**. *(3 pts)*
+5. Par Cramer (ou Gauss) : **x = 5 500 F** (sac de ciment) ; **y = 12 000 F/m³** (sable) ; **z = 25 000 F/m³** (gravier). *(5 pts)*
+6. 5 × 5 500 + 12 000 + 2 × 25 000 = 27 500 + 12 000 + 50 000 = **89 500** ✔. *(1 pt)*
+
+### Partie C — Interprétation (3 pts)
+7. Nœud : les barres seraient **alignées** (mécanisme) — la structure ne peut pas reprendre la charge. Factures : une équation serait une combinaison des autres (information redondante) — les prix ne peuvent pas être déterminés de façon unique. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Se tromper de signe dans le développement d'un déterminant 3 × 3.
+> - Remplacer la mauvaise colonne dans la méthode de Cramer.
+> - Ne pas vérifier la solution.`},
  exercices:[
   {t:"Cramer", d:1, e:`Résoudre par Cramer : 3x + 2y = 16 ; x + 4y = 12.`, c:`det = 12 − 2 = **10** ; x = (16 × 4 − 2 × 12)/10 = 40/10 = **4** ; y = (3 × 12 − 16 × 1)/10 = 20/10 = **2**.`},
   {t:"Pivot de Gauss", d:2, e:`Résoudre : x + 2y + z = 8 ; 2x + y + z = 7 ; x + y + 2z = 9.`, c:`L2 − 2L1 : − 3y − z = − 9 ; L3 − L1 : − y + z = 1.
@@ -769,6 +1145,46 @@ $$ ω = √(k/m)   ;   f = ω/(2π)   ;   T = 1/f
 > - y' = k y → y = y₀ e^(k t) ; T' = − k (T − Ta) → T = Ta + (T₀ − Ta) e^(− k t).
 > - E I y'' = − M ; deux intégrations + conditions d'appui ; f = 5 q L⁴/384 E I ; console : P L³/3 E I.
 > - m x'' + k x = 0 → ω = √(k/m) ; f = ω/2π ; T = 1/f.`,
+ sujet:{titre:"Équations différentielles : refroidissement du béton, flèche d'une console et vibration d'un plancher", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Trois phénomènes du bâtiment sont décrits par des équations différentielles.
+
+**Données**
+- Refroidissement d'un massif de béton : T'(t) = − k (T − Ta), avec Ta = **30 °C**, T(0) = **60 °C**, k = **0,1 h⁻¹** ;
+- Console de **3 m** encastrée, charge ponctuelle **P = 30 kN** à son extrémité, E I = **78 125 kN·m²** ; M(x) = − P (L − x) (x depuis l'encastrement) ; E I y'' = − M ;
+- Plancher modélisé par une masse **m = 2 000 kg** sur un ressort de raideur **k = 8 × 10⁶ N/m** : m x'' + k x = 0 ; fréquence de confort : f ≥ **5 Hz**.
+
+### Partie A — Refroidissement (7 points)
+1. Vérifier que T(t) = Ta + (T0 − Ta) e^(− k t) est solution et satisfait la condition initiale. (3 pts)
+2. Calculer T après 5 h. (2 pts)
+3. Au bout de combien de temps la température atteint-elle 35 °C ? (2 pts)
+
+### Partie B — Console (7 points)
+4. Intégrer deux fois E I y'' = P (L − x) avec y(0) = 0 et y'(0) = 0 (encastrement). (4 pts)
+5. Calculer la flèche à l'extrémité et la comparer à L / 250. (3 pts)
+
+### Partie C — Vibration (6 points)
+6. Montrer que x(t) = A cos(ω t) + B sin(ω t) est solution si ω = √(k / m). (2 pts)
+7. Calculer ω, la fréquence propre et la période. Le confort est-il assuré ? (4 pts)`,
+  corrige:`### Partie A — Refroidissement (7 pts)
+1. T'(t) = (T0 − Ta)(− k) e^(− k t) = − k (T − Ta) ✔ ; T(0) = Ta + T0 − Ta = T0 ✔. *(3 pts)*
+2. T(5) = 30 + 30 e^(− 0,5) = 30 + 18,2 = **48,2 °C**. *(2 pts)*
+3. $$ 30 + 30 e^(− 0,1 t) = 35   ⇔   e^(− 0,1 t) = 1/6   ⇔   t = 10 ln 6 = 17,9 h
+   *(2 pts)*
+
+### Partie B — Console (7 pts)
+4. *(4 pts)*
+   - E I y' = P (L x − x²/2) + C1 ; y'(0) = 0 → C1 = 0 ;
+   - E I y = P (L x²/2 − x³/6) + C2 ; y(0) = 0 → C2 = 0.
+5. y(L) = P L³ / (3 E I) = 30 × 27 / (3 × 78 125) = **3,46 mm** ; L / 250 = **12 mm** ✔. *(3 pts)*
+
+### Partie C — Vibration (6 pts)
+6. x'' = − ω² x → m (− ω² x) + k x = 0 ⇔ ω² = k / m ✔. *(2 pts)*
+7. ω = √(8 × 10⁶ / 2 000) = **63,2 rad/s** ; f = ω / 2π = **10,1 Hz** ; T = **0,099 s**. f ≥ 5 Hz → **confort assuré** (les pas des occupants, vers 2 Hz, n'entrent pas en résonance). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les conditions aux limites (encastrement : déplacement et rotation nuls).
+> - Confondre ω (rad/s) et f (Hz).
+> - Décoffrer ou charger un massif encore chaud sans tenir compte des gradients thermiques.`},
  exercices:[
   {t:"Refroidissement d'un voile en béton", d:1, e:`Le cœur d'un voile épais atteint 65 °C pendant la prise ; l'air est à 25 °C et k = 0,08 h⁻¹.
 a) Écrire T(t).
@@ -882,6 +1298,50 @@ $$ yₙ₊₁ = yₙ + h × F(tₙ, yₙ)
 > - Newton : xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ), très rapide près de la racine.
 > - Trapèzes : h [(y₀ + yₙ)/2 + somme des intermédiaires] ; Simpson (n pair) : h/3 [y₀ + 4 impairs + 2 pairs + yₙ].
 > - Euler : yₙ₊₁ = yₙ + h F(tₙ, yₙ).`,
+ sujet:{titre:"Méthodes numériques : Newton, dichotomie, trapèzes, Simpson et Euler", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le bureau d'études utilise des méthodes numériques quand les calculs exacts sont impossibles ou trop longs.
+
+**Données**
+- Équation à résoudre (dimension d'un ouvrage) : f(x) = x³ + 2x − 20 = 0, racine entre 2 et 3 ;
+- Profil en travers : ordonnées de déblai (m) tous les **5 m** : **0 – 1,2 – 1,9 – 2,3 – 2,0 – 1,4 – 0** ;
+- Refroidissement : y' = − 0,1 (y − 30), y(0) = 60 ; pas **h = 2 h** ; solution exacte y(t) = 30 + 30 e^(− 0,1 t).
+
+### Partie A — Équation (8 points)
+1. Appliquer **5 itérations** de dichotomie sur [2 ; 3] et donner l'intervalle obtenu. (3 pts)
+2. Appliquer la méthode de Newton à partir de x0 = 2 jusqu'à ce que deux itérés diffèrent de moins de 0,001. (4 pts)
+3. Comparer la vitesse des deux méthodes. (1 pt)
+
+### Partie B — Aire du profil (7 points)
+4. Calculer l'aire par la méthode des trapèzes. (3 pts)
+5. Calculer l'aire par la méthode de Simpson. (3 pts)
+6. Laquelle est en général la plus précise ? (1 pt)
+
+### Partie C — Euler (5 points)
+7. Calculer y(2) et y(4) par la méthode d'Euler. (3 pts)
+8. Comparer à la valeur exacte en t = 4 et proposer un moyen d'améliorer la précision. (2 pts)`,
+  corrige:`### Partie A — Équation (8 pts)
+1. f(2) = − 8 < 0 ; f(3) = 13 > 0. Milieux successifs : 2,5 (f > 0) → [2 ; 2,5] ; 2,25 (f < 0) → [2,25 ; 2,5] ; 2,375 (f < 0) → [2,375 ; 2,5] ; 2,4375 (f < 0) → [2,4375 ; 2,5] ; 2,46875 (f < 0) → **[2,46875 ; 2,5]**. *(3 pts)*
+2. f'(x) = 3x² + 2 ; x_{n+1} = x_n − f(x_n) / f'(x_n) : *(4 pts)*
+   - x1 = 2 − (− 8) / 14 = **2,5714** ;
+   - x2 = 2,5714 − 2,1458 / 21,837 = **2,4732** ;
+   - x3 = 2,4732 − 0,0735 / 20,350 = **2,4696** ;
+   - x4 = **2,4695** → racine **x ≈ 2,4695**.
+3. Newton converge **beaucoup plus vite** (3 à 4 itérations pour 4 décimales) ; la dichotomie gagne seulement un facteur 2 par itération, mais elle ne diverge jamais. *(1 pt)*
+
+### Partie B — Aire (7 pts)
+4. $$ trapèzes : 5 × [(0 + 0)/2 + 1,2 + 1,9 + 2,3 + 2,0 + 1,4] = 5 × 8,8 = 44,0 m²
+   *(3 pts)*
+5. Simpson (6 intervalles, nombre pair) : 5/3 × [0 + 4 (1,2 + 2,3 + 1,4) + 2 (1,9 + 2,0) + 0] = 5/3 × 27,4 = **45,7 m²**. *(3 pts)*
+6. **Simpson** (approximation parabolique au lieu de segments droits), à condition d'avoir un nombre pair d'intervalles. *(1 pt)*
+
+### Partie C — Euler (5 pts)
+7. y(2) = 60 + 2 × (− 0,1)(60 − 30) = **54** ; y(4) = 54 + 2 × (− 0,1)(54 − 30) = **49,2 °C**. *(3 pts)*
+8. Exact : 30 + 30 e^(− 0,4) = **50,1 °C** → erreur ≈ 0,9 °C. Améliorer : **pas plus petit** (h = 0,5 h) ou méthode d'ordre supérieur (Runge-Kutta). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer Simpson avec un nombre impair d'intervalles.
+> - Se tromper de demi-intervalle en dichotomie (regarder le signe de f).
+> - Croire qu'un résultat numérique est exact : toujours estimer l'erreur.`},
  exercices:[
   {t:"Dichotomie : √7", d:1, e:`On cherche √7, racine de f(x) = x² − 7 sur [2 ; 3].
 a) Effectuer 5 étapes de dichotomie.
@@ -999,6 +1459,57 @@ $$ [k] = (E I/L³) × ( 12  6L  − 12  6L ; 6L  4L²  − 6L  2L² ; − 12  �
 > - [K]{u} = {F} → déplacements → efforts N = k Δu → réactions.
 > - Série : souplesses ajoutées ; parallèle : raideurs ajoutées.
 > - Élément poutre : (E I/L³)(12, 6L, 4L², 2L²) ; console : v = P L³/3 E I.`,
+ sujet:{titre:"Méthode des déplacements : assembler et résoudre un système de deux barres", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** On initie la méthode des déplacements (base des logiciels de calcul de structures) sur un tirant composé de deux barres en série.
+
+**Données**
+- Nœud 1 fixe (encastré) ; barre 1 entre les nœuds 1 et 2 : L1 = **2 m** ; barre 2 entre les nœuds 2 et 3 : L2 = **4 m** ;
+- Acier : E = **210 000 MPa** ; section A = **400 mm²** pour les deux barres ;
+- Force **F = 30 kN** appliquée au nœud 3, dans l'axe ;
+- Raideur d'une barre : k = E A / L ; matrice élémentaire : k × ( 1 − 1 ; − 1 1 ).
+
+### Partie A — Matrices élémentaires (5 points)
+1. Calculer les raideurs k1 et k2 (en N/mm). (2 pts)
+2. Écrire les deux matrices élémentaires. (3 pts)
+
+### Partie B — Assemblage (6 points)
+3. Assembler la matrice de rigidité globale 3 × 3 (degrés de liberté u1, u2, u3). (4 pts)
+4. Écrire le système K × u = F avec les conditions aux limites. (2 pts)
+
+### Partie C — Résolution (6 points)
+5. Résoudre pour u2 et u3. (3 pts)
+6. Calculer les efforts normaux dans les barres et la réaction en 1. (3 pts)
+
+### Partie D — Contrôle (3 points)
+7. Retrouver l'allongement total par la formule ΔL = F L / (E A) de chaque barre. (2 pts)
+8. Pourquoi les logiciels utilisent-ils cette méthode ? (1 pt)`,
+  corrige:`### Partie A — Matrices (5 pts)
+1. k1 = 210 000 × 400 / 2 000 = **42 000 N/mm** ; k2 = 210 000 × 400 / 4 000 = **21 000 N/mm**. *(2 pts)*
+2. Barre 1 (u1, u2) : 42 000 × ( 1 − 1 ; − 1 1 ) ; barre 2 (u2, u3) : 21 000 × ( 1 − 1 ; − 1 1 ). *(3 pts)*
+
+### Partie B — Assemblage (6 pts)
+3. *(4 pts)*
+
+| | u1 | u2 | u3 |
+|---|---|---|---|
+| | 42 000 | − 42 000 | 0 |
+| | − 42 000 | 63 000 | − 21 000 |
+| | 0 | − 21 000 | 21 000 |
+
+4. u1 = 0 ; forces : F2 = 0, F3 = 30 000 N → on garde les lignes 2 et 3 : 63 000 u2 − 21 000 u3 = 0 ; − 21 000 u2 + 21 000 u3 = 30 000. *(2 pts)*
+
+### Partie C — Résolution (6 pts)
+5. En additionnant : 42 000 u2 = 30 000 → **u2 = 0,714 mm** ; u3 = u2 + 30 000 / 21 000 = **2,143 mm**. *(3 pts)*
+6. N1 = k1 (u2 − u1) = **30 kN** ; N2 = k2 (u3 − u2) = **30 kN** (traction) ; réaction R1 = − 42 000 × 0,714 = **− 30 kN** (équilibre ✔). *(3 pts)*
+
+### Partie D — Contrôle (3 pts)
+7. ΔL1 = 30 000 × 2 000 / (210 000 × 400) = 0,714 mm ; ΔL2 = 1,429 mm → total **2,143 mm** ✔. *(2 pts)*
+8. La méthode est **systématique** (assemblage automatique des matrices élémentaires) : elle s'applique à des structures de milliers de barres, hyperstatiques ou non. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les matrices élémentaires aux mauvaises positions lors de l'assemblage.
+> - Oublier d'imposer les conditions d'appui (matrice singulière).
+> - Mélanger N, kN, mm et m.`},
  exercices:[
   {t:"Raideur et allongement d'un tirant", d:1, e:`Un tirant en acier Ø 20 (A = 3,14 cm²), long de 4 m (E = 210 000 MPa), reprend N = 30 kN.
 Calculer sa raideur, son allongement et sa contrainte.`, c:`k = E A/L = 210 000 × 314/4 000 = **16 485 N/mm** (≈ 16 500 kN/m).
@@ -1103,6 +1614,46 @@ $$ coefficient de corrélation : r = Sxy / √(Sxx × Syy)
 > - Loi normale : fk ≈ m − 1,645 s (fractile 5 %).
 > - Moindres carrés : a = Sxy/Sxx ; b = ȳ − a x̄ ; r = Sxy/√(Sxx Syy).
 > - Modèles exponentiels ou logarithmiques : passer par ln.`,
+ sujet:{titre:"Régression linéaire : relier la résistance du béton au rapport E/C", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un laboratoire de Yamoussoukro a confectionné six gâchées avec le même ciment et des rapports E/C différents.
+
+| E/C (x) | 0,40 | 0,45 | 0,50 | 0,55 | 0,60 | 0,65 |
+|---|---|---|---|---|---|---|
+| fc28 (y, MPa) | 41,0 | 37,0 | 33,5 | 30,0 | 27,0 | 24,0 |
+
+Formules : Sxx = Σ (xi − x̄)² ; Syy = Σ (yi − ȳ)² ; Sxy = Σ (xi − x̄)(yi − ȳ) ; a = Sxy / Sxx ; b = ȳ − a x̄ ; r = Sxy / √(Sxx Syy).
+
+### Partie A — Nuage de points (4 points)
+1. Représenter le nuage de points. La relation semble-t-elle linéaire ? Croissante ou décroissante ? (2 pts)
+2. Calculer les moyennes x̄ et ȳ. (2 pts)
+
+### Partie B — Droite de régression (10 points)
+3. Calculer Sxx, Syy et Sxy. (4 pts)
+4. Calculer a et b et écrire l'équation de la droite. (3 pts)
+5. Calculer le coefficient de corrélation et l'interpréter. (3 pts)
+
+### Partie C — Exploitation (6 points)
+6. Prévoir la résistance pour E/C = 0,52. (2 pts)
+7. Quel E/C maximal pour obtenir au moins 32 MPa ? (2 pts)
+8. Peut-on utiliser la droite pour E/C = 0,90 ? Pourquoi ? (2 pts)`,
+  corrige:`### Partie A — Nuage (4 pts)
+1. Les points sont presque alignés, sur une droite **décroissante** : plus il y a d'eau, moins le béton résiste. *(2 pts)*
+2. x̄ = 3,15 / 6 = **0,525** ; ȳ = 192,5 / 6 = **32,08 MPa**. *(2 pts)*
+
+### Partie B — Régression (10 pts)
+3. Sxx = **0,04375** ; Syy = **201,21** ; Sxy = **− 2,9625**. *(4 pts)*
+4. a = − 2,9625 / 0,04375 = **− 67,7** ; b = 32,08 + 67,7 × 0,525 = **67,6** → **fc28 = − 67,7 E/C + 67,6**. *(3 pts)*
+5. r = − 2,9625 / √(0,04375 × 201,21) = **− 0,998** : corrélation **négative très forte** — le modèle linéaire décrit très bien les essais sur ce domaine. *(3 pts)*
+
+### Partie C — Exploitation (6 pts)
+6. fc28 = − 67,7 × 0,52 + 67,6 = **32,4 MPa**. *(2 pts)*
+7. − 67,7 x + 67,6 ≥ 32 ⇔ x ≤ 35,6 / 67,7 = **0,526** → **E/C ≤ 0,52** (avec une marge). *(2 pts)*
+8. **Non** : 0,90 est loin hors du domaine étudié (0,40 – 0,65) ; la relation réelle n'est pas linéaire sur un grand domaine (formule de Bolomey ou d'Abrams), l'extrapolation donnerait une valeur fausse (6,7 MPa ici). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Interpréter une corrélation comme une loi valable partout.
+> - Se tromper de signe dans Sxy.
+> - Extrapoler hors du domaine des essais.`},
  exercices:[
   {t:"Moyenne, écart-type et valeur caractéristique", d:1, e:`Six éprouvettes cylindriques d'un béton prévu en C25/30 donnent : 31 – 28 – 33 – 30 – 29 – 35 MPa.
 Calculer m, s, CV et fk ≈ m − 1,645 s. Conclure.`, c:`m = 186/6 = **31 MPa**.
@@ -1211,6 +1762,44 @@ Les normes fixent des écarts admissibles sur l'ouvrage réalisé : implantation
 > - Arrondir à la fin, dans le sens de la sécurité ; toujours contrôler l'ordre de grandeur.
 > - x petit : (1 + x)ⁿ ≈ 1 + n x ; √(1 + x) ≈ 1 + x/2 ; sin α ≈ tan α ≈ α (en radians).
 > - Somme : incertitudes absolues ajoutées ; produit : relatives ajoutées ; puissance n : n fois la relative.`,
+ sujet:{titre:"Ordres de grandeur et incertitudes : volume d'une dalle et résistance d'un cube", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Toute mesure est entachée d'incertitude. Vous évaluez leurs conséquences sur deux calculs courants.
+
+**Données**
+- Dalle : longueur **8,00 ± 0,02 m**, largeur **6,00 ± 0,02 m**, épaisseur **0,15 ± 0,005 m** ;
+- Cube de béton : côté **150 ± 1 mm** ; charge de rupture **540 ± 5 kN** ;
+- Pour un produit ou un quotient, les incertitudes **relatives** s'ajoutent (estimation par excès) ;
+- Une note de calcul annonce une charge de **4 850 kN** sous un poteau de maison R+1.
+
+### Partie A — Volume de la dalle (8 points)
+1. Calculer le volume nominal. (1 pt)
+2. Calculer l'incertitude relative de chaque mesure et l'incertitude relative du volume. (4 pts)
+3. En déduire l'incertitude absolue et écrire le résultat. Quelle mesure faut-il améliorer en priorité ? (3 pts)
+
+### Partie B — Résistance du cube (7 points)
+4. Calculer l'aire et son incertitude (ΔA ≈ 2 a Δa). (2 pts)
+5. Calculer la résistance et son incertitude ; écrire le résultat avec un nombre raisonnable de chiffres. (5 pts)
+
+### Partie C — Ordres de grandeur (5 points)
+6. Estimer l'ordre de grandeur de la charge d'un poteau de maison R+1 (surface reprise ≈ 15 m², ≈ 10 kN/m² par niveau à l'ELU, 2 niveaux). La valeur de 4 850 kN est-elle plausible ? Quelle erreur suspecter ? (3 pts)
+7. Pourquoi ne faut-il pas recopier les 10 chiffres d'une calculatrice dans une note de calcul ? (2 pts)`,
+  corrige:`### Partie A — Dalle (8 pts)
+1. V = 8,00 × 6,00 × 0,15 = **7,20 m³**. *(1 pt)*
+2. 0,02 / 8 = **0,25 %** ; 0,02 / 6 = **0,33 %** ; 0,005 / 0,15 = **3,33 %** → ΔV/V = **3,92 %**. *(4 pts)*
+3. ΔV = 7,20 × 0,0392 = **0,28 m³** → **V = 7,2 ± 0,3 m³**. C'est l'**épaisseur** qui domine l'incertitude : contrôler les niveaux du coffrage et de l'arase (5 mm sur 15 cm = 3,3 %). *(3 pts)*
+
+### Partie B — Cube (7 pts)
+4. A = 150² = **22 500 mm²** ; ΔA = 2 × 150 × 1 = **300 mm²** (1,33 %). *(2 pts)*
+5. σ = 540 000 / 22 500 = **24,0 MPa** ; Δσ/σ = 5/540 + 1,33 % = 0,93 % + 1,33 % = **2,26 %** → Δσ = **0,54 MPa** → **σ = 24,0 ± 0,5 MPa**. *(5 pts)*
+
+### Partie C — Ordres de grandeur (5 pts)
+6. 15 × 10 × 2 = **≈ 300 kN** : 4 850 kN est **16 fois trop grand** → suspecter une erreur d'unité (daN au lieu de kN, ou m² au lieu de surface d'influence), ou de virgule. On refait le calcul avant d'aller plus loin. *(3 pts)*
+7. Les données n'ont que 2 ou 3 chiffres significatifs : afficher plus de chiffres donne une **fausse précision** et rend la note illisible. On arrondit le résultat à la précision des données. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner des incertitudes absolues pour un produit.
+> - Afficher un résultat avec plus de chiffres que la précision ne le permet.
+> - Ne jamais confronter un résultat de calcul à un ordre de grandeur.`},
  exercices:[
   {t:"Calculs approchés", d:1, e:`Sans calculatrice, donner une valeur approchée de 1,03⁴ ; √1,06 ; 1/0,98. Comparer ensuite aux valeurs exactes.`, c:`1,03⁴ ≈ 1 + 4 × 0,03 = **1,12** (exact 1,1255).
 √1,06 ≈ 1 + 0,06/2 = **1,03** (exact 1,0296).

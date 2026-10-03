@@ -81,6 +81,45 @@ Autour du bâtiment, le climat local est modifié par l'environnement :
 > - Nord : chaud et sec en saison sèche, fort écart jour-nuit → inertie et ventilation nocturne.
 > - Données : températures, humidité, pluie, ensoleillement, vents dominants.
 > - Le microclimat (végétation, sols, voisins) compte autant que le climat régional.`,
+ sujet:{titre:"Lire le climat de deux villes ivoiriennes et en déduire des stratégies de construction", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un architecte conçoit le même modèle d'école pour **Abidjan** (littoral) et **Korhogo** (nord, savane). Vous analysez les deux climats.
+
+**Données (mois le plus chaud)**
+
+| Ville | T max (°C) | T min (°C) | Humidité moyenne | Pluie annuelle | Vent dominant |
+|---|---|---|---|---|---|
+| Abidjan (mars) | 32 | 25 | 80 % | 1 800 mm | sud-ouest (mer) |
+| Korhogo (février) | 36 | 19 | 25 % | 1 200 mm | nord-est (harmattan, poussiéreux) |
+
+### Partie A — Lecture des données (6 points)
+1. Calculer l'amplitude jour-nuit et la température moyenne de chaque ville. (3 pts)
+2. Caractériser chaque climat (chaud-humide, chaud-sec ou tropical à saisons contrastées). (3 pts)
+
+### Partie B — Stratégies (10 points)
+3. Pourquoi l'**inertie thermique** (murs lourds) est-elle efficace à Korhogo et peu utile à Abidjan ? (3 pts)
+4. Proposer pour Abidjan quatre dispositions constructives adaptées (ventilation, protections, toiture, humidité). (4 pts)
+5. Proposer pour Korhogo trois dispositions adaptées (inertie, protection contre l'harmattan, fraîcheur nocturne). (3 pts)
+
+### Partie C — Pluie (4 points)
+6. Pour une toiture de **300 m²**, calculer le volume d'eau de pluie annuel dans chaque ville. (2 pts)
+7. Quelles conséquences sur les gouttières, les débords et les fondations ? (2 pts)`,
+  corrige:`### Partie A — Lecture (6 pts)
+1. Abidjan : amplitude **7 °C**, moyenne (32 + 25) / 2 = **28,5 °C** ; Korhogo : amplitude **17 °C**, moyenne **27,5 °C**. *(3 pts)*
+2. Abidjan : climat **chaud et humide** (faible amplitude, humidité élevée toute l'année) ; Korhogo : climat **tropical sec à saisons contrastées** (forte amplitude en saison sèche, harmattan). *(3 pts)*
+
+### Partie B — Stratégies (10 pts)
+3. À Korhogo, les nuits fraîches (19 °C) refroidissent les murs lourds, qui restituent cette fraîcheur le jour (déphasage). À Abidjan, la nuit reste chaude (25 °C) : les murs lourds ne se refroidissent pas et restituent la chaleur la nuit. *(3 pts)*
+4. **Ventilation traversante** (bâtiments étroits, ouvertures face au vent de mer) ; **protections solaires** (débords, brise-soleil, façades est-ouest réduites) ; **toiture isolée et ventilée**, couleur claire ; constructions **légères ou ventilées** ; **protection contre l'humidité** (soubassements, drainage, matériaux qui sèchent). *(4 pts)*
+5. **Murs épais** (BTC, terre, béton) et **ventilation nocturne** ; ouvertures réduites et protégées côté **nord-est** (harmattan, poussière) ; patios ombragés, végétation, toitures isolées. *(3 pts)*
+
+### Partie C — Pluie (4 pts)
+6. Abidjan : 300 × 1,8 = **540 m³/an** ; Korhogo : 300 × 1,2 = **360 m³/an** (à multiplier par ≈ 0,8 pour l'eau récupérable). *(2 pts)*
+7. Gouttières et descentes plus généreuses sur le littoral (averses violentes) ; **débords** larges pour protéger les murs ; **drainage** autour des fondations et pentes de terrain éloignant l'eau du bâtiment. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer partout le même modèle de bâtiment.
+> - Construire lourd et fermé en climat chaud et humide.
+> - Oublier l'harmattan et la poussière dans le nord.`},
  exercices:[
   {t:"Lire des données climatiques", d:1, e:`Relevés moyens d'un mois de saison sèche : Abidjan : 31 °C / 24 °C, HR 82 % ; Korhogo : 35 °C / 18 °C, HR 30 %.
 a) Calculer l'écart jour-nuit de chaque ville.
@@ -155,6 +194,47 @@ Par ciel clair, le rayonnement solaire atteint environ **1 000 W/m²** sur une s
 > - Près de l'équateur : soleil presque vertical à midi → protéger d'abord la toiture.
 > - Façades nord/sud faciles à protéger ; est et surtout ouest à limiter.
 > - Ombre portée L = H/tan h.`,
+ sujet:{titre:"La course du soleil à Bouaké : hauteur à midi, ombres et orientation", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un lotissement est projeté à **Bouaké (latitude φ = 7,7° N)**. Vous étudiez l'ensoleillement pour orienter les bâtiments.
+
+**Données**
+- Déclinaison : δ = + 23,45° (21 juin) ; 0° (équinoxes) ; − 23,45° (21 décembre) ;
+- Hauteur du soleil à midi : h = 90° − | φ − δ | ;
+- Longueur d'ombre d'un objet de hauteur H : L = H / tan h ;
+- Immeuble R+3 de **12 m** de haut.
+
+### Partie A — Hauteur du soleil à midi (6 points)
+1. Calculer h à midi le 21 juin, aux équinoxes et le 21 décembre. (4 pts)
+2. Le 21 juin, le soleil est-il au nord ou au sud à midi ? Conséquence pour une façade nord ? (2 pts)
+
+### Partie B — Ombres (8 points)
+3. Calculer la longueur de l'ombre de l'immeuble à midi aux trois dates. (4 pts)
+4. Calculer l'ombre en milieu de matinée (h = 35°). (2 pts)
+5. Quel espacement minimal entre deux immeubles pour ne pas priver de soleil une cour à midi le 21 décembre ? (2 pts)
+
+### Partie C — Orientation (6 points)
+6. Quelles façades reçoivent le plus de rayonnement sous ces latitudes ? Pourquoi ? (3 pts)
+7. Proposer l'orientation des grandes façades et des pièces de vie. (3 pts)`,
+  corrige:`### Partie A — Hauteur (6 pts)
+1. *(4 pts)*
+   - 21 juin : 90 − |7,7 − 23,45| = 90 − 15,75 = **74,3°** ;
+   - équinoxes : 90 − 7,7 = **82,3°** ;
+   - 21 décembre : 90 − |7,7 + 23,45| = **58,9°**.
+2. δ (23,45°) > φ (7,7°) : le soleil passe **au nord** à midi. La façade nord reçoit donc du soleil direct en juin-juillet (à protéger aussi, par de petits débords). *(2 pts)*
+
+### Partie B — Ombres (8 pts)
+3. 21 juin : 12 / tan 74,3° = **3,4 m** (vers le sud) ; équinoxes : 12 / tan 82,3° = **1,6 m** ; 21 décembre : 12 / tan 58,9° = **7,3 m** (vers le nord). *(4 pts)*
+4. 12 / tan 35° = **17,1 m**. *(2 pts)*
+5. Au moins **7,3 m** entre l'immeuble et la cour au nord (davantage pour ensoleiller aussi les façades). *(2 pts)*
+
+### Partie C — Orientation (6 pts)
+6. La **toiture** (soleil presque vertical à midi) puis les façades **est et ouest** (soleil bas, rayons presque perpendiculaires le matin et l'après-midi, l'ouest aux heures les plus chaudes). Les façades nord et sud reçoivent peu, et un petit débord les protège. *(3 pts)*
+7. Grandes façades et ouvertures **au nord et au sud** ; pignons courts, pièces de service (escaliers, sanitaires, rangements) ou murs pleins à **l'est et à l'ouest** ; tenir compte des vents dominants pour la ventilation. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Croire que le soleil est toujours au sud à midi sous les tropiques.
+> - Protéger le sud et oublier l'ouest.
+> - Calculer tan avec une calculatrice en radians.`},
  exercices:[
   {t:"Hauteur du soleil à Korhogo", d:1, e:`Korhogo est à la latitude 9,5° N. Calculer la hauteur du soleil à midi le 21 juin, aux équinoxes et le 21 décembre, et préciser s'il est au nord ou au sud.`, c:`21 juin : 90 − |9,5 − 23,45| = 90 − 13,95 = **76,0°, au nord** (δ > φ).
 Équinoxes : 90 − 9,5 = **80,5°, au sud**.
@@ -224,6 +304,46 @@ En climatisation, une consigne de **25 à 26 °C** suffit et économise beaucoup
 > - T(opérative) ≈ moyenne de l'air et des parois : des parois chaudes rendent la chaleur insupportable.
 > - Un courant d'air de 1 m/s équivaut à 3 à 4 °C de moins.
 > - Confort en ventilation naturelle : 24 à 29 °C, HR 30 à 70 %, air en mouvement.`,
+ sujet:{titre:"Le confort thermique sous une toiture en tôle : température opérative, air et humidité", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Des enseignants d'une école de Divo se plaignent de la chaleur dans les classes couvertes en tôle sans faux plafond.
+
+**Données**
+- Air intérieur : **31 °C** ; humidité relative **70 %** ;
+- Température moyenne des parois sans faux plafond : **35 °C** (sous-face de la tôle à 46 °C) ;
+- Avec faux plafond isolé et ventilé : température moyenne des parois **32 °C** ;
+- T(opérative) ≈ (T(air) + T(parois)) / 2 ;
+- Un mouvement d'air de **1 m/s** abaisse la température ressentie d'environ **3 à 4 °C** ;
+- Zone de confort indicative en climat tropical : température opérative **≤ 28 à 29 °C** avec un peu de mouvement d'air.
+
+### Partie A — Les facteurs du confort (5 points)
+1. Citer les six paramètres du confort thermique (4 liés à l'ambiance, 2 à l'occupant). (3 pts)
+2. Comment le corps perd-il sa chaleur ? Lequel de ces modes devient difficile quand l'air est humide ? (2 pts)
+
+### Partie B — Température opérative (8 points)
+3. Calculer la température opérative actuelle. (2 pts)
+4. Calculer la température opérative avec le faux plafond isolé. Gain ? (3 pts)
+5. Avec en plus des ventilateurs de plafond (1 m/s), quelle température ressentie ? Le confort est-il atteint ? (3 pts)
+
+### Partie C — Solutions (7 points)
+6. Proposer quatre solutions pour améliorer le confort sans climatisation. (4 pts)
+7. Pourquoi la climatisation n'est-elle pas la première solution à proposer ? (3 pts)`,
+  corrige:`### Partie A — Facteurs (5 pts)
+1. Ambiance : **température de l'air**, **température des parois** (rayonnement), **vitesse de l'air**, **humidité** ; occupant : **activité** (métabolisme) et **vêtement**. *(3 pts)*
+2. Convection, rayonnement, conduction et **évaporation** de la sueur ; l'évaporation devient difficile quand l'air est **humide** (l'air est déjà chargé de vapeur). *(2 pts)*
+
+### Partie B — Température opérative (8 pts)
+3. (31 + 35) / 2 = **33 °C** : on se sent à 33 °C. *(2 pts)*
+4. (31 + 32) / 2 = **31,5 °C** → gain de **1,5 °C** de température ressentie (et beaucoup moins de rayonnement chaud sur la tête). *(3 pts)*
+5. 31,5 − 3 à 4 ≈ **28 °C** ressentis : on approche de la zone de confort. *(3 pts)*
+
+### Partie C — Solutions (7 pts)
+6. **Faux plafond isolé** et ventilation des combles ; **tôle claire** ou peinture réfléchissante ; **ventilateurs** de plafond ; **ventilation traversante** (fenêtres face à face, impostes hautes) ; **protections solaires** (débords, arbres) ; ombrager la cour. *(4 pts)*
+7. Coût d'installation et d'**électricité** (souvent indisponible ou cher), entretien, bruit, nécessité de fermer les fenêtres ; elle traite les symptômes : on commence par réduire les apports de chaleur (conception) avant de climatiser. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Ne regarder que la température de l'air.
+> - Oublier le rayonnement d'une tôle chaude au-dessus des têtes.
+> - Climatiser un bâtiment mal conçu : facture énorme pour un confort médiocre.`},
  exercices:[
   {t:"Température opérative", d:1, e:`Dans une classe, l'air est à 29 °C. Calculer la température opérative : a) si les parois sont à 35 °C (toiture non isolée) ; b) si elles sont à 30 °C (toiture isolée).`, c:`a) (29 + 35)/2 = **32 °C**.
 b) (29 + 30)/2 = **29,5 °C**, soit 2,5 °C de mieux : l'isolation de la toiture améliore directement le confort.`},
@@ -303,6 +423,50 @@ $$ FLJ = E(intérieur) / E(extérieur, ciel couvert) × 100     (%)
 > - 300 à 500 lux pour lire et travailler.
 > - FLJ ≥ 2 % pour une classe ; fenêtres ≥ 1/6 du plancher.
 > - Profondeur éclairée ≈ 2 à 2,5 fois la hauteur du linteau ; lumière sans soleil direct.`,
+ sujet:{titre:"Éclairage naturel d'une salle de classe : surface vitrée et facteur de lumière du jour", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une salle de classe de **8,00 × 7,00 m** est prévue dans un collège à Man. On veut un éclairage naturel suffisant pour lire et écrire.
+
+**Données**
+- Éclairement extérieur par ciel couvert : **12 000 lux** ;
+- FLJ = E(intérieur) / E(extérieur) × 100 ; besoin sur les tables : **300 lux** ;
+- Règle de prédimensionnement : surface vitrée ≥ **1/6** de la surface du plancher pour une classe ;
+- Fenêtres standard : **1,20 × 1,20 m**.
+
+### Partie A — Notions (5 points)
+1. Définir l'éclairement (lux) et le flux lumineux (lumen). (2 pts)
+2. Pourquoi utilise-t-on le ciel couvert pour dimensionner l'éclairage naturel ? (1 pt)
+3. Pourquoi faut-il éviter le soleil direct sur les tables et le tableau ? (2 pts)
+
+### Partie B — Dimensionnement (9 points)
+4. Calculer la surface vitrée minimale et le nombre de fenêtres. (3 pts)
+5. Calculer le FLJ nécessaire pour obtenir 300 lux. (2 pts)
+6. Avec un FLJ mesuré de 2,5 % au fond de la classe, l'éclairement est-il suffisant ? (2 pts)
+7. Comment répartir les fenêtres (un ou deux côtés, hauteur des allèges) ? (2 pts)
+
+### Partie C — Confort visuel (6 points)
+8. Citer trois causes d'éblouissement et une solution pour chacune. (3 pts)
+9. Pourquoi les parois et le plafond clairs améliorent-ils l'éclairage ? (1 pt)
+10. Quelle orientation de fenêtres privilégier en Côte d'Ivoire ? (2 pts)`,
+  corrige:`### Partie A — Notions (5 pts)
+1. **Éclairement** : flux reçu par unité de surface (lux = lm/m²) ; **flux lumineux** : quantité de lumière émise par une source (lumen). *(2 pts)*
+2. C'est la situation la plus défavorable courante : si l'éclairage suffit par ciel couvert, il suffira presque toujours. *(1 pt)*
+3. Le soleil direct crée des **taches très lumineuses**, de l'**éblouissement**, des reflets sur le tableau et de la **chaleur**. *(2 pts)*
+
+### Partie B — Dimensionnement (9 pts)
+4. 56 / 6 = **9,33 m²** ; une fenêtre fait 1,44 m² → 9,33 / 1,44 = 6,5 → **7 fenêtres** (10,1 m²). *(3 pts)*
+5. FLJ = 300 / 12 000 = **2,5 %**. *(2 pts)*
+6. E = 0,025 × 12 000 = **300 lux** ✔ (juste suffisant au point le plus défavorable). *(2 pts)*
+7. Fenêtres sur **les deux longs côtés** (éclairage bilatéral et ventilation traversante), allèges vers 1,00 m, linteaux hauts (la lumière pénètre plus loin) ; lumière principale venant de la gauche des élèves droitiers. *(2 pts)*
+
+### Partie C — Confort visuel (6 pts)
+8. Soleil direct → **débords, brise-soleil** ; ciel lumineux vu en face → orienter les tables parallèlement aux fenêtres ; reflets sur le tableau → tableau mat, éclairage latéral ; contrastes trop forts → parois claires. *(3 pts)*
+9. Elles **réfléchissent** la lumière et la répartissent dans la pièce (fond de classe moins sombre). *(1 pt)*
+10. Fenêtres au **nord et au sud** (faciles à protéger du soleil par des débords) ; éviter l'est et l'ouest. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre lux et lumens.
+> - Ajouter des fenêtres à l'ouest : éblouissement et chaleur.
+> - Oublier que le fond de la classe est le point le plus sombre.`},
  exercices:[
   {t:"Éclairement d'une surface", d:1, e:`Une lampe LED de 1 800 lm éclaire uniformément un plan de travail de 6 m² (on néglige les pertes).
 Calculer l'éclairement. Est-il suffisant pour une cuisine ?`, c:`E = 1 800/6 = **300 lux** : c'est la valeur recommandée pour un plan de travail de cuisine.`},
@@ -372,6 +536,46 @@ Les averses tropicales sont violentes : 80 à 120 mm/h pendant quelques minutes.
 > - Arase étanche, hérisson et film, soubassement hydrofuge, pente du terrain, drainage.
 > - Débords de 60 cm à 1 m, gouttes d'eau sous les appuis.
 > - Les averses tropicales atteignent 100 mm/h.`,
+ sujet:{titre:"Protéger le bâtiment de l'eau : pluie battante, débords et remontées capillaires", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une maison à Grand-Bassam présente des murs humides en pied et des traces d'eau en haut des façades exposées aux pluies.
+
+**Données**
+- Débord de toiture : **0,60 m** ; pluie tombant à **30°** puis **45°** de la verticale (vent) ;
+- Hauteur capillaire : h = 2 σ cos θ / (ρ g r), σ = **0,073 N/m**, ρ = **1 000 kg/m³**, g = **9,81 m/s²**, θ ≈ 0 ;
+- Rayons de pores : **0,1 mm** (sable), **10 µm** (mortier), **1 µm** (enduit fin, argile).
+
+### Partie A — La pluie (7 points)
+1. Calculer la hauteur de mur protégée par le débord pour une pluie à 30° puis à 45°. (4 pts)
+2. Quels sont les points faibles d'une façade face à la pluie battante ? (3 pts)
+
+### Partie B — Remontées capillaires (8 points)
+3. Calculer la hauteur capillaire théorique pour chaque rayon de pore. (4 pts)
+4. Pourquoi les remontées réelles ne dépassent-elles en général pas 1 à 1,5 m ? (2 pts)
+5. Décrire les signes de remontées capillaires sur un mur. (2 pts)
+
+### Partie C — Solutions (5 points)
+6. Proposer des solutions pour une construction neuve. (3 pts)
+7. Proposer des solutions pour la maison existante. (2 pts)`,
+  corrige:`### Partie A — Pluie (7 pts)
+1. h = 0,60 / tan 30° = **1,04 m** ; h = 0,60 / tan 45° = **0,60 m**. Plus la pluie est inclinée, moins le débord protège. *(4 pts)*
+2. Appuis de fenêtres sans **rejingot** ni **larmier**, joints menuiserie-maçonnerie, **fissures** d'enduit, têtes de murs et acrotères sans couvertine, pied de façade éclaboussé (rebond de la pluie). *(3 pts)*
+
+### Partie B — Capillarité (8 pts)
+3. *(4 pts)*
+   - r = 0,1 mm : h = 2 × 0,073 / (1 000 × 9,81 × 10⁻⁴) = **0,15 m** ;
+   - r = 10 µm : **1,49 m** ;
+   - r = 1 µm : **14,9 m** (théorique).
+4. L'eau **s'évapore** par les faces du mur au fur et à mesure qu'elle monte : il s'établit un équilibre entre remontée et évaporation (souvent 1 à 1,5 m) ; les pores ne sont pas des tubes continus. *(2 pts)*
+5. Bande humide en **pied de mur**, plus marquée après la saison des pluies, **salpêtre** (sels blancs), enduits et peintures qui cloquent et s'effritent, odeur de moisi. *(2 pts)*
+
+### Partie C — Solutions (5 pts)
+6. **Arase étanche** (chape hydrofuge ou film) entre fondation et maçonnerie ; soubassement en matériaux peu capillaires ; **drainage** périphérique ; trottoir avec pente vers l'extérieur ; débords suffisants. *(3 pts)*
+7. **Injection** d'une barrière chimique hydrofuge dans le mur ; drainage périphérique ; remplacer les enduits ciment étanches par des enduits **respirants** (chaux) qui laissent sécher ; supprimer les terres contre le mur. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Couvrir un mur humide d'un enduit ou d'une peinture étanche : l'eau monte plus haut.
+> - Confondre remontées capillaires, infiltrations et condensation.
+> - Négliger l'entretien des gouttières.`},
  exercices:[
   {t:"Hauteurs de remontée capillaire", d:1, e:`Calculer la hauteur théorique de remontée de l'eau dans des pores de rayon 50 µm et 5 µm (σ = 0,073 N/m, mouillage parfait cos θ = 1).`, c:`50 µm : h = 2 × 0,073/(1 000 × 9,81 × 50 × 10⁻⁶) = **0,30 m**.
 5 µm : h = 2 × 0,073/(1 000 × 9,81 × 5 × 10⁻⁶) = **2,98 m**.
@@ -440,6 +644,46 @@ Les **moisissures** se développent quand l'humidité relative au contact d'une 
 > - Un bâtiment neuf doit sécher plusieurs mois avant les revêtements étanches.
 > - Une famille produit 10 à 12 kg de vapeur par jour : ventiler.
 > - Diagnostiquer la cause (capillarité, infiltration, fuite, condensation) avant de traiter.`,
+ sujet:{titre:"Diagnostiquer l'humidité dans un logement : mesures, causes et traitements", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une famille de 4 personnes à Yopougon se plaint de taches noires et de peintures qui se décollent dans son appartement.
+
+**Constats**
+- T1 : taches noires derrière une armoire contre un mur extérieur ombragé, dans une chambre climatisée la nuit ;
+- T2 : bande humide de 0,80 m en pied de mur de la salle de séjour, au rez-de-chaussée ;
+- T3 : auréole brune au plafond de la salle de bains, sous la terrasse ;
+- Mesure sur un échantillon de mortier prélevé en T2 : masse humide **152,4 g**, masse sèche **140,0 g** ;
+- La famille produit environ **12 kg de vapeur d'eau par jour** ; l'air extérieur contient **21,5 g d'eau/kg d'air** ; on accepte que l'air intérieur en contienne **2 g/kg** de plus ; masse volumique de l'air **1,16 kg/m³**.
+
+### Partie A — Diagnostic (9 points)
+1. Pour chaque constat, proposer la cause la plus probable (condensation, remontée capillaire, infiltration, fuite). Justifier. (6 pts)
+2. Citer les étapes d'une démarche de diagnostic de l'humidité. (3 pts)
+
+### Partie B — Mesures (6 points)
+3. Calculer la teneur en eau du mortier. Est-elle normale (un mortier sec contient 1 à 3 %) ? (2 pts)
+4. Calculer le débit d'air de ventilation nécessaire pour évacuer la vapeur produite par la famille (en kg/h puis en m³/h). (4 pts)
+
+### Partie C — Traitements (5 points)
+5. Proposer un traitement pour chacun des trois désordres. (3 pts)
+6. Pourquoi faut-il traiter la cause avant de refaire les peintures ? (2 pts)`,
+  corrige:`### Partie A — Diagnostic (9 pts)
+1. *(6 pts)*
+   - **T1** : **condensation** et moisissures — mur froid (chambre climatisée, mur ombragé), air immobile derrière l'armoire, humidité relative élevée au contact ;
+   - **T2** : **remontées capillaires** — bande régulière en pied de mur, au rez-de-chaussée ;
+   - **T3** : **infiltration** par la terrasse (étanchéité, relevés ou évacuation) ou **fuite** d'une canalisation de l'étage.
+2. Observer la forme, la position et l'évolution des taches (selon la pluie, les saisons) ; mesurer l'humidité à différentes hauteurs ; vérifier les réseaux (compteur d'eau fermé : l'index tourne-t-il ?) ; contrôler toiture, gouttières, joints ; mesurer l'humidité de l'air intérieur. *(3 pts)*
+
+### Partie B — Mesures (6 pts)
+3. w = (152,4 − 140,0) / 140,0 = **8,9 %** : bien supérieur à 1 – 3 % → mortier **humide**. *(2 pts)*
+4. 12 kg/jour = **0,5 kg/h** ; débit d'air = 0,5 / 0,002 = **250 kg/h** → 250 / 1,16 = **≈ 215 m³/h** d'air renouvelé. *(4 pts)*
+
+### Partie C — Traitements (5 pts)
+5. T1 : décoller l'armoire du mur, **ventiler** (aérations, extracteurs), éviter le surclimatisation, isoler le mur ; traiter la moisissure (eau de Javel diluée). T2 : drainage, barrière anti-capillaire par injection, enduit respirant. T3 : réparer l'**étanchéité** de la terrasse (relevés, évacuations) ou la fuite. *(3 pts)*
+6. Sinon l'humidité revient et la nouvelle peinture se décolle à nouveau : on perd l'argent des finitions. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Traiter toutes les taches d'humidité de la même façon.
+> - Boucher les aérations pour « garder la fraîcheur » de la climatisation.
+> - Repeindre sans laisser sécher le mur.`},
  exercices:[
   {t:"Teneur en eau d'un échantillon", d:1, e:`Un morceau de brique prélevé dans un mur pèse 2 450 g ; après séchage à l'étuve, il pèse 2 280 g.
 Calculer sa teneur en eau.`, c:`w = (2 450 − 2 280)/2 280 × 100 = 170/2 280 × 100 = **7,5 %** : brique nettement humide (une brique sèche en contient moins de 2 %).`},
@@ -523,6 +767,47 @@ Les bâtiments voisins, les reliefs et la végétation forment des **masques** q
 > - Débord : d ≥ H/tan hp ; efficace au nord et au sud.
 > - Est et ouest : brise-soleil verticaux, claustras, volets, végétation.
 > - Protection extérieure (g ≈ 0,15) bien meilleure qu'intérieure (g ≈ 0,55).`,
+ sujet:{titre:"Dimensionner des protections solaires : débord au sud et brise-soleil à l'est", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un immeuble de bureaux est construit à **Abidjan (φ = 5,3° N)**. On dimensionne les protections des fenêtres de **1,20 m** de haut.
+
+**Données**
+- Hauteur du soleil à Abidjan (21 décembre) : **25°** à 8 h ; **37,5°** à 9 h ; **49°** à 10 h ; **61°** à midi (sud) ; aux équinoxes : 30° à 8 h, presque plein est ;
+- À 9 h le 21 décembre, l'azimut du soleil fait un angle **γ = 55°** avec la normale à la façade sud ;
+- Hauteur apparente : tan hp = tan h / cos γ ; débord nécessaire : d ≥ H / tan hp ;
+- Hauteur du soleil : sin h = sin φ sin δ + cos φ cos δ cos ω (ω : angle horaire, 15° par heure, négatif le matin) ;
+- Pour Korhogo : φ = **9,5°**, δ = **− 23,45°** (21 décembre).
+
+### Partie A — Façade sud (8 points)
+1. Calculer le débord nécessaire pour protéger la fenêtre à midi le 21 décembre. (2 pts)
+2. Calculer la hauteur apparente à 9 h et le débord nécessaire pour protéger de 9 h à 15 h. (4 pts)
+3. Aux équinoxes, quel débord est nécessaire à midi ? Conclure sur la façade sud. (2 pts)
+
+### Partie B — Façade est (6 points)
+4. À 8 h aux équinoxes (h = 30°, soleil en face), quel débord horizontal faudrait-il ? Est-ce réaliste ? (3 pts)
+5. Proposer une protection adaptée et expliquer son principe. (3 pts)
+
+### Partie C — Calcul de la hauteur du soleil (6 points)
+6. Calculer la hauteur du soleil à Korhogo le 21 décembre à midi (ω = 0) et à 9 h (ω = − 45°). (4 pts)
+7. Pourquoi les protections doivent-elles être un peu plus importantes dans le nord en décembre ? (2 pts)`,
+  corrige:`### Partie A — Sud (8 pts)
+1. d = 1,20 / tan 61° = **0,67 m**. *(2 pts)*
+2. tan hp = tan 37,5° / cos 55° = 0,767 / 0,574 = 1,338 → **hp = 53,2°** ; d = 1,20 / 1,338 = **0,90 m**. *(4 pts)*
+3. Soleil presque vertical (85°) : **quelques centimètres** suffisent. Un débord de 0,90 m protège la façade sud presque toute l'année : c'est la façade la **plus facile** à protéger. *(2 pts)*
+
+### Partie B — Est (6 pts)
+4. d = 1,20 / tan 30° = **2,08 m** : irréaliste (et le soleil plus bas, à 7 h, passerait encore dessous). *(3 pts)*
+5. Des **protections verticales** ou orientables : lames verticales inclinées, volets persiennés, claustras, brise-soleil à lames, écran végétal ; elles arrêtent le soleil bas et rasant du matin tout en laissant passer la lumière diffuse et l'air. *(3 pts)*
+
+### Partie C — Hauteur (6 pts)
+6. *(4 pts)*
+   - midi : h = 90 − |9,5 + 23,45| = **57,1°** (ou par la formule : sin h = 0,839) ;
+   - 9 h : sin h = sin 9,5° × sin(− 23,45°) + cos 9,5° × cos 23,45° × cos 45° = − 0,0657 + 0,6398 = 0,5741 → **h = 35,0°**.
+7. Le soleil d'hiver y est **plus bas** (57° à midi contre 61° à Abidjan) : il pénètre plus profondément sous les débords des façades sud. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser la hauteur réelle au lieu de la hauteur apparente quand le soleil est de biais.
+> - Vouloir protéger l'est et l'ouest avec des débords horizontaux.
+> - Oublier le signe de la déclinaison en décembre.`},
  exercices:[
   {t:"Débord d'une fenêtre au sud", d:1, e:`Une fenêtre au sud, à Yamoussoukro (h à midi le 21 décembre = 60°), a une hauteur H = 1,20 m sous le débord.
 Quelle profondeur de débord assure l'ombre à midi ce jour-là ?`, c:`d = 1,20/tan 60° = 1,20/1,732 = **0,69 m** : un débord de 70 cm suffit à midi (on prend un peu plus pour couvrir la fin de matinée et le début d'après-midi).`},
@@ -599,6 +884,45 @@ Dans un logement, l'air neuf entre par les pièces principales (séjour, chambre
 > - Bureau : 25 m³/h par personne ; classe : 15 à 18 m³/h par élève.
 > - Logement : entrée d'air par les pièces principales, extraction par les pièces humides.
 > - Un climatiseur split n'apporte pas d'air neuf.`,
+ sujet:{titre:"Ventilation et qualité de l'air : salle de classe et logement", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On vérifie le renouvellement d'air d'une salle de classe d'un lycée à Daloa et d'un appartement.
+
+**Données**
+- Classe de **40 élèves** (secondaire) ; production de CO₂ : **0,015 m³/h** par élève ; air extérieur à **400 ppm** ;
+- Débit réglementaire indicatif : **18 m³/h par élève** ; C = C(ext) + G / Q (G en m³/h, Q en m³/h, C en ppm × 10⁻⁶) ;
+- Appartement de **120 m³** : extraction cuisine **90 m³/h**, salle de bains **30 m³/h**, WC **15 m³/h**.
+
+### Partie A — Polluants (5 points)
+1. Citer cinq polluants de l'air intérieur et leur origine. (3 pts)
+2. Pourquoi le CO₂ sert-il d'indicateur de la qualité de l'air ? (2 pts)
+
+### Partie B — Salle de classe (9 points)
+3. Calculer la production totale de CO₂ et le débit réglementaire. (2 pts)
+4. Calculer la concentration de CO₂ en régime établi. (3 pts)
+5. Quel débit faudrait-il pour ne pas dépasser 1 000 ppm ? (2 pts)
+6. Les fenêtres sont fermées pour le bruit de la route : quelles conséquences et quelles solutions ? (2 pts)
+
+### Partie C — Logement (6 points)
+7. Calculer le débit total extrait et le taux de renouvellement horaire. (3 pts)
+8. Expliquer le principe de la ventilation par balayage (entrées d'air dans les pièces sèches, extraction dans les pièces humides). (3 pts)`,
+  corrige:`### Partie A — Polluants (5 pts)
+1. **CO₂** (respiration), **vapeur d'eau** (cuisine, douches), **COV** (peintures, colles, meubles), **fumées et particules** (cuisson au charbon, encens, tabac), **monoxyde de carbone** (combustion), **moisissures**, poussières, odeurs. *(3 pts)*
+2. Il est produit par les occupants, facile à mesurer, et sa concentration suit celle des autres polluants liés à l'occupation : au-delà de 1 000 – 1 500 ppm, l'air est confiné (fatigue, maux de tête, baisse de l'attention). *(2 pts)*
+
+### Partie B — Classe (9 pts)
+3. G = 40 × 0,015 = **0,6 m³/h** ; Q = 40 × 18 = **720 m³/h**. *(2 pts)*
+4. C = 400 + 0,6 / 720 × 10⁶ = 400 + 833 = **1 233 ppm**. *(3 pts)*
+5. 400 + 0,6 / Q × 10⁶ ≤ 1 000 → Q ≥ 0,6 × 10⁶ / 600 = **1 000 m³/h** (25 m³/h par élève). *(2 pts)*
+6. L'air devient vite **confiné** (CO₂ > 2 000 ppm), chaleur et humidité augmentent. Solutions : **impostes** hautes ou grilles acoustiques, ventilation par le côté calme, ventilateur d'extraction, aérer entre les cours, planter une haie et éloigner la route. *(2 pts)*
+
+### Partie C — Logement (6 pts)
+7. 90 + 30 + 15 = **135 m³/h** → 135 / 120 = **1,1 volume par heure**. *(3 pts)*
+8. L'air neuf **entre** par les pièces de vie (séjour, chambres) et **traverse** le logement pour être **extrait** dans les pièces humides et polluées (cuisine, salle de bains, WC) : les odeurs et la vapeur ne passent pas dans les pièces sèches. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de convertir la concentration en ppm (× 10⁶).
+> - Boucher les entrées d'air pour garder la fraîcheur de la climatisation.
+> - Faire entrer l'air par la cuisine.`},
  exercices:[
   {t:"Taux de renouvellement", d:1, e:`Une chambre de 4 × 3,5 × 2,8 m est ventilée par un débit de 60 m³/h.
 Calculer le taux de renouvellement.`, c:`V = 4 × 3,5 × 2,8 = **39,2 m³** → n = 60/39,2 = **1,5 volume par heure**.`},
@@ -664,6 +988,45 @@ La **puissance installée par m²** permet de comparer les solutions : avec des 
 > - U : 0,4 à 0,7 ; M : 0,7 à 0,8.
 > - Espacement ≤ 1,5 × hauteur au-dessus du plan de travail.
 > - LED : 8 à 12 W/m² pour 500 lux.`,
+ sujet:{titre:"Éclairage artificiel d'une salle de classe par la méthode des flux", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On équipe une salle de classe de **9,00 × 7,00 m** d'un lycée à Abengourou pour les cours du soir.
+
+**Données**
+- Éclairement à maintenir : **300 lux** ; facteur d'utilance **U = 0,55** ; facteur de maintenance **M = 0,8** ;
+- Φ(total) = E × S / (U × M) ; N = Φ(total) / Φ(luminaire) ;
+- Réglettes LED : **2 200 lm**, **18 W** ;
+- Utilisation : **6 h/jour**, **200 jours/an** ; électricité : **90 F/kWh** ;
+- Ancien éclairage : tubes fluorescents de **36 W** (avec ballast **45 W**) donnant **2 500 lm**, même nombre de points lumineux.
+
+### Partie A — Notions (4 points)
+1. Que représentent U et M ? Pourquoi M < 1 ? (2 pts)
+2. Pourquoi l'éclairement nécessaire dépend-il de l'activité (circulation, classe, atelier de dessin) ? (2 pts)
+
+### Partie B — Dimensionnement (9 points)
+3. Calculer la surface et le flux total nécessaire. (3 pts)
+4. Calculer le nombre de réglettes et proposer une disposition régulière. (3 pts)
+5. Calculer la puissance installée et la puissance surfacique (W/m²). (3 pts)
+
+### Partie C — Économie (7 points)
+6. Calculer la consommation annuelle et son coût avec les LED. (3 pts)
+7. Calculer la consommation des anciens tubes (même nombre de points) et l'économie annuelle. (4 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **U** : part du flux des lampes qui arrive réellement sur le plan de travail (dépend du luminaire, des dimensions et des couleurs du local) ; **M** : tient compte du vieillissement des lampes et de l'encrassement — il est < 1 car l'éclairement baisse avec le temps. *(2 pts)*
+2. Les tâches visuelles fines (écriture, dessin) demandent plus de lumière que la circulation : environ 100 lux (couloir), 300 lux (classe), 500 lux (dessin, bureaux). *(2 pts)*
+
+### Partie B — Dimensionnement (9 pts)
+3. S = **63 m²** ; Φ = 300 × 63 / (0,55 × 0,8) = **42 955 lm**. *(3 pts)*
+4. 42 955 / 2 200 = 19,5 → **20 réglettes**, par exemple **4 rangées de 5**, parallèles aux fenêtres. *(3 pts)*
+5. 20 × 18 = **360 W** → 360 / 63 = **5,7 W/m²**. *(3 pts)*
+
+### Partie C — Économie (7 pts)
+6. 0,360 × 6 × 200 = **432 kWh/an** → **38 880 F/an**. *(3 pts)*
+7. Tubes : 20 × 45 = 900 W → 0,9 × 1 200 h = **1 080 kWh/an** → 97 200 F ; économie : **648 kWh** et **58 320 F/an** (60 %), plus une durée de vie bien plus longue des LED. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les facteurs U et M (on sous-dimensionne de moitié).
+> - Compter la puissance des tubes sans leur ballast.
+> - Disposer les luminaires au hasard : l'éclairement doit être uniforme.`},
  exercices:[
   {t:"Éclairer une salle de classe", d:2, e:`Une classe de 9 × 7 m doit recevoir 300 lux. U = 0,55 ; M = 0,8. On utilise des luminaires LED de 4 000 lm (36 W).
 Calculer le nombre de luminaires, proposer une disposition et calculer la puissance par m².`, c:`Φ(total) = 300 × 63/(0,55 × 0,8) = **42 955 lm** → N = 42 955/4 000 = 10,7 → **11**, que l'on porte à **12** pour une disposition régulière en **3 rangées de 4**.
@@ -753,6 +1116,48 @@ Dans les établissements recevant du public, on retient les principes suivants (
 > - Réaction au feu (A1 à F) : contribution au feu ; résistance au feu (R, E, I + durée) : tenue des éléments.
 > - Compartimenter, calfeutrer les traversées.
 > - Dégagements en UP : 0,90 / 1,40 / n × 0,60 m ; 1 UP par 100 personnes au-delà de 100.`,
+ sujet:{titre:"Sécurité incendie d'une salle polyvalente : dégagements, classements et extincteurs", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une salle polyvalente de **450 places** est construite à Yamoussoukro, avec des bureaux à l'étage (bâtiment de **1 200 m²** sur 2 niveaux).
+
+**Données**
+- Unités de passage : **1 UP = 0,90 m** ; **2 UP = 1,40 m** ; au-delà, n × 0,60 m ;
+- De 101 à 500 personnes : **2 dégagements** au moins et **1 UP par tranche de 100 personnes** ;
+- Extincteurs : **1 pour 200 m²**, au moins 1 par niveau ;
+- Classements : réaction au feu (A1, A2, B… s1, d0) ; résistance au feu (R, E, I + durée).
+
+### Partie A — Le feu (5 points)
+1. Décrire les phases d'un incendie dans un local. Qu'est-ce que l'embrasement généralisé ? (3 pts)
+2. Pourquoi les fumées sont-elles la première cause de décès ? (2 pts)
+
+### Partie B — Évacuation (8 points)
+3. Calculer le nombre d'unités de passage nécessaires et proposer les portes (nombre, largeurs). (4 pts)
+4. Citer quatre règles concernant les sorties (emplacement, sens d'ouverture, distances, balisage). (4 pts)
+
+### Partie C — Matériaux et structure (4 points)
+5. Que signifient A1, A2-s1,d0 ? Classer : béton, plaque de plâtre, laine de roche, moquette, lambris bois. (2 pts)
+6. Que signifient R 60, REI 90 et EI 30 ? Donner un exemple d'élément pour chacun. (2 pts)
+
+### Partie D — Moyens de secours (3 points)
+7. Calculer le nombre minimal d'extincteurs à eau. Où placer les extincteurs à CO₂ ? (3 pts)`,
+  corrige:`### Partie A — Le feu (5 pts)
+1. **Éclosion** → **croissance** (fumées chaudes sous le plafond) → **embrasement généralisé** (flashover : tout le local s'enflamme en quelques secondes quand les gaz chauds atteignent ≈ 600 °C) → **feu développé** → **déclin**. *(3 pts)*
+2. Elles sont **toxiques** (CO, gaz irritants), **chaudes** et **opaques** (on ne trouve plus la sortie) ; elles se propagent plus vite que les flammes. *(2 pts)*
+
+### Partie B — Évacuation (8 pts)
+3. 450 personnes → **5 UP** (tranches de 100, arrondies au-dessus) et au moins 2 dégagements ; par exemple **2 portes de 2 UP (1,40 m)** et **1 porte de 1 UP (0,90 m)**, ou une porte de 3 UP (1,80 m) et une de 2 UP, **éloignées** l'une de l'autre. *(4 pts)*
+4. Sorties **opposées** et éloignées ; portes **s'ouvrant vers l'extérieur** (sens de la sortie), sans clé ; **distances** à parcourir limitées (30 à 40 m) ; **éclairage de sécurité** et **balisage** lumineux ; dégagements toujours libres. *(4 pts)*
+
+### Partie C — Matériaux (4 pts)
+5. **A1** : incombustible (béton) ; **A2** : quasi incombustible (plaque de plâtre, laine de roche) ; s1 : peu de fumée, d0 : pas de gouttes enflammées. Moquette et lambris bois : classes B à E (combustibles), à limiter dans les dégagements. *(2 pts)*
+6. **R 60** : stabilité 60 min (poteau) ; **REI 90** : stabilité, étanchéité aux flammes et isolation 90 min (plancher séparatif) ; **EI 30** : étanchéité et isolation 30 min (porte coupe-feu). *(2 pts)*
+
+### Partie D — Secours (3 pts)
+7. 600 m² par niveau / 200 = **3 extincteurs par niveau**, soit **6** au total, répartis près des sorties ; extincteurs à **CO₂** près des **tableaux électriques** et des locaux techniques. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mettre les deux sorties côte à côte.
+> - Fermer les sorties à clé pendant les manifestations.
+> - Confondre réaction au feu (matériau) et résistance au feu (élément de construction).`},
  exercices:[
   {t:"Largeurs de dégagements", d:1, e:`Donner la largeur minimale d'un dégagement de 1 UP, 2 UP, 3 UP et 5 UP.`, c:`1 UP : **0,90 m** ; 2 UP : **1,40 m** ; 3 UP : 3 × 0,60 = **1,80 m** ; 5 UP : 5 × 0,60 = **3,00 m**.`},
   {t:"Salle de réunion", d:1, e:`Une salle de réunion accueille 80 personnes. Proposer des dégagements conformes.`, c:`Effectif de 51 à 100 : **2 dégagements de 1 UP** (2 portes de 0,90 m, éloignées l'une de l'autre), ou 1 dégagement de 2 UP (1,40 m) + 1 dégagement accessoire.`},
@@ -819,6 +1224,53 @@ On garde une marge de 1 à 2 °C.
 > - Point de rosée : ps(Td) = pv ; à 30 °C et 80 %, Td ≈ 26 °C.
 > - Sous les tropiques : condensation sur les surfaces refroidies (gaines, tuyaux, locaux climatisés).
 > - Isoler les surfaces froides avec un pare-vapeur continu ; prévoir l'évacuation des condensats.`,
+ sujet:{titre:"Air humide et condensation : point de rosée, tuyaux froids et climatiseur", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Dans un immeuble de bureaux climatisé à San-Pédro, des gouttes apparaissent sur les tuyaux d'eau froide et sous les gaines ; on veut aussi dimensionner l'évacuation des condensats.
+
+**Données**
+- Air extérieur : **28 °C**, humidité relative **75 %** ; p = **101 325 Pa** ;
+- Pression de vapeur saturante :
+
+| T (°C) | 10 | 13 | 15 | 20 | 22 | 24 | 26 | 28 | 30 |
+|---|---|---|---|---|---|---|---|---|---|
+| ps (Pa) | 1 226 | 1 495 | 1 702 | 2 333 | 2 639 | 2 978 | 3 355 | 3 774 | 4 237 |
+
+- Humidité absolue : x = 0,622 × pv / (p − pv) (kg d'eau / kg d'air sec) ;
+- Tuyau d'eau glacée à **12 °C** ; gaine de soufflage à **18 °C** en surface ;
+- Climatiseur traitant **400 m³/h** d'air extérieur, sortie de batterie à **13 °C** saturé ; masse volumique de l'air **1,16 kg/m³**.
+
+### Partie A — Air humide (6 points)
+1. Définir humidité relative, pression de vapeur et point de rosée. (3 pts)
+2. Calculer pv et l'humidité absolue x de l'air extérieur. (3 pts)
+
+### Partie B — Point de rosée (7 points)
+3. Calculer le point de rosée par interpolation dans le tableau. (3 pts)
+4. Les surfaces du tuyau (12 °C) et de la gaine (18 °C) se couvrent-elles d'eau dans un local qui reçoit cet air ? (2 pts)
+5. Proposer une solution. (2 pts)
+
+### Partie C — Condensats (7 points)
+6. Calculer l'humidité absolue de l'air à la sortie de la batterie. (2 pts)
+7. Calculer la quantité d'eau retirée par heure. (3 pts)
+8. Quelles dispositions prévoir pour les évacuations de condensats ? (2 pts)`,
+  corrige:`### Partie A — Air humide (6 pts)
+1. **pv** : pression partielle de la vapeur d'eau dans l'air ; **HR** = pv / ps(T) (part de la vapeur maximale que l'air peut contenir à cette température) ; **point de rosée** Td : température à laquelle il faut refroidir l'air pour qu'il devienne saturé (ps(Td) = pv). *(3 pts)*
+2. pv = 0,75 × 3 774 = **2 831 Pa** ; x = 0,622 × 2 831 / (101 325 − 2 831) = **0,0179 kg/kg = 17,9 g/kg**. *(3 pts)*
+
+### Partie B — Point de rosée (7 pts)
+3. 2 831 Pa est entre ps(22) = 2 639 et ps(24) = 2 978 : $$ Td = 22 + 2 × (2 831 − 2 639) / (2 978 − 2 639) = 23,1 °C
+   *(3 pts)*
+4. 12 °C et 18 °C sont **inférieurs à 23,1 °C** : les deux surfaces **condensent** (le tuyau ruisselle). *(2 pts)*
+5. **Calorifuger** les tuyaux et gaines avec un isolant à cellules fermées et un **pare-vapeur** continu (sinon l'humidité condense dans l'isolant) ; limiter l'entrée d'air humide non traité. *(2 pts)*
+
+### Partie C — Condensats (7 pts)
+6. ps(13) = 1 495 Pa (saturé) → x = 0,622 × 1 495 / (101 325 − 1 495) = **9,3 g/kg**. *(2 pts)*
+7. Δx = 17,9 − 9,3 = 8,6 g/kg ; débit d'air : 400 × 1,16 = 464 kg/h → **≈ 4,0 L d'eau par heure** (≈ 40 L par journée de 10 h). *(3 pts)*
+8. Bac et tuyau d'évacuation avec **pente** continue, **siphon**, raccordement au réseau d'eaux usées (pas de rejet sur la façade ou le trottoir), accès pour l'entretien, éventuellement pompe de relevage. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Comparer la température de surface à la température de l'air au lieu du point de rosée.
+> - Interpoler sur la mauvaise colonne du tableau.
+> - Oublier l'évacuation des condensats : dégâts des eaux garantis.`},
  exercices:[
   {t:"Humidité relative et point de rosée", d:1, e:`Un local à 26 °C contient de l'air dont la pression de vapeur vaut 2 000 Pa.
 a) Calculer l'humidité relative (ps(26 °C) = 3 355 Pa).
@@ -893,6 +1345,72 @@ Le **pare-vapeur** (ou le matériau le plus fermé à la vapeur) doit être plac
 > - Sd = µ × e ; chutes de température ∝ R, chutes de pv ∝ Sd.
 > - Condensation si pv > ps à une interface.
 > - Pare-vapeur du côté chaud et humide (extérieur sous les tropiques) ; intérieur ouvert à la vapeur.`,
+ sujet:{titre:"Méthode de Glaser : condensation dans le mur d'une chambre climatisée", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Dans un hôtel à Assinie, des moisissures apparaissent derrière la peinture des chambres très climatisées. On analyse la paroi par la méthode de Glaser.
+
+**Paroi (de l'extérieur vers l'intérieur)**
+
+| Couche | R (m²·K/W) | Sd (m) |
+|---|---|---|
+| Enduit ciment 2 cm | 0,017 | 0,30 |
+| Brique creuse 15 cm | 0,375 | 1,50 |
+| Polystyrène 4 cm | 1,053 | 1,60 |
+| Plaque de plâtre 1,3 cm | 0,052 | 0,10 |
+| Peinture glycéro (intérieur) | ≈ 0 | 4,0 |
+
+Rse = **0,04** ; Rsi = **0,13** m²·K/W.
+**Conditions** : extérieur **30 °C, 85 %** (pv = 3 601 Pa) ; chambre **19 °C, 55 %** (pv = 1 209 Pa).
+Pression de vapeur saturante : ps(20,2 °C) = **2 367 Pa** ; ps(19,9 °C) = **2 318 Pa** ; ps(27,1 °C) = **3 596 Pa** ; ps(29,6 °C) = **4 152 Pa**.
+
+### Partie A — Principe (4 points)
+1. Dans quel sens migre la vapeur dans cette paroi ? Pourquoi est-ce l'inverse d'un pays froid ? (2 pts)
+2. Qu'est-ce que l'épaisseur d'air équivalente Sd ? (2 pts)
+
+### Partie B — Profils (10 points)
+3. Calculer la résistance totale et le flux de chaleur (ΔT = 11 °C). (2 pts)
+4. Calculer la température à chaque interface. (4 pts)
+5. Calculer la pression de vapeur à chaque interface (chute proportionnelle aux Sd). (4 pts)
+
+### Partie C — Diagnostic et solutions (6 points)
+6. Comparer pv et ps à chaque interface. Où y a-t-il condensation ? (2 pts)
+7. Vérifier que la condensation disparaît si l'on remplace la peinture glycéro par une peinture acrylique (Sd = 0,2 m). (2 pts)
+8. Où faudrait-il placer un pare-vapeur dans un bâtiment climatisé en climat tropical ? Pourquoi ? (2 pts)`,
+  corrige:`### Partie A — Principe (4 pts)
+1. La vapeur va du côté où pv est le plus élevé vers le plus faible : **de l'extérieur (3 601 Pa) vers l'intérieur climatisé (1 209 Pa)**. En pays froid, l'intérieur chauffé est plus humide : la vapeur sort. *(2 pts)*
+2. **Sd = µ × e** : épaisseur d'air qui opposerait la même résistance à la vapeur que la couche (plus Sd est grand, plus la couche est étanche à la vapeur). *(2 pts)*
+
+### Partie B — Profils (10 pts)
+3. RT = 0,04 + 0,017 + 0,375 + 1,053 + 0,052 + 0,13 = **1,667 m²·K/W** ; φ = 11 / 1,667 = **6,6 W/m²**. *(2 pts)*
+4. Chute de température proportionnelle à R (ΔT × R / RT) : *(4 pts)*
+   - surface extérieure : 30 − 11 × 0,04 / 1,667 = **29,7 °C** ;
+   - enduit / brique : **29,6 °C** ;
+   - brique / polystyrène : **27,1 °C** ;
+   - polystyrène / plâtre : **20,2 °C** ;
+   - plâtre / peinture : **19,9 °C**.
+5. ΣSd = 7,50 m ; chute totale 2 392 Pa : *(4 pts)*
+   - enduit / brique : 3 601 − 2 392 × 0,30 / 7,50 = **3 506 Pa** ;
+   - brique / polystyrène : **3 028 Pa** ;
+   - polystyrène / plâtre : **2 517 Pa** ;
+   - plâtre / peinture : **2 484 Pa** ; puis 1 209 Pa dans la chambre.
+
+### Partie C — Diagnostic (6 pts)
+6. *(2 pts)*
+
+| Interface | T (°C) | ps (Pa) | pv (Pa) | Diagnostic |
+|---|---|---|---|---|
+| Enduit / brique | 29,6 | 4 152 | 3 506 | sec |
+| Brique / polystyrène | 27,1 | 3 596 | 3 028 | sec |
+| Polystyrène / plâtre | 20,2 | 2 367 | 2 517 | **condensation** |
+| Plâtre / peinture | 19,9 | 2 318 | 2 484 | **condensation** |
+
+La vapeur bute sur la peinture glycéro (côté **froid**) : elle condense dans le plâtre et derrière la peinture → moisissures.
+7. ΣSd = 3,70 m : pv(polystyrène / plâtre) = 3 601 − 2 392 × 3,40 / 3,70 = **1 403 Pa** < 2 367 ; pv(plâtre / peinture) = **1 336 Pa** < 2 318 → **plus de condensation**. *(2 pts)*
+8. Côté **extérieur** (côté chaud et humide) de l'isolant, ou bien utiliser des finitions intérieures **perméables** à la vapeur ; et ne pas surclimatiser (19 °C est inutilement froid). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Placer le pare-vapeur côté intérieur comme en Europe.
+> - Répartir la chute de pression de vapeur selon les résistances thermiques au lieu des Sd.
+> - Poser des revêtements étanches (vinyle, glycéro) dans des pièces très climatisées.`},
  exercices:[
   {t:"Épaisseurs d'air équivalentes", d:1, e:`Calculer Sd pour : a) 20 cm de béton (µ = 100) ; b) 6 cm de polystyrène (µ = 50) ; c) 10 cm de laine minérale (µ = 1).
 Classer ces couches de la plus ouverte à la plus fermée à la vapeur.`, c:`a) Sd = 100 × 0,20 = **20 m** ; b) 50 × 0,06 = **3 m** ; c) 1 × 0,10 = **0,10 m**.
@@ -962,6 +1480,47 @@ Sous les tropiques, les écarts de température intérieur-extérieur sont faibl
 > - Q = Cd A √(2Δp/ρ) ; ouvertures en série : 1/A(éq)² = Σ 1/Aᵢ² (la plus petite domine).
 > - Le vent est le moteur principal sous les tropiques ; le tirage aide la nuit et par temps calme.
 > - Entrées à hauteur d'homme face au vent, sorties hautes et aussi grandes.`,
+ sujet:{titre:"Ventilation naturelle : effet du vent et tirage thermique d'une cage d'escalier", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** On veut rafraîchir sans climatisation une salle de réunion de **60 m³** d'un centre culturel à Grand-Lahou.
+
+**Données**
+- Vent : **3 m/s** ; différence de coefficients de pression entre les deux façades **ΔCp = 0,9** ; ρ(air) = **1,2 kg/m³** ;
+- Ouvertures : **1,2 m²** au vent, **0,8 m²** sous le vent ; coefficient de débit **Cd = 0,6** ;
+- Δp = ½ ρ v² ΔCp ; Q = Cd × A(éq) × √(2 Δp / ρ) ; 1 / A(éq)² = 1 / A1² + 1 / A2² ;
+- Tirage thermique : Δp ≈ ρ g h ΔT / T(K) ; cage d'escalier de **6 m** de haut, intérieur **2 °C** plus chaud que l'extérieur (T int ≈ **305 K**) ; g = 9,81 m/s².
+
+### Partie A — Effet du vent (9 points)
+1. Calculer la différence de pression due au vent. (2 pts)
+2. Calculer la surface équivalente des deux ouvertures. (2 pts)
+3. Calculer le débit d'air (m³/s et m³/h) et le nombre de renouvellements par heure. (3 pts)
+4. Que se passerait-il si l'ouverture sous le vent était fermée ? (2 pts)
+
+### Partie B — Tirage thermique (7 points)
+5. Calculer la différence de pression motrice dans la cage d'escalier. (2 pts)
+6. Calculer le débit avec la même surface équivalente. (3 pts)
+7. Comparer les deux effets et dire quand le tirage thermique est utile. (2 pts)
+
+### Partie C — Conception (4 points)
+8. Proposer quatre règles de conception pour une bonne ventilation naturelle. (4 pts)`,
+  corrige:`### Partie A — Vent (9 pts)
+1. Δp = 0,5 × 1,2 × 3² × 0,9 = **4,86 Pa**. *(2 pts)*
+2. 1 / A(éq)² = 1 / 1,44 + 1 / 0,64 = 0,694 + 1,563 = 2,257 → **A(éq) = 0,67 m²** (la plus petite ouverture limite le débit). *(2 pts)*
+3. $$ Q = 0,6 × 0,67 × √(2 × 4,86 / 1,2) = 0,40 × 2,85 = 1,14 m³/s ≈ 4 090 m³/h
+   soit 4 090 / 60 ≈ **68 renouvellements par heure**. *(3 pts)*
+4. L'air ne peut plus **traverser** : il n'y a plus qu'une faible ventilation par turbulence (mono-façade), le débit chute fortement. *(2 pts)*
+
+### Partie B — Tirage (7 pts)
+5. Δp = 1,2 × 9,81 × 6 × 2 / 305 = **0,46 Pa**. *(2 pts)*
+6. Q = 0,6 × 0,67 × √(2 × 0,46 / 1,2) = 0,40 × 0,88 = **0,35 m³/s ≈ 1 260 m³/h** (21 vol/h). *(3 pts)*
+7. Le vent est **3 fois plus efficace** quand il souffle, mais il est irrégulier ; le tirage thermique fonctionne **sans vent** (nuits calmes, sites abrités) : il assure un débit de base, d'autant plus fort que la hauteur est grande (cheminée solaire, cage d'escalier ouverte en haut). *(2 pts)*
+
+### Partie C — Conception (4 pts)
+8. Bâtiments **étroits** (≤ 2,5 fois la hauteur pour une façade, plus avec ventilation traversante) ; ouvertures sur des **façades opposées**, face aux vents dominants (± 30 à 45°) ; **porosité** suffisante (20 à 30 % des façades), impostes et cloisons ajourées ; sorties **hautes** (lanterneaux, cheminées) ; protéger les ouvertures de la pluie et des intrusions (persiennes, grilles). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les surfaces d'ouverture en série au lieu de calculer A(éq).
+> - Oublier la conversion de la température en kelvins.
+> - Croire qu'une seule grande fenêtre suffit à ventiler.`},
  exercices:[
   {t:"Pression du vent", d:1, e:`Un vent de 3 m/s souffle perpendiculairement à une maison (Cp = + 0,6 face au vent ; − 0,3 à l'arrière).
 Calculer la pression sur chaque façade et la différence de pression.`, c:`½ ρ v² = 0,5 × 1,2 × 9 = **5,4 Pa**.
@@ -1048,6 +1607,52 @@ Bonnes pratiques : surface **claire**, **double toiture** ou comble **ventilé**
 > - T(air-soleil) = T + α I/he : une toiture claire et ventilée est la mesure la plus rentable.
 > - Porosité 20 à 30 %, protections extérieures, végétation.
 > - Inertie adaptée au climat ; ventilateurs avant climatiseurs.`,
+ sujet:{titre:"Conception bioclimatique : toiture, couleurs, isolation et liste de vérifications", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un promoteur veut des logements économes à Yamoussoukro. Vous étudiez l'effet de la toiture et proposez une méthode de vérification.
+
+**Données**
+- Rayonnement sur la toiture : **950 W/m²** ; air extérieur **30 °C** ; coefficient d'échange extérieur **he = 20 W/(m²·K)** ;
+- T(air-soleil) = T(air) + α × I / he ; coefficients d'absorption : tôle sombre **0,9** ; couleur moyenne **0,6** ; blanc **0,3** ;
+- Toiture tôle + faux plafond sans isolant : **U = 2,5 W/(m²·K)** ; avec **8 cm** de laine minérale : **U = 0,45** ;
+- Température intérieure visée : **28 °C** ; surface de toiture **100 m²**.
+
+### Partie A — Température air-soleil (5 points)
+1. Calculer T(air-soleil) pour les trois couleurs. (3 pts)
+2. Expliquer pourquoi une toiture sombre peut atteindre plus de 70 °C. (2 pts)
+
+### Partie B — Flux de chaleur (8 points)
+3. Calculer le flux par m² et pour 100 m² pour : (a) tôle sombre sans isolant ; (b) tôle blanche avec 8 cm d'isolant. (6 pts)
+4. Combien de climatiseurs de **2,5 kW** de froid faudrait-il pour compenser le seul apport de la toiture (a) ? (2 pts)
+
+### Partie C — Méthode bioclimatique (7 points)
+5. Établir une liste de huit vérifications bioclimatiques pour un projet de logement (site, orientation, toiture, façades, ventilation, matériaux, végétation, eau). (5 pts)
+6. Pourquoi faut-il commencer par réduire les apports solaires avant de penser à la climatisation ? (2 pts)`,
+  corrige:`### Partie A — Air-soleil (5 pts)
+1. Sombre : 30 + 0,9 × 950 / 20 = **72,8 °C** ; moyenne : **58,5 °C** ; blanc : **44,3 °C**. *(3 pts)*
+2. La tôle sombre absorbe 90 % du rayonnement et le transforme en chaleur ; elle est mince et ne peut l'évacuer que par convection et rayonnement : sa surface s'échauffe fortement. *(2 pts)*
+
+### Partie B — Flux (8 pts)
+3. *(6 pts)*
+   - (a) 2,5 × (72,8 − 28) = **112 W/m²** → **11,2 kW** pour 100 m² ;
+   - (b) 0,45 × (44,3 − 28) = **7,3 W/m²** → **0,73 kW** : **15 fois moins**.
+4. 11,2 / 2,5 = 4,5 → **5 climatiseurs** juste pour la toiture (a) ; un seul suffit presque pour (b). *(2 pts)*
+
+### Partie C — Méthode (7 pts)
+5. *(5 pts)*
+   - **Site** : vents dominants, masques, végétation existante ;
+   - **orientation** : grandes façades nord-sud ;
+   - **toiture** : couleur claire, isolée, ventilée, débords larges ;
+   - **façades est-ouest** : réduites, opaques ou protégées ;
+   - **protections solaires** dimensionnées pour toutes les baies ;
+   - **ventilation traversante** (bâtiment étroit, ouvertures opposées, porosité) ;
+   - **matériaux** adaptés (inertie si climat à forte amplitude, légèreté ventilée sinon) ;
+   - **végétation** et sols perméables autour ; **eau** : récupération des pluies, gestion du ruissellement.
+6. Chaque watt de chaleur évité n'a pas à être retiré par un climatiseur : on réduit l'investissement, la facture et les émissions ; un bâtiment bien conçu reste confortable même en cas de coupure d'électricité. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Peindre une toiture en couleur sombre pour « faire joli ».
+> - Isoler le faux plafond sans ventiler les combles.
+> - Dimensionner la climatisation avant d'avoir optimisé l'enveloppe.`},
  exercices:[
   {t:"Température d'air-soleil", d:1, e:`Une toiture-terrasse reçoit 850 W/m² ; l'air est à 32 °C ; he = 20 W/(m²·K).
 Calculer la température d'air-soleil pour une étanchéité noire (α = 0,95) et pour une protection en gravillons clairs (α = 0,5).`, c:`Noire : 32 + 0,95 × 850/20 = 32 + 40,4 = **72,4 °C**.
@@ -1118,6 +1723,52 @@ Une pièce de bois massif se recouvre d'une couche de **charbon** qui isole le c
 > - Charge calorifique q = Σ m H/S (logement ≈ 780 MJ/m²).
 > - Béton : la distance a des armatures fixe la durée (REI 60 : dalle de 80 mm, a ≥ 20 mm).
 > - Acier : 47 % de sa résistance à 600 °C → protection nécessaire ; bois : 0,65 mm/min de carbonisation.`,
+ sujet:{titre:"Résistance au feu des structures : courbe ISO, dalle en béton, poutre en bois et charge calorifique", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le bureau de contrôle vérifie la stabilité au feu d'un immeuble de bureaux à Treichville.
+
+**Données**
+- Courbe ISO 834 : θ = 20 + 345 log₁₀(8 t + 1) (θ en °C, t en minutes) ;
+- Dalle portant dans un sens : REI 60 → h ≥ 80 mm et a ≥ 20 mm ; REI 90 → h ≥ 100 mm et a ≥ 30 mm (a : distance de l'axe des aciers à la face exposée = enrobage + Ø/2) ;
+- Dalle de **16 cm**, aciers **HA12**, enrobage **20 mm** ;
+- Poutre en bois **20 × 40 cm** exposée sur 3 faces (dessous et côtés) ; vitesse de carbonisation **0,65 mm/min** ; durée visée **60 min** ;
+- Acier de charpente : perd environ la moitié de sa résistance vers **550 °C** ;
+- Bureau de **25 m²** : **300 kg** de papier et bois (17 MJ/kg) et **50 kg** de plastiques (35 MJ/kg) ; q = Σ (m × H) / S.
+
+### Partie A — Courbe ISO (4 points)
+1. Calculer la température des gaz à 30, 60, 90 et 120 min. (4 pts)
+
+### Partie B — Dalle en béton (5 points)
+2. Calculer la distance a. Quelle résistance au feu la dalle atteint-elle ? (3 pts)
+3. Que faudrait-il changer pour atteindre REI 90 ? (2 pts)
+
+### Partie C — Bois et acier (7 points)
+4. Calculer l'épaisseur carbonisée et la section résiduelle de la poutre en bois au bout de 60 min. (3 pts)
+5. Calculer le rapport des modules de flexion (b h² / 6) avant et après. Conclure. (2 pts)
+6. Pourquoi une poutre en acier non protégée s'effondre-t-elle souvent en 15 à 20 min ? Comment la protéger ? (2 pts)
+
+### Partie D — Charge calorifique (4 points)
+7. Calculer la charge calorifique du bureau en MJ/m². (2 pts)
+8. Pourquoi cette valeur intéresse-t-elle les pompiers et l'ingénieur ? (2 pts)`,
+  corrige:`### Partie A — ISO (4 pts)
+1. 30 min : **842 °C** ; 60 min : **945 °C** ; 90 min : **1 006 °C** ; 120 min : **1 049 °C**. *(4 pts)*
+
+### Partie B — Dalle (5 pts)
+2. a = 20 + 12 / 2 = **26 mm** ; h = 160 mm ≥ 100 mais a = 26 < 30 → **REI 60** (a ≥ 20 ✔), pas REI 90. *(3 pts)*
+3. Porter l'**enrobage à 25 mm** (a = 31 mm ≥ 30), ou ajouter un **enduit** ou un plafond protecteur en sous-face. *(2 pts)*
+
+### Partie C — Bois et acier (7 pts)
+4. 0,65 × 60 = **39 mm** par face exposée → b = 200 − 2 × 39 = **122 mm** ; h = 400 − 39 = **361 mm**. *(3 pts)*
+5. (122 × 361²) / (200 × 400²) = **0,50** : la poutre a perdu la **moitié** de sa résistance en flexion ; elle tient si elle a été dimensionnée avec cette réserve (le bois carbonisé protège le cœur). *(2 pts)*
+6. L'acier, mince et très conducteur, atteint **550 °C** en quelques minutes sous la courbe ISO (842 °C à 30 min) et perd la moitié de sa résistance. Protections : **peinture intumescente**, **flocage**, **plaques** de plâtre coupe-feu, enrobage béton. *(2 pts)*
+
+### Partie D — Charge calorifique (4 pts)
+7. q = (300 × 17 + 50 × 35) / 25 = (5 100 + 1 750) / 25 = **274 MJ/m²**. *(2 pts)*
+8. Elle mesure l'**énergie** que peut libérer l'incendie : plus elle est élevée, plus le feu sera long et intense ; elle sert à fixer les **durées de résistance** au feu exigées et les moyens de lutte. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre enrobage et distance a (il faut ajouter Ø/2).
+> - Croire que le bois brûle « plus vite » que l'acier ne cède : une grosse section bois résiste souvent mieux.
+> - Oublier la face supérieure non exposée dans la carbonisation (3 faces seulement).`},
  exercices:[
   {t:"Courbe ISO 834", d:1, e:`Calculer la température du feu normalisé après 10 minutes et après 45 minutes.`, c:`10 min : θ = 20 + 345 × log₁₀(81) = 20 + 345 × 1,908 = **678 °C**.
 45 min : θ = 20 + 345 × log₁₀(361) = 20 + 345 × 2,558 = **902 °C**.`},
@@ -1200,6 +1851,70 @@ U : tension du parc (12, 24 ou 48 V) ; DoD : profondeur de décharge admissible 
 > - Pc = besoins/(H × PR) ; C = besoins × N/(U × DoD).
 > - Régulateur ≥ 1,25 Pc/U ; onduleur dimensionné pour les démarrages.
 > - Plein sud, 10 à 15°, sans ombre, nettoyé ; chute de tension DC ≤ 3 %.`,
+ sujet:{titre:"Dimensionner une installation solaire photovoltaïque autonome pour une maison", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une maison isolée près de Dabakala, sans réseau électrique, doit être équipée d'une installation solaire autonome en **24 V**.
+
+**Besoins quotidiens**
+
+| Appareil | Puissance | Durée par jour |
+|---|---|---|
+| 6 lampes LED | 9 W chacune | 6 h |
+| Réfrigérateur | 100 W | 10 h (cycles) |
+| Téléviseur | 80 W | 5 h |
+| 2 ventilateurs | 50 W chacun | 8 h |
+| Ordinateur | 60 W | 4 h |
+
+**Données**
+- Ensoleillement du mois le plus défavorable : **H = 4,5 kWh/m²/jour** (heures équivalentes) ; ratio de performance **PR = 0,7** ;
+- Pc = E / (H × PR) ; modules de **300 Wc** ;
+- Batteries plomb, profondeur de décharge **DoD = 50 %**, autonomie **2 jours** : C = E × N / (U × DoD) ;
+- Régulateur : courant ≥ 1,25 × Pc / U.
+
+### Partie A — Bilan (5 points)
+1. Calculer l'énergie journalière de chaque appareil et le total. (4 pts)
+2. Quel appareil consomme le plus ? Proposer une économie. (1 pt)
+
+### Partie B — Champ photovoltaïque (6 points)
+3. Calculer la puissance crête nécessaire et le nombre de modules. (3 pts)
+4. Pourquoi dimensionne-t-on sur le mois le moins ensoleillé ? Comment orienter les modules en Côte d'Ivoire ? (3 pts)
+
+### Partie C — Stockage et électronique (7 points)
+5. Calculer la capacité des batteries en Ah. (3 pts)
+6. Calculer le courant du régulateur et choisir un calibre (30, 40, 50, 60 A). (2 pts)
+7. Calculer la puissance des appareils pouvant fonctionner en même temps et choisir l'onduleur. (2 pts)
+
+### Partie D — Entretien (2 points)
+8. Citer quatre opérations d'entretien. (2 pts)`,
+  corrige:`### Partie A — Bilan (5 pts)
+1. *(4 pts)*
+
+| Appareil | Énergie (Wh/jour) |
+|---|---|
+| Lampes : 6 × 9 × 6 | 324 |
+| Réfrigérateur : 100 × 10 | 1 000 |
+| Téléviseur : 80 × 5 | 400 |
+| Ventilateurs : 2 × 50 × 8 | 800 |
+| Ordinateur : 60 × 4 | 240 |
+| **Total** | **2 764 Wh/jour** |
+
+2. Le **réfrigérateur** (36 %) : choisir un modèle très économe (classe A+++, ou réfrigérateur solaire 12/24 V), bien ventilé, loin des sources de chaleur. *(1 pt)*
+
+### Partie B — Champ (6 pts)
+3. Pc = 2 764 / (4,5 × 0,7) = **877 Wc** → 877 / 300 = 2,9 → **3 modules de 300 Wc** (900 Wc). *(3 pts)*
+4. Pour que les besoins soient couverts **toute l'année**, y compris en saison des pluies (ciel couvert). Modules orientés **plein sud** avec une **faible inclinaison** (10 à 15°, assez pour que la pluie les nettoie), sans ombre. *(3 pts)*
+
+### Partie C — Stockage (7 pts)
+5. C = 2 764 × 2 / (24 × 0,5) = **461 Ah** (par exemple 2 × 2 batteries de 12 V / 250 Ah). *(3 pts)*
+6. 1,25 × 900 / 24 = 46,9 A → régulateur de **50 A** (MPPT de préférence). *(2 pts)*
+7. 6 × 9 + 100 + 80 + 2 × 50 + 60 = **394 W** (+ le pic de démarrage du réfrigérateur) → onduleur **800 à 1 000 VA**, pur sinus. *(2 pts)*
+
+### Partie D — Entretien (2 pts)
+8. **Nettoyer** les modules (poussière, harmattan) ; vérifier les **connexions** et les câbles ; contrôler le **niveau d'électrolyte** et la tension des batteries (plomb ouvert) ; surveiller les ombres (arbres) ; ne pas dépasser la décharge maximale. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre puissance (W) et énergie (Wh).
+> - Dimensionner sur l'ensoleillement moyen annuel.
+> - Décharger les batteries plomb au-delà de 50 % : leur durée de vie s'effondre.`},
  exercices:[
   {t:"Production d'un module", d:1, e:`Un module de 400 Wc est installé à Korhogo (H = 5,5 kWh/m²/jour) avec PR = 0,75.
 Calculer sa production journalière et annuelle.`, c:`E = 0,4 × 5,5 × 0,75 = **1,65 kWh/jour** ; par an : 1,65 × 365 = **602 kWh**.`},

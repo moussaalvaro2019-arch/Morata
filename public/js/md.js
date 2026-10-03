@@ -47,11 +47,22 @@ function inline(s){
   return t;
 }
 
+/* « texte ; $$ formule » sur une même ligne : la formule passe en bloc sous le texte */
+function fxi(f){ // formule en bloc ; un barème « *(2 pts)* » en fin de formule reste en dehors
+  const b = String(f).match(/^(.*?)\s*(\*\([^)]*\bpts?\)\*)\s*$/), x = b ? b[1] : f;
+  return `<span class="fx fxi">${esc(texish(x.trim())).replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>')}</span>${b ? inline(b[2]) : ''}`;
+}
+function blockify(s){
+  const m = String(s).match(/^(.*?)(?:^|\s)\$\$\s+([^$]+)$/);
+  if(!m) return inline(s);
+  return (m[1].trim() ? inline(m[1].trim()) : '') + fxi(m[2]);
+}
+
 A.md = function(src, opt={}){
   const lines = String(src || '').replace(/\r/g, '').split('\n');
   const out = []; const toc = [];
   let i = 0, para = [];
-  const flush = () => { if(para.length){ out.push(`<p>${para.map(inline).join(opt.br ? '<br>' : ' ')}</p>`); para = []; } };
+  const flush = () => { if(para.length){ out.push(`<p>${para.map(blockify).join(opt.br ? '<br>' : ' ')}</p>`); para = []; } };
   while(i < lines.length){
     const raw = lines[i], l = raw.trim();
     if(!l){ flush(); i++; continue; }
@@ -105,12 +116,17 @@ A.md = function(src, opt={}){
       flush(); const ord = /^\d/.test(l); const start = ord ? parseInt(l, 10) : 1; const items = [];
       while(i < lines.length){
         const x = lines[i].trim();
-        if(/^([-*•]|\d+[.)])\s+/.test(x)) items.push(x.replace(/^([-*•]|\d+[.)])\s+/, ''));
-        else if(x && /^\s{2,}/.test(lines[i]) && items.length) items[items.length-1] += ' ' + x;
+        if(/^([-*•]|\d+[.)])\s+/.test(x)) items.push([x.replace(/^([-*•]|\d+[.)])\s+/, '')]);
+        else if(x && /^\s{2,}/.test(lines[i]) && items.length) items[items.length-1].push(x);
+        else if(x.startsWith('$$') && items.length) items[items.length-1].push(x);
         else break;
         i++;
       }
-      out.push(`<${ord?'ol':'ul'}${ord && start > 1 ? ` start="${start}"` : ''}>${items.map(x=>`<li>${inline(x)}</li>`).join('')}</${ord?'ol':'ul'}>`);
+      const li = parts => { let h = '', txt = [];
+        const fl = () => { if(txt.length){ h += (h ? ' ' : '') + txt.map(blockify).join(' '); txt = []; } };
+        parts.forEach(x => { if(x.startsWith('$$')){ fl(); h += fxi(x.replace(/^\$\$\s?/, '').replace(/\$\$$/, '')); } else txt.push(x); });
+        fl(); return h; };
+      out.push(`<${ord?'ol':'ul'}${ord && start > 1 ? ` start="${start}"` : ''}>${items.map(x=>`<li>${li(x)}</li>`).join('')}</${ord?'ol':'ul'}>`);
       continue;
     }
     para.push(l); i++;

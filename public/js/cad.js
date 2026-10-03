@@ -40,7 +40,8 @@ const rectPts = (a, b) => [[a[0],a[1]],[b[0],a[1]],[b[0],b[1]],[a[0],b[1]]];
 function entPts(e){
   switch(e.t){
     case 'line': case 'wall': case 'door': case 'win': case 'dim': case 'beam': return [[e.x1,e.y1],[e.x2,e.y2]];
-    case 'rect': case 'box': case 'roof': case 'stair': return rectPts([e.x1,e.y1],[e.x2,e.y2]);
+    case 'rect': case 'box': case 'stair': return rectPts([e.x1,e.y1],[e.x2,e.y2]);
+    case 'roof': return roofFoot(e);
     case 'circle': case 'cyl': return [[e.cx-e.r,e.cy-e.r],[e.cx+e.r,e.cy+e.r]];
     case 'post': return [[e.cx-e.a/2,e.cy-e.a/2],[e.cx+e.a/2,e.cy+e.a/2]];
     case 'slab': return e.pts;
@@ -55,6 +56,7 @@ function bboxOf(list){
 }
 function transform(e, fn){ // fn([x,y]) -> [x,y]
   const o = JSON.parse(JSON.stringify(e));
+  if(o.t === 'roof' && !o.pts){ o.pts = rectPts([o.x1,o.y1],[o.x2,o.y2]); delete o.x1; delete o.y1; delete o.x2; delete o.y2; }
   const T2 = (kx, ky) => { const p = fn([o[kx], o[ky]]); o[kx] = r3(p[0]); o[ky] = r3(p[1]); };
   if('x1' in o){ T2('x1','y1'); T2('x2','y2'); }
   if(o.t === 'circle' || o.t === 'cyl' || o.t === 'post') T2('cx','cy');
@@ -68,7 +70,8 @@ function hit(e, p, tol){
     case 'wall': return segDist(p, [e.x1,e.y1], [e.x2,e.y2]) <= tol + e.ep/2;
     case 'dim': { const n = normal(e), o = e.off||0; return segDist(p, [e.x1+n[0]*o, e.y1+n[1]*o], [e.x2+n[0]*o, e.y2+n[1]*o]) <= tol*1.5; }
     case 'rect': { const P = rectPts([e.x1,e.y1],[e.x2,e.y2]); return P.some((a,i)=>segDist(p, a, P[(i+1)%4]) <= tol); }
-    case 'box': case 'roof': case 'stair': { const P = rectPts([e.x1,e.y1],[e.x2,e.y2]); return inside(p, P) || P.some((a,i)=>segDist(p, a, P[(i+1)%4]) <= tol); }
+    case 'box': case 'stair': { const P = rectPts([e.x1,e.y1],[e.x2,e.y2]); return inside(p, P) || P.some((a,i)=>segDist(p, a, P[(i+1)%4]) <= tol); }
+    case 'roof': { const P = roofGeo(e).eaves; return inside(p, P) || P.some((a,i)=>segDist(p, a, P[(i+1)%P.length]) <= tol); }
     case 'circle': return Math.abs(Math.hypot(p[0]-e.cx, p[1]-e.cy) - e.r) <= tol;
     case 'cyl': return Math.hypot(p[0]-e.cx, p[1]-e.cy) <= e.r + tol;
     case 'post': return Math.abs(p[0]-e.cx) <= e.a/2 + tol && Math.abs(p[1]-e.cy) <= e.a/2 + tol;
@@ -82,6 +85,276 @@ function hit(e, p, tol){
 }
 function inside(p, pts){ let c = false; for(let i=0, j=pts.length-1; i<pts.length; j=i++){ const a = pts[i], b = pts[j]; if(((a[1] > p[1]) !== (b[1] > p[1])) && (p[0] < (b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1]) + a[0])) c = !c; } return c; }
 function normal(e){ const dx = e.x2-e.x1, dy = e.y2-e.y1, L = Math.hypot(dx, dy) || 1; return [-dy/L, dx/L]; }
+
+/* ---------- toitures : géométrie adaptée au contour du bâtiment ----------
+   Une toiture est un polygone (contour des murs, d'une pièce, d'une sélection ou tracé point par point).
+   4 pans : enveloppe des croupes posées sur les rectangles maximaux du contour (toiture à pentes égales exacte
+   pour les plans orthogonaux : L, T, U, en croix…). 2 pans : corps principal + ailes dont le faîtage vient
+   rejoindre celui du corps principal. 1 pan et terrasse : plan incliné ou dalle sur le contour exact. */
+const roofFoot = e => e.pts && e.pts.length >= 3 ? e.pts : rectPts([e.x1,e.y1],[e.x2,e.y2]);
+const sArea = P => P.reduce((a,p,i) => { const q = P[(i+1)%P.length]; return a + p[0]*q[1] - q[0]*p[1]; }, 0)/2;
+const ccwPoly = P => sArea(P) < 0 ? P.slice().reverse() : P.slice();
+function cleanPoly(P){
+  let Q = P.filter((p,i) => dist(p, P[(i+1)%P.length]) > 1e-4), k = 0;
+  while(Q.length > 3 && k < Q.length){ const a = Q[(k-1+Q.length)%Q.length], b = Q[k], c = Q[(k+1)%Q.length]; if(segDist(b, a, c) < 2e-3){ Q.splice(k, 1); k = 0; } else k++; }
+  return Q;
+}
+function offsetPoly(P, d){ // décalage à angles vifs d'un polygone CCW (d > 0 vers l'extérieur)
+  if(!d) return P.map(p => p.slice());
+  const n = P.length, L = P.map((a, i) => { const b = P[(i+1)%n], l = dist(a, b) || 1; return {p:[a[0] + (b[1]-a[1])/l*d, a[1] - (b[0]-a[0])/l*d], d:[(b[0]-a[0])/l, (b[1]-a[1])/l]}; });
+  return P.map((_, i) => { const A1 = L[(i-1+n)%n], A2 = L[i], den = A1.d[0]*A2.d[1] - A1.d[1]*A2.d[0];
+    if(Math.abs(den) < 1e-9) return A2.p.slice();
+    const t = ((A2.p[0]-A1.p[0])*A2.d[1] - (A2.p[1]-A1.p[1])*A2.d[0])/den; return [A1.p[0] + A1.d[0]*t, A1.p[1] + A1.d[1]*t]; });
+}
+function frameOf(P){ // repère du bâtiment : axe du plus long côté
+  let b = null; P.forEach((p, i) => { const q = P[(i+1)%P.length], l = dist(p, q); if(!b || l > b.l) b = {l, a:Math.atan2(q[1]-p[1], q[0]-p[0])}; });
+  const q = Math.PI/2, th = ((b.a % q) + q) % q, c = Math.cos(th), s = Math.sin(th);
+  return {th, L:p => [p[0]*c + p[1]*s, -p[0]*s + p[1]*c], W:p => [p[0]*c - p[1]*s, p[0]*s + p[1]*c]};
+}
+const isOrtho = P => P.every((p, i) => { const q = P[(i+1)%P.length]; return Math.abs(p[0]-q[0]) < 2e-3 || Math.abs(p[1]-q[1]) < 2e-3; });
+/* contour extérieur d'un ensemble de murs (segments épais) et/ou de polygones, par une grille fine */
+function rasterOutline(segs, polys, opt={}){
+  const pts = segs.flatMap(s => [s.a, s.b]).concat(polys.flat()); if(pts.length < 2) return null;
+  const pad = Math.max(0, ...segs.map(s => s.r)) + .3;
+  let x0 = Math.min(...pts.map(p => p[0])) - pad, y0 = Math.min(...pts.map(p => p[1])) - pad;
+  const x1 = Math.max(...pts.map(p => p[0])) + pad, y1 = Math.max(...pts.map(p => p[1])) + pad;
+  let h = opt.h || .05; if((x1-x0)*(y1-y0)/(h*h) > 1.2e6) h = Math.sqrt((x1-x0)*(y1-y0)/1.2e6);
+  const nx = Math.ceil((x1-x0)/h) + 2, ny = Math.ceil((y1-y0)/h) + 2, G = new Uint8Array(nx*ny);
+  x0 -= h; y0 -= h;
+  const cx = i => x0 + (i + .5)*h, cy = j => y0 + (j + .5)*h;
+  segs.forEach(s => { const l = dist(s.a, s.b); if(l < 1e-6) return; const u = [(s.b[0]-s.a[0])/l, (s.b[1]-s.a[1])/l], r = s.r + h*.6;
+    const i0 = Math.max(0, Math.floor((Math.min(s.a[0], s.b[0]) - r - x0)/h)), i1 = Math.min(nx-1, Math.ceil((Math.max(s.a[0], s.b[0]) + r - x0)/h));
+    const j0 = Math.max(0, Math.floor((Math.min(s.a[1], s.b[1]) - r - y0)/h)), j1 = Math.min(ny-1, Math.ceil((Math.max(s.a[1], s.b[1]) + r - y0)/h));
+    for(let j=j0;j<=j1;j++) for(let i=i0;i<=i1;i++){ const dx = cx(i) - s.a[0], dy = cy(j) - s.a[1], t = dx*u[0] + dy*u[1], n = Math.abs(-dx*u[1] + dy*u[0]); if(t >= -s.r - h*.6 && t <= l + s.r + h*.6 && n <= r) G[j*nx+i] = 1; } });
+  polys.forEach(P => { const xs = P.map(p => p[0]), ys = P.map(p => p[1]);
+    const i0 = Math.max(0, Math.floor((Math.min(...xs) - x0)/h)), i1 = Math.min(nx-1, Math.ceil((Math.max(...xs) - x0)/h)), j0 = Math.max(0, Math.floor((Math.min(...ys) - y0)/h)), j1 = Math.min(ny-1, Math.ceil((Math.max(...ys) - y0)/h));
+    for(let j=j0;j<=j1;j++) for(let i=i0;i<=i1;i++) if(inside([cx(i), cy(j)], P)) G[j*nx+i] = 1; });
+  // extérieur : remplissage depuis le bord ; l'emprise = tout ce qui n'est pas extérieur (murs + intérieur)
+  const st = [0]; G[0] = 2;
+  while(st.length){ const k = st.pop(), i = k % nx, j = (k - i)/nx; [[i-1,j],[i+1,j],[i,j-1],[i,j+1]].forEach(([a, b]) => { if(a >= 0 && b >= 0 && a < nx && b < ny && !G[b*nx+a]){ G[b*nx+a] = 2; st.push(b*nx+a); } }); }
+  const full = (i, j) => i >= 0 && j >= 0 && i < nx && j < ny && G[j*nx+i] !== 2;
+  const next = new Map(), key = (i, j) => i + ',' + j, add = (a, b) => { const k = key(a[0], a[1]); if(!next.has(k)) next.set(k, []); next.get(k).push(b); };
+  for(let j=0;j<ny;j++) for(let i=0;i<nx;i++){ if(!full(i, j)) continue;
+    if(!full(i, j-1)) add([i,j],[i+1,j]); if(!full(i+1, j)) add([i+1,j],[i+1,j+1]); if(!full(i, j+1)) add([i+1,j+1],[i,j+1]); if(!full(i-1, j)) add([i,j+1],[i,j]); }
+  const loops = [];
+  while(next.size){ const [k0] = next.keys(); let cur = k0.split(',').map(Number), loop = [], guard = 0;
+    while(guard++ < 2e6){ const k = key(cur[0], cur[1]), L = next.get(k); if(!L) break; const nx2 = L.pop(); if(!L.length) next.delete(k); loop.push(cur); cur = nx2; if(key(cur[0], cur[1]) === k0) break; }
+    if(loop.length >= 4) loops.push(loop); }
+  if(!loops.length) return null;
+  let P = loops.map(l => l.map(([i, j]) => [x0 + i*h, y0 + j*h])).sort((a, b) => sArea(b) - sArea(a))[0];
+  P = cleanPoly(P);
+  if(opt.ortho) return P;
+  P = cleanPoly(dpClosed(P, h*1.5));
+  // recalage des côtés sur les nus extérieurs des murs (ou les sommets des polygones)
+  const cands = {x:[], y:[]};
+  segs.forEach(s => { if(Math.abs(s.a[0]-s.b[0]) < 1e-3){ cands.x.push(s.a[0]-s.r, s.a[0]+s.r); cands.y.push(Math.min(s.a[1],s.b[1])-s.r, Math.max(s.a[1],s.b[1])+s.r); } if(Math.abs(s.a[1]-s.b[1]) < 1e-3){ cands.y.push(s.a[1]-s.r, s.a[1]+s.r); cands.x.push(Math.min(s.a[0],s.b[0])-s.r, Math.max(s.a[0],s.b[0])+s.r); } });
+  polys.flat().forEach(p => { cands.x.push(p[0]); cands.y.push(p[1]); });
+  const snapV = (v, L) => { let b = v, bd = h*2.2; L.forEach(c => { const d = Math.abs(c - v); if(d < bd){ bd = d; b = c; } }); return b; };
+  const n = P.length, Q = P.map(p => p.slice());
+  for(let i=0;i<n;i++){ const a = P[i], b = P[(i+1)%n];
+    if(Math.abs(a[1]-b[1]) < 1e-6){ const y = snapV(a[1], cands.y); Q[i][1] = y; Q[(i+1)%n][1] = y; }
+    else if(Math.abs(a[0]-b[0]) < 1e-6){ const x = snapV(a[0], cands.x); Q[i][0] = x; Q[(i+1)%n][0] = x; } }
+  P = cleanPoly(Q);
+  // côtés en biais : recalés sur le nu des murs parallèles, puis sommets recalculés à l'intersection des côtés
+  const Lns = P.map((a, i) => { const b = P[(i+1)%P.length], l = dist(a, b) || 1, u = [(b[0]-a[0])/l, (b[1]-a[1])/l]; return {p:a.slice(), u, l, ax:Math.abs(u[0]) < 1e-6 || Math.abs(u[1]) < 1e-6}; });
+  Lns.forEach(L => { if(L.ax) return; const m = [L.p[0] + L.u[0]*L.l/2, L.p[1] + L.u[1]*L.l/2]; let best = null;
+    segs.forEach(sg => { const l = dist(sg.a, sg.b); if(l < .2) return; const v = [(sg.b[0]-sg.a[0])/l, (sg.b[1]-sg.a[1])/l]; if(Math.abs(v[0]*L.u[1] - v[1]*L.u[0]) > .06) return;
+      const n = [-v[1], v[0]]; [1, -1].forEach(k => { const q = [sg.a[0] + n[0]*sg.r*k, sg.a[1] + n[1]*sg.r*k], d2 = Math.abs((m[0]-q[0])*n[0] + (m[1]-q[1])*n[1]); if(d2 < h*3 && (!best || d2 < best.d)) best = {d:d2, p:q, u:v}; }); });
+    if(best){ L.p = best.p; L.u = best.u; L.fit = true; } });
+  const keep = Lns.filter((L, i) => { if(L.l >= h*3 && (L.ax || L.fit || L.l >= h*10)) return true; const A1 = Lns[(i-1+Lns.length)%Lns.length], A2 = Lns[(i+1)%Lns.length]; return Math.abs(A1.u[0]*A2.u[1] - A1.u[1]*A2.u[0]) < .2; });
+  if(keep.length >= 3 && keep.length < Lns.length || Lns.some(L => !L.ax)){
+    const V = keep.map((A2, i) => { const A1 = keep[(i-1+keep.length)%keep.length], den = A1.u[0]*A2.u[1] - A1.u[1]*A2.u[0];
+      if(Math.abs(den) < 1e-6) return A2.p.slice(); const t = ((A2.p[0]-A1.p[0])*A2.u[1] - (A2.p[1]-A1.p[1])*A2.u[0])/den; return [A1.p[0] + A1.u[0]*t, A1.p[1] + A1.u[1]*t]; });
+    if(V.length >= 3 && Math.abs(polyArea(V) - polyArea(P)) < polyArea(P)*.05) P = cleanPoly(V);
+  }
+  return P;
+}
+function dpClosed(P, tol){
+  const dp = (pts) => { if(pts.length < 3) return pts; let k = 0, dm = 0; for(let i=1;i<pts.length-1;i++){ const d = segDist(pts[i], pts[0], pts[pts.length-1]); if(d > dm){ dm = d; k = i; } }
+    return dm > tol ? dp(pts.slice(0, k+1)).slice(0, -1).concat(dp(pts.slice(k))) : [pts[0], pts[pts.length-1]]; };
+  let k0 = 0; P.forEach((p, i) => { if(p[0] < P[k0][0] - 1e-9 || (Math.abs(p[0] - P[k0][0]) < 1e-9 && p[1] < P[k0][1])) k0 = i; });
+  P = P.slice(k0).concat(P.slice(0, k0));
+  let far = 0, fd = 0; P.forEach((p, i) => { const d = dist(p, P[0]); if(d > fd){ fd = d; far = i; } });
+  const A1 = dp(P.slice(0, far+1)), A2 = dp(P.slice(far).concat([P[0]]));
+  return A1.slice(0, -1).concat(A2.slice(0, -1));
+}
+/* rectangles maximaux d'un polygone orthogonal (repère local) */
+function maxRects(P){
+  const U = a => [...new Set(a.map(v => Math.round(v*1e4)/1e4))].sort((x, y) => x - y);
+  const xs = U(P.map(p => p[0])), ys = U(P.map(p => p[1])), nx = xs.length - 1, ny = ys.length - 1;
+  if(nx < 1 || ny < 1 || nx*ny > 6400) return [];
+  const S = new Int32Array((nx+1)*(ny+1)), at = (i, j) => S[j*(nx+1)+i];
+  for(let j=0;j<ny;j++) for(let i=0;i<nx;i++) S[(j+1)*(nx+1)+i+1] = (inside([(xs[i]+xs[i+1])/2, (ys[j]+ys[j+1])/2], P) ? 1 : 0) + at(i+1, j) + at(i, j+1) - at(i, j);
+  const full = (i0, i1, j0, j1) => at(i1, j1) - at(i0, j1) - at(i1, j0) + at(i0, j0) === (i1-i0)*(j1-j0);
+  const out = [];
+  for(let i0=0;i0<nx;i0++) for(let j0=0;j0<ny;j0++){ if(!full(i0, i0+1, j0, j0+1)) continue;
+    for(let i1=i0+1; i1<=nx && full(i0, i1, j0, j0+1); i1++) for(let j1=j0+1; j1<=ny && full(i0, i1, j0, j1); j1++){
+      if((i0 && full(i0-1, i0, j0, j1)) || (i1 < nx && full(i1, i1+1, j0, j1)) || (j0 && full(i0, i1, j0-1, j0)) || (j1 < ny && full(i0, i1, j1, j1+1))) continue;
+      out.push({x0:xs[i0], x1:xs[i1], y0:ys[j0], y1:ys[j1]}); } }
+  return out.sort((a, b) => (b.x1-b.x0)*(b.y1-b.y0) - (a.x1-a.x0)*(a.y1-a.y0));
+}
+/* 2 pans : corps principal puis ailes ; une aile perpendiculaire prolonge son faîtage jusqu'à celui du corps qu'elle rejoint */
+function gablePieces(R, sens){
+  const area = r => (r.x1-r.x0)*(r.y1-r.y0), long = r => (r.x1-r.x0) >= (r.y1-r.y0) ? 'x' : 'y', E = 1e-6;
+  const sub = (F, Q) => { if(F.x1 <= Q.x0+E || F.x0 >= Q.x1-E || F.y1 <= Q.y0+E || F.y0 >= Q.y1-E) return [F]; const o = [];
+    if(F.x0 < Q.x0-E) o.push({...F, x1:Q.x0}); if(F.x1 > Q.x1+E) o.push({...F, x0:Q.x1});
+    const mx0 = Math.max(F.x0, Q.x0), mx1 = Math.min(F.x1, Q.x1);
+    if(F.y0 < Q.y0-E) o.push({x0:mx0, x1:mx1, y0:F.y0, y1:Q.y0}); if(F.y1 > Q.y1+E) o.push({x0:mx0, x1:mx1, y0:Q.y1, y1:F.y1}); return o; };
+  const ov = (a0, a1, b0, b1) => Math.min(a1, b1) - Math.max(a0, b0);
+  const contact = (F, Q) => { const c = [];
+    if(Math.abs(F.x1-Q.x0) < 1e-4) c.push({side:'x1', len:ov(F.y0, F.y1, Q.y0, Q.y1), inQ:F.y0 >= Q.y0-1e-4 && F.y1 <= Q.y1+1e-4});
+    if(Math.abs(F.x0-Q.x1) < 1e-4) c.push({side:'x0', len:ov(F.y0, F.y1, Q.y0, Q.y1), inQ:F.y0 >= Q.y0-1e-4 && F.y1 <= Q.y1+1e-4});
+    if(Math.abs(F.y1-Q.y0) < 1e-4) c.push({side:'y1', len:ov(F.x0, F.x1, Q.x0, Q.x1), inQ:F.x0 >= Q.x0-1e-4 && F.x1 <= Q.x1+1e-4});
+    if(Math.abs(F.y0-Q.y1) < 1e-4) c.push({side:'y0', len:ov(F.x0, F.x1, Q.x0, Q.x1), inQ:F.x0 >= Q.x0-1e-4 && F.x1 <= Q.x1+1e-4});
+    return c.filter(x => x.len > 1e-3).sort((a, b) => b.len - a.len)[0]; };
+  const main = R[0], placed = [{...main, k:'gable', dir:(sens === 'x' || sens === 'y') ? sens : long(main)}];
+  R.slice(1).forEach(r => {
+    let free = [r]; placed.forEach(Q => { free = free.flatMap(F => sub(F, Q)); });
+    free.filter(F => area(F) > 1e-3).sort((a, b) => area(b) - area(a)).forEach(F => {
+      let best = null; placed.forEach(Q => { const c = contact(F, Q); if(c && (!best || c.len > best.len)) best = {...c, Q}; });
+      if(!best){ placed.push({...F, k:'gable', dir:long(F)}); return; }
+      const Q = best.Q, perp = best.side[0], width = perp === 'x' ? F.y1 - F.y0 : F.x1 - F.x0, hostW = Q.dir === 'x' ? Q.y1 - Q.y0 : Q.x1 - Q.x0;
+      if(Q.dir !== perp && best.inQ && width <= hostW + 1e-4){ const G = {...F, k:'gable', dir:perp}, mid = perp === 'x' ? (Q.x0+Q.x1)/2 : (Q.y0+Q.y1)/2; G[best.side] = mid; placed.push(G); }
+      else placed.push({...F, k:'gable', dir:Q.dir === perp ? perp : long(F)});
+    });
+  });
+  return placed;
+}
+function pieceH(P, u, v, s){
+  if(u < P.x0 - 1e-6 || u > P.x1 + 1e-6 || v < P.y0 - 1e-6 || v > P.y1 + 1e-6) return -Infinity;
+  if(P.k === 'hip') return s*Math.min(u - P.x0, P.x1 - u, v - P.y0, P.y1 - v);
+  return P.dir === 'x' ? s*Math.min(v - P.y0, P.y1 - v) : s*Math.min(u - P.x0, P.x1 - u);
+}
+function pieceFaces(P, s){ // pans plans : z = a u + b v + c sur un polygone convexe (sens trigonométrique)
+  const {x0, x1, y0, y1} = P, w = x1 - x0, h = y1 - y0, F = [], add = (poly, a, b, c) => F.push({poly, pl:[a, b, c], P});
+  const S = () => add([[x0,y0],[x1,y0],[x1,y1],[x0,y1]], 0, 0, 0);
+  if(P.k === 'hip'){
+    if(w >= h){ const m = h/2, ym = (y0+y1)/2;
+      add([[x0,y0],[x1,y0],[x1-m,ym],[x0+m,ym]], 0, s, -s*y0); add([[x1,y1],[x0,y1],[x0+m,ym],[x1-m,ym]], 0, -s, s*y1);
+      add([[x0,y1],[x0,y0],[x0+m,ym]], s, 0, -s*x0); add([[x1,y0],[x1,y1],[x1-m,ym]], -s, 0, s*x1); }
+    else { const m = w/2, xm = (x0+x1)/2;
+      add([[x0,y1],[x0,y0],[xm,y0+m],[xm,y1-m]], s, 0, -s*x0); add([[x1,y0],[x1,y1],[xm,y1-m],[xm,y0+m]], -s, 0, s*x1);
+      add([[x0,y0],[x1,y0],[xm,y0+m]], 0, s, -s*y0); add([[x1,y1],[x0,y1],[xm,y1-m]], 0, -s, s*y1); }
+  } else if(P.dir === 'x'){ const ym = (y0+y1)/2; add([[x0,y0],[x1,y0],[x1,ym],[x0,ym]], 0, s, -s*y0); add([[x1,y1],[x0,y1],[x0,ym],[x1,ym]], 0, -s, s*y1); }
+  else if(P.dir === 'y'){ const xm = (x0+x1)/2; add([[x0,y1],[x0,y0],[xm,y0],[xm,y1]], s, 0, -s*x0); add([[x1,y0],[x1,y1],[xm,y1],[xm,y0]], -s, 0, s*x1); }
+  else S();
+  return F;
+}
+function clipLine(p0, d, poly){ // intervalle de t pour lequel p0 + t d est dans le polygone convexe CCW
+  let t0 = -1e9, t1 = 1e9;
+  for(let i=0;i<poly.length;i++){ const a = poly[i], b = poly[(i+1)%poly.length], nI = [-(b[1]-a[1]), b[0]-a[0]], num = (p0[0]-a[0])*nI[0] + (p0[1]-a[1])*nI[1], den = d[0]*nI[0] + d[1]*nI[1];
+    if(Math.abs(den) < 1e-12){ if(num < -1e-7) return null; continue; }
+    const t = -num/den; if(den > 0) t0 = Math.max(t0, t); else t1 = Math.min(t1, t); }
+  return t0 <= t1 ? [t0, t1] : null;
+}
+function visRuns(t0, t1, n, vis){ // sous-intervalles de [t0, t1] où vis(t) est vrai (bornes affinées par dichotomie)
+  const out = [], edge = (tin, tout) => { for(let k=0;k<18;k++){ const m = (tin + tout)/2; if(vis(m)) tin = m; else tout = m; } return tin; };
+  let run = null, prevT = t0, prevV = false;
+  for(let k=0;k<=n;k++){ const t = t0 + (t1 - t0)*k/n, v = vis(t);
+    if(v && run === null) run = k ? edge(t, prevT) : t;
+    if(!v && run !== null){ out.push([run, edge(prevT, t)]); run = null; }
+    prevT = t; prevV = v; }
+  if(run !== null) out.push([run, t1]);
+  return out.filter(r => r[1] - r[0] > 2e-3);
+}
+function triPoly(P){ // découpage en triangles par oreilles (polygone simple CCW)
+  const idx = P.map((_, i) => i), out = [], cr = (a, b, c) => (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0]);
+  const inT = (p, a, b, c) => cr(a, b, p) > 1e-12 && cr(b, c, p) > 1e-12 && cr(c, a, p) > 1e-12;
+  let guard = 0;
+  while(idx.length > 3 && guard++ < 4000){ let cut = false;
+    for(let k=0;k<idx.length;k++){ const i0 = idx[(k-1+idx.length)%idx.length], i1 = idx[k], i2 = idx[(k+1)%idx.length], a = P[i0], b = P[i1], c = P[i2];
+      if(cr(a, b, c) <= 1e-12) continue;
+      if(idx.some(j => j !== i0 && j !== i1 && j !== i2 && inT(P[j], a, b, c))) continue;
+      out.push([a, b, c]); idx.splice(k, 1); cut = true; break; }
+    if(!cut) break; }
+  if(idx.length === 3) out.push(idx.map(i => P[i]));
+  return out;
+}
+const RG = new Map();
+function roofGeo(e){
+  const foot0 = roofFoot(e), key = JSON.stringify([foot0, e.deb, e.type, e.pente, e.sens, e.inv]);
+  if(RG.has(key)) return RG.get(key);
+  const type = e.type || '2 pans', foot = ccwPoly(cleanPoly(foot0.map(p => [+p[0], +p[1]]))), deb = type === 'terrasse' ? (e.deb || 0) : (e.deb ?? .5);
+  if(foot.length < 3 || polyArea(foot) < 1e-3){ const I = p => p.slice(); return {type, foot, outer:foot, eaves:foot, fr:{th:0, L:I, W:I}, s:0, ang:0, faces:[], lines:[], pieces:[], h:() => -Infinity, area:0, ridge:0, valley:0, hip:0, ortho:true}; }
+  const outer = offsetPoly(foot, deb), fr = frameOf(foot), ang = (e.pente || (type === '1 pan' ? 10 : 15))*Math.PI/180, s = Math.tan(ang);
+  const G = {type, foot, outer, eaves:outer, fr, s, ang, faces:[], lines:[], pieces:[], h:() => 0, ortho:true};
+  const Lo = outer.map(fr.L);
+  if(type === '1 pan'){
+    const xs = Lo.map(q => q[0]), ys = Lo.map(q => q[1]), u0 = Math.min(...xs), u1 = Math.max(...xs), v0 = Math.min(...ys), v1 = Math.max(...ys);
+    const dir = (e.sens === 'x' || e.sens === 'y') ? e.sens : ((u1-u0) >= (v1-v0) ? 'x' : 'y'), inv = e.inv === true || e.inv === '1';
+    const pl = dir === 'x' ? (inv ? [0, -s, s*v1] : [0, s, -s*v0]) : (inv ? [-s, 0, s*u1] : [s, 0, -s*u0]);
+    G.faces = [{poly:Lo, pl, tri:true}];
+    G.h = (u, v) => inside([u, v], Lo) || Lo.some((a, i) => segDist([u, v], a, Lo[(i+1)%Lo.length]) < 1e-4) ? pl[0]*u + pl[1]*v + pl[2] : -Infinity;
+    const gw = fr.W([pl[0], pl[1]]), gl = Math.hypot(gw[0], gw[1]) || 1, c = centroid(outer), len = Math.min(3, Math.sqrt(polyArea(outer))*.45);
+    G.arrow = [[c[0] + gw[0]/gl*len/2, c[1] + gw[1]/gl*len/2], [c[0] - gw[0]/gl*len/2, c[1] - gw[1]/gl*len/2]];
+  } else if(type !== 'terrasse'){
+    const convex = Lo.every((a, i) => { const b = Lo[(i+1)%Lo.length], c = Lo[(i+2)%Lo.length]; return (b[0]-a[0])*(c[1]-b[1]) - (b[1]-a[1])*(c[0]-b[0]) > -1e-9; });
+    if(!isOrtho(Lo) && convex){
+      // contour convexe quelconque : un pan par côté (4 pans) ou par long côté (2 pans), toiture exacte à pentes égales
+      const xs = Lo.map(q => q[0]), ys = Lo.map(q => q[1]), ax = (e.sens === 'x' || e.sens === 'y') ? e.sens : ((Math.max(...xs) - Math.min(...xs)) >= (Math.max(...ys) - Math.min(...ys)) ? 'x' : 'y');
+      const PLs = Lo.map((a, i) => { const b = Lo[(i+1)%Lo.length], l = dist(a, b) || 1, n = [-(b[1]-a[1])/l, (b[0]-a[0])/l], dx = Math.abs((b[0]-a[0])/l);
+        return {pl:[s*n[0], s*n[1], -s*(a[0]*n[0] + a[1]*n[1])], eave:type === '4 pans' || (ax === 'x' ? dx >= Math.SQRT1_2 - 1e-9 : dx <= Math.SQRT1_2 + 1e-9)}; }).filter(q => q.eave);
+      const zq = (pl, q) => pl[0]*q[0] + pl[1]*q[1] + pl[2];
+      const clipHalf = (poly, f) => { const o = []; poly.forEach((a, i) => { const b = poly[(i+1)%poly.length], fa = f(a), fb = f(b); if(fa <= 1e-9) o.push(a); if((fa < -1e-9 && fb > 1e-9) || (fa > 1e-9 && fb < -1e-9)){ const t = fa/(fa - fb); o.push([a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t]); } }); return o; };
+      PLs.forEach((q, i) => { let poly = Lo.map(v => v.slice()); PLs.forEach((r, j) => { if(j !== i && poly.length >= 3) poly = clipHalf(poly, v => zq(q.pl, v) - zq(r.pl, v)); }); if(poly.length >= 3 && polyArea(poly) > 1e-4) G.faces.push({poly, pl:q.pl}); });
+      G.h = (u, v) => (inside([u, v], Lo) || Lo.some((a, i) => segDist([u, v], a, Lo[(i+1)%Lo.length]) < 1e-4)) ? Math.max(0, Math.min(...PLs.map(q => zq(q.pl, [u, v])))) : -Infinity;
+    } else {
+      let Pl = Lo;
+      if(!isOrtho(Lo)){ G.ortho = false; const W = Math.max(...Lo.map(q => q[0])) - Math.min(...Lo.map(q => q[0])), H = Math.max(...Lo.map(q => q[1])) - Math.min(...Lo.map(q => q[1]));
+        Pl = rasterOutline([], [Lo], {ortho:true, h:Math.max(.25, Math.max(W, H)/36)}) || Lo; G.eaves = Pl.map(fr.W); }
+      const R = maxRects(Pl);
+      G.pieces = !R.length ? [] : type === '4 pans' ? R.map(r => ({...r, k:'hip'})) : gablePieces(R, e.sens);
+      G.faces = G.pieces.flatMap(P => pieceFaces(P, s));
+      G.h = (u, v) => { let m = -Infinity; for(const P of G.pieces){ const z = pieceH(P, u, v, s); if(z > m) m = z; } return m; };
+    }
+    // lignes du plan de toiture : faîtages, arêtiers, noues et ressauts
+    const F = G.faces, H = q => G.h(q[0], q[1]), zf = (f, q) => f.pl[0]*q[0] + f.pl[1]*q[1] + f.pl[2];
+    for(let i=0;i<F.length;i++) for(let j=i+1;j<F.length;j++){
+      const f = F[i], g = F[j], na = f.pl[0]-g.pl[0], nb = f.pl[1]-g.pl[1], nc = f.pl[2]-g.pl[2], nn = na*na + nb*nb;
+      if(nn < 1e-12) continue;
+      const sq = Math.sqrt(nn), p0 = [-nc*na/nn, -nc*nb/nn], d = [-nb/sq, na/sq], r1 = clipLine(p0, d, f.poly), r2 = r1 && clipLine(p0, d, g.poly);
+      if(!r2) continue; const t0 = Math.max(r1[0], r2[0]), t1 = Math.min(r1[1], r2[1]); if(t1 - t0 < 2e-3) continue;
+      const at = t => [p0[0] + d[0]*t, p0[1] + d[1]*t];
+      const nr = [na/sq, nb/sq], flat = (pl, q) => { let n = 0; for(const sg of [1, -1]){ const q1 = [q[0]+nr[0]*.02*sg, q[1]+nr[1]*.02*sg], h1 = H(q1); if(h1 === -Infinity) continue; if(Math.abs(h1 - zf(pl, q1)) > 1e-6) return false; n++; } return n > 0; };
+      visRuns(t0, t1, Math.max(8, Math.ceil((t1-t0)/.08)), t => { const q = at(t); return zf(f, q) >= H(q) - 1e-6 && !flat(f, q) && !flat(g, q); }).forEach(([a, b]) => {
+        const m = at((a+b)/2), nrm = [na/sq, nb/sq], zm = zf(f, m), h1 = H([m[0]+nrm[0]*.05, m[1]+nrm[1]*.05]), h2 = H([m[0]-nrm[0]*.05, m[1]-nrm[1]*.05]);
+        const k = (h1 > -Infinity && h2 > -Infinity && (h1 + h2)/2 > zm + 1e-4) ? 'valley' : Math.abs(f.pl[0]*d[0] + f.pl[1]*d[1]) < 1e-7 ? 'ridge' : 'hip';
+        G.lines.push({a:fr.W(at(a)), b:fr.W(at(b)), k}); });
+    }
+    G.pieces.forEach(P => [[[P.x0,P.y0],[P.x1,P.y0],[0,-1]], [[P.x1,P.y0],[P.x1,P.y1],[1,0]], [[P.x1,P.y1],[P.x0,P.y1],[0,1]], [[P.x0,P.y1],[P.x0,P.y0],[-1,0]]].forEach(([a, b, n]) => {
+      const at = t => [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t];
+      visRuns(0, 1, Math.max(6, Math.ceil(dist(a, b)/.1)), t => { const q = at(t), qi = [q[0]-n[0]*1e-3, q[1]-n[1]*1e-3], qo = [q[0]+n[0]*1e-3, q[1]+n[1]*1e-3], zi = pieceH(P, qi[0], qi[1], s), hi = H(qi), ho = H(qo);
+        return zi >= hi - 1e-6 && ho > -Infinity && Math.abs(ho - hi) > .02; }).forEach(([t0, t1]) => G.lines.push({a:fr.W(at(t0)), b:fr.W(at(t1)), k:'step'})); }));
+  }
+  // fusion des segments confondus (pans coplanaires de plusieurs rectangles)
+  const kept = [];
+  G.lines.forEach(l => { const d = [l.b[0]-l.a[0], l.b[1]-l.a[1]], Ln = Math.hypot(d[0], d[1]); if(Ln < 2e-3) return; const u = [d[0]/Ln, d[1]/Ln];
+    const m = kept.find(k => k.k === l.k && Math.abs(u[0]*k.u[1] - u[1]*k.u[0]) < 1e-4 && Math.abs((l.a[0]-k.p[0])*k.u[1] - (l.a[1]-k.p[1])*k.u[0]) < 1e-3);
+    const t1 = m ? (l.a[0]-m.p[0])*m.u[0] + (l.a[1]-m.p[1])*m.u[1] : 0, t2 = m ? (l.b[0]-m.p[0])*m.u[0] + (l.b[1]-m.p[1])*m.u[1] : 0;
+    if(m && Math.max(t1, t2) >= m.t0 - 1e-3 && Math.min(t1, t2) <= m.t1 + 1e-3){ m.t0 = Math.min(m.t0, t1, t2); m.t1 = Math.max(m.t1, t1, t2); }
+    else kept.push({k:l.k, p:l.a, u, t0:0, t1:Ln}); });
+  G.lines = kept.filter(k => k.t1 - k.t0 > .05).map(k => ({k:k.k, a:[k.p[0]+k.u[0]*k.t0, k.p[1]+k.u[1]*k.t0], b:[k.p[0]+k.u[0]*k.t1, k.p[1]+k.u[1]*k.t1]}));
+  G.area = type === 'terrasse' ? polyArea(outer) : polyArea(G.eaves)/Math.cos(ang);
+  G.ridge = G.lines.filter(l => l.k === 'ridge').reduce((a, l) => a + dist(l.a, l.b), 0);
+  G.valley = G.lines.filter(l => l.k === 'valley').reduce((a, l) => a + dist(l.a, l.b), 0);
+  G.hip = G.lines.filter(l => l.k === 'hip').reduce((a, l) => a + dist(l.a, l.b), 0);
+  if(RG.size > 60) RG.delete(RG.keys().next().value);
+  RG.set(key, G); return G;
+}
+/* contour du bâtiment : murs du niveau courant (sinon pièces, dalles, formes fermées) */
+function autoOutline(list){
+  const walls = list.filter(e => e.t === 'wall' && dist([e.x1,e.y1],[e.x2,e.y2]) > .05);
+  const shapes = list.filter(e => ['room','slab'].includes(e.t) || (e.t === 'poly' && e.closed) || e.t === 'rect' || e.t === 'box');
+  if(!walls.length && !shapes.length) return null;
+  const ref = walls.length ? walls.map(w => [[w.x1,w.y1],[w.x2,w.y2]]) : shapes.map(e => e.pts || rectPts([e.x1,e.y1],[e.x2,e.y2]));
+  let b = null; ref.forEach(P => P.forEach((p, i) => { const q = P[(i+1)%P.length], l = dist(p, q); if(!b || l > b.l) b = {l, a:Math.atan2(q[1]-p[1], q[0]-p[0])}; }));
+  const qa = Math.PI/2, th = ((b.a % qa) + qa) % qa, c = Math.cos(th), s = Math.sin(th), L = p => [p[0]*c + p[1]*s, -p[0]*s + p[1]*c], W = p => [p[0]*c - p[1]*s, p[0]*s + p[1]*c];
+  const P = walls.length ? rasterOutline(walls.map(w => ({a:L([w.x1,w.y1]), b:L([w.x2,w.y2]), r:(w.ep || .2)/2})), [])
+                         : rasterOutline([], shapes.map(e => (e.pts || rectPts([e.x1,e.y1],[e.x2,e.y2])).map(L)));
+  if(!P || P.length < 3) return null;
+  const top = walls.length ? Math.max(...walls.map(w => (w.z ?? 0) + (w.h ?? C.ht))) : null;
+  return {pts:ccwPoly(P.map(W)).map(p => p.map(r3)), z:top};
+}
 
 /* ---------- vue ---------- */
 const toS = p => [p[0]*C.view.s + C.view.ox, C.view.oy - p[1]*C.view.s];
@@ -112,13 +385,13 @@ function entSvg(e, o={}){
     case 'post': return `<rect x="${e.cx-e.a/2}" y="${e.cy-e.a/2}" width="${e.a}" height="${e.a}" fill="${o.light && !C.sel.has(e.id) ? '#14202E' : col}"/>`;
     case 'beam': { const n = normal(e), h = (e.b||.2)/2; return `<polygon points="${[[e.x1+n[0]*h,e.y1+n[1]*h],[e.x2+n[0]*h,e.y2+n[1]*h],[e.x2-n[0]*h,e.y2-n[1]*h],[e.x1-n[0]*h,e.y1-n[1]*h]].map(p=>p.join(',')).join(' ')}" fill="${col}" fill-opacity=".12" stroke="${col}" stroke-width="1" stroke-dasharray="5 3" ${nss}/>`; }
     case 'slab': return `<polygon points="${e.pts.map(p=>p.join(',')).join(' ')}" fill="${col}" fill-opacity=".10" stroke="${col}" stroke-width="1.2" stroke-dasharray="8 3 2 3" ${nss}/>`;
-    case 'roof': { const x0 = Math.min(e.x1,e.x2), y0 = Math.min(e.y1,e.y2), x1 = Math.max(e.x1,e.x2), y1 = Math.max(e.y1,e.y2), d = e.deb ?? .5, X0 = x0-d, X1 = x1+d, Y0 = y0-d, Y1 = y1+d, alongX = (x1-x0) >= (y1-y0);
-      let g = `<rect x="${X0}" y="${Y0}" width="${X1-X0}" height="${Y1-Y0}" fill="${col}" fill-opacity=".10" stroke="${col}" stroke-width="${sw}" ${nss}/><rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" fill="none" stroke="${col}" stroke-width=".6" stroke-dasharray="3 3" ${nss}/>`;
-      if(e.type === '2 pans' || e.type === '4 pans'){ const D = alongX ? (Y1-Y0)/2 : (X1-X0)/2, hip = e.type === '4 pans' ? D : 0;
-        g += alongX ? `<line x1="${X0+hip}" y1="${(Y0+Y1)/2}" x2="${X1-hip}" y2="${(Y0+Y1)/2}" stroke="${col}" stroke-width="2" ${nss}/>` : `<line x1="${(X0+X1)/2}" y1="${Y0+hip}" x2="${(X0+X1)/2}" y2="${Y1-hip}" stroke="${col}" stroke-width="2" ${nss}/>`;
-        if(hip){ const r0 = alongX ? [X0+hip, (Y0+Y1)/2] : [(X0+X1)/2, Y0+hip], r1 = alongX ? [X1-hip, (Y0+Y1)/2] : [(X0+X1)/2, Y1-hip];
-          [[X0,Y0,r0],[X0,Y1,alongX?r0:r1],[X1,Y0,alongX?r1:r0],[X1,Y1,r1]].forEach(([x,y,r]) => g += `<line x1="${x}" y1="${y}" x2="${r[0]}" y2="${r[1]}" stroke="${col}" stroke-width="1.2" ${nss}/>`); } }
-      else if(e.type === '1 pan') g += `<line x1="${X0}" y1="${Y1}" x2="${X1}" y2="${Y1}" stroke="${col}" stroke-width="2.4" ${nss}/>`;
+    case 'roof': { const G = roofGeo(e), ps = P => P.map(q => q[0] + ',' + q[1]).join(' ');
+      let g = `<polygon points="${ps(G.eaves)}" fill="${col}" fill-opacity=".10" stroke="${col}" stroke-width="${sw}" ${nss}/>`;
+      if(G.type !== 'terrasse' || (e.deb || 0) > 0) g += `<polygon points="${ps(G.foot)}" fill="none" stroke="${col}" stroke-width=".6" stroke-dasharray="3 3" ${nss}/>`;
+      G.lines.forEach(l => { g += `<line x1="${l.a[0]}" y1="${l.a[1]}" x2="${l.b[0]}" y2="${l.b[1]}" stroke="${col}" stroke-width="${l.k === 'ridge' ? 2.2 : l.k === 'step' ? 1.6 : 1.2}" ${l.k === 'valley' ? 'stroke-dasharray="7 4"' : ''} ${nss}/>`; });
+      if(G.arrow){ const [a, b] = G.arrow, u = [b[0]-a[0], b[1]-a[1]], l = Math.hypot(u[0], u[1]) || 1, k = Math.min(.45, l*.25), n = [-u[1]/l, u[0]/l], t = [b[0]-u[0]/l*k, b[1]-u[1]/l*k];
+        g += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${col}" stroke-width="1.6" ${nss}/><polygon points="${b[0]},${b[1]} ${t[0]+n[0]*k*.5},${t[1]+n[1]*k*.5} ${t[0]-n[0]*k*.5},${t[1]-n[1]*k*.5}" fill="${col}"/>`; }
+      if(G.type === 'terrasse') g += `<polygon points="${ps(offsetPoly(G.outer, -.12))}" fill="none" stroke="${col}" stroke-width=".8" stroke-dasharray="2 3" ${nss}/>`;
       return g; }
     case 'door': case 'win': {
       const n = normal(e), w = dist([e.x1,e.y1],[e.x2,e.y2]), t = (e.ep || .2) + .02, h = t/2;
@@ -180,6 +453,11 @@ function overlay(){
   if(cmd){
     const P = cmd.pts, last = P[P.length-1];
     const ghost = (e) => `<g transform="${wt()}" opacity=".75">${entSvg(Object.assign({layer:AUTO[e.t]||C.cur}, e), {col:'#F3B23A'})}</g>`;
+    if(cmd.n === 'TOIT'){
+      if(cmd.foot) s += ghost({t:'roof', pts:cmd.foot, type:cmd.type || '2 pans', deb:cmd.type === 'terrasse' ? 0 : .5, pente:15});
+      else if(cmd.poly && P.length) s += `<g transform="${wt()}"><polygon points="${P.concat([p]).map(q => q.join(',')).join(' ')}" fill="rgba(243,178,58,.08)" stroke="#F3B23A" stroke-width="1.5" stroke-dasharray="6 4" vector-effect="non-scaling-stroke"/></g>`;
+      else if(last && dist(last, p) > .05) s += ghost({t:'roof', pts:ccwPoly(rectPts(last, p)), type:'4 pans', deb:.5, pente:15});
+    }
     if(last){
       if(['LIGNE','POLYLIGNE','COTE','PORTE','FENETRE'].includes(cmd.n) && !(cmd.n==='COTE' && P.length===2) && !(cmd.n==='PORTE' && P.length===2)) s += ghost({t: cmd.n==='FENETRE'?'win':'line', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:C.ep});
       if(cmd.n === 'MUR') s += ghost({t:'wall', x1:last[0], y1:last[1], x2:p[0], y2:p[1], ep:cmd.ep||C.ep});
@@ -220,7 +498,7 @@ function snap(sx, sy){
       if(!layer(e.layer).v || !belongs(e)) return;
       const cand = [];
       if('x1' in e){ cand.push([[e.x1,e.y1],'end'],[[e.x2,e.y2],'end'],[[(e.x1+e.x2)/2,(e.y1+e.y2)/2],'mid']); }
-      if(['rect','box','roof','stair'].includes(e.t)) rectPts([e.x1,e.y1],[e.x2,e.y2]).forEach(p => cand.push([p,'end']));
+      if(['rect','box','stair'].includes(e.t) || (e.t === 'roof' && !e.pts)) rectPts([e.x1,e.y1],[e.x2,e.y2]).forEach(p => cand.push([p,'end']));
       if(e.t === 'post' || e.t === 'cyl') cand.push([[e.cx,e.cy],'ctr']);
       if(e.pts) e.pts.forEach(p => cand.push([p,'end']));
       if(e.t === 'circle') cand.push([[e.cx,e.cy],'ctr']);
@@ -284,7 +562,8 @@ function prompt(){
     case 'BOITE': return k === 0 ? 'Premier coin de la boîte :' : k === 1 ? 'Coin opposé (ou @longueur,largeur) :' : `Hauteur en m <${fm(C.ht)}> :`;
     case 'CYLINDRE': return k === 0 ? 'Centre du cylindre :' : k === 1 ? 'Rayon (valeur ou point) :' : `Hauteur en m <${fm(C.ht)}> :`;
     case 'DALLE': return k === 0 ? 'Premier coin de la dalle [S = depuis la sélection] :' : k === 1 ? 'Coin opposé :' : 'Épaisseur en m <0,20> :';
-    case 'TOIT': return k === 0 ? 'Premier coin du bâtiment à couvrir :' : k === 1 ? 'Coin opposé :' : c.type ? `Pente en degrés <${c.type === '1 pan' ? 10 : 15}> :` : 'Type [2P = 2 pans, 4P = 4 pans, 1P = monopente, T = terrasse] <2P> :';
+    case 'TOIT': if(!c.foot){ if(c.poly) return k ? 'Point suivant du contour [C ou Entrée = fermer, U = annuler le dernier] :' : 'Premier point du contour du toit :'; return k ? 'Coin opposé :' : 'Premier coin [Entrée = contour automatique des murs, S = pièces ou formes sélectionnées, P = contour point par point] :'; }
+      return c.type ? `Pente en degrés <${c.type === '1 pan' ? 10 : 15}> :` : `Contour de ${c.foot.length} côtés, ${fm(polyArea(c.foot))} m². Type [2P = 2 pans, 4P = 4 pans (croupes), 1P = monopente, T = terrasse] <2P> :`;
     case 'POTEAU': return `Centre du poteau ${fm(C.pa*100).replace(',00','')}×${fm(C.pa*100).replace(',00','')} cm [S = section, Entrée = terminer] :`;
     case 'POUTRE': return k ? 'Point suivant [Entrée = terminer] :' : 'Premier point de la poutre (20 × 40 cm) :';
     case 'ESCALIER': return k === 0 ? 'Coin de départ (bas de l\'escalier) :' : k === 1 ? 'Coin opposé (l\'escalier monte dans le sens du plus grand côté) :' : `Hauteur à monter en m <${fm(C.ht + .2)}> :`;
@@ -357,7 +636,8 @@ function point(p){
     case 'PORTE': if(k < 2) c.pts.push(p); else { const e = {t:'door', x1:c.pts[0][0], y1:c.pts[0][1], x2:c.pts[1][0], y2:c.pts[1][1], ep:wallEpAt(c.pts[0])}; const n = normal(e); e.sw = ((p[0]-e.x1)*n[0] + (p[1]-e.y1)*n[1]) >= 0 ? 1 : -1; pushHist(); addEnt(e); C.cmd = null; } break;
     case 'COTE': if(k < 2) c.pts.push(p); else { const e = {t:'dim', x1:c.pts[0][0], y1:c.pts[0][1], x2:c.pts[1][0], y2:c.pts[1][1]}; const n = normal(e); e.off = r3((p[0]-e.x1)*n[0] + (p[1]-e.y1)*n[1]); pushHist(); addEnt(e); C.cmd = null; } break;
     case 'TEXTE': if(!k){ c.pts.push(p); log(prompt()); } break;
-    case 'BOITE': case 'DALLE': case 'TOIT': case 'ESCALIER': if(k < 2){ c.pts.push(p); if(k === 1) log(prompt()); } break;
+    case 'BOITE': case 'DALLE': case 'ESCALIER': if(k < 2){ c.pts.push(p); if(k === 1) log(prompt()); } break;
+    case 'TOIT': if(c.foot) break; c.pts.push(p); if(!c.poly && c.pts.length === 2){ c.foot = ccwPoly(rectPts(c.pts[0], c.pts[1])); c.z = r3(C.lvz + C.ht); log(prompt()); } break;
     case 'CYLINDRE': if(k === 0) c.pts.push(p); else if(k === 1){ c.r = r3(dist(c.pts[0], p)); c.pts.push(p); log(prompt()); } break;
     case 'POTEAU': pushHist(); addEnt({t:'post', cx:p[0], cy:p[1], a:C.pa, h:r3(C.ht)}); log('Poteau placé en ' + fm(p[0]) + ' ; ' + fm(p[1])); break;
     case 'POUTRE': if(last && dist(last,p) > 1e-6){ pushHist(); addEnt({t:'beam', x1:last[0], y1:last[1], x2:p[0], y2:p[1], b:.2, hb:.4, z:r3(C.lvz + C.ht - .4)}); } c.pts.push(p); break;
@@ -401,7 +681,7 @@ function typed(raw){
   const U = t.toUpperCase();
   if(!t){ if(c.n === 'PIECE' && c.pts.length === 2) return mkRoom('Pièce'); if(c.n === 'TEXTE' && c.pts.length) return;
     if(['BOITE','CYLINDRE','DALLE','ESCALIER'].includes(c.n) && c.pts.length === 2) return make3d(c, null);
-    if(c.n === 'TOIT' && c.pts.length === 2){ if(!c.type){ c.type = '2 pans'; log(prompt()); return draw(); } return make3d(c, null); }
+    if(c.n === 'TOIT'){ if(!c.foot){ if(c.poly) return roofClose(c); if(!c.pts.length) return roofAuto(c); return; } if(!c.type){ c.type = '2 pans'; log(prompt()); return draw(); } return make3d(c, null); }
     if(c.n === 'NIVEAU' || c.n === 'RENDU' || c.n === 'SOLEIL'){ C.cmd = null; return draw(); }
     if(c.n === 'COPIERNIVEAU') return copyLevel(3);
     if(SELVAL.includes(c.n) && c.stage){ if(c.n === 'EXTRUSION') return selVal(c, String(C.ht), String(C.ht)); C.cmd = null; return draw(); }
@@ -409,7 +689,14 @@ function typed(raw){
   // options des commandes 3D
   const num = () => parseFloat(t.replace(',','.'));
   if(['BOITE','CYLINDRE','DALLE','ESCALIER'].includes(c.n) && c.pts.length === 2) return make3d(c, isNaN(num()) ? null : num());
-  if(c.n === 'TOIT' && c.pts.length === 2){
+  if(c.n === 'TOIT' && !c.foot){
+    if(!c.pts.length && (U === 'S' || U === 'SEL')) return roofFromSel(c);
+    if(!c.pts.length && (U === 'A' || U === 'AUTO')) return roofAuto(c);
+    if(!c.pts.length && U === 'P'){ c.poly = true; log(prompt()); return draw(); }
+    if(c.poly && U === 'C') return roofClose(c);
+    if(c.poly && U === 'U'){ c.pts.pop(); return draw(); }
+  }
+  if(c.n === 'TOIT' && c.foot){
     if(!c.type){ const T = {'2P':'2 pans', '2':'2 pans', '4P':'4 pans', '4':'4 pans', '1P':'1 pan', '1':'1 pan', 'T':'terrasse'}[U]; if(!T){ log('Type inconnu : tapez 2P, 4P, 1P ou T'); return; } c.type = T; if(T === 'terrasse') return make3d(c, 0); log(prompt()); return draw(); }
     return make3d(c, isNaN(num()) ? null : num());
   }
@@ -436,13 +723,34 @@ function typed(raw){
   if(!p){ log('Point ou option non valide : ' + t); return; }
   point(p);
 }
+function roofSet(c, r, how){
+  if(!r || r.pts.length < 3){ log('Contour introuvable : ' + how); return draw(); }
+  c.foot = r.pts; c.z = r.z ?? r3(C.lvz + C.ht); c.pts = []; c.poly = false; log(prompt()); draw();
+}
+function roofAuto(c){
+  const lv = C.ents.filter(e => layer(e.layer).v && belongs(e));
+  roofSet(c, autoOutline(lv), 'dessinez d\'abord des murs (MUR) ou des pièces sur ce niveau, ou cliquez deux coins, ou tapez P.');
+}
+function roofFromSel(c){
+  const src = C.ents.filter(e => C.sel.has(e.id) && (['room','slab','rect','box','wall'].includes(e.t) || (e.t === 'poly' && e.closed)));
+  if(!src.length){ log('Sélectionnez d\'abord les pièces, rectangles, polylignes fermées ou murs à couvrir.'); return draw(); }
+  if(src.length === 1 && src[0].t !== 'wall'){ const e = src[0]; return roofSet(c, {pts:ccwPoly(cleanPoly(e.pts || rectPts([e.x1,e.y1],[e.x2,e.y2]))).map(p => p.map(r3)), z:r3((e.z ?? C.lvz) + (e.t === 'box' ? (e.h || C.ht) : C.ht))}, ''); }
+  roofSet(c, autoOutline(src), 'sélection non fermée.');
+}
+function roofClose(c){
+  if(c.pts.length < 3){ log('Il faut au moins 3 points pour fermer le contour'); return; }
+  const P = ccwPoly(cleanPoly(c.pts.map(p => p.slice())));
+  if(P.length < 3 || polyArea(P) < .05){ log('Contour trop petit'); return; }
+  roofSet(c, {pts:P.map(p => p.map(r3)), z:r3(C.lvz + C.ht)}, '');
+}
 function make3d(c, v){
   const [a, b] = c.pts; pushHist();
   if(c.n === 'BOITE'){ addEnt({t:'box', x1:a[0], y1:a[1], x2:b[0], y2:b[1], h:r3(v || C.ht)}); log('Boîte créée (h = ' + fm(v || C.ht) + ' m)'); }
   if(c.n === 'CYLINDRE'){ addEnt({t:'cyl', cx:a[0], cy:a[1], r:c.r || .2, h:r3(v || C.ht)}); log('Cylindre créé'); }
   if(c.n === 'DALLE'){ const ep = v || .2; addEnt({t:'slab', pts:rectPts(a, b).map(q => q.map(r3)), z:r3(C.lvz + C.ht), h:r3(ep)}); log('Dalle créée à +' + fm(C.lvz + C.ht) + ' (ép. ' + fm(ep) + ' m)'); }
   if(c.n === 'ESCALIER'){ addEnt({t:'stair', x1:a[0], y1:a[1], x2:b[0], y2:b[1], H:r3(v || C.ht + .2)}); log('Escalier créé (' + Math.round((v || C.ht + .2)/.17) + ' marches)'); }
-  if(c.n === 'TOIT'){ addEnt({t:'roof', x1:a[0], y1:a[1], x2:b[0], y2:b[1], z:r3(C.lvz + C.ht), type:c.type, pente:c.type === 'terrasse' ? 2 : (v || (c.type === '1 pan' ? 10 : 15)), deb:c.type === 'terrasse' ? 0 : .5}); log('Toiture ' + c.type + ' créée'); }
+  if(c.n === 'TOIT'){ const e = addEnt({t:'roof', pts:c.foot.map(q => q.map(r3)), z:c.z ?? r3(C.lvz + C.ht), type:c.type, pente:c.type === 'terrasse' ? 2 : (v || (c.type === '1 pan' ? 10 : 15)), deb:c.type === 'terrasse' ? 0 : .5, sens:'auto'}); const G = roofGeo(e);
+    log('Toiture ' + c.type + ' créée : ' + fm(G.area) + ' m² de couverture' + (G.ridge ? ', faîtage ' + fm(G.ridge) + ' m' : '') + (G.valley ? ', noues ' + fm(G.valley) + ' m' : '') + (G.ortho ? '' : ' (murs en biais : contour approché en escalier)')); }
   C.cmd = null; draw();
 }
 function slabFromSel(){
@@ -536,8 +844,16 @@ function props3d(e){
    ${e.t === 'win' ? `<label class="fld"><span>Allège (m)</span><input class="inp" type="number" step="0.05" data-pe="sill" value="${e.sill ?? 1}"></label>` : ''}
    ${e.t === 'post' ? `<label class="fld"><span>Section (m)</span><input class="inp" type="number" step="0.05" data-pe="a" value="${e.a}"></label>` : ''}
    ${e.t === 'beam' ? `<label class="fld"><span>Largeur (m)</span><input class="inp" type="number" step="0.05" data-pe="b" value="${e.b ?? .2}"></label>` : ''}
-   ${e.t === 'roof' ? `<div class="g2"><label class="fld"><span>Type</span><select class="inp" data-pe="type">${['2 pans','4 pans','1 pan','terrasse'].map(t => `<option ${t === e.type ? 'selected' : ''}>${t}</option>`).join('')}</select></label><label class="fld"><span>Débord (m)</span><input class="inp" type="number" step="0.1" data-pe="deb" value="${e.deb ?? .5}"></label></div>` : ''}
+   ${e.t === 'roof' ? roofProps(e) : ''}
    <div class="g2"><label class="fld"><span>Matériau 3D</span><select class="inp" data-pe="mat">${Object.entries(mats).map(([k, m]) => `<option value="${k}" ${(e.mat || d[0]) === k ? 'selected' : ''}>${esc(m.n)}</option>`).join('')}</select></label><label class="fld"><span>Couleur</span><input class="inp" type="color" data-pe="col" value="${e.col || d[1]}" style="height:34px;padding:2px"></label></div>`;
+}
+function roofProps(e){
+  const G = roofGeo(e), opt = (k, L) => L.map(([v, n]) => `<option value="${v}" ${String(e[k] ?? L[0][0]) === v ? 'selected' : ''}>${n}</option>`).join('');
+  return `<div class="g2"><label class="fld"><span>Type</span><select class="inp" data-pe="type">${['2 pans','4 pans','1 pan','terrasse'].map(t => `<option ${t === e.type ? 'selected' : ''}>${t}</option>`).join('')}</select></label><label class="fld"><span>Débord (m)</span><input class="inp" type="number" step="0.1" data-pe="deb" value="${e.deb ?? .5}"></label></div>
+   ${G.type === 'terrasse' ? `<label class="fld"><span>Acrotère (m)</span><input class="inp" type="number" step="0.05" data-pe="acro" value="${e.acro ?? .6}"></label>`
+     : `<div class="g2"><label class="fld"><span>${G.type === '1 pan' ? 'Égout parallèle à' : 'Faîtage principal'}</span><select class="inp" data-pe="sens">${opt('sens', [['auto','Automatique'],['x','l\'axe X du bâtiment'],['y','l\'axe Y du bâtiment']])}</select></label>${G.type === '1 pan' ? `<label class="fld"><span>Sens de la pente</span><select class="inp" data-pe="inv">${opt('inv', [['0','Normal'],['1','Inversé']])}</select></label>` : ''}</div>`}
+   <div class="mlist"><div><span>Contour</span><b>${G.foot.length} côtés</b></div><div><span>Surface couverte</span><b>${fm(G.area)} m²</b></div>${G.ridge ? `<div><span>Faîtage</span><b>${fm(G.ridge)} m</b></div>` : ''}${G.hip ? `<div><span>Arêtiers</span><b>${fm(G.hip)} m</b></div>` : ''}${G.valley ? `<div><span>Noues</span><b>${fm(G.valley)} m</b></div>` : ''}</div>
+   <button class="btn b-line b-sm" data-cact="roofauto">${ic('roof')}Ajuster au contour des murs</button>`;
 }
 function toggleProps(force){ const p = $('#cprops'); if(p) p.classList.toggle('open', force ?? !p.classList.contains('open')); }
 
@@ -586,6 +902,10 @@ function metreDoc(d){
   if(Sr){ lines.push(L('Enduits & revêtements','carreau', Sr*1.05, `Carrelage des pièces (${R.length} pièces, ${fm(Sr)} m² + 5 %)`)); lines.push(L('Enduits & revêtements','plinthe', Math.max(0, Pr - D.reduce((a,o)=>a+len(o),0)))); lines.push(L('Peinture','peinti', Sr + Math.max(0, (L15+L10)*ht*2 - (Ad15+Ad10)*2)*.8, 'Peinture plafonds et murs intérieurs')); }
   D.length && lines.push(L('Menuiseries','porte', D.length, `Portes (${D.map(o=>fm(len(o))).join(' ; ')} m)`));
   Wn.length && lines.push(L('Menuiseries','fenetre', Wn.reduce((a,o)=>a+len(o)*1.2,0), 'Fenêtres (hauteur 1,20 m)'));
+  ents.filter(e => e.t === 'roof').forEach(e => { const G = roofGeo(e); if(!G.area) return;
+    if(G.type === 'terrasse') lines.push(L('Toiture / étanchéité','etanch', G.area, `Étanchéité de la toiture-terrasse (${fm(G.area)} m²)`));
+    else lines.push(L('Toiture / étanchéité','charpente', G.area, `Charpente de la toiture ${G.type} (${fm(G.area)} m² de rampants)`),
+      L('Toiture / étanchéité','tole', G.area, `Couverture ${G.type}, pente ${F(e.pente || 15, 0)}° : ${fm(G.area)} m²${G.ridge ? ', faîtage ' + fm(G.ridge) + ' m' : ''}${G.hip ? ', arêtiers ' + fm(G.hip) + ' m' : ''}${G.valley ? ', noues ' + fm(G.valley) + ' m' : ''}`)); });
   const doc = {name:'Métré · ' + (d.name || 'plan'), projet:d.name || '', tva:A.cfg().tva ?? 18, lots:[]};
   lines.forEach(l => { let lt = doc.lots.find(x => x.nom === l.lot); if(!lt){ lt = {nom:l.lot, lignes:[]}; doc.lots.push(lt); } lt.lignes.push(l); });
   return doc;
@@ -649,17 +969,36 @@ function cadSolids(){
     if(e.t === 'stair'){ const x0 = Math.min(e.x1,e.x2), x1 = Math.max(e.x1,e.x2), y0 = Math.min(e.y1,e.y2), y1 = Math.max(e.y1,e.y2), alongX = (x1-x0) >= (y1-y0), H = e.H || 3, n = Math.max(3, Math.round(H/.17)), L = alongX ? x1-x0 : y1-y0, g = L/n, sl = slot(e);
       const fwd = alongX ? (e.x2 >= e.x1 ? 1 : -1) : (e.y2 >= e.y1 ? 1 : -1);
       for(let k=0;k<n;k++){ const u0 = fwd > 0 ? k*g : L - (k+1)*g; out.push(alongX ? {k:'box', x:x0 + u0, y:-y1, z, w:g, d:y1-y0, h:(k+1)*H/n, slot:sl, ent:id, label:'Escalier'} : {k:'box', x:x0, y:-(y0 + u0 + g), z, w:x1-x0, d:g, h:(k+1)*H/n, slot:sl, ent:id, label:'Escalier'}); } }
-    if(e.t === 'roof'){ const d = e.deb ?? .5, X0 = Math.min(e.x1,e.x2) - d, X1 = Math.max(e.x1,e.x2) + d, Z0 = -Math.max(e.y1,e.y2) - d, Z1 = -Math.min(e.y1,e.y2) + d, sl = slot(e), y0 = z + .02;
-      if(e.type === 'terrasse'){ out.push({k:'box', x:X0, y:Z0, z, w:X1-X0, d:Z1-Z0, h:.2, slot:slot(e, ':d'), ent:id, label:'Dalle de toiture'}); cfg['ent:' + id + ':d'] = ['enduit', '#F4F1EA'];
-        [[X0, Z0, X1-X0, .12],[X0, Z1-.12, X1-X0, .12],[X0, Z0, .12, Z1-Z0],[X1-.12, Z0, .12, Z1-Z0]].forEach(([x, y, w, dd]) => out.push({k:'box', x, y, z:z + .2, w, d:dd, h:.6, slot:slot(e, ':d'), ent:id, label:'Acrotère'}));
-        out.push({k:'box', x:X0 + .12, y:Z0 + .12, z:z + .2, w:X1-X0-.24, d:Z1-Z0-.24, h:.06, slot:sl, ent:id, label:'Toiture-terrasse'}); }
-      else { const ang = (e.pente || 15)*Math.PI/180, alongX = (X1-X0) >= (Z1-Z0), tr = [];
-        if(e.type === '1 pan'){ const hf = (Z1-Z0)*Math.tan(ang); tr.push([[X0,y0+hf,Z0],[X1,y0+hf,Z0],[X1,y0,Z1]], [[X0,y0+hf,Z0],[X1,y0,Z1],[X0,y0,Z1]]); }
-        else if(alongX){ const Zm = (Z0+Z1)/2, hf = (Zm-Z0)*Math.tan(ang), yR = y0 + hf, hip = e.type === '4 pans' ? (Zm - Z0) : 0, r0 = X0 + hip, r1 = X1 - hip;
-          tr.push([[X0,y0,Z0],[X1,y0,Z0],[r1,yR,Zm]], [[X0,y0,Z0],[r1,yR,Zm],[r0,yR,Zm]], [[X1,y0,Z1],[X0,y0,Z1],[r0,yR,Zm]], [[X1,y0,Z1],[r0,yR,Zm],[r1,yR,Zm]]); if(hip) tr.push([[X0,y0,Z1],[X0,y0,Z0],[r0,yR,Zm]], [[X1,y0,Z0],[X1,y0,Z1],[r1,yR,Zm]]); }
-        else { const Xm = (X0+X1)/2, hf = (Xm-X0)*Math.tan(ang), yR = y0 + hf, hip = e.type === '4 pans' ? (Xm - X0) : 0, r0 = Z0 + hip, r1 = Z1 - hip;
-          tr.push([[X0,y0,Z0],[X0,y0,Z1],[Xm,yR,r1]], [[X0,y0,Z0],[Xm,yR,r1],[Xm,yR,r0]], [[X1,y0,Z1],[X1,y0,Z0],[Xm,yR,r0]], [[X1,y0,Z1],[Xm,yR,r0],[Xm,yR,r1]]); if(hip) tr.push([[X1,y0,Z0],[X0,y0,Z0],[Xm,yR,r0]], [[X0,y0,Z1],[X1,y0,Z1],[Xm,yR,r1]]); }
-        out.push({k:'tris', tris:tr, slot:sl, ent:id, label:'Toiture ' + e.type}); out.push({k:'tris', tris:tr.map(t => t.map(([x,y,zz]) => [x, y - .1, zz])), slot:'bandeau', ent:id, label:'Sous-face'}); }
+    if(e.t === 'roof'){ const G = roofGeo(e), sl = slot(e), y0 = z + .02, fr = G.fr;
+      const P3 = (q, h) => { const p = fr.W(q); return [p[0], y0 + h, -p[1]]; };
+      const up = t => { const [a, b, c] = t, ny = (b[2]-a[2])*(c[0]-a[0]) - (b[0]-a[0])*(c[2]-a[2]); return ny < 0 ? [a, c, b] : t; };
+      const face = (t, nx, nz) => { const [a, b, c] = t, n = [(b[1]-a[1])*(c[2]-a[2]) - (b[2]-a[2])*(c[1]-a[1]), (b[2]-a[2])*(c[0]-a[0]) - (b[0]-a[0])*(c[2]-a[2]), (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])]; return n[0]*nx + n[2]*nz < 0 ? [a, c, b] : t; };
+      if(G.type === 'terrasse'){ const kd = 'ent:' + id + ':d', ac = e.acro ?? .6, P = G.outer; cfg[kd] = ['enduit', '#F4F1EA'];
+        out.push({k:'prism', pts:P.map(q => [q[0], -q[1]]), z, h:.2, slot:kd, ent:id, label:'Dalle de toiture'});
+        if(ac > 0) P.forEach((a, i) => { const b = P[(i+1)%P.length], l = dist(a, b); if(l < .01) return; const u = [(b[0]-a[0])/l, (b[1]-a[1])/l], nI = [-u[1], u[0]];
+          const pv = P[(i-1+P.length)%P.length], pn = P[(i+2)%P.length];
+          const crA = (a[0]-pv[0])*(b[1]-a[1]) - (a[1]-pv[1])*(b[0]-a[0]), crB = (b[0]-a[0])*(pn[1]-b[1]) - (b[1]-a[1])*(pn[0]-b[0]);
+          const ea = crA < -1e-9 ? .12 : 0, eb = crB < -1e-9 ? .12 : 0, L2 = l + ea + eb, mo = (eb - ea)/2, m = [(a[0]+b[0])/2 + u[0]*mo + nI[0]*.06, (a[1]+b[1])/2 + u[1]*mo + nI[1]*.06];
+          out.push({k:'obox', cx:m[0], cy:-m[1], z:z + .2, L:L2, t:.12, h:ac, ang:Math.atan2(-u[1], u[0]), slot:kd, ent:id, label:'Acrotère'}); });
+        const Pin = offsetPoly(P, -.12); if(polyArea(Pin) > .05) out.push({k:'prism', pts:Pin.map(q => [q[0], -q[1]]), z:z + .2, h:.06, slot:sl, ent:id, label:'Toiture-terrasse'}); }
+      else { const tr = [];
+        G.faces.forEach(f => { const pz = q => f.pl[0]*q[0] + f.pl[1]*q[1] + f.pl[2], T = f.tri ? triPoly(f.poly) : f.poly.slice(1, -1).map((q, k) => [f.poly[0], q, f.poly[k+2]]);
+          T.forEach(t => tr.push(up(t.map(q => P3(q, pz(q)))))); });
+        out.push({k:'tris', tris:tr, slot:sl, ent:id, label:'Toiture ' + G.type});
+        out.push({k:'tris', tris:tr.map(t => t.map(([x,y,zz]) => [x, y - .1, zz])), slot:'bandeau', ent:id, label:'Sous-face'});
+        // pignons et frises : du haut des murs jusqu'à la sous-face, le long du contour des murs
+        const kp = 'ent:' + id + ':p', pg = []; cfg[kp] = ['enduit', '#EFE6D6'];
+        const hAt = p => { const q = fr.L(p), v = G.h(q[0], q[1]); return v > -Infinity ? v : 0; };
+        G.foot.forEach((a, i) => { const b = G.foot[(i+1)%G.foot.length], l = dist(a, b); if(l < .01) return; const nO = [(b[1]-a[1])/l, -(b[0]-a[0])/l], n = Math.max(1, Math.ceil(l/.15));
+          for(let k=0;k<n;k++){ const pa = [a[0] + (b[0]-a[0])*k/n, a[1] + (b[1]-a[1])*k/n], pb = [a[0] + (b[0]-a[0])*(k+1)/n, a[1] + (b[1]-a[1])*(k+1)/n];
+            const ha = y0 + hAt(pa) - .04, hb = y0 + hAt(pb) - .04; if(Math.max(ha, hb) <= z + .005) continue;
+            const A0 = [pa[0], z, -pa[1]], B0 = [pb[0], z, -pb[1]], A1 = [pa[0], Math.max(z, ha), -pa[1]], B1 = [pb[0], Math.max(z, hb), -pb[1]];
+            pg.push(face([A0, B0, B1], nO[0], -nO[1]), face([A0, B1, A1], nO[0], -nO[1])); } });
+        G.pieces.filter(P => P.k === 'gable').forEach(P => { const ends = P.dir === 'x' ? [[P.x0, -1], [P.x1, 1]] : [[P.y0, -1], [P.y1, 1]];
+          ends.forEach(([c, sg]) => { const out1 = P.dir === 'x' ? [c + sg*1e-3, (P.y0+P.y1)/2] : [(P.x0+P.x1)/2, c + sg*1e-3]; if(G.h(out1[0], out1[1]) === -Infinity) return;
+            const m = P.dir === 'x' ? (P.y1-P.y0)/2 : (P.x1-P.x0)/2, q0 = P.dir === 'x' ? [c, P.y0] : [P.x0, c], q1 = P.dir === 'x' ? [c, P.y1] : [P.x1, c], qm = P.dir === 'x' ? [c, (P.y0+P.y1)/2] : [(P.x0+P.x1)/2, c];
+            const nl = P.dir === 'x' ? fr.W([sg, 0]) : fr.W([0, sg]); pg.push(face([P3(q0, -.04), P3(q1, -.04), P3(qm, G.s*m - .04)], nl[0], -nl[1])); }); });
+        if(pg.length) out.push({k:'tris', tris:pg, slot:kp, ent:id, label:'Pignons et frises'}); }
     }
   });
   if(out.length){ const xs = out.flatMap(s => s.k === 'obox' ? [s.cx - s.L/2, s.cx + s.L/2] : s.k === 'box' ? [s.x, s.x + s.w] : s.k === 'cyl' ? [s.x] : s.k === 'prism' ? s.pts.map(q => q[0]) : []), zs = out.flatMap(s => s.k === 'obox' ? [s.cy - s.L/2, s.cy + s.L/2] : s.k === 'box' ? [s.y, s.y + s.d] : s.k === 'cyl' ? [s.y] : s.k === 'prism' ? s.pts.map(q => q[1]) : []);
@@ -698,8 +1037,11 @@ function fromProject3D(pj){
     M.stairs.filter(e => e.lvl === i).forEach(e => { const r = e.r; d.ents.push({id:nid(), layer:'structure', t:'stair', x1:r.x + .05, y1:fy(r.y + r.h - .05), x2:r.x + r.w/2, y2:fy(r.y + .05), z, H:HN}); });
   });
   const zt = L.length*HN;
-  if(T.type === 'terrasse' || pj.toiture === 'terrasse'){ const rooms = L[L.length-1].lv.pieces.filter(r => r.t !== 'terrasse'), bt = PL.bbox({pieces:rooms}); d.ents.push({id:nid(), layer:'toiture', t:'roof', x1:bt.x0, y1:fy(bt.y1), x2:bt.x1, y2:fy(bt.y0), z:r3(zt - .2), type:'terrasse', pente:2, deb:0, mat:'gravier', col:'#A39C90'}); }
-  else d.ents.push({id:nid(), layer:'toiture', t:'roof', x1:b0.x0, y1:fy(b0.y1), x2:b0.x1, y2:fy(b0.y0), z:HN, type:T.type || '2 pans', pente:T.pente || 15, deb:T.debord || .6, mat:'tole', col:(pj.id === 'moyen' ? '#9C3B2E' : '#5F7184')});
+  const zTop = L[L.length-1].z, rect2 = r => ({t:'room', pts:rectPts([r.x, fy(r.y+r.h)], [r.x+r.w, fy(r.y)])});
+  if(T.type === 'terrasse' || pj.toiture === 'terrasse'){ const rooms = L[L.length-1].lv.pieces.filter(r => r.t !== 'terrasse'), o = autoOutline(rooms.map(rect2)), bt = PL.bbox({pieces:rooms});
+    d.ents.push({id:nid(), layer:'toiture', t:'roof', pts:o ? o.pts : ccwPoly(rectPts([bt.x0, fy(bt.y1)], [bt.x1, fy(bt.y0)])), z:r3(zt - .2), type:'terrasse', pente:2, deb:0, acro:T.acrotere || .6, mat:'gravier', col:'#A39C90'}); }
+  else { const o = autoOutline(d.ents.filter(e => e.t === 'wall' && Math.abs((e.z ?? 0) - zTop) < .05));
+    d.ents.push({id:nid(), layer:'toiture', t:'roof', pts:o ? o.pts : ccwPoly(rectPts([b0.x0, fy(b0.y1)], [b0.x1, fy(b0.y0)])), z:r3(zt), type:T.type || '2 pans', pente:T.pente || 15, deb:T.debord || .6, sens:'auto', mat:'tole', col:(pj.id === 'moyen' ? '#9C3B2E' : '#5F7184')}); }
   d.ents.push({id:nid(), layer:'textes', t:'text', x:b0.x0, y:fy(b0.y1) - 1.6, s:.4, txt:pj.titre, z:0});
   return d;
 }
@@ -814,6 +1156,9 @@ A.on('click', '[data-cact]', async el => {
   if(a === 'zin') return zoomAt(vw/2, vh/2, 1.25); if(a === 'zout') return zoomAt(vw/2, vh/2, .8); if(a === 'zext') return zoomExt();
   if(a === 'ortho' || a === 'osnap' || a === 'grid'){ start(a === 'ortho' ? 'ORTHO' : a === 'osnap' ? 'ACCROCHAGE' : 'GRILLE'); return; }
   if(a === 'metre') return showMetre();
+  if(a === 'roofauto'){ const e = C.ents.find(x => C.sel.has(x.id) && x.t === 'roof'); if(!e) return;
+    const ws = C.ents.filter(w => (w.t === 'wall' || w.t === 'room') && Math.abs(((w.z ?? 0) + (w.t === 'wall' ? (w.h ?? C.ht) : C.ht)) - (e.z ?? 0)) < .45), r = autoOutline(ws.length ? ws : C.ents.filter(belongs));
+    if(!r){ log('Aucun mur sous cette toiture'); return; } pushHist(); e.pts = r.pts; delete e.x1; delete e.y1; delete e.x2; delete e.y2; log('Toiture ajustée au contour des murs (' + r.pts.length + ' côtés)'); return draw(); }
   if(a === 'metreopen'){ A.closeWin(); return A.METRE.openDoc(metreDoc(data())); }
   if(a === 'png') return exportPng();
   if(a === 'svg') return A.download((C.name||'plan').replace(/[^\w-]+/g,'_') + '.svg', standalone(), 'image/svg+xml');
@@ -825,7 +1170,7 @@ A.on('click', '[data-cact]', async el => {
   if(a === 'delsel'){ start('EFFACER'); return; }
   if(a === 'flip'){ const e = C.ents.find(x => C.sel.has(x.id) && x.t === 'door'); if(e){ pushHist(); e.sw = -(e.sw||1); draw(); } return; }
 });
-A.on('change', '[data-pe]', el => { const k = el.dataset.pe; if(!C) return; pushHist(); C.ents.filter(e => C.sel.has(e.id)).forEach(e => { if(k === 'layer'){ if(el.value) e.layer = el.value; } else if(['ep','s','r','off','z','h','hb','H','a','b','pente','deb','sill'].includes(k)){ const v = parseFloat(el.value); if(!isNaN(v)) e[k] = v; } else e[k] = el.value; }); draw(); });
+A.on('change', '[data-pe]', el => { const k = el.dataset.pe; if(!C) return; pushHist(); C.ents.filter(e => C.sel.has(e.id)).forEach(e => { if(k === 'layer'){ if(el.value) e.layer = el.value; } else if(['ep','s','r','off','z','h','hb','H','a','b','pente','deb','sill','acro'].includes(k)){ const v = parseFloat(el.value); if(!isNaN(v)) e[k] = v; } else e[k] = el.value; }); draw(); });
 A.on('change', '#cLv', el => { if(!C) return; if(el.value === 'new'){ start('NIVEAU'); const i = $('#cmdIn'); if(i) i.focus(); return; } C.lvz = parseFloat(el.value) || 0; C.sel.clear(); log('Niveau de travail : ' + fm(C.lvz) + ' m'); draw(); });
 A.on('change', '[data-cp]', el => { const k = el.dataset.cp, v = parseFloat(el.value); if(C && v > 0){ C[k] = v; draw(); } });
 A.on('change', '[data-cauto]', el => { if(C) C.auto = el.checked; });
@@ -844,7 +1189,7 @@ function help(){
   const rows = [['MUR / MU','Dessine des murs (épaisseur réglable : E 0.15)'],['LIGNE / L','Lignes successives'],['POLYLIGNE / PL','Polyligne (C pour clore)'],['RECTANGLE / REC','Rectangle par 2 coins'],['CERCLE / C','Centre puis rayon'],['PIECE / PI','Pièce : 2 coins puis le nom (surface calculée)'],['PORTE / PO','2 points sur le mur puis le côté d\'ouverture'],['FENETRE / FE','2 points sur le mur'],['COTE / COT','Cotation : 2 points puis position'],['TEXTE / T','Point puis texte'],['EFFACER / E','Efface la sélection ou les objets cliqués'],['DEPLACER / D, COPIER / CO','Sélection, point de base, destination'],['ROTATION / RO, MIROIR / MI','Sélection puis point de base / axe'],['ANNULER / U, RETABLIR / R','Ctrl+Z / Ctrl+Y'],['ZE','Zoom étendu (tout voir)'],['ORTHO / O (F8)','Traits horizontaux ou verticaux'],['ACC (F3), GRILLE / G (F7)','Accrochage aux objets, grille'],['EP / HT','Épaisseur des murs, hauteur pour le métré'],['METRE / MT','Métré du plan'],['ENR','Enregistrer (Ctrl+S)']];
   A.win({title:'Aide de l\'atelier de dessin', wide:true, body:`<div class="note info">${ic('info')}<span>Les unités sont en <b>mètres</b>. L'axe Y monte vers le haut comme sur AutoCAD. Molette = zoom, bouton du milieu (ou outil main) = déplacer la vue. Entrée ou Espace répète la dernière commande.</span></div>
    <div class="tw"><table class="t"><thead><tr><th>Commande</th><th>Effet</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
-   <h3 style="font-size:16px">Dessin en 3D</h3><div class="tw"><table class="t"><tbody>${[['3D, 2D, PARTAGE','Vue 3D, vue en plan, ou les deux côte à côte (boutons dans la barre du haut)'],['NIVEAU / NIV','Choisit l\'altitude de travail (ex. 3 pour l\'étage) ; les autres niveaux sont grisés'],['COPIERNIVEAU / CN','Copie tout le niveau courant vers le haut (ex. 3) et passe au nouveau niveau'],['BOITE / BO','Boîte : 2 coins puis la hauteur'],['CYLINDRE / CYL','Centre, rayon puis hauteur'],['DALLE / DA','2 coins puis l\'épaisseur (S = dalle depuis une pièce ou un rectangle sélectionné)'],['POTEAU / POT','Clics successifs (S25 = section 25 cm)'],['POUTRE / POU','Points successifs (20 × 40 cm)'],['ESCALIER / ESC','Coin de départ, coin opposé, hauteur à monter'],['TOIT / TO','2 coins, type (2P, 4P, 1P, T) puis la pente'],['EXTRUSION / EXT','Donne une hauteur à des rectangles, polylignes fermées, cercles ou pièces'],['ELEVATION / ELEV','Change l\'altitude des objets sélectionnés'],['MATERIAU / MAT, COULEUR / COUL','Matériau (enduit, brique, pierre, bois, tôle, tuiles, verre…) et couleur (#C0A080 ou blanc, beige, rouge…) des objets'],['RENDU, SOLEIL','Mode réaliste, maquette ou filaire ; heure du soleil (6 à 18)'],['RDM / ETUDIER','Étude complète de la poutre, de la ligne ou du mur sélectionné : appuis, charges, réactions, diagrammes V et M, ferraillage (solveur guidé)']].map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+   <h3 style="font-size:16px">Dessin en 3D</h3><div class="tw"><table class="t"><tbody>${[['3D, 2D, PARTAGE','Vue 3D, vue en plan, ou les deux côte à côte (boutons dans la barre du haut)'],['NIVEAU / NIV','Choisit l\'altitude de travail (ex. 3 pour l\'étage) ; les autres niveaux sont grisés'],['COPIERNIVEAU / CN','Copie tout le niveau courant vers le haut (ex. 3) et passe au nouveau niveau'],['BOITE / BO','Boîte : 2 coins puis la hauteur'],['CYLINDRE / CYL','Centre, rayon puis hauteur'],['DALLE / DA','2 coins puis l\'épaisseur (S = dalle depuis une pièce ou un rectangle sélectionné)'],['POTEAU / POT','Clics successifs (S25 = section 25 cm)'],['POUTRE / POU','Points successifs (20 × 40 cm)'],['ESCALIER / ESC','Coin de départ, coin opposé, hauteur à monter'],['TOIT / TO','Entrée = toiture sur le contour des murs du niveau (plans en L, T, U, en croix…), S = sur les pièces ou formes sélectionnées, P = contour point par point, ou 2 coins ; puis le type (2P = 2 pans, 4P = 4 pans à croupes, 1P = monopente, T = terrasse) et la pente. Dans les propriétés : débord, sens du faîtage, sens de la pente, acrotère, « Ajuster au contour des murs »'],['EXTRUSION / EXT','Donne une hauteur à des rectangles, polylignes fermées, cercles ou pièces'],['ELEVATION / ELEV','Change l\'altitude des objets sélectionnés'],['MATERIAU / MAT, COULEUR / COUL','Matériau (enduit, brique, pierre, bois, tôle, tuiles, verre…) et couleur (#C0A080 ou blanc, beige, rouge…) des objets'],['RENDU, SOLEIL','Mode réaliste, maquette ou filaire ; heure du soleil (6 à 18)'],['RDM / ETUDIER','Étude complète de la poutre, de la ligne ou du mur sélectionné : appuis, charges, réactions, diagrammes V et M, ferraillage (solveur guidé)']].map(r=>`<tr><td class="mono" style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
    <h3 style="font-size:16px">Saisie des points</h3><div class="tw"><table class="t"><tbody>
    <tr><td class="mono"><b>3,2</b></td><td>Point absolu x = 3 m, y = 2 m</td></tr><tr><td class="mono"><b>@4,0</b></td><td>4 m vers la droite depuis le dernier point</td></tr>
    <tr><td class="mono"><b>@3&lt;90</b></td><td>3 m dans la direction 90° (vers le haut)</td></tr><tr><td class="mono"><b>4.5</b></td><td>Distance directe : 4,50 m dans la direction du curseur</td></tr></tbody></table></div>

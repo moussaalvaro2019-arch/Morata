@@ -33,7 +33,7 @@ A.page('', {space:'site', title:'Accueil', render(){
       <span class="kick" style="color:var(--amber)">${esc(c.tagline)}</span>
       <h1>${esc(c.heroTitle)} <em>${esc(c.heroAccent)}</em></h1>
       <p class="lead">${esc(c.heroText)}</p>
-      <div class="row"><a class="btn b-pri b-lg" href="#/${S.me?'app':'inscription'}">${S.me?'Continuer mes cours':'Commencer gratuitement'} ${ic('arrow')}</a><a class="btn b-lg" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)" href="#/matieres">Voir les ${st.mat} matières</a></div>
+      <div class="row"><a class="btn b-pri b-lg" href="#/${S.me?'app':'matieres'}">${S.me?'Continuer mes cours':'Lire un chapitre gratuit'} ${ic('arrow')}</a><a class="btn b-lg" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)" href="#/matieres">Voir les ${st.mat} matières</a></div>
       <div class="trust"><span>${ic('book')}${st.ch} chapitres</span><span>${ic('edit')}${st.ex} exercices corrigés</span><span>${ic('target')}${st.q} questions de quiz</span><span>${ic('building')}${st.proj} projets réels</span><span>${ic('spark')}Professeur IA</span></div>
     </div>
     <div class="bp" aria-hidden="true">${A.PLAN ? A.PLAN.thumb(proj[1] || proj[0], {dark:true, labels:true}) : ''}</div>
@@ -75,10 +75,12 @@ A.page('', {space:'site', title:'Accueil', render(){
     <div class="pcards">${proj.map(p => `<a class="pcard" href="#/${S.me?'app/construction/projet/'+p.id:'construction'}"><div class="pv">${A.PLAN.thumb(p,{dark:true})}</div><div class="pb"><span class="pill p-or" style="justify-self:start">${esc(p.standing)}</span><b>${esc(p.titre)}</b><span class="sub">${esc(p.resume)}</span></div></a>`).join('')}</div>
   </section>
 
+  ${A.paywallOn() ? `<section class="sect"><div class="price-card"><div class="stack s8"><span class="kick">Tarif</span><h2>Accès complet : ${esc(A.prixTxt())}</h2><p class="muted" style="max-width:62ch">Le premier chapitre de chaque matière se lit gratuitement, sans compte. L'inscription débloque tous les chapitres, les exercices corrigés, les sujets d'examen, les quiz, l'atelier de dessin, le métré et le professeur IA. Paiement simple par ${['wave','mtn','orange','moov'].filter(k => (A.cfg().pay||{})[k]).map(k => ({wave:'Wave', mtn:'MTN Mobile Money', orange:'Orange Money', moov:'Moov Money'})[k]).join(', ') || 'Mobile Money'}.</p></div><div class="stack s8" style="justify-items:start"><b class="price-big">${F(A.cfg().formule === 'mensuel' ? A.cfg().prixMois : A.cfg().prixAcces)} <small>FCFA${A.cfg().formule === 'mensuel' ? ' / mois' : ''}</small></b><a class="btn b-pri b-lg" href="#/${S.me ? 'app/abonnement' : 'inscription'}">${S.me ? 'Activer mon accès' : 'Créer mon compte'} ${ic('arrow')}</a></div></div></section>` : ''}
+
   <section class="sect">
     <div class="sech"><div><span class="kick">Méthode</span><h2>Comment ça marche</h2></div></div>
     <ol class="how">
-      <li><span class="n">1</span><b>Créez votre compte</b><p>Gratuit, en une minute, depuis votre téléphone ou votre ordinateur.</p></li>
+      <li><span class="n">1</span><b>Créez votre compte</b><p>En une minute, depuis votre téléphone ou votre ordinateur${A.paywallOn() ? `, puis activez votre accès : ${esc(A.prixCourt())}, par Wave ou Mobile Money` : ''}.</p></li>
       <li><span class="n">2</span><b>Suivez les cours</b><p>Chapitres courts, formules, exemples chiffrés et figures. Votre progression est enregistrée.</p></li>
       <li><span class="n">3</span><b>Testez-vous</b><p>Un quiz corrigé à la fin de chaque chapitre, et l'IA pour réexpliquer autrement.</p></li>
       <li><span class="n">4</span><b>Pratiquez</b><p>Dessinez des plans, faites le métré d'un projet et obtenez votre attestation par matière.</p></li>
@@ -115,12 +117,12 @@ A.page('matiere/:id', {space:'site', title:p => (A.mat(p.id)||{}).titre || 'Mati
    ${A.matHead(m)}
    <div class="cols"><div class="stack">
     <h3 style="font-size:18px">Trois niveaux, à suivre dans l'ordre</h3>
-    ${A.matLevels(m, {}).map(L => `<div class="card lvbox" style="--lc:${L.c}"><div class="row between"><b style="color:${L.c}">${'●'.repeat(L.id)} ${L.n}</b><span class="sub">${L.total} chapitres · ${Math.max(1, Math.round(L.min/60))} h</span></div><p class="sub" style="margin:2px 0 8px">${L.d}</p><div class="chlist">${L.ch.map((c,i) => i < pv
+    ${A.matLevels(m, {}).map(L => `<div class="card lvbox" style="--lc:${L.c}"><div class="row between"><b style="color:${L.c}">${'●'.repeat(L.id)} ${L.n}</b><span class="sub">${L.total} chapitres · ${Math.max(1, Math.round(L.min/60))} h</span></div><p class="sub" style="margin:2px 0 8px">${L.d}</p><div class="chlist">${L.ch.map((c,i) => A.isFree(c.id)
       ? `<a class="chap" href="#/cours/${c.id}"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · aperçu gratuit</span></span><span class="pill p-ok">Ouvert</span></a>`
       : `<a class="chap locked" href="#/inscription"><span class="n">${i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min · ${A.nq(c)} questions${A.nex(c) ? ` · ${A.nex(c)} exercices corrigés` : ''}</span></span>${ic('lock')}</a>`).join('') || '<p class="sub">Chapitres en préparation.</p>'}</div></div>`).join('')}
    </div><div class="stack">
     ${m.objectifs?`<div class="card"><h3>Objectifs</h3><ul style="margin:0;padding-left:18px;display:grid;gap:6px">${m.objectifs.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>`:''}
-    <div class="card" style="background:var(--navy);color:#fff;border:0"><h3 style="color:#fff">Accès complet gratuit</h3><p style="color:#B7C3D3;margin-bottom:12px">Créez votre compte pour lire tous les chapitres, passer les quiz, suivre votre progression et poser vos questions à l'IA.</p><a class="btn b-pri b-full" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div>
+    <div class="card" style="background:var(--navy);color:#fff;border:0"><h3 style="color:#fff">${A.paywallOn() ? 'Accès complet : ' + esc(A.prixTxt()) : 'Accès complet gratuit'}</h3><p style="color:#B7C3D3;margin-bottom:12px">Créez votre compte pour lire tous les chapitres, faire les exercices et les sujets d'examen corrigés, passer les quiz, suivre votre progression et poser vos questions à l'IA.</p><a class="btn b-pri b-full" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div>
    </div></div>
   </section></div>`;
 }});
@@ -130,15 +132,17 @@ A.matHead = m => `<div class="mhead" style="background:linear-gradient(130deg,${
 A.page('cours/:id', {space:'site', title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', render(p){
   if(S.me){ location.replace('#/app/cours/'+p.id); return null; }
   const f0 = A.chap(p.id); if(!f0) return `<div class="wrap sect">${A.empty('book','Chapitre introuvable.')}</div>`;
-  const idx = f0.m.chapitres.findIndex(c => c.id === p.id), pv = +A.cfg().preview || 0;
-  if(idx >= pv) return `<div class="wrap sect"><div class="card stack" style="max-width:560px;margin:0 auto;text-align:center;justify-items:center">${ic('lock')}<h2>Chapitre réservé aux inscrits</h2><p class="muted">L'inscription est gratuite et donne accès à tous les cours, quiz et outils.</p><a class="btn b-pri" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div></div>`;
+  const idx = f0.m.chapitres.findIndex(c => c.id === p.id);
+  const lockedMsg = `<div class="wrap sect"><div class="card stack" style="max-width:560px;margin:0 auto;text-align:center;justify-items:center">${ic('lock')}<h2>Chapitre réservé aux inscrits</h2><p class="muted">${A.paywallOn() ? `L'inscription, ${esc(A.prixCourt())}, donne accès à tous les cours, exercices, sujets d'examen, quiz et outils.` : 'L\'inscription est gratuite et donne accès à tous les cours, quiz et outils.'}</p><a class="btn b-pri" href="#/inscription">Créer mon compte ${ic('arrow')}</a></div></div>`;
+  if(!A.isFree(p.id)) return lockedMsg;
   if(!A.chapReady(f0)) return `<div class="wrap sect">${A.chapLoading()}</div>`;
+  if(A.chap(p.id).c.verrou) return lockedMsg;
   const f = A.chap(p.id), md = A.md(f.c.contenu);
   return `<div class="wrap"><section class="sect" style="max-width:900px;margin:0 auto">
    <a class="btn b-ghost b-sm" style="justify-self:start" href="#/matiere/${f.m.id}">${ic('back')}${esc(f.m.titre)}</a>
    <article class="lesson"><span class="kick">Chapitre ${idx+1} · ${f.c.duree||20} min</span><h1 style="font-size:clamp(24px,3vw,34px);margin:6px 0 18px">${esc(f.c.titre)}</h1>${md.html}</article>
    ${A.exosHtml(f.c)}
-   <div class="band"><div><h2>La suite vous attend</h2><p>Quiz corrigé, chapitres suivants, assistant IA : tout est gratuit avec un compte.</p></div><a class="btn b-lg" style="background:#fff;color:var(--or2)" href="#/inscription">S'inscrire ${ic('arrow')}</a></div>
+   <div class="band"><div><h2>La suite vous attend</h2><p>${A.paywallOn() ? `Quiz corrigé, sujets d'examen, chapitres suivants, assistant IA : tout est inclus dans l'inscription : ${esc(A.prixCourt())}.` : 'Quiz corrigé, chapitres suivants, assistant IA : tout est gratuit avec un compte.'}</p></div><a class="btn b-lg" style="background:#fff;color:var(--or2)" href="#/inscription">S'inscrire ${ic('arrow')}</a></div>
   </section></div>`;
 }});
 
@@ -163,7 +167,7 @@ A.page('outils', {space:'site', title:'Outils', render(){
     <div class="stack">
      <div class="card stack"><h3>${ic('calc')} Métré & devis estimatif</h3><p class="muted">Avant-métré par lots (terrassement, béton armé, maçonnerie, enduits, revêtements, peinture…), sous-détail des matériaux (sacs de ciment, sable, gravier, acier), devis quantitatif et estimatif en FCFA avec TVA, et métré automatique de votre plan dessiné.</p></div>
      <div class="card stack"><h3>${ic('spark')} Professeur IA</h3><p class="muted">Posez vos questions à toute heure : « comment calculer le ferraillage d'une poutre de 5 m ? », « explique-moi l'essai Proctor ». L'IA répond en français, avec les formules, les normes et des exemples adaptés aux chantiers locaux.</p></div>
-     <a class="btn b-pri b-lg" href="#/${S.me?'app/atelier':'inscription'}">${S.me?'Ouvrir l\'atelier':'Créer mon compte gratuit'} ${ic('arrow')}</a>
+     <a class="btn b-pri b-lg" href="#/${S.me?'app/atelier':'inscription'}">${S.me?'Ouvrir l\'atelier':'Créer mon compte'} ${ic('arrow')}</a>
     </div>
    </div></section></div>`;
 }});
@@ -192,7 +196,7 @@ const authHero = () => `<div class="a-hero">${A.lockup(true)}<div class="stack s
 A.page('connexion', {space:'bare', title:'Connexion', render(){
   if(S.me) { location.replace('#/app'); return null; }
   return `<div class="auth">${authHero()}<div class="a-side">
-   <div class="stack s8"><span class="kick">Bon retour</span><h2>Se connecter</h2><p class="muted">Pas encore de compte ? <a href="#/inscription" style="color:var(--or2);font-weight:600">Inscrivez-vous gratuitement</a></p></div>
+   <div class="stack s8"><span class="kick">Bon retour</span><h2>Se connecter</h2><p class="muted">Pas encore de compte ? <a href="#/inscription" style="color:var(--or2);font-weight:600">Inscrivez-vous</a></p></div>
    <form id="fLogin" class="stack">
     <label class="fld"><span>E-mail</span><input class="inp" id="lgEmail" type="email" autocomplete="username" required></label>
     <label class="fld"><span>Mot de passe</span><input class="inp" id="lgPw" type="password" autocomplete="current-password" required></label>
@@ -217,7 +221,7 @@ A.page('inscription', {space:'bare', title:'Inscription', render(){
   const c = A.cfg();
   if(c.openSignup === false) return `<div class="auth">${authHero()}<div class="a-side"><h2>Inscriptions fermées</h2><p class="muted">Les inscriptions sont momentanément fermées. Revenez bientôt ou contactez la direction.</p><a class="btn b-line" href="#/connexion">J'ai déjà un compte</a></div></div>`;
   return `<div class="auth">${authHero()}<div class="a-side">
-   <div class="stack s8"><span class="kick">Gratuit</span><h2>Créer mon compte</h2><p class="muted">Déjà inscrit ? <a href="#/connexion" style="color:var(--or2);font-weight:600">Connectez-vous</a></p></div>
+   <div class="stack s8"><span class="kick">${A.paywallOn() ? 'Inscription' : 'Gratuit'}</span><h2>Créer mon compte</h2><p class="muted">Déjà inscrit ? <a href="#/connexion" style="color:var(--or2);font-weight:600">Connectez-vous</a></p>${A.paywallOn() ? `<div class="note info">${ic('coins')}<span>Accès complet : <b>${esc(A.prixTxt())}</b>, par ${['wave','mtn','orange','moov'].filter(k => (c.pay||{})[k]).map(k => ({wave:'Wave', mtn:'MTN Mobile Money', orange:'Orange Money', moov:'Moov Money'})[k]).join(' ou ') || 'Mobile Money'}. Après la création du compte, une page vous indique comment payer.</span></div>` : ''}</div>
    <form id="fSignup" class="stack">
     <label class="fld"><span>Nom et prénoms</span><input class="inp" id="suName" autocomplete="name" required></label>
     <div class="g2"><label class="fld"><span>E-mail</span><input class="inp" id="suEmail" type="email" autocomplete="email" required></label><label class="fld"><span>Téléphone (WhatsApp)</span><input class="inp" id="suPhone" inputmode="tel" autocomplete="tel"></label></div>
@@ -238,7 +242,7 @@ A.on('submit', '#fSignup', async () => {
   const r = await A.db.signUp({email, password:A.val('suPw'), name, phone:A.val('suPhone'), city:A.val('suCity'), profil:A.val('suProfil')});
   b.disabled = false;
   if(!r.ok){ toast(r.msg, r.confirm ? 'mail' : 'x'); if(r.confirm) A.go('#/connexion'); return; }
-  toast('Compte créé. Bienvenue !'); A.go('#/app');
+  toast('Compte créé. Bienvenue !'); A.go(A.hasAccess() ? '#/app' : '#/app/abonnement');
 });
 
 /* mot de passe oublié / nouveau */

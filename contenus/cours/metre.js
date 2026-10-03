@@ -100,6 +100,68 @@ La colonne **N°** reprend la numérotation du bordereau (lot.article) pour faci
 > - Une unité adaptée à chaque ouvrage (m³, m², ml, kg, u, ens).
 > - Ordre logique, calculs écrits, pas de double compte, vides déduits selon le marché.
 > - Les ouvrages filants se mesurent sur le **périmètre à l'axe**.`,
+ sujet:{titre:"Organiser un avant-métré : unités, règles et feuille de métré d'une boutique", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un commerçant de Yopougon veut construire une **boutique** simple de **8,00 × 5,00 m** (dimensions extérieures brutes). Vous êtes stagiaire dans un bureau d'études et vous préparez l'avant-métré du gros œuvre.
+
+**Données**
+- Murs en agglos creux de **15 cm** (épaisseur brute 0,15 m) ;
+- Semelle filante sous tous les murs : **0,40 m** de large, **0,20 m** de haut, sur un béton de propreté de **5 cm** (même largeur) ;
+- Fouilles en rigole : **0,40 m** de large, **0,60 m** de profondeur ;
+- Hauteur de maçonnerie (dessus dallage → dessous chaînage) : **3,00 m** ;
+- Ouvertures : 1 porte métallique **1,20 × 2,40 m** et 2 fenêtres **1,20 × 1,00 m** ;
+- Dallage intérieur entre murs bruts.
+
+### Partie A — Vocabulaire (5 points)
+1. Définir : avant-métré, métré, devis quantitatif et estimatif (DQE), attachement. (2 pts)
+2. Donner l'unité de mesure des ouvrages suivants : fouilles, béton armé, coffrage, aciers, maçonnerie, plinthes, portes, installation de chantier, enduit, gouttière. (3 pts)
+
+### Partie B — Règles de base (5 points)
+3. Dans quel ordre présente-t-on les ouvrages d'un avant-métré ? Citer trois règles de présentation d'une feuille de métré. (2 pts)
+4. Calculer le périmètre extérieur, le périmètre intérieur et le **périmètre à l'axe** des murs. Lequel utilise-t-on pour les murs extérieurs et pourquoi ? (3 pts)
+
+### Partie C — Feuille de métré (10 points)
+5. Établir la feuille de métré (colonnes : n°, désignation, nombre, longueur, largeur, hauteur, quantité partielle, quantité totale, unité) pour : (8 pts)
+   - les fouilles en rigole ;
+   - le béton de propreté ;
+   - le béton de la semelle filante ;
+   - la maçonnerie d'agglos de 15 (ouvertures déduites) ;
+   - le dallage.
+6. Pourquoi les déductions sont-elles écrites comme des quantités partielles négatives plutôt que soustraites de tête ? (2 pts)`,
+  corrige:`### Partie A — Vocabulaire (5 pts)
+1. *(2 pts)*
+   - **Avant-métré** : calcul des quantités d'ouvrages **sur plans**, avant les travaux (pour le devis ou l'appel d'offres).
+   - **Métré** : mesure des quantités **réellement exécutées**, sur le chantier ou sur plans de récolement.
+   - **DQE** : tableau quantités × prix unitaires = montants, par article et par lot.
+   - **Attachement** : constat écrit et contradictoire des quantités exécutées (indispensable pour les ouvrages cachés).
+2. Fouilles **m³** ; béton armé **m³** ; coffrage **m²** ; aciers **kg** ; maçonnerie **m²** ; plinthes **ml** ; portes **u** ; installation de chantier **ft** (forfait) ; enduit **m²** ; gouttière **ml**. *(3 pts, 0,3 par réponse)*
+
+### Partie B — Règles (5 pts)
+3. Ordre **d'exécution** des lots (terrassements → fondations → élévation → toiture → finitions → lots techniques → VRD) et, dans un lot, du bas vers le haut. Règles : un ouvrage par ligne avec un libellé précis ; dimensions toujours dans le même ordre (L × l × h) ; deux décimales ; quantités partielles puis total ; repérer chaque ligne (axe, pièce, repère du plan). *(2 pts)*
+4. *(3 pts)*
+   - Extérieur : 2 × (8,00 + 5,00) = **26,00 m** ;
+   - Intérieur : 2 × (7,70 + 4,70) = **24,80 m** ;
+   - Axe : 2 × (7,85 + 4,85) = **25,40 m** (moyenne des deux).
+   On mesure les murs extérieurs **à l'axe** : les angles comptés en trop à l'extérieur compensent exactement ceux comptés en moins à l'intérieur, pour toute section symétrique (mur, semelle, fouille centrée).
+
+### Partie C — Feuille de métré (10 pts)
+5. *(8 pts)*
+
+| N° | Désignation | Nb | L | l | h | Partiel | Total | U |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Fouilles en rigole | 1 | 25,40 | 0,40 | 0,60 | 6,10 | **6,10** | m³ |
+| 2 | Béton de propreté ép. 5 cm | 1 | 25,40 | 0,40 | 0,05 | 0,51 | **0,51** | m³ |
+| 3 | Béton armé de semelle filante | 1 | 25,40 | 0,40 | 0,20 | 2,03 | **2,03** | m³ |
+| 4 | Maçonnerie d'agglos de 15 : brut | 1 | 25,40 | | 3,00 | 76,20 | | |
+| | à déduire : porte | −1 | 1,20 | | 2,40 | −2,88 | | |
+| | à déduire : fenêtres | −2 | 1,20 | | 1,00 | −2,40 | **70,92** | m² |
+| 5 | Dallage | 1 | 7,70 | 4,70 | | 36,19 | **36,19** | m² |
+
+6. Écrire chaque déduction sur sa ligne (nombre négatif) rend le calcul **vérifiable** par un tiers, évite les oublis et permet de reprendre facilement une quantité si le plan change (une fenêtre ajoutée = une ligne). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser le périmètre extérieur (26,00 m) pour les fouilles et les semelles : on compte deux fois les angles.
+> - Oublier l'unité ou mélanger m² et m³ dans une même colonne.
+> - Soustraire les ouvertures de tête sans les écrire : le métré n'est plus contrôlable.`},
  exercices:[
   {t:"Choisir les unités", d:1, e:`Donner l'unité de mesure de : a) un remblai ; b) un enduit de façade ; c) une gouttière ; d) les aciers d'une dalle ; e) un WC ; f) un carrelage ; g) une fosse septique ; h) un coffrage de poteau ; i) des bordures de trottoir ; j) une installation de chantier.`, c:`a) **m³** ; b) **m²** ; c) **ml** ; d) **kg** ; e) **u** ; f) **m²** ; g) **ens** ; h) **m²** ; i) **ml** ; j) **ft** (forfait).`},
   {t:"Remplir un tableau de métré", d:1, e:`Calculer les quantités : 10 semelles 1,00 × 1,00 × 0,30 m ; 45,60 m de longrines 0,20 × 0,40 ; un dallage de 60 m² épais de 8 cm ; 6 portes 0,80 × 2,10 ; 85 m² de murs à enduire sur les deux faces.`, c:`| Désignation | Calcul | Quantité |
@@ -182,6 +244,58 @@ Ce tableau sert à la fois pour le lot menuiseries et pour **déduire les ouvert
 > - Vérifier : somme des cotes partielles = cote totale.
 > - Niveaux par rapport au ±0,00 ; hauteurs de murs lues sur les coupes.
 > - La nomenclature des menuiseries sert à déduire les ouvertures.`,
+ sujet:{titre:"Lire un dossier de plans avant de métrer : échelles, cotes et niveaux", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On vous remet le dossier de plans d'une maison basse à Bouaké. Avant tout métré, le chef de bureau vous demande de vérifier que vous savez exploiter le plan de masse, les cotes et les niveaux.
+
+**Données**
+- **Plan de masse au 1/500** : la parcelle mesure **4,0 × 5,0 cm** sur le plan ; l'emprise de la maison **2,26 × 1,66 cm** ;
+- **Plan du rez-de-chaussée au 1/100** ; un détail de fenêtre au **1/20** montre un appui de **6,0 cm** de long ;
+- Chaîne de cotes de la façade principale (de gauche à droite) : 0,15 – 3,50 – 0,10 – **x** – 0,10 – 4,30 – 0,15 ; cote totale **11,30** ;
+- Chaîne de cotes du pignon : 0,15 – 4,00 – 0,10 – **y** – 0,15 ; cote totale **8,30** ;
+- Coupe : niveau fini RDC **± 0,00** ; terrain naturel **− 0,30** ; niveau fini de la terrasse accessible **+ 3,20** ; dalle **16 cm**, chape et carrelage **4 cm** ;
+- Nomenclature des menuiseries : P1 porte d'entrée 0,90 × 2,20 (×1) ; P2 portes intérieures 0,80 × 2,10 (×5) ; F1 fenêtres 1,20 × 1,20 (×6) ; F2 fenêtres 0,60 × 0,60 (×3). Les P2 sont toutes dans des cloisons.
+
+### Partie A — Échelles (5 points)
+1. Calculer les dimensions réelles de la parcelle et sa surface. (2 pts)
+2. Calculer l'emprise au sol de la maison et le coefficient d'emprise au sol (CES). (2 pts)
+3. Quelle est la longueur réelle de l'appui de fenêtre ? (1 pt)
+
+### Partie B — Cotes (6 points)
+4. Calculer les cotes manquantes x et y. (2 pts)
+5. Expliquer la différence entre cotes partielles, cotes cumulées et cote totale ; pourquoi la vérification « somme des partielles = totale » est-elle indispensable ? (2 pts)
+6. Pourquoi ne faut-il jamais mesurer à la règle sur un plan quand une cote existe ? (2 pts)
+
+### Partie C — Niveaux (4 points)
+7. Calculer la hauteur sous plafond du rez-de-chaussée (sans faux plafond ni enduit). (2 pts)
+8. De combien faut-il remblayer sous le dallage si celui-ci (8 cm) repose sur un hérisson de 15 cm ? (2 pts)
+
+### Partie D — Nomenclature (5 points)
+9. Calculer la surface totale des baies, puis la surface des baies à déduire de la maçonnerie des **murs extérieurs**. (3 pts)
+10. Citer quatre documents du dossier à consulter avant de métrer et ce qu'on y cherche. (2 pts)`,
+  corrige:`### Partie A — Échelles (5 pts)
+1. 1 cm au 1/500 = 5 m → parcelle **20,00 × 25,00 m = 500 m²**. *(2 pts)*
+2. Emprise : 2,26 × 5 = 11,30 m ; 1,66 × 5 = 8,30 m → **93,79 m²** ; **CES = 93,79 / 500 = 0,19 (18,8 %)**. *(2 pts)*
+3. Au 1/20, 1 cm = 0,20 m → appui **1,20 m**. *(1 pt)*
+
+### Partie B — Cotes (6 pts)
+4. x = 11,30 − (0,15 + 3,50 + 0,10 + 0,10 + 4,30 + 0,15) = 11,30 − 8,30 = **3,00 m** ; y = 8,30 − (0,15 + 4,00 + 0,10 + 0,15) = **3,90 m**. *(2 pts)*
+5. **Partielles** : entre deux éléments voisins (murs, baies) ; **cumulées** : depuis une origine unique (pas d'erreurs qui s'additionnent) ; **totale** : hors tout. Si la somme des partielles ne donne pas la totale, le plan contient une erreur : on la signale à l'architecte avant de métrer. *(2 pts)*
+6. Le papier se déforme, l'impression peut être réduite, le dessin peut être faux alors que la cote est juste : **la cote prime sur le dessin**. *(2 pts)*
+
+### Partie C — Niveaux (4 pts)
+7. HSP = 3,20 − 0,04 − 0,16 = **3,00 m**. *(2 pts)*
+8. Dessous du dallage : 0,00 − 0,08 = −0,08 ; dessous du hérisson : −0,08 − 0,15 = **−0,23**. Terrain naturel à −0,30 → remblai compacté de **0,07 m** seulement (après décapage de la terre végétale, souvent davantage). *(2 pts)*
+
+### Partie D — Nomenclature (5 pts)
+9. *(3 pts)*
+   - P1 : 1,98 m² ; P2 : 5 × 1,68 = 8,40 m² ; F1 : 6 × 1,44 = 8,64 m² ; F2 : 3 × 0,36 = 1,08 m² → **total 20,10 m²** ;
+   - murs extérieurs (P2 exclues) : 1,98 + 8,64 + 1,08 = **11,70 m²**.
+10. Plan de masse (implantation, emprise, VRD) ; plans des niveaux (dimensions, baies) ; coupes (hauteurs, niveaux, épaisseurs) ; plans de structure et de ferraillage (béton, aciers) ; CCTP (qualité, règles de mesure) ; nomenclature des menuiseries. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de convertir l'échelle au carré pour les surfaces (1 cm² au 1/500 = 25 m²).
+> - Déduire les portes intérieures de la maçonnerie des murs extérieurs.
+> - Confondre niveau fini (carrelage) et niveau brut (dalle) dans le calcul des hauteurs.`},
  exercices:[
   {t:"Échelles", d:1, e:`a) Sur un plan au 1/100, un mur mesure 7,4 cm. Longueur réelle ? b) Même mesure sur un plan au 1/50 ? c) Quelle longueur dessiner au 1/50 pour un mur de 4,25 m ? d) À quelle échelle un bâtiment de 24 m tient-il sur 12 cm ?`, c:`a) 7,4 × 100 = 740 cm = **7,40 m**.
 b) 7,4 × 50 = 370 cm = **3,70 m**.
@@ -262,6 +376,55 @@ S1 et S2 : surfaces des deux bases ; Sm : surface de la section à mi-hauteur. L
 > - Trapèze : (B + b)/2 × h ; cercle : π D²/4.
 > - Tronc de pyramide : h/3 (S1 + S2 + √S1S2) ; prismoïde : h/6 (S1 + S2 + 4 Sm).
 > - Longueur inclinée = horizontale × √(1 + p²) (p en valeur décimale).`,
+ sujet:{titre:"Géométrie du métreur : terrasse, citerne, pignon, talus et pentes", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le chantier d'un hôtel à Grand-Bassam, vous devez fournir rapidement plusieurs quantités qui demandent un peu de géométrie.
+
+**Données**
+- Terrasse en forme de **trapèze** : bases **12,00 m** et **8,00 m**, distance entre les bases **6,50 m** ;
+- Citerne cylindrique enterrée : diamètre intérieur **2,50 m**, hauteur utile **2,00 m** ;
+- Pignon triangulaire d'un bâtiment de **8,30 m** de large, toiture à deux pans de pente **30 %** ;
+- Débord de toiture : projection horizontale d'un pan, débord compris : **4,65 m** ;
+- Fouille de bassin : fond **10,00 × 6,00 m**, profondeur **1,50 m**, talus à **45°** (1 pour 1) sur les quatre côtés ;
+- Canalisation : regard amont fil d'eau **− 0,80 m**, longueur **30,00 m**, pente **1,5 %**.
+
+Formule du prismoïde : V = h / 6 × (S1 + S2 + 4 Sm).
+
+### Partie A — Surfaces (6 points)
+1. Calculer la surface de la terrasse. (2 pts)
+2. Calculer la hauteur du pignon (sur l'axe du faîtage) et la surface du pignon en maçonnerie. (2 pts)
+3. Calculer la longueur du rampant d'un pan et l'angle de la toiture en degrés. (2 pts)
+
+### Partie B — Volumes (8 points)
+4. Calculer la contenance de la citerne en m³ et en litres. (2 pts)
+5. Calculer les dimensions de la fouille du bassin en surface, puis la section à mi-profondeur. (2 pts)
+6. Calculer le volume de la fouille par la formule du prismoïde. (2 pts)
+7. Calculer le volume par la moyenne des deux aires et l'écart en %. Conclure. (2 pts)
+
+### Partie C — Pentes (6 points)
+8. Calculer la cote du fil d'eau du regard aval. (2 pts)
+9. Une rampe d'accès PMR monte de **0,30 m**. Quelle longueur minimale faut-il pour une pente de **5 %** ? (2 pts)
+10. Convertir 30 % en degrés et 45° en %. (2 pts)`,
+  corrige:`### Partie A — Surfaces (6 pts)
+1. S = (12,00 + 8,00) / 2 × 6,50 = **65,00 m²**. *(2 pts)*
+2. Demi-largeur 4,15 m → h = 4,15 × 0,30 = **1,245 m** ; S = 8,30 × 1,245 / 2 = **5,17 m²**. *(2 pts)*
+3. $$ rampant = 4,65 × √(1 + 0,30²) = 4,65 × 1,044 = 4,85 m
+   angle = arctan 0,30 = **16,7°**. *(2 pts)*
+
+### Partie B — Volumes (8 pts)
+4. V = π × 1,25² × 2,00 = **9,82 m³ ≈ 9 820 L**. *(2 pts)*
+5. Talus 1 pour 1 sur 1,50 m : + 1,50 m de chaque côté → surface **13,00 × 9,00 m** (S2 = 117 m²) ; fond S1 = 60 m² ; mi-profondeur : **11,50 × 7,50 = 86,25 m²**. *(2 pts)*
+6. V = 1,50 / 6 × (60 + 117 + 4 × 86,25) = 0,25 × 522 = **130,50 m³**. *(2 pts)*
+7. (60 + 117) / 2 × 1,50 = **132,75 m³**, soit **+ 1,7 %** : la moyenne des aires surestime toujours un peu le volume d'une fouille en talus ; l'écart reste faible et on l'accepte souvent sur chantier. *(2 pts)*
+
+### Partie C — Pentes (6 pts)
+8. Chute = 30,00 × 0,015 = 0,45 m → fil d'eau aval **− 1,25 m**. *(2 pts)*
+9. L = 0,30 / 0,05 = **6,00 m** (en projection horizontale). *(2 pts)*
+10. arctan 0,30 = **16,7°** ; tan 45° = 1 → **100 %**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre pente en % et angle en degrés (30 % ≠ 30°).
+> - Calculer la section à mi-hauteur comme la moyenne des surfaces : on prend la moyenne des **dimensions**.
+> - Oublier le débord dans la projection du rampant.`},
  exercices:[
   {t:"Fouille talutée", d:2, e:`Fouille de semelle : fond 1,00 × 1,00 m, profondeur 1,20 m, talus à 1/2. Calculer le volume de fouille.`, c:`Dimensions en haut : 1,00 + 2 × 0,60 = 2,20 m → S1 = 1,00 m² ; S2 = 4,84 m² ; √(S1 S2) = 2,20 m².
 V = 1,20 / 3 × (1,00 + 4,84 + 2,20) = 0,40 × 8,04 = **3,22 m³**.`},
@@ -347,6 +510,61 @@ Pour un sous-sol ou une plate-forme, on utilise les formules de volume (prismoï
 > - Fouilles et remblais en **m³ en place** ; évacuation × foisonnement.
 > - Puits : (A + 2 s)(B + 2 s) × profondeur ; rigoles entre les puits.
 > - Remblai = fouilles − ouvrages enterrés ; excédent = ouvrages enterrés.`,
+ sujet:{titre:"Terrassements d'une villa : fouilles, remblais, évacuation et apports", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Villa R+0 à Abatta. Vous établissez le métré du lot terrassements à partir du plan de fondations.
+
+**Données**
+- Emprise du bâtiment **14,00 × 10,00 m** ; décapage de la terre végétale sur **15 cm**, **1,50 m** autour de l'emprise ;
+- Terrain naturel (après décapage) à **0,00** ; sol : latérite, foisonnement **1,25** ;
+- **12 semelles isolées 1,20 × 1,20 × 0,30 m** sur béton de propreté de **5 cm**, fond de fouille à **− 1,20** ; surlargeur de travail **0,15 m** de chaque côté ;
+- **Amorces de poteaux 25 × 25** du dessus des semelles jusqu'au TN ;
+- **Longrines 20 × 40** (dessus au TN) : longueur totale à l'axe **64,00 m** en **17 tronçons** ; fouilles en rigole **0,40 × 0,45 m**, avec béton de propreté de 5 cm sur la largeur de la rigole ;
+- Remblai d'apport sous dallage : surface **120 m²**, épaisseur compactée **0,30 m**, coefficient d'approvisionnement **1,30** ;
+- Camions de **8 m³**.
+
+### Partie A — Fouilles (8 points)
+1. Calculer la surface décapée et le volume de terre végétale foisonnée à évacuer. (2 pts)
+2. Calculer le volume des fouilles en puits. (2 pts)
+3. Expliquer pourquoi les rigoles se mesurent entre les puits, puis calculer leur volume. (3 pts)
+4. En déduire le volume total des fouilles. (1 pt)
+
+### Partie B — Remblais et évacuation (8 points)
+5. Calculer le volume des ouvrages enterrés : bétons de propreté, semelles, amorces (25 × 25 × 0,85 m), longrines (longueur entre poteaux). (4 pts)
+6. Calculer le volume de remblai des fouilles. (2 pts)
+7. Calculer le volume foisonné de déblais excédentaires et le nombre de rotations de camion. (2 pts)
+
+### Partie C — Remblai d'apport (4 points)
+8. Calculer le volume en place puis le volume à approvisionner, et le nombre de camions. (2 pts)
+9. Pourquoi ne peut-on pas réutiliser la terre végétale en remblai sous dallage ? (2 pts)`,
+  corrige:`### Partie A — Fouilles (8 pts)
+1. (14,00 + 3,00) × (10,00 + 3,00) = **221 m²** ; terre végétale 221 × 0,15 = 33,15 m³ en place → × 1,25 = **41,44 m³** foisonnés (6 rotations de 8 m³), sauf si on la stocke pour les espaces verts. *(2 pts)*
+2. Puits : 12 × (1,20 + 2 × 0,15)² × 1,20 = 12 × 1,50 × 1,50 × 1,20 = **32,40 m³**. *(2 pts)*
+3. Les puits sont déjà creusés sur toute leur profondeur : compter les rigoles sur toute la longueur compterait deux fois les zones communes. Longueur en rigole : 64,00 − 17 × 1,50 = **38,50 m** → 38,50 × 0,40 × 0,45 = **6,93 m³**. *(3 pts)*
+4. Total fouilles : 32,40 + 6,93 = **39,33 m³**. *(1 pt)*
+
+### Partie B — Remblais et évacuation (8 pts)
+5. *(4 pts)*
+
+| Ouvrage | Calcul | m³ |
+|---|---|---|
+| Propreté des semelles | 12 × 1,20 × 1,20 × 0,05 | 0,86 |
+| Semelles | 12 × 1,20 × 1,20 × 0,30 | 5,18 |
+| Amorces | 12 × 0,25 × 0,25 × 0,85 | 0,64 |
+| Longrines | (64,00 − 17 × 0,25) × 0,20 × 0,40 | 4,78 |
+| Propreté des longrines | 38,50 × 0,40 × 0,05 | 0,77 |
+| **Total** | | **12,24** |
+
+6. Remblai des fouilles : 39,33 − 12,24 = **27,09 m³** (en place, compacté par couches). *(2 pts)*
+7. Excédent : 12,24 × 1,25 = **15,30 m³** foisonnés → 15,30 / 8 = 1,9 → **2 rotations**. *(2 pts)*
+
+### Partie C — Remblai d'apport (4 pts)
+8. 120 × 0,30 = **36,00 m³** en place → × 1,30 = **46,80 m³** à approvisionner → 46,80 / 8 = 5,85 → **6 camions**. *(2 pts)*
+9. Elle contient des matières organiques qui pourrissent et se tassent : le dallage fissurerait. On utilise de la latérite ou du sable compacté par couches de 20 cm. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer le foisonnement au volume des fouilles pour le paiement : les fouilles se paient **en place**.
+> - Oublier les surlargeurs dans les puits (et les compter dans les rigoles, qui ont déjà leur largeur de travail).
+> - Calculer les longrines sur 64 m sans retirer les poteaux, ou les rigoles sans retirer les puits.`},
  exercices:[
   {t:"Décapage et évacuation de la terre végétale", d:1, e:`On décape sur 20 cm un terrain de 25 × 18 m. Foisonnement : 1,25. Combien de rotations de camions de 8 m³ faut-il pour évacuer la terre ?`, c:`Surface : 25 × 18 = **450 m²** ; volume en place : 450 × 0,20 = **90 m³**.
 Foisonné : 90 × 1,25 = **112,5 m³** → 112,5 / 8 = 14,06 → **15 rotations**.`},
@@ -430,6 +648,56 @@ Une semelle avec glacis (dessus incliné) se décompose en un **prisme** (le tal
 > - Semelle à glacis = prisme + tronc de pyramide.
 > - Sous-détail : 7 sacs/m³ (350), 6 sacs (300), 3 sacs (150) ; 0,40 m³ de sable et 0,80 m³ de gravier par m³.
 > - Majorer les aciers de 5 à 10 %.`,
+ sujet:{titre:"Fondations filantes, soubassement et dallage d'une maison", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Maison à Daloa fondée sur semelles filantes. Vous établissez le métré du lot fondations et la commande de ciment correspondante.
+
+**Données**
+- Murs extérieurs : rectangle de **11,00 × 7,30 m à l'axe** ; un **refend** traverse la largeur ;
+- Béton de propreté **5 cm**, largeur **0,60 m** ; semelle filante **0,50 × 0,25 m** ;
+- Les semelles du refend se mesurent **entre nus des semelles extérieures** ; le béton de propreté du refend, entre nus des propretés extérieures ;
+- Soubassement en **agglos pleins de 15**, hauteur **0,60 m**, casse **3 %** ; le refend se mesure entre nus des murs ;
+- Chaînage bas **15 × 20** sur tous les murs (coffré sur deux faces) ;
+- Dallage **8 cm** dosé à **300 kg/m³** sur hérisson de **15 cm** (0,16 m³ de pierres par m²), treillis soudé en panneaux de surface utile **13,00 m²** ;
+- Ciment (sacs de 50 kg) : béton de propreté **3 sacs/m³** ; béton armé **7 sacs/m³** ; dallage **6 sacs/m³**.
+
+### Partie A — Béton de propreté et semelles (6 points)
+1. Calculer la longueur de semelle à métrer (axe des murs extérieurs + refend). (2 pts)
+2. Calculer le volume de béton de propreté. (2 pts)
+3. Calculer le volume de béton des semelles. (2 pts)
+
+### Partie B — Soubassement et chaînage (6 points)
+4. Calculer la surface de soubassement et le nombre d'agglos pleins. (3 pts)
+5. Calculer le volume de béton et la surface de coffrage du chaînage bas. (3 pts)
+
+### Partie C — Dallage (5 points)
+6. Calculer la surface intérieure à daller (refend déduit). (2 pts)
+7. Calculer le volume de pierres du hérisson, le volume de béton du dallage et le nombre de panneaux de treillis. (3 pts)
+
+### Partie D — Ciment (3 points)
+8. Calculer le nombre total de sacs de ciment pour les ouvrages de ce lot (+ 5 % de pertes). (3 pts)`,
+  corrige:`### Partie A — Propreté et semelles (6 pts)
+1. Périmètre à l'axe : 2 × (11,00 + 7,30) = **36,60 m** ; refend : 7,30 − 0,50 = **6,80 m** → **43,40 m**. *(2 pts)*
+2. Propreté : refend 7,30 − 0,60 = 6,70 m → (36,60 + 6,70) × 0,60 × 0,05 = 43,30 × 0,03 = **1,30 m³**. *(2 pts)*
+3. Semelles : 43,40 × 0,50 × 0,25 = **5,43 m³**. *(2 pts)*
+
+### Partie B — Soubassement et chaînage (6 pts)
+4. Longueur : 36,60 + (7,30 − 0,15) = **43,75 m** ; surface 43,75 × 0,60 = **26,25 m²** ; agglos 26,25 × 12,5 × 1,03 = **338 agglos pleins**. *(3 pts)*
+5. Béton : 43,75 × 0,15 × 0,20 = **1,31 m³** ; coffrage : 43,75 × 2 × 0,20 = **17,50 m²**. *(3 pts)*
+
+### Partie C — Dallage (5 pts)
+6. Intérieur : (11,00 − 0,15) × (7,30 − 0,15) = 10,85 × 7,15 = 77,58 m² ; refend : 7,15 × 0,15 = 1,07 m² → **76,51 m²**. *(2 pts)*
+7. *(3 pts)*
+   - Pierres : 76,51 × 0,16 = **12,24 m³** ;
+   - Béton : 76,51 × 0,08 = **6,12 m³** ;
+   - Treillis : 76,51 / 13,00 = 5,9 → **6 panneaux**.
+
+### Partie D — Ciment (3 pts)
+8. Propreté 1,30 × 3 = 3,9 ; semelles 5,43 × 7 = 38,0 ; chaînage 1,31 × 7 = 9,2 ; dallage 6,12 × 6 = 36,7 → **87,8 sacs** ; + 5 % → 92,2 → **93 sacs** (hors mortier du soubassement : 26,25 × 0,09 ≈ 2,4 sacs de plus). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mesurer le refend d'axe à axe (7,30 m) : on compterait deux fois les croisements.
+> - Oublier de retirer l'emprise du refend dans la surface du dallage.
+> - Commander le treillis à la surface brute sans tenir compte des recouvrements.`},
  exercices:[
   {t:"Semelles de deux types", d:1, e:`Le plan des fondations comporte 8 semelles S1 de 1,00 × 1,00 × 0,30 m et 4 semelles S2 de 1,20 × 1,20 × 0,35 m. Calculer le béton des semelles et le béton de propreté (débord 5 cm, épaisseur 5 cm).`, c:`Semelles : 8 × 1,00 × 1,00 × 0,30 = 2,40 m³ ; 4 × 1,20 × 1,20 × 0,35 = 2,02 m³ → **4,42 m³**.
 Propreté : 8 × 1,10 × 1,10 × 0,05 = 0,48 m³ ; 4 × 1,30 × 1,30 × 0,05 = 0,34 m³ → **0,82 m³**.`},
@@ -507,6 +775,58 @@ Sable : environ le volume de mortier.
 > - Murs extérieurs à l'axe, cloisons entre nus ; hauteur jusqu'au dessous du chaînage.
 > - Déduire poteaux, linteaux et ouvertures ; le béton armé est compté à part.
 > - Mortier : 0,010 / 0,015 / 0,020 m³ par m² pour 10 / 15 / 20.`,
+ sujet:{titre:"Maçonneries d'une maison : murs extérieurs, cloisons, matériaux et montant", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Maison de plain-pied à Yamoussoukro. On vous demande le métré du lot maçonnerie, la commande de matériaux et le montant HT.
+
+**Données**
+- Murs extérieurs en **agglos creux de 15**, rectangle de **12,00 × 9,00 m à l'axe** ;
+- Hauteur de maçonnerie (dessus dallage → dessous chaînage) : **2,80 m** ;
+- **12 poteaux** noyés dans les murs, largeur vue **0,20 m** ;
+- Baies des murs extérieurs : 1 porte **1,00 × 2,20** ; 7 fenêtres **1,20 × 1,40** ; 2 fenêtres **0,60 × 0,60** placées juste sous le chaînage (sans linteau) ;
+- Linteaux de **20 cm** de haut, débordant de **20 cm** de chaque côté des baies ;
+- Le CCTP prévoit de ne déduire que les vides de **plus de 0,50 m²** ;
+- Cloisons en **agglos creux de 10** : trois cloisons de **8,85 m, 4,85 m et 3,85 m** entre nus, 4 portes **0,80 × 2,10** avec linteaux de 1,20 × 0,20 m ;
+- 12,5 agglos/m², casse **4 %** ; mortier dosé à **300 kg/m³** : 0,015 m³/m² (agglos de 15) et 0,010 m³/m² (agglos de 10) ;
+- Prix du bordereau : agglos de 15 : **12 000 F/m²** ; agglos de 10 : **9 500 F/m²**.
+
+### Partie A — Murs extérieurs (8 points)
+1. Calculer la surface brute de maçonnerie. (2 pts)
+2. Calculer les déductions : poteaux, baies (en appliquant la règle des 0,50 m²) et linteaux. (4 pts)
+3. En déduire la surface nette. (2 pts)
+
+### Partie B — Cloisons (5 points)
+4. Calculer la surface nette des cloisons. (3 pts)
+5. Pourquoi mesure-t-on les cloisons entre nus et non à l'axe ? (2 pts)
+
+### Partie C — Matériaux (4 points)
+6. Calculer le nombre d'agglos de 15 et de 10 à commander. (2 pts)
+7. Calculer le volume de mortier et le nombre de sacs de ciment. (2 pts)
+
+### Partie D — Montant (3 points)
+8. Calculer le montant HT du lot maçonnerie. (3 pts)`,
+  corrige:`### Partie A — Murs extérieurs (8 pts)
+1. Périmètre à l'axe 2 × (12,00 + 9,00) = 42,00 m → **42,00 × 2,80 = 117,60 m²**. *(2 pts)*
+2. *(4 pts)*
+   - Poteaux : 12 × 0,20 × 2,80 = **6,72 m²** ;
+   - Baies > 0,50 m² : 1 × 2,20 + 7 × 1,68 = **13,96 m²** (les fenêtres de 0,36 m² ne se déduisent pas) ;
+   - Linteaux : (1,40 + 7 × 1,60) × 0,20 = 12,60 × 0,20 = **2,52 m²**.
+3. Net : 117,60 − 6,72 − 13,96 − 2,52 = **94,40 m²**. *(2 pts)*
+
+### Partie B — Cloisons (5 pts)
+4. Brut : (8,85 + 4,85 + 3,85) × 2,80 = 17,55 × 2,80 = 49,14 m² ; portes 4 × 1,68 = 6,72 ; linteaux 4 × 1,20 × 0,20 = 0,96 → **41,46 m²**. *(3 pts)*
+5. La cloison s'arrête au nu du mur qu'elle rencontre : à l'axe, on compterait deux fois la partie déjà comptée dans le mur. *(2 pts)*
+
+### Partie C — Matériaux (4 pts)
+6. Agglos de 15 : 94,40 × 12,5 × 1,04 = **1 228** ; agglos de 10 : 41,46 × 12,5 × 1,04 = **539**. *(2 pts)*
+7. Mortier : 94,40 × 0,015 = 1,416 m³ et 41,46 × 0,010 = 0,415 m³ → **1,83 m³** ; ciment 1,83 × 300 = 549 kg → **11 sacs** (8,5 + 2,5) ; sable ≈ 1,83 m³. *(2 pts)*
+
+### Partie D — Montant (3 pts)
+8. 94,40 × 12 000 = 1 132 800 F ; 41,46 × 9 500 = 393 870 F → **1 526 670 F HT**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la règle du marché sur les petits vides (ici, ne pas déduire les 0,60 × 0,60).
+> - Compter les poteaux et linteaux en maçonnerie : ils sont payés au lot béton armé.
+> - Mesurer les murs extérieurs entre nus intérieurs ou au périmètre extérieur.`},
  exercices:[
   {t:"Murs d'une pièce", d:1, e:`Pièce de 4,00 × 3,50 m à l'axe des murs (agglos de 15), hauteur 2,80 m. À déduire : 4 poteaux 20 × 20, une porte 0,90 × 2,20 et une fenêtre 1,20 × 1,20. Calculer la surface nette, le nombre d'agglos (+ 3 %) et le ciment de pose.`, c:`Brut : 2 × (4,00 + 3,50) × 2,80 = **42,00 m²**.
 Déductions : poteaux 4 × 0,20 × 2,80 = 2,24 ; porte 1,98 ; fenêtre 1,44.
@@ -586,6 +906,54 @@ Sur un bâtiment existant : nettoyage (lavage haute pression), piquage des parti
 > - Enduits : m² par face, ouvertures déduites, tableaux ajoutés.
 > - Façade : périmètre **extérieur** × hauteur ; murs intérieurs : périmètre intérieur × hauteur.
 > - Mortier : ≈ 0,018 m³/m² (int.), 0,020 m³/m² (ext.) ; 7 sacs par m³ à 350 kg/m³.`,
+ sujet:{titre:"Enduits intérieurs, façades, plafonds et chapes d'un bâtiment de deux pièces", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un bâtiment de deux pièces (bureau et salle de réunion) est en fin de gros œuvre à Korhogo. Vous métrez les enduits et la chape.
+
+**Données**
+- **Chambre-bureau** : **4,00 × 4,20 m** entre murs bruts ; **salle** : **5,60 × 4,20 m** entre murs bruts ; murs de **15 cm** (3 murs transversaux) ;
+- Hauteur sous plafond brute : **2,80 m** ;
+- Baies : porte d'entrée de la salle **1,00 × 2,20** ; porte de communication **0,80 × 2,10** ; fenêtre du bureau **1,20 × 1,20** ; 2 fenêtres de la salle **1,20 × 1,40** ;
+- Tableaux des fenêtres (2 côtés + linteau, pas l'appui) enduits côté intérieur, comptés en m² (profondeur 0,15 m) ;
+- Façades : hauteur enduite **3,20 m** ;
+- Mortier (dosé à 350 kg/m³) : intérieur **0,018 m³/m²** (0,13 sac) ; plafond **0,015 m³/m²** (0,11 sac) ; façade **0,022 m³/m²** (0,15 sac) ;
+- Chape de **4 cm** dosée à **300 kg/m³** (6 sacs/m³) mesurée entre murs enduits (enduit de **1,5 cm**).
+
+### Partie A — Enduits intérieurs (7 points)
+1. Calculer l'enduit des murs du bureau (tableaux compris). (3 pts)
+2. Calculer l'enduit des murs de la salle (tableaux compris). (3 pts)
+3. Pourquoi la porte de communication est-elle déduite dans les deux pièces ? (1 pt)
+
+### Partie B — Plafonds et façades (5 points)
+4. Calculer l'enduit des plafonds. (1 pt)
+5. Calculer les dimensions extérieures du bâtiment, le périmètre extérieur et la surface nette des façades. (4 pts)
+
+### Partie C — Matériaux (5 points)
+6. Calculer le nombre de sacs de ciment pour l'ensemble des enduits. (3 pts)
+7. Calculer le volume de sable (+ 10 %). (2 pts)
+
+### Partie D — Chape (3 points)
+8. Calculer la surface de chape, son volume et le ciment nécessaire. (3 pts)`,
+  corrige:`### Partie A — Enduits intérieurs (7 pts)
+1. Bureau : 2 × (4,00 + 4,20) × 2,80 = 45,92 m² − porte 1,68 − fenêtre 1,44 + tableaux (2 × 1,20 + 1,20) × 0,15 = 0,54 → **43,34 m²**. *(3 pts)*
+2. Salle : 2 × (5,60 + 4,20) × 2,80 = 54,88 m² − 2,20 − 1,68 − 2 × 1,68 + tableaux 2 × (2 × 1,40 + 1,20) × 0,15 = 1,20 → **48,84 m²**. *(3 pts)*
+3. La porte traverse le mur : il manque de l'enduit sur **chacune des deux faces**. *(1 pt)*
+   Total murs intérieurs : **92,18 m²**.
+
+### Partie B — Plafonds et façades (5 pts)
+4. 4,00 × 4,20 + 5,60 × 4,20 = 16,80 + 23,52 = **40,32 m²**. *(1 pt)*
+5. Longueur : 4,00 + 5,60 + 3 × 0,15 = **10,05 m** ; largeur : 4,20 + 2 × 0,15 = **4,50 m** ; périmètre **29,10 m** ; brut 29,10 × 3,20 = 93,12 m² ; baies extérieures 2,20 + 1,44 + 3,36 = 7,00 m² → **86,12 m²** (tableaux déjà comptés à l'intérieur). *(4 pts)*
+
+### Partie C — Matériaux (5 pts)
+6. Ciment : 92,18 × 0,13 = 11,98 ; 40,32 × 0,11 = 4,44 ; 86,12 × 0,15 = 12,92 → **29,3 → 30 sacs**. *(3 pts)*
+7. Sable : 92,18 × 0,018 + 40,32 × 0,015 + 86,12 × 0,022 = 1,66 + 0,60 + 1,89 = 4,16 m³ → + 10 % = **4,6 m³**. *(2 pts)*
+
+### Partie D — Chape (3 pts)
+8. Entre enduits : 3,97 × 4,17 + 5,57 × 4,17 = 16,55 + 23,23 = **39,78 m²** ; volume 39,78 × 0,04 = **1,59 m³** ; ciment 1,59 × 6 = 9,5 → **10 sacs**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mesurer la façade sur le périmètre intérieur.
+> - Oublier les tableaux, souvent oubliés alors qu'ils prennent du temps à réaliser.
+> - Métrer la chape entre murs bruts : l'enduit est fait avant.`},
  exercices:[
   {t:"Enduits d'un séjour", d:2, e:`Séjour de 5,60 × 4,20 m entre murs bruts, hauteur 2,75 m. Ouvertures : porte d'entrée 0,90 × 2,20, porte intérieure 0,80 × 2,10 (cloison de 10, sans tableaux), 2 fenêtres 1,20 × 1,20, baie 2,40 × 2,20. Tableaux de 0,15 m pour la porte d'entrée (2 jambages + voussure), les fenêtres et la baie (3 côtés). Calculer les surfaces d'enduit des murs et du plafond et le ciment (0,018 m³/m², 7 sacs/m³).`, c:`Brut : 2 × (5,60 + 4,20) × 2,75 = **53,90 m²**.
 Ouvertures : 1,98 + 1,68 + 2 × 1,44 + 5,28 = **11,82 m²**.
@@ -662,6 +1030,64 @@ Dans certains bordereaux, le coffrage est **inclus** dans le prix du m³ de bét
 > - Poteaux jusqu'au dessous des poutres ; poutres = retombée sous dalle ; dalle hors tout.
 > - Coffrage = surfaces de béton en contact avec le moule.
 > - Vérifier les ratios coffrage/béton et béton/m² de plancher.`,
+ sujet:{titre:"Béton armé d'élévation d'un rez-de-chaussée : volumes et coffrages sans double compte", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Rez-de-chaussée d'un immeuble de bureaux à Cocody. Vous métrez le béton et les coffrages des ouvrages d'élévation (hors aciers).
+
+**Données**
+- **10 poteaux 20 × 20**, hauteur du dessus du dallage au **dessous des poutres** : **2,80 m** ;
+- Poutres **20 × 40** (hauteur totale, dalle comprise) ; longueur cumulée **entre poteaux** : **37,20 m** ;
+- Dalle pleine de **15 cm**, dimensions hors tout **10,20 × 8,20 m**, avec une **trémie d'escalier de 3,00 × 1,20 m** ;
+- Linteaux **15 × 20** : longueur cumulée **14,60 m** (coffrés sur le fond et les deux joues) ;
+- Règles : poteaux arrêtés sous les poutres ; poutres comptées **en retombée sous la dalle**, entre poteaux ; sous-face de dalle coffrée hors emprise des poutres ; rives de dalle et bords de trémie coffrés sur 15 cm ;
+- Prix du bordereau : béton armé dosé à 350 (hors coffrage et aciers) **120 000 F/m³** ; coffrage **6 500 F/m²**.
+
+### Partie A — Poteaux (4 points)
+1. Calculer le volume de béton et la surface de coffrage des poteaux. (4 pts)
+
+### Partie B — Poutres (5 points)
+2. Calculer la hauteur de retombée et le volume de béton des poutres. (2 pts)
+3. Calculer le coffrage des poutres (fond + deux joues de retombée). (3 pts)
+
+### Partie C — Dalle (6 points)
+4. Calculer le volume de béton de la dalle (trémie déduite). (2 pts)
+5. Calculer la sous-face coffrée, la rive de dalle et les bords de trémie. (4 pts)
+
+### Partie D — Linteaux et récapitulatif (5 points)
+6. Calculer le béton et le coffrage des linteaux. (2 pts)
+7. Récapituler béton et coffrage, calculer le ratio coffrage / béton et le montant HT. (3 pts)`,
+  corrige:`### Partie A — Poteaux (4 pts)
+1. Béton : 10 × 0,20 × 0,20 × 2,80 = **1,12 m³** ; coffrage : 10 × 4 × 0,20 × 2,80 = **22,40 m²**. *(4 pts)*
+
+### Partie B — Poutres (5 pts)
+2. Retombée : 0,40 − 0,15 = **0,25 m** ; béton : 37,20 × 0,20 × 0,25 = **1,86 m³**. *(2 pts)*
+3. Fond : 37,20 × 0,20 = 7,44 m² ; joues : 2 × 37,20 × 0,25 = 18,60 m² → **26,04 m²**. *(3 pts)*
+
+### Partie C — Dalle (6 pts)
+4. 10,20 × 8,20 × 0,15 = 12,55 m³ − trémie 3,00 × 1,20 × 0,15 = 0,54 m³ → **12,01 m³**. *(2 pts)*
+5. *(4 pts)*
+   - Sous-face : 83,64 − 3,60 (trémie) − 7,44 (fonds de poutres) = **72,60 m²** ;
+   - Rive : 2 × (10,20 + 8,20) × 0,15 = **5,52 m²** (avec la joue de retombée, la face extérieure d'une poutre de rive fait bien 0,40 m) ;
+   - Bords de trémie : 2 × (3,00 + 1,20) × 0,15 = **1,26 m²**.
+
+### Partie D — Linteaux et récapitulatif (5 pts)
+6. Béton : 14,60 × 0,15 × 0,20 = **0,44 m³** ; coffrage : 14,60 × 0,15 + 2 × 14,60 × 0,20 = 2,19 + 5,84 = **8,03 m²**. *(2 pts)*
+7. *(3 pts)*
+
+| Ouvrage | Béton (m³) | Coffrage (m²) |
+|---|---|---|
+| Poteaux | 1,12 | 22,40 |
+| Poutres | 1,86 | 26,04 |
+| Dalle | 12,01 | 79,38 |
+| Linteaux | 0,44 | 8,03 |
+| **Total** | **15,43** | **135,85** |
+
+Ratio : 135,85 / 15,43 = **8,8 m² de coffrage par m³** (ordre de grandeur courant pour une structure poteaux-poutres-dalle).
+Montant : 15,43 × 120 000 = 1 851 600 F ; 135,85 × 6 500 = 883 025 F → **2 734 625 F HT**.
+
+> [!attention] Erreurs à éviter
+> - Compter les poutres sur 40 cm de haut **et** la dalle sur toute sa surface : la partie commune est comptée deux fois.
+> - Prolonger les poteaux jusqu'au-dessus de la dalle.
+> - Oublier la trémie dans le béton et dans la sous-face.`},
  exercices:[
   {t:"Poteaux d'un R+1", d:1, e:`Un bâtiment R+1 compte 16 poteaux 25 × 25 cm par niveau, de 2,80 m de hauteur chacun. Calculer le béton et le coffrage des poteaux.`, c:`Béton : 2 × 16 × 0,25 × 0,25 × 2,80 = **5,60 m³**.
 Coffrage : 2 × 16 × (4 × 0,25) × 2,80 = **89,60 m²** (ratio 16 m²/m³).`},
@@ -741,6 +1167,65 @@ Les dallages, dalles minces et tables de compression reçoivent des **treillis s
 > - Nomenclature : nombre × longueur développée × poids au mètre.
 > - Cadres : L/e + 1 ; recouvrement ≈ 40 Ø.
 > - Ratios pour estimer ; commande en barres de 12 m + 5 à 10 %.`,
+ sujet:{titre:"Nomenclature d'aciers d'un ensemble semelle + poteau et commande en barres de 12 m", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une villa compte **12 ensembles identiques « semelle isolée + poteau »**. Vous établissez la nomenclature des aciers, les ratios et la commande.
+
+**Données**
+- Semelle **1,20 × 1,20 × 0,30 m**, enrobage **5 cm** ; nappe inférieure en **HA12** espacés de **15 cm** dans les deux sens, chaque barre avec deux retours de **0,15 m** ;
+- Poteau **25 × 25** de hauteur totale **3,65 m** (amorce 0,85 m + RDC 2,80 m), enrobage **2,5 cm** ;
+- Aciers longitudinaux : **4 HA14** de longueur droite **3,90 m** plus un retour en pied de **0,30 m** ;
+- Cadres **HA6** espacés de **15 cm** ; crochets : 2 × 10 Ø ;
+- Masses linéiques : HA6 **0,222** ; HA12 **0,888** ; HA14 **1,208 kg/m** ; barres du commerce de **12 m**.
+
+### Partie A — Semelle (5 points)
+1. Calculer le nombre de barres par direction (longueur couverte = 1,20 − 2 × 0,05). (2 pts)
+2. Calculer la longueur développée d'une barre, la longueur totale et le poids. (3 pts)
+
+### Partie B — Poteau (6 points)
+3. Calculer la longueur et le poids des aciers longitudinaux. (2 pts)
+4. Calculer les dimensions intérieures d'un cadre, sa longueur développée et le nombre de cadres. (3 pts)
+5. En déduire le poids des cadres. (1 pt)
+
+### Partie C — Récapitulatif et ratios (4 points)
+6. Présenter la nomenclature d'un ensemble et le poids pour les 12 ensembles. (2 pts)
+7. Calculer le volume de béton d'un ensemble et le ratio kg/m³ ; le comparer aux ratios usuels (semelles 30 à 50 ; poteaux 100 à 150). (2 pts)
+
+### Partie D — Commande (5 points)
+8. Combien de morceaux peut-on couper dans une barre de 12 m pour chaque diamètre ? En déduire le nombre de barres à commander. (3 pts)
+9. Calculer le taux de chutes pour le HA14 et proposer une solution pour le réduire. (2 pts)`,
+  corrige:`### Partie A — Semelle (5 pts)
+1. 1,10 / 0,15 = 7,3 → 8 espacements → **9 barres** par direction (18 barres). *(2 pts)*
+2. L = 1,10 + 2 × 0,15 = **1,40 m** ; 18 × 1,40 = **25,20 m** ; 25,20 × 0,888 = **22,38 kg**. *(3 pts)*
+
+### Partie B — Poteau (6 pts)
+3. 4 × (3,90 + 0,30) = **16,80 m** × 1,208 = **20,29 kg**. *(2 pts)*
+4. Cadre intérieur : 0,25 − 2 × 0,025 = **0,20 × 0,20 m** ; L = 4 × 0,20 + 2 × 10 × 0,006 = 0,80 + 0,12 = **0,92 m** ; nombre : 3,65 / 0,15 = 24,3 → 25 espacements → **26 cadres**. *(3 pts)*
+5. 26 × 0,92 = 23,92 m × 0,222 = **5,31 kg**. *(1 pt)*
+
+### Partie C — Récapitulatif (4 pts)
+6. *(2 pts)*
+
+| Repère | Ø | Nb | L. unitaire | L. totale | Poids (kg) |
+|---|---|---|---|---|---|
+| 1 – nappe de semelle | HA12 | 18 | 1,40 | 25,20 | 22,38 |
+| 2 – filantes du poteau | HA14 | 4 | 4,20 | 16,80 | 20,29 |
+| 3 – cadres | HA6 | 26 | 0,92 | 23,92 | 5,31 |
+| **Total d'un ensemble** | | | | | **47,98** |
+
+12 ensembles : **575,8 kg**.
+7. Béton : 1,20 × 1,20 × 0,30 + 0,25² × 3,65 = 0,432 + 0,228 = **0,660 m³** → **72,7 kg/m³** (semelle seule : 22,38 / 0,432 = 51,8 kg/m³, en haut de la fourchette ; poteau seul : 25,60 / 0,228 = 112 kg/m³, dans la fourchette). *(2 pts)*
+
+### Partie D — Commande (5 pts)
+8. *(3 pts)*
+   - HA12 : 12 / 1,40 = 8 morceaux par barre ; 12 × 18 = 216 morceaux → **27 barres** ;
+   - HA14 : 12 / 4,20 = 2 morceaux ; 48 morceaux → **24 barres** ;
+   - HA6 : 12 / 0,92 = 13 cadres ; 312 cadres → **24 barres**.
+9. HA14 commandé : 24 × 12 × 1,208 = 347,9 kg pour 243,5 kg utiles → **30 % de chutes** (3,60 m par barre). Solutions : réutiliser les chutes de 3,60 m (chapeaux, linteaux, attentes) ; ou couper les poteaux en deux barres avec recouvrement au niveau de l'amorce ; ou commander des longueurs sur mesure. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le « + 1 » dans le nombre de barres ou de cadres.
+> - Calculer le cadre sur les dimensions extérieures du poteau.
+> - Commander au poids théorique sans tenir compte des chutes.`},
  exercices:[
   {t:"Poids au mètre", d:1, e:`Calculer avec la formule le poids au mètre d'un HA8, d'un HA16 et d'un HA20, puis le poids de 75 m de HA12.`, c:`HA8 : 0,00617 × 64 = **0,395 kg/m** ; HA16 : 0,00617 × 256 = **1,58 kg/m** ; HA20 : 0,00617 × 400 = **2,47 kg/m**.
 75 m de HA12 : 75 × 0,888 = **66,6 kg**.`},
@@ -816,6 +1301,50 @@ Un escalier droit se décompose en :
 > - Corps creux 16 + 4 : 8,3 entrevous, 1,7 ml de poutrelles, 0,07 m³ de béton et 1,10 m² de treillis par m².
 > - Poutrelles : portée + 2 × 0,10 m d'appui.
 > - Escalier = paillasse + marches + paliers ; coffrage = sous-faces + contremarches + joues.`,
+ sujet:{titre:"Plancher à corps creux 16+4 et escalier droit : quantités et matériaux", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Duplex à Bingerville : vous métrez le plancher de l'étage d'une pièce et l'escalier droit qui y mène.
+
+**Données — plancher**
+- Panneau de **8,40 × 4,50 m** entre appuis ; poutrelles préfabriquées parallèles au côté de **4,50 m**, entraxe **0,60 m**, appui de **0,10 m** à chaque extrémité ;
+- Entrevous de 16 cm : **20 cm** de long dans le sens des poutrelles ;
+- Béton coulé en place (nervures + dalle de compression 4 cm) : **0,07 m³/m²**, dosé à 350 (7 sacs/m³) ;
+- Treillis soudé : **1,10 m²** par m² de plancher (recouvrements compris) ; casse des entrevous **5 %**.
+
+**Données — escalier**
+- **18 contremarches** pour une hauteur de **3,06 m** ; giron **0,28 m** ; largeur **1,00 m** ;
+- Paillasse de **15 cm** d'épaisseur ; le palier d'arrivée est compté avec la dalle.
+
+### Partie A — Poutrelles et entrevous (8 points)
+1. Calculer le nombre de rangées d'entrevous et le nombre de poutrelles. (3 pts)
+2. Calculer la longueur d'une poutrelle et la longueur totale à commander. (2 pts)
+3. Calculer le nombre d'entrevous (casse comprise) et comparer au ratio de 8,3 entrevous par m². (3 pts)
+
+### Partie B — Béton et treillis (5 points)
+4. Calculer la surface du plancher, le volume de béton et le nombre de sacs de ciment. (3 pts)
+5. Calculer la surface de treillis soudé. (2 pts)
+
+### Partie C — Escalier (7 points)
+6. Calculer la hauteur d'une marche, la projection horizontale de la volée et l'angle de la paillasse. (3 pts)
+7. Calculer la longueur de la paillasse et son volume de béton. (2 pts)
+8. Calculer le volume des marches (prismes triangulaires) et le volume total de l'escalier. (2 pts)`,
+  corrige:`### Partie A — Poutrelles et entrevous (8 pts)
+1. 8,40 / 0,60 = **14 rangées** d'entrevous ; les rangées de rive s'appuient sur les chaînages → **13 poutrelles**. *(3 pts)*
+2. 4,50 + 2 × 0,10 = **4,70 m** ; 13 × 4,70 = **61,10 ml** (ratio : 61,10 / 37,80 = 1,6 ml/m²). *(2 pts)*
+3. Par rangée : 4,50 / 0,20 = 22,5 → 23 ; 14 × 23 = 322 → + 5 % = **339 entrevous**. Ratio : 37,80 × 8,33 = 315 : notre décompte est un peu supérieur (arrondi de chaque rangée), il est plus juste pour la commande. *(3 pts)*
+
+### Partie B — Béton et treillis (5 pts)
+4. Surface **37,80 m²** ; béton 37,80 × 0,07 = **2,65 m³** ; ciment 2,65 × 7 = 18,5 → **19 sacs**. *(3 pts)*
+5. 37,80 × 1,10 = **41,58 m²** de treillis. *(2 pts)*
+
+### Partie C — Escalier (7 pts)
+6. h = 3,06 / 18 = **0,17 m** ; 17 girons → projection 17 × 0,28 = **4,76 m** ; tan α = 0,17 / 0,28 = 0,607 → **α = 31,3°**. *(3 pts)*
+7. L = 4,76 / cos 31,3° = **5,57 m** ; paillasse : 5,57 × 1,00 × 0,15 = **0,84 m³**. *(2 pts)*
+8. Une marche : 0,28 × 0,17 / 2 × 1,00 = 0,0238 m³ ; 17 marches → **0,40 m³** ; total **1,24 m³** (coffrage : sous-face 5,57 m² + contremarches 18 × 0,17 × 1,00 = 3,06 m²). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter autant de poutrelles que de rangées d'entrevous.
+> - Oublier les longueurs d'appui des poutrelles.
+> - Calculer la paillasse sur la projection horizontale au lieu de sa longueur inclinée.`},
  exercices:[
   {t:"Matériaux d'un plancher 16 + 4", d:1, e:`Plancher à corps creux 16 + 4 de 120 m². Calculer les entrevous (+ 3 %), les poutrelles, le béton de 2e phase, le ciment, le sable, le gravier et le treillis.`, c:`Entrevous : 120 × 8,3 × 1,03 = 1 025,9 → **1 026** ; poutrelles : 120 × 1,7 = **204 ml**.
 Béton : 120 × 0,07 = **8,40 m³** → ciment 8,40 × 7 = **58,8 → 59 sacs** ; sable **3,36 m³** ; gravier **6,72 m³**.
@@ -892,6 +1421,68 @@ En climat tropical, les averses sont violentes : règle pratique, **1 cm² de se
 > - Pannes et chevrons en ml (ou m³), charpente métallique en kg.
 > - Eaux pluviales : ≈ 1 cm² de descente par m² de toiture.
 > - Terrasse : forme de pente (épaisseur moyenne), étanchéité + relevés.`,
+ sujet:{titre:"Toiture à deux pans en bac aluminium : couverture, eaux pluviales, charpente et étanchéité", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Salle polyvalente à San-Pédro : bâtiment de **12,00 × 8,00 m** couvert par une toiture à deux pans, plus un petit auvent en toiture-terrasse.
+
+**Données**
+- Faîtage parallèle à la grande longueur ; pente **25 %** ; débords de **0,60 m** sur les quatre côtés ;
+- Bac aluminium de largeur utile **1,00 m**, longueurs commandées sur mesure (arrondies aux 10 cm supérieurs) ;
+- Pannes en bois **8 × 16**, entraxe **1,00 m** mesuré sur le rampant (une panne à l'égout et une au faîtage) ;
+- Fixations : **6 par m²** ; descentes Ø 100 (78,5 cm²) de **3,50 m** ; règle : **1 cm² de descente par m² de toiture projetée** ;
+- Auvent en toiture-terrasse de **4,00 × 3,00 m**, adossé au bâtiment par un côté de 4,00 m : étanchéité avec **relevés de 0,20 m** sur les trois autres côtés ;
+- Prix : couverture **9 500 F/m²** ; faîtière **6 000 F/ml** ; gouttière **8 000 F/ml** ; descente **7 500 F/ml** ; charpente **12 000 F/m²** (surface projetée) ; étanchéité **15 000 F/m²**.
+
+### Partie A — Couverture (6 points)
+1. Calculer la projection horizontale d'un pan, débord compris, et la longueur du rampant. (2 pts)
+2. Calculer la longueur couverte et la surface de couverture. (2 pts)
+3. Calculer le nombre de tôles et leur longueur de commande. (2 pts)
+
+### Partie B — Accessoires et eaux pluviales (5 points)
+4. Calculer les longueurs de faîtière, de rives et de gouttières. (2 pts)
+5. Vérifier qu'une descente Ø 100 par pan suffit et calculer la longueur de descentes. (3 pts)
+
+### Partie C — Charpente (4 points)
+6. Calculer le nombre de lignes de pannes, la longueur totale et le volume de bois. (3 pts)
+7. Calculer le nombre de fixations. (1 pt)
+
+### Partie D — Étanchéité de l'auvent (2 points)
+8. Calculer la surface d'étanchéité, relevés compris. (2 pts)
+
+### Partie E — Montant (3 points)
+9. Calculer le montant HT de la toiture (couverture, accessoires, eaux pluviales, charpente, étanchéité). (3 pts)`,
+  corrige:`### Partie A — Couverture (6 pts)
+1. Projection : 8,00 / 2 + 0,60 = **4,60 m** ; rampant = 4,60 × √(1 + 0,25²) = 4,60 × 1,031 = **4,74 m**. *(2 pts)*
+2. Longueur : 12,00 + 2 × 0,60 = **13,20 m** ; surface : 2 × 4,74 × 13,20 = **125,14 m²**. *(2 pts)*
+3. 13,20 / 1,00 = 13,2 → 14 tôles par pan → **28 tôles de 4,80 m**. *(2 pts)*
+
+### Partie B — Accessoires et eaux pluviales (5 pts)
+4. Faîtière **13,20 ml** ; rives 4 × 4,74 = **18,96 ml** ; gouttières 2 × 13,20 = **26,40 ml**. *(2 pts)*
+5. Surface projetée : 13,20 × 9,20 = 121,44 m², soit **60,72 m² par pan** → section nécessaire 60,72 cm² ≤ 78,5 cm² ✔ (et moins de 80 m² par descente) → **2 descentes**, 2 × 3,50 = **7,00 ml** (+ 2 naissances et coudes). *(3 pts)*
+
+### Partie C — Charpente (4 pts)
+6. Par pan : lignes à 0 – 1 – 2 – 3 – 4 m et au faîtage (4,74 m) → **6 lignes** ; 12 lignes × 13,20 = **158,40 ml** ; bois 158,40 × 0,08 × 0,16 = **2,03 m³**. *(3 pts)*
+7. 125,14 × 6 = **751 fixations**. *(1 pt)*
+
+### Partie D — Étanchéité (2 pts)
+8. 4,00 × 3,00 = 12,00 m² ; relevés : (4,00 + 3,00 + 3,00) × 0,20 = 2,00 m² → **14,00 m²**. *(2 pts)*
+
+### Partie E — Montant (3 pts)
+9. *(3 pts)*
+
+| Ouvrage | Qté | P.U. (F) | Montant (F) |
+|---|---|---|---|
+| Couverture bac alu | 125,14 m² | 9 500 | 1 188 830 |
+| Faîtière | 13,20 ml | 6 000 | 79 200 |
+| Gouttières | 26,40 ml | 8 000 | 211 200 |
+| Descentes | 7,00 ml | 7 500 | 52 500 |
+| Charpente | 121,44 m² | 12 000 | 1 457 280 |
+| Étanchéité auvent | 14,00 m² | 15 000 | 210 000 |
+| **Total HT** | | | **3 199 010** |
+
+> [!attention] Erreurs à éviter
+> - Mesurer la couverture en projection : elle se paie **en rampant**, débords compris.
+> - Oublier les débords en pignon dans la longueur couverte.
+> - Oublier les relevés d'étanchéité, qui sont la partie la plus exposée aux fuites.`},
  exercices:[
   {t:"Couverture d'une maison", d:2, e:`Maison de 12,00 × 9,00 m, débords de 0,60 m, deux pans à 25 %, tôles de largeur utile 1,00 m. Calculer le rampant, la surface de couverture, le nombre de tôles, la faîtière, les gouttières et les fixations (6/m²).`, c:`Rampant : 5,10 × √(1 + 0,0625) = **5,26 m** ; surface : 2 × 5,26 × 13,20 = **138,78 m²**.
 Tôles : 13,20 / 1,00 → 14 par pan → **28 tôles** de 5,30 m environ.
@@ -968,6 +1559,70 @@ Dans une cuisine, on compte la **crédence** au-dessus du plan de travail : long
 > - Plinthes : périmètre − portes (ml).
 > - Faïence : périmètre × hauteur − ouvertures + crédences.
 > - Colle ≈ 5 kg/m², joint ≈ 0,3 kg/m².`,
+ sujet:{titre:"Carrelage, plinthes et faïence d'un appartement : quantités, commande et montant", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Appartement F3 à Marcory : vous établissez le métré du lot revêtements, la commande et le montant.
+
+**Données (dimensions entre murs enduits)**
+
+| Pièce | Dimensions (m) | Portes (largeur) |
+|---|---|---|
+| Séjour | 6,17 × 4,47 | 1,00 + 0,80 |
+| Chambre 1 | 3,97 × 3,57 | 0,80 |
+| Chambre 2 | 3,57 × 3,27 | 0,80 |
+| Couloir | 3,60 × 1,20 | 4 × 0,80 |
+| Cuisine | 3,07 × 2,47 | (faïence, pas de plinthes) |
+| Salle d'eau | 2,47 × 1,97 | (faïence, pas de plinthes) |
+
+- Faïence de la salle d'eau sur **2,10 m** de haut ; porte **0,70 × 2,10**, fenêtre **0,60 × 0,60** ;
+- Crédence de la cuisine : **0,60 m** de haut sur deux murs (3,07 + 2,47 m) ;
+- Carreaux de sol 40 × 40 en cartons de **1,44 m²**, majoration **8 %** ; faïence en cartons de **1,50 m²**, majoration **10 %** ; plinthes + **5 %** ;
+- Colle : sol **5 kg/m²**, faïence **3,5 kg/m²** (sacs de 25 kg) ; joint **0,3 kg/m²** ;
+- Prix : carrelage posé **11 000 F/m²** ; plinthes **2 000 F/ml** ; faïence **13 000 F/m²**.
+
+### Partie A — Sols et plinthes (7 points)
+1. Calculer la surface de carrelage de chaque pièce et le total. (3 pts)
+2. Calculer les plinthes de chaque pièce concernée et le total. (3 pts)
+3. Pourquoi mesure-t-on entre murs enduits ? (1 pt)
+
+### Partie B — Faïence (4 points)
+4. Calculer la faïence de la salle d'eau et de la crédence. (4 pts)
+
+### Partie C — Commande (6 points)
+5. Calculer le nombre de cartons de carreaux de sol et de faïence, et la longueur de plinthes à commander. (3 pts)
+6. Calculer le nombre de sacs de colle et la masse de joint. (3 pts)
+
+### Partie D — Montant (3 points)
+7. Calculer le montant HT du lot. (3 pts)`,
+  corrige:`### Partie A — Sols et plinthes (7 pts)
+1. *(3 pts)*
+
+| Pièce | Sol (m²) | Plinthes (ml) |
+|---|---|---|
+| Séjour | 27,58 | 2 × (6,17 + 4,47) − 1,80 = 19,48 |
+| Chambre 1 | 14,17 | 15,08 − 0,80 = 14,28 |
+| Chambre 2 | 11,67 | 13,68 − 0,80 = 12,88 |
+| Couloir | 4,32 | 9,60 − 3,20 = 6,40 |
+| Cuisine | 7,58 | — |
+| Salle d'eau | 4,87 | — |
+| **Total** | **70,19** | **53,04** |
+
+2. Voir le tableau : **53,04 ml**. *(3 pts)*
+3. Le carrelage se pose après les enduits : c'est la surface réellement couverte. *(1 pt)*
+
+### Partie B — Faïence (4 pts)
+4. Salle d'eau : 2 × (2,47 + 1,97) × 2,10 = 18,65 m² − porte 1,47 − fenêtre 0,36 = **16,82 m²** ; crédence : (3,07 + 2,47) × 0,60 = **3,32 m²** → **20,14 m²**. *(4 pts)*
+
+### Partie C — Commande (6 pts)
+5. Sol : 70,19 × 1,08 = 75,81 m² / 1,44 = 52,6 → **53 cartons** ; faïence : 20,14 × 1,10 = 22,15 / 1,50 = 14,8 → **15 cartons** ; plinthes : 53,04 × 1,05 = **55,7 → 56 ml**. *(3 pts)*
+6. Colle sol : 70,19 × 5 = 351 kg → **15 sacs** ; colle faïence : 20,14 × 3,5 = 70 kg → **3 sacs** ; joint : (70,19 + 20,14) × 0,3 = **27 kg**. *(3 pts)*
+
+### Partie D — Montant (3 pts)
+7. 70,19 × 11 000 = 772 090 ; 53,04 × 2 000 = 106 080 ; 20,14 × 13 000 = 261 820 → **1 139 990 F HT**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mettre des plinthes dans les pièces faïencées, ou oublier de déduire les portes.
+> - Commander la surface nette sans majoration : il manquera des carreaux du même lot (teinte).
+> - Arrondir les cartons à l'unité inférieure.`},
  exercices:[
   {t:"Carrelage en diagonale", d:1, e:`Salon de 6,00 × 4,50 m carrelé en 60 × 60 posé en diagonale (15 % de chutes), cartons de 1,44 m². Calculer la surface à commander, le nombre de carreaux, de cartons, de sacs de colle (5 kg/m², sacs de 25 kg) et de joint.`, c:`Surface : 6,00 × 4,50 = **27,00 m²** → commande 27,00 × 1,15 = **31,05 m²**.
 Carreaux : 31,05 / 0,36 = 86,3 → **87 carreaux** ; cartons : 31,05 / 1,44 = 21,6 → **22 cartons**.
@@ -1049,6 +1704,59 @@ Une grille se mesure en m² ou se pèse : poids = Σ longueurs × poids au mètr
 > - Menuiseries à l'unité (portes) ou au m² (fenêtres), d'après la nomenclature.
 > - Faux plafonds : m² + corniches en ml ; plaques + 5 %.
 > - Peinture : m² par support ; litres = surface × couches / rendement.`,
+ sujet:{titre:"Menuiseries, grilles, faux plafonds et peinture d'une villa", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Second œuvre d'une villa à Assinie. Vous chiffrez les menuiseries, les grilles de défense, le faux plafond et la peinture.
+
+**Données**
+- Nomenclature : P1 porte d'entrée métallique 1,00 × 2,20 (×1) à **250 000 F/u** ; P2 portes isoplanes 0,80 × 2,10 (×6) à **85 000 F/u** ; F1 fenêtres aluminium 1,20 × 1,40 (×7) et F2 0,60 × 0,60 (×3) à **75 000 F/m²** ;
+- Grilles des F1 : barreaux verticaux en **carré de 12** (1,13 kg/m) espacés de **12 cm** (9 barreaux de 1,40 m), cadre en **plat 30 × 5** (1,18 kg/m) ; prix **2 200 F/kg** ;
+- Faux plafond en dalles **60 × 60** : surface des pièces **85 m²**, corniches **74 ml** ; + 5 % ; prix **7 500 F/m²** et **1 500 F/ml** ;
+- Peinture : murs intérieurs **280 m²**, façades **160 m²** ; 1 couche d'impression (**10 m²/L**) + 2 couches de finition (intérieur **8 m²/L** par couche, façade **6 m²/L** par couche) ; seaux de **20 L** ;
+- Prix peinture : intérieur **2 500 F/m²**, façade **3 500 F/m²** (trois couches comprises).
+
+### Partie A — Menuiseries (6 points)
+1. Calculer la surface de fenêtres et le montant de chaque ligne de menuiserie. (4 pts)
+2. Quels contrôles faire sur la nomenclature avant de chiffrer ? (2 pts)
+
+### Partie B — Grilles (4 points)
+3. Calculer le poids d'une grille, des 7 grilles, et leur montant. (4 pts)
+
+### Partie C — Faux plafond (4 points)
+4. Calculer le nombre de dalles et la longueur de corniches à commander. (2 pts)
+5. Calculer le montant du faux plafond. (2 pts)
+
+### Partie D — Peinture (6 points)
+6. Calculer les litres d'impression et de finition, à l'intérieur et en façade, et le nombre de seaux. (4 pts)
+7. Calculer le montant de la peinture et le total du lot. (2 pts)`,
+  corrige:`### Partie A — Menuiseries (6 pts)
+1. Fenêtres : 7 × 1,68 + 3 × 0,36 = **12,84 m²**. *(4 pts)*
+
+| Repère | Qté | P.U. (F) | Montant (F) |
+|---|---|---|---|
+| P1 | 1 u | 250 000 | 250 000 |
+| P2 | 6 u | 85 000 | 510 000 |
+| F1 + F2 | 12,84 m² | 75 000 | 963 000 |
+| **Total** | | | **1 723 000** |
+
+2. Compter les repères **sur chaque niveau** et sur les façades, vérifier les sens d'ouverture et les dimensions (tableau fini ou brut), et ce que comprend le prix (huisserie, quincaillerie, vitrage, pose). *(2 pts)*
+
+### Partie B — Grilles (4 pts)
+3. Barreaux : 9 × 1,40 × 1,13 = 14,24 kg ; cadre : 2 × (1,20 + 1,40) × 1,18 = 6,14 kg → **20,37 kg** par grille ; 7 grilles : **142,6 kg** ; montant 7 × 20,37 × 2 200 = **313 698 F**. *(4 pts)*
+
+### Partie C — Faux plafond (4 pts)
+4. 85 / 0,36 = 236,1 → + 5 % → **248 dalles** ; corniches 74 × 1,05 = **78 ml**. *(2 pts)*
+5. 85 × 7 500 + 74 × 1 500 = 637 500 + 111 000 = **748 500 F**. *(2 pts)*
+
+### Partie D — Peinture (6 pts)
+6. *(4 pts)*
+   - Intérieur : impression 280 / 10 = **28 L** (2 seaux) ; finition 2 × 280 / 8 = **70 L** (4 seaux) ;
+   - Façade : impression 160 / 10 = **16 L** (1 seau) ; finition 2 × 160 / 6 = **53,3 L** (3 seaux).
+7. 280 × 2 500 + 160 × 3 500 = **1 260 000 F** ; total du lot : 1 723 000 + 313 698 + 748 500 + 1 260 000 = **4 045 198 F HT**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les petites fenêtres ou compter les portes en m² quand le bordereau les paie à l'unité.
+> - Calculer la peinture pour une seule couche.
+> - Peser une grille sans son cadre.`},
  exercices:[
   {t:"Devis des menuiseries", d:1, e:`Une villa comporte : 1 porte d'entrée (250 000 F), 7 portes isoplanes (85 000 F l'unité), 8 fenêtres F1 de 1,20 × 1,20 et 4 fenêtres F2 de 0,60 × 0,60 (75 000 F/m²). Calculer le montant HT et TTC (TVA 18 %).`, c:`Fenêtres : 8 × 1,44 + 4 × 0,36 = **12,96 m²** → 12,96 × 75 000 = 972 000 F.
 Portes : 250 000 + 7 × 85 000 = 845 000 F.
@@ -1138,6 +1846,74 @@ Ex. : 12 m³ de sable ≈ 12 × 1,6 = 19,2 t.
 > - 1 sac de ciment → béton 350 : 1 brouette de sable + 2 de gravier.
 > - Majorer : ciment 5 %, granulats 10 %, agglos 3 à 5 %, aciers 5 à 10 %.
 > - Sable ≈ 1,6 t/m³ ; gravier ≈ 1,5 t/m³.`,
+ sujet:{titre:"Du métré aux commandes : sous-détail des matériaux d'un chantier de gros œuvre", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le métré du gros œuvre d'un groupe de deux villas est terminé. Le conducteur de travaux vous demande la liste des matériaux, le nombre de camions et le budget d'achat.
+
+**Quantités d'ouvrages**
+- Béton armé dosé à 350 : **24,5 m³** ; béton de dallage dosé à 300 : **9,2 m³** ; béton de propreté dosé à 150 : **2,4 m³** ;
+- Maçonnerie d'agglos de 15 : **310 m²** ; agglos de 10 : **120 m²** ;
+- Enduits (1,8 cm, dosés à 350) : **900 m²**.
+
+**Fiche de sous-détail**
+- Béton : 0,40 m³ de sable et 0,80 m³ de gravier par m³ ; ciment : 7 / 6 / 3 sacs par m³ (350 / 300 / 150) ;
+- Agglos de 15 : 0,09 sac et 0,015 m³ de sable par m² ; agglos de 10 : 0,06 sac et 0,010 m³ ; 12,5 agglos/m² + 4 % ;
+- Enduit : 0,13 sac et 0,018 m³ de sable par m² ;
+- Majorations : ciment **+ 5 %** ; sable et gravier **+ 10 %** ; camions de **12 m³** ;
+- Prix rendus chantier : ciment **5 500 F/sac** ; sable **12 000 F/m³** ; gravier **25 000 F/m³** ; agglo de 15 **350 F** ; agglo de 10 **300 F**.
+
+### Partie A — Ciment (6 points)
+1. Calculer le nombre de sacs pour chaque ouvrage et le total majoré. (5 pts)
+2. Exprimer la commande en tonnes. (1 pt)
+
+### Partie B — Granulats (5 points)
+3. Calculer le sable et le gravier nécessaires, majorés. (3 pts)
+4. En déduire le nombre de camions de chaque granulat. (2 pts)
+
+### Partie C — Agglos et organisation (4 points)
+5. Calculer le nombre d'agglos de 15 et de 10. (2 pts)
+6. Pourquoi ne faut-il pas faire livrer tout le ciment en une fois ? Proposer une règle de stockage. (2 pts)
+
+### Partie D — Gâchées (3 points)
+7. Pour couler **1,20 m³** de béton dosé à 350 à la bétonnière (1 sac = 0,143 m³ de béton ; 1 brouette de sable, 2 de gravier et 25 L d'eau par sac), calculer le nombre de gâchées et les quantités. (3 pts)
+
+### Partie E — Budget (2 points)
+8. Calculer le budget d'achat de ces matériaux. (2 pts)`,
+  corrige:`### Partie A — Ciment (6 pts)
+1. *(5 pts)*
+
+| Ouvrage | Calcul | Sacs |
+|---|---|---|
+| Béton armé | 24,5 × 7 | 171,5 |
+| Dallage | 9,2 × 6 | 55,2 |
+| Propreté | 2,4 × 3 | 7,2 |
+| Agglos de 15 | 310 × 0,09 | 27,9 |
+| Agglos de 10 | 120 × 0,06 | 7,2 |
+| Enduits | 900 × 0,13 | 117,0 |
+| **Total** | | **386,0** |
+
+Majoré de 5 % : 405,3 → **406 sacs**.
+2. 406 × 50 kg = **20,3 t**. *(1 pt)*
+
+### Partie B — Granulats (5 pts)
+3. Béton total : 24,5 + 9,2 + 2,4 = 36,1 m³ → sable 14,44 m³ et gravier 28,88 m³. Sable des maçonneries et enduits : 310 × 0,015 + 120 × 0,010 + 900 × 0,018 = 4,65 + 1,20 + 16,20 = 22,05 m³. *(3 pts)*
+   - Sable : 14,44 + 22,05 = 36,49 → + 10 % = **40,1 m³** ;
+   - Gravier : 28,88 → + 10 % = **31,8 m³**.
+4. Sable : 40,1 / 12 = 3,3 → **4 camions** ; gravier : 31,8 / 12 = 2,6 → **3 camions**. *(2 pts)*
+
+### Partie C — Agglos et organisation (4 pts)
+5. Agglos de 15 : 310 × 12,5 × 1,04 = **4 030** ; agglos de 10 : 120 × 12,5 × 1,04 = **1 560**. *(2 pts)*
+6. Le ciment s'évente avec l'humidité (prise partielle, perte de résistance) et immobilise de la trésorerie : livrer par lots selon le planning (2 à 3 semaines de consommation), stocker sur palettes, à l'abri, piles de 10 sacs maximum, et utiliser les plus anciens d'abord. *(2 pts)*
+
+### Partie D — Gâchées (3 pts)
+7. 1,20 / 0,143 = 8,4 → **9 gâchées** (9 sacs) : **9 brouettes de sable**, **18 brouettes de gravier**, environ **225 L d'eau** (sans en rajouter pour fluidifier). *(3 pts)*
+
+### Partie E — Budget (2 pts)
+8. 406 × 5 500 = 2 233 000 ; 40,14 × 12 000 = 481 680 ; 31,77 × 25 000 = 794 250 ; 4 030 × 350 = 1 410 500 ; 1 560 × 300 = 468 000 → **5 387 430 F**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le sable des mortiers et enduits (souvent plus que celui des bétons).
+> - Additionner des sacs, des m³ et des tonnes dans la même colonne.
+> - Arrondir les camions à l'unité inférieure.`},
  exercices:[
   {t:"Préparer une coulée de dalle", d:1, e:`On coule 2,50 m³ de béton dosé à 350 kg/m³ à la bétonnière. Calculer le nombre de sacs, de brouettes de sable et de gravier (60 L) et la quantité d'eau (E/C ≈ 0,5).`, c:`Ciment : 2,50 × 7 = **17,5 sacs** (18 sacs).
 Sable : 2,50 × 0,40 = 1,00 m³ → 1 000 / 60 = **17 brouettes** ; gravier : 2,00 m³ → **34 brouettes**.
@@ -1232,6 +2008,87 @@ Le maître d'ouvrage compare les offres des entreprises à son **estimation** : 
 > - DQE : quantité × prix, sous-totaux par lot, récapitulatif HT, TVA 18 %, TTC.
 > - Estimation sommaire : ratio au m² et répartition par lots.
 > - Contrôler montants, unités, ratios et oublis.`,
+ sujet:{titre:"Établir et contrôler le DQE du gros œuvre d'une villa", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le métré du gros œuvre d'une villa de **108 m²** (surface hors œuvre) est terminé. Vous établissez le DQE à partir du bordereau, puis vous contrôlez l'offre d'une entreprise.
+
+**Quantités et prix unitaires (F HT)**
+
+| N° | Désignation | U | Qté | P.U. |
+|---|---|---|---|---|
+| 1.1 | Installation de chantier | ft | 1 | 350 000 |
+| 1.2 | Décapage | m² | 221 | 500 |
+| 1.3 | Fouilles | m³ | 39,33 | 4 500 |
+| 1.4 | Remblai d'apport compacté | m³ | 36,00 | 6 000 |
+| 1.5 | Évacuation des déblais | m³ | 15,30 | 3 500 |
+| 2.1 | Béton de propreté | m³ | 1,30 | 75 000 |
+| 2.2 | Béton armé de fondations (coffrage compris) | m³ | 6,74 | 185 000 |
+| 2.3 | Aciers HA façonnés et posés | kg | 580 | 1 000 |
+| 2.4 | Soubassement en agglos pleins de 15 | m² | 26,25 | 12 000 |
+| 2.5 | Hérisson ép. 15 cm | m² | 76,51 | 6 500 |
+| 2.6 | Dallage 8 cm + treillis | m² | 76,51 | 9 500 |
+| 3.1 | Béton armé d'élévation (coffrage compris) | m³ | 15,43 | 185 000 |
+| 3.2 | Aciers HA façonnés et posés | kg | 1 450 | 1 000 |
+| 3.3 | Maçonnerie d'agglos de 15 | m² | 94,40 | 12 000 |
+| 3.4 | Cloisons en agglos de 10 | m² | 41,46 | 9 500 |
+
+L'offre de l'entreprise indique : article 2.6 → **762 845 F** ; article 3.1 → quantité **15,34 m³**, montant **2 837 900 F**.
+
+### Partie A — DQE (9 points)
+1. Calculer le montant de chaque article. (6 pts)
+2. Calculer les sous-totaux des lots 1 (terrassements), 2 (fondations) et 3 (élévation). (3 pts)
+
+### Partie B — Récapitulatif (5 points)
+3. Établir le récapitulatif : total HT, TVA 18 %, total TTC. (3 pts)
+4. Le maître d'ouvrage veut une provision pour imprévus de 5 % sur le TTC : quel budget doit-il prévoir ? (2 pts)
+
+### Partie C — Contrôle de l'offre (3 points)
+5. Identifier et corriger les deux anomalies de l'offre. De combien le total HT de l'entreprise est-il faussé ? (3 pts)
+
+### Partie D — Ratios (3 points)
+6. Calculer le coût du gros œuvre au m². (1 pt)
+7. Si le gros œuvre représente 45 % du coût total, estimer le coût total HT de la villa. (2 pts)`,
+  corrige:`### Partie A — DQE (9 pts)
+1. et 2. *(9 pts)*
+
+| N° | Montant (F) |
+|---|---|
+| 1.1 | 350 000 |
+| 1.2 | 110 500 |
+| 1.3 | 176 985 |
+| 1.4 | 216 000 |
+| 1.5 | 53 550 |
+| **Lot 1** | **907 035** |
+| 2.1 | 97 500 |
+| 2.2 | 1 246 900 |
+| 2.3 | 580 000 |
+| 2.4 | 315 000 |
+| 2.5 | 497 315 |
+| 2.6 | 726 845 |
+| **Lot 2** | **3 463 560** |
+| 3.1 | 2 854 550 |
+| 3.2 | 1 450 000 |
+| 3.3 | 1 132 800 |
+| 3.4 | 393 870 |
+| **Lot 3** | **5 831 220** |
+
+### Partie B — Récapitulatif (5 pts)
+3. Total HT = 907 035 + 3 463 560 + 5 831 220 = **10 201 815 F** ; TVA 18 % = **1 836 327 F** ; TTC = **12 038 142 F**. *(3 pts)*
+4. 12 038 142 × 1,05 = **12 640 049 F**. *(2 pts)*
+
+### Partie C — Contrôle (3 pts)
+5. *(3 pts)*
+   - 2.6 : 76,51 × 9 500 = **726 845 F** (chiffres inversés) → + 36 000 F ;
+   - 3.1 : quantité mal recopiée (15,34 au lieu de **15,43**) → 2 854 550 F, soit − 16 650 F dans l'offre.
+   Le total HT de l'entreprise est faussé de 36 000 − 16 650 = **+ 19 350 F**. C'est le prix unitaire (et en cas de désaccord, le prix en lettres) qui fait foi : on corrige les montants.
+
+### Partie D — Ratios (3 pts)
+6. 10 201 815 / 108 = **94 460 F/m²** de gros œuvre. *(1 pt)*
+7. 10 201 815 / 0,45 = **22,7 millions F HT** environ. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer la TVA article par article puis arrondir : on l'applique au total HT.
+> - Recopier les quantités sans les comparer au métré.
+> - Confondre provision pour imprévus (maître d'ouvrage) et aléas (inclus dans les prix de l'entreprise).`},
  exercices:[
   {t:"Calculer des montants", d:1, e:`Calculer les montants et le sous-total : 12,40 m³ de béton armé à 185 000 F/m³ ; 37,50 m² de dallage à 9 500 F/m² ; 450 kg d'acier à 1 000 F/kg.`, c:`12,40 × 185 000 = **2 294 000 F** ; 37,50 × 9 500 = **356 250 F** ; 450 × 1 000 = **450 000 F**.
 Sous-total : **3 100 250 F**.`},
@@ -1314,6 +2171,54 @@ Avec FC = 10 %, FG = 12 % et B = 10 % : K = 1,10 × 1,12 × 1,10 = **1,355**. Le
 > - Temps unitaire = durée / rendement ; taux horaires chargés.
 > - PV HT = DS × K, K = (1 + FC)(1 + FG)(1 + B).
 > - DS maximal admissible = prix imposé / K.`,
+ sujet:{titre:"Sous-détail du prix d'un m² de maçonnerie et négociation du prix", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une entreprise répond à un appel d'offres pour un groupe scolaire. Le maître d'ouvrage trouve le prix de la maçonnerie trop élevé (12 000 F/m²) et propose **10 500 F/m²**. Vous établissez le sous-détail pour décider.
+
+**Données pour 1 m² de maçonnerie d'agglos creux de 15**
+- 12,5 agglos + **4 %** de casse, à **450 F** l'agglo rendu chantier ;
+- Mortier : **0,09 sac** de ciment (+ 5 %) à **5 500 F/sac** ; **0,015 m³** de sable (+ 10 %) à **12 000 F/m³** ; eau : **50 F** ;
+- Équipe : 1 maçon (**1 250 F/h** chargé) + 1 manœuvre (**750 F/h** chargé), qui posent **10 m²** par journée de **8 h** ;
+- Petit matériel et échafaudage : **150 F/m²** ;
+- Coefficients de l'entreprise : frais de chantier **10 %**, frais généraux **12 %**, bénéfice et aléas **10 %**.
+
+### Partie A — Déboursé sec (9 points)
+1. Calculer le coût des matériaux pour 1 m². (4 pts)
+2. Calculer le temps unitaire et le coût de main-d'œuvre. (3 pts)
+3. En déduire le déboursé sec. (2 pts)
+
+### Partie B — Prix de vente (5 points)
+4. Calculer le coefficient de vente K et le prix de vente HT. (3 pts)
+5. Comparer au prix de 12 000 F/m² de l'offre. (2 pts)
+
+### Partie C — Négociation (6 points)
+6. Calculer le coefficient K correspondant à 10 500 F/m², puis le taux de bénéfice restant (FC et FG inchangés). L'entreprise doit-elle accepter ? (3 pts)
+7. Le rendement réel tombe à **8 m²/jour** (chantier en étage, approvisionnement difficile). Recalculer le déboursé sec et le prix de vente. (3 pts)`,
+  corrige:`### Partie A — Déboursé sec (9 pts)
+1. *(4 pts)*
+
+| Poste | Calcul | F/m² |
+|---|---|---|
+| Agglos | 12,5 × 1,04 = 13 × 450 | 5 850 |
+| Ciment | 0,09 × 1,05 × 5 500 | 520 |
+| Sable | 0,015 × 1,10 × 12 000 | 198 |
+| Eau | forfait | 50 |
+| **Matériaux** | | **6 618** |
+
+2. Temps unitaire : 8 h / 10 m² = **0,8 h/m²** pour chacun ; MO = 0,8 × (1 250 + 750) = **1 600 F/m²**. *(3 pts)*
+3. DS = 6 618 + 1 600 + 150 = **8 368 F/m²**. *(2 pts)*
+
+### Partie B — Prix de vente (5 pts)
+4. K = 1,10 × 1,12 × 1,10 = **1,355** ; PV = 8 368 × 1,355 = **11 340 F/m²**. *(3 pts)*
+5. L'offre à 12 000 F/m² contient environ 660 F/m² de marge en plus (K réel = 12 000 / 8 368 = 1,434) : elle est négociable, mais pas jusqu'à n'importe quel prix. *(2 pts)*
+
+### Partie C — Négociation (6 pts)
+6. K = 10 500 / 8 368 = **1,255** ; 1 + B = 1,255 / (1,10 × 1,12) = 1,0185 → **B ≈ 1,9 %**. Le bénéfice et les aléas sont presque nuls : le moindre imprévu (casse, retard) rend l'ouvrage déficitaire. L'entreprise peut descendre vers 11 300 – 11 500 F/m², pas à 10 500. *(3 pts)*
+7. Temps unitaire 8 / 8 = **1,0 h/m²** → MO = **2 000 F/m²** ; DS = 6 618 + 2 000 + 150 = **8 768 F/m²** ; PV = 8 768 × 1,355 = **11 880 F/m²**. Le rendement pèse lourd : il faut le mesurer sur chantier pour fiabiliser les prix. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser des salaires bruts au lieu des taux horaires chargés.
+> - Additionner les pourcentages (10 + 12 + 10 = 32 %) au lieu de multiplier les coefficients.
+> - Oublier la casse et les pertes dans les quantités de matériaux.`},
  exercices:[
   {t:"Coefficient de vente", d:1, e:`Une entreprise a des frais de chantier de 8 %, des frais généraux de 15 % et vise un bénéfice de 10 %. Calculer K, puis le prix de vente d'un ouvrage dont le déboursé sec est 85 000 F.`, c:`K = 1,08 × 1,15 × 1,10 = **1,366**.
 PV = 85 000 × 1,366 = **116 127 F HT**.`},
@@ -1379,6 +2284,70 @@ Compter **par logement type**, puis multiplier par le nombre de logements identi
 > - Électricité : appareils à l'unité, câbles et gaines en ml (+ 10 %), tableau à l'ensemble ; 8 points par circuit.
 > - Plomberie : appareils à l'unité, tubes par diamètre en ml (+ 10 %), fosse à l'ensemble.
 > - Climatisation : ≈ 600 BTU/m², liaisons en ml.`,
+ sujet:{titre:"Lots techniques d'une maison F4 : électricité, climatisation et plomberie", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Maison F4 à Angré. Vous métrez les lots électricité, climatisation et plomberie sanitaire à partir des plans techniques.
+
+**Électricité**
+- **22 points lumineux** (12 m de câble 1,5 mm² chacun) ; **28 prises 16 A** (10 m de câble 2,5 mm² chacune) ;
+- Prises spécialisées : cuisinière (**15 m de 6 mm²**), chauffe-eau (**15 m de 2,5 mm²**), 4 climatiseurs (**15 m de 2,5 mm²** chacun) ;
+- Majoration des câbles **10 %** ; câbles vendus en rouleaux de **100 m** ;
+- Au plus **8 points** par circuit d'éclairage et **8 prises** par circuit de prises ; un circuit par appareil spécialisé.
+
+**Climatisation** : 3 chambres de **12, 14 et 16 m²** et un séjour vitré de **35 m²** ; ratio **600 BTU/m²** ; gammes : 9 000 – 12 000 – 18 000 – 24 000 BTU.
+
+**Plomberie** : 2 WC, 2 lavabos, 2 douches, 1 évier, 1 chauffe-eau ; PVC mesuré sur plan : Ø 100 **18 m**, Ø 50 **22 m**, Ø 40 **9 m** ; PPR : eau froide **48 m**, eau chaude **16 m** ; + 10 % ; barres de **4 m**.
+
+**Prix (F, fourni posé)** : point lumineux 18 000 ; prise 15 000 ; prise spécialisée 25 000 ; tableau 250 000 ; split 9 000 BTU 250 000 ; 12 000 BTU 320 000 ; 24 000 BTU 550 000 ; WC 120 000 ; lavabo 75 000 ; douche 90 000 ; évier 95 000 ; chauffe-eau 180 000.
+
+### Partie A — Câbles (5 points)
+1. Calculer les longueurs de câble de 1,5 – 2,5 – 6 mm² et le nombre de rouleaux. (5 pts)
+
+### Partie B — Circuits (3 points)
+2. Calculer le nombre de circuits d'éclairage, de prises et spécialisés. Quelle protection des personnes impose-t-on ? (3 pts)
+
+### Partie C — Climatisation (4 points)
+3. Calculer la puissance nécessaire et choisir le split de chaque pièce. (4 pts)
+
+### Partie D — Plomberie (4 points)
+4. Calculer le nombre de barres de PVC par diamètre et de PPR. (3 pts)
+5. Pourquoi le WC a-t-il une évacuation en Ø 100 ? (1 pt)
+
+### Partie E — Montant (4 points)
+6. Calculer le montant de chaque lot et le total. (4 pts)`,
+  corrige:`### Partie A — Câbles (5 pts)
+1. *(5 pts)*
+   - 1,5 mm² : 22 × 12 = 264 m + 10 % = **290 m** → **3 rouleaux** ;
+   - 2,5 mm² : 28 × 10 + 15 + 4 × 15 = 355 m + 10 % = **391 m** → **4 rouleaux** ;
+   - 6 mm² : 15 + 10 % = **16,5 m** (à la coupe).
+
+### Partie B — Circuits (3 pts)
+2. Éclairage : 22 / 8 = 2,75 → **3 circuits** ; prises : 28 / 8 = 3,5 → **4 circuits** ; spécialisés : cuisinière, chauffe-eau, 4 climatiseurs → **6 circuits** ; total **13 circuits**. Protection : interrupteurs **différentiels 30 mA** et mise à la terre. *(3 pts)*
+
+### Partie C — Climatisation (4 pts)
+3. *(4 pts)*
+
+| Pièce | Besoin (BTU) | Split choisi |
+|---|---|---|
+| Chambre 12 m² | 7 200 | 9 000 |
+| Chambre 14 m² | 8 400 | 9 000 |
+| Chambre 16 m² | 9 600 | 12 000 |
+| Séjour 35 m² | 21 000 | 24 000 |
+
+### Partie D — Plomberie (4 pts)
+4. Ø 100 : 19,8 m → **5 barres** ; Ø 50 : 24,2 m → **7 barres** ; Ø 40 : 9,9 m → **3 barres** ; PPR eau froide 52,8 m → **14 barres** ; eau chaude 17,6 m → **5 barres**. *(3 pts)*
+5. Le WC évacue des matières solides avec un fort débit instantané : il faut un grand diamètre pour éviter les bouchages. *(1 pt)*
+
+### Partie E — Montant (4 pts)
+6. *(4 pts)*
+   - Électricité : 22 × 18 000 + 28 × 15 000 + 6 × 25 000 + 250 000 = **1 216 000 F** ;
+   - Climatisation : 2 × 250 000 + 320 000 + 550 000 = **1 370 000 F** ;
+   - Sanitaires : 2 × 120 000 + 2 × 75 000 + 2 × 90 000 + 95 000 + 180 000 = **845 000 F** ;
+   - **Total : 3 431 000 F HT** (hors tuyauteries, comptées à part).
+
+> [!attention] Erreurs à éviter
+> - Mettre tous les climatiseurs sur un même circuit de prises.
+> - Choisir une puissance inférieure au besoin (le split tourne en permanence et use).
+> - Oublier les montées et descentes verticales des tubes sur le plan.`},
  exercices:[
   {t:"Câbles d'un duplex", d:1, e:`Un duplex comporte 26 points lumineux (11 m de câble 1,5 mm² chacun en moyenne), 32 prises (9 m de 2,5 mm²) et 6 circuits spécialisés (15 m de 6 mm² chacun). Calculer les longueurs à commander (+ 10 %).`, c:`1,5 mm² : 26 × 11 × 1,10 = **314,6 m** → 3 couronnes de 100 m + complément (ou 4 couronnes).
 2,5 mm² : 32 × 9 × 1,10 = **316,8 m**.
@@ -1450,6 +2419,57 @@ Terre végétale (m³), engazonnement (m²), arbres et arbustes (u), arrosage (e
 > - Réseaux : tranchée, sable, canalisation, remblai, regards, évacuation.
 > - Clôture = fondation + soubassement + poteaux + mur + chaperon + finitions.
 > - VRD : 5 à 10 % du coût d'une maison.`,
+ sujet:{titre:"VRD d'une villa : allée pavée, mur de clôture et assainissement autonome", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur une parcelle de **20 × 30 m** à Bassam, le budget de la villa a oublié les VRD. On vous demande de les métrer.
+
+**Allée carrossable** : **30,00 × 3,50 m** en pavés autobloquants ; couche de base en graveleux latéritique de **20 cm** (coefficient d'approvisionnement **1,30**) ; lit de sable de **3 cm** ; pavés **+ 3 %** ; bordures des deux côtés.
+
+**Mur de clôture**
+- Sur tout le périmètre, sauf un portail de **4,00 m** et un portillon de **1,00 m** ;
+- Fouille en rigole **0,40 × 0,60 m** ; semelle **0,40 × 0,20 m** ;
+- Maçonnerie d'agglos de 15 sur **2,00 m** de haut, **36 poteaux 20 × 20** de 2,00 m ; chaînage haut **15 × 15** ;
+- 12,5 agglos/m² + 4 %.
+
+**Assainissement autonome**
+- Fosse septique de dimensions extérieures **3,40 × 1,90 m**, profondeur **2,00 m** ; fouille avec **0,30 m** de surlargeur de chaque côté ;
+- Puisard circulaire de **1,50 m** de diamètre et **3,00 m** de profondeur, rempli de pierres ;
+- Foisonnement **1,25**.
+
+### Partie A — Allée (6 points)
+1. Calculer la couche de base en place et à approvisionner. (2 pts)
+2. Calculer le sable de pose, les pavés à commander et les bordures. (3 pts)
+3. Pourquoi ne pose-t-on pas les pavés directement sur le terrain naturel ? (1 pt)
+
+### Partie B — Clôture (8 points)
+4. Calculer la longueur de clôture. (1 pt)
+5. Calculer les fouilles et le béton de semelle. (2 pts)
+6. Calculer la maçonnerie nette et le nombre d'agglos. (3 pts)
+7. Calculer le béton des poteaux et du chaînage. (2 pts)
+
+### Partie C — Assainissement (6 points)
+8. Calculer la fouille de la fosse et le remblai autour de la fosse. (3 pts)
+9. Calculer la fouille du puisard. (1 pt)
+10. Calculer le volume foisonné à évacuer. (2 pts)`,
+  corrige:`### Partie A — Allée (6 pts)
+1. 30,00 × 3,50 × 0,20 = **21,00 m³** en place → × 1,30 = **27,30 m³** à approvisionner. *(2 pts)*
+2. Sable : 105 × 0,03 = **3,15 m³** ; pavés : 105 × 1,03 = **108,2 m²** ; bordures : 2 × 30 = **60 ml**. *(3 pts)*
+3. Le terrain naturel n'est ni portant ni drainant : sous les roues, les pavés s'enfonceraient en ornières. *(1 pt)*
+
+### Partie B — Clôture (8 pts)
+4. Périmètre 2 × (20 + 30) = 100 m − 4,00 − 1,00 = **95,00 m**. *(1 pt)*
+5. Fouilles : 95 × 0,40 × 0,60 = **22,80 m³** ; semelle : 95 × 0,40 × 0,20 = **7,60 m³**. *(2 pts)*
+6. Brut : 95 × 2,00 = 190 m² − poteaux 36 × 0,20 × 2,00 = 14,40 m² → **175,60 m²** ; agglos : 175,60 × 12,5 × 1,04 = **2 283**. *(3 pts)*
+7. Poteaux : 36 × 0,20 × 0,20 × 2,00 = **2,88 m³** ; chaînage : 95 × 0,15 × 0,15 = **2,14 m³**. *(2 pts)*
+
+### Partie C — Assainissement (6 pts)
+8. Fouille : 4,00 × 2,50 × 2,00 = **20,00 m³** ; volume de la fosse : 3,40 × 1,90 × 2,00 = 12,92 m³ → remblai : **7,08 m³**. *(3 pts)*
+9. π × 0,75² × 3,00 = **5,30 m³**. *(1 pt)*
+10. Excédent en place : 12,92 + 5,30 = 18,22 m³ → × 1,25 = **22,78 m³** foisonnés. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les VRD dans le budget : 5 à 10 % du coût d'une maison.
+> - Commander la latérite au volume en place.
+> - Compter le portail dans la longueur de mur.`},
  exercices:[
   {t:"Cour pavée", d:1, e:`Cour de 25 × 12 m : couche de fondation en graveleux latéritique de 20 cm, couche de base de 15 cm, lit de sable de 3 cm, pavés et bordures sur tout le périmètre. Calculer les quantités (coefficient 1,3 pour les graveleux, 3 % de coupes pour les pavés).`, c:`Surface : **300 m²**.
 Fondation : 300 × 0,20 = **60 m³** en place → **78 m³** à approvisionner.
@@ -1525,6 +2545,70 @@ On compare déblais et remblais tronçon par tronçon et on décide : réemploi 
 > - Carroyage : V = (a b / 4) Σ n h, avec n = 1, 2 ou 4.
 > - Cote d'équilibre : Σ n Z / Σ n.
 > - Organiser le mouvement des terres pour limiter apports et évacuations.`,
+ sujet:{titre:"Cubatures d'une plate-forme et d'une voie d'accès : profils et carroyage", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Aménagement d'une zone d'activités à Akoupé : une voie d'accès (profils en travers) et une plate-forme de stockage (carroyage).
+
+**Partie voie — surfaces des profils en travers**
+
+| Profil | Distance au suivant | Déblai (m²) | Remblai (m²) |
+|---|---|---|---|
+| P1 | 20 m | 8,0 | 0 |
+| P2 | 20 m | à calculer | 0 |
+| P3 | 25 m | 6,2 | 3,4 |
+| P4 | — | 0 | 11,8 |
+
+Au profil P2, le terrain est horizontal : déblai de hauteur **1,40 m** sous une plate-forme de **8,00 m**, talus à **3/2** (1,5 horizontal pour 1 vertical).
+Un m³ de remblai compacté demande **1,10 m³** de déblai en place ; foisonnement **1,25** ; camions de **10 m³**.
+
+**Partie plate-forme** : carroyage de **2 × 2 mailles de 10 × 10 m** ; altitudes des nœuds (m) :
+
+| | Col. 1 | Col. 2 | Col. 3 |
+|---|---|---|---|
+| Ligne 1 | 52,40 | 52,10 | 51,80 |
+| Ligne 2 | 52,20 | 51,90 | 51,50 |
+| Ligne 3 | 51,90 | 51,60 | 51,30 |
+
+Formule : V = (a × b / 4) × Σ (p × h), avec p = 1 (coin), 2 (bord), 4 (intérieur) et h = Z − Zp.
+
+### Partie A — Profils (10 points)
+1. Calculer la surface de déblai du profil P2. (2 pts)
+2. Calculer les volumes de déblai et de remblai par la moyenne des aires. (5 pts)
+3. Calculer l'excédent de déblai en place, le volume foisonné et le nombre de rotations. (3 pts)
+
+### Partie B — Carroyage (8 points)
+4. Calculer le poids de chaque nœud et Σ p. (2 pts)
+5. Pour une cote projet **Zp = 51,80 m**, calculer les hauteurs h et le volume net (déblai − remblai). (4 pts)
+6. Calculer la cote d'équilibre déblai = remblai. (2 pts)
+
+### Partie C — Synthèse (2 points)
+7. Expliquer l'intérêt de caler la plate-forme à la cote d'équilibre et sa limite. (2 pts)`,
+  corrige:`### Partie A — Profils (10 pts)
+1. S = (l + n h) × h = (8,00 + 1,5 × 1,40) × 1,40 = 10,10 × 1,40 = **14,14 m²** (trapèze de bases 8,00 et 8,00 + 2 × 2,10 = 12,20 m). *(2 pts)*
+2. *(5 pts)*
+   - Déblai : (8,0 + 14,14) / 2 × 20 + (14,14 + 6,2) / 2 × 20 + (6,2 + 0) / 2 × 25 = 221,4 + 203,4 + 77,5 = **502,3 m³** ;
+   - Remblai : 0 + (0 + 3,4) / 2 × 20 + (3,4 + 11,8) / 2 × 25 = 34 + 190 = **224 m³**.
+3. Déblai réutilisé : 224 × 1,10 = 246,4 m³ → excédent en place : 502,3 − 246,4 = **255,9 m³** → foisonné : 255,9 × 1,25 = **319,9 m³** → 32,0 → **32 rotations**. *(3 pts)*
+
+### Partie B — Carroyage (8 pts)
+4. Coins (4 nœuds) p = 1 ; bords (4 nœuds) p = 2 ; centre p = 4 → **Σ p = 16** (= 4 mailles × 4). *(2 pts)*
+5. *(4 pts)*
+
+| h (m) | Col. 1 | Col. 2 | Col. 3 |
+|---|---|---|---|
+| Ligne 1 | + 0,60 | + 0,30 | 0,00 |
+| Ligne 2 | + 0,40 | + 0,10 | − 0,30 |
+| Ligne 3 | + 0,10 | − 0,20 | − 0,50 |
+
+Σ p h = (0,60 + 0,00 + 0,10 − 0,50) × 1 + (0,30 + 0,40 − 0,30 − 0,20) × 2 + 0,10 × 4 = 0,20 + 0,40 + 0,40 = **1,00** → V = 100 / 4 × 1,00 = **25 m³** de déblai net.
+6. Zéq = Σ p Z / Σ p = 829,80 / 16 = **51,86 m** (vérification : 25 m³ / 400 m² = 0,0625 m au-dessus de 51,80). *(2 pts)*
+
+### Partie C — Synthèse (2 pts)
+7. À la cote d'équilibre, les déblais servent de remblais : ni apport ni évacuation, donc moins de camions et de coût. Limites : il faut des déblais de bonne qualité (pas de terre végétale ni d'argile gonflante), tenir compte du foisonnement et du compactage, et respecter les contraintes d'écoulement des eaux et d'accès. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Faire la moyenne d'un profil en déblai et d'un profil en remblai sans point de passage.
+> - Oublier les poids des nœuds dans le carroyage.
+> - Évacuer le volume en place sans le foisonner.`},
  exercices:[
   {t:"Surface d'un profil en déblai", d:1, e:`Plate-forme de 10 m de large en déblai sous un terrain horizontal situé 2,00 m plus haut ; talus à 3/2 (1,5 m d'horizontal pour 1 m de hauteur). Calculer la largeur en tête et la surface de déblai.`, c:`Largeur en tête : 10 + 2 × 1,5 × 2,00 = **16 m**.
 Surface : (10 + 16) / 2 × 2,00 = **26 m²** (ou (10 + 1,5 × 2) × 2 = 26 m²).`},
@@ -1604,6 +2688,69 @@ Un ouvrage nouveau, non prévu au bordereau, fait l'objet d'un **prix nouveau** 
 > - Travaux du mois = cumul − cumul précédent ; puis retenue, avance, révision, pénalités, TVA.
 > - Révision : P = P0 (0,15 + 0,85 I/I0).
 > - DGD : solde définitif ; retenue rendue après la garantie de parfait achèvement.`,
+ sujet:{titre:"Situation de travaux n° 4 : cumul, retenues, révision et net à payer", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Marché de gros œuvre d'un centre de santé à Divo : montant **120 000 000 F HT**, délai **10 mois**. Vous préparez la situation n° 4 de l'entreprise.
+
+**Extrait du marché et avancement cumulé à la fin du mois 4**
+
+| Article | U | P.U. (F) | Qté marché | Qté cumulée |
+|---|---|---|---|---|
+| Terrassements | ft | 4 500 000 | 1 | 100 % |
+| Béton armé de fondations | m³ | 185 000 | 60 | 60 |
+| Béton armé d'élévation | m³ | 195 000 | 140 | 85 |
+| Maçonnerie | m² | 12 000 | 1 800 | 950 |
+| Aciers | kg | 1 000 | 18 000 | 12 400 |
+
+- Cumul de la situation n° 3 : **41 200 000 F HT** ;
+- Retenue de garantie **5 %** ; remboursement de l'avance : **15 %** des travaux du mois ;
+- Révision : P = P0 × (0,15 + 0,85 × I / I0) avec I0 = **100** et I = **104** ;
+- TVA **18 %** sur le net.
+
+### Partie A — Attachements (3 points)
+1. Qu'est-ce qu'un attachement ? Pour quels ouvrages de cette liste est-il indispensable et pourquoi ? (3 pts)
+
+### Partie B — Montant cumulé (7 points)
+2. Calculer le montant cumulé de chaque article et le total. (4 pts)
+3. Calculer le pourcentage d'avancement des trois derniers articles. (2 pts)
+4. En déduire le montant des travaux du mois. (1 pt)
+
+### Partie C — Décompte (8 points)
+5. Calculer la retenue de garantie et le remboursement de l'avance. (2 pts)
+6. Calculer le coefficient et le montant de la révision. (2 pts)
+7. Calculer le net HT, la TVA et le net à payer TTC. (4 pts)
+
+### Partie D — Pénalités (2 points)
+8. À la fin du chantier, le retard est de **12 jours**. Calculer la pénalité (1/1 000 du marché par jour, plafond 5 %). (2 pts)`,
+  corrige:`### Partie A — Attachements (3 pts)
+1. Constat écrit et **contradictoire** (entreprise + maître d'œuvre, signé) des quantités exécutées, avec croquis cotés. Indispensable pour les **fondations** et les **aciers** : une fois bétonnés ou remblayés, on ne peut plus les mesurer. *(3 pts)*
+
+### Partie B — Montant cumulé (7 pts)
+2. *(4 pts)*
+
+| Article | Calcul | Cumulé (F) |
+|---|---|---|
+| Terrassements | 100 % × 4 500 000 | 4 500 000 |
+| BA fondations | 60 × 185 000 | 11 100 000 |
+| BA élévation | 85 × 195 000 | 16 575 000 |
+| Maçonnerie | 950 × 12 000 | 11 400 000 |
+| Aciers | 12 400 × 1 000 | 12 400 000 |
+| **Total** | | **55 975 000** |
+
+3. BA élévation 85 / 140 = **60,7 %** ; maçonnerie 950 / 1 800 = **52,8 %** ; aciers 12 400 / 18 000 = **68,9 %**. *(2 pts)*
+4. Travaux du mois : 55 975 000 − 41 200 000 = **14 775 000 F**. *(1 pt)*
+
+### Partie C — Décompte (8 pts)
+5. Retenue : 5 % × 14 775 000 = **738 750 F** ; avance : 15 % = **2 216 250 F**. *(2 pts)*
+6. Coefficient : 0,15 + 0,85 × 1,04 = **1,034** ; révision : 14 775 000 × 0,034 = **+ 502 350 F**. *(2 pts)*
+7. Net HT = 14 775 000 − 738 750 − 2 216 250 + 502 350 = **12 322 350 F** ; TVA = **2 218 023 F** ; **net à payer : 14 540 373 F TTC**. *(4 pts)*
+
+### Partie D — Pénalités (2 pts)
+8. 120 000 000 / 1 000 × 12 = **1 440 000 F** ; plafond 5 % = 6 000 000 F, non atteint → on retient 1 440 000 F. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Facturer le cumul au lieu des seuls travaux du mois.
+> - Appliquer la révision au cumul déjà révisé dans les situations précédentes.
+> - Oublier le remboursement de l'avance : l'écart se paie au décompte final.`},
  exercices:[
   {t:"Net à payer d'une situation", d:1, e:`Marché de 80 M F HT. Cumul à fin de mois : 32 M ; cumul précédent : 20 M. Retenue de garantie 5 % ; remboursement de l'avance : 10 % des travaux du mois ; TVA 18 %. Calculer le net à payer HT et TTC.`, c:`Travaux du mois : 32 − 20 = **12 M**.
 Retenue : 0,6 M ; avance : 1,2 M → net HT : 12 − 0,6 − 1,2 = **10,2 M**.
@@ -1695,6 +2842,82 @@ Détail d'un lot (fondations) : propreté 1,18 × 75 000 = 88 500 ; béton armé
 > - Démarche complète : plans → avant-métré par lots → DQE → récapitulatif → contrôles par ratios → sous-détail des matériaux.
 > - Toujours vérifier coût au m², part du gros œuvre et ratios béton/acier.
 > - Les VRD et branchements s'ajoutent (5 à 10 %).`,
+ sujet:{titre:"Étude de cas : avant-métré et devis complet d'un studio-boutique", duree:180, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un client d'Abobo veut un **studio-boutique** de plain-pied. Vous réalisez l'avant-métré complet et le devis.
+
+**Description**
+- Murs en agglos de 15 : rectangle de **7,15 × 5,15 m** hors tout (murs de 0,15 m) ;
+- Fondations : fouille en rigole **0,50 × 0,60** ; propreté **5 cm** sur 0,50 m ; semelle **0,40 × 0,20** ; soubassement en agglos pleins de 15 sur **0,60 m** ; chaînage bas **15 × 20** ;
+- Dallage sur hérisson entre murs bruts ;
+- Élévation : hauteur de maçonnerie **2,80 m** ; **6 poteaux 15 × 15** (largeur vue 0,15) ; chaînage haut **15 × 20** ; baies : 1 porte **0,90 × 2,20** et 2 fenêtres **1,20 × 1,20** ; linteaux **15 × 20** débordant de **0,20 m** de chaque côté ;
+- Toiture à deux pans, faîtage dans la grande longueur, pente **20 %**, débords **0,50 m** partout ;
+- Enduits : intérieur sur 2,80 m (sans tableaux), extérieur sur **3,40 m** de haut ; carrelage entre murs enduits (enduit 1,5 cm) ; peinture sur toutes les surfaces enduites.
+
+**Prix unitaires (F HT)** : installation et implantation 150 000 (ft) ; fouilles 4 500/m³ ; propreté 75 000/m³ ; béton armé (aciers et coffrages compris) 250 000/m³ ; soubassement 12 000/m² ; dallage sur hérisson 16 000/m² ; maçonnerie 12 000/m² ; charpente + couverture 22 000/m² (rampant) ; enduit intérieur 3 000/m² ; enduit extérieur 3 500/m² ; carrelage 11 000/m² ; peinture 2 500/m² ; porte métallique 250 000 (u) ; fenêtres aluminium 75 000/m² ; électricité 450 000 (ft).
+
+### Partie A — Infrastructure (6 points)
+1. Calculer le périmètre à l'axe, les fouilles, la propreté, la semelle, le soubassement et le chaînage bas. (4 pts)
+2. Calculer la surface du dallage. (2 pts)
+
+### Partie B — Élévation (5 points)
+3. Calculer la maçonnerie nette. (3 pts)
+4. Calculer le béton armé d'élévation (poteaux, chaînage haut, linteaux). (2 pts)
+
+### Partie C — Toiture et finitions (4 points)
+5. Calculer le rampant et la surface de couverture. (2 pts)
+6. Calculer les enduits intérieur et extérieur, le carrelage et la peinture. (2 pts)
+
+### Partie D — Devis (5 points)
+7. Établir le DQE, le total HT, la TVA (18 %) et le total TTC. (4 pts)
+8. Calculer le coût au m² hors œuvre et commenter. (1 pt)`,
+  corrige:`### Partie A — Infrastructure (6 pts)
+1. Axe : 2 × (7,00 + 5,00) = **24,00 m**. *(4 pts)*
+   - Fouilles : 24 × 0,50 × 0,60 = **7,20 m³** ;
+   - Propreté : 24 × 0,50 × 0,05 = **0,60 m³** ;
+   - Semelle : 24 × 0,40 × 0,20 = **1,92 m³** ;
+   - Soubassement : 24 × 0,60 = **14,40 m²** ;
+   - Chaînage bas : 24 × 0,15 × 0,20 = **0,72 m³**.
+2. Dallage : 6,85 × 4,85 = **33,22 m²**. *(2 pts)*
+
+### Partie B — Élévation (5 pts)
+3. Brut 24 × 2,80 = 67,20 m² − poteaux 6 × 0,15 × 2,80 = 2,52 − porte 1,98 − fenêtres 2,88 − linteaux (1,30 + 2 × 1,60) × 0,20 = 0,90 → **58,92 m²**. *(3 pts)*
+4. Poteaux 6 × 0,15 × 0,15 × 2,80 = 0,378 ; chaînage 24 × 0,15 × 0,20 = 0,720 ; linteaux 4,50 × 0,15 × 0,20 = 0,135 → **1,23 m³**. *(2 pts)*
+
+### Partie C — Toiture et finitions (4 pts)
+5. Projection : 5,15 / 2 + 0,50 = 3,075 m ; rampant = 3,075 × √1,04 = **3,14 m** ; longueur 7,15 + 1,00 = 8,15 m → **51,18 m²**. *(2 pts)*
+6. Intérieur : 2 × (6,85 + 4,85) × 2,80 = 65,52 − 1,98 − 2,88 = **60,66 m²** ; extérieur : 2 × (7,15 + 5,15) × 3,40 = 83,64 − 4,86 = **78,78 m²** ; carrelage : 6,82 × 4,82 = **32,87 m²** ; peinture : **139,44 m²**. *(2 pts)*
+
+### Partie D — Devis (5 pts)
+7. *(4 pts)*
+
+| Désignation | U | Qté | P.U. | Montant (F) |
+|---|---|---|---|---|
+| Installation, implantation | ft | 1 | 150 000 | 150 000 |
+| Fouilles en rigole | m³ | 7,20 | 4 500 | 32 400 |
+| Béton de propreté | m³ | 0,60 | 75 000 | 45 000 |
+| Béton armé de fondations (1,92 + 0,72) | m³ | 2,64 | 250 000 | 660 000 |
+| Soubassement | m² | 14,40 | 12 000 | 172 800 |
+| Dallage sur hérisson | m² | 33,22 | 16 000 | 531 520 |
+| Maçonnerie d'agglos de 15 | m² | 58,92 | 12 000 | 707 040 |
+| Béton armé d'élévation | m³ | 1,23 | 250 000 | 307 500 |
+| Charpente et couverture | m² | 51,18 | 22 000 | 1 125 960 |
+| Enduit intérieur | m² | 60,66 | 3 000 | 181 980 |
+| Enduit extérieur | m² | 78,78 | 3 500 | 275 730 |
+| Carrelage | m² | 32,87 | 11 000 | 361 570 |
+| Peinture | m² | 139,44 | 2 500 | 348 600 |
+| Porte métallique | u | 1 | 250 000 | 250 000 |
+| Fenêtres aluminium | m² | 2,88 | 75 000 | 216 000 |
+| Électricité | ft | 1 | 450 000 | 450 000 |
+| **Total HT** | | | | **5 816 100** |
+| TVA 18 % | | | | 1 046 898 |
+| **Total TTC** | | | | **6 862 998** |
+
+8. Surface hors œuvre : 7,15 × 5,15 = 36,82 m² → 5 816 100 / 36,82 = **≈ 158 000 F HT/m²**. Le ratio est plus élevé que pour une grande maison : les postes fixes (installation, électricité, menuiseries) pèsent lourd sur une petite surface. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier un lot entier (toiture, enduits extérieurs, électricité) : la vérification par ratio au m² permet de le détecter.
+> - Mesurer l'enduit extérieur sur le périmètre à l'axe.
+> - Mélanger dimensions hors tout, à l'axe et entre murs.`},
  exercices:[
   {t:"Vérifier un lot du devis", d:1, e:`Recalculer le lot maçonnerie : 101,56 m² d'agglos de 15 à 9 500 F/m² et 39,16 m² d'agglos de 10 à 7 500 F/m².`, c:`101,56 × 9 500 = **964 820 F** ; 39,16 × 7 500 = **293 700 F**.
 Total : **1 258 520 F HT** ✔ (identique au récapitulatif).`},

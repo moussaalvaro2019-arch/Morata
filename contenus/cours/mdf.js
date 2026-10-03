@@ -107,6 +107,55 @@ La même charge exerce une pression 56 fois plus forte sous les pieds : il faut 
 > - p = F/S ; 1 bar = 10⁵ Pa ≈ 10,2 mCE.
 > - Pression relative (manomètre) + atmosphérique = absolue.
 > - Aspiration limitée à 10,33 m en théorie, ≈ 7 m en pratique.`,
+ sujet:{titre:"Pressions et conversions autour d'une citerne de chantier", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur un chantier d'immeuble à Koumassi, on installe une citerne d'eau sur une dalle, une pompe et un réseau provisoire. Le chef de chantier doit maîtriser les pressions.
+
+**Données**
+- g = **9,81 m/s²** ; ρ(eau) = **1 000 kg/m³** ; p = F/S ; 1 bar = 10⁵ Pa ; 1 mCE = 9 810 Pa ; p(atm) ≈ **1,01 bar** ;
+- Citerne : **3 m³** d'eau ; masse de la cuve vide **150 kg** ;
+- Appui sur **4 pieds** de **12 × 12 cm**, ou sur un socle de **1,60 × 1,60 m** ;
+- Pression maximale admise sur la chape de la dalle : **0,25 MPa** ;
+- Forage : niveau de l'eau à **9 m** sous la pompe de surface.
+
+### Partie A — Notions (4 points)
+1. Qu'est-ce qu'un fluide ? Comparer l'eau et l'air (masse volumique, compressibilité). (2 pts)
+2. Distinguer pression relative et pression absolue. Que mesure un manomètre ? (2 pts)
+
+### Partie B — La citerne (6 points)
+3. Calculer le poids total de la citerne pleine. (2 pts)
+4. Calculer la pression sous les pieds, puis sous le socle. Comparer à la pression admise. (3 pts)
+5. Conclure. (1 pt)
+
+### Partie C — Conversions (6 points)
+6. Convertir : 4,2 bar en kPa et en mCE ; 18 mCE en bar ; 1,2 MPa en bar. (4 pts)
+7. Un manomètre indique 3 bar. Quelle est la pression absolue ? (1 pt)
+8. Quelle pression obtient-on au pied d'une colonne d'eau de 30 m ? (1 pt)
+
+### Partie D — L'aspiration (4 points)
+9. Peut-on aspirer l'eau du forage avec la pompe de surface ? Justifier par la limite théorique et la limite pratique. (2 pts)
+10. Quelle solution adopter ? (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. Un fluide se déforme sans résistance permanente et **épouse la forme** de son contenant. Eau : ρ = 1 000 kg/m³, pratiquement **incompressible** ; air : ρ = 1,2 kg/m³, très **compressible**. *(2 pts)*
+2. La pression **relative** est mesurée au-dessus de la pression atmosphérique ; la pression **absolue** = relative + atmosphérique. Un manomètre indique en général la **pression relative**. *(2 pts)*
+
+### Partie B — Citerne (6 pts)
+3. Masse : 3 000 + 150 = 3 150 kg → P = 3 150 × 9,81 = **30,9 kN**. *(2 pts)*
+4. Pieds : S = 4 × 0,12 × 0,12 = 0,0576 m² → p = 30,9/0,0576 = **536 kPa = 0,54 MPa** > 0,25 MPa ✗ ; socle : S = 2,56 m² → p = **12,1 kPa** ✓ (44 fois moins). *(3 pts)*
+5. Sur pieds, la chape serait poinçonnée : il faut un **socle de répartition** (ou des platines plus grandes) et vérifier que la dalle supporte 30,9 kN à cet endroit. *(1 pt)*
+
+### Partie C — Conversions (6 pts)
+6. 4,2 bar = **420 kPa** = 420 000/9 810 = **42,8 mCE** ; 18 mCE = 18 × 9 810 = 176 580 Pa = **1,77 bar** ; 1,2 MPa = **12 bar**. *(4 pts)*
+7. p(absolue) = 3 + 1,01 = **4,01 bar**. *(1 pt)*
+8. p = 30 × 9 810 = 294 300 Pa ≈ **2,9 bar** (repère : 1 bar ≈ 10 m d'eau). *(1 pt)*
+
+### Partie D — Aspiration (4 pts)
+9. Non : la pression atmosphérique ne peut faire monter l'eau qu'à **10,33 m** en théorie ; avec les pertes de charge et la tension de vapeur, on ne dépasse pas **6 à 7 m** en pratique. À 9 m, la pompe **cavite** et ne débite pas. *(2 pts)*
+10. Installer une **pompe immergée** dans le forage (elle **refoule** au lieu d'aspirer), ou descendre la pompe de surface dans une fosse à moins de 6 m du niveau de l'eau. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre masse (kg) et poids (N).
+> - Oublier de convertir les cm² en m².
+> - Confondre bar et MPa : 1 MPa = 10 bar.`},
  exercices:[
   {t:"Conversions de pression", d:1, e:`Convertir : a) 3 bar en Pa et en mCE ; b) 25 mCE en bar ; c) 450 kPa en bar.`, c:`a) 3 bar = **300 000 Pa** = 3 × 10,2 = **30,6 mCE**.
 b) 25 mCE = 25 × 9 810 = 245 250 Pa = **2,45 bar**.
@@ -164,6 +213,57 @@ Fond de la même bâche (3 × 3 m, 2 m d'eau) : p = 19,6 kPa ; F = 19,6 × 9 = *
 > - Vases communicants : même niveau, même pression.
 > - Paroi verticale : F = ½ ρ g h² b, à h/3 du fond ; fond : F = ρ g h S.
 > - Drainer les murs de soutènement pour supprimer la poussée de l'eau.`,
+ sujet:{titre:"Bâche à eau enterrée et château d'eau : pressions et poussées hydrostatiques", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour un groupe scolaire à Bouaké, on construit une **bâche à eau** en béton armé et l'on étudie la distribution depuis le château d'eau du quartier.
+
+**Données**
+- p = ρ g h ; poussée sur une paroi verticale : F = ½ ρ g h² b (appliquée à h/3 du fond) ; fond : F = ρ g h S ;
+- Bâche : dimensions intérieures **4,00 × 3,00 m** ; hauteur d'eau **2,50 m** ;
+- Château d'eau : niveau de l'eau à **28 m** au-dessus du sol ; robinets à 1, 4, 7, 10, 13, 16 et 19 m au-dessus du sol ; pression minimale souhaitée **1 bar** ;
+- Coffrage d'un voile : béton frais (ρ = **2 400 kg/m³**) coulé sur **3 m** de hauteur ; banche de **0,40 m** de largeur.
+
+### Partie A — Loi de l'hydrostatique (4 points)
+1. Énoncer la loi fondamentale de l'hydrostatique. Pourquoi la pression ne dépend-elle pas de la forme du récipient ? (2 pts)
+2. Expliquer le principe des vases communicants. Donner un exemple sur un chantier. (2 pts)
+
+### Partie B — La bâche (8 points)
+3. Calculer la pression au fond de la bâche. (1 pt)
+4. Calculer la poussée sur la paroi de 4 m, son point d'application et le moment à la base de la paroi (supposée encastrée en pied). (4 pts)
+5. Calculer la poussée sur le fond. (2 pts)
+6. De quel côté de la paroi place-t-on les aciers verticaux principaux ? (1 pt)
+
+### Partie C — Le château d'eau (5 points)
+7. Calculer la pression statique (débit nul) à chaque niveau de robinet (présenter un tableau). (4 pts)
+8. Jusqu'à quel niveau la pression minimale est-elle assurée ? (1 pt)
+
+### Partie D — Le coffrage (3 points)
+9. Calculer la pression du béton frais en pied de coffrage et la poussée sur une banche de 0,40 m de large. (3 pts)`,
+  corrige:`### Partie A — Loi (4 pts)
+1. Dans un liquide au repos, **p = ρ g h** (pression relative) : elle augmente de 9,81 kPa (≈ 0,1 bar) par mètre de profondeur. Elle ne dépend que de la **hauteur de liquide** au-dessus du point, pas du volume ni de la forme. *(2 pts)*
+2. Tous les points d'un liquide au repos situés au **même niveau** ont la même pression : dans des récipients reliés, l'eau s'établit au même niveau. Exemple : le **niveau à eau** (tuyau transparent) pour reporter une altitude d'un poteau à l'autre. *(2 pts)*
+
+### Partie B — Bâche (8 pts)
+3. p = 1 000 × 9,81 × 2,5 = **24,5 kPa**. *(1 pt)*
+4. F = 0,5 × 9 810 × 2,5² × 4 = **122,6 kN** (30,7 kN par mètre de paroi), appliquée à 2,5/3 = **0,83 m** du fond ; M = 122,6 × 0,833 = **102,2 kN·m** (25,5 kN·m par mètre). *(4 pts)*
+5. F = 24,5 × (4 × 3) = **294,3 kN**. *(2 pts)*
+6. La paroi fléchit comme une console poussée par l'eau : les fibres tendues sont **côté eau**, en pied : les aciers verticaux principaux sont placés **côté eau** (avec un enrobage adapté et un béton étanche). *(1 pt)*
+
+### Partie C — Château d'eau (5 pts)
+7. p = (28 − z) × 9 810 :
+| Robinet z (m) | 1 | 4 | 7 | 10 | 13 | 16 | 19 |
+|---|---|---|---|---|---|---|---|
+| Hauteur d'eau (m) | 27 | 24 | 21 | 18 | 15 | 12 | 9 |
+| p (bar) | 2,65 | 2,35 | 2,06 | 1,77 | 1,47 | 1,18 | **0,88** |
+*(4 pts)*
+8. La pression statique reste ≥ 1 bar jusqu'au robinet à **16 m** ; à 19 m elle est insuffisante (0,88 bar), et en fonctionnement les pertes de charge la réduiront encore : un **surpresseur** est nécessaire pour les niveaux hauts. *(1 pt)*
+
+### Partie D — Coffrage (3 pts)
+9. p = 2 400 × 9,81 × 3 = **70,6 kPa** ; poussée triangulaire : F = 0,5 × 70,6 × 3 × 0,40 = **42,4 kN** par banche. Le béton frais pousse comme un liquide **2,4 fois plus lourd** que l'eau : les tiges et serre-joints doivent être dimensionnés en conséquence, et la vitesse de coulage maîtrisée. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la poussée sur une paroi avec ρ g h × S (c'est la pression au fond, pas la pression moyenne).
+> - Placer le point d'application à mi-hauteur : il est au tiers inférieur.
+> - Oublier les pertes de charge : la pression statique est un maximum.`},
  exercices:[
   {t:"Pression au fond d'une piscine", d:1, e:`Calculer la pression relative au fond d'une piscine de 1,8 m de profondeur, en kPa et en bar.`, c:`p = 1 000 × 9,81 × 1,8 = **17 658 Pa ≈ 17,7 kPa** = **0,177 bar**.`},
   {t:"Poussée sur la paroi d'une piscine", d:2, e:`Une piscine de 10 × 5 m a 1,5 m d'eau. Calculer la poussée sur une grande paroi (10 m) et son point d'application, puis la force sur le fond.`, c:`Paroi : F = 0,5 × 9 810 × 1,5² × 10 = **110 363 N ≈ 110,4 kN**, à 1,5/3 = **0,5 m** du fond.
@@ -218,6 +318,56 @@ Un corps flotte en s'enfonçant d'un volume tel que ρ(liquide) × V(immergé) =
 > - Sous-pression u = ρ g h(w) sous le radier ; force u × S.
 > - Ouvrages enterrés vides : vérifier G(min) ≥ 1,1 u S ; lester, ancrer ou drainer.
 > - Le radier doit aussi résister en flexion à la sous-pression.`,
+ sujet:{titre:"Sous-pression sous une bâche enterrée : vérification au soulèvement", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une bâche à eau enterrée est construite dans une zone de nappe haute à Grand-Bassam. En saison des pluies, on la vide pour la nettoyer.
+
+**Données**
+- Dimensions extérieures : **5,00 × 4,00 m** ; hauteur **2,90 m** (radier 0,25 m ; voiles de 0,20 m sur 2,50 m ; dalle de couverture 0,15 m) ; le dessus de la dalle est au niveau du terrain ;
+- Nappe en saison des pluies : **0,60 m** sous le terrain naturel ; béton armé : **25 kN/m³** ;
+- u = ρ g h(w) ; condition de stabilité : G(min) ≥ **1,1** × u × S ;
+- Solution 1 : laisser **0,60 m** d'eau dans la bâche (dimensions intérieures **4,60 × 3,60 m**) ;
+- Solution 2 : radier débordant de **0,50 m** tout autour (même épaisseur) ; terre au-dessus du débord : **18 kN/m³** au-dessus de la nappe, **20 kN/m³** (saturée) en dessous ;
+- Flotteur sphérique d'un robinet de remplissage : diamètre **12 cm**, masse **150 g**.
+
+### Partie A — Principe (3 points)
+1. Énoncer le principe d'Archimède. D'où vient la poussée ? (2 pts)
+2. Citer trois ouvrages exposés au soulèvement. (1 pt)
+
+### Partie B — Vérification de la bâche vide (8 points)
+3. Calculer la hauteur d'eau sous le radier, la sous-pression et la force de soulèvement. (3 pts)
+4. Calculer le volume de béton et le poids propre de la bâche vide. (3 pts)
+5. La bâche est-elle stable au soulèvement ? (2 pts)
+
+### Partie C — Solutions (6 points)
+6. Vérifier la solution 1. Pourquoi est-elle peu fiable ? (2 pts)
+7. Vérifier la solution 2 (attention : la sous-pression s'exerce aussi sous le débord). (4 pts)
+
+### Partie D — Flottaison (3 points)
+8. Calculer la force verticale nette exercée par le flotteur entièrement immergé. À quoi sert-elle ? (3 pts)`,
+  corrige:`### Partie A — Principe (3 pts)
+1. Tout corps plongé dans un liquide subit une force **verticale vers le haut** égale au **poids du liquide déplacé** : F = ρ g V. Elle provient des pressions sur la face inférieure, plus fortes (plus profondes) que sur la face supérieure. *(2 pts)*
+2. Cuves et fosses enterrées vides, piscines vidées, sous-sols et parkings en cours de construction, radiers de stations de pompage. *(1 pt)*
+
+### Partie B — Bâche vide (8 pts)
+3. Dessous du radier à 2,90 m sous le terrain ; nappe à 0,60 m → h(w) = **2,30 m** ; u = 9,81 × 2,30 = **22,6 kPa** ; F = 22,6 × 20 = **451 kN**. *(3 pts)*
+4. Radier : 5 × 4 × 0,25 = 5,0 m³ ; dalle : 5 × 4 × 0,15 = 3,0 m³ ; voiles : (20 − 4,6 × 3,6) × 2,50 = 3,44 × 2,50 = 8,6 m³ ; total **16,6 m³** → G = 16,6 × 25 = **415 kN**. *(3 pts)*
+5. 1,1 × 451 = **496 kN** > 415 kN : la bâche vide **peut se soulever** (fissuration des liaisons, rupture des canalisations, basculement). *(2 pts)*
+
+### Partie C — Solutions (6 pts)
+6. Eau : 4,60 × 3,60 × 0,60 × 9,81 = **97,5 kN** → G = 512,5 kN ≥ 496 ✓. Mais il suffit d'une vidange complète (nettoyage, fuite, oubli) pour perdre la sécurité : solution **à éviter**. *(2 pts)*
+7. Radier 6,00 × 5,00 m : surface soumise à la sous-pression **30 m²** → F = 22,6 × 30 = **677 kN** → 1,1 F = **745 kN**.
+- Débord en béton : (30 − 20) × 0,25 × 25 = **62,5 kN** ;
+- Terre sur le débord (10 m², hauteur 2,65 m : 0,60 m au-dessus de la nappe, 2,05 m en dessous) : 10 × (0,60 × 18 + 2,05 × 20) = **518 kN** ;
+- G = 415 + 62,5 + 518 = **995,5 kN** ≥ 745 kN ✓.
+Le débord, chargé par les terres, stabilise durablement la bâche. *(4 pts)*
+
+### Partie D — Flottaison (3 pts)
+8. V = 4/3 × π × 0,06³ = 9,05 × 10⁻⁴ m³ ; poussée : 1 000 × 9,81 × 9,05 × 10⁻⁴ = 8,88 N ; poids : 0,15 × 9,81 = 1,47 N → force nette **7,4 N** vers le haut. Transmise par le bras de levier, elle **ferme le robinet** de remplissage quand le niveau monte. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Vérifier le soulèvement avec l'ouvrage plein : c'est l'état **vide** qui est critique.
+> - Oublier la sous-pression sous le débord du radier.
+> - Compter les charges d'exploitation (eau, personnes) dans G(min).`},
  exercices:[
   {t:"Poussée sur une cuve", d:1, e:`Une cuve enterrée de 2 × 2 × 1,5 m (dimensions extérieures) est entièrement dans la nappe. Elle pèse 3 t à vide. Se soulève-t-elle ?`, c:`F(A) = 9,81 × (2 × 2 × 1,5) = **58,9 kN** ; poids = 3 × 9,81 = **29,4 kN** < 58,9 kN → **oui**, elle se soulève vide. Il faut un lest d'environ 1,1 × 58,9 − 29,4 = 35,4 kN (3,6 t) ou un ancrage.`},
   {t:"Sous-pression d'un sous-sol", d:2, e:`Un parking enterré a un radier de 25 × 18 m. La nappe peut monter à 2,5 m au-dessus du dessous du radier. Calculer la sous-pression et la force totale. Quel poids minimal doit avoir l'ouvrage (coefficient 1,1) ?`, c:`u = 9,81 × 2,5 = **24,5 kPa** ; F = 24,5 × 450 = **11 036 kN**.
@@ -307,6 +457,53 @@ Débit probable de la maison : 0,47 L/s ; vitesse limitée à 1,5 m/s.
 > - Continuité : S₁ v₁ = S₂ v₂ ; aux branchements Q = Σ Qᵢ.
 > - Vitesse dans les réseaux intérieurs : 1,5 à 2 m/s au plus.
 > - Débit probable = Σ débits de base × y, y = 0,8/√(n − 1).`,
+ sujet:{titre:"Débits, vitesses et diamètres d'une maison de dix appareils", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On dimensionne l'alimentation en eau d'une villa à Bingerville comprenant **10 appareils** sanitaires.
+
+**Données**
+- Q = V/t = S × v ; S = π D²/4 ; 1 L/s = 3,6 m³/h ; continuité : S₁ v₁ = S₂ v₂ ;
+- Débits de base : lavabo, évier, douche, lave-linge **0,20 L/s** ; baignoire, robinet de jardin **0,33 L/s** ; WC **0,12 L/s** ;
+- Appareils : 2 lavabos, 2 douches, 1 baignoire, 2 WC, 1 évier, 1 lave-linge, 1 robinet de jardin ;
+- Simultanéité : y = 0,8/√(n − 1) ; vitesse maximale : **1,5 m/s** ;
+- Diamètres intérieurs disponibles : **16 ; 20,4 ; 26 ; 32,6 mm**.
+
+### Partie A — Notions (3 points)
+1. Définir le débit volumique et donner la relation entre débit, section et vitesse. (2 pts)
+2. Pourquoi applique-t-on un coefficient de simultanéité ? (1 pt)
+
+### Partie B — Mesures (4 points)
+3. Un seau de 10 L se remplit en 32 s. Calculer le débit en L/s et en m³/h. (2 pts)
+4. Combien de temps faut-il pour remplir une citerne de 2 000 L avec un débit de 0,35 L/s ? (2 pts)
+
+### Partie C — Dimensionnement (9 points)
+5. Calculer la somme des débits de base, le coefficient de simultanéité et le débit probable. (3 pts)
+6. Calculer la section et le diamètre intérieur minimaux, puis choisir le tube. (3 pts)
+7. Calculer la vitesse réelle dans le tube choisi et dans le tube immédiatement inférieur. Conclure. (3 pts)
+
+### Partie D — Continuité (4 points)
+8. Un tube de 40 mm où l'eau circule à 0,8 m/s se réduit à 20 mm. Calculer la nouvelle vitesse. Commenter. (2 pts)
+9. Calculer le débit d'un caniveau de 0,40 m de large où l'eau a 0,12 m de hauteur et une vitesse de 0,9 m/s. (2 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. Le débit volumique Q est le **volume** qui traverse une section par unité de **temps** (m³/s, L/s, m³/h) ; **Q = S × v**. *(2 pts)*
+2. Tous les appareils ne fonctionnent pas en même temps : additionner tous les débits conduirait à des tubes **surdimensionnés** (coûteux et à vitesse trop faible). *(1 pt)*
+
+### Partie B — Mesures (4 pts)
+3. Q = 10/32 = **0,31 L/s** = 0,3125 × 3,6 = **1,13 m³/h**. *(2 pts)*
+4. t = 2 000/0,35 = 5 714 s ≈ **95 min** (1 h 35). *(2 pts)*
+
+### Partie C — Dimensionnement (9 pts)
+5. Σ = 2 × 0,20 + 2 × 0,20 + 0,33 + 2 × 0,12 + 0,20 + 0,20 + 0,33 = **2,10 L/s** ; y = 0,8/√9 = **0,267** ; Q = 2,10 × 0,267 = **0,56 L/s**. *(3 pts)*
+6. S = 0,000 56/1,5 = **3,73 × 10⁻⁴ m²** ; D = √(4 S/π) = **21,8 mm** → on choisit le diamètre intérieur **26 mm**. *(3 pts)*
+7. 26 mm : S = 5,31 × 10⁻⁴ m² → v = **1,05 m/s** ✓ ; 20,4 mm : S = 3,27 × 10⁻⁴ m² → v = **1,71 m/s** > 1,5 ✗ (bruit, usure, coups de bélier). On retient le **26 mm**. *(3 pts)*
+
+### Partie D — Continuité (4 pts)
+8. Diamètre divisé par 2 → section divisée par 4 → v₂ = 4 × 0,8 = **3,2 m/s** : beaucoup trop rapide pour un réseau intérieur. *(2 pts)*
+9. Q = 0,40 × 0,12 × 0,9 = 0,0432 m³/s = **43,2 L/s**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser le diamètre extérieur d'un tube PER ou PVC.
+> - Oublier de convertir les L/s en m³/s et les mm en m.
+> - Additionner tous les débits de base sans simultanéité.`},
  exercices:[
   {t:"Mesurer un débit", d:1, e:`Une douche remplit un seau de 12 L en 40 s. Calculer le débit en L/s et en m³/h, puis le volume consommé par une douche de 6 minutes.`, c:`Q = 12/40 = **0,3 L/s** = 0,3 × 3,6 = **1,08 m³/h**.
 Volume : 0,3 × 360 = **108 L** : un pommeau économe (0,15 L/s) diviserait la consommation par deux.`},
@@ -367,6 +564,58 @@ Règles :
 > - Pas de retour d'eau non potable vers le réseau public.
 > - Consommation urbaine : 80 à 150 L/personne/jour.
 > - Évacuations : lavabo 32, douche/évier 40, WC 100 mm ; pente 1 à 3 % ; siphons et ventilation.`,
+ sujet:{titre:"Plomberie d'une villa : diagnostic de l'alimentation et des évacuations", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un technicien diagnostique l'installation sanitaire d'une villa de **6 occupants** à Abobo avant sa vente.
+
+**Constats**
+- Le réseau public délivre **4,5 bar** ; aucun réducteur de pression ; un seul robinet d'arrêt général ;
+- Le **forage** de la parcelle est raccordé directement sur le réseau public, sans dispositif anti-retour ;
+- Une canalisation d'eau potable traverse un **regard d'eaux usées** ;
+- WC raccordé en **Ø 50 mm** ; douche sans **siphon** ; chute d'eaux usées **non ventilée** ;
+- Collecteur horizontal de **12 m** posé avec une pente de **0,5 %** ;
+- Coupures d'eau fréquentes ; consommation estimée **120 L par personne et par jour**.
+
+### Partie A — Alimentation (6 points)
+1. Quelle pression de confort viser au robinet ? Que faut-il ajouter à l'installation ? Pourquoi ? (2 pts)
+2. Expliquer le danger du raccordement du forage et de la traversée du regard. Proposer les corrections. (2 pts)
+3. Citer deux matériaux de canalisation adaptés à la distribution intérieure et un adapté aux réseaux enterrés. (2 pts)
+
+### Partie B — Réserve d'eau (5 points)
+4. Calculer le volume d'une réserve de deux jours et choisir la citerne. (2 pts)
+5. La citerne est posée en toiture. Quelle charge représente-t-elle ? Quelle précaution prendre ? (2 pts)
+6. Quelle autre solution de stockage peut-on proposer ? (1 pt)
+
+### Partie C — Évacuations (7 points)
+7. Distinguer eaux usées, eaux vannes et eaux pluviales. (1 pt)
+8. Relever les défauts des évacuations et donner les diamètres corrects des appareils. (3 pts)
+9. Rôle du siphon et de la ventilation de la chute. (2 pts)
+10. Calculer la dénivellation du collecteur de 12 m avec une pente correcte de 2 %. (1 pt)
+
+### Partie D — Synthèse (2 points)
+11. Classer les travaux par ordre de priorité. (2 pts)`,
+  corrige:`### Partie A — Alimentation (6 pts)
+1. **1 à 3 bar** au robinet. À 4,5 bar : bruits, usure des joints et robinetteries, coups de bélier, fuites. Ajouter un **réducteur de pression** réglé vers 3 bar après le compteur, et des **robinets d'arrêt par pièce** pour réparer sans tout couper. *(2 pts)*
+2. Le forage (eau non contrôlée) peut **refouler** dans le réseau public et le contaminer : séparer les deux réseaux, ou installer un **disconnecteur** / clapet anti-retour agréé. Une conduite d'eau potable dans un regard d'eaux usées peut aspirer de l'eau polluée en cas de dépression : la **dévier** hors du regard. *(2 pts)*
+3. Intérieur : **PPR** soudé, **PER** ou **multicouche** ; enterré : **PE** ou **PVC pression**. *(2 pts)*
+
+### Partie B — Réserve (5 pts)
+4. V = 6 × 120 × 2 = **1 440 L** → citerne de **1 500 L**. *(2 pts)*
+5. 1 500 L d'eau = 1,5 t ≈ **14,7 kN** (plus la cuve) : vérifier la **structure** (dalle ou charpente) et poser la citerne sur un **support** qui répartit la charge sur les éléments porteurs. *(2 pts)*
+6. Une **bâche** au sol ou enterrée avec un **surpresseur** (pas de charge en toiture, pression régulière). *(1 pt)*
+
+### Partie C — Évacuations (7 pts)
+7. **EU** : lavabos, douches, éviers, machines ; **EV** : WC ; **EP** : toitures et cours (réseau séparé de préférence). *(1 pt)*
+8. Défauts : WC en Ø 50 (il faut **100 mm**, 90 minimum) ; douche sans siphon ; chute non ventilée ; pente de 0,5 % insuffisante (1 à 3 %). Diamètres : lavabo **32 mm** ; douche, évier, baignoire, machine **40 mm** ; WC et chute **100 mm**. *(3 pts)*
+9. Le **siphon** (garde d'eau de 50 mm) bloque les **odeurs** du réseau ; la **ventilation** primaire de la chute en toiture évite que l'écoulement **désamorce** les siphons par aspiration. *(2 pts)*
+10. 12 × 0,02 = **0,24 m** de dénivellation. *(1 pt)*
+
+### Partie D — Synthèse (2 pts)
+11. 1. **Santé** : séparer le forage du réseau public, dévier la conduite du regard ; 2. **Hygiène** : siphon de la douche, ventilation de la chute, WC en Ø 100 ; 3. **Durabilité** : réducteur de pression, reprise de la pente du collecteur ; 4. **Confort** : réserve d'eau et robinets d'arrêt. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Raccorder un forage ou une citerne d'eau de pluie au réseau public sans protection.
+> - Poser une citerne en toiture sans vérifier la structure.
+> - Réduire le diamètre d'une évacuation vers l'aval.`},
  exercices:[
   {t:"Volume d'une bâche", d:1, e:`Une famille de 6 personnes consomme 120 L par personne et par jour. Quel volume de bâche faut-il pour 2 jours d'autonomie ?`, c:`Consommation : 6 × 120 = **720 L/jour** → 2 jours : **1 440 L** → on choisit une bâche de **1,5 à 2 m³**.`},
   {t:"Pression trop forte", d:1, e:`Le réseau public arrive à 5 bar chez un client. Quels problèmes cela peut-il causer ? Que poser ?`, c:`Bruits dans les canalisations, coups de bélier, usure des robinets et des chasses d'eau, fuites, surconsommation.
@@ -424,6 +673,52 @@ Par un orifice situé à h sous la surface libre : v = √(2 g h). Le débit ré
 > - Fluide réel : H₁ = H₂ + ΔH.
 > - Torricelli : v = √(2gh) ; Q = Cd S √(2gh), Cd ≈ 0,6.
 > - Venturi : la pression baisse là où la vitesse augmente.`,
+ sujet:{titre:"Applications du théorème de Bernoulli dans un immeuble et sur un chantier", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un bureau d'études vérifie la pression d'un immeuble alimenté par un château d'eau, puis traite plusieurs applications de Bernoulli sur le chantier voisin.
+
+**Données**
+- H = z + p/(ρ g) + v²/(2 g) ; fluide réel : H₁ = H₂ + ΔH ; g = **9,81 m/s²** ;
+- Château d'eau : niveau de l'eau à **32 m** (vitesse nulle, pression atmosphérique) ;
+- Robinet au 4ᵉ étage : z = **13 m** ; vitesse **1,2 m/s** ; pertes de charge **3,5 m** ;
+- Citerne de chantier : orifice de **25 mm** à **1,80 m** sous la surface ; Cd = **0,62** ;
+- Venturi : diamètres **50 mm** et **25 mm** ; débit **2 L/s** ;
+- Lance d'incendie : vitesse de sortie **12 m/s**.
+
+### Partie A — Notions (4 points)
+1. Définir la charge hydraulique et ses trois termes. (2 pts)
+2. Énoncer le théorème de Bernoulli pour un fluide parfait et pour un fluide réel. (2 pts)
+
+### Partie B — Pression au 4ᵉ étage (5 points)
+3. Calculer la hauteur de vitesse au robinet. Commenter. (1 pt)
+4. Calculer la pression au robinet en mCE et en bar. Est-elle suffisante ? (4 pts)
+
+### Partie C — Vidange et venturi (7 points)
+5. Calculer la vitesse théorique et le débit réel à l'orifice de la citerne. (3 pts)
+6. Calculer les vitesses dans le venturi et la différence de pression entre les deux sections. À quoi sert ce dispositif ? (4 pts)
+
+### Partie D — Jet et siphon (4 points)
+7. À quelle hauteur monte le jet vertical de la lance ? Quelle vitesse faudrait-il pour atteindre 15 m ? (2 pts)
+8. On veut vider une fouille inondée avec un tuyau en siphon passant par-dessus un merlon. À quelles conditions cela fonctionne-t-il ? (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. La charge H (en mètres) est l'énergie d'un kilogramme d'eau : **z** (cote, énergie de position) + **p/(ρ g)** (hauteur de pression) + **v²/(2 g)** (hauteur de vitesse). *(2 pts)*
+2. Fluide parfait : la charge se **conserve** le long d'une ligne de courant ; fluide réel : H₁ = H₂ + **ΔH**, les pertes de charge étant l'énergie dissipée par frottement entre 1 et 2. *(2 pts)*
+
+### Partie B — 4ᵉ étage (5 pts)
+3. v²/(2 g) = 1,2²/19,62 = **0,07 m** : négligeable devant les autres termes. *(1 pt)*
+4. 32 = 13 + p/(ρ g) + 0,07 + 3,5 → p/(ρ g) = **15,43 m** → p = 15,43 × 9 810 = **1,51 bar** ≥ 1 bar ✓. *(4 pts)*
+
+### Partie C — Vidange et venturi (7 pts)
+5. v = √(2 × 9,81 × 1,80) = **5,94 m/s** ; S = π × 0,025²/4 = 4,91 × 10⁻⁴ m² ; Q = 0,62 × 4,91 × 10⁻⁴ × 5,94 = **1,81 L/s**. *(3 pts)*
+6. v₁ = 0,002/(π × 0,05²/4) = **1,02 m/s** ; v₂ = **4,07 m/s** (section divisée par 4). Même cote : p₁ − p₂ = ρ (v₂² − v₁²)/2 = 500 × (16,60 − 1,04) = **7 780 Pa ≈ 0,79 mCE**. La pression **baisse** là où la vitesse augmente : la mesure de cette différence donne le **débit** (débitmètre venturi) ; le même principe sert aux injecteurs et trompes à vide. *(4 pts)*
+
+### Partie D — Jet et siphon (4 pts)
+7. h = v²/(2 g) = 144/19,62 = **7,3 m** ; pour 15 m : v = √(2 × 9,81 × 15) = **17,2 m/s**. *(2 pts)*
+8. Le tuyau doit être **rempli d'eau** (amorcé) ; la sortie doit être **plus basse** que la surface de l'eau dans la fouille ; le point haut ne doit pas dépasser **7 à 8 m** au-dessus de cette surface (sinon l'eau « décroche » par dépression). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les pertes de charge dans un réseau réel.
+> - Mélanger des pressions en bar et des hauteurs en mètres dans la même équation.
+> - Oublier le coefficient de débit Cd à la sortie d'un orifice.`},
  exercices:[
   {t:"Pression à un robinet", d:1, e:`Un réservoir a son niveau d'eau à 22 m au-dessus du sol. Un robinet est à 4 m au-dessus du sol. À débit nul, quelle pression lit-on ? Avec un débit (v = 1,2 m/s) et 1,5 m de pertes de charge ?`, c:`Débit nul : p/(ρg) = 22 − 4 = **18 m** → **1,77 bar**.
 Avec débit : 22 − 4 − 1,2²/(2 × 9,81) − 1,5 = 22 − 4 − 0,07 − 1,5 = **16,43 m** → **1,61 bar**.`},
@@ -488,6 +783,55 @@ Il dépend de Re et de ε/D (diagramme de Moody, formule de Colebrook). Valeurs 
 > - Re = v D/ν ; laminaire < 2 000 ; turbulent > 4 000 (cas des réseaux d'eau).
 > - λ = 64/Re (laminaire) ; λ = 0,316 Re^(−0,25) (turbulent lisse) ; λ ≈ 0,02 à 0,03 en pratique.
 > - Rugosité : plastiques lisses ; acier galvanisé qui s'entartre.`,
+ sujet:{titre:"Régimes d'écoulement et rugosité : pourquoi les vieux réseaux coulent mal", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Dans un immeuble ancien du Plateau, les robinets des étages coulent mal. Le réseau d'origine est en **acier galvanisé** entartré. On compare avec un réseau neuf en PPR.
+
+**Données**
+- Re = v D/ν ; eau : ν = **10⁻⁶ m²/s** ; air : ν = **15 × 10⁻⁶ m²/s** ;
+- Laminaire : Re < 2 000 ; transition : 2 000 à 4 000 ; turbulent : Re > 4 000 ;
+- λ = 64/Re (laminaire) ; λ = 0,316 × Re^(−0,25) (turbulent, tube lisse) ;
+- ΔH = λ × (L/D) × v²/(2 g) ;
+- Tronçon étudié : **30 m** ; débit **0,4 L/s** ;
+- Réseau neuf PPR : diamètre intérieur **26 mm**, lisse ;
+- Réseau ancien : diamètre intérieur réduit à **20 mm** par le tartre ; λ ≈ **0,045**.
+
+### Partie A — Notions (4 points)
+1. Décrire les écoulements laminaire et turbulent. (2 pts)
+2. Qu'est-ce que la rugosité ? Comment évolue-t-elle dans un tube en acier galvanisé ? (2 pts)
+
+### Partie B — Calculer Re (6 points)
+3. Calculer Re et indiquer le régime pour : a) eau à 1,2 m/s dans un tube de 20 mm ; b) eau à 0,05 m/s dans un tube de 16 mm ; c) air à 4 m/s dans une gaine de 300 mm ; d) eau à 0,03 m/s dans un tube de 100 mm. (4 pts)
+4. Calculer λ pour les cas a) et b). (2 pts)
+
+### Partie C — Comparaison des réseaux (8 points)
+5. Réseau neuf : calculer v, Re, λ et la perte de charge du tronçon. (4 pts)
+6. Réseau ancien : calculer v et la perte de charge. (2 pts)
+7. Comparer et expliquer les plaintes des occupants. (2 pts)
+
+### Partie D — Conclusion (2 points)
+8. En dessous de quelle vitesse l'écoulement serait-il laminaire dans le tube de 26 mm ? Conclure pour la plomberie. (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **Laminaire** : les filets de fluide glissent régulièrement les uns sur les autres (écoulement lent, visqueux, petit diamètre) ; **turbulent** : des tourbillons mélangent le fluide ; c'est le cas presque général de l'eau dans les réseaux. *(2 pts)*
+2. La **rugosité** ε est la hauteur moyenne des aspérités de la paroi. L'acier galvanisé s'**entartre** et se **corrode** : sa rugosité augmente et son diamètre utile diminue avec les années. *(2 pts)*
+
+### Partie B — Re (6 pts)
+3. a) Re = 1,2 × 0,020/10⁻⁶ = **24 000** → turbulent ; b) Re = 0,05 × 0,016/10⁻⁶ = **800** → laminaire ; c) Re = 4 × 0,30/15 × 10⁻⁶ = **80 000** → turbulent ; d) Re = 0,03 × 0,10/10⁻⁶ = **3 000** → transition. *(4 pts)*
+4. a) λ = 0,316 × 24 000^(−0,25) = **0,025** ; b) λ = 64/800 = **0,080**. *(2 pts)*
+
+### Partie C — Comparaison (8 pts)
+5. v = 0,0004/(π × 0,026²/4) = **0,75 m/s** ; Re = **19 600** ; λ = 0,316 × 19 600^(−0,25) = **0,027** ;
+$$ ΔH = 0,027 × (30/0,026) × 0,75²/19,62 ≈ 0,89 m
+*(4 pts)*
+6. v = 0,0004/(π × 0,020²/4) = **1,27 m/s** ; ΔH = 0,045 × (30/0,020) × 1,27²/19,62 ≈ **5,6 m**. *(2 pts)*
+7. Le réseau entartré perd **6 fois plus** de charge (5,6 m contre 0,9 m) : aux étages, après le dénivelé, il ne reste presque plus de pression, donc peu de débit. La réduction de diamètre pèse lourd (ΔH ≈ 1/D⁵) et la rugosité s'y ajoute. Remède : **remplacer** les colonnes par des tubes lisses (PPR, PER) bien dimensionnés. *(2 pts)*
+
+### Partie D — Conclusion (2 pts)
+8. v < 2 000 × 10⁻⁶/0,026 = **0,077 m/s** (8 cm/s) : en plomberie, l'écoulement est **toujours turbulent** ; on utilise donc les formules turbulentes (Blasius, Colebrook) ou λ ≈ 0,02 à 0,03. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la viscosité de l'air (15 fois celle de l'eau) dans Re.
+> - Utiliser λ = 64/Re pour un écoulement turbulent.
+> - Négliger l'effet du diamètre : une petite réduction augmente fortement les pertes.`},
  exercices:[
   {t:"Calculer Re", d:1, e:`De l'eau (ν = 10⁻⁶ m²/s) circule à 1,02 m/s dans une conduite de 50 mm. Calculer Re et le régime.`, c:`Re = 1,02 × 0,05/10⁻⁶ = **51 000** → **turbulent**.`},
   {t:"Vitesse limite du laminaire", d:1, e:`Dans un tube de 20 mm, en dessous de quelle vitesse l'écoulement de l'eau est-il laminaire (Re < 2 000) ?`, c:`v < 2 000 × 10⁻⁶/0,02 = **0,1 m/s** : en plomberie, on est presque toujours en turbulent.`},
@@ -545,6 +889,63 @@ On exige en général **au moins 1 bar** (≈ 10 m) à l'appareil le plus défav
 > - ΔH ≈ proportionnelle à 1/D⁵ à débit donné.
 > - Pression au compteur = Δz + ΔH + pression voulue au robinet (≥ 1 bar).
 > - Vitesses de 1 à 1,5 m/s pour dimensionner.`,
+ sujet:{titre:"Pertes de charge et dimensionnement de l'alimentation d'un immeuble R+2", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On vérifie l'alimentation de l'appartement le plus défavorable d'un immeuble R+2 à Marcory. La pression au compteur est de **2,0 bar**.
+
+**Données**
+- Débit probable du tronçon : **0,45 L/s** ; longueur du compteur à la douche la plus défavorable : **32 m** ; dénivelé : **8 m** ;
+- Pression minimale à l'appareil : **1 bar (10,2 m)** ;
+- ΔH(lin) = λ (L/D) v²/(2 g) ; λ = 0,316 Re^(−0,25) ; ν = 10⁻⁶ m²/s ; ΔH(sing) = ΣK v²/(2 g) ;
+- Accessoires : **6 coudes** (K = 0,4) ; **2 tés** (K = 1,2) ; **2 vannes** (K = 0,2) ; **1 clapet anti-retour** (K = 2,5) ;
+- Diamètres intérieurs envisagés : **20,4 mm** et **26 mm**.
+
+### Partie A — Notions (4 points)
+1. Distinguer pertes de charge linéaires et singulières. (2 pts)
+2. Comment la perte de charge varie-t-elle avec le diamètre à débit constant ? Conséquence. (2 pts)
+
+### Partie B — Tube de 20,4 mm (7 points)
+3. Calculer la vitesse, Re et λ. (3 pts)
+4. Calculer les pertes linéaires, singulières et totales. (3 pts)
+5. Calculer la pression disponible à la douche. Conclure. (1 pt)
+
+### Partie C — Tube de 26 mm (6 points)
+6. Reprendre les calculs avec le tube de 26 mm (présenter un tableau comparatif). (4 pts)
+7. Calculer la pression à la douche et conclure. (2 pts)
+
+### Partie D — Démarche (3 points)
+8. Quelle pression faudrait-il au compteur pour conserver le tube de 20,4 mm ? (1 pt)
+9. Rappeler la démarche de dimensionnement d'un réseau d'eau. (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **Linéaires** : dues au frottement le long de la conduite, proportionnelles à la longueur ; **singulières** : localisées aux accessoires (coudes, tés, vannes, clapets, compteurs), ΔH = K v²/(2 g). *(2 pts)*
+2. À débit constant, ΔH varie environ comme **1/D⁵** : un diamètre un peu trop petit coûte très cher en pression. *(2 pts)*
+
+### Partie B — 20,4 mm (7 pts)
+3. S = π × 0,0204²/4 = 3,27 × 10⁻⁴ m² → v = **1,38 m/s** ; Re = 1,38 × 0,0204/10⁻⁶ = **28 100** ; λ = 0,316 × 28 100^(−0,25) = **0,0244**. *(3 pts)*
+4. v²/(2 g) = 0,0966 m ; linéaires : 0,0244 × (32/0,0204) × 0,0966 = **3,70 m** ; ΣK = 6 × 0,4 + 2 × 1,2 + 2 × 0,2 + 2,5 = **7,7** → singulières : 7,7 × 0,0966 = **0,74 m** ; total **4,44 m**. *(3 pts)*
+5. Compteur : 2,0 bar = 20,39 m → douche : 20,39 − 8 − 4,44 = **7,95 m ≈ 0,78 bar** < 1 bar ✗. *(1 pt)*
+
+### Partie C — 26 mm (6 pts)
+6. Comparaison :
+| Grandeur | 20,4 mm | 26 mm |
+|---|---|---|
+| v (m/s) | 1,38 | 0,85 |
+| Re | 28 100 | 22 000 |
+| λ | 0,0244 | 0,0259 |
+| v²/2g (m) | 0,097 | 0,037 |
+| ΔH linéaires (m) | 3,70 | 1,17 |
+| ΔH singulières (m) | 0,74 | 0,28 |
+| **ΔH total (m)** | **4,44** | **1,45** |
+*(4 pts)*
+7. Douche : 20,39 − 8 − 1,45 = **10,94 m ≈ 1,07 bar** ≥ 1 bar ✓. Le passage au 26 mm divise les pertes par 3. *(2 pts)*
+
+### Partie D — Démarche (3 pts)
+8. 10,2 + 8 + 4,44 = 22,64 m → **2,22 bar** au compteur. *(1 pt)*
+9. 1. Débits probables de chaque tronçon (simultanéité) ; 2. diamètres pour v ≈ **1 à 1,5 m/s** ; 3. pertes de charge jusqu'au point le plus **défavorable** (le plus haut et le plus loin) ; 4. vérifier la pression (≥ 1 bar), sinon augmenter les diamètres ou installer un **surpresseur**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le dénivelé entre le compteur et l'appareil.
+> - Vérifier un appareil proche au lieu du plus défavorable.
+> - Négliger les pertes singulières, importantes dans les réseaux courts et très équipés.`},
  exercices:[
   {t:"Perte de charge linéaire", d:1, e:`Une conduite de 50 mm de diamètre et de 100 m de long transporte 3 L/s. Calculer la vitesse, Re, λ (Blasius) et la perte de charge.`, c:`v = 0,003/(π × 0,05²/4) = **1,53 m/s** ; Re = 1,53 × 0,05/10⁻⁶ = **76 400** ; λ = 0,316 × 76 400^(− 0,25) = **0,019**.
 ΔH = 0,019 × (100/0,05) × 1,53²/19,62 = **4,5 m** (0,45 bar).`},
@@ -610,6 +1011,51 @@ Pour une parcelle composée, on fait la somme des Cᵢ × Aᵢ (ou on calcule un
 > - C : toiture ≈ 1 ; béton ≈ 0,9 ; jardin ≈ 0,2.
 > - Descentes : ≈ 1 cm² par m² de toiture (avec marge sous les tropiques).
 > - Évacuer loin des fondations ; infiltrer, stocker ou retenir quand c'est possible.`,
+ sujet:{titre:"Eaux pluviales d'une villa : descentes, ruissellement de la parcelle et récupération", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une villa est construite sur une parcelle de **900 m²** à Abidjan. On dimensionne l'évacuation des eaux pluviales et l'on étudie une citerne de récupération.
+
+**Données**
+- Méthode rationnelle : Q = C × i × A/3 600 (Q en L/s ; i en mm/h ; A en m²) ; intensité de projet : **180 mm/h** ;
+- Toiture à deux versants : **20,00 × 12,00 m** en plan, gouttières le long des deux façades de 20 m ; C = 0,95 (toiture) ;
+- Descentes : **1 cm² de section par m²** de toiture en plan ; Ø 100 : **78,5 cm²** ; Ø 125 : **122,7 cm²** ; une descente dessert au plus **12 m** de gouttière de chaque côté ;
+- Parcelle : toiture **240 m²** (C = 0,95) ; cour en béton **260 m²** (C = 0,9) ; allée en latérite **150 m²** (C = 0,5) ; jardin **250 m²** (C = 0,2) ;
+- Pluie annuelle : **1 800 mm** ; usages de l'eau de pluie (WC, arrosage) : **300 L/jour** ; 1 mm de pluie sur 1 m² = 1 L.
+
+### Partie A — Notions (3 points)
+1. Pourquoi les ouvrages d'eaux pluviales sont-ils dimensionnés pour des pluies courtes et très intenses ? (1 pt)
+2. Définir le coefficient de ruissellement et classer toiture, béton, latérite et jardin. (2 pts)
+
+### Partie B — Toiture (6 points)
+3. Calculer le débit de pointe de la toiture (on prendra C = 1 pour les ouvrages de toiture). (2 pts)
+4. Calculer la section totale de descentes, puis proposer le nombre, le diamètre et la position des descentes. (4 pts)
+
+### Partie C — Parcelle (6 points)
+5. Calculer Σ C × A, le débit de pointe de la parcelle et le coefficient moyen. (4 pts)
+6. Le propriétaire veut bétonner le jardin. Calculer le nouveau débit. Conclure. (2 pts)
+
+### Partie D — Récupération (5 points)
+7. Calculer le volume d'eau récupérable par an sur la toiture (C = 0,9) et le comparer aux besoins. (2 pts)
+8. On installe une citerne de 5 m³. Calculer son autonomie et le volume apporté par un orage de 50 mm. Quel équipement prévoir ? (3 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. Les orages tropicaux apportent **100 à 200 mm/h** pendant quelques minutes : si les ouvrages ne passent pas ces pointes, l'eau déborde, s'infiltre dans les murs et érode les sols. *(1 pt)*
+2. C = part de la pluie qui **ruisselle** (le reste s'infiltre ou s'évapore). Toiture (0,9 à 1) > béton (0,85 à 0,95) > latérite compactée (0,4 à 0,7) > jardin (0,1 à 0,3). *(2 pts)*
+
+### Partie B — Toiture (6 pts)
+3. Q = 1,0 × 180 × 240/3 600 = **12 L/s**. *(2 pts)*
+4. Section totale : 240 × 1 = **240 cm²**, soit 120 cm² par versant. Une Ø 125 par versant (122,7 cm²), placée au milieu de la gouttière (10 m de chaque côté ≤ 12 m), suffirait à la règle. Avec la **marge tropicale**, on retient **2 descentes Ø 100 par versant** (157 cm² par versant, **4 descentes** au total), placées à 5 m des extrémités, avec crapaudines en tête et dauphins en pied. *(4 pts)*
+
+### Partie C — Parcelle (6 pts)
+5. Σ C A = 240 × 0,95 + 260 × 0,9 + 150 × 0,5 + 250 × 0,2 = 228 + 234 + 75 + 50 = **587 m²** ; Q = 587 × 180/3 600 = **29,4 L/s** ; C moyen = 587/900 = **0,65**. *(4 pts)*
+6. Jardin bétonné : + 250 × (0,9 − 0,2) = + 175 → Σ C A = 762 m² → Q = **38,1 L/s** (+ 30 %). Imperméabiliser augmente fortement le ruissellement et inonde l'aval : garder des surfaces **perméables** (jardin, pavés à joints ouverts). *(2 pts)*
+
+### Partie D — Récupération (5 pts)
+7. V = 1 800 mm × 240 m² × 0,9 = **388,8 m³/an** ; besoins : 0,3 × 365 = **109,5 m³/an** : la toiture fournit plus de trois fois les besoins annuels ; la limite est la **saison sèche**. *(2 pts)*
+8. Autonomie : 5 000/300 ≈ **17 jours** ; orage de 50 mm : 240 × 0,05 × 0,9 = **10,8 m³** > 5 m³ : prévoir un **trop-plein** vers le réseau ou un puits d'infiltration, un **filtre** (ou dispositif de premier rinçage) à l'entrée, une citerne fermée et opaque, et **aucune liaison** avec le réseau d'eau potable. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de diviser par 3 600 dans Q = C i A/3 600.
+> - Faire la moyenne des coefficients C sans pondérer par les surfaces.
+> - Rejeter les descentes au pied des fondations.`},
  exercices:[
   {t:"Débit d'une toiture", d:1, e:`Une villa a une toiture de 220 m² en projection horizontale. Calculer le débit de pointe pour i = 180 mm/h (C = 1).`, c:`Q = 1 × 180 × 220/3 600 = **11 L/s**.`},
   {t:"Nombre de descentes", d:1, e:`Avec la règle de 1 cm² de descente par m² de toiture, combien de descentes de 100 mm faut-il pour la toiture de 220 m² ?`, c:`Section nécessaire : **220 cm²** ; une descente Ø 100 : 78,5 cm² → 220/78,5 = 2,8 → **3 descentes** (4 pour avoir une marge sous les tropiques, ou des Ø 125).`},
@@ -664,6 +1110,61 @@ K : coefficient de Strickler (PVC ≈ 100 ; béton ≈ 70) ; S : section ; R = S
 > - Manning : Q = K S R^(2/3) √I ; PVC Ø 110 à 2 % : ≈ 10 L/s.
 > - Pente ≥ 1 % (2 % conseillé), autocurage ≥ 0,6 m/s, regards aux changements de direction.
 > - Siphon disconnecteur, ventilation, bac dégraisseur pour les cuisines collectives.`,
+ sujet:{titre:"Collecteur d'eaux usées d'un immeuble de 24 logements", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un immeuble de **24 logements** à Angré doit être raccordé à l'égout public. On dimensionne le collecteur enterré de la parcelle.
+
+**Données**
+- **4 personnes** par logement ; consommation **150 L/personne/jour** ; rejet **85 %** ; coefficient de pointe **3** ;
+- Débit de pointe à retenir pour le collecteur (chasses d'eau simultanées) : **4,5 L/s** ;
+- Manning-Strickler à pleine section : v = K R^(2/3) √I ; Q = S v ; R = D/4 ; PVC : K = **100** ;
+- Diamètres intérieurs : Ø 110 : **103,6 mm** ; Ø 125 : **117,6 mm** ; Ø 160 : **150,6 mm** ;
+- Vitesse d'autocurage : **≥ 0,6 m/s** ; pente minimale **1 %** ;
+- Collecteur de **45 m** en terrain plat ; fil d'eau au départ : **0,60 m** sous le terrain ; fil d'eau de l'égout public au point de raccordement : **1,10 m** sous le terrain.
+
+### Partie A — Notions (4 points)
+1. Distinguer réseaux séparatif et unitaire. Lequel exige-t-on pour une construction neuve ? (2 pts)
+2. Pourquoi les canalisations d'eaux usées sont-elles dimensionnées à surface libre ? Que signifie « autocurage » ? (2 pts)
+
+### Partie B — Débits (4 points)
+3. Calculer le volume journalier rejeté, le débit moyen et le débit de pointe. (3 pts)
+4. Pourquoi retient-on un débit de 4,5 L/s pour le collecteur ? (1 pt)
+
+### Partie C — Capacité (6 points)
+5. Calculer la vitesse et le débit à pleine section du Ø 110 et du Ø 125 à 1 % et à 1,5 % de pente. (4 pts)
+6. Quels diamètres conviennent ? (2 pts)
+
+### Partie D — Profil en long (6 points)
+7. Calculer la profondeur d'arrivée du collecteur avec une pente de 1,5 %, puis de 1 %. Quelle pente retenir ? (3 pts)
+8. Choisir le diamètre définitif et justifier. (1 pt)
+9. Où placer les regards ? Quels équipements prévoir avant le branchement public ? (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **Séparatif** : un réseau pour les eaux usées (EU et EV), un autre pour les eaux pluviales ; **unitaire** : un seul réseau, qui déborde et pollue lors des orages. Le neuf est en **séparatif**. *(2 pts)*
+2. Les eaux usées s'écoulent par **gravité**, avec une surface libre à la pression atmosphérique (les tuyaux ne sont pas en charge). **Autocurage** : vitesse suffisante (≥ 0,6 m/s) pour entraîner les dépôts et éviter les bouchages. *(2 pts)*
+
+### Partie B — Débits (4 pts)
+3. V = 24 × 4 × 150 × 0,85 = **12 240 L/jour** ; Q(moyen) = 12 240/86 400 = **0,14 L/s** ; Q(pointe) = 3 × 0,14 = **0,43 L/s**. *(3 pts)*
+4. Dans un bâtiment, ce sont les **chasses d'eau** (1,5 à 2 L/s chacune pendant quelques secondes) qui dimensionnent les collecteurs, pas le débit moyen. *(1 pt)*
+
+### Partie C — Capacité (6 pts)
+5. Résultats (pleine section) :
+| Conduite | Pente | v (m/s) | Q (L/s) |
+|---|---|---|---|
+| Ø 110 | 1 % | 0,88 | 7,4 |
+| Ø 110 | 1,5 % | 1,07 | 9,0 |
+| Ø 125 | 1 % | 0,95 | 10,3 |
+| Ø 125 | 1,5 % | 1,17 | 12,7 |
+Exemple : Ø 125 à 1 % : R = 0,1176/4 = 0,0294 m ; v = 100 × 0,0294^(2/3) × √0,01 = **0,95 m/s** ; Q = 0,95 × 0,01086 = **10,3 L/s**. *(4 pts)*
+6. Tous dépassent 4,5 L/s avec v ≥ 0,6 m/s : le **Ø 110** convient déjà ; le **Ø 125** donne une marge. *(2 pts)*
+
+### Partie D — Profil en long (6 pts)
+7. 1,5 % : chute 45 × 0,015 = 0,675 m → arrivée à **1,275 m** sous le terrain, **plus bas** que l'égout (1,10 m) : raccordement gravitaire impossible ✗. 1 % : chute **0,45 m** → arrivée à **1,05 m**, 5 cm au-dessus du fil d'eau de l'égout ✓. On retient **1 %**. *(3 pts)*
+8. **Ø 125 à 1 %** : 10,3 L/s (plus du double du débit de projet), v = 0,95 m/s ≥ 0,6 ✓ ; on ne descend jamais sous le diamètre des branchements amont et on garde une marge pour les bouchages. *(1 pt)*
+9. Regards aux **changements de direction**, de pente, aux **jonctions** et au moins tous les **30 à 50 m** en ligne droite (un regard intermédiaire sur les 45 m) ; avant le branchement : **regard siphoïde** (siphon disconnecteur) contre les odeurs, **ventilation** du réseau, **bac dégraisseur** si un restaurant occupe le rez-de-chaussée. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Choisir une pente forte sans vérifier la profondeur d'arrivée par rapport à l'égout.
+> - Dimensionner sur le débit moyen journalier.
+> - Réduire le diamètre vers l'aval.`},
  exercices:[
   {t:"Rayon hydraulique", d:1, e:`Calculer le rayon hydraulique d'un tuyau de 150 mm coulant à pleine section, puis d'un caniveau rectangulaire de 0,40 m de large rempli sur 0,20 m.`, c:`Tuyau plein : R = D/4 = **0,0375 m**.
 Caniveau : S = 0,40 × 0,20 = 0,08 m² ; P = 0,40 + 2 × 0,20 = 0,80 m → R = **0,10 m**.`},
@@ -728,6 +1229,59 @@ Un surpresseur (pompe + **ballon** à membrane + pressostat ou variateur) mainti
 > - Point de fonctionnement : intersection des courbes de la pompe et du réseau.
 > - Aspiration ≤ 6 à 7 m (cavitation) ; sinon pompe immergée.
 > - Surpresseur : bâche + pompes + ballon ; dimensionné au débit de pointe.`,
+ sujet:{titre:"Pompe de remplissage d'un réservoir en toiture : HMT, puissance et cavitation", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un immeuble R+5 à Treichville est alimenté depuis une **bâche enterrée** ; une pompe de surface remplit un réservoir de **15 m³** en toiture.
+
+**Données**
+- Dénivelé entre la surface de l'eau dans la bâche et l'arrivée dans le réservoir : **22 m** ;
+- Refoulement : **75 m** de tube de diamètre intérieur **50 mm** ; débit visé **3 L/s** ; pertes singulières : **+ 20 %** des pertes linéaires ;
+- ν = 10⁻⁶ m²/s ; λ = 0,316 Re^(−0,25) ; ΔH = λ (L/D) v²/(2 g) ;
+- HMT = H(géo) + ΔH + p(résiduelle)/(ρ g) ; P(hyd) = ρ g Q HMT ; rendement η = **0,62** ;
+- Courbe de la pompe : H = 34 − 0,9 × 10⁶ Q² ; courbe du réseau : H = 22 + 0,45 × 10⁶ Q² (Q en m³/s) ;
+- Aspiration : hauteur **3,5 m** ; pertes à l'aspiration **0,6 m** ; tension de vapeur (30 °C) **0,43 m** ; NPSH requis : **3,5 m** ;
+- NPSH(disponible) = 10,33 − h(asp) − ΔH(asp) − h(vapeur).
+
+### Partie A — Notions (3 points)
+1. Définir la HMT. Pourquoi la pression résiduelle est-elle nulle ici ? (2 pts)
+2. Qu'est-ce que la cavitation ? (1 pt)
+
+### Partie B — HMT et puissance (7 points)
+3. Calculer la vitesse, Re, λ et les pertes de charge du refoulement. (4 pts)
+4. Calculer la HMT, la puissance hydraulique et la puissance absorbée. (3 pts)
+
+### Partie C — Point de fonctionnement (5 points)
+5. Vérifier que la courbe du réseau est cohérente avec les pertes calculées. (1 pt)
+6. Calculer le débit et la hauteur au point de fonctionnement. (3 pts)
+7. Calculer le temps de remplissage du réservoir. (1 pt)
+
+### Partie D — Aspiration (5 points)
+8. Calculer le NPSH disponible et conclure. (2 pts)
+9. On envisage d'utiliser la même pompe sur un forage dont l'eau est à 8 m sous la pompe. Conclure et proposer une solution. (2 pts)
+10. Quelles précautions prendre sur la conduite d'aspiration ? (1 pt)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. La **HMT** est l'énergie (en mètres de colonne d'eau) que la pompe doit fournir : dénivelé géométrique + pertes de charge (aspiration et refoulement) + pression voulue à l'arrivée. Le réservoir est **à l'air libre** : on n'exige aucune pression en sortie. *(2 pts)*
+2. À l'aspiration, la pression baisse ; si elle atteint la **tension de vapeur**, des bulles se forment puis implosent sur la roue : bruit, chute de débit, **érosion** de la roue. *(1 pt)*
+
+### Partie B — HMT et puissance (7 pts)
+3. S = π × 0,05²/4 = 1,963 × 10⁻³ m² → v = **1,53 m/s** ; Re = 1,53 × 0,05/10⁻⁶ = **76 400** ; λ = 0,316 × 76 400^(−0,25) = **0,019** ;
+$$ ΔH(lin) = 0,019 × (75/0,05) × 1,53²/19,62 = 3,39 m   →   ΔH = 3,39 × 1,2 = 4,07 m
+*(4 pts)*
+4. HMT = 22 + 4,07 = **26,1 m** ; P(hyd) = 9 810 × 0,003 × 26,1 = **768 W** ; P(absorbée) = 768/0,62 = **1 240 W** ≈ 1,2 kW. *(3 pts)*
+
+### Partie C — Point de fonctionnement (5 pts)
+5. Pertes ∝ Q² : k = 4,07/0,003² = 452 000 ≈ **0,45 × 10⁶** ✓. *(1 pt)*
+6. 34 − 0,9 × 10⁶ Q² = 22 + 0,45 × 10⁶ Q² → Q² = 12/1,35 × 10⁶ → **Q = 2,98 L/s** ; H = 22 + 0,45 × 10⁶ × 0,00298² = **26,0 m**. La pompe convient (point proche du besoin). *(3 pts)*
+7. Q = 2,98 L/s = 10,7 m³/h → t = 15/10,7 = **1,4 h** (≈ 1 h 24). *(1 pt)*
+
+### Partie D — Aspiration (5 pts)
+8. NPSH(disp) = 10,33 − 3,5 − 0,6 − 0,43 = **5,8 m** > 3,5 m ✓ : pas de cavitation. *(2 pts)*
+9. NPSH(disp) = 10,33 − 8 − 0,6 − 0,43 = **1,3 m** < 3,5 m ✗ : la pompe caviterait. Solution : **pompe immergée** dans le forage (elle refoule, sans aspiration). *(2 pts)*
+10. Conduite d'aspiration **courte**, de **gros diamètre**, montante vers la pompe (sans point haut où l'air s'accumule), avec **crépine** et **clapet de pied**, joints étanches à l'air. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les pertes de charge dans la HMT.
+> - Confondre puissance hydraulique et puissance absorbée (rendement).
+> - Installer une pompe de surface à plus de 6 à 7 m au-dessus de l'eau.`},
  exercices:[
   {t:"Puissance d'une pompe d'épuisement", d:1, e:`Une pompe d'épuisement relève 15 L/s d'eau sur une hauteur totale (HMT) de 8 m avec un rendement de 0,5.
 Calculer la puissance hydraulique et la puissance absorbée.`, c:`P(h) = 9 810 × 0,015 × 8 = **1 177 W** ; P(abs) = 1 177/0,5 = **2,35 kW**.`},
@@ -797,6 +1351,59 @@ Sous une route ou une voie d'accès, l'eau passe dans une **buse** (tuyau circul
 > - Rectangle le plus efficace : b = 2h.
 > - Vitesses : ≥ 0,5 m/s (dépôts) et ≤ limite d'érosion du revêtement.
 > - Fr = v/√(gh) : fluvial < 1 < torrentiel ; ressaut à protéger.`,
+ sujet:{titre:"Caniveau, fossé et buse d'un lotissement : écoulements à surface libre", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Dans un lotissement à Bingerville, un caniveau en béton collecte les eaux d'une rue, puis un fossé en terre conduit l'eau vers une buse sous la route départementale.
+
+**Données**
+- Manning-Strickler : Q = K S R^(2/3) √I ; R = S/P ; Fr = v/√(g h) ;
+- Caniveau en béton : K = **70** ; pente **0,8 %** ; débit à évacuer **0,35 m³/s** ;
+- Section A : largeur **0,50 m**, hauteur d'eau **0,40 m** ; section B : largeur **0,70 m**, hauteur d'eau **0,35 m** ;
+- Fossé trapézoïdal en latérite compactée : K = **35** ; fond **1,00 m** ; talus à **3/2** (1,5 horizontal pour 1 vertical) ; hauteur d'eau **0,50 m** ; pente **0,4 %** ; débit **0,80 m³/s** ;
+- Vitesses : minimale **0,5 m/s** ; maximale latérite **1,5 m/s** ; béton **4 à 6 m/s** ;
+- Buse en béton : K = **75** ; pente **1 %** ; débit à faire passer **1,1 m³/s** ; diamètres **600** et **800 mm**.
+
+### Partie A — Notions (3 points)
+1. Définir la section mouillée, le périmètre mouillé et le rayon hydraulique. (1 pt)
+2. Pourquoi la section rectangulaire la plus efficace a-t-elle une largeur égale à deux fois la hauteur d'eau ? (1 pt)
+3. Distinguer écoulement fluvial et torrentiel. (1 pt)
+
+### Partie B — Caniveau (7 points)
+4. Calculer S, P, R, v et Q pour les sections A et B. (5 pts)
+5. Calculer le nombre de Froude de chaque section. Conclure et choisir. (2 pts)
+
+### Partie C — Fossé (5 points)
+6. Calculer la section mouillée, le périmètre mouillé, le rayon hydraulique, la vitesse et le débit du fossé. (4 pts)
+7. Vérifier les vitesses admissibles. (1 pt)
+
+### Partie D — Buse (5 points)
+8. Calculer la capacité à pleine section des buses Ø 600 et Ø 800. Choisir. (3 pts)
+9. Quelles dispositions prendre en entrée et en sortie de la buse ? (2 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. **S** : aire de la section occupée par l'eau ; **P** : longueur de paroi en contact avec l'eau (la surface libre n'en fait pas partie) ; **R = S/P**. *(1 pt)*
+2. Pour une section donnée, le débit est maximal quand le **périmètre mouillé** (frottement) est **minimal** : pour un rectangle, c'est b = 2h. *(1 pt)*
+3. **Fluvial** (Fr < 1) : lent et profond, influencé par l'aval ; **torrentiel** (Fr > 1) : rapide et peu profond ; le passage de l'un à l'autre forme un **ressaut** érosif. *(1 pt)*
+
+### Partie B — Caniveau (7 pts)
+4. Résultats :
+| Section | S (m²) | P (m) | R (m) | v (m/s) | Q (m³/s) |
+|---|---|---|---|---|---|
+| A : 0,50 × 0,40 | 0,200 | 1,30 | 0,154 | 1,80 | **0,360** |
+| B : 0,70 × 0,35 | 0,245 | 1,40 | 0,175 | 1,96 | **0,480** |
+Exemple A : v = 70 × 0,154^(2/3) × √0,008 = 70 × 0,287 × 0,0894 = **1,80 m/s**. Les deux sections passent 0,35 m³/s. *(5 pts)*
+5. A : Fr = 1,80/√(9,81 × 0,40) = **0,91** (fluvial, proche de 1) ; B : Fr = 1,96/√(9,81 × 0,35) = **1,06** (torrentiel). Près de Fr = 1, la surface est instable (ondulations) : on prévoit une **revanche** d'au moins 0,15 m. On retient **A** (juste suffisante, emprise plus faible) avec une hauteur totale de **0,55 m**, ou B si l'on veut une marge de débit. *(2 pts)*
+
+### Partie C — Fossé (5 pts)
+6. S = h (b + m h) = 0,50 × (1,00 + 1,5 × 0,50) = **0,875 m²** ; P = b + 2 h √(1 + m²) = 1,00 + 2 × 0,50 × 1,803 = **2,80 m** ; R = **0,312 m** ; v = 35 × 0,312^(2/3) × √0,004 = **1,02 m/s** ; Q = **0,89 m³/s** ≥ 0,80 ✓. *(4 pts)*
+7. 0,5 ≤ 1,02 ≤ 1,5 m/s : ni dépôts ni érosion de la latérite ✓. *(1 pt)*
+
+### Partie D — Buse (5 pts)
+8. Pleine section : R = D/4. Ø 600 : v = 75 × 0,15^(2/3) × 0,1 = **2,12 m/s** → Q = **0,60 m³/s** ✗ ; Ø 800 : v = **2,56 m/s** → Q = **1,29 m³/s** ✓. On retient la **buse Ø 800** (une revanche est conseillée contre les débris). *(3 pts)*
+9. Entrée : **tête d'ouvrage** (murs en aile), grille ou dégrilleur contre les déchets ; sortie : **enrochements** ou bassin de dissipation, la vitesse de 2,6 m/s érodant la latérite ; entretien et **curage** avant la saison des pluies. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter la surface libre dans le périmètre mouillé.
+> - Oublier la racine carrée de la pente (I en m/m : 0,8 % = 0,008).
+> - Choisir un fossé en terre sans vérifier la vitesse d'érosion.`},
  exercices:[
   {t:"Rayon hydraulique et débit", d:1, e:`Un caniveau rectangulaire en béton (K = 70) de 0,40 m de large écoule une hauteur d'eau de 0,30 m sur une pente de 1 %. Calculer S, P, R, la vitesse et le débit.`, c:`S = 0,12 m² ; P = 0,40 + 0,60 = 1,00 m ; R = **0,12 m** → R^(2/3) = 0,243.
 v = 70 × 0,243 × 0,1 = **1,70 m/s** ; Q = 0,12 × 1,70 = **0,204 m³/s ≈ 204 L/s**.`},
@@ -859,6 +1466,57 @@ $$ Δp ≈ 2 × ρ × L × v / t
 > - Fermeture brusque (t < 2L/a) : Δp = ρ a Δv (6 bar en PVC, 18 bar en acier pour 1,5 m/s).
 > - Fermeture lente : Δp ≈ 2 ρ L v/t.
 > - Protection : vitesses faibles, manœuvres lentes, anti-béliers, ventouses, butées.`,
+ sujet:{titre:"Coup de bélier sur une conduite de refoulement et protections", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une conduite de refoulement relie une station de pompage à un réservoir de quartier à Daloa. On étudie les coups de bélier lors des arrêts de pompe et des manœuvres de vanne.
+
+**Données**
+- Conduite PVC **PN 10** (10 bar admissibles) ; longueur **1 200 m** ; diamètre intérieur **200 mm** ; vitesse **1,4 m/s** ; pression de service **6 bar** ;
+- Célérité : PVC **a = 400 m/s** ; acier **a = 1 100 m/s** ;
+- Fermeture brusque (t < 2L/a) : Δp = ρ a Δv (Joukowsky) ; fermeture lente : Δp ≈ 2 ρ L v/t (Michaud) ;
+- Butée d'un coude d'angle θ : F = 2 p S sin(θ/2) ; pression d'essai **10 bar** ;
+- Logement : tube PER (a = **300 m/s**), robinet quart de tour, vitesse **2 m/s**.
+
+### Partie A — Le phénomène (4 points)
+1. Décrire le coup de bélier et ses conséquences. (2 pts)
+2. Pourquoi les tubes plastiques sont-ils moins exposés que les tubes en acier ? (2 pts)
+
+### Partie B — Fermeture brusque (6 points)
+3. Calculer le débit de la conduite. (1 pt)
+4. Calculer la surpression maximale et la pression totale dans la conduite PVC. Conclure. (3 pts)
+5. Même calcul si la conduite était en acier. (2 pts)
+
+### Partie C — Fermeture lente (5 points)
+6. Calculer le temps d'aller-retour de l'onde 2L/a. (1 pt)
+7. Calculer la surpression si la vanne est fermée en 30 s, et la pression totale. (2 pts)
+8. Quel temps de fermeture minimal limite la surpression à 2 bar ? (2 pts)
+
+### Partie D — Protections (5 points)
+9. Calculer l'effort sur la butée d'un coude à 90° lors de l'essai à 10 bar. (2 pts)
+10. Calculer la surpression dans un logement lors de la fermeture d'un robinet quart de tour. Proposer une protection. (1 pt)
+11. Citer quatre protections d'un réseau contre le coup de bélier. (2 pts)`,
+  corrige:`### Partie A — Phénomène (4 pts)
+1. Un arrêt brusque de l'écoulement (vanne, pompe, robinet quart de tour) transforme l'énergie de la masse d'eau en une **onde de surpression** qui parcourt la conduite, se réfléchit et alterne avec des **dépressions**. Conséquences : claquements, **éclatement** des tubes et des joints, déboîtement des raccords, aspiration d'eau polluée en dépression. *(2 pts)*
+2. La célérité de l'onde dépend de l'**élasticité** du tuyau : un tube souple (PVC, PE) se déforme et absorbe une partie de l'onde (a = 200 à 500 m/s) ; la surpression ρ a Δv est donc 2 à 4 fois plus faible qu'en acier. *(2 pts)*
+
+### Partie B — Fermeture brusque (6 pts)
+3. Q = π × 0,2²/4 × 1,4 = **0,044 m³/s = 44 L/s**. *(1 pt)*
+4. Δp = 1 000 × 400 × 1,4 = 560 000 Pa = **5,6 bar** → pression totale 6 + 5,6 = **11,6 bar** > 10 bar ✗ : risque d'éclatement. *(3 pts)*
+5. Δp = 1 000 × 1 100 × 1,4 = **15,4 bar** → **21,4 bar** au total. *(2 pts)*
+
+### Partie C — Fermeture lente (5 pts)
+6. 2L/a = 2 × 1 200/400 = **6 s**. *(1 pt)*
+7. Δp = 2 × 1 000 × 1 200 × 1,4/30 = 112 000 Pa = **1,12 bar** → **7,1 bar** ✓. *(2 pts)*
+8. t = 2 ρ L v/Δp = 2 × 1 000 × 1 200 × 1,4/200 000 = **16,8 s** : fermer en **au moins 17 s** (vanne à volant ou motorisée lente). *(2 pts)*
+
+### Partie D — Protections (5 pts)
+9. S = 0,0314 m² ; F = 2 × 10⁶ × 0,0314 × sin 45° = **44,4 kN** : la butée en béton doit reprendre cet effort par frottement et appui sur le sol. *(2 pts)*
+10. Δp = 1 000 × 300 × 2 = **6 bar** : installer un **anti-bélier** (petit ballon à membrane) près des électrovannes et machines à laver, et des robinets à **fermeture progressive**. *(1 pt)*
+11. **Vitesses limitées** (1 à 1,5 m/s) ; **manœuvres lentes** (vannes à volant, démarreurs progressifs et variateurs sur les pompes) ; **réservoirs anti-bélier** (ballons à air ou à vessie) ou cheminées d'équilibre, soupapes de décharge ; **ventouses** aux points hauts ; **butées** aux coudes et tés. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier d'ajouter la surpression à la pression de service.
+> - Appliquer la formule de Michaud à une fermeture plus courte que 2L/a.
+> - Négliger les dépressions, qui peuvent aplatir les tubes et aspirer de l'eau polluée.`},
  exercices:[
   {t:"Surpression dans une conduite en acier", d:1, e:`Une conduite en acier (a = 1 100 m/s) transporte de l'eau à 1,2 m/s. Calculer la surpression en cas de fermeture brusque.`, c:`Δp = 1 000 × 1 100 × 1,2 = 1 320 000 Pa = **13,2 bar** : si la pression de service est de 6 bar, la conduite subit **19 bar**.`},
   {t:"Fermeture brusque ou lente ?", d:1, e:`Une conduite en PVC (a = 350 m/s) de 300 m de long est fermée en 6 s. Calculer 2L/a et conclure. Calculer la surpression.`, c:`2L/a = 600/350 = **1,7 s** < 6 s → fermeture **lente**.
@@ -916,6 +1574,54 @@ Dans les maisons et les immeubles, les coupures d'eau imposent souvent : **bâch
 > - z(fond) ≥ z(robinet le plus haut) + pression minimale + pertes de pointe.
 > - Trop-plein, vidange, aération, accès sécurisé, nettoyage annuel.
 > - 1 m³ d'eau en toiture = 1 t à reprendre par la structure.`,
+ sujet:{titre:"Château d'eau d'un quartier : volume, hauteur et fonctionnement", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une commune de l'intérieur construit un château d'eau pour un quartier de **3 000 habitants**, alimenté par un forage équipé d'un **pompage solaire**.
+
+**Données**
+- Consommation : **60 L/habitant/jour** ; volume de régulation : **50 %** de la consommation journalière (pompage limité aux heures de soleil) ; réserve incendie : **120 m³** ;
+- Pompe solaire : fonctionne **8 h/jour** ;
+- Point le plus défavorable : une maison R+3 sur une colline, dernier robinet à **16 m** au-dessus de la base du château d'eau ; pression minimale **1 bar (10,2 m)** ; pertes de charge à la pointe **4,5 m** ;
+- Cuve cylindrique ; marnage maximal souhaité : **4 m**.
+
+### Partie A — Rôles (3 points)
+1. Citer les trois fonctions d'un réservoir. (3 pts)
+
+### Partie B — Volume (6 points)
+2. Calculer la consommation journalière, le volume de régulation et le volume total. (3 pts)
+3. Calculer le débit de la pompe (m³/h et L/s). (2 pts)
+4. Pourquoi le volume de régulation est-il plus grand avec un pompage solaire ? (1 pt)
+
+### Partie C — Hauteur et dimensions (7 points)
+5. Calculer la cote minimale du fond de la cuve au-dessus de la base. (3 pts)
+6. Calculer la section et le diamètre de la cuve pour un marnage de 4 m. (2 pts)
+7. Calculer le poids de l'eau à reprendre par la structure et les fondations quand la cuve est pleine. (1 pt)
+8. Quelle pression statique reçoit une maison située au pied du château d'eau (robinet à 1 m) quand la cuve est pleine ? (1 pt)
+
+### Partie D — Équipements (4 points)
+9. Lister les équipements hydrauliques et de sécurité du réservoir. (2 pts)
+10. Quelles règles d'hygiène appliquer ? (2 pts)`,
+  corrige:`### Partie A — Rôles (3 pts)
+1. **Régulation** : absorber l'écart entre une production régulière (ou limitée aux heures de soleil) et une consommation variable ; **pression** : mettre le réseau en pression par gravité ; **sécurité** : réserve en cas de panne, de coupure ou d'**incendie**. *(3 pts)*
+
+### Partie B — Volume (6 pts)
+2. C = 3 000 × 60 = **180 m³/jour** ; régulation : 0,5 × 180 = **90 m³** ; total : 90 + 120 = **210 m³**. *(3 pts)*
+3. Q = 180/8 = **22,5 m³/h** = 22,5/3,6 = **6,25 L/s**. *(2 pts)*
+4. La pompe ne fonctionne que **8 h** (le jour) alors que l'on consomme matin et soir : le réservoir doit stocker la production de la journée pour la soirée, la nuit et le petit matin. *(1 pt)*
+
+### Partie C — Hauteur et dimensions (7 pts)
+5. z(fond) ≥ z(robinet) + p(min)/(ρ g) + ΔH = 16 + 10,2 + 4,5 = **30,7 m** au-dessus de la base. *(3 pts)*
+6. S = 210/4 = **52,5 m²** → D = √(4 × 52,5/π) = **8,2 m**. *(2 pts)*
+7. 210 m³ = 210 t → **2 060 kN**, sans compter le poids de la cuve et de la tour : fondations sur étude géotechnique. *(1 pt)*
+8. Niveau haut : 30,7 + 4 = 34,7 m → hauteur d'eau 33,7 m → p ≈ **3,3 bar** : acceptable, mais un **réducteur de pression** peut être utile dans les zones basses. *(1 pt)*
+
+### Partie D — Équipements (4 pts)
+9. **Arrivée** par le haut (commande de la pompe par poires de niveau ou flotteur) ; **départ** légèrement au-dessus du fond (crépine) ; **trop-plein** et **vidange** vers un exutoire, avec grilles anti-animaux ; **aération** protégée ; **trappe** fermée à clé, échelle à crinoline, garde-corps ; compteur de production ; indicateur de niveau ; étanchéité (cuvelage). *(2 pts)*
+10. Cuve **couverte** et à l'abri de la lumière (algues), aérations grillagées, accès fermé ; **nettoyage et désinfection au moins une fois par an** ; contrôle de la qualité de l'eau (chlore résiduel) ; pas de stagnation (renouvellement de la réserve incendie). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la réserve incendie dans le volume.
+> - Calculer la hauteur avec le niveau haut de l'eau : c'est le **fond** (niveau bas) qui doit assurer la pression.
+> - Oublier le poids de l'eau dans le calcul de la structure.`},
  exercices:[
   {t:"Volume d'un réservoir de village", d:1, e:`Un village de 3 000 habitants consomme 35 L/hab/jour. On prévoit 40 % de régulation et une réserve incendie de 120 m³. Calculer le volume du réservoir.`, c:`Consommation : 3 000 × 35 = **105 m³/jour** ; régulation : 0,4 × 105 = **42 m³**.
 Volume : 42 + 120 = **162 m³** → réservoir de **170 à 200 m³**.`},
@@ -968,6 +1674,53 @@ Très répandu, il infiltre les eaux en profondeur sans traitement par le sol su
 > - Épandage : surface = débit/charge admissible (20 à 40 L/m²/j) ; tranchées de 0,5 m.
 > - ≥ 30 à 35 m d'un puits ; pas d'eaux pluviales dans la fosse.
 > - Puisard : à éviter (pollution de la nappe).`,
+ sujet:{titre:"Assainissement autonome d'une grande villa : fosse septique et épandage", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une villa de **8 pièces principales** occupée par **10 personnes** est construite à Songon, dans un quartier sans réseau d'égout.
+
+**Données**
+- Consommation : **110 L/personne/jour** (rejet égal à la consommation) ;
+- Fosse toutes eaux : **3 m³** jusqu'à 5 pièces principales, **+ 1 m³** par pièce supplémentaire ; temps de séjour minimal **3 jours** ;
+- Production de boues : **0,08 m³/personne/an** ; vidange quand les boues atteignent **la moitié** du volume ;
+- Épandage : charge admissible du sol **20 L/m²/jour** ; tranchées de **0,50 m** de largeur, longueur **≤ 20 m** chacune, fond à **0,80 m** de profondeur ;
+- Le puits d'un voisin est à **25 m** de l'emplacement prévu pour l'épandage ; en saison des pluies, la nappe remonte à **1,50 m** sous le terrain.
+
+### Partie A — Principe (4 points)
+1. Décrire la chaîne de l'assainissement autonome (prétraitement, traitement, évacuation, entretien). (3 pts)
+2. Quels risques sanitaires présente un assainissement mal conçu ? (1 pt)
+
+### Partie B — Fosse (6 points)
+3. Calculer le volume de la fosse et le débit journalier. (2 pts)
+4. Vérifier le temps de séjour. (2 pts)
+5. Calculer la fréquence de vidange. (2 pts)
+
+### Partie C — Épandage (5 points)
+6. Calculer la surface d'infiltration et la longueur totale de tranchées. (3 pts)
+7. Proposer un nombre et une longueur de tranchées. (2 pts)
+
+### Partie D — Implantation (5 points)
+8. Les contraintes d'implantation sont-elles respectées (puits, nappe) ? (3 pts)
+9. Proposer des solutions. Le puisard est-il acceptable ici ? (2 pts)`,
+  corrige:`### Partie A — Principe (4 pts)
+1. **Prétraitement** : fosse septique toutes eaux (eaux vannes + eaux ménagères), où les matières lourdes décantent, les graisses flottent et les bactéries digèrent une partie de la pollution (bac à graisses en amont si besoin) ; **traitement et évacuation** : l'effluent est **épuré par le sol** (tranchées d'épandage, filtre à sable) puis infiltré ; **entretien** : vidange régulière des boues. *(3 pts)*
+2. Pollution de la **nappe** et des **puits**, odeurs, débordements, maladies hydriques (diarrhées, choléra, typhoïde). *(1 pt)*
+
+### Partie B — Fosse (6 pts)
+3. V = 3 + (8 − 5) × 1 = **6 m³** ; débit : 10 × 110 = **1 100 L/jour**. *(2 pts)*
+4. Séjour = 6 000/1 100 = **5,5 jours** ≥ 3 jours ✓. *(2 pts)*
+5. Boues : 10 × 0,08 = 0,8 m³/an ; vidange à 3 m³ (moitié de la fosse) → **tous les 3,75 ans**, soit environ **tous les 3 à 4 ans**. *(2 pts)*
+
+### Partie C — Épandage (5 pts)
+6. Surface = 1 100/20 = **55 m²** ; longueur = 55/0,50 = **110 m** de tranchées. *(3 pts)*
+7. **6 tranchées de 18,5 m** (≤ 20 m), alimentées par un regard de répartition, espacées d'au moins **1,5 m** (ou 6 × 19 m pour arrondir). *(2 pts)*
+
+### Partie D — Implantation (5 pts)
+8. **Puits** à 25 m < 30 à 35 m exigés ✗ ; **nappe** : fond des tranchées à 0,80 m, nappe à 1,50 m → 0,70 m de sol filtrant < 1 m exigé ✗ ; il faut aussi ≥ 5 m des bâtiments et ≥ 3 m des limites et des arbres. *(3 pts)*
+9. **Déplacer** l'épandage à plus de 35 m du puits ; à cause de la nappe haute, réaliser un **tertre d'infiltration** ou un **filtre à sable drainé** (épandage surélevé) ; ne pas envoyer les eaux pluviales dans la fosse ; aucune circulation de véhicules sur l'épandage. Le **puisard** est **inacceptable** : il infiltre en profondeur sans épuration, près d'un puits et dans une nappe haute. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Envoyer les eaux pluviales dans la fosse (elle serait lessivée).
+> - Oublier la distance aux puits et la hauteur de la nappe.
+> - Croire que la fosse suffit à épurer : le sol (ou un filtre) fait l'essentiel du traitement.`},
  exercices:[
   {t:"Volume de fosse", d:1, e:`Quel volume de fosse toutes eaux faut-il pour une maison de 4 pièces principales ? De 7 pièces principales ?`, c:`4 pièces (≤ 5) : **3 m³** ; 7 pièces : 3 + 2 = **5 m³**.`},
   {t:"Temps de séjour", d:1, e:`Une fosse de 3 m³ reçoit les eaux de 5 personnes consommant 100 L par jour. Calculer le temps de séjour.`, c:`Débit : 5 × 100 = **500 L/jour** → séjour = 3 000/500 = **6 jours** : suffisant pour la décantation.`},
@@ -1023,6 +1776,57 @@ ou Q (L/s) = C × i × A(m²)/3 600. Elle est valable pour des bassins de quelqu
 > - tc (Kirpich) ≈ 0,0195 L^0,77 I^(−0,385) ; i = a t^(−b) (IDF).
 > - Q = C i A/3,6 (m³/s, mm/h, km²).
 > - Dimensionner par Manning ; entretenir les ouvrages.`,
+ sujet:{titre:"Drainage d'un lotissement de 12 ha : débit de projet et dalot", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un lotissement de **12 ha** est aménagé à Yamoussoukro. Toutes ses eaux convergent vers une traversée de voie à dimensionner.
+
+**Données**
+- Bassin versant : A = **12 ha** ; plus grande longueur d'écoulement L = **600 m** ; pente moyenne I = **1,5 %** ;
+- Occupation : toitures **30 %** (C = 0,95) ; voirie **20 %** (C = 0,9) ; espaces verts **50 %** (C = 0,25) ; avant aménagement : C = **0,30** ;
+- Temps de concentration (Kirpich) : tc = 0,0195 × L^0,77 × I^(−0,385) (tc en min, L en m) ;
+- Courbe IDF décennale (exemple pédagogique) : i = 650 × t^(−0,5) (i en mm/h ; t en min) ;
+- Méthode rationnelle : Q = C × i × A/3,6 (Q en m³/s ; A en km²) ;
+- Dalot en béton : K = **70** ; pente **0,5 %** ; Manning : Q = K S R^(2/3) √I ; buses béton : K = **75**.
+
+### Partie A — Notions (4 points)
+1. Définir le bassin versant, le temps de concentration et la période de retour. Quelle période de retour retenir pour un ouvrage de voirie ? (3 pts)
+2. Pourquoi l'averse de projet a-t-elle la durée du temps de concentration ? (1 pt)
+
+### Partie B — Débit de projet (7 points)
+3. Calculer le coefficient de ruissellement moyen. (2 pts)
+4. Calculer le temps de concentration et l'intensité de projet. (3 pts)
+5. Calculer le débit de pointe, puis celui avant aménagement. Commenter. (2 pts)
+
+### Partie C — Ouvrage (6 points)
+6. Calculer la capacité d'un dalot de 1,20 m de large avec 0,80 m d'eau, puis de 1,50 m de large avec 1,00 m d'eau. Choisir et fixer la hauteur intérieure. (4 pts)
+7. Une buse Ø 1 200 à la même pente débite 2,69 m³/s. Combien en faudrait-il ? Comparer. (2 pts)
+
+### Partie D — Conception (3 points)
+8. Proposer trois mesures pour limiter le débit envoyé à l'aval et assurer le bon fonctionnement des ouvrages. (3 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **Bassin versant** : surface dont toutes les eaux convergent vers un même exutoire ; **temps de concentration** : temps mis par l'eau tombée au point le plus éloigné pour atteindre l'exutoire ; **période de retour** : intervalle moyen entre deux pluies au moins aussi fortes. Pour la voirie et les réseaux urbains : **10 ans**. *(3 pts)*
+2. Une averse plus courte ne fait pas encore contribuer tout le bassin ; une averse plus longue est moins intense : le débit est **maximal** pour une durée égale à tc. *(1 pt)*
+
+### Partie B — Débit (7 pts)
+3. C = 0,30 × 0,95 + 0,20 × 0,9 + 0,50 × 0,25 = 0,285 + 0,180 + 0,125 = **0,59**. *(2 pts)*
+4. tc = 0,0195 × 600^0,77 × 0,015^(−0,385) = 0,0195 × 137,8 × 5,04 = **13,5 min** ; i = 650 × 13,5^(−0,5) = **177 mm/h**. *(3 pts)*
+5. Q = 0,59 × 177 × 0,12/3,6 = **3,47 m³/s** ; avant aménagement : 0,30 × 177 × 0,12/3,6 = **1,77 m³/s**. L'urbanisation **double** presque le débit de pointe : risque d'inondation à l'aval. *(2 pts)*
+
+### Partie C — Ouvrage (6 pts)
+6. Résultats :
+| Dalot | S (m²) | P (m) | R (m) | v (m/s) | Q (m³/s) |
+|---|---|---|---|---|---|
+| 1,20 × 0,80 | 0,96 | 2,80 | 0,343 | 2,42 | **2,33** ✗ |
+| 1,50 × 1,00 | 1,50 | 3,50 | 0,429 | 2,81 | **4,22** ✓ |
+On retient le dalot de **1,50 m** de large, avec une hauteur intérieure de **1,25 m** (revanche de 0,25 m pour les débris). *(4 pts)*
+7. 3,47/2,69 = 1,3 → **2 buses Ø 1 200** (5,38 m³/s). Le dalot unique, plus large et plus facile à curer, est préférable pour ce débit ; deux buses se bouchent plus facilement. *(2 pts)*
+
+### Partie D — Conception (3 pts)
+8. **Bassin de rétention** ou noues pour ramener le débit vers celui d'avant aménagement ; limiter l'**imperméabilisation** (espaces verts, parkings perméables, infiltration à la parcelle) ; **entretien** : curage des caniveaux et du dalot avant chaque saison des pluies (les déchets sont la première cause d'inondation) ; protection en **enrochements** à la sortie (v ≈ 2,8 m/s) ; ne jamais boucher les **exutoires naturels**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mélanger les unités : dans Q = C i A/3,6, A est en km² (12 ha = 0,12 km²).
+> - Prendre une durée d'averse arbitraire au lieu du temps de concentration.
+> - Oublier la revanche et l'entretien dans le dimensionnement d'un ouvrage.`},
  exercices:[
   {t:"Débit d'un lotissement", d:1, e:`Un lotissement de 3 ha a un coefficient de ruissellement de 0,55 ; l'intensité de projet est de 150 mm/h. Calculer le débit de pointe.`, c:`A = 0,03 km² → Q = 0,55 × 150 × 0,03/3,6 = **0,69 m³/s**.`},
   {t:"Temps de concentration", d:2, e:`Un petit bassin a une longueur d'écoulement de 250 m et une pente de 3 %. Calculer tc (Kirpich), puis l'intensité avec la courbe de l'exemple (i = 600 t^(−0,5)).`, c:`tc = 0,0195 × 250^0,77 × 0,03^(− 0,385) = 0,0195 × 70,4 × 3,85 = **5,3 min**.

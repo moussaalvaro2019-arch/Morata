@@ -8,6 +8,9 @@ Durée : environ 30 minutes, depuis un ordinateur. Même principe que pour Event
 |---|---|
 | `public/` | Le site et toute l'application (pages, cours, atelier de dessin, métré, espace PDG) |
 | `public/config.js` | **À remplir** avec les 2 informations de votre projet Supabase |
+| `contenus/cours/` | Le contenu complet des 18 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
+| `netlify/functions/cours.mjs` | Les cours protégés : n'envoie le contenu des chapitres payants qu'aux apprenants dont l'accès est actif |
+| `outils/` | Petits outils : catalogue des cours, serveur de test local |
 | `netlify/edge-functions/ia.js` | L'assistant IA (appelle l'API Claude ; la clé reste secrète sur Netlify) |
 | `package.json` | Indique à Netlify d'installer la bibliothèque de l'IA (rien à modifier) |
 | `netlify.toml` | Réglages Netlify (dossier publié : `public`) |
@@ -48,14 +51,14 @@ Enregistrez. Cette clé est prévue pour être publique : la sécurité est assu
 ## Étape 3 : mettre les fichiers sur GitHub
 
 1. Sur **github.com**, ouvrez votre dépôt ou créez-en un.
-2. **Add file** → **Upload files** → glissez **le contenu** du dossier en gardant les sous-dossiers (`public`, `netlify`, `package.json`, `netlify.toml`, `supabase.sql`, `GUIDE-INSTALLATION.md`, `README.md`) → **Commit changes**.
-   Astuce : sur Chrome, on peut glisser directement les dossiers `public` et `netlify`.
+2. **Add file** → **Upload files** → glissez **le contenu** du dossier en gardant les sous-dossiers (`public`, `contenus`, `netlify`, `outils`, `package.json`, `netlify.toml`, `supabase.sql`, `GUIDE-INSTALLATION.md`, `README.md`) → **Commit changes**.
+   Astuce : sur Chrome, on peut glisser directement les dossiers `public`, `contenus`, `netlify` et `outils`. **N'oubliez pas `contenus`** : sans lui, les cours ne s'affichent pas.
 
 ## Étape 4 : publier sur Netlify
 
 1. **app.netlify.com** → connectez-vous avec GitHub.
 2. **Add new site** → **Import an existing project** → **GitHub** → choisissez le dépôt.
-3. Laissez **Build command** vide. **Publish directory** : `public` (déjà indiqué par `netlify.toml`). → **Deploy**.
+3. Laissez **Build command** vide. **Publish directory** : `public` (déjà indiqué par `netlify.toml`). → **Deploy**. Netlify installe aussi, sans rien vous demander, la fonction des cours protégés (`/api/cours`) et l'assistant IA.
 4. Notez l'adresse du site (ex. `https://batipro-academie.netlify.app`). Vous pouvez la changer dans **Site configuration → Change site name**.
 5. Retournez dans Supabase → **Authentication** → **URL Configuration** → **Site URL** : collez l'adresse Netlify (sert au lien « Mot de passe oublié »).
 
@@ -100,6 +103,29 @@ Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonctio
 - **Intelligence artificielle** : modèle, quota, journal d'utilisation.
 - **Travaux des apprenants** : plans dessinés et métrés (ouvrir une copie pour corriger).
 - **Paramètres** : nom de la plateforme, textes d'accueil, contacts (WhatsApp), ouverture des inscriptions, **bordereau des prix** du métré, **administrateurs** (inviter un collaborateur), exports.
+
+### Accès payant : premier chapitre gratuit, puis inscription à 4 000 FCFA
+**Si votre site était déjà en ligne avant cette version** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Il ajoute les colonnes d'accès des profils, la table des paiements et les fonctions de validation, sans toucher à vos données. Vos apprenants déjà inscrits sont alors **non payés** : activez dans l'onglet **Tous les apprenants** ceux que vous voulez garder gratuits.
+
+**Réglages** — Espace PDG → **Abonnements & paiements** → onglet **Réglages** :
+- **Activer l'accès payant** (décoché : toute la plateforme redevient gratuite) ;
+- **Formule** : *Inscription : paiement unique* (4 000 FCFA par défaut) ou *Abonnement mensuel* (prix par mois, à utiliser quand la plateforme sera connue) ;
+- **Chapitres gratuits par matière** : 1 par défaut (le premier de chaque matière, en lecture complète) ;
+- **Où les apprenants paient** : numéros **Wave** et **MTN Mobile Money** (0544176359 déjà rempli), Orange, Moov, Djamo, **nom du bénéficiaire affiché** et numéro **WhatsApp** pour les preuves de paiement.
+
+> **Ne mettez jamais un numéro de carte bancaire** (16 chiffres, carte Visa Djamo…) : ces numéros sont visibles par tous les visiteurs et pourraient servir à des fraudes. Pour Djamo, indiquez le **numéro de téléphone** lié au compte. La plateforme refuse d'enregistrer un numéro de 16 chiffres ou plus.
+
+**Au quotidien** :
+1. L'apprenant lit gratuitement le premier chapitre, s'inscrit, puis ouvre **Mon abonnement** : il voit le montant et vos numéros, paie depuis son téléphone, puis **déclare son paiement** (numéro utilisé et référence du SMS) ; il peut aussi vous envoyer la capture sur WhatsApp.
+2. Vous recevez l'argent **directement** sur votre numéro Wave ou MTN Money. Vous vérifiez la réception sur votre téléphone, puis Espace PDG → **Abonnements & paiements** → onglet **À valider** → **Valider** : l'accès s'ouvre aussitôt (ou **Refuser** si le paiement n'est pas arrivé).
+3. Vous pouvez à tout moment **activer** (paiement en espèces, bourse, partenaire) ou **désactiver** un apprenant (onglets *Tous les apprenants*, *Accès actifs*, *Non payés*, *Expirés*), et, en formule mensuelle, prolonger d'un mois. Le tableau de bord de la page indique les encaissements.
+
+**Ce qui est protégé** : sans accès actif, le serveur n'envoie ni le contenu des chapitres payants, ni leurs exercices, quiz et sujets d'examen ; l'assistant IA, la résolution en photo et les annales sont aussi réservés aux accès actifs. Les administrateurs ont toujours un accès complet.
+
+**Recevoir l'argent automatiquement (sans validation manuelle)** : il faut passer par un **agrégateur de paiement** (CinetPay, PayDunya, ou l'API marchande de Wave Business), qui encaisse le paiement de l'apprenant et prévient la plateforme. Cela demande un **compte marchand** à votre nom (souvent avec registre de commerce), des frais par transaction (environ 2 à 3,5 %) et une petite fonction serveur supplémentaire, qui pourra être ajoutée quand vous aurez ouvert ce compte. En attendant, la validation en un clic ne coûte rien et l'argent arrive sans intermédiaire sur votre numéro. Aucune plateforme ne peut, en revanche, prélever de l'argent sur un apprenant simplement parce qu'il se connecte : chaque paiement doit être fait (ou autorisé) par lui.
+
+### Sujets d'examen par chapitre
+Chaque chapitre des 18 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 316 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
 
 ### Annales d'examens (sujets officiels)
 **Importer toute une rubrique d'un site autorisé (Fomesoutra…)** — Espace PDG → **Annales d'examens** → carte **Importer les sujets d'un site autorisé** :
@@ -154,3 +180,6 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 | « Clé ANTHROPIC_API_KEY invalide » | Recopiez la clé sans espace ; vérifiez qu'elle n'a pas été supprimée sur console.anthropic.com |
 | « Limite de … questions atteinte » | Augmentez le quota dans Espace PDG → Intelligence artificielle |
 | Le bouton « créer le compte PDG » n'apparaît pas | Un administrateur existe déjà : connectez-vous avec son e-mail |
+| Les chapitres restent vides ou « Cours introuvable » | Le dossier `contenus` n'a pas été envoyé sur GitHub : ajoutez-le, puis attendez le redéploiement |
+| Un apprenant a payé mais reste bloqué | Espace PDG → Abonnements & paiements → **À valider** (ou activez-le dans *Tous les apprenants*) ; il doit ensuite actualiser la page |
+| « Activez votre accès » s'affiche pour tout le monde après la mise à jour | `supabase.sql` n'a pas été relancé : relancez-le (il ajoute les fonctions d'accès) |

@@ -78,6 +78,66 @@ Sous le soleil, une toiture **absorbe** le rayonnement solaire, s'échauffe, **c
 > - La chaleur va du chaud vers le froid ; Φ (W) = φ (W/m²) × S.
 > - Conduction : φ = λ ΔT/e ; convection : φ = h ΔT ; rayonnement : φ = ε σ T⁴.
 > - Une toiture tropicale combine les trois : agir sur chacun.`,
+ sujet:{titre:"Les trois modes de transfert de chaleur dans une maison en tôle à Bouaké", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une famille de Bouaké se plaint de la chaleur dans sa maison couverte en **tôle sans faux plafond**. On analyse, mode par mode, d'où vient la chaleur ressentie.
+
+**Données**
+- T(K) = T(°C) + 273,15 ; σ = 5,67 × 10⁻⁸ W/(m²·K⁴) ;
+- Conduction : φ = λ × ΔT / e ; convection : φ = h × ΔT ; rayonnement net entre deux surfaces : φ ≈ ε × σ × (T₁⁴ − T₂⁴) ;
+- Dalle de béton d'une pièce voisine : **15 cm**, λ = **2 W/(m·K)**, faces à **38 °C** et **31 °C**, surface **60 m²** ;
+- Peau d'un occupant à **34 °C**, air à **29 °C**, surface du corps **1,8 m²** ; h = **3 W/(m²·K)** en air calme, **12 W/(m²·K)** sous un ventilateur ;
+- Sous-face de la tôle à **65 °C**, ε = **0,9** ; surfaces de la pièce à **33 °C** ; surface de toiture **60 m²**.
+
+### Partie A — Notions (4 points)
+1. Expliquer la différence entre température et chaleur. Convertir 36 °C et 29 °C en kelvins et donner l'écart. (2 pts)
+2. Nommer les trois modes de transfert et donner pour chacun un exemple pris dans la maison. (2 pts)
+
+### Partie B — Conduction (4 points)
+3. Calculer la densité de flux et le flux total qui traversent la dalle de la pièce voisine. (3 pts)
+4. Que deviendrait la densité de flux avec une dalle de 30 cm, toutes choses égales par ailleurs ? (1 pt)
+
+### Partie C — Convection (5 points)
+5. Calculer la densité de flux et la puissance cédées par la peau de l'occupant en air calme, puis sous le ventilateur. (3 pts)
+6. Expliquer pourquoi le ventilateur rafraîchit l'occupant alors qu'il ne refroidit pas l'air. (2 pts)
+
+### Partie D — Rayonnement (5 points)
+7. Calculer la densité de flux émise par la sous-face de la tôle, puis l'échange net avec les surfaces de la pièce et la puissance correspondante pour 60 m². (3 pts)
+8. On colle un film aluminium propre (ε = 0,05) sous la tôle, face à une lame d'air. Recalculer l'échange net et la puissance. (2 pts)
+
+### Partie E — Synthèse (2 points)
+9. Proposer une solution technique qui agit sur chacun des modes (absorption, conduction, rayonnement, convection) pour cette maison. (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. La **température** mesure l'agitation des molécules (°C ou K) ; la **chaleur** est une énergie (J) qui passe toujours du corps chaud vers le corps froid. 36 °C = **309,15 K** ; 29 °C = **302,15 K** ; écart **7 K** (= 7 °C). *(2 pts)*
+2. **Conduction** : chaleur qui traverse la tôle ou un mur ; **convection** : air chaud qui monte sous la toiture, air brassé par le ventilateur ; **rayonnement** : chaleur « ressentie » sous la tôle brûlante. *(2 pts)*
+
+### Partie B — Conduction (4 pts)
+3. Loi de Fourier :
+$$ φ = 2 × 7 / 0,15 = 93,3 W/m²
+$$ Φ = 93,3 × 60 = 5 600 W
+*(3 pts)*
+4. φ est inversement proportionnel à l'épaisseur : **46,7 W/m²** (flux divisé par deux). *(1 pt)*
+
+### Partie C — Convection (5 pts)
+5. Écart peau-air : 34 − 29 = 5 °C.
+- Air calme : φ = 3 × 5 = **15 W/m²** → P = 15 × 1,8 = **27 W** ;
+- Ventilateur : φ = 12 × 5 = **60 W/m²** → P = 60 × 1,8 = **108 W**. *(3 pts)*
+6. Le ventilateur ne baisse pas la température de l'air, il **augmente h** en renouvelant l'air au contact de la peau : le corps évacue quatre fois plus de chaleur par convection, et la sueur s'évapore mieux. *(2 pts)*
+
+### Partie D — Rayonnement (5 pts)
+7. T₁ = 338,15 K ; T₂ = 306,15 K.
+$$ φ(émis) = 0,9 × 5,67 × 10⁻⁸ × 338,15⁴ ≈ 667 W/m²
+$$ φ(net) = 0,9 × 5,67 × 10⁻⁸ × (338,15⁴ − 306,15⁴) ≈ 219 W/m²
+$$ Φ = 219 × 60 ≈ 13,1 kW
+C'est l'équivalent de **dix radiateurs électriques** allumés au-dessus des occupants. *(3 pts)*
+8. φ(net) = 0,05 × 5,67 × 10⁻⁸ × (338,15⁴ − 306,15⁴) ≈ **12 W/m²** → Φ ≈ **0,73 kW** : le rayonnement est divisé par **18**. *(2 pts)*
+
+### Partie E — Synthèse (2 pts)
+9. **Absorption** : peindre la tôle en blanc ou en couleur claire ; **conduction** : faux plafond avec 5 à 10 cm de laine minérale ; **rayonnement** : écran réfléchissant propre face à une lame d'air ; **convection** : ventiler les combles (entrées en bas de pente, sorties au faîtage) et utiliser des ventilateurs de plafond. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer le rayonnement avec des températures en °C : il faut des **kelvins**, à la puissance 4.
+> - Confondre la densité de flux φ (W/m²) et le flux Φ (W).
+> - Croire qu'un ventilateur refroidit l'air : il augmente seulement les échanges avec la peau.`},
  exercices:[
   {t:"Conversion et flux", d:1, e:`a) Convertir 32 °C et 24 °C en kelvins ; quel est l'écart en K ?
 b) Une densité de flux de 45 W/m² traverse un mur de 18 m². Calculer le flux total.`, c:`a) 32 + 273,15 = **305,15 K** ; 24 + 273,15 = **297,15 K** ; écart **8 K** (= 8 °C).
@@ -158,6 +218,63 @@ Une paroi lourde **exposée au soleil** et non ventilée la nuit restitue la cha
 > - 5 cm de laine (R = 1,25) ≈ 2,5 m de béton.
 > - Inertie : stockage de chaleur Q = ρ c S e ΔT.
 > - Isolation et inertie jouent des rôles différents et complémentaires.`,
+ sujet:{titre:"Isolation ou inertie : choisir les matériaux d'une maison à Korhogo", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un particulier de Korhogo hésite entre des murs épais en **BTC** et des murs plus minces avec un **isolant**. On compare les deux notions : résistance thermique et inertie.
+
+**Données**
+- R = e / λ ; isolant thermique : λ ≤ 0,065 W/(m·K) ; Q = ρ × c × S × e × ΔT ; 1 kWh = 3,6 MJ ;
+- Conductivités λ (W/(m·K)) : BTC **1,0** ; béton **2,0** ; brique **0,6** ; laine minérale **0,04** ; PSE **0,035** ; fibre de coco **0,05** ;
+- Capacités volumiques ρ × c : BTC **1,7 MJ/(m³·K)** ; laine minérale **0,03 MJ/(m³·K)** ;
+- Mur en BTC de **30 cm**, surface **40 m²**, qui s'échauffe en moyenne de **5 °C** dans la journée ;
+- Évacuation nocturne : Φ = 0,34 × q × ΔT (W ; q en m³/h), écart air intérieur-extérieur la nuit : **4 °C**, durée **8 h**.
+
+### Partie A — Notions (4 points)
+1. Définir la conductivité thermique λ. Pourquoi les isolants sont-ils efficaces ? (2 pts)
+2. Parmi les matériaux des données, lesquels sont des isolants au sens strict ? (2 pts)
+
+### Partie B — Résistances thermiques (6 points)
+3. Calculer la résistance de : 30 cm de BTC ; 15 cm de béton ; 8 cm de laine ; 6 cm de PSE ; 5 cm de fibre de coco. (3 pts)
+4. Quelle épaisseur de béton, puis de brique, donnerait la même résistance que 8 cm de laine ? (2 pts)
+5. Conclure : un mur lourd est-il isolant ? (1 pt)
+
+### Partie C — Inertie (7 points)
+6. Calculer la chaleur stockée par le mur en BTC dans la journée (en MJ et en kWh). (3 pts)
+7. Même calcul pour une couche de laine de 8 cm de même surface. Conclure. (1 pt)
+8. On veut évacuer la chaleur stockée par le mur en 8 h de ventilation nocturne. Calculer la puissance moyenne à évacuer et le débit d'air nécessaire. (3 pts)
+
+### Partie D — Stratégie (3 points)
+9. Le climat de Korhogo est sec avec un fort écart jour-nuit ; celui d'Abidjan est humide avec des nuits chaudes. Quelle stratégie (isolation, inertie, ventilation) recommander dans chaque ville ? (3 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. λ (W/(m·K)) est le flux qui traverse 1 m² d'un matériau de 1 m d'épaisseur pour 1 °C d'écart : plus λ est **petit**, plus le matériau isole. Les isolants doivent leur efficacité à l'**air immobile** (λ = 0,025) emprisonné dans leurs fibres ou cellules. *(2 pts)*
+2. λ ≤ 0,065 : **laine minérale**, **PSE** et **fibre de coco**. Le BTC, la brique et le béton ne sont pas des isolants. *(2 pts)*
+
+### Partie B — Résistances (6 pts)
+3. Résistances des couches :
+| Couche | Calcul | R (m²·K/W) |
+|---|---|---|
+| BTC 30 cm | 0,30/1,0 | **0,30** |
+| Béton 15 cm | 0,15/2,0 | **0,075** |
+| Laine 8 cm | 0,08/0,04 | **2,00** |
+| PSE 6 cm | 0,06/0,035 | **1,71** |
+| Coco 5 cm | 0,05/0,05 | **1,00** |
+*(3 pts)*
+4. e = R × λ : béton : 2,0 × 2,0 = **4,0 m** ; brique : 2,0 × 0,6 = **1,20 m**. *(2 pts)*
+5. Non : 30 cm de BTC isolent presque **sept fois moins** que 8 cm de laine. L'intérêt du mur lourd est ailleurs : l'**inertie**. *(1 pt)*
+
+### Partie C — Inertie (7 pts)
+6. Q = 1,7 × 10⁶ × 40 × 0,30 × 5 = **102 MJ** = 102/3,6 = **28,3 kWh**. *(3 pts)*
+7. Q = 0,03 × 10⁶ × 40 × 0,08 × 5 = **0,48 MJ** (0,13 kWh) : 200 fois moins. La laine **isole** mais ne **stocke** presque rien. *(1 pt)*
+8. P = 28,3 kWh / 8 h ≈ **3,5 kW** ;
+$$ q = P / (0,34 × ΔT) = 3 540 / (0,34 × 4) ≈ 2 600 m³/h
+C'est un débit important, obtenu par une **ventilation traversante** de nuit (fenêtres opposées grandes ouvertes) ou un ventilateur d'extraction. *(3 pts)*
+
+### Partie D — Stratégie (3 pts)
+9. **Korhogo (sec)** : murs épais à forte inertie (BTC, terre), **fermés et occultés le jour**, **ventilés la nuit** quand l'air est frais ; la toiture reste isolée. **Abidjan (humide)** : nuits chaudes, ventilation nocturne peu efficace : **protéger les parois lourdes du soleil** (débords, isolation extérieure) ou construire **léger et ventilé** ; isoler la toiture en priorité. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre isolation (freiner le flux, R = e/λ) et inertie (stocker la chaleur, ρ c e).
+> - Oublier de convertir les centimètres en mètres dans R = e/λ.
+> - Croire que l'inertie seule rafraîchit : sans évacuation nocturne, la chaleur stockée revient dans la pièce.`},
  exercices:[
   {t:"Résistances de couches", d:1, e:`Calculer la résistance thermique de : a) 20 cm de béton ; b) 15 cm de BTC (λ = 1,0) ; c) 4 cm de polystyrène (λ = 0,035) ; d) 2,5 cm de lambris bois (λ = 0,15).`, c:`a) 0,20/2 = **0,10 m²·K/W** ; b) 0,15/1,0 = **0,15** ; c) 0,04/0,035 = **1,14** ; d) 0,025/0,15 = **0,17**.
 Les 4 cm de polystyrène isolent onze fois plus que 20 cm de béton.`},
@@ -219,6 +336,71 @@ Avec le mur en béton ci-dessus (ΔT total 7 °C) : chute dans Rse : 0,04/0,27 �
 > - Φ = U × S × ΔT.
 > - Murs courants : U ≈ 2 à 3,7 ; mur isolé : U ≈ 0,5.
 > - La chute de température dans chaque couche est proportionnelle à sa résistance.`,
+ sujet:{titre:"Murs d'une chambre climatisée à Abidjan : coefficient U, flux et température de surface", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une chambre de **4,00 × 3,50 m**, hauteur **2,80 m**, est climatisée la nuit. Deux de ses murs donnent sur l'extérieur ; ils comptent une fenêtre de **1,5 m²**.
+
+**Données**
+- Mur actuel : enduit **1,5 cm** (λ = 1,15) + brique de terre cuite **20 cm** (λ = 0,6) + enduit **1,5 cm** (λ = 1,15) ;
+- Rsi = **0,13** ; Rse = **0,04 m²·K/W** ; R(totale) = Rsi + Σ e/λ + Rse ; U = 1/R(totale) ; Φ = U × S × ΔT ;
+- T(ext) = **33 °C** ; T(int) = **25 °C** ; utilisation **10 h/jour**, **365 jours** ;
+- Climatiseur : **3 kWh** de froid par kWh électrique ; électricité **90 F/kWh** ;
+- Variante isolée : l'enduit intérieur est remplacé par **4 cm de PSE** (λ = 0,035) et une **plaque de plâtre de 13 mm** (λ = 0,25) ; coût **9 000 F/m²**.
+
+### Partie A — Notions (3 points)
+1. Que représente le coefficient U ? Dans quelle unité s'exprime-t-il ? Pourquoi Rse est-il plus faible que Rsi ? (3 pts)
+
+### Partie B — Le mur actuel (8 points)
+2. Calculer la surface opaque des murs extérieurs. (1 pt)
+3. Calculer la résistance totale et le coefficient U du mur (présenter un tableau). (3 pts)
+4. Calculer le flux qui entre par ces murs (sans tenir compte du soleil). (2 pts)
+5. Calculer la température de la surface intérieure du mur. Commenter. (2 pts)
+
+### Partie C — Le mur isolé (5 points)
+6. Calculer la nouvelle résistance totale et le nouveau U. (2 pts)
+7. Calculer le nouveau flux et le pourcentage de réduction. (2 pts)
+8. Calculer la nouvelle température de surface intérieure. (1 pt)
+
+### Partie D — Économie (4 points)
+9. Calculer, pour chaque solution, l'électricité consommée par an pour compenser ce flux et son coût ; en déduire l'économie annuelle. (3 pts)
+10. Calculer le temps de retour de l'isolation. Pourquoi est-il en réalité plus court ? (1 pt)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. U est le **flux qui traverse 1 m² de paroi pour 1 °C d'écart** entre l'air intérieur et l'air extérieur, en **W/(m²·K)** ; plus U est petit, plus la paroi isole. À l'extérieur, le **vent** augmente fortement les échanges par convection : la résistance superficielle est donc plus faible (0,04 contre 0,13). *(3 pts)*
+
+### Partie B — Mur actuel (8 pts)
+2. S = (4,00 + 3,50) × 2,80 − 1,5 = 21,0 − 1,5 = **19,5 m²**. *(1 pt)*
+3. Résistance totale du mur :
+| Couche | R (m²·K/W) |
+|---|---|
+| Rsi | 0,130 |
+| Enduit 0,015/1,15 | 0,013 |
+| Brique 0,20/0,6 | 0,333 |
+| Enduit 0,015/1,15 | 0,013 |
+| Rse | 0,040 |
+| **Total** | **0,529** |
+U = 1/0,529 = **1,89 W/(m²·K)**. *(3 pts)*
+4. Φ = 1,89 × 19,5 × 8 ≈ **295 W**. *(2 pts)*
+5. Chute dans Rsi : 0,13/0,529 × 8 = 1,97 °C → T(si) ≈ **27,0 °C**. La paroi est 2 °C plus chaude que l'air : elle **rayonne** vers l'occupant, qui ressent une chaleur près du mur. *(2 pts)*
+
+### Partie C — Mur isolé (5 pts)
+6. R = 0,13 + 0,052 (plâtre) + 1,143 (PSE) + 0,333 + 0,013 + 0,04 = **1,711 m²·K/W** → U = **0,58 W/(m²·K)**. *(2 pts)*
+7. Φ = 0,584 × 19,5 × 8 ≈ **91 W** ; réduction : (295 − 91)/295 = **69 %**. *(2 pts)*
+8. T(si) = 25 + 0,13/1,711 × 8 = **25,6 °C** : la paroi est presque à la température de l'air. *(1 pt)*
+
+### Partie D — Économie (4 pts)
+9. Consommations comparées :
+| | Mur actuel | Mur isolé |
+|---|---|---|
+| Froid par jour (10 h) | 2,95 kWh | 0,91 kWh |
+| Électricité par jour (÷ 3) | 0,98 kWh | 0,30 kWh |
+| Électricité par an | **358 kWh** | **111 kWh** |
+| Coût annuel | **32 270 F** | **9 980 F** |
+Économie : **≈ 248 kWh** et **≈ 22 300 F par an**. *(3 pts)*
+10. Investissement : 19,5 × 9 000 = 175 500 F → 175 500 / 22 300 ≈ **7,9 ans**. Le calcul ignore le **soleil** sur les murs (qui peut doubler l'écart de température équivalent) et le gain de confort : le retour réel est nettement plus court. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier Rsi et Rse : U serait fortement surestimé.
+> - Laisser la fenêtre dans la surface du mur : elle a son propre coefficient.
+> - Confondre l'énergie de froid et l'énergie électrique (diviser par le rendement du climatiseur).`},
  exercices:[
   {t:"Coefficient U d'un mur en brique", d:1, e:`Calculer U pour un mur en brique de 20 cm (λ = 0,6), sans enduit, paroi verticale.`, c:`R = 0,13 + 0,20/0,6 + 0,04 = 0,13 + 0,333 + 0,04 = **0,503 m²·K/W** → U = **1,99 W/(m²·K)**.`},
   {t:"Flux à travers un mur", d:1, e:`Un mur en parpaing enduit (U = 2,5) de 30 m² sépare un bureau climatisé à 24 °C de l'extérieur à 30 °C.
@@ -289,6 +471,69 @@ Toute l'électricité consommée dans un local finit en **chaleur** dans ce loca
 > - Toiture non isolée : premier poste de loin.
 > - Toute l'électricité consommée devient chaleur.
 > - Chaleur sensible (température) et latente (vapeur d'eau).`,
+ sujet:{titre:"Inventaire des sources de chaleur d'une villa de 120 m²", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une villa de plain-pied de **120 m²** à Yamoussoukro est très chaude en début d'après-midi. On dresse l'inventaire des apports de chaleur à 15 h pour hiérarchiser les travaux.
+
+**Données**
+- Toiture en tôle **sans isolation ni faux plafond** : **210 W/m²** entrent dans les pièces ; après travaux (faux plafond, lame d'air, 5 cm de laine) : **27 W/m²** ;
+- Fenêtres à l'ouest : **5 m²** de vitrage clair, I = **500 W/m²**, g = **0,85** ; des persiennes extérieures arrêtent **80 %** du soleil ;
+- **5 occupants** : 100 W chacun dont **70 W sensibles** et **30 W latents** ;
+- Éclairage : **10 lampes à incandescence de 60 W** allumées, remplaçables par des LED de **8 W** ;
+- Appareils en marche : téléviseur **100 W**, réfrigérateur **70 W**, ordinateur **120 W**.
+
+### Partie A — Notions (3 points)
+1. Distinguer apports extérieurs et apports intérieurs ; en citer trois de chaque sorte. (2 pts)
+2. Pourquoi dit-on que toute l'électricité consommée dans un local finit en chaleur ? (1 pt)
+
+### Partie B — Situation actuelle (8 points)
+3. Calculer chaque apport et le total à 15 h (présenter un tableau). (5 pts)
+4. Quelle part du total représente la toiture ? (1 pt)
+5. Séparer la chaleur sensible et la chaleur latente. Pourquoi la chaleur latente compte-t-elle pour un climatiseur ? (2 pts)
+
+### Partie C — Après travaux (6 points)
+6. Recalculer le bilan après isolation de la toiture, pose des persiennes et passage aux LED ; calculer la réduction obtenue. (4 pts)
+7. Quel est maintenant le premier poste ? Proposer deux améliorations supplémentaires. (2 pts)
+
+### Partie D — Leviers d'action (3 points)
+8. Classer les actions possibles pour cette villa selon les quatre leviers : empêcher, réduire, évacuer, refroidir. (3 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. **Extérieurs** : soleil sur la toiture, soleil à travers les vitrages, soleil sur les murs, air chaud et humide qui entre, conduction à travers les parois. **Intérieurs** : occupants, éclairage, appareils (téléviseur, réfrigérateur, cuisson). *(2 pts)*
+2. L'énergie électrique est transformée (lumière, mouvement, son) mais finit toujours **dégradée en chaleur** dans le local : une lampe de 60 W chauffe la pièce de 60 W. *(1 pt)*
+
+### Partie B — Situation actuelle (8 pts)
+3. Bilan à 15 h :
+| Poste | Calcul | Apport |
+|---|---|---|
+| Toiture | 120 × 210 | 25 200 W |
+| Fenêtres ouest | 5 × 500 × 0,85 | 2 125 W |
+| Occupants | 5 × 100 | 500 W |
+| Éclairage | 10 × 60 | 600 W |
+| Appareils | 100 + 70 + 120 | 290 W |
+| **Total** | | **28 715 W ≈ 28,7 kW** |
+*(5 pts)*
+4. 25 200 / 28 715 = **88 %** : la toiture apporte plus de sept fois toutes les autres sources réunies. *(1 pt)*
+5. Latent : 5 × 30 = **150 W** (vapeur d'eau des occupants) ; sensible : **28 565 W**. Le climatiseur doit **condenser** cette vapeur pour éviter une ambiance moite : sous les tropiques, avec l'air extérieur humide, le latent représente souvent 25 à 40 % de son travail. *(2 pts)*
+
+### Partie C — Après travaux (6 pts)
+6. Bilan après travaux :
+| Poste | Calcul | Apport |
+|---|---|---|
+| Toiture isolée | 120 × 27 | 3 240 W |
+| Fenêtres avec persiennes | 2 125 × 0,20 | 425 W |
+| Occupants | inchangé | 500 W |
+| LED | 10 × 8 | 80 W |
+| Appareils | inchangé | 290 W |
+| **Total** | | **4 535 W** |
+Réduction : (28 715 − 4 535)/28 715 = **84 %**. *(4 pts)*
+7. La toiture reste le premier poste (**71 %**). Améliorations : peindre la tôle en **blanc**, **ventiler les combles** (aérateurs de faîtage), passer à **10 cm de laine** ou ajouter un **écran réfléchissant**. *(2 pts)*
+
+### Partie D — Leviers (3 pts)
+8. **Empêcher** : toiture claire, isolée et ventilée ; persiennes ; débords ; arbres à l'ouest. **Réduire** : LED, réfrigérateur performant, cuisine ventilée. **Évacuer** : ventilation traversante, ventilation nocturne, ouvertures hautes. **Refroidir** (en dernier) : ventilateurs de plafond, puis climatisation d'une chambre bien fermée. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Commencer par changer les lampes alors que la toiture représente près de 90 % des apports.
+> - Oublier la chaleur latente (occupants, air humide) dans le dimensionnement d'un climatiseur.
+> - Compter le soleil sur les vitrages sans le facteur solaire g.`},
  exercices:[
   {t:"Apports internes d'un bureau", d:1, e:`Un bureau accueille 4 personnes en activité légère (130 W chacune), 4 ordinateurs (120 W), 6 lampes LED de 18 W et une imprimante de 200 W (allumée en permanence).
 Calculer les apports internes.`, c:`Personnes : 4 × 130 = **520 W** ; ordinateurs : **480 W** ; éclairage : 6 × 18 = **108 W** ; imprimante : **200 W**.
@@ -356,6 +601,65 @@ Un ventilateur de plafond (50 à 75 W) suffit dans une maison bien conçue ; la 
 > - Protections extérieures, ventilation traversante et sorties hautes.
 > - Couleurs claires, végétation, apports intérieurs réduits.
 > - Ventilateurs d'abord, climatisation ciblée ensuite.`,
+ sujet:{titre:"Concevoir une maison fraîche à Abidjan : critique d'un avant-projet", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un client présente l'avant-projet de sa maison de **100 m²** à Abidjan et demande pourquoi le bureau d'études prévoit « trop de climatiseurs ».
+
+**Description de l'avant-projet**
+- Grande baie vitrée de **6 m²** sur la façade **ouest**, protégée par des **rideaux intérieurs** ;
+- Toiture en **tôle de couleur sombre**, sans faux plafond ;
+- **Aucun débord** de toiture ; fenêtres des chambres sur **une seule façade** ;
+- Cour entièrement **bétonnée** autour de la maison ; éclairage par **lampes halogènes**.
+
+**Données**
+- Soleil sur la façade ouest à 16 h : I = **500 W/m²** ; vitrage clair g = **0,85** ;
+- Un rideau intérieur arrête **35 %** du soleil ; une persienne extérieure en arrête **85 %** ;
+- Fenêtre de la façade sud : hauteur **1,20 m**, haut de la fenêtre **0,30 m** sous le débord ; hauteur du soleil à midi en saison chaude : **62°** ;
+- Consommation de climatisation estimée : **650 kWh/mois** pour l'avant-projet, **150 kWh/mois** pour une maison bien conçue ; électricité **90 F/kWh** ; surcoût de construction des améliorations : **1 800 000 F**.
+
+### Partie A — Analyse critique (8 points)
+1. Relever six défauts de conception de l'avant-projet et proposer une correction pour chacun. (6 pts)
+2. Pourquoi ces choix coûtent-ils peu s'ils sont faits à la conception ? (2 pts)
+
+### Partie B — Protections solaires (6 points)
+3. Calculer l'apport solaire de la baie ouest : sans protection, avec le rideau intérieur, avec une persienne extérieure. (3 pts)
+4. Calculer la longueur de débord qui ombrage entièrement la fenêtre sud à midi. (3 pts)
+
+### Partie C — Ventilateur ou climatiseur (2 points)
+5. Comparer un ventilateur de plafond et un climatiseur (puissance absorbée, effet sur le confort). À quelles conditions la climatisation est-elle justifiée ? (2 pts)
+
+### Partie D — Bilan économique (4 points)
+6. Calculer l'économie annuelle d'électricité et le temps de retour du surcoût de construction. (4 pts)`,
+  corrige:`### Partie A — Analyse critique (8 pts)
+1. Défauts relevés et corrections :
+| Défaut | Correction |
+|---|---|
+| Baie de 6 m² à l'ouest (soleil bas de l'après-midi) | Ouvrir au **nord et au sud** ; réduire et protéger les baies ouest |
+| Rideaux intérieurs seulement | **Protections extérieures** : persiennes, brise-soleil, volets |
+| Tôle sombre sans faux plafond | Tôle **claire**, **faux plafond isolé** (5 à 10 cm de laine), **combles ventilés** |
+| Aucun débord | **Débords de 60 cm à 1 m**, galerie ou véranda |
+| Fenêtres sur une seule façade | **Ventilation traversante** (façades opposées, impostes) |
+| Cour bétonnée, halogènes | **Végétation**, pelouse, arbres à l'est et à l'ouest ; éclairage **LED** |
+*(6 pts — 1 pt par défaut corrigé)*
+2. À la conception, on **choisit** une orientation, une forme de toiture ou une position de fenêtre sans surcoût notable ; une fois construit, il faut démolir, ajouter ou climatiser : c'est cher, parfois impossible. *(2 pts)*
+
+### Partie B — Protections solaires (6 pts)
+3. Sans protection : Φ = 6 × 500 × 0,85 = **2 550 W** ; rideau intérieur : 2 550 × 0,65 = **1 658 W** ; persienne extérieure : 2 550 × 0,15 = **383 W**. La protection extérieure est **quatre fois plus efficace** que le rideau, qui a déjà laissé entrer la chaleur derrière le vitrage. *(3 pts)*
+4. Le débord doit arrêter les rayons qui atteindraient le bas de la fenêtre, situé à 0,30 + 1,20 = 1,50 m sous le débord :
+$$ d = 1,50 / tan 62° = 1,50 / 1,881 ≈ 0,80 m
+→ débord de **0,80 m** (dans la fourchette de 60 cm à 1 m). *(3 pts)*
+
+### Partie C — Ventilateur ou climatiseur (2 pts)
+5. Ventilateur de plafond : **50 à 75 W**, un courant d'air de 1 m/s vaut **3 à 4 °C** de moins ressentis ; climatiseur : **1 000 à 2 500 W**. La climatisation se justifie pour les pièces et les périodes qui en ont vraiment besoin, **réglée à 25-26 °C**, portes et fenêtres **fermées**, dans des locaux déjà protégés du soleil. *(2 pts)*
+
+### Partie D — Bilan économique (4 pts)
+6. Économie : (650 − 150) × 12 = **6 000 kWh/an** → 6 000 × 90 = **540 000 F/an**.
+$$ temps de retour = 1 800 000 / 540 000 ≈ 3,3 ans
+Le surcoût est remboursé en un peu plus de trois ans, puis la maison économise chaque année 540 000 F tout en étant plus confortable. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Croire qu'un rideau intérieur protège du soleil autant qu'une persienne : la chaleur est déjà entrée.
+> - Calculer le débord avec la hauteur de la fenêtre seule, sans la distance entre le débord et le haut de la fenêtre.
+> - Dimensionner la climatisation avant d'avoir corrigé la conception.`},
  exercices:[
   {t:"Associer problèmes et solutions", d:1, e:`Associer à chaque problème le choix le plus efficace : a) plafond brûlant l'après-midi ; b) séjour surchauffé de 15 h à 18 h par une baie vitrée ; c) air immobile et moite dans les chambres ; d) murs extérieurs chauds au toucher le soir.`, c:`a) **Toiture** : faux plafond isolé + combles ventilés + couleur claire.
 b) Baie à l'**ouest** : protection extérieure (brise-soleil, volets, store extérieur) ou galerie, arbres.
@@ -419,6 +723,71 @@ On peut définir un U moyen = Σ Uᵢ Sᵢ/Σ Sᵢ.
 > - Lame d'air immobile ≈ 0,17 ; avec face réfléchissante ≈ 0,5.
 > - Toiture : faux plafond seul ÷ 2 ; avec 5 cm d'isolant ÷ 8.
 > - Paroi composée : Φ = Σ Uᵢ Sᵢ ΔT.`,
+ sujet:{titre:"Coefficients U des parois et de la toiture d'un immeuble de bureaux", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On réhabilite un petit immeuble de bureaux à Cocody. On compare les parois actuelles et les parois améliorées.
+
+**Données**
+- Rsi = **0,13** (mur) ; Rse = **0,04** ; toiture (flux descendant) : Rsi = **0,17** ; R(totale) = Rsi + Σ e/λ + R(lame) + Rse ; U = 1/R ;
+- Mur actuel : enduit extérieur **2 cm** (λ = 1,15) + parpaing creux **20 cm** (R = **0,23 m²·K/W**) + enduit intérieur **2 cm** (λ = 1,15) ;
+- Mur amélioré : l'enduit intérieur est remplacé par **6 cm de PSE** (λ = 0,035) et une **plaque de plâtre de 13 mm** (λ = 0,25) ;
+- Toiture améliorée : tôle (résistance négligeable) + combles à lame d'air (R = **0,17**) + **8 cm de laine** (λ = 0,04) + faux plafond en plâtre (R = **0,04**) ; tôle seule : U = **4,8 W/(m²·K)** ;
+- Façade d'un bureau : **10,00 × 3,00 m** percée de **4 fenêtres de 1,50 × 1,20 m** en simple vitrage (Uw = **5,8 W/(m²·K)**) ; écart de température **7 °C**.
+
+### Partie A — Notions (3 points)
+1. Pourquoi les résistances des couches s'additionnent-elles ? (1 pt)
+2. Comparer la résistance d'une lame d'air immobile, d'une lame avec une face réfléchissante et d'une lame fortement ventilée. (2 pts)
+
+### Partie B — Les murs (7 points)
+3. Calculer R(totale) et U du mur actuel. (2 pts)
+4. Calculer R(totale) et U du mur amélioré (présenter un tableau). (4 pts)
+5. Dans quel rapport le flux est-il divisé ? (1 pt)
+
+### Partie C — La toiture (4 points)
+6. Calculer U de la toiture améliorée. (3 pts)
+7. Comparer avec la tôle seule. (1 pt)
+
+### Partie D — Une façade composée (6 points)
+8. Calculer, pour la façade avec le mur actuel puis avec le mur amélioré : le coefficient H = Σ U × S, le U moyen et le flux. (4 pts)
+9. Quelle part du flux passe par les fenêtres dans chaque cas ? Conclure. (2 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. Le même flux traverse **successivement** toutes les couches (montage en **série**) : les écarts de température s'ajoutent, donc les résistances aussi. *(1 pt)*
+2. Lame immobile de 2 à 5 cm : **≈ 0,17 m²·K/W** ; avec une face **réfléchissante** propre : **0,5 à 0,6** (rayonnement presque supprimé) ; lame **fortement ventilée** : **ne compte pas** comme résistance, mais elle évacue la chaleur avant qu'elle n'atteigne le plafond. *(2 pts)*
+
+### Partie B — Murs (7 pts)
+3. R = 0,04 + 0,017 + 0,23 + 0,017 + 0,13 = **0,434 m²·K/W** → U = **2,30 W/(m²·K)**. *(2 pts)*
+4. Résistance du mur amélioré :
+| Couche | R (m²·K/W) |
+|---|---|
+| Rse | 0,040 |
+| Enduit 0,02/1,15 | 0,017 |
+| Parpaing creux 20 cm | 0,230 |
+| PSE 0,06/0,035 | 1,714 |
+| Plâtre 0,013/0,25 | 0,052 |
+| Rsi | 0,130 |
+| **Total** | **2,183** |
+U = 1/2,183 = **0,46 W/(m²·K)**. *(4 pts)*
+5. 2,30/0,46 ≈ **5** : le flux à travers la partie opaque est divisé par cinq. *(1 pt)*
+
+### Partie C — Toiture (4 pts)
+6. R = 0,04 + 0,17 + 0,08/0,04 + 0,04 + 0,17 = 0,04 + 0,17 + 2,00 + 0,04 + 0,17 = **2,42 m²·K/W** → U = **0,41 W/(m²·K)**. *(3 pts)*
+7. 4,8/0,41 ≈ **12** : la toiture améliorée laisse passer douze fois moins de chaleur que la tôle seule. *(1 pt)*
+
+### Partie D — Façade composée (6 pts)
+8. Fenêtres : 4 × 1,50 × 1,20 = **7,2 m²** ; partie opaque : 30 − 7,2 = **22,8 m²**.
+| | Mur actuel | Mur amélioré |
+|---|---|---|
+| U × S mur | 2,30 × 22,8 = 52,4 W/K | 0,458 × 22,8 = 10,4 W/K |
+| U × S fenêtres | 5,8 × 7,2 = 41,8 W/K | 41,8 W/K |
+| **H** | **94,2 W/K** | **52,2 W/K** |
+| U moyen = H/30 | **3,14 W/(m²·K)** | **1,74 W/(m²·K)** |
+| Φ = H × 7 | **659 W** | **365 W** |
+*(4 pts)*
+9. Fenêtres : 41,8/94,2 = **44 %** avant, 41,8/52,2 = **80 %** après. Une fois les murs isolés, les **fenêtres** deviennent le point faible : il faut aussi les traiter (vitrage plus performant, protections, menuiseries à rupture de pont thermique). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser Rsi = 0,13 pour une toiture : en flux descendant, Rsi = 0,17.
+> - Compter une lame d'air ventilée comme une résistance.
+> - Faire la moyenne des U sans pondérer par les surfaces.`},
  exercices:[
   {t:"Mur en BTC enduit", d:1, e:`Calculer U pour un mur en BTC de 30 cm (λ = 1,0) avec un enduit de 1,5 cm (λ = 0,9) sur chaque face.`, c:`R = 0,13 + 0,015/0,9 + 0,30/1,0 + 0,015/0,9 + 0,04 = 0,13 + 0,017 + 0,30 + 0,017 + 0,04 = **0,503 m²·K/W** → U = **1,99 W/(m²·K)**.`},
   {t:"Toiture avec faux plafond", d:2, e:`Une toiture comprend une tôle (résistance négligeable), une lame d'air non ventilée (R = 0,16), 8 cm de laine (λ = 0,04) et un faux plafond en plâtre de 1,3 cm (λ = 0,25). Flux descendant : Rsi = 0,17 ; Rse = 0,04.
@@ -487,6 +856,74 @@ $$ ΔT(couche) = (R(couche)/R(totale)) × (T(ext) − T(int))
 > - Rayonnement entre deux surfaces : ε(eff) = 1/(1/ε₁ + 1/ε₂ − 1).
 > - Un écran réfléchissant face à une lame d'air divise le rayonnement par 10 à 15.
 > - ΔT de chaque couche ∝ sa résistance : l'isolant « porte » presque tout l'écart.`,
+ sujet:{titre:"Écran réfléchissant sous toiture et position de l'isolant dans un mur", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour un centre de santé à Daloa, on étudie l'intérêt d'un écran réfléchissant sous la toiture et la position de l'isolant dans les murs.
+
+**Données**
+- σ = 5,67 × 10⁻⁸ ; h(r) = 4 × ε × σ × T³ (T = 300 K, ε = 0,9) ; h(c) intérieur = **2,5** ; h(c) extérieur = **20 W/(m²·K)** ;
+- Rayonnement entre deux surfaces : φ = ε(eff) × σ × (T₁⁴ − T₂⁴) avec 1/ε(eff) = 1/ε₁ + 1/ε₂ − 1 ;
+- Sous-face de la tôle à **65 °C** ; faux plafond à **36 °C** (ε = 0,9) ; surface **80 m²** ;
+- Mur à isolation extérieure (de l'extérieur vers l'intérieur) : Rse = 0,04 ; **PSE 5 cm** (λ = 0,035) ; **BTC 30 cm** (λ = 1,0) ; enduit **1,5 cm** (λ = 1,15) ; Rsi = 0,13 ;
+- Variante à isolation intérieure : enduit extérieur 1,5 cm ; BTC 30 cm ; PSE 5 cm ; plaque de plâtre 13 mm (λ = 0,25) ;
+- T(ext) = **34 °C** ; T(int) = **25 °C**.
+
+### Partie A — Échanges superficiels (4 points)
+1. Calculer h(r), puis les coefficients h intérieur et extérieur et les résistances Rsi et Rse correspondantes. Comparer aux valeurs conventionnelles. (3 pts)
+2. Quelle part des échanges intérieurs se fait par rayonnement ? Conséquence pour le confort. (1 pt)
+
+### Partie B — Rayonnement sous toiture (7 points)
+3. Sous-face de tôle ordinaire (ε = 0,9) : calculer ε(eff), la densité de flux rayonnée vers le faux plafond et la puissance pour 80 m². (3 pts)
+4. Même calcul avec un aluminium propre (ε = 0,05), puis poussiéreux (ε = 0,2). (3 pts)
+5. À quelles conditions l'écran réfléchissant est-il efficace ? (1 pt)
+
+### Partie C — Profil de température, isolation extérieure (6 points)
+6. Calculer R(totale), U et la densité de flux du mur. (2 pts)
+7. Calculer la température à chaque interface. (4 pts)
+
+### Partie D — Position de l'isolant (3 points)
+8. Calculer les températures de part et d'autre du BTC dans la variante à isolation intérieure. (2 pts)
+9. Quelle solution choisir pour une salle d'hospitalisation climatisée en continu ? pour un bureau climatisé par intermittence ? (1 pt)`,
+  corrige:`### Partie A — Échanges superficiels (4 pts)
+1. h(r) = 4 × 0,9 × 5,67 × 10⁻⁸ × 300³ = **5,5 W/(m²·K)**.
+- Intérieur : h = 2,5 + 5,5 = **8,0** → Rsi = 1/8 = **0,125 ≈ 0,13** ;
+- Extérieur : h = 20 + 5,5 = **25,5** → Rse = **0,039 ≈ 0,04 m²·K/W**.
+On retrouve les valeurs conventionnelles. *(3 pts)*
+2. 5,5/8 = **69 %** : à l'intérieur, le rayonnement domine ; la **température des parois** compte autant que celle de l'air pour le confort. *(1 pt)*
+
+### Partie B — Rayonnement sous toiture (7 pts)
+3. T₁ = 338,15 K ; T₂ = 309,15 K ; T₁⁴ − T₂⁴ = 3,94 × 10⁹ K⁴.
+$$ ε(eff) = 1/(1/0,9 + 1/0,9 − 1) = 0,82
+$$ φ = 0,82 × 5,67 × 10⁻⁸ × 3,94 × 10⁹ ≈ 183 W/m²   →   Φ = 183 × 80 ≈ 14,6 kW
+*(3 pts)*
+4. Comparaison des sous-faces :
+| Sous-face | ε(eff) | φ (W/m²) | Φ pour 80 m² |
+|---|---|---|---|
+| Ordinaire (0,9) | 0,82 | 183 | 14,6 kW |
+| Aluminium propre (0,05) | 0,050 | **11** | **0,89 kW** |
+| Aluminium poussiéreux (0,2) | 0,196 | **44** | **3,5 kW** |
+L'écran propre divise le rayonnement par **16** ; poussiéreux, seulement par **4**. *(3 pts)*
+5. Il doit faire **face à une lame d'air** (collé contre un matériau, il ne sert à rien) et rester **propre** : face réfléchissante tournée vers le bas, ou protégée de la poussière. *(1 pt)*
+
+### Partie C — Isolation extérieure (6 pts)
+6. R = 0,04 + 1,429 + 0,300 + 0,013 + 0,13 = **1,912 m²·K/W** → U = **0,52 W/(m²·K)** ; φ = 9/1,912 = **4,7 W/m²**. *(2 pts)*
+7. Chute dans chaque couche : ΔT = R/1,912 × 9.
+| Interface | Température |
+|---|---|
+| Air extérieur | 34,0 °C |
+| Surface extérieure (après Rse : − 0,19) | **33,8 °C** |
+| PSE / BTC (− 6,73) | **27,1 °C** |
+| BTC / enduit (− 1,41) | **25,7 °C** |
+| Surface intérieure (− 0,06) | **25,6 °C** |
+*(4 pts)*
+
+### Partie D — Position de l'isolant (3 pts)
+8. R = 0,04 + 0,013 + 0,30 + 1,429 + 0,052 + 0,13 = 1,964. Faces du BTC : côté extérieur **33,8 °C**, côté intérieur **32,4 °C** : la maçonnerie reste à la température extérieure. *(2 pts)*
+9. Salle d'hospitalisation climatisée en continu : **isolation extérieure** (le BTC, entre 25,7 et 27,1 °C, apporte son inertie au local et lisse les pointes). Bureau climatisé par intermittence : **isolation intérieure** (le local, léger, se refroidit vite sans refroidir les murs). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Poser l'écran réfléchissant directement contre l'isolant ou le plafond : sans lame d'air, il est inutile.
+> - Oublier de convertir en kelvins avant d'élever à la puissance 4.
+> - Croire que la position de l'isolant change beaucoup U : elle change surtout la **température de la maçonnerie** (inertie).`},
  exercices:[
   {t:"Coefficient de rayonnement", d:1, e:`Calculer h(r) ≈ 4 ε σ T³ pour une surface d'émissivité 0,9 à 27 °C (300 K), puis pour une surface aluminium (ε = 0,05).`, c:`ε = 0,9 : h(r) = 4 × 0,9 × 5,67 × 10⁻⁸ × 300³ = **5,5 W/(m²·K)**.
 ε = 0,05 : h(r) = **0,31 W/(m²·K)** : la surface aluminium n'échange presque plus par rayonnement.`},
@@ -558,6 +995,61 @@ $$ H = Σ (U × S) + Σ (ψ × L)      ;      Φ = H × ΔT
 > - Toiture : couleur claire + ventilation + isolant ; tôle seule 21 kW pour 100 m², isolée 2,7 kW.
 > - Ponts thermiques : H = Σ U S + Σ ψ L ; souvent aussi importants que les parois.
 > - Isolation continue par l'extérieur, rupteurs, retours d'isolant.`,
+ sujet:{titre:"Toiture d'une villa et ponts thermiques d'une chambre climatisée", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour une villa de **110 m²** à San-Pédro, on compare plusieurs toitures, puis on étudie les ponts thermiques d'une chambre climatisée isolée par l'intérieur.
+
+**Données**
+- Température d'air-soleil : T(as) = T(ext) + α × I / he ; φ = U × (T(as) − T(int)) ;
+- T(ext) = **33 °C** ; I = **950 W/m²** ; he = **22 W/(m²·K)** ; T(int) = **26 °C** ; α = **0,9** (tôle sombre) ou **0,3** (tôle blanche) ;
+- U (W/(m²·K)) : tôle seule **4,8** ; tôle + faux plafond **2,4** ; tôle + faux plafond + 5 cm de laine **0,60** ; dalle béton 15 cm **3,5** ; dalle + 5 cm de PSE **0,58** ;
+- Chambre : murs extérieurs isolés **24 m²** (U = **0,50**) ; jonctions avec les planchers haut et bas **18 m** (ψ = **0,75**) ; tableaux de fenêtres **8 m** (ψ = **0,35**) ; poteaux **5,6 m** (ψ = **0,5 W/(m·K)**) ; écart de température **8 °C** ;
+- Avec une isolation extérieure continue : ψ = **0,10** (planchers) ; **0,10** (tableaux) ; **0,05** (poteaux).
+
+### Partie A — Notion (2 points)
+1. Qu'est-ce que la température d'air-soleil ? Pourquoi l'utilise-t-on pour une toiture ? (2 pts)
+
+### Partie B — Comparaison de toitures (8 points)
+2. Calculer T(as) pour la tôle sombre et pour la tôle blanche. (2 pts)
+3. Avec une couverture sombre, calculer la densité de flux et la puissance pour les cinq toitures (présenter un tableau). (4 pts)
+4. Recalculer pour une tôle blanche : tôle seule, puis tôle + faux plafond + laine. Conclure. (2 pts)
+
+### Partie C — Ponts thermiques (7 points)
+5. Calculer le coefficient de déperdition H de la chambre, en distinguant murs et ponts thermiques. Quelle part revient aux ponts thermiques ? (4 pts)
+6. Calculer le flux correspondant. (1 pt)
+7. Recalculer H et le flux avec une isolation extérieure continue ; calculer la réduction. (2 pts)
+
+### Partie D — Points froids (3 points)
+8. Pourquoi les ponts thermiques d'un local climatisé sont-ils des zones à risque de condensation ? Citer trois traitements. (3 pts)`,
+  corrige:`### Partie A — Notion (2 pts)
+1. C'est la température d'un air **fictif** qui produirait sur la face extérieure le même flux que l'air réel **plus le soleil absorbé**. Elle permet de traiter la toiture comme une paroi ordinaire : φ = U × (T(as) − T(int)). *(2 pts)*
+
+### Partie B — Toitures (8 pts)
+2. Sombre : T(as) = 33 + 0,9 × 950/22 = 33 + 38,9 = **71,9 °C** ; blanche : 33 + 0,3 × 950/22 = 33 + 13,0 = **46,0 °C**. *(2 pts)*
+3. Écart T(as) − T(int) = 71,9 − 26 = 45,9 °C.
+| Toiture | U | φ (W/m²) | Pour 110 m² |
+|---|---|---|---|
+| Tôle seule | 4,8 | 220 | **24,2 kW** |
+| Tôle + faux plafond | 2,4 | 110 | 12,1 kW |
+| Tôle + faux plafond + laine | 0,60 | 27,5 | **3,0 kW** |
+| Dalle béton 15 cm | 3,5 | 161 | 17,7 kW |
+| Dalle + 5 cm de PSE | 0,58 | 26,6 | 2,9 kW |
+*(4 pts)*
+4. Écart 46,0 − 26 = 20,0 °C : tôle seule **96 W/m²** → **10,5 kW** ; tôle + faux plafond + laine **12 W/m²** → **1,3 kW**. Peindre en blanc divise le flux par **2,3** ; combinée à l'isolation, la couleur claire divise le flux de la tôle sombre nue par **18**. *(2 pts)*
+
+### Partie C — Ponts thermiques (7 pts)
+5. Murs : 24 × 0,50 = **12,0 W/K**. Ponts : 18 × 0,75 + 8 × 0,35 + 5,6 × 0,5 = 13,5 + 2,8 + 2,8 = **19,1 W/K**.
+$$ H = 12,0 + 19,1 = 31,1 W/K
+Les ponts thermiques représentent **61 %** : ils laissent passer plus de chaleur que les murs eux-mêmes. *(4 pts)*
+6. Φ = 31,1 × 8 ≈ **249 W**. *(1 pt)*
+7. Ponts : 18 × 0,10 + 8 × 0,10 + 5,6 × 0,05 = **2,88 W/K** → H = **14,9 W/K** → Φ ≈ **119 W** ; réduction **52 %**. *(2 pts)*
+
+### Partie D — Points froids (3 pts)
+8. Dans un local climatisé, les ponts thermiques sont des zones **froides** de la paroi ; l'air extérieur chaud et très humide qui les atteint (face extérieure, intérieur de la paroi) peut y descendre sous son **point de rosée** : condensation, moisissures, dégradation. Traitements : **isolation extérieure continue** devant les dalles et les poteaux ; **rupteurs** de ponts thermiques aux balcons ; **retours d'isolant** sur les tableaux et en sous-face des dalles (0,6 à 1 m). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer le flux de toiture avec T(ext) au lieu de T(air-soleil) : on oublie l'essentiel, le soleil.
+> - Oublier les ponts thermiques : dans une paroi isolée, ils peuvent dépasser le flux des murs.
+> - Confondre U (W/(m²·K), multiplié par une surface) et ψ (W/(m·K), multiplié par une longueur).`},
  exercices:[
   {t:"Flux à travers une toiture-terrasse", d:1, e:`Une toiture-terrasse de 80 m² en béton (U = 3,5) a une température d'air-soleil de 65 °C l'après-midi ; le local est à 26 °C.
 Calculer le flux (calcul en régime permanent).`, c:`φ = 3,5 × (65 − 26) = **136,5 W/m²** → Φ = 136,5 × 80 = **10,9 kW** : l'équivalent de trois gros climatiseurs.`},
@@ -624,6 +1116,59 @@ On définit le **facteur solaire d'une paroi opaque** : S(paroi) = α U/he, frac
 > - Vitrage : Φ = S I g F(s) ; protection extérieure : g global ≈ 0,15.
 > - Paroi opaque : Φ = U S (α I/he + ΔT) ; S(paroi) = α U/he.
 > - Couleurs claires et ombrage divisent les apports des murs par deux ou plus.`,
+ sujet:{titre:"Apports solaires de la façade ouest d'une salle de réunion", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une salle de réunion d'un siège social à Marcory a sa grande façade orientée **à l'ouest**. Les occupants se plaignent de la chaleur en fin d'après-midi.
+
+**Données**
+- Façade ouest : **15,00 × 3,20 m**, dont **12 m²** de vitrage clair (g = **0,85** ; U = **5,8 W/(m²·K)**) ;
+- Mur en parpaing de teinte foncée : U = **2,47 W/(m²·K)**, α = **0,7** ; he = **25 W/(m²·K)** ;
+- À 16 h : I = **520 W/m²** ; T(ext) = **33 °C** ; T(int) = **25 °C** ;
+- Vitrage : Φ = S × I × g × F(s) ; paroi opaque : Φ = U × S × (α × I / he + T(ext) − T(int)) ;
+- Rayonnement horaire sur la façade ouest (W/m²) : 13 h : **150** ; 14 h : **330** ; 15 h : **470** ; 16 h : **520** ; 17 h : **450** ; 18 h : **200** ;
+- Solutions : store extérieur (g global = **0,15**) ; mur repeint en blanc (α = **0,3**) ; façade nord : I = **200 W/m²**.
+
+### Partie A — Notions (3 points)
+1. Classer la toiture, les façades est/ouest et les façades nord/sud selon le rayonnement reçu. Pourquoi la façade ouest est-elle la plus pénalisante ? (2 pts)
+2. Définir le facteur solaire g et le facteur d'ombrage F(s). (1 pt)
+
+### Partie B — Situation actuelle à 16 h (9 points)
+3. Calculer l'apport solaire et l'apport par conduction du vitrage. (3 pts)
+4. Calculer la surface du mur opaque, l'écart « équivalent » dû au soleil, le flux à travers le mur et la part due au soleil. (4 pts)
+5. Calculer l'apport total de la façade et le facteur solaire du mur. (2 pts)
+
+### Partie C — Solutions (5 points)
+6. Avec le store extérieur et le mur peint en blanc, recalculer l'apport total et la réduction obtenue. (3 pts)
+7. Quel serait l'apport solaire du vitrage si la même façade était orientée au nord ? Conclure. (2 pts)
+
+### Partie D — Énergie de l'après-midi (3 points)
+8. Calculer l'énergie solaire qui entre par le vitrage entre 13 h et 18 h, sans puis avec le store. (3 pts)`,
+  corrige:`### Partie A — Notions (3 pts)
+1. Toiture (≈ 1 000 W/m², 5 à 6 kWh/m²/jour) > façades est/ouest (≈ 550 W/m²) > façades nord/sud (≈ 200 W/m²). L'ouest reçoit un soleil **bas** (difficile à arrêter avec un débord) au moment où l'air est **le plus chaud** de la journée. *(2 pts)*
+2. **g** : fraction de l'énergie solaire incidente qui entre réellement à travers le vitrage ; **F(s)** : fraction qui atteint le vitrage malgré les protections (1 sans ombre, 0,2 à 0,3 avec une bonne protection extérieure). *(1 pt)*
+
+### Partie B — Situation actuelle (9 pts)
+3. Soleil : Φ = 12 × 520 × 0,85 = **5 304 W** ; conduction : 5,8 × 12 × 8 = **557 W**. *(3 pts)*
+4. S(opaque) = 15,00 × 3,20 − 12 = **36 m²** ; écart équivalent : α I/he = 0,7 × 520/25 = **14,6 °C**.
+$$ Φ = 2,47 × 36 × (14,6 + 8) = 88,9 × 22,6 ≈ 2 006 W
+Part du soleil : 88,9 × 14,56 ≈ **1 295 W** (65 %) ; part de l'écart de température : 88,9 × 8 ≈ **711 W**. *(4 pts)*
+5. Total : 5 304 + 557 + 2 006 = **7 867 W ≈ 7,9 kW**. Facteur solaire du mur : S = α U/he = 0,7 × 2,47/25 = **0,069** : 6,9 % du rayonnement traverse le mur (36 W/m²), contre 85 % pour le vitrage. *(2 pts)*
+
+### Partie C — Solutions (5 pts)
+6. Vitrage : 12 × 520 × 0,15 = **936 W** ; conduction inchangée : 557 W ; mur blanc : 88,9 × (0,3 × 520/25 + 8) = 88,9 × 14,24 ≈ **1 266 W**.
+$$ Total = 936 + 557 + 1 266 = 2 759 W     réduction = (7 867 − 2 759)/7 867 ≈ 65 %
+*(3 pts)*
+7. Nord : 12 × 200 × 0,85 = **2 040 W**, soit 2,6 fois moins qu'à l'ouest sans aucune protection : l'**orientation** décidée à la conception est la première protection solaire. *(2 pts)*
+
+### Partie D — Énergie de l'après-midi (3 pts)
+8. Somme des rayonnements horaires : 150 + 330 + 470 + 520 + 450 + 200 = **2 120 Wh/m²**.
+- Sans store : 12 × 2,12 × 0,85 = **21,6 kWh** de chaleur par après-midi ;
+- Avec store : 12 × 2,12 × 0,15 = **3,8 kWh**.
+Le climatiseur doit extraire 17,8 kWh de moins chaque jour, soit environ 6 kWh d'électricité avec un rendement de 3. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer le flux du mur avec le seul écart de température : sur une façade ouest, le soleil pèse presque deux fois plus.
+> - Compter la surface vitrée deux fois (dans le mur et dans le vitrage).
+> - Confondre une puissance (W, à 16 h) et une énergie (kWh, sur l'après-midi).`},
  exercices:[
   {t:"Apports par une fenêtre", d:1, e:`Une fenêtre de 1,5 m² exposée à l'est reçoit 550 W/m² à 8 h. Calculer les apports avec un vitrage clair (g = 0,85), puis avec des persiennes extérieures fermées (g ≈ 0,1).`, c:`Vitrage clair : 1,5 × 550 × 0,85 = **701 W** ; persiennes : 1,5 × 550 × 0,1 = **83 W**.`},
   {t:"Facteur solaire d'un mur", d:1, e:`Calculer le facteur solaire d'un mur en BTC (U = 2,0) de couleur ocre (α = 0,7), puis de couleur blanche (α = 0,25), avec he = 25 W/(m²·K).`, c:`Ocre : S = 0,7 × 2,0/25 = **0,056** ; blanc : S = 0,25 × 2,0/25 = **0,020**.
@@ -696,6 +1241,70 @@ Ag, Af : surfaces de vitrage et de cadre ; Uf : U du cadre ; ψg, Lg : pont ther
 > - Sous les tropiques, g compte plus que Ug ; sélectivité TL/g ≥ 1,5.
 > - Uw = (Ag Ug + Af Uf + ψg Lg)/Aw ; le cadre aluminium sans rupture est un pont thermique.
 > - Protections extérieures d'abord ; vitrages sélectifs pour les bureaux climatisés.`,
+ sujet:{titre:"Choisir les menuiseries vitrées d'un immeuble de bureaux climatisé", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** La façade **est** d'un immeuble de bureaux climatisé au Plateau compte **24 fenêtres** de **1,80 × 1,50 m**. On compare quatre menuiseries.
+
+**Données**
+- Une fenêtre : vitrage Ag = **2,16 m²** ; cadre Af = **0,54 m²** ; bord de vitrage Lg = **7,2 m** ; Uw = (Ag × Ug + Af × Uf + ψg × Lg)/Aw ;
+- ψg = **0,06 W/(m·K)** pour un double vitrage ; **0** pour un simple vitrage ;
+- Solutions :
+| Solution | Vitrage | Cadre | Ug | Uf | g | TL |
+|---|---|---|---|---|---|---|
+| A | Simple clair | Alu sans rupture | 5,8 | 5,7 | 0,85 | 0,90 |
+| B | Double clair 4/16/4 | Alu à rupture | 2,8 | 2,5 | 0,75 | 0,80 |
+| C | Double à contrôle solaire sélectif | Alu à rupture | 1,3 | 2,5 | 0,32 | 0,62 |
+| D | Simple réfléchissant | Alu sans rupture | 5,7 | 5,7 | 0,35 | 0,25 |
+- À 9 h : I = **550 W/m²** sur la façade ; écart de température **8 °C** ; énergie solaire journalière sur la façade : **2,8 kWh/m²** ;
+- Climatisation : **3 kWh** de froid par kWh électrique ; **260 jours/an** ; **90 F/kWh** ; surcoût de la solution C par rapport à A : **60 000 F/m²** de fenêtre.
+
+### Partie A — Notions (4 points)
+1. Définir Ug, g et TL. Pourquoi g compte-t-il plus que Ug sous les tropiques ? (2 pts)
+2. Définir la sélectivité. Calculer la sélectivité des quatre solutions. (2 pts)
+
+### Partie B — Coefficient Uw (5 points)
+3. Calculer Uw pour chaque solution. (4 pts)
+4. Pourquoi le cadre en aluminium sans rupture de pont thermique est-il pénalisant ? (1 pt)
+
+### Partie C — Apports à 9 h (6 points)
+5. Calculer, pour chaque solution, les apports solaires, les apports par conduction et le total pour la façade (présenter un tableau). (5 pts)
+6. Classer les solutions. Pourquoi la solution D, pourtant performante en apports, est-elle à écarter ? (1 pt)
+
+### Partie D — Économie (5 points)
+7. Calculer l'énergie solaire journalière qui entre avec A et avec C, puis l'économie annuelle d'électricité et d'argent. (3 pts)
+8. Calculer le temps de retour du surcoût de C. Quel autre gain n'est pas compté ? (2 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. **Ug** : chaleur qui traverse le vitrage par écart de température (W/(m²·K)) ; **g** : part de l'énergie solaire qui entre ; **TL** : part de la lumière visible transmise. Sous les tropiques, l'écart de température est faible (5 à 8 °C) alors que le soleil apporte des centaines de W/m² : **g** domine. *(2 pts)*
+2. Sélectivité = TL/g : A : 0,90/0,85 = **1,06** ; B : **1,07** ; C : 0,62/0,32 = **1,94** ; D : 0,25/0,35 = **0,71**. Seule C atteint l'objectif tropical (≥ 1,5) : beaucoup de lumière, peu de chaleur. *(2 pts)*
+
+### Partie B — Uw (5 pts)
+3. Aw = 2,70 m².
+- A : (2,16 × 5,8 + 0,54 × 5,7)/2,70 = (12,53 + 3,08)/2,70 = **5,78 W/(m²·K)** ;
+- B : (2,16 × 2,8 + 0,54 × 2,5 + 0,06 × 7,2)/2,70 = (6,05 + 1,35 + 0,43)/2,70 = **2,90** ;
+- C : (2,81 + 1,35 + 0,43)/2,70 = **1,70** ;
+- D : (12,31 + 3,08)/2,70 = **5,70**. *(4 pts)*
+4. L'aluminium est très conducteur (λ = 230) : un cadre sans rupture (Uf = 5,7) est un **pont thermique**, qui annule une partie du gain d'un bon vitrage et crée des points froids (condensation côté extérieur). *(1 pt)*
+
+### Partie C — Apports à 9 h (6 pts)
+5. Surfaces : vitrage 24 × 2,16 = **51,84 m²** ; fenêtres 24 × 2,70 = **64,8 m²**.
+| Solution | Solaire = 51,84 × 550 × g | Conduction = 64,8 × Uw × 8 | Total |
+|---|---|---|---|
+| A | 24 235 W | 2 996 W | **27,2 kW** |
+| B | 21 384 W | 1 503 W | **22,9 kW** |
+| C | 9 124 W | 881 W | **10,0 kW** |
+| D | 9 979 W | 2 955 W | **12,9 kW** |
+*(5 pts)*
+6. C < D < B < A. Le double vitrage clair (B) ne gagne que 16 % : il agit sur Ug, pas sur le soleil. **D** a un TL de 0,25 : bureaux sombres, **éclairage allumé** toute la journée (qui chauffe à son tour), vue dégradée ; sa sélectivité est mauvaise. *(1 pt)*
+
+### Partie D — Économie (5 pts)
+7. A : 51,84 × 2,8 × 0,85 = **123,4 kWh/jour** ; C : 51,84 × 2,8 × 0,32 = **46,4 kWh/jour** ; différence : 77,0 kWh de froid → 25,6 kWh d'électricité par jour.
+$$ 25,6 × 260 ≈ 6 670 kWh/an   →   6 670 × 90 ≈ 600 000 F/an
+*(3 pts)*
+8. Surcoût : 64,8 × 60 000 = **3 888 000 F** → temps de retour ≈ 3 888 000/600 000 ≈ **6,5 ans**. Non compté : la puissance de climatisation installée diminue de **17 kW** (environ cinq climatiseurs de 12 000 BTU/h en moins), le confort près des vitres et l'isolation acoustique du double vitrage. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Choisir un double vitrage clair pour « isoler » : sous les tropiques, c'est g qu'il faut réduire.
+> - Calculer les apports solaires sur la surface totale de la fenêtre : le soleil entre par le vitrage (Ag).
+> - Oublier le cadre dans Uw : en aluminium sans rupture, il pèse lourd.`},
  exercices:[
   {t:"Sélectivité", d:1, e:`Calculer la sélectivité de trois vitrages : A (TL = 0,90 ; g = 0,85) ; B (TL = 0,35 ; g = 0,40) ; C (TL = 0,62 ; g = 0,32). Lequel convient le mieux à un bureau climatisé ?`, c:`A : 0,90/0,85 = **1,06** ; B : 0,35/0,40 = **0,88** ; C : 0,62/0,32 = **1,94**.
 **C** : beaucoup de lumière, peu de chaleur. B est sombre et laisse pourtant passer autant de chaleur que de lumière.`},
@@ -760,6 +1369,54 @@ Les fuites d'air (menuiseries mal jointives, portes ouvertes) représentent souv
 > - Φs = 0,34 q ΔT ; Φl = 0,83 q Δx (q en m³/h, Δx en g/kg).
 > - Sous les tropiques, la charge latente de l'air neuf dépasse souvent largement la charge sensible.
 > - Étanchéité à l'air, débit ajusté, récupération d'énergie.`,
+ sujet:{titre:"Air neuf et infiltrations d'une salle de formation climatisée", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une salle de formation de **10,00 × 8,00 m**, hauteur **3,00 m**, accueille **30 stagiaires** à Abidjan. Elle est climatisée et ventilée mécaniquement.
+
+**Données**
+- Air neuf : **25 m³/h par personne** ; infiltrations : **0,5 volume par heure** ;
+- Extérieur : **32 °C ; 60 %** (x = **18,0 g/kg**) ; intérieur : **25 °C ; 50 %** (x = **9,9 g/kg**) ;
+- Φ(sensible) = 0,34 × q × ΔT ; Φ(latente) = 0,83 × q × Δx (q en m³/h ; Δx en g/kg) ; masse volumique de l'air **1,2 kg/m³** ;
+- Utilisation **8 h/jour**, **200 jours/an** ; climatiseur : **3 kWh** de froid par kWh électrique ; **90 F/kWh** ;
+- Récupérateur enthalpique : récupère **60 %** de la charge (sensible et latente) de l'air neuf ; coût installé **1 200 000 F**.
+
+### Partie A — Notions (4 points)
+1. Expliquer la différence entre charge sensible et charge latente. D'où viennent les coefficients 0,34 et 0,83 ? (3 pts)
+2. Pourquoi l'air neuf est-il indispensable malgré son coût ? (1 pt)
+
+### Partie B — Charges de l'air neuf (7 points)
+3. Calculer le débit d'air neuf, puis les charges sensible et latente. Comparer. (4 pts)
+4. Calculer la quantité d'eau condensée par heure par le climatiseur pour l'air neuf. (3 pts)
+
+### Partie C — Infiltrations (4 points)
+5. Calculer le volume de la salle, le débit d'infiltration et les charges correspondantes. (3 pts)
+6. Citer deux moyens de réduire les infiltrations. (1 pt)
+
+### Partie D — Récupération et économie (5 points)
+7. Calculer la charge totale due à l'air (air neuf + infiltrations), puis la charge restante avec le récupérateur. (2 pts)
+8. Calculer la consommation électrique annuelle correspondante avec et sans récupérateur, l'économie et le temps de retour. (3 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. La charge **sensible** sert à abaisser la **température** de l'air ; la charge **latente** sert à retirer sa **vapeur d'eau** en la condensant sur l'évaporateur. 0,34 = ρ × c/3 600 = 1,2 × 1 000/3 600 (Wh/(m³·K)) ; 0,83 ≈ 1,2 × 2 500/3 600, où 2 500 kJ/kg est la chaleur de condensation de l'eau. *(3 pts)*
+2. L'air neuf évacue le **CO₂**, les odeurs et l'humidité produits par les occupants : sans lui, la concentration de CO₂ monte vite (somnolence, maux de tête) dans une salle de 30 personnes. *(1 pt)*
+
+### Partie B — Air neuf (7 pts)
+3. q = 30 × 25 = **750 m³/h** ; ΔT = 7 °C ; Δx = 18,0 − 9,9 = 8,1 g/kg.
+$$ Φs = 0,34 × 750 × 7 = 1 785 W     Φl = 0,83 × 750 × 8,1 = 5 042 W
+Total **6 827 W** : la charge latente vaut **2,8 fois** la charge sensible. *(4 pts)*
+4. Masse d'air : 750 × 1,2 = 900 kg/h ; eau retirée : 900 × 8,1 = 7 290 g/h ≈ **7,3 litres par heure**, soit environ 58 L par journée de 8 h : l'évacuation des condensats doit être raccordée au réseau. *(3 pts)*
+
+### Partie C — Infiltrations (4 pts)
+5. V = 10 × 8 × 3 = **240 m³** ; q = 0,5 × 240 = **120 m³/h** ; Φs = 0,34 × 120 × 7 = **286 W** ; Φl = 0,83 × 120 × 8,1 = **807 W** ; total **1 093 W**. *(3 pts)*
+6. Menuiseries **jointives** (joints, fenêtres fixes ou bien fermées), portes à **fermeture automatique**, **sas** d'entrée, calfeutrement des traversées de gaines. *(1 pt)*
+
+### Partie D — Récupération (5 pts)
+7. Charge de l'air : 6 827 + 1 093 = **7 920 W**. Avec récupérateur : 7 920 − 0,60 × 6 827 = **3 824 W**. *(2 pts)*
+8. Sans récupérateur : 7,92 × 8 × 200/3 = **4 224 kWh/an** → 380 100 F ; avec : 3,82 × 8 × 200/3 = **2 039 kWh/an** → 183 500 F.
+Économie : ≈ **2 185 kWh** et **196 600 F/an** ; temps de retour : 1 200 000/196 600 ≈ **6,1 ans** (calcul majorant : la charge réelle varie au cours de la journée). Une régulation du débit par **sonde de CO₂** réduit encore la charge quand la salle n'est pas pleine. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la charge latente : sous les tropiques, c'est la plus grosse part de la charge de l'air neuf.
+> - Prendre Δx en kg/kg dans la formule 0,83 × q × Δx, qui attend des g/kg.
+> - Supprimer l'air neuf pour économiser : la qualité de l'air devient inacceptable.`},
  exercices:[
   {t:"Charge sensible d'une infiltration", d:1, e:`Une chambre de 60 m³ climatisée à 24 °C reçoit des infiltrations de 0,5 vol/h d'air à 30 °C.
 Calculer la charge sensible.`, c:`q = 0,5 × 60 = **30 m³/h** → Φs = 0,34 × 30 × 6 = **61 W**.`},
@@ -837,6 +1494,68 @@ Attention : le « CV » commercial désigne une capacité de froid, pas la puiss
 > - 1 kW = 3 412 BTU/h ; 12 000 BTU/h ≈ 3,5 kW de froid.
 > - La puissance frigorifique n'est pas la puissance électrique (≈ 3 fois moins).
 > - Les protections solaires réduisent fortement la puissance nécessaire.`,
+ sujet:{titre:"Bilan thermique d'une salle de réunion et choix du climatiseur", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** On doit climatiser une salle de réunion de **6,00 × 5,00 m**, hauteur **3,00 m**, au **dernier étage** d'un immeuble à Treichville, pour **8 personnes**. Les deux autres murs donnent sur des locaux climatisés (pas d'échange).
+
+**Données**
+- Extérieur : **32 °C ; 60 %** (x = **18,0 g/kg**) ; intérieur : **24 °C ; 50 %** (x = **9,3 g/kg**) ;
+- Toiture-terrasse : dalle **15 cm** (λ = 2) + **4 cm de PSE** (λ = 0,035) ; Rsi = **0,17** ; Rse = **0,04** ; α = **0,8** ; I = **900 W/m²** ; he = **25 W/(m²·K)** ;
+- Façade ouest **6,00 × 3,00 m** avec **4 m²** de vitrage protégé par un store extérieur (g global = **0,15**), I = **500 W/m²** ; mur en parpaing U = **2,47**, α = **0,6** ;
+- Façade nord **5,00 × 3,00 m** à l'ombre, avec **2 m²** de vitrage clair (g = **0,85**), rayonnement diffus I = **150 W/m²** ;
+- Vitrages : U = **5,8 W/(m²·K)** ; occupants : **75 W** sensibles et **55 W** latents ; vidéoprojecteur **300 W** ; 2 ordinateurs portables de **60 W** ; éclairage LED **8 W/m²** ;
+- Air neuf : **25 m³/h par personne** ; Φs = 0,34 q ΔT ; Φl = 0,83 q Δx ; marge **10 %** ; 1 kW = **3 412 BTU/h** ;
+- Gamme : 9 000 BTU/h (2,6 kW) ; 12 000 (3,5 kW) ; 18 000 (5,3 kW) ; 24 000 (7,0 kW).
+
+### Partie A — Méthode (3 points)
+1. Énumérer les postes d'un bilan thermique d'été en séparant sensible et latent. À quelle heure le fait-on ? (3 pts)
+
+### Partie B — Calculs préliminaires (4 points)
+2. Calculer le coefficient U de la toiture et sa température d'air-soleil. (2 pts)
+3. Calculer les surfaces opaques des façades et le débit d'air neuf. (2 pts)
+
+### Partie C — Bilan (9 points)
+4. Calculer tous les apports sensibles (présenter un tableau). (6 pts)
+5. Calculer les apports latents, le total et la puissance avec la marge. (3 pts)
+
+### Partie D — Choix et analyse (4 points)
+6. Choisir le climatiseur. Calculer sa puissance électrique approximative (rendement 3). (2 pts)
+7. Que deviendrait la puissance sans le store extérieur ? Que donnerait le ratio « 1 CV pour 15 m² » ? Conclure. (2 pts)`,
+  corrige:`### Partie A — Méthode (3 pts)
+1. **Sensible** : toiture (si dernier niveau), murs (soleil + écart de température), vitrages (soleil + conduction), occupants, éclairage, équipements, air neuf et infiltrations. **Latent** : occupants, air neuf et infiltrations. On le fait à l'heure la plus défavorable, en général **15 à 17 h**, et on ajoute une marge d'environ 10 %. *(3 pts)*
+
+### Partie B — Préliminaires (4 pts)
+2. R = 0,17 + 0,15/2 + 0,04/0,035 + 0,04 = 0,17 + 0,075 + 1,143 + 0,04 = **1,428** → U = **0,70 W/(m²·K)** ; T(as) = 32 + 0,8 × 900/25 = **60,8 °C**. *(2 pts)*
+3. Ouest : 18 − 4 = **14 m²** ; nord : 15 − 2 = **13 m²** ; air neuf : 8 × 25 = **200 m³/h**. *(2 pts)*
+
+### Partie C — Bilan (9 pts)
+4. Apports sensibles (ΔT = 8 °C) :
+| Poste | Calcul | Apport |
+|---|---|---|
+| Toiture | 0,70 × 30 × (60,8 − 24) | 773 W |
+| Mur ouest | 2,47 × 14 × (0,6 × 500/25 + 8) | 692 W |
+| Mur nord | 2,47 × 13 × 8 | 257 W |
+| Vitrage ouest : soleil | 4 × 500 × 0,15 | 300 W |
+| Vitrage ouest : conduction | 5,8 × 4 × 8 | 186 W |
+| Vitrage nord : soleil | 2 × 150 × 0,85 | 255 W |
+| Vitrage nord : conduction | 5,8 × 2 × 8 | 93 W |
+| Occupants | 8 × 75 | 600 W |
+| Équipements | 300 + 2 × 60 | 420 W |
+| Éclairage | 30 × 8 | 240 W |
+| Air neuf | 0,34 × 200 × 8 | 544 W |
+| **Total sensible** | | **4 360 W** |
+*(6 pts)*
+5. Latent : occupants 8 × 55 = **440 W** ; air neuf 0,83 × 200 × (18,0 − 9,3) = **1 444 W** ; total latent **1 884 W**.
+$$ Total = 4 360 + 1 884 = 6 244 W     avec marge : 6 244 × 1,1 ≈ 6,87 kW ≈ 23 400 BTU/h
+Le latent représente **30 %** de la charge. *(3 pts)*
+
+### Partie D — Choix (4 pts)
+6. Climatiseur de **24 000 BTU/h (7,0 kW)**, de préférence **inverter** (charge variable selon l'occupation). Puissance électrique ≈ 6,87/3 ≈ **2,3 kW**. *(2 pts)*
+7. Sans store (g = 0,85) : + 4 × 500 × 0,70 = + 1 400 W → (6 244 + 1 400) × 1,1 ≈ **8,4 kW** : il faudrait deux appareils (24 000 + 9 000 BTU/h). Le ratio « 1 CV pour 15 m² » donnerait 2 CV (**5,3 kW**) : **sous-dimensionné** ici (dernier étage, façade ouest, 8 personnes, air neuf). Le bilan détaillé est indispensable, et le store est la mesure la plus rentable. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la charge latente de l'air neuf (près du quart de la charge totale ici).
+> - Confondre la puissance frigorifique (7,0 kW) et la puissance électrique absorbée (≈ 2,3 kW).
+> - Dimensionner au ratio de surface sans tenir compte de la toiture, de l'orientation et de l'occupation.`},
  exercices:[
   {t:"Conversions", d:1, e:`a) Convertir 18 000 BTU/h en kW.
 b) Un bilan donne 4,6 kW avec la marge : quel appareil du commerce choisir ?`, c:`a) 18 000/3 412 = **5,3 kW**.
@@ -899,6 +1618,61 @@ $$ déphasage : Δt = (e / 2) × √(T₀ / (π × a))
 > - a = λ/(ρ c) ; f = exp(− e √(π/(a T₀))) ; Δt = (e/2) √(T₀/(π a)).
 > - Béton 20 cm : f ≈ 0,3, Δt ≈ 5 h ; BTC 30 cm : f ≈ 0,1, Δt ≈ 9 h.
 > - Climat sec : inertie + ventilation nocturne ; climat humide : parois lourdes à l'ombre ou construction légère ventilée.`,
+ sujet:{titre:"Inertie des murs : amortissement et déphasage dans une maison à Bondoukou", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour une maison à Bondoukou (climat de transition, nuits plus fraîches), on compare quatre types de murs ouest du point de vue du régime variable.
+
+**Données**
+- Diffusivité : a = λ/(ρ × c) ; période T₀ = **86 400 s** ;
+- Amortissement : f = exp(− e × √(π/(a × T₀))) ; déphasage : Δt = (e/2) × √(T₀/(π × a)) ;
+- Matériaux :
+| Mur | e (m) | λ (W/(m·K)) | ρ (kg/m³) | c (J/(kg·K)) |
+|---|---|---|---|---|
+| Béton | 0,15 | 2,0 | 2 400 | 880 |
+| BTC | 0,35 | 1,0 | 1 900 | 900 |
+| Terre (pisé) | 0,45 | 0,9 | 1 800 | 900 |
+| Bardage bois | 0,03 | 0,15 | 600 | 1 600 |
+- La température de la face extérieure du mur ouest oscille de **± 15 °C** autour de sa moyenne et culmine à **15 h**.
+
+### Partie A — Notions (4 points)
+1. Expliquer ce que sont l'amortissement et le déphasage d'une paroi. Que mesure la diffusivité ? (2 pts)
+2. Pourquoi l'inertie n'a-t-elle pas le même intérêt à Korhogo (sec) et à Abidjan (humide) ? (2 pts)
+
+### Partie B — Calculs (9 points)
+3. Calculer la diffusivité de chaque mur. (2 pts)
+4. Calculer l'amortissement, le déphasage, l'amplitude transmise et l'heure du maximum sur la face intérieure de chaque mur (présenter un tableau). (7 pts)
+
+### Partie C — Dimensionnement (4 points)
+5. Quelle épaisseur de BTC faut-il pour obtenir un déphasage de 10 h ? Quel est alors l'amortissement ? (3 pts)
+6. À quelle heure la chaleur arrive-t-elle alors dans la pièce ? Est-ce favorable pour une chambre ? (1 pt)
+
+### Partie D — Stratégie (3 points)
+7. Proposer, pour cette maison, une stratégie complète d'utilisation de l'inertie (murs, ouvertures, ventilation, usage des pièces). (3 pts)`,
+  corrige:`### Partie A — Notions (4 pts)
+1. Une paroi lourde **atténue** l'onde de chaleur (amortissement f : rapport des amplitudes transmise et reçue) et la **retarde** (déphasage Δt : décalage entre le maximum extérieur et le maximum transmis). La diffusivité a mesure la **vitesse de pénétration** d'une variation de température : plus a est petite, plus la pénétration est lente. *(2 pts)*
+2. **Korhogo** : fort écart jour-nuit ; la chaleur stockée le jour est évacuée la nuit par l'air frais (ventilation nocturne) : l'inertie rafraîchit. **Abidjan** : nuits chaudes et faible écart ; la chaleur restituée la nuit est mal évacuée et réchauffe les chambres : il faut mettre les parois lourdes à l'ombre ou construire léger et ventilé. *(2 pts)*
+
+### Partie B — Calculs (9 pts)
+3. Béton : 2,0/(2 400 × 880) = **9,5 × 10⁻⁷ m²/s** ; BTC : 1,0/(1 900 × 900) = **5,85 × 10⁻⁷** ; terre : 0,9/(1 800 × 900) = **5,6 × 10⁻⁷** ; bois : 0,15/(600 × 1 600) = **1,6 × 10⁻⁷**. *(2 pts)*
+4. Exemple pour le BTC : √(π/(a T₀)) = √(π/(5,85 × 10⁻⁷ × 86 400)) = 7,88 m⁻¹ → f = exp(− 0,35 × 7,88) = 0,063 ; Δt = (0,35/2) × √(86 400/(π × 5,85 × 10⁻⁷)) = 0,175 × 216 820 = 37 940 s = 10,5 h.
+| Mur | f | Δt | Amplitude transmise (± 15 × f) | Maximum intérieur |
+|---|---|---|---|---|
+| Béton 15 cm | 0,40 | 3,6 h | ± 5,9 °C | ≈ **18 h 30** |
+| BTC 35 cm | 0,063 | 10,5 h | ± 0,9 °C | ≈ **1 h 30** |
+| Terre 45 cm | 0,026 | 13,9 h | ± 0,4 °C | ≈ **4 h 55** |
+| Bardage bois 3 cm | 0,63 | 1,7 h | ± 9,5 °C | ≈ **16 h 45** |
+*(7 pts)*
+
+### Partie C — Dimensionnement (4 pts)
+5. e = 2 × Δt × √(π a/T₀) = 2 × 36 000 × √(π × 5,85 × 10⁻⁷/86 400) = 72 000 × 4,61 × 10⁻⁶ ≈ **0,33 m** ; f = exp(− 0,33 × 7,88) ≈ **0,07** : l'onde est réduite à 7 %. *(3 pts)*
+6. 15 h + 10 h = **1 h du matin**, très atténuée (± 1 °C). Favorable si la chambre est **ventilée la nuit** (l'air frais évacue cette petite onde) ; défavorable si elle est fermée et climatisée. *(1 pt)*
+
+### Partie D — Stratégie (3 pts)
+7. Murs lourds (BTC 30 à 35 cm) à l'**est et à l'ouest**, protégés par des débords ou de la végétation ; **fermer et occulter le jour** (volets) pour garder la fraîcheur stockée ; **ventiler largement la nuit** (ouvertures opposées, impostes, ouvertures hautes) pour décharger les murs ; toiture **isolée et ventilée** (l'inertie ne compense pas une tôle nue) ; chambres plutôt côté **est** (la chaleur des murs est arrivée et évacuée avant la nuit suivante). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre amortissement (rapport d'amplitudes, sans unité) et déphasage (heures).
+> - Oublier que la formule du déphasage donne des **secondes** : diviser par 3 600.
+> - Croire qu'un mur lourd « isole » : il retarde et atténue, mais sa résistance thermique reste faible.`},
  exercices:[
   {t:"Diffusivité de matériaux", d:1, e:`Calculer la diffusivité : a) du béton (λ = 2,0 ; ρ = 2 400 ; c = 880) ; b) du bois (λ = 0,15 ; ρ = 600 ; c = 1 600).`, c:`a) a = 2,0/(2 400 × 880) = **9,5 × 10⁻⁷ m²/s**.
 b) a = 0,15/(600 × 1 600) = **1,6 × 10⁻⁷ m²/s** : la chaleur pénètre 6 fois plus lentement dans le bois, mais une planche mince stocke peu.`},
@@ -965,6 +1739,57 @@ Les fluides frigorigènes ont un fort effet de serre en cas de fuite (R410A, R32
 > - EER = froid/électricité (2,5 à 5) ; inverter pour les usages variables.
 > - Split pour les pièces, DRV pour les immeubles, eau glacée pour les grands bâtiments.
 > - Unité extérieure à l'ombre et ventilée, condensats raccordés, filtres nettoyés.`,
+ sujet:{titre:"Climatisation d'un hôtel de 24 chambres : choix du système, implantation et entretien", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un hôtel de **24 chambres** à Grand-Bassam doit être climatisé. Le bilan donne **3,0 kW** de froid par chambre, **18 kW** pour l'accueil et les couloirs, **25 kW** pour le restaurant.
+
+**Données**
+- Solution 1 : **splits individuels** : EER = **2,8** ; SEER = **3,0** ;
+- Solution 2 : **DRV** (débit de réfrigérant variable) : EER = **4,2** ; SEER = **4,5** ; surcoût d'investissement **15 000 000 F** ;
+- Fonctionnement : **16 h/jour**, **365 jours** ; taux de charge moyen **45 %** ; E = P(froid) × taux × heures/SEER ; électricité **90 F/kWh** ;
+- Charge latente d'une chambre : **30 %** de sa charge ; chaleur de condensation de l'eau : **2 500 kJ/kg** ;
+- Filtres encrassés : consommation **+ 12 %** ; unité extérieure en plein soleil : capacité **− 15 %**.
+
+### Partie A — Principe (5 points)
+1. Décrire le cycle frigorifique (quatre organes) en précisant où la chaleur est absorbée et où elle est rejetée. (3 pts)
+2. Définir l'EER et le SEER. Qu'apporte la technologie inverter ? (2 pts)
+
+### Partie B — Puissances et choix (7 points)
+3. Calculer la puissance frigorifique totale, puis, pour chaque solution, la puissance électrique absorbée et la chaleur rejetée à l'extérieur. (3 pts)
+4. Calculer les consommations annuelles des deux solutions, l'économie du DRV et son temps de retour. (3 pts)
+5. Quel système proposer pour le restaurant ? (1 pt)
+
+### Partie C — Implantation (5 points)
+6. Calculer le débit de condensats d'une chambre et de l'ensemble des chambres. Comment les évacuer ? (3 pts)
+7. Un split de 12 000 BTU/h (3,5 kW) est prévu par chambre. Que se passe-t-il si son unité extérieure est installée en plein soleil ? (2 pts)
+
+### Partie D — Entretien (3 points)
+8. Calculer le surcoût annuel des filtres encrassés pour la solution 1. Établir un plan d'entretien. (3 pts)`,
+  corrige:`### Partie A — Principe (5 pts)
+1. **Évaporateur** (unité intérieure) : le fluide s'évapore à basse température et **absorbe** la chaleur de la pièce (l'air y dépose son humidité) ; **compresseur** : comprime la vapeur, qui s'échauffe ; **condenseur** (unité extérieure) : le fluide se condense et **rejette** la chaleur dehors ; **détendeur** : fait chuter la pression, le cycle recommence. *(3 pts)*
+2. **EER** = puissance frigorifique/puissance électrique absorbée (à pleine charge) ; **SEER** : efficacité **saisonnière**, sur une année, charges partielles comprises. L'**inverter** fait varier la vitesse du compresseur : moins de marches-arrêts, meilleure déshumidification, 20 à 40 % de consommation en moins. *(2 pts)*
+
+### Partie B — Puissances et choix (7 pts)
+3. P(froid) = 24 × 3,0 + 18 + 25 = **115 kW**.
+| | Splits (EER 2,8) | DRV (EER 4,2) |
+|---|---|---|
+| Puissance électrique = 115/EER | **41,1 kW** | **27,4 kW** |
+| Chaleur rejetée = froid + électricité | **156,1 kW** | **142,4 kW** |
+*(3 pts)*
+4. Splits : 115 × 0,45 × 5 840/3,0 = **100 740 kWh/an** ; DRV : 115 × 0,45 × 5 840/4,5 = **67 160 kWh/an**.
+Économie : **33 580 kWh** → **3 022 200 F/an** ; temps de retour : 15 000 000/3 022 200 ≈ **5 ans**. *(3 pts)*
+5. Restaurant : **cassettes** ou **gainable** (soufflage réparti dans une grande salle), raccordés au DRV ou en système propre ; prévoir l'**air neuf** et l'extraction de la cuisine. *(1 pt)*
+
+### Partie C — Implantation (5 pts)
+6. Latent d'une chambre : 0,30 × 3,0 = 0,9 kW ; débit d'eau : 0,9/2 500 = 3,6 × 10⁻⁴ kg/s = **1,3 L/h** ; pour 24 chambres : **≈ 31 L/h**. Évacuation par un **réseau de condensats** en pente avec siphon, raccordé aux eaux pluviales ou usées, **jamais** en façade ou sur le trottoir. *(3 pts)*
+7. Capacité : 3,5 × 0,85 ≈ **2,98 kW** < 3,0 kW nécessaires : l'appareil devient **sous-dimensionné** aux heures chaudes, tourne en continu, consomme plus et s'use plus vite. Unité extérieure à l'**ombre**, bien **ventilée**, loin des sources de chaleur. *(2 pts)*
+
+### Partie D — Entretien (3 pts)
+8. Surcoût : 0,12 × 100 740 ≈ **12 090 kWh/an** → **≈ 1 088 000 F/an**, plus une mauvaise qualité de l'air. Plan : **filtres nettoyés chaque mois** ; **échangeurs** et bacs à condensats nettoyés et désinfectés chaque année ; contrôle d'**étanchéité** du circuit (fluide à fort effet de serre, récupération par technicien qualifié) ; vérification des **condensats** et des liaisons frigorifiques isolées. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Croire que la chaleur extraite « disparaît » : elle est rejetée dehors, augmentée de l'énergie du compresseur.
+> - Confondre EER (pleine charge) et SEER (sur l'année) dans les calculs de consommation.
+> - Installer les unités extérieures au soleil ou dans un local fermé.`},
  exercices:[
   {t:"Chaleur rejetée à l'extérieur", d:1, e:`Un climatiseur extrait 5,3 kW d'une pièce et absorbe 1,7 kW électriques.
 Calculer son EER et la chaleur rejetée par l'unité extérieure.`, c:`EER = 5,3/1,7 = **3,1**.
@@ -1029,6 +1854,63 @@ On classe les actions par temps de retour : les réglages et l'entretien se remb
 > - Bureaux climatisés : 150 à 300 kWh/(m²·an) ; bien conçus : < 100.
 > - Les gains se multiplient : (1 − p₁)(1 − p₂)…
 > - Classer les actions par temps de retour.`,
+ sujet:{titre:"Audit énergétique de la climatisation d'un immeuble de bureaux", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un immeuble de bureaux de **1 200 m²** au Plateau consomme **220 kWh/(m²·an)**. Le propriétaire commande un audit de la climatisation.
+
+**Données**
+- Climatisation : **200 kW** de froid installés ; taux de charge moyen **60 %** ; **11 h/jour** ; **260 jours/an** ; SEER = **2,6** ;
+- E = P(froid) × taux de charge × heures / SEER ; électricité **90 F/kWh** ;
+- Actions proposées :
+| Action | Économie sur la climatisation | Investissement |
+|---|---|---|
+| 1. Consigne relevée de 22 à 25 °C (7 % par degré) | à calculer | 1 500 000 F |
+| 2. Remise en état et entretien des filtres et échangeurs | 8 % | 900 000 F |
+| 3. Brise-soleil extérieurs | 15 % | 6 000 000 F |
+| 4. Remplacement par des appareils inverter (SEER 4,2) | à calculer | 25 000 000 F |
+- Objectif d'une démarche de certification : **− 20 %** sur la consommation totale du bâtiment.
+
+### Partie A — Situation actuelle (5 points)
+1. Calculer la consommation annuelle de climatisation, sa part dans la consommation totale et son coût. (3 pts)
+2. Calculer la puissance installée par m² et la consommation de climatisation par m². Commenter. (2 pts)
+
+### Partie B — Actions une par une (7 points)
+3. Calculer l'économie relative des actions 1 et 4. (2 pts)
+4. Pour chaque action prise seule, calculer l'économie en kWh et en F, puis le temps de retour ; classer les actions. (5 pts)
+
+### Partie C — Actions combinées (6 points)
+5. Pourquoi les économies ne s'additionnent-elles pas ? Calculer l'économie réelle des quatre actions combinées. (4 pts)
+6. Calculer la nouvelle consommation du bâtiment en kWh/(m²·an) et vérifier l'objectif de certification. (2 pts)
+
+### Partie D — Synthèse (2 points)
+7. Calculer le temps de retour global et proposer un ordre de réalisation. (2 pts)`,
+  corrige:`### Partie A — Situation actuelle (5 pts)
+1. E = 200 × 0,60 × 11 × 260/2,6 = **132 000 kWh/an**. Consommation totale : 220 × 1 200 = **264 000 kWh/an** → climatisation **50 %** ; coût : 132 000 × 90 = **11 880 000 F/an**. *(3 pts)*
+2. 200 000/1 200 ≈ **167 W/m²** ; 132 000/1 200 = **110 kWh/(m²·an)**. Le bâtiment (220 kWh/(m²·an)) est dans la fourchette courante (150 à 300) mais loin d'un bâtiment bien conçu (< 100 au total). *(2 pts)*
+
+### Partie B — Actions une par une (7 pts)
+3. Action 1 : 3 degrés × 7 % = **21 %** ; action 4 : 1 − 2,6/4,2 = **38,1 %** (la consommation est inversement proportionnelle au SEER). *(2 pts)*
+4. Résultats :
+| Action | Économie (kWh) | Économie (F/an) | Temps de retour |
+|---|---|---|---|
+| 1. Consigne 25 °C | 27 720 | 2 494 800 | **0,6 an** |
+| 2. Filtres et échangeurs | 10 560 | 950 400 | **0,9 an** |
+| 3. Brise-soleil | 19 800 | 1 782 000 | **3,4 ans** |
+| 4. Appareils inverter | 50 290 | 4 525 700 | **5,5 ans** |
+Classement par temps de retour : **1, 2, 3, 4** (réglages et entretien d'abord, investissements lourds ensuite). *(5 pts)*
+
+### Partie C — Actions combinées (6 pts)
+5. Chaque action s'applique à la consommation **déjà réduite** par les précédentes : les économies se **multiplient**.
+$$ 0,79 × 0,92 × 0,85 × 0,619 = 0,382
+Consommation restante : 132 000 × 0,382 ≈ **50 480 kWh** ; économie : **81 520 kWh (− 62 %)**, soit **7 337 000 F/an**. La somme naïve (21 + 8 + 15 + 38 = 82 %) est fausse. *(4 pts)*
+6. Bâtiment : 264 000 − 81 520 = 182 480 kWh → **152 kWh/(m²·an)** ; réduction totale : 81 520/264 000 = **30,9 %** > 20 % : objectif **atteint**. *(2 pts)*
+
+### Partie D — Synthèse (2 pts)
+7. Investissement total : 33 400 000 F → temps de retour global ≈ 33 400 000/7 337 000 ≈ **4,6 ans**. Ordre : consigne et horloges (immédiat), entretien, brise-soleil, puis remplacement des appareils (en fin de vie, en les choisissant **plus petits** car les charges ont baissé). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner les pourcentages d'économie au lieu de les multiplier.
+> - Confondre la puissance installée (kW) et la consommation (kWh).
+> - Remplacer les appareils avant d'avoir réduit les besoins : on les surdimensionne.`},
  exercices:[
   {t:"Consommation annuelle", d:1, e:`Une chambre d'hôtel est équipée d'un split de 2,6 kW de froid (SEER = 4) ; charge moyenne 50 %, 12 h par jour, 365 jours.
 Calculer la consommation annuelle et le coût à 90 F/kWh.`, c:`E = 2,6 × 0,5 × 12 × 365/4 = **1 424 kWh/an** → **128 000 F/an** par chambre.`},
@@ -1092,6 +1974,56 @@ Le **ballon** contient en général la consommation d'**une journée** (50 à 75
 > - S = Q/(H × η) ; ballon ≈ une journée de consommation.
 > - Thermosiphon pour les petites installations ; capteurs au sud, 10 à 20°.
 > - Économies importantes pour les hôtels, cliniques et internats.`,
+ sujet:{titre:"Chauffe-eau solaire collectif d'une clinique à Bouaflé", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une clinique de **30 lits** à Bouaflé produit son eau chaude avec des chauffe-eau électriques. On étudie un chauffe-eau solaire collectif.
+
+**Données**
+- Besoins : **60 L par lit et par jour** à **50 °C**, plus **400 L/jour** pour la cuisine et la buanderie ; eau froide à **26 °C** ;
+- Q = m × c × ΔT ; c = **4,18 kJ/(kg·K)** ; 1 kWh = **3 600 kJ** ;
+- Irradiation dans le plan des capteurs H = **5,2 kWh/m²/jour** ; rendement moyen η = **0,45** ; S = Q/(H × η) ; capteurs de **2 m²** ;
+- Taux de couverture solaire annuel : **80 %** ; électricité **90 F/kWh** ; coût installé **250 000 F par m²** de capteur ;
+- Hygiène : montée en température du stockage à **60 °C** une fois par semaine.
+
+### Partie A — Principe (4 points)
+1. Décrire les composants d'un chauffe-eau solaire. (2 pts)
+2. Expliquer le thermosiphon. Pourquoi prévoir une circulation forcée ici ? (2 pts)
+
+### Partie B — Dimensionnement (9 points)
+3. Calculer le volume d'eau chaude journalier et l'énergie nécessaire (kJ et kWh). (3 pts)
+4. Calculer la surface de capteurs et le nombre de capteurs. (3 pts)
+5. Proposer le volume de stockage. (1 pt)
+6. Calculer la puissance d'appoint électrique pour produire la consommation d'une journée en 6 h. (2 pts)
+
+### Partie C — Économie (4 points)
+7. Calculer l'électricité économisée par an, l'économie en F et le temps de retour. (4 pts)
+
+### Partie D — Installation et hygiène (3 points)
+8. Donner l'orientation et l'inclinaison des capteurs ; citer deux dispositifs de sécurité. (2 pts)
+9. Calculer l'énergie nécessaire pour monter le stockage de 50 à 60 °C. Pourquoi le faire ? (1 pt)`,
+  corrige:`### Partie A — Principe (4 pts)
+1. **Capteurs** (plaque noire absorbante parcourue par l'eau, sous vitrage, dans un caisson isolé, ou tubes sous vide) ; **ballon de stockage** isolé ; **circulation** (thermosiphon ou pompe et régulation) ; **appoint** électrique ou gaz pour les jours sans soleil ; tuyauteries isolées, vase d'expansion, soupape. *(2 pts)*
+2. Dans le **thermosiphon**, l'eau chauffée, plus légère, monte naturellement vers le ballon placé **au-dessus** des capteurs, sans pompe. Avec 28 m² de capteurs et plus de 2 000 L de stockage, le ballon ne peut pas être posé au-dessus des capteurs sur la toiture : on prévoit une **circulation forcée** (pompe + régulation différentielle), ballons dans un local technique. *(2 pts)*
+
+### Partie B — Dimensionnement (9 pts)
+3. V = 30 × 60 + 400 = **2 200 L/jour** (2 200 kg) ; ΔT = 50 − 26 = 24 °C.
+$$ Q = 2 200 × 4,18 × 24 = 220 704 kJ = 61,3 kWh/jour
+*(3 pts)*
+4. S = 61,3/(5,2 × 0,45) = **26,2 m²** → 26,2/2 = 13,1 → **14 capteurs** (28 m²). *(3 pts)*
+5. Environ une journée de consommation, soit 50 à 75 L par m² de capteur (1 400 à 2 100 L) : **2 ballons de 1 000 L** (2 000 L). *(1 pt)*
+6. P = 61,3 kWh/6 h ≈ **10,2 kW** (par exemple 2 résistances de 5 à 6 kW, une par ballon, commandées par horloge et thermostat). *(2 pts)*
+
+### Partie C — Économie (4 pts)
+7. E = 61,3 × 365 × 0,80 ≈ **17 900 kWh/an** → 17 900 × 90 ≈ **1 611 000 F/an**.
+Investissement : 28 × 250 000 = **7 000 000 F** → temps de retour ≈ 7 000 000/1 611 000 ≈ **4,3 ans**, pour une durée de vie de 15 à 20 ans. *(4 pts)*
+
+### Partie D — Installation et hygiène (3 pts)
+8. Capteurs orientés **plein sud**, inclinés de **10 à 20°** (la pluie les nettoie), **sans ombre**. Sécurité : **vase d'expansion** et **soupape** (dilatation, surpression), protection contre la **surchauffe**, **mitigeur thermostatique** au puisage contre les brûlures. *(2 pts)*
+9. Q = 2 000 × 4,18 × 10 = 83 600 kJ ≈ **23,2 kWh** par semaine. Ce choc thermique détruit les **légionelles**, bactéries qui prolifèrent entre 25 et 45 °C et sont dangereuses dans une clinique (inhalation lors des douches). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de convertir les kJ en kWh (diviser par 3 600).
+> - Prendre ΔT par rapport à 0 °C au lieu de la température de l'eau froide (26 °C).
+> - Dimensionner les capteurs sans rendement : la surface serait deux fois trop petite.`},
  exercices:[
   {t:"Besoins d'une famille", d:1, e:`Une famille de 4 personnes utilise 40 L d'eau chaude par personne et par jour, chauffée de 27 à 47 °C.
 Calculer l'énergie journalière nécessaire.`, c:`m = 160 kg → Q = 160 × 4,18 × 20 = 13 376 kJ = 13 376/3 600 = **3,7 kWh/jour**.`},

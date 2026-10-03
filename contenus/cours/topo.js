@@ -90,6 +90,55 @@ Exemples : une rampe de garage de 15 % monte de 15 cm par mètre ; une canalisat
 > - Longueur réelle = longueur plan × échelle ; surface : × échelle².
 > - X vers l'Est, Y vers le Nord, Z altitude ; D = √(ΔX² + ΔY²).
 > - Pente = Δh / Dh.`,
+ sujet:{titre:"Unités d'angle, échelles et coordonnées d'un terrain à bâtir", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un géomètre vous transmet le plan d'un terrain à Anyama. Avant de l'exploiter, vous devez maîtriser les unités d'angle, les échelles et les coordonnées rectangulaires.
+
+**Données**
+- Angles relevés : **125,4370 gon** ; angle à convertir : **48°30'** ;
+- Sur un plan au **1/2 000**, une limite mesure **6,35 cm** ; sur un plan au **1/500**, une parcelle couvre **12,4 cm²** ;
+- On doit dessiner un terrain de **240 m** de long sur une feuille A3 (zone utile **38 cm**) ;
+- Bornes (en m) : **A (1 250,00 ; 840,00)**, **B (1 310,00 ; 920,00)**, **C (1 330,00 ; 850,00)** (X vers l'Est, Y vers le Nord) ;
+- Altitudes : **ZA = 52,30 m** ; **ZB = 54,80 m**.
+
+### Partie A — Unités d'angle (5 points)
+1. Rappeler les correspondances entre gon, degrés et radians pour un tour complet. (1 pt)
+2. Convertir 125,4370 gon en degrés décimaux puis en degrés-minutes-secondes. (2 pts)
+3. Convertir 48°30' en gon, et 100 gon en radians. (2 pts)
+
+### Partie B — Échelles (6 points)
+4. Calculer la longueur réelle de la limite et la surface réelle de la parcelle. (3 pts)
+5. Choisir l'échelle normalisée permettant de dessiner le terrain sur l'A3 (1/500, 1/1 000 ou 1/2 000). (2 pts)
+6. Quelle est la précision graphique (0,1 mm sur le papier) au 1/500 et au 1/2 000 ? (1 pt)
+
+### Partie C — Coordonnées (9 points)
+7. Calculer les distances AB, AC et BC. (3 pts)
+8. Calculer les gisements GAB et GAC. (2 pts)
+9. Calculer la surface du triangle ABC par la formule des coordonnées. (2 pts)
+10. Calculer la pente de A vers B en %. (2 pts)`,
+  corrige:`### Partie A — Unités (5 pts)
+1. 1 tour = **400 gon = 360° = 2π rad** ; 1 gon = 0,9°. *(1 pt)*
+2. 125,4370 × 0,9 = **112,8933°** = 112° + 0,8933 × 60 = 53,60' → **112°53'36"**. *(2 pts)*
+3. 48°30' = 48,5° / 0,9 = **53,8889 gon** ; 100 gon = **π/2 = 1,5708 rad**. *(2 pts)*
+
+### Partie B — Échelles (6 pts)
+4. 6,35 cm × 2 000 = 12 700 cm = **127,00 m** ; 1 cm² au 1/500 = 5 m × 5 m = 25 m² → 12,4 × 25 = **310 m²**. *(3 pts)*
+5. 240 m / 0,38 m = 632 → l'échelle doit être plus petite que 1/632 : **1/1 000** (24 cm sur le papier) ; le 1/500 donnerait 48 cm, trop grand. *(2 pts)*
+6. 0,1 mm × 500 = **5 cm** ; 0,1 mm × 2 000 = **20 cm**. *(1 pt)*
+
+### Partie C — Coordonnées (9 pts)
+7. *(3 pts)*
+   - AB : ΔX = 60,00, ΔY = 80,00 → **100,00 m** ;
+   - AC : ΔX = 80,00, ΔY = 10,00 → √6 500 = **80,62 m** ;
+   - BC : ΔX = 20,00, ΔY = − 70,00 → √5 300 = **72,80 m**.
+8. GAB = arctan(60 / 80) = **40,9666 gon** (quadrant I) ; GAC = arctan(80 / 10) = **92,0833 gon**. *(2 pts)*
+9. $$ 2S = |XA (YB − YC) + XB (YC − YA) + XC (YA − YB)|
+   = |1 250 × 70 + 1 310 × 10 + 1 330 × (− 80)| = |87 500 + 13 100 − 106 400| = 5 800 → **S = 2 900 m²**. *(2 pts)*
+10. (54,80 − 52,30) / 100,00 = **2,5 %** (montée). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Multiplier par l'échelle une seule fois pour une surface (il faut l'échelle au carré).
+> - Calculer le gisement avec arctan(ΔY / ΔX) : en topographie, il part du Nord, donc arctan(ΔX / ΔY).
+> - Calculatrice réglée en degrés quand on travaille en gon.`},
  exercices:[
   {t:"Conversions d'angles", d:1, e:`1. Convertir en degrés, minutes, secondes : 128,75 gon.
 2. Convertir en grades : 30° 15' 20".
@@ -172,6 +221,53 @@ Pour un niveau, il n'y a **pas de centrage** : on se place n'importe où, de pr�
 > - Stadimétrie : D = 100 × (Ls − Li).
 > - Mise en station : trépied, centrage, calage grossier puis fin, vérification.
 > - Portées égales pour le niveau, double retournement pour le théodolite.`,
+ sujet:{titre:"Mise en station, double retournement et contrôle d'un niveau", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Avant le levé d'un lotissement à Songon, le chef de brigade contrôle votre maîtrise du matériel : mise en station du théodolite, mesures en cercle gauche et cercle droit, réglage du niveau.
+
+**Données — théodolite (station S, hauteur d'instrument hi = 1,55 m)**
+- Visée sur le prisme P (hp = 1,80 m) : Hz CG = **125,4320 gon** ; Hz CD = **325,4380 gon** ;
+- Angle zénithal : V CG = **96,4560 gon** ; V CD = **303,5480 gon** ;
+- Distance inclinée : **Di = 85,420 m**.
+
+**Données — niveau**
+- A et B distants de **60 m**. Niveau au milieu : lectures **LA = 1,532** et **LB = 1,218** ;
+- Niveau à **5 m de A** (55 m de B) : lectures **LA = 1,486** et **LB = 1,181**.
+
+### Partie A — Mise en station (5 points)
+1. Décrire dans l'ordre les étapes de la mise en station d'un théodolite sur un point au sol. (3 pts)
+2. À quoi servent la nivelle sphérique, la nivelle torique et le plomb optique (ou laser) ? (2 pts)
+
+### Partie B — Double retournement (8 points)
+3. Calculer la lecture horizontale moyenne et l'erreur de collimation horizontale. (3 pts)
+4. Vérifier la somme V CG + V CD, calculer l'erreur d'index et l'angle zénithal corrigé. (3 pts)
+5. Quelles erreurs le double retournement élimine-t-il ? (2 pts)
+
+### Partie C — Distances et dénivelée (3 points)
+6. Calculer la distance horizontale et la dénivelée S → P (sol à sol). (3 pts)
+
+### Partie D — Contrôle du niveau (4 points)
+7. Calculer la dénivelée vraie entre A et B. (1 pt)
+8. Calculer la lecture correcte sur B depuis la deuxième station, l'erreur et la pente de la ligne de visée (mm/m). Conclure. (3 pts)`,
+  corrige:`### Partie A — Mise en station (5 pts)
+1. Trépied ouvert, plateau à peu près horizontal au-dessus du point ; fixer l'appareil ; centrer grossièrement au plomb en déplaçant le trépied ; caler la **nivelle sphérique** avec les jambes du trépied ; caler la **nivelle torique** avec les vis calantes (deux positions à 100 gon) ; **centrage fin** en faisant glisser l'appareil sur le plateau ; recontrôler la nivelle ; mesurer **hi**. *(3 pts)*
+2. Sphérique : calage approché ; torique : calage précis de l'axe principal vertical ; plomb : centrage de l'axe sur le point au sol. *(2 pts)*
+
+### Partie B — Double retournement (8 pts)
+3. Moyenne : (125,4320 + 325,4380 − 200) / 2 = **125,4350 gon** ; collimation : (125,4320 − 125,4380) / 2 = **− 3 mgon** (la moyenne CG/CD l'élimine). *(3 pts)*
+4. V CG + V CD = 400,0040 gon au lieu de 400 → erreur d'index **i = + 2 mgon** ; V = (96,4560 − 303,5480 + 400) / 2 = **96,4540 gon**. *(3 pts)*
+5. Collimation horizontale, erreur d'index vertical, défaut de perpendicularité des tourillons et excentricité des cercles. *(2 pts)*
+
+### Partie C — Distances (3 pts)
+6. Dh = 85,420 × sin(96,4540) = **85,288 m** ; Di cos V = 85,420 × cos(96,4540) = 4,755 m → ΔZ = 4,755 + 1,55 − 1,80 = **+ 4,505 m**. *(3 pts)*
+
+### Partie D — Niveau (4 pts)
+7. Au milieu, les portées égales éliminent l'erreur : Δh = 1,532 − 1,218 = **+ 0,314 m** (B plus haut). *(1 pt)*
+8. Près de A, la lecture sur A (5 m) est quasi exacte : LB correcte = 1,486 − 0,314 = **1,172** ; lue 1,181 → **9 mm** de trop pour 50 m de différence de portée → visée montante de **0,18 mm/m** (≈ 11 mgon). C'est hors tolérance (≈ 0,05 mm/m) : faire régler le niveau ; en attendant, toujours niveler à **portées égales**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier les hauteurs d'instrument et de prisme dans la dénivelée.
+> - Faire la moyenne CG/CD sans retrancher 200 gon à la lecture CD.
+> - Croire qu'un niveau mal réglé donne une dénivelée fausse quand les portées sont égales.`},
  exercices:[
   {t:"Distance stadimétrique", d:1, e:`Les lectures sur la mire sont : fil supérieur 2,148 ; fil milieu 1,962 ; fil inférieur 1,776.
 1. Vérifier la cohérence des lectures.
@@ -247,6 +343,53 @@ Avec un niveau ou un théodolite : D = 100 × (Ls − Li) pour une visée horizo
 > - Corrections au ruban : étalonnage, température (11,5 × 10⁻⁶ /°C), pente.
 > - Mesurer aller et retour.
 > - Station totale : ± (2 mm + 2 ppm).`,
+ sujet:{titre:"Mesurer une distance au ruban et à la station totale : corrections et contrôles", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour vérifier une limite de parcelle à Bonoua, vous mesurez la distance AB au ruban, sur un terrain en pente, par une journée chaude. Vous la recoupez ensuite à la station totale.
+
+**Données**
+- Ruban acier nominal **50 m**, étalonné à **20 °C** ; sa longueur réelle est **50,008 m** ;
+- Distance inclinée mesurée (aller) : **137,465 m** ; retour : **137,481 m** ; température **32 °C** ;
+- Dénivelée entre A et B : **4,250 m** ;
+- Coefficient de dilatation de l'acier : **11,5 × 10⁻⁶ /°C** ;
+- Tolérance aller-retour : **2 cm pour 100 m** ;
+- Station totale sur un autre côté : **Di = 64,318 m**, **V = 92,6540 gon**.
+
+### Partie A — Contrôle aller-retour (4 points)
+1. Calculer l'écart aller-retour et la tolérance pour cette longueur. La mesure est-elle acceptable ? (2 pts)
+2. Pourquoi mesure-t-on toujours en aller et retour ? (2 pts)
+
+### Partie B — Corrections (10 points)
+3. Calculer la correction d'étalonnage (sur la mesure aller). Quel est son signe ? (3 pts)
+4. Calculer la correction de température. Expliquer son signe. (3 pts)
+5. Calculer la distance inclinée corrigée puis la distance horizontale. (3 pts)
+6. Quelle erreur aurait-on commise en reportant la distance inclinée sur le plan ? (1 pt)
+
+### Partie C — Station totale (4 points)
+7. Calculer la distance horizontale et la dénivelée (Di cos V) pour la visée à la station totale. (4 pts)
+
+### Partie D — Méthodes (2 points)
+8. Qu'est-ce que la cultellation (mesure par ressauts) ? Quand l'utilise-t-on ? (2 pts)`,
+  corrige:`### Partie A — Aller-retour (4 pts)
+1. Écart : 137,481 − 137,465 = **16 mm** ; tolérance : 2 × 1,37 = **27 mm** → acceptable. *(2 pts)*
+2. Pour détecter les **fautes** (portée oubliée, mauvaise lecture) et améliorer la précision par la moyenne. *(2 pts)*
+
+### Partie B — Corrections (10 pts)
+3. 0,008 × 137,465 / 50 = **+ 0,022 m** : le ruban est trop long, chaque « 50 m » lu vaut 50,008 m → on **ajoute**. *(3 pts)*
+4. 11,5 × 10⁻⁶ × (32 − 20) × 137,465 = **+ 0,019 m** : le ruban dilaté s'allonge, la distance lue est trop courte → on ajoute. *(3 pts)*
+5. Di = 137,465 + 0,022 + 0,019 = **137,506 m** ; $$ Dh = √(137,506² − 4,250²) = 137,440 m
+   *(3 pts)*
+6. 137,506 − 137,440 = **6,6 cm** de trop : inacceptable pour une limite de propriété. *(1 pt)*
+
+### Partie C — Station totale (4 pts)
+7. Dh = 64,318 × sin(92,6540) = **63,890 m** ; Di cos V = 64,318 × cos(92,6540) = **+ 7,405 m** (visée montante, V < 100 gon). *(4 pts)*
+
+### Partie D — Méthodes (2 pts)
+8. On mesure par portées **horizontales** courtes (ruban tenu horizontal, extrémité reportée au sol au fil à plomb) : sur les terrains en forte pente, quand on ne connaît pas la dénivelée. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Se tromper de signe : ruban trop long ou dilaté → distance lue trop courte → correction positive.
+> - Réduire à l'horizontale avant d'appliquer les corrections d'étalonnage et de température.
+> - Calculatrice en degrés pour V exprimé en gon.`},
  exercices:[
   {t:"Réduction à l'horizontale", d:1, e:`Entre deux bornes, on mesure une distance inclinée de 62,415 m ; la dénivelée vaut 5,320 m. Calculer la distance horizontale et l'angle de pente en grades.`, c:`**Dh = √(62,415² − 5,320²) = √(3 895,63 − 28,30) = √3 867,33 = 62,188 m.**
 sin i = 5,320 / 62,415 = 0,0852 → i = 4,889° = **5,43 gon**.`},
@@ -308,6 +451,50 @@ Sur un plan topographique, chaque point levé porte son **altitude** (par exempl
 > - Lot = îlot + numéro ; sécurisation par ACD et titre foncier ; bornage contradictoire par un géomètre agréé.
 > - CES = emprise / terrain ; COS = plancher / terrain.
 > - Niveau ±0,00 = référence du projet, rattaché à une altitude.`,
+ sujet:{titre:"Exploiter un dossier foncier et un plan de lotissement avant de construire", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un client a acheté le **lot 125** d'un lotissement approuvé à Bingerville. Il vous apporte son dossier et veut savoir ce qu'il peut construire.
+
+**Données**
+- Coordonnées des bornes (système local du lotissement, m) : **B1 (120,00 ; 340,00)** ; **B2 (140,00 ; 340,00)** ; **B3 (141,20 ; 365,50)** ; **B4 (119,40 ; 364,80)** ; le côté B1B2 donne sur la voie ;
+- Surface inscrite au dossier : **525 m²** ;
+- Règlement du lotissement : recul de **5 m** sur voie, **3 m** en fond de lot, **2 m** sur les limites latérales ; **CES 50 %** ; **COS 1,0**.
+
+### Partie A — Documents (5 points)
+1. Citer quatre documents d'un dossier foncier sérieux en Côte d'Ivoire et le rôle de chacun. (3 pts)
+2. Quels éléments lit-on sur un plan de lotissement ? (2 pts)
+
+### Partie B — Vérifications sur les bornes (8 points)
+3. Calculer les longueurs des quatre côtés. (3 pts)
+4. Calculer la surface du lot par la formule des coordonnées et la comparer à la surface du dossier. (4 pts)
+5. Que faire si une borne a disparu sur le terrain ? (1 pt)
+
+### Partie C — Constructibilité (7 points)
+6. Expliquer CES et COS. (2 pts)
+7. En assimilant le lot à un rectangle de 20 × 25 m, calculer la zone constructible après reculs. (2 pts)
+8. Calculer l'emprise maximale autorisée par le CES et la surface de plancher maximale autorisée par le COS. Proposer un parti (niveaux). (3 pts)`,
+  corrige:`### Partie A — Documents (5 pts)
+1. *(3 pts)*
+   - **Arrêté de concession définitive (ACD)** ou titre foncier : preuve de propriété ;
+   - **Plan du lot / extrait topographique** avec les coordonnées des bornes ;
+   - **Arrêté d'approbation du lotissement** : le lotissement est légal ;
+   - **Certificat de mutation / attestation d'attribution**, **reçus** de paiement ; et pour construire, le **permis de construire**.
+2. Numéros et dimensions des lots, voies (largeurs), réserves (équipements, espaces verts), bornes, orientation, échelle, règlement d'urbanisme. *(2 pts)*
+
+### Partie B — Bornes (8 pts)
+3. B1B2 = **20,00 m** ; B2B3 = √(1,20² + 25,50²) = **25,53 m** ; B3B4 = √(21,80² + 0,70²) = **21,81 m** ; B4B1 = √(0,60² + 24,80²) = **24,81 m**. *(3 pts)*
+4. $$ 2S = |Σ (Xi × Yi+1 − Xi+1 × Yi)| = 1 051,06 → S = 525,53 m²
+   Écart avec le dossier : **0,53 m²**, soit 0,1 % : conforme (les tolérances sont de l'ordre du m² pour un lot urbain). *(4 pts)*
+5. Ne jamais la replacer « à l'œil » : faire rétablir la borne par un **géomètre-expert agréé** à partir des coordonnées, de préférence en présence des voisins. *(1 pt)*
+
+### Partie C — Constructibilité (7 pts)
+6. **CES** = emprise au sol du bâtiment / surface du terrain ; **COS** = surface de plancher totale / surface du terrain. *(2 pts)*
+7. (20 − 2 × 2) × (25 − 5 − 3) = 16 × 17 = **272 m²**. *(2 pts)*
+8. CES : 0,50 × 525 = **262 m²** d'emprise (plus restrictif que les 272 m² de reculs) ; COS : 1,0 × 525 = **525 m²** de plancher → par exemple un **R+1** de 2 × 260 m² environ. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Construire sur la foi d'une simple attestation villageoise sans vérifier le lotissement.
+> - Calculer la surface à partir de longueurs seules sur un quadrilatère quelconque.
+> - Oublier les reculs ou confondre CES et COS.`},
  exercices:[
   {t:"Dimensions d'un lot", d:1, e:`Sur un plan de lotissement au 1/500, un lot mesure 4,0 cm × 5,6 cm.
 1. Calculer ses dimensions réelles et sa surface.
@@ -379,6 +566,69 @@ Un **profil en long** est la coupe verticale du terrain suivant un axe (route, c
 > - Talweg : pointes des « V » vers l'amont ; crête : pointes vers l'aval.
 > - ZP = Z1 + e × d1 / (d1 + d2) ; pente = e / distance réelle.
 > - Profil en long : distances en abscisses, altitudes en ordonnées (échelle des hauteurs × 10).`,
+ sujet:{titre:"Courbes de niveau et profil en long d'une voie d'accès", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le plan topographique au **1/1 000** d'un terrain à Dabou (équidistance **1 m**), vous préparez l'étude d'une voie d'accès.
+
+**Données**
+- Un point P se trouve entre les courbes 54 et 55 : sur le plan, il est à **6,5 mm** de la courbe 54, les deux courbes étant distantes de **15 mm** suivant la ligne de plus grande pente passant par P ;
+- Entre la courbe 52 (point A) et la courbe 57 (point B), on mesure **8,4 cm** sur le plan ;
+- Profil en long de l'axe de la voie :
+
+| Profil | Distance cumulée (m) | TN (m) |
+|---|---|---|
+| P0 | 0 | 50,20 |
+| P1 | 25 | 51,05 |
+| P2 | 50 | 52,40 |
+| P3 | 75 | 52,10 |
+| P4 | 100 | 53,30 |
+
+- Ligne de projet : départ à **50,50 m** en P0, pente constante **+ 2,5 %**.
+
+### Partie A — Lecture des courbes (6 points)
+1. Calculer l'altitude de P par interpolation. (2 pts)
+2. Calculer la pente moyenne entre A et B. (2 pts)
+3. Comment reconnaît-on sur un plan une zone raide, un talweg, une croupe ? (2 pts)
+
+### Partie B — Profil du terrain (3 points)
+4. Calculer la pente du terrain naturel entre chaque profil. (3 pts)
+
+### Partie C — Ligne de projet (8 points)
+5. Calculer les altitudes projet et les hauteurs de déblai (D) ou de remblai (R) à chaque profil. (4 pts)
+6. Calculer la position des points de passage. (4 pts)
+
+### Partie D — Dessin (3 points)
+7. On dessine le profil avec une échelle des longueurs au 1/1 000 et des hauteurs au 1/100. Pourquoi ces deux échelles ? Quelle est la hauteur sur le papier d'un remblai de 0,30 m ? (3 pts)`,
+  corrige:`### Partie A — Courbes (6 pts)
+1. ZP = 54 + 1 × 6,5 / 15 = **54,43 m**. *(2 pts)*
+2. Distance réelle : 8,4 cm × 1 000 = 84 m ; dénivelée 5 m → p = 5 / 84 = **5,95 %**. *(2 pts)*
+3. Zone raide : courbes **serrées** ; talweg (vallon) : courbes en V pointant vers l'**amont** ; croupe (crête) : courbes en V pointant vers l'**aval**. *(2 pts)*
+
+### Partie B — Terrain (3 pts)
+4. P0-P1 : 0,85 / 25 = **+ 3,4 %** ; P1-P2 : **+ 5,4 %** ; P2-P3 : **− 1,2 %** ; P3-P4 : **+ 4,8 %**. *(3 pts)*
+
+### Partie C — Projet (8 pts)
+5. *(4 pts)*
+
+| Profil | TN | Projet | h = TN − projet |
+|---|---|---|---|
+| P0 | 50,20 | 50,500 | R 0,300 |
+| P1 | 51,05 | 51,125 | R 0,075 |
+| P2 | 52,40 | 51,750 | D 0,650 |
+| P3 | 52,10 | 52,375 | R 0,275 |
+| P4 | 53,30 | 53,000 | D 0,300 |
+
+6. x = L × |h1| / (|h1| + |h2|) : *(4 pts)*
+   - entre P1 et P2 : 25 × 0,075 / 0,725 = 2,59 → **27,59 m** ;
+   - entre P2 et P3 : 25 × 0,650 / 0,925 = 17,57 → **67,57 m** ;
+   - entre P3 et P4 : 25 × 0,275 / 0,575 = 11,96 → **86,96 m**.
+
+### Partie D — Dessin (3 pts)
+7. Les dénivelées sont petites devant les longueurs : on les **exagère** (×10) pour les rendre lisibles. Un remblai de 0,30 m au 1/100 mesure **3 mm**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Inverser le signe : h = TN − projet, positif en déblai.
+> - Mesurer la distance d'interpolation hors de la ligne de plus grande pente.
+> - Compter la position du point de passage depuis l'origine sans ajouter la distance cumulée du profil précédent.`},
  exercices:[
   {t:"Interpoler une altitude", d:1, e:`Sur un plan au 1/1 000 (équidistance 1 m), un point M se trouve entre les courbes 212 et 213, à 6 mm de la courbe 212 et à 9 mm de la courbe 213. Calculer son altitude.`, c:`ZM = 212 + 1 × 6 / (6 + 9) = 212 + 0,40 = **212,40 m**.`},
   {t:"Pente entre deux courbes", d:1, e:`Sur un plan au 1/500, deux courbes de niveau d'équidistance 0,5 m sont distantes de 12 mm. Calculer la pente du terrain. Une route peut-elle monter directement selon la ligne de plus grande pente si sa pente maximale est de 8 % ?`, c:`Distance réelle : 12 × 500 = 6 000 mm = 6 m. **p = 0,5 / 6 = 8,3 %**.
@@ -443,6 +693,68 @@ Cette méthode est très pratique quand on vise **beaucoup de points** depuis un
 > - Portées égales, mire verticale, lectures au mm.
 > - Toujours fermer (retour au départ ou arrivée sur un repère) ; comparer f à la tolérance ; compenser.
 > - Plan de visée : Hv = Z + LAR ; Z = Hv − L.`,
+ sujet:{titre:"Cheminement de nivellement encadré entre deux repères", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour donner des altitudes aux points de changement d'un futur réseau d'assainissement à Gagnoa, vous effectuez un nivellement direct entre deux repères de nivellement connus.
+
+**Données**
+- Repère de départ **RN1 : Z = 25,412 m** ; repère d'arrivée **RN2 : Z = 27,836 m** ;
+- Carnet de terrain :
+
+| Station | Point | Lecture arrière | Lecture avant |
+|---|---|---|---|
+| S1 | RN1 | 1,625 | |
+| S1 | PC1 | | 0,842 |
+| S2 | PC1 | 1,914 | |
+| S2 | PC2 | | 1,203 |
+| S3 | PC2 | 0,987 | |
+| S3 | PC3 | | 1,452 |
+| S4 | PC3 | 2,315 | |
+| S4 | RN2 | | 0,915 |
+
+- Depuis S2, on a aussi visé un point de détail **P** (fond d'un regard existant) : lecture **1,560** ;
+- Tolérance de fermeture : **T = ± 3 mm × √n** (n : nombre de stations).
+
+### Partie A — Principe (4 points)
+1. Expliquer le principe du nivellement direct et la formule Δh = LAR − LAV. (2 pts)
+2. Pourquoi place-t-on le niveau à égale distance des deux mires ? (2 pts)
+
+### Partie B — Calcul du cheminement (10 points)
+3. Calculer les dénivelées de chaque station et leur somme. Contrôler avec Σ LAR − Σ LAV. (3 pts)
+4. Calculer la fermeture et la tolérance. Conclure. (3 pts)
+5. Compenser et calculer les altitudes de PC1, PC2 et PC3. (4 pts)
+
+### Partie C — Point de détail (3 points)
+6. Calculer l'altitude du plan de visée de S2 puis l'altitude de P. Pourquoi P n'est-il pas contrôlé ? (3 pts)
+
+### Partie D — Exploitation (3 points)
+7. Le fil d'eau du futur regard doit être à **1,10 m** sous PC2. Calculer son altitude et la lecture sur mire à obtenir depuis S2 pour régler le fond de fouille (fond de fouille = fil d'eau − 0,15 m). (3 pts)`,
+  corrige:`### Partie A — Principe (4 pts)
+1. Le niveau donne une visée **horizontale** ; la mire mesure la hauteur de cette visée au-dessus de chaque point. Le point le plus haut donne la lecture la plus faible : Δh = LAR − LAV. *(2 pts)*
+2. Les portées égales éliminent l'**erreur de collimation** du niveau et l'effet de la sphéricité et de la réfraction. *(2 pts)*
+
+### Partie B — Cheminement (10 pts)
+3. S1 : + 0,783 ; S2 : + 0,711 ; S3 : − 0,465 ; S4 : + 1,400 → **Σ = + 2,429 m**. Contrôle : 6,841 − 4,412 = **2,429** ✔. *(3 pts)*
+4. Théorique : 27,836 − 25,412 = 2,424 → **f = + 5 mm** ; T = 3 × √4 = **6 mm** → |f| ≤ T : accepté. *(3 pts)*
+5. Correction − 5 mm répartie (− 1 ; − 1 ; − 2 ; − 1 mm) : *(4 pts)*
+
+| Point | Δh compensée | Z (m) |
+|---|---|---|
+| RN1 | | 25,412 |
+| PC1 | + 0,782 | **26,194** |
+| PC2 | + 0,710 | **26,904** |
+| PC3 | − 0,467 | **26,437** |
+| RN2 | + 1,399 | 27,836 ✔ |
+
+### Partie C — Point de détail (3 pts)
+6. Plan de visée S2 = 26,194 + 1,914 = **28,108 m** ; ZP = 28,108 − 1,560 = **26,548 m**. P est un point **rayonné** : il ne fait pas partie du cheminement, une faute de lecture sur P ne serait pas détectée (le relire ou le viser depuis une autre station). *(3 pts)*
+
+### Partie D — Exploitation (3 pts)
+7. Fil d'eau : 26,904 − 1,10 = **25,804 m** ; fond de fouille : **25,654 m** ; lecture à obtenir : 28,108 − 25,654 = **2,454 m**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compenser une fermeture hors tolérance au lieu de recommencer.
+> - Oublier que le dernier point (RN2) doit retrouver exactement son altitude connue.
+> - Utiliser l'altitude non compensée de PC1 pour le plan de visée de S2.`},
  exercices:[
   {t:"Altitude d'un point", d:1, e:`Le repère R a pour altitude 37,452 m. Lecture arrière sur R : 0,968 ; lecture avant sur P : 2,314. Calculer l'altitude de P. P est-il plus haut ou plus bas que R ?`, c:`Δh = 0,968 − 2,314 = **− 1,346 m** → **ZP = 37,452 − 1,346 = 36,106 m**. P est **plus bas** que R (on lit plus haut sur la mire en P).`},
   {t:"Cheminement encadré", d:2, e:`On nivelle de R1 (Z = 25,300) à R2 (Z = 26,018) en passant par les points 1 et 2 :
@@ -509,6 +821,53 @@ On contrôle par nivellement : les **niveaux des fonds de fouille** et des **sem
 > - Lecture à faire = Hv − Zprojet.
 > - h = Zterrain − Zprojet : positif = déblai, négatif = remblai.
 > - Pente : Zprojet(x) = Z0 − p x ; nivelettes et mire-nivelette ; laser rotatif.`,
+ sujet:{titre:"Le niveau sur le chantier : traits de niveau, fond de fouille, plate-forme et pentes", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Chantier d'un entrepôt à Yopougon. Le repère de chantier **R** a pour altitude **12,450 m**. Le niveau ± 0,00 (dessus du dallage fini) est fixé à **12,80 m**.
+
+**Données**
+- Station du niveau : lecture sur R = **1,325** ;
+- Fond de fouille des semelles à **− 1,20** (par rapport au ± 0,00) ;
+- Plate-forme de **120 m²** : six points nivelés depuis la même station, lectures **1,605 – 1,740 – 1,485 – 1,910 – 1,815 – 1,560** ; dessus du remblai (arase sous hérisson et dallage) à **− 0,25** ;
+- Canalisation : regard R1 fil d'eau **11,20 m**, pente **2 %**, longueur jusqu'à R2 **18 m** ;
+- Dallage d'une aire de lavage : pente **1,5 %** vers un siphon situé à **4,00 m** du bord.
+
+### Partie A — Plan de visée et traits de niveau (6 points)
+1. Calculer l'altitude du plan de visée. (1 pt)
+2. Calculer l'altitude du fond de fouille et la lecture à obtenir sur la mire. (2 pts)
+3. On veut tracer sur les poteaux un trait « + 1,00 ». Est-ce possible depuis cette station ? Proposer une solution avec un trait « + 0,50 » et donner la lecture. (3 pts)
+
+### Partie B — Plate-forme (7 points)
+4. Calculer les altitudes des six points et l'altitude moyenne. (3 pts)
+5. Calculer l'altitude de l'arase et la hauteur de remblai à chaque point. (2 pts)
+6. Estimer le volume de remblai compacté. (2 pts)
+
+### Partie C — Pentes (5 points)
+7. Calculer le fil d'eau en R2 et la lecture à obtenir sur la mire posée au fond de R2. (3 pts)
+8. Calculer la différence de niveau entre le bord de l'aire de lavage et le siphon. (2 pts)
+
+### Partie D — Bonnes pratiques (2 points)
+9. Pourquoi faut-il deux repères de chantier, protégés et contrôlés régulièrement ? (2 pts)`,
+  corrige:`### Partie A — Traits de niveau (6 pts)
+1. Plan de visée : 12,450 + 1,325 = **13,775 m**. *(1 pt)*
+2. Fond de fouille : 12,80 − 1,20 = **11,60 m** ; lecture : 13,775 − 11,60 = **2,175 m**. *(2 pts)*
+3. Trait + 1,00 = 13,80 m, au-dessus du plan de visée (13,775) : lecture négative (− 0,025), **impossible**. Trait + 0,50 = 13,30 m → lecture **0,475 m** ; on en déduira le + 1,00 au mètre (+ 0,50 au-dessus). *(3 pts)*
+
+### Partie B — Plate-forme (7 pts)
+4. Z = 13,775 − L : **12,170 – 12,035 – 12,290 – 11,865 – 11,960 – 12,215** ; moyenne **12,089 m**. *(3 pts)*
+5. Arase : 12,80 − 0,25 = **12,55 m** ; hauteurs : **0,380 – 0,515 – 0,260 – 0,685 – 0,590 – 0,335 m**. *(2 pts)*
+6. Hauteur moyenne 0,461 m → V ≈ 120 × 0,461 = **55 m³** de remblai compacté (estimation : les points ont tous le même poids). *(2 pts)*
+
+### Partie C — Pentes (5 pts)
+7. R2 : 11,20 − 0,02 × 18 = **10,84 m** ; lecture : 13,775 − 10,84 = **2,935 m**. *(3 pts)*
+8. 4,00 × 0,015 = **0,06 m** : le siphon est 6 cm plus bas que le bord. *(2 pts)*
+
+### Partie D — Pratiques (2 pts)
+9. Un repère peut être heurté ou déplacé par les engins : avec deux repères, on contrôle l'un par l'autre, et on peut toujours en retrouver un. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer les altitudes avec Z = plan de visée + lecture.
+> - Oublier de convertir les niveaux relatifs (± 0,00) en altitudes.
+> - Régler les fonds de fouille sans contrôle de fermeture sur le repère.`},
  exercices:[
   {t:"Marquer des niveaux", d:1, e:`Hv = 32,476 m. Quelle lecture faut-il faire pour marquer :
 1. le niveau ±0,00 = 31,800 ;
@@ -573,6 +932,63 @@ $$ erreur d'index : e = (VCG + VCD − 400) / 2      V corrigé = VCG − e
 > - Double retournement : CG et CD, on prend la moyenne.
 > - V : 0 au zénith, 100 à l'horizontale ; e = (VCG + VCD − 400)/2.
 > - Tour d'horizon fermé sur la première direction.`,
+ sujet:{titre:"Tour d'horizon au théodolite en deux positions de cercle", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Depuis une station S d'un canevas de lotissement, vous mesurez les directions vers quatre points A, B, C, D par un tour d'horizon en cercle gauche (CG) puis en cercle droit (CD), avec fermeture sur A.
+
+**Lectures horizontales (gon)**
+
+| Point | CG | CD |
+|---|---|---|
+| A | 0,0120 | 200,0110 |
+| B | 68,4530 | 268,4544 |
+| C | 152,7810 | 352,7788 |
+| D | 287,3360 | 87,3384 |
+| A (fermeture) | 0,0135 | 200,0125 |
+
+Tolérance de fermeture d'un tour : **3 mgon**.
+
+### Partie A — Méthode (4 points)
+1. Pourquoi refermer le tour sur le point de départ ? (1 pt)
+2. Pourquoi mesurer en CG et en CD ? Qu'est-ce que la réitération ? (3 pts)
+
+### Partie B — Fermetures (6 points)
+3. Calculer les fermetures du tour en CG et en CD et les comparer à la tolérance. (2 pts)
+4. Répartir les fermetures proportionnellement au rang de la visée et donner les lectures corrigées. (4 pts)
+
+### Partie C — Directions moyennes et angles (8 points)
+5. Calculer les directions moyennes CG/CD. (3 pts)
+6. Réduire les directions à zéro sur A. (2 pts)
+7. Calculer les angles ASB, BSC, CSD et DSA, et vérifier leur somme. (3 pts)
+
+### Partie D — Conversion (2 points)
+8. Convertir l'angle BSC en degrés-minutes-secondes. (2 pts)`,
+  corrige:`### Partie A — Méthode (4 pts)
+1. La fermeture contrôle que l'appareil n'a pas bougé (trépied, embase) pendant le tour. *(1 pt)*
+2. La moyenne CG/CD élimine la **collimation**, le défaut des **tourillons** et l'**excentricité** ; la **réitération** consiste à recommencer le tour en décalant l'origine du cercle pour répartir les erreurs de graduation. *(3 pts)*
+
+### Partie B — Fermetures (6 pts)
+3. CG : 0,0135 − 0,0120 = **1,5 mgon** ; CD : 200,0125 − 200,0110 = **1,5 mgon** ; ≤ 3 mgon : acceptées. *(2 pts)*
+4. Corrections : A 0 ; B − 0,4 ; C − 0,8 ; D − 1,1 mgon (et − 1,5 sur la fermeture). *(4 pts)*
+
+| Point | CG corrigé | CD corrigé |
+|---|---|---|
+| A | 0,0120 | 200,0110 |
+| B | 68,4526 | 268,4540 |
+| C | 152,7802 | 352,7780 |
+| D | 287,3349 | 87,3373 |
+
+### Partie C — Angles (8 pts)
+5. Moyenne = (CG + CD ∓ 200) / 2 : A **0,0115** ; B **68,4533** ; C **152,7791** ; D **287,3361**. *(3 pts)*
+6. Réduites (− 0,0115) : A **0** ; B **68,4418** ; C **152,7676** ; D **287,3246**. *(2 pts)*
+7. ASB = **68,4418** ; BSC = **84,3258** ; CSD = **134,5570** ; DSA = 400 − 287,3246 = **112,6754** → somme **400,0000 gon** ✔. *(3 pts)*
+
+### Partie D — Conversion (2 pts)
+8. 84,3258 × 0,9 = 75,8932° → **75°53'36"**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Faire la moyenne CG/CD sans enlever 200 gon (ou en les enlevant du mauvais côté de 400).
+> - Répartir la fermeture uniformément sur toutes les visées au lieu de la faire croître avec le rang.
+> - Calculer DSA sans boucler à 400 gon.`},
  exercices:[
   {t:"Angle horizontal", d:1, e:`Depuis S, on lit LA = 285,6230 gon et LB = 18,4410 gon. Calculer l'angle ASB.`, c:`LB − LA = 18,4410 − 285,6230 = − 267,1820 → + 400 = **132,8180 gon**.`},
   {t:"Double retournement", d:2, e:`Mesures CG : LA = 105,2215 ; LB = 230,8760. Mesures CD : LA = 305,2195 ; LB = 30,8790.
@@ -644,6 +1060,49 @@ Les calculatrices topographiques et les stations totales font ces calculs automa
 > - g = arctan(|ΔX|/|ΔY|), puis quadrant : g ; 200 − g ; 200 + g ; 400 − g.
 > - Rayonnement : X = XA + D sin G ; Y = YA + D cos G.
 > - Transmission : GBC = GAB + angle − 200.`,
+ sujet:{titre:"Gisements, rayonnement et transmission des gisements sur un chantier", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le chantier d'un collège à Abengourou, deux bornes A et B du canevas sont connues. Vous calculez des points nouveaux par rayonnement et par transmission de gisement.
+
+**Données** (X vers l'Est, Y vers le Nord, en m ; angles en gon)
+- **A (512,340 ; 1 208,770)** ; **B (585,910 ; 1 165,320)** ;
+- En station sur A, orienté sur B : angle horaire de B vers C = **72,4500 gon** ; distance horizontale AC = **64,250 m** ;
+- En station sur B : angle horaire de A vers D = **135,2200 gon** ; distance horizontale BD = **50,000 m**.
+
+### Partie A — Gisement et distance (6 points)
+1. Calculer ΔX et ΔY de A vers B et indiquer le quadrant. (2 pts)
+2. Calculer le gisement GAB, le gisement réciproque GBA et la distance AB. (4 pts)
+
+### Partie B — Rayonnement depuis A (6 points)
+3. Calculer le gisement GAC. (2 pts)
+4. Calculer les coordonnées de C. (4 pts)
+
+### Partie C — Transmission en B (6 points)
+5. Calculer le gisement GBD par la formule de transmission. (2 pts)
+6. Calculer les coordonnées de D. (4 pts)
+
+### Partie D — Contrôle (2 points)
+7. Calculer la distance CD et le gisement GCD. Pourquoi est-il utile de mesurer CD sur le terrain ? (2 pts)`,
+  corrige:`### Partie A — Gisement et distance (6 pts)
+1. ΔX = **+ 73,570** ; ΔY = **− 43,450** → **quadrant II** (Sud-Est). *(2 pts)*
+2. g = arctan(73,570 / 43,450) = 66,0380 gon → **GAB = 200 − 66,0380 = 133,9620 gon** ; **GBA = 333,9620 gon** ; AB = √(73,570² + 43,450²) = **85,443 m**. *(4 pts)*
+
+### Partie B — Rayonnement (6 pts)
+3. GAC = 133,9620 + 72,4500 = **206,4120 gon**. *(2 pts)*
+4. $$ XC = 512,340 + 64,250 × sin 206,4120 = 512,340 − 6,460 = 505,880
+   $$ YC = 1 208,770 + 64,250 × cos 206,4120 = 1 208,770 − 63,924 = 1 144,846
+   → **C (505,880 ; 1 144,846)**. *(4 pts)*
+
+### Partie C — Transmission (6 pts)
+5. GBD = GAB + angle − 200 = 133,9620 + 135,2200 − 200 = **69,1820 gon**. *(2 pts)*
+6. XD = 585,910 + 50,000 × sin 69,1820 = 585,910 + 44,255 = **630,165** ; YD = 1 165,320 + 50,000 × cos 69,1820 = 1 165,320 + 23,270 = **1 188,590**. *(4 pts)*
+
+### Partie D — Contrôle (2 pts)
+7. ΔX = 124,285 ; ΔY = 43,744 → **CD = 131,759 m** ; **GCD = 78,4552 gon**. La mesure de CD sur le terrain contrôle d'un coup les deux rayonnements : une faute d'angle ou de distance apparaîtrait. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le quadrant : arctan donne toujours un angle entre 0 et 100 gon.
+> - Ajouter l'angle dans le mauvais sens (les angles sont horaires, comme les gisements).
+> - Ne pas ramener un gisement entre 0 et 400 gon.`},
  exercices:[
   {t:"Gisement et distance", d:1, e:`Calculer GAB, GBA et DAB pour A (1 250,000 ; 3 480,000) et B (1 287,450 ; 3 452,120).`, c:`ΔX = + 37,450 ; ΔY = − 27,880 → quadrant II.
 g = arctan(37,450 / 27,880) = arctan(1,3433) = 59,2598 gon → **GAB = 200 − 59,2598 = 140,7402 gon** ; **GBA = 340,7402 gon**.
@@ -724,6 +1183,47 @@ Problèmes fréquents :
 > - Coordonnées : 2S = Σ (Xi Yi+1 − Xi+1 Yi), en valeur absolue.
 > - Échelle : surface réelle = surface plan × (dénominateur)².
 > - Triangles semblables : surfaces proportionnelles au carré des longueurs.`,
+ sujet:{titre:"Surface d'une parcelle et division en deux lots de même surface", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une famille de Daoukro veut partager un terrain entre deux héritiers et connaître précisément la surface d'une autre parcelle.
+
+**Données**
+- Parcelle 1, pentagone de sommets (m) : **P1 (1 452,30 ; 2 310,50)** ; **P2 (1 498,70 ; 2 322,10)** ; **P3 (1 505,40 ; 2 280,60)** ; **P4 (1 470,20 ; 2 255,30)** ; **P5 (1 440,80 ; 2 275,40)** ;
+- Parcelle 2, trapèze **A (1 200,00 ; 800,00)** ; **B (1 260,00 ; 800,00)** ; **C (1 250,00 ; 840,00)** ; **D (1 200,00 ; 840,00)** ; AB et DC sont parallèles (côté AB sur la voie) ;
+- Le partage doit se faire par une droite **EF parallèle à AB**, E sur AD et F sur BC, en deux lots de **même surface** (chacun ayant ainsi un accès : le lot ABFE sur la voie, le lot EFCD par une servitude).
+
+### Partie A — Surface par les coordonnées (7 points)
+1. Écrire la formule de Gauss (coordonnées). (1 pt)
+2. Calculer la surface de la parcelle 1. (4 pts)
+3. Exprimer cette surface en hectares, ares et centiares. (2 pts)
+
+### Partie B — Division du trapèze (10 points)
+4. Calculer la surface du trapèze ABCD. (2 pts)
+5. Exprimer la largeur du trapèze à la distance y de AB. (2 pts)
+6. Écrire l'équation donnant y pour que le lot ABFE fasse la moitié de la surface, et la résoudre. (4 pts)
+7. Calculer les coordonnées de E et F et vérifier la surface du lot ABFE. (2 pts)
+
+### Partie C — Pratique (3 points)
+8. Pourquoi implante-t-on les nouvelles bornes E et F à partir de leurs coordonnées plutôt qu'au ruban depuis A et B ? Quel professionnel doit le faire ? (3 pts)`,
+  corrige:`### Partie A — Gauss (7 pts)
+1. $$ 2S = |Σ (Xi × Yi+1 − Xi+1 × Yi)|   (sommets pris dans l'ordre, le dernier relié au premier)
+   *(1 pt)*
+2. En calculant sur les coordonnées (on peut retrancher 1 400 et 2 200 pour alléger) : 2S = 5 662,32 → **S = 2 831,16 m²**. *(4 pts)*
+3. **0 ha 28 a 31 ca** (et 16 dm²), soit 0,2831 ha. *(2 pts)*
+
+### Partie B — Division (10 pts)
+4. S = (60,00 + 50,00) / 2 × 40,00 = **2 200 m²**. *(2 pts)*
+5. La largeur diminue de 10 m sur 40 m : **b(y) = 60 − 0,25 y**. *(2 pts)*
+6. $$ (60 + 60 − 0,25 y) / 2 × y = 1 100   →   0,125 y² − 60 y + 1 100 = 0
+   y = (60 − √(3 600 − 550)) / 0,25 = (60 − 55,227) / 0,25 = **19,093 m** (l'autre racine, 461 m, est hors du terrain). *(4 pts)*
+7. **E (1 200,000 ; 819,093)** ; **F (1 255,227 ; 819,093)** ; lot ABFE : (60,000 + 55,227) / 2 × 19,093 = **1 100,0 m²** ✔. *(2 pts)*
+
+### Partie C — Pratique (3 pts)
+8. Les coordonnées permettent l'implantation depuis n'importe quel point du canevas, avec contrôle ; le ruban cumule les erreurs et les côtés ne sont pas perpendiculaires. Le bornage d'un partage est l'affaire d'un **géomètre-expert agréé**, avec procès-verbal signé par les parties. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Couper en deux la hauteur du trapèze (y = 20 m donne deux lots inégaux).
+> - Prendre les sommets dans le désordre dans la formule de Gauss.
+> - Oublier la valeur absolue (le signe dépend du sens de parcours).`},
  exercices:[
   {t:"Surface d'un triangle par Héron", d:1, e:`Calculer la surface d'un triangle de côtés 30 m, 40 m et 50 m. Vérifier avec la formule base × hauteur / 2 (le triangle est rectangle).`, c:`p = 60 m. S = √(60 × 30 × 20 × 10) = √360 000 = **600 m²**.
 Triangle rectangle (30² + 40² = 50²) : S = 30 × 40 / 2 = **600 m²** ✔.`},
@@ -800,6 +1300,51 @@ Pour les poteaux et voiles des étages, on remonte les axes par **plomb laser** 
 > - Contrôle par les diagonales : √(a² + b²).
 > - Chaises à 1–2 m des fouilles, axes cloués, cordeaux, fil à plomb, niveau ±0,00.
 > - Station totale : calcul inverse (G, D) et implantation polaire.`,
+ sujet:{titre:"Implanter un bâtiment rectangulaire par coordonnées depuis une station", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un bâtiment administratif de **15,00 × 10,00 m** doit être implanté à Bondoukou. L'architecte a fixé l'angle A et l'orientation de la façade AB dans le système du chantier.
+
+**Données** (X vers l'Est, Y vers le Nord, angles en gon)
+- **A (100,000 ; 200,000)** ; façade AB de **15,00 m** au gisement **80,0000 gon** ; le bâtiment est à droite de AB (côté AD au gisement 180,0000 gon), largeur **10,00 m** ;
+- Station **S (90,000 ; 185,000)**, référence **R (150,000 ; 185,000)** ;
+- Les chaises d'implantation sont placées à **1,50 m** à l'extérieur des axes.
+
+### Partie A — Coordonnées des angles (7 points)
+1. Calculer les coordonnées de B. (2 pts)
+2. Calculer les coordonnées de D puis de C. (3 pts)
+3. Calculer la longueur théorique des diagonales. (2 pts)
+
+### Partie B — Éléments d'implantation (8 points)
+4. Calculer le gisement GSR. (1 pt)
+5. Pour chaque angle (A, B, C, D), calculer le gisement depuis S, la distance horizontale et l'angle horaire à ouvrir depuis R. (7 pts)
+
+### Partie C — Contrôles et chaises (5 points)
+6. Quels contrôles faire après l'implantation des quatre angles ? Quelle tolérance retenir ? (3 pts)
+7. Pourquoi reporte-t-on les axes sur des chaises (ou des repères déportés) ? (2 pts)`,
+  corrige:`### Partie A — Coordonnées (7 pts)
+1. XB = 100 + 15 × sin 80 = **114,266** ; YB = 200 + 15 × cos 80 = **204,635**. *(2 pts)*
+2. D : XD = 100 + 10 × sin 180 = **103,090** ; YD = 200 + 10 × cos 180 = **190,489** ; C = B + même vecteur : **C (117,356 ; 195,125)**. *(3 pts)*
+3. $$ diagonale = √(15² + 10²) = 18,028 m
+   *(2 pts)*
+
+### Partie B — Implantation (8 pts)
+4. ΔX = 60, ΔY = 0 → **GSR = 100,0000 gon**. *(1 pt)*
+5. Angle à ouvrir depuis R = G − GSR (± 400). *(7 pts)*
+
+| Point | Gisement depuis S | Distance (m) | Angle depuis R |
+|---|---|---|---|
+| A | 37,4334 | 18,028 | 337,4334 |
+| B | 56,6908 | 31,215 | 356,6908 |
+| C | 77,4328 | 29,170 | 377,4328 |
+| D | 74,7226 | 14,194 | 374,7226 |
+
+### Partie C — Contrôles (5 pts)
+6. Mesurer les **quatre côtés** (15,00 et 10,00) et les **deux diagonales** (18,03 m chacune), éventuellement depuis une seconde station ; tolérance courante en bâtiment : **± 1 à 2 cm**. *(3 pts)*
+7. Les piquets d'angle disparaissent au terrassement : les chaises, hors de l'emprise des fouilles, conservent les axes (cordeaux tendus) pendant toute la construction des fondations. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer D avec le gisement 380 au lieu de 180 (bâtiment du mauvais côté de AB).
+> - Implanter sans contrôle des diagonales : un rectangle « en parallélogramme » passe inaperçu.
+> - Placer les chaises trop près des fouilles.`},
  exercices:[
   {t:"Angle droit au ruban", d:1, e:`On veut tracer un angle droit avec un ruban en utilisant des multiples de 3-4-5. Donner deux triangles possibles et expliquer la méthode.`, c:`Triangles : **6 – 8 – 10 m** ou **9 – 12 – 15 m** (plus grands = plus précis).
 Méthode : depuis l'angle A sur l'axe connu, on mesure 6 m le long de l'axe (point B). Avec deux rubans, on cherche le point C situé à 8 m de A et à 10 m de B : l'angle BAC est droit. On prolonge AC par jalonnement.`},
@@ -866,6 +1411,66 @@ Pour une canalisation, le profil en long indique en plus le **fil d'eau**, les *
 > - Point de passage : x = L |h1| / (|h1| + |h2|).
 > - Raccordements paraboliques saillants et rentrants.
 > - Profils en travers : chaussée, dévers, talus (1/1 déblai, 3/2 remblai) → surfaces pour les cubatures.`,
+ sujet:{titre:"Ligne rouge d'une voie : déclivités, points de passage, raccordement et profils en travers", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Voie de desserte d'un lotissement à Sikensi. Profils tous les **20 m**.
+
+**Données**
+
+| Profil | P0 | P1 | P2 | P3 | P4 | P5 |
+|---|---|---|---|---|---|---|
+| Distance (m) | 0 | 20 | 40 | 60 | 80 | 100 |
+| TN (m) | 48,20 | 48,95 | 49,60 | 49,10 | 48,40 | 48,05 |
+
+- Projet : départ à **48,60** en P0, pente **+ 1,0 %** jusqu'à P3, puis **− 1,5 %** jusqu'à P5 ;
+- Raccordement parabolique saillant en P3 de rayon **R = 2 000 m** ;
+- Profils en travers (terrain horizontal en travers) : plate-forme de **8,00 m** ; talus de déblai à **1/1** ; talus de remblai à **3/2**.
+
+### Partie A — Ligne rouge (8 points)
+1. Calculer les altitudes projet (sans raccordement) et les hauteurs de déblai ou de remblai. (5 pts)
+2. Calculer la position des points de passage. (3 pts)
+
+### Partie B — Raccordement (5 points)
+3. Calculer le changement de déclivité, la longueur du raccordement et sa demi-longueur (tangente). (3 pts)
+4. Calculer la flèche au sommet et l'altitude projet corrigée en P3. Qu'est-ce que cela change pour P3 ? (2 pts)
+
+### Partie C — Profils en travers (5 points)
+5. Calculer la surface de déblai en P2. (2 pts)
+6. Calculer la surface de remblai en P4. (2 pts)
+7. Pourquoi les talus de remblai sont-ils plus doux que ceux de déblai ? (1 pt)
+
+### Partie D — Synthèse (2 points)
+8. Proposer une modification de la ligne rouge pour mieux équilibrer déblais et remblais. (2 pts)`,
+  corrige:`### Partie A — Ligne rouge (8 pts)
+1. *(5 pts)*
+
+| Profil | TN | Projet | h |
+|---|---|---|---|
+| P0 | 48,20 | 48,60 | R 0,40 |
+| P1 | 48,95 | 48,80 | D 0,15 |
+| P2 | 49,60 | 49,00 | D 0,60 |
+| P3 | 49,10 | 49,20 | R 0,10 |
+| P4 | 48,40 | 48,90 | R 0,50 |
+| P5 | 48,05 | 48,60 | R 0,55 |
+
+2. Entre P0 et P1 : 20 × 0,40 / 0,55 = **14,55 m** ; entre P2 et P3 : 40 + 20 × 0,60 / 0,70 = **57,14 m**. *(3 pts)*
+
+### Partie B — Raccordement (5 pts)
+3. Δp = 1,0 − (− 1,5) = **2,5 %** ; longueur L = R × Δp = 2 000 × 0,025 = **50 m** ; tangente T = **25 m** (de 35 à 85 m). *(3 pts)*
+4. $$ f = T² / (2 R) = 25² / 4 000 = 0,156 m
+   Projet en P3 : 49,20 − 0,156 = **49,044 m** → P3 passe de R 0,10 à **D 0,056** : le point de passage se déplace et le volume de remblai diminue. *(2 pts)*
+
+### Partie C — Profils en travers (5 pts)
+5. S = (l + n h) h = (8,00 + 1 × 0,60) × 0,60 = **5,16 m²**. *(2 pts)*
+6. S = (8,00 + 1,5 × 0,50) × 0,50 = **4,38 m²**. *(2 pts)*
+7. Un remblai rapporté est moins compact et moins cohérent que le terrain en place : il lui faut une pente plus faible pour rester stable. *(1 pt)*
+
+### Partie D — Synthèse (2 pts)
+8. Le projet est surtout en remblai en fin de tracé : abaisser la seconde déclivité (par exemple − 2 % après P3) ou abaisser légèrement le départ réduirait les remblais en utilisant les déblais de P1-P2 (tout en gardant une pente minimale de 0,5 % pour l'écoulement des eaux). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer l'altitude projet après P3 depuis P0 avec la seconde pente.
+> - Oublier le raccordement : les altitudes en sommet de côte sont fausses de plusieurs centimètres.
+> - Utiliser la pente du talus de déblai pour le remblai.`},
  exercices:[
   {t:"Compléter un profil en long", d:2, e:`Une voie part du profil P0 (projet 30,00 m) avec une pente de − 1,5 %. Profils tous les 25 m. TN : P0 30,35 ; P1 29,90 ; P2 29,10 ; P3 28,95. Calculer les cotes projet et les hauteurs de déblai ou remblai.`, c:`Projet : P0 30,000 ; P1 29,625 ; P2 29,250 ; P3 28,875.
 Hauteurs : **P0 D 0,35** ; **P1 D 0,275** ; **P2 R 0,15** ; **P3 D 0,075**.`},
@@ -938,6 +1543,61 @@ puis on calcule les coordonnées de proche en proche.
 > - Transmission : G = Gprécédent + angle − 200 ; contrôle sur le gisement de départ.
 > - ΔX = D sin G, ΔY = D cos G ; f = √(fx² + fy²) ; précision f / L.
 > - Compensation proportionnelle aux longueurs : cX = − fx D / L.`,
+ sujet:{titre:"Polygonale fermée d'un canevas : fermetures, compensation et coordonnées", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Pour lever et implanter une cité universitaire à Korhogo, vous créez un canevas de quatre stations A, B, C, D par une polygonale fermée.
+
+**Données**
+- **A (1 000,000 ; 1 000,000)** ; gisement de départ connu **GAB = 126,4191 gon** ;
+- Angles intérieurs mesurés (gon) : **A = 103,0902** ; **B = 92,8098** ; **C = 101,3863** ; **D = 102,7165** ;
+- Distances horizontales : **AB = 93,254 m** ; **BC = 92,564 m** ; **CD = 87,239 m** ; **DA = 84,110 m** ;
+- Tolérance angulaire : **T = 2,7 × 1,5 mgon × √n** ; tolérance planimétrique : **1/5 000**.
+
+### Partie A — Fermeture angulaire (5 points)
+1. Calculer la somme théorique et la fermeture angulaire. (2 pts)
+2. Comparer à la tolérance et compenser les angles. (3 pts)
+
+### Partie B — Gisements (4 points)
+3. Calculer les gisements GBC, GCD et GDA, et contrôler en revenant à GAB. (4 pts)
+
+### Partie C — Fermeture planimétrique (6 points)
+4. Calculer les projections ΔX et ΔY de chaque côté. (4 pts)
+5. Calculer fx, fy, la fermeture linéaire f et la précision relative. Conclure. (2 pts)
+
+### Partie D — Compensation et coordonnées (5 points)
+6. Répartir les écarts proportionnellement aux longueurs (Bowditch). (3 pts)
+7. Calculer les coordonnées compensées de B, C et D et vérifier le retour sur A. (2 pts)`,
+  corrige:`### Partie A — Fermeture angulaire (5 pts)
+1. Théorique : (4 − 2) × 200 = **400 gon** ; mesurée : **400,0028** → **fa = + 2,8 mgon**. *(2 pts)*
+2. T = 2,7 × 1,5 × √4 = **8,1 mgon** → acceptée ; correction **− 0,7 mgon** par angle : A **103,0895** ; B **92,8091** ; C **101,3856** ; D **102,7158** (somme 400,0000). *(3 pts)*
+
+### Partie B — Gisements (4 pts)
+3. G suivant = G précédent + angle − 200 : *(4 pts)*
+   - GBC = 126,4191 + 92,8091 − 200 = **19,2282** ;
+   - GCD = 19,2282 + 101,3856 − 200 + 400 = **320,6138** ;
+   - GDA = 320,6138 + 102,7158 − 200 = **223,3296** ;
+   - contrôle : 223,3296 + 103,0895 − 200 = **126,4191** = GAB ✔.
+
+### Partie C — Fermeture planimétrique (6 pts)
+4. ΔX = D sin G ; ΔY = D cos G : *(4 pts)*
+
+| Côté | ΔX | ΔY |
+|---|---|---|
+| AB | + 85,339 | − 37,598 |
+| BC | + 27,535 | + 88,374 |
+| CD | − 82,705 | + 27,757 |
+| DA | − 30,138 | − 78,525 |
+| **Σ** | **+ 0,031** | **+ 0,008** |
+
+5. f = √(0,031² + 0,008²) = **0,032 m** pour L = 357,167 m → **1 / 11 160**, meilleur que 1/5 000 : accepté. *(2 pts)*
+
+### Partie D — Compensation (5 pts)
+6. cX = − 0,031 × D / L ; cY = − 0,008 × D / L → AB : − 8 / − 2 mm ; BC : − 8 / − 2 ; CD : − 8 / − 2 ; DA : − 7 / − 2 mm. *(3 pts)*
+7. **B (1 085,331 ; 962,400)** ; **C (1 112,858 ; 1 050,772)** ; **D (1 030,145 ; 1 078,527)** ; retour **A (1 000,000 ; 1 000,000)** ✔. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer les gisements avec les angles non compensés : le gisement final ne referme pas.
+> - Répartir fx et fy à parts égales sans tenir compte des longueurs.
+> - Compenser une fermeture hors tolérance au lieu de chercher la faute.`},
  exercices:[
   {t:"Fermeture angulaire", d:1, e:`Une polygonale fermée de 5 sommets donne des angles intérieurs : 108,4520 ; 121,3360 ; 96,7845 ; 110,2215 ; 163,2100 gon. Calculer la fermeture angulaire et la correction à appliquer à chaque angle (tolérance : 10 mgon).`, c:`Σ théorique = (5 − 2) × 200 = **600 gon**. Σ mesurée = 108,4520 + 121,3360 + 96,7845 + 110,2215 + 163,2100 = **600,0040 gon**.
 **fa = + 4,0 mgon ≤ 10 mgon** ✔ → correction **− 0,8 mgon** par angle.`},
@@ -992,6 +1652,55 @@ Les points sont transférés dans un logiciel de topographie ou de DAO : tracé 
 > - Rayonnement : X = XS + Dh sin G ; Y = YS + Dh cos G.
 > - Croquis + codification + contrôles sur points connus.
 > - Station libre : position calculée depuis plusieurs points connus.`,
+ sujet:{titre:"Levé de détails à la station totale : coordonnées et altitudes de quatre points", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Levé de l'existant d'une parcelle à Riviera avant un projet d'immeuble. Vous dépouillez les mesures d'une station totale.
+
+**Données**
+- Station **S (500,000 ; 300,000)**, **ZS = 25,430 m**, hauteur d'instrument **hi = 1,560 m** ;
+- Référence **R (565,000 ; 345,000)** : l'appareil est orienté de façon que les lectures Hz soient des **gisements** ;
+- Fermeture en fin de station sur R : écart **1,5 mgon** ;
+- Observations :
+
+| Point | Code | Hz (gon) | Di (m) | V (gon) | hp (m) |
+|---|---|---|---|---|---|
+| 1 | angle de bâtiment | 42,3150 | 38,612 | 97,8540 | 1,500 |
+| 2 | regard | 118,7620 | 52,374 | 101,2380 | 1,800 |
+| 3 | arbre | 245,0310 | 27,905 | 99,1200 | 1,500 |
+| 4 | borne | 352,6480 | 61,240 | 98,6650 | 2,000 |
+
+### Partie A — Orientation (4 points)
+1. Calculer le gisement GSR qu'on affiche sur R pour orienter l'appareil. (2 pts)
+2. Que signifie l'écart de fermeture de 1,5 mgon et comment l'interpréter ? (2 pts)
+
+### Partie B — Calculs (12 points)
+3. Calculer pour chaque point la distance horizontale et la dénivelée (avec hi et hp). (6 pts)
+4. Calculer les coordonnées X, Y et l'altitude Z de chaque point. (6 pts)
+
+### Partie C — Organisation (4 points)
+5. À quoi servent le croquis et la codification des points ? (2 pts)
+6. Pour le point 3, le porte-prisme a en réalité allongé la canne à 2,000 m, mais la hauteur saisie est restée 1,500 m. Quelle erreur sur Z3 ? Comment l'éviter ? (2 pts)`,
+  corrige:`### Partie A — Orientation (4 pts)
+1. ΔX = 65, ΔY = 45 → **GSR = arctan(65 / 45) = 61,4498 gon**. *(2 pts)*
+2. L'appareil a très peu tourné pendant la station (embase, trépied au soleil) : 1,5 mgon est négligeable pour des visées de 60 m (1,4 mm) ; un écart important obligerait à refaire la station. *(2 pts)*
+
+### Partie B — Calculs (12 pts)
+3. et 4. Dh = Di sin V ; ΔZ = Di cos V + hi − hp ; X = XS + Dh sin Hz ; Y = YS + Dh cos Hz. *(12 pts)*
+
+| Point | Dh | Di cos V | ΔZ | X | Y | Z |
+|---|---|---|---|---|---|---|
+| 1 | 38,590 | + 1,301 | + 1,361 | 523,803 | 330,375 | 26,791 |
+| 2 | 52,364 | − 1,018 | − 1,258 | 550,106 | 284,790 | 24,172 |
+| 3 | 27,902 | + 0,386 | + 0,446 | 481,869 | 278,792 | 25,876 |
+| 4 | 61,227 | + 1,284 | + 0,844 | 458,544 | 345,057 | 26,274 |
+
+### Partie C — Organisation (4 pts)
+5. Le croquis indique la nature et les liaisons des points (qui est relié à qui) ; le code permet au logiciel de dessiner automatiquement (calques, symboles) et évite les confusions. *(2 pts)*
+6. Le calcul retranche 1,500 au lieu de 2,000 : Z3 calculé est **trop haut de 0,50 m** (vrai Z3 = 25,376 m). Annoncer et saisir chaque changement de hauteur de prisme, et viser régulièrement un point de contrôle. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier hi − hp dans la dénivelée.
+> - Utiliser la distance inclinée dans le calcul des coordonnées.
+> - Inverser sin et cos (X avec le sinus du gisement, Y avec le cosinus).`},
  exercices:[
   {t:"Calculer un point levé", d:2, e:`Station S (1 200,000 ; 2 300,000 ; 18,450), hi = 1,520. Point P : gisement 245,6800 gon, Di = 54,320 m, V = 103,2100 gon, hp = 1,700. Calculer les coordonnées et l'altitude de P.`, c:`Dh = 54,320 × sin(103,2100) = **54,251 m** ; Di cos V = **− 2,738 m** ; ΔZ = − 2,738 + 1,520 − 1,700 = **− 2,918 m**.
 XP = 1 200,000 + 54,251 × sin(245,68) = **1 164,328** ; YP = 2 300,000 + 54,251 × cos(245,68) = **2 259,126** ; **ZP = 15,532 m**.`},
@@ -1039,6 +1748,55 @@ Chaque point est matérialisé durablement (borne, clou, plot béton), décrit p
 > - Relèvement / station libre : position de la station à partir de points connus.
 > - Toujours une visée de contrôle supplémentaire.
 > - Canevas hiérarchisé, bornes matérialisées, fiches signalétiques.`,
+ sujet:{titre:"Intersection d'un point inaccessible et contrôle par une troisième visée", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Pour rattacher un chantier de pont à Tiassalé, il faut les coordonnées d'un repère P peint sur un château d'eau inaccessible. Vous l'observez depuis deux bornes connues A et B, puis depuis une troisième borne C.
+
+**Données** (m, gon)
+- **A (1 200,000 ; 2 500,000)** ; **B (1 450,000 ; 2 480,000)** ; **C (1 180,000 ; 2 760,000)** ;
+- En A : angle horaire de P vers B : **α = 65,2625 gon** ;
+- En B : angle horaire de A vers P : **β = 60,5137 gon** ;
+- En C (appareil orienté en gisements) : lecture vers P : **GCP = 131,1917 gon**.
+
+Formules : YP = (XB − XA + YA tan GAP − YB tan GBP) / (tan GAP − tan GBP) ; XP = XA + (YP − YA) tan GAP.
+
+### Partie A — Gisements (6 points)
+1. Calculer GAB, GBA et la distance AB. (3 pts)
+2. En déduire GAP et GBP (faire un croquis). (3 pts)
+
+### Partie B — Intersection (8 points)
+3. Calculer tan GAP et tan GBP. (2 pts)
+4. Calculer les coordonnées de P. (4 pts)
+5. Calculer l'angle d'intersection en P. La configuration est-elle bonne ? (2 pts)
+
+### Partie C — Contrôle (4 points)
+6. Vérifier que P est sur la visée issue de C. (3 pts)
+7. Pourquoi une troisième visée est-elle indispensable ? (1 pt)
+
+### Partie D — Relèvement (2 points)
+8. Expliquer la différence entre intersection et relèvement, et le piège du « cercle dangereux ». (2 pts)`,
+  corrige:`### Partie A — Gisements (6 pts)
+1. ΔX = 250, ΔY = − 20 → GAB = 200 − arctan(250 / 20) = **105,0821 gon** ; **GBA = 305,0821 gon** ; **AB = 250,799 m**. *(3 pts)*
+2. P est au Nord de AB : GAP = GAB − α = **39,8196 gon** ; GBP = GBA + β = **365,5958 gon**. *(3 pts)*
+
+### Partie B — Intersection (8 pts)
+3. tan GAP = **0,72222** ; tan GBP = **− 0,60000**. *(2 pts)*
+4. *(4 pts)*
+$$ YP = (250 + 2 500 × 0,72222 − 2 480 × (− 0,60000)) / (0,72222 + 0,60000) = 3 543,56 / 1,32222 = 2 680,000
+$$ XP = 1 200 + 180,000 × 0,72222 = 1 330,000
+   → **P (1 330,000 ; 2 680,000)**.
+5. Angle en P = 200 − α − β = 200 − 65,2625 − 60,5137 = **74,2238 gon** : visées bien sécantes (idéal vers 100 gon, à éviter sous 30 gon). *(2 pts)*
+
+### Partie C — Contrôle (4 pts)
+6. De C vers P : ΔX = 150, ΔY = − 80 → gisement = 200 − arctan(150 / 80) = **131,1917 gon** = lecture ✔ (P confirmé ; distance CP = 170,000 m). *(3 pts)*
+7. Avec deux visées, une faute d'angle donne quand même un point, faux et non détecté : la troisième visée contrôle. *(1 pt)*
+
+### Partie D — Relèvement (2 pts)
+8. Intersection : on stationne sur des points **connus** pour déterminer un point **visé** ; relèvement : on stationne sur le point **inconnu** et on vise des points connus. Si la station est sur le cercle passant par les trois points visés, le relèvement est indéterminé (cercle dangereux). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Retrancher l'angle quand il faut l'ajouter : faire un croquis avec le Nord.
+> - Garder trop peu de décimales dans les tangentes.
+> - Accepter un point d'intersection sans visée de contrôle.`},
  exercices:[
   {t:"Gisements d'une intersection", d:1, e:`A (100,000 ; 100,000) et B (100,000 ; 200,000). Depuis A, on mesure l'angle BAP = 50,0000 gon (P à droite de AB, sens horaire depuis B). Depuis B, l'angle ABP = 50,0000 gon (sens trigonométrique depuis A). Calculer GAP et GBP puis les coordonnées de P.`, c:`GAB = 0 gon (B au nord de A) → **GAP = 0 + 50 = 50,0000 gon** (tan = 1).
 GBA = 200 gon → P à l'est de BA : **GBP = 200 − 50 = 150,0000 gon** (tan = − 1).
@@ -1099,6 +1857,53 @@ Distance sur la grille UTM = distance réelle (au niveau de l'ellipsoïde) × k.
 > - Ciel dégagé nécessaire ; vertical moins précis ; H = h − N.
 > - UTM zones 29 et 30 pour la Côte d'Ivoire ; faux Est 500 000 m ; k = 0,9996 au méridien central.
 > - Distances UTM ≠ distances terrain : facteur d'échelle ou système local.`,
+ sujet:{titre:"Lever au GNSS en RTK : zones UTM, facteur d'échelle et altitudes", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un bureau d'études lève au GNSS (RTK) une zone industrielle près d'Abidjan, puis un site à Man. On vous demande d'exploiter correctement les coordonnées.
+
+**Données**
+- Site 1 : longitude **4°01' Ouest** ; Est UTM moyen **E = 385 000 m** ;
+- Site 2 (Man) : longitude **7°33' Ouest** ;
+- Facteur d'échelle : k ≈ 0,9996 × (1 + (E − 500 000)² / (2 R²)), R = **6 381 km** ;
+- Distance mesurée sur le terrain (ramenée à l'ellipsoïde) entre deux bornes du site 1 : **750,000 m** ;
+- Point M : hauteur ellipsoïdale **h = 38,742 m** ; ondulation du géoïde fournie par le modèle : **N = 21,460 m** (valeur d'exercice) ;
+- Le nivellement depuis un repère donne pour M : **H = 17,315 m**.
+
+### Partie A — Principe (5 points)
+1. Combien de satellites faut-il au minimum et pourquoi ? (2 pts)
+2. Comparer les précisions des modes autonome, différentiel, RTK et statique, et dire lequel utiliser pour (a) lever un terrain, (b) créer les points de référence d'un grand chantier. (3 pts)
+
+### Partie B — Projection UTM (7 points)
+3. Déterminer la zone UTM et le méridien central de chaque site. (2 pts)
+4. Calculer le facteur d'échelle au site 1. (2 pts)
+5. Calculer la distance « grille » correspondant aux 750,000 m et l'écart. Conséquence pour l'implantation d'un bâtiment de 150 m ? (3 pts)
+
+### Partie C — Altitudes (5 points)
+6. Calculer l'altitude H de M à partir du GNSS. (2 pts)
+7. Comparer avec le nivellement et conclure sur l'usage du GNSS pour les niveaux d'un bâtiment. (3 pts)
+
+### Partie D — Bonnes pratiques RTK (3 points)
+8. Citer trois vérifications à faire pendant une séance RTK. (3 pts)`,
+  corrige:`### Partie A — Principe (5 pts)
+1. **4 satellites** : trois inconnues de position (X, Y, Z) et une inconnue d'horloge du récepteur. *(2 pts)*
+2. Autonome 3 à 10 m ; différentiel 0,5 à 1 m ; **RTK 1 à 3 cm** ; **statique** quelques mm. (a) lever : RTK ; (b) points de référence : statique (post-traitement). *(3 pts)*
+
+### Partie B — UTM (7 pts)
+3. Zones de 6° depuis 180° Ouest : 4°01' W est entre 6° W et 0° → **zone 30**, méridien central **3° W** ; 7°33' W est entre 12° W et 6° W → **zone 29**, méridien central **9° W**. *(2 pts)*
+4. $$ k = 0,9996 × (1 + 115 000² / (2 × 6 381 000²)) = 0,999 762
+   *(2 pts)*
+5. 750,000 × 0,999 762 = **749,822 m** : **17,8 cm** d'écart. Sur 150 m : 150 × (1 − 0,999 762) = **3,6 cm** → inacceptable pour un bâtiment : on travaille en système local ou on corrige les distances du facteur d'échelle. *(3 pts)*
+
+### Partie C — Altitudes (5 pts)
+6. H = h − N = 38,742 − 21,460 = **17,282 m**. *(2 pts)*
+7. Écart avec le nivellement : 17,315 − 17,282 = **3,3 cm** : normal pour la composante verticale RTK (2 à 5 cm) et l'incertitude du modèle de géoïde, mais trop grand pour les niveaux d'un bâtiment (tolérance de l'ordre du cm) : les niveaux se font **au niveau depuis un repère**. *(3 pts)*
+
+### Partie D — RTK (3 pts)
+8. Solution **fixée** (pas flottante) ; indicateurs de précision (PDOP, précision H et V affichées) ; contrôle sur un point connu en **début et fin** de séance ; hauteur de canne correcte ; calibration locale sur plusieurs points connus. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Implanter avec des distances UTM sans facteur d'échelle.
+> - Confondre hauteur ellipsoïdale et altitude.
+> - Travailler en solution flottante ou sous couvert d'arbres sans contrôle.`},
  exercices:[
   {t:"Choisir le mode GNSS", d:1, e:`Quel mode GNSS utiliser pour :
 1. repérer approximativement un terrain à acheter ;
@@ -1169,6 +1974,58 @@ Avec une station totale ou un GNSS RTK, on calcule les **coordonnées** de tous 
 > - CT = TC + D (et non TC + 2T).
 > - Abscisses-ordonnées : x = R sin θ, y = R(1 − cos θ), θ = s/R ; déflexion θ/2.
 > - Rmin = V² / (127 (d + f)).`,
+ sujet:{titre:"Courbe circulaire d'une route : éléments, chaînages et carnet d'implantation", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Sur la route d'accès à une carrière près de Bouaflé, deux alignements droits se coupent au sommet S, au chaînage **1 + 120,50**. On les raccorde par une courbe circulaire.
+
+**Données**
+- Rayon **R = 200 m** ; angle de déviation **Δ = 38,4000 gon** ;
+- Points d'implantation aux chaînages ronds multiples de **20 m** ;
+- Implantation par **angles de déflexion** depuis TC (station sur TC, orientation sur S) et cordes depuis TC.
+
+### Partie A — Éléments de la courbe (7 points)
+1. Calculer la tangente T, le développement D et la corde C. (4 pts)
+2. Calculer la flèche f et la bissectrice B. (3 pts)
+
+### Partie B — Chaînages (4 points)
+3. Calculer les chaînages de TC et de CT. Pourquoi CT ≠ S + T ? (4 pts)
+
+### Partie C — Carnet d'implantation (7 points)
+4. Pour les points aux chaînages 1 + 060 à 1 + 160, calculer l'abscisse curviligne s depuis TC, l'angle de déflexion θ/2 (gon) et la corde depuis TC. (5 pts)
+5. Calculer la déflexion et la corde pour CT ; quelle vérification permettent-elles ? (2 pts)
+
+### Partie D — Méthode alternative (2 points)
+6. Calculer les coordonnées x (sur la tangente) et y (perpendiculaire) du point 1 + 100 pour une implantation par abscisses et ordonnées. (2 pts)`,
+  corrige:`### Partie A — Éléments (7 pts)
+1. Δ/2 = 19,2 gon. *(4 pts)*
+   - T = 200 × tan(19,2 gon) = **62,216 m** ;
+   - D = 200 × 38,4 × π / 200 = **120,637 m** ;
+   - C = 2 × 200 × sin(19,2 gon) = **118,817 m**.
+2. f = 200 × (1 − cos 19,2) = **9,027 m** ; B = 200 × (1 / cos 19,2 − 1) = **9,454 m**. *(3 pts)*
+
+### Partie B — Chaînages (4 pts)
+3. **TC = 1 120,50 − 62,22 = 1 + 058,28** ; **CT = 1 058,28 + 120,64 = 1 + 178,92**. On roule sur l'arc, pas sur les deux tangentes : le chaînage se calcule avec le développement (CT est avant S + T = 1 + 182,72). *(4 pts)*
+
+### Partie C — Carnet (7 pts)
+4. θ = s / R ; déflexion θ/2 ; corde = 2 R sin(θ/2) : *(5 pts)*
+
+| Chaînage | s (m) | θ/2 (gon) | Corde depuis TC (m) |
+|---|---|---|---|
+| 1 + 060 | 1,716 | 0,2732 | 1,716 |
+| 1 + 080 | 21,716 | 3,4563 | 21,706 |
+| 1 + 100 | 41,716 | 6,6394 | 41,641 |
+| 1 + 120 | 61,716 | 9,8225 | 61,472 |
+| 1 + 140 | 81,716 | 13,0056 | 81,149 |
+| 1 + 160 | 101,716 | 16,1887 | 100,624 |
+
+5. CT : s = 120,637 → θ/2 = **19,2000 gon** = Δ/2 et corde = **118,817 m** = C : le point implanté doit tomber exactement sur l'alignement de sortie (contrôle de tout le calcul). *(2 pts)*
+
+### Partie D — Abscisses et ordonnées (2 pts)
+6. θ = 41,716 / 200 = 0,20858 rad → x = 200 sin θ = **41,415 m** ; y = 200 (1 − cos θ) = **4,335 m**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer CT en ajoutant la tangente au lieu du développement.
+> - Ouvrir l'angle θ au lieu de θ/2 depuis la tangente.
+> - Calculatrice en degrés : Δ est en gon, le développement demande Δ en radians.`},
  exercices:[
   {t:"Éléments d'une courbe", d:1, e:`Courbe de rayon 200 m, angle de déviation 30 gon. Calculer T, D, C, f et B.`, c:`Δ/2 = 15 gon.
 **T = 200 × tan(15 gon) = 48,016 m** ; **D = 200 × 30 × π/200 = 94,248 m** ; **C = 2 × 200 × sin(15 gon) = 93,378 m** ; **f = 200 × (1 − cos 15 gon) = 5,526 m** ; **B = 5,683 m**.`},
@@ -1237,6 +2094,54 @@ Sur un chantier linéaire, on organise le transport des déblais vers les rembla
 > - Quadrillage : V = a²/4 × (Σh1 + 2Σh2 + 4Σh4).
 > - Niveau d'équilibre = moyenne pondérée des altitudes.
 > - Foisonnement (≈ 1,25) pour le transport ; compactage (≈ 0,9) pour les remblais.`,
+ sujet:{titre:"Cubatures d'une route : surface d'un profil, volumes et mouvement des terres", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Route d'accès à une usine à Bonoua. On calcule la surface d'un profil en travers, les volumes d'un tronçon en déblai, puis on organise le mouvement des terres.
+
+**Données — profil P2** (repère local : x horizontal en travers, z vertical, plate-forme à z = 0)
+- Plate-forme de **8,00 m** (x de − 4,00 à + 4,00) ; talus de déblai à **1/1** ;
+- Terrain naturel en travers : **z = 1,20 + 0,05 x** (pente transversale de 5 %).
+
+**Données — tronçon**
+- Surfaces de déblai : P1 = **7,85 m²**, P2 = valeur calculée (arrondie à 11,11 m²), P3 = **6,40 m²** ; distances P1-P2 = P2-P3 = **25 m** ;
+- Section médiane entre P1 et P2 (levée) : **Sm = 9,62 m²**.
+
+**Données — mouvement des terres**
+- Déblais de la section A (0 à 150 m) : **1 450 m³** en place ; remblais de la section B (300 à 450 m) : **1 200 m³** compactés ;
+- 1 m³ de remblai compacté demande **1,10 m³** de déblai en place ; foisonnement **1,25** ;
+- Prix : transport **500 F/m³ par 100 m** (hectomètre) de distance moyenne ; évacuation en décharge **3 500 F/m³** foisonné.
+
+### Partie A — Surface du profil (7 points)
+1. Calculer les points d'intersection des talus avec le terrain naturel. (4 pts)
+2. Calculer la surface de déblai par la formule de Gauss. (3 pts)
+
+### Partie B — Volumes (6 points)
+3. Calculer le volume entre P1 et P2 par la moyenne des aires et par le prismatoïde ; comparer. (4 pts)
+4. Calculer le volume entre P2 et P3 et le volume du tronçon (moyenne des aires). (2 pts)
+
+### Partie C — Mouvement des terres (7 points)
+5. Calculer le déblai réutilisé en remblai et l'excédent. (2 pts)
+6. Calculer la distance moyenne de transport entre les sections A et B et le coût de ce transport. (3 pts)
+7. Calculer le coût d'évacuation de l'excédent. Pourquoi cherche-t-on à équilibrer déblais et remblais ? (2 pts)`,
+  corrige:`### Partie A — Surface (7 pts)
+1. *(4 pts)*
+   - Talus droit depuis (4 ; 0) : z = x − 4 ; avec le TN : x − 4 = 1,20 + 0,05 x → x = 5,2 / 0,95 = **5,474** ; z = **1,474** ;
+   - Talus gauche depuis (− 4 ; 0) : z = − x − 4 ; − x − 4 = 1,20 + 0,05 x → x = − 5,2 / 1,05 = **− 4,952** ; z = **0,952**.
+2. Polygone (− 4 ; 0), (4 ; 0), (5,474 ; 1,474), (− 4,952 ; 0,952) : *(3 pts)*
+$$ 2S = |Σ (xi zi+1 − xi+1 zi)| = |0 + 5,895 + 12,511 + 3,810| = 22,216 → S = 11,11 m²
+
+### Partie B — Volumes (6 pts)
+3. Moyenne des aires : 25 × (7,85 + 11,11) / 2 = **237,0 m³** ; prismatoïde : 25 / 6 × (7,85 + 4 × 9,62 + 11,11) = **239,3 m³** ; écart **1 %** : la moyenne des aires suffit pour un avant-projet. *(4 pts)*
+4. P2-P3 : 25 × (11,11 + 6,40) / 2 = **218,9 m³** → tronçon : **455,9 m³**. *(2 pts)*
+
+### Partie C — Mouvement des terres (7 pts)
+5. Réutilisé : 1 200 × 1,10 = **1 320 m³** en place ; excédent : 1 450 − 1 320 = **130 m³** en place. *(2 pts)*
+6. Centres de gravité à 75 m et 375 m → distance moyenne **300 m = 3 hm** ; coût : 1 320 × 3 × 500 = **1 980 000 F**. *(3 pts)*
+7. 130 × 1,25 = 162,5 m³ foisonnés × 3 500 = **568 750 F**. Réutiliser les déblais évite à la fois l'achat de matériaux d'apport et la mise en décharge : c'est la principale source d'économie des terrassements. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre le terrain horizontal alors qu'il est en pente en travers.
+> - Oublier de fermer le polygone dans la formule de Gauss.
+> - Comparer des volumes en place et des volumes foisonnés ou compactés.`},
  exercices:[
   {t:"Volume par les profils", d:1, e:`Trois profils en travers de déblai distants de 25 m ont des surfaces de 12,4 ; 18,6 et 9,8 m². Calculer le volume de déblai.`, c:`V = 25 × ((12,4 + 18,6)/2 + (18,6 + 9,8)/2) = 25 × (15,5 + 14,2) = **742,5 m³**.`},
   {t:"Volume par quadrillage", d:2, e:`Une plateforme de 20 × 20 m est divisée en 4 carrés de 10 m. Hauteurs de déblai aux 9 nœuds (ligne par ligne) : 1,20 ; 0,90 ; 0,65 / 1,05 ; 0,80 ; 0,50 / 0,85 ; 0,55 ; 0,30. Calculer le volume.`, c:`Angles (×1) : 1,20 + 0,65 + 0,85 + 0,30 = 3,00 ; bords (×2) : 0,90 + 1,05 + 0,50 + 0,55 = 3,00 → 6,00 ; centre (×4) : 0,80 → 3,20.
@@ -1292,6 +2197,50 @@ Les cahiers des charges imposent des **tolérances** d'exécution : par exemple 
 > - σ = √(Σ v² / (n − 1)) ; σx̄ = σ / √n ; tolérance = 2,7 σ.
 > - Propagation : σ = √(Σ σi²) ; n éléments égaux : σ0 √n.
 > - Pondération : poids p = 1 / σ².`,
+ sujet:{titre:"Précision des mesures : moyenne, écart-type, faute et propagation des erreurs", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Vous êtes chargé du contrôle qualité des mesures d'un cabinet de géomètres. On vous soumet plusieurs séries de mesures.
+
+**Données**
+- Huit mesures d'un même angle (gon) : **54,2318 – 54,2325 – 54,2312 – 54,2321 – 54,2365 – 54,2316 – 54,2323 – 54,2319** ;
+- Nivellement de **16 stations**, écart-type par station **σ0 = 0,8 mm** ; fermeture obtenue : **7 mm** ;
+- Distance mesurée en **4 portées** de ruban, écart-type par portée **3 mm** ;
+- Terrain rectangulaire : **a = 40,00 m ± 0,01 m** ; **b = 25,00 m ± 0,01 m** (écarts-types).
+
+### Partie A — Types d'erreurs (4 points)
+1. Définir faute, erreur systématique et erreur accidentelle, avec un exemple de chacune en topographie. (3 pts)
+2. Comment élimine-t-on ou réduit-on chacune ? (1 pt)
+
+### Partie B — Série d'angles (9 points)
+3. Calculer la moyenne et l'écart-type des huit mesures, puis la tolérance 2,7 σ. La valeur 54,2365 est-elle rejetée ? (3 pts)
+4. Recalculer moyenne et écart-type sans 54,2365. Cette valeur est-elle une faute ? (4 pts)
+5. Donner le résultat final avec son écart-type. (2 pts)
+
+### Partie C — Propagation (7 points)
+6. Calculer l'écart-type et la tolérance du nivellement ; la fermeture est-elle acceptable ? (3 pts)
+7. Calculer l'écart-type de la distance mesurée au ruban. (1 pt)
+8. Calculer la surface du terrain et son écart-type. (3 pts)`,
+  corrige:`### Partie A — Erreurs (4 pts)
+1. *(3 pts)*
+   - **Faute** : erreur grossière (lecture 1,850 au lieu de 1,580, hauteur de prisme oubliée) ;
+   - **Systématique** : toujours dans le même sens (ruban trop long, collimation du niveau, dilatation) ;
+   - **Accidentelle** : petite, de signe variable, inévitable (pointé, lecture, vibrations).
+2. Fautes : contrôles et mesures doubles, puis on recommence ; systématiques : étalonnage, corrections, méthodes (portées égales, CG/CD) ; accidentelles : répétition et moyenne. *(1 pt)*
+
+### Partie B — Série d'angles (9 pts)
+3. Moyenne **54,23249** ; σ = **1,67 mgon** ; tolérance 2,7 σ = **4,5 mgon** ; résidu de 54,2365 : **+ 4,0 mgon** < 4,5 → il n'est pas rejeté par ce test… parce que la valeur suspecte gonfle elle-même σ. *(3 pts)*
+4. Sans elle : moyenne **54,23191** ; σ = **0,44 mgon** ; tolérance **1,2 mgon** ; écart de 54,2365 à la moyenne : **4,6 mgon**, soit plus de 10 σ → c'est une **faute** (pointé sur un autre point, mauvaise lecture) : on l'élimine. *(4 pts)*
+5. σ de la moyenne : 0,44 / √7 = **0,17 mgon** → **54,2319 gon ± 0,2 mgon**. *(2 pts)*
+
+### Partie C — Propagation (7 pts)
+6. σ = 0,8 × √16 = **3,2 mm** ; tolérance 2,7 × 3,2 = **8,6 mm** ; fermeture 7 mm ≤ 8,6 : **acceptable**. *(3 pts)*
+7. σ = 3 × √4 = **6 mm**. *(1 pt)*
+8. S = 40,00 × 25,00 = **1 000,00 m²** ; $$ σS = √((b σa)² + (a σb)²) = √(0,25² + 0,40²) = 0,47 m²
+   → **1 000,0 m² ± 0,5 m²**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Tester une valeur suspecte avec un écart-type calculé en l'incluant.
+> - Additionner les écarts-types au lieu de les combiner quadratiquement.
+> - Confondre l'écart-type d'une mesure et celui de la moyenne (divisé par √n).`},
  exercices:[
   {t:"Moyenne et écart-type d'un angle", d:2, e:`Un angle a été mesuré 5 fois : 63,4521 ; 63,4528 ; 63,4517 ; 63,4525 ; 63,4524 gon. Calculer la moyenne, l'écart-type d'une mesure et celui de la moyenne.`, c:`x̄ = **63,4523 gon**. Résidus (mgon) : − 0,2 ; + 0,5 ; − 0,6 ; + 0,2 ; + 0,1.
 Σ v² = 0,04 + 0,25 + 0,36 + 0,04 + 0,01 = 0,70 mgon² → **σ = √(0,70 / 4) = 0,42 mgon** ; **σx̄ = 0,42 / √5 = 0,19 mgon**.`},

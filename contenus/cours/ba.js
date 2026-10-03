@@ -95,6 +95,43 @@ La masse d'une barre se retrouve par la formule **0,006 17 × φ²** (kg/m, φ e
 > - fc28 = 25 MPa → ft28 = 2,1 MPa ; fbu = 14,17 MPa.
 > - FeE400 → σs = 348 MPa ; FeE500 → σs = 435 MPa ; Es = 200 000 MPa.
 > - Raccourcissement ultime du béton : 3,5 ‰ ; allongement limite de l'acier : 10 ‰.`,
+ sujet:{titre:"Caractéristiques du béton et de l'acier d'une villa", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour une villa à Yamoussoukro, le cahier des charges impose un béton **fc28 = 25 MPa** et des aciers **HA FeE500**. Le conducteur de travaux veut savoir quand décoffrer et comprendre les valeurs de calcul utilisées par le bureau d'études.
+
+**Données** : BAEL 91 révisé 99 — béton fc28 = 25 MPa, aciers HA FeE500, γb = 1,5, γs = 1,15, θ = 1 ; fcj = j / (4,76 + 0,83 j) × fc28 ; ftj = 0,6 + 0,06 fcj ; Eij = 11 000 fcj^(1/3) ; Evj = 3 700 fcj^(1/3) ; Es = 200 000 MPa.
+
+### Partie A — Le béton (9 points)
+1. Calculer la résistance du béton à 7 jours et à 14 jours. (3 pts)
+2. Les étais d'une dalle peuvent être retirés quand le béton atteint 70 % de fc28. Peut-on décoffrer à 14 jours ? (2 pts)
+3. Calculer ft28, Ei28 et Ev. Expliquer pourquoi on utilise deux modules. (4 pts)
+
+### Partie B — Résistances de calcul (6 points)
+4. Calculer fbu (contrainte de calcul du béton) et fsu (acier). (3 pts)
+5. Calculer la déformation de l'acier à la limite élastique εl = fsu / Es. (1 pt)
+6. Expliquer le rôle de γb et γs. (2 pts)
+
+### Partie C — Pourquoi armer le béton ? (5 points)
+7. Calculer l'effort de traction que peuvent reprendre 4 HA12 à l'ELU. (2 pts)
+8. Expliquer pourquoi les aciers sont placés dans la zone tendue d'une poutre et pourquoi on néglige la résistance du béton tendu. (3 pts)`,
+  corrige:`### Partie A — Béton (9 pts)
+1. j = 7 : 7 / (4,76 + 5,81) × 25 = **16,6 MPa** ; j = 14 : 14 / (4,76 + 11,62) × 25 = **21,4 MPa**. *(3 pts)*
+2. 70 % de 25 = 17,5 MPa ; à 14 jours on a 21,4 MPa → **oui** (à 7 jours, 16,6 MPa : pas encore). *(2 pts)*
+3. **ft28 = 0,6 + 0,06 × 25 = 2,1 MPa** ; 25^(1/3) = 2,924 → **Ei28 = 32 164 MPa**, **Ev = 10 819 MPa**. Ei sert aux charges de courte durée ; Ev (≈ Ei / 3) tient compte du **fluage** sous charges de longue durée (flèches à long terme). *(4 pts)*
+
+### Partie B — Calcul (6 pts)
+4. $$ fbu = 0,85 fc28 / (θ γb) = 0,85 × 25 / 1,5 = 14,17 MPa
+$$ fsu = fe / γs = 500 / 1,15 = 434,8 MPa *(3 pts)*
+5. εl = 434,8 / 200 000 = **2,17 ‰**. *(1 pt)*
+6. Ce sont des **coefficients de sécurité** sur les matériaux : ils couvrent la dispersion des résistances, les défauts d'exécution et les imprécisions de calcul ; γb > γs car le béton est fabriqué sur chantier, l'acier en usine. *(2 pts)*
+
+### Partie C — Armer (5 pts)
+7. 4 HA12 : 4 × 1,131 = **4,52 cm²** → F = 452 × 434,8 = **196,7 kN** (près de 20 t). *(2 pts)*
+8. Le béton résiste bien en compression (25 MPa) mais très mal en traction (2,1 MPa) et **fissure** dès que celle-ci est dépassée : on le considère donc fissuré dans la zone tendue et ce sont les aciers, placés là où les fibres s'allongent (en bas en travée, en haut sur appui), qui reprennent la traction. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre fc28 (résistance mesurée) et fbu (valeur de calcul réduite).
+> - Décoffrer « à 7 jours » par habitude sans vérifier la résistance atteinte.
+> - Oublier que les aciers doivent suivre le signe du moment (en haut sur appui).`},
  exercices:[
   {t:"Caractéristiques d'un béton C30/37", d:1, e:`Un bureau d'études prescrit un béton de fc28 = 30 MPa et des aciers FeE500. Calculer ft28, fbu, σs et Eij.`, c:`ft28 = 0,6 + 0,06 × 30 = **2,4 MPa**.
 fbu = 0,85 × 30 / 1,5 = **17,0 MPa**.
@@ -183,6 +220,43 @@ L'**Eurocode** utilise les mêmes coefficients de charges (1,35 G + 1,5 Q) et γ
 > - On vérifie toujours les deux.
 > - Quand G est favorable (soulèvement, renversement), on le prend avec le coefficient 1,0.
 > - Le classement de la fissuration (FPN, FP, FTP) dépend de l'exposition de l'élément.`,
+ sujet:{titre:"Combinaisons d'actions d'une poutre et soulèvement d'une toiture", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le bureau d'études prépare les combinaisons d'actions d'un bâtiment de bureaux à Abidjan.
+
+**Données** : BAEL 91 révisé 99 — béton fc28 = 25 MPa, aciers HA FeE500, γb = 1,5, γs = 1,15, θ = 1.
+- Poutre sur deux appuis, portée **5,00 m** : charge permanente **G = 20 kN/m**, charge d'exploitation **Q = 8 kN/m** ;
+- Toiture légère en tôle sur pannes : poids **G = 0,30 kN/m²** ; effet du vent en dépression (soulèvement) **W = − 0,80 kN/m²** ;
+- Combinaisons : ELU fondamental 1,35 G + 1,5 Q ; ELS G + Q ; vent favorable au soulèvement : G + 1,5 W (G pris à sa valeur minimale).
+
+### Partie A — États limites (5 points)
+1. Définir l'ELU et l'ELS et donner un exemple de vérification pour chacun. (3 pts)
+2. Pourquoi les coefficients de pondération de G et de Q sont-ils différents ? (2 pts)
+
+### Partie B — Poutre (10 points)
+3. Calculer pu et pser. (3 pts)
+4. Calculer Mu, Mser et Vu. (4 pts)
+5. Avec quel moment calcule-t-on les aciers ? avec quel moment vérifie-t-on les contraintes et la fissuration ? (3 pts)
+
+### Partie C — Toiture (5 points)
+6. Calculer la charge résultante sous la combinaison G + 1,5 W. Interpréter son signe. (3 pts)
+7. Quelles dispositions prendre ? (2 pts)`,
+  corrige:`### Partie A — États limites (5 pts)
+1. **ELU** (état limite ultime) : ruine ou perte d'équilibre ; on vérifie la résistance (ex. calcul des aciers de flexion, flambement). **ELS** (service) : confort et durabilité ; on vérifie les contraintes, l'ouverture des fissures et les flèches. *(3 pts)*
+2. G est connue avec précision (poids des matériaux) : 1,35 ; Q est plus incertaine (occupation variable) : 1,5. *(2 pts)*
+
+### Partie B — Poutre (10 pts)
+3. **pu = 1,35 × 20 + 1,5 × 8 = 27 + 12 = 39 kN/m** ; **pser = 28 kN/m**. *(3 pts)*
+4. **Mu = 39 × 5² / 8 = 121,9 kN·m** ; **Mser = 28 × 25 / 8 = 87,5 kN·m** ; **Vu = 39 × 5 / 2 = 97,5 kN**. *(4 pts)*
+5. Les aciers se calculent à l'**ELU** avec Mu (puis Vu pour les cadres) ; les contraintes du béton et de l'acier, la fissuration et la flèche se vérifient à l'**ELS** avec Mser. *(3 pts)*
+
+### Partie C — Toiture (5 pts)
+6. 0,30 + 1,5 × (− 0,80) = 0,30 − 1,20 = **− 0,90 kN/m²** : la résultante est **dirigée vers le haut** ; le vent arrache la toiture si elle n'est pas ancrée. *(3 pts)*
+7. Fixer les tôles sur les pannes (tire-fonds, crochets), ancrer les pannes et la charpente dans les chaînages (pattes scellées, tiges filetées), et prévoir un chaînage haut capable de reprendre cet arrachement. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Majorer le poids propre (1,35 G) dans une vérification où il est favorable (soulèvement).
+> - Calculer les aciers avec Mser.
+> - Oublier les combinaisons de vent pour les toitures légères (cause fréquente de sinistres).`},
  exercices:[
   {t:"Combinaisons pour un plancher", d:1, e:`Un plancher de bureaux porte G = 5,2 kN/m² et Q = 2,5 kN/m². Calculer les charges surfaciques à l'ELU et à l'ELS.`, c:`ELU : pu = 1,35 × 5,2 + 1,5 × 2,5 = 7,02 + 3,75 = **10,77 kN/m²**.
 ELS : pser = 5,2 + 2,5 = **7,7 kN/m²**.
@@ -284,6 +358,57 @@ Pour un mur porteur, on raisonne **par mètre linéaire** : planchers (portée r
 > - Surface d'influence : mi-portées de chaque côté.
 > - Poteau voisin de rive : + 15 % (2 travées) ou + 10 % (plus de 2 travées).
 > - Ne pas oublier : poutres, poteaux, acrotères, murs, cloisons, semelles et terres.`,
+ sujet:{titre:"Descente de charges sur un poteau intérieur d'un R+1", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Immeuble R+1 à toiture-terrasse. On calcule la charge transmise par un **poteau intérieur** jusqu'à sa semelle.
+
+**Données** : BAEL 91 révisé 99 — béton fc28 = 25 MPa, aciers HA FeE500, γb = 1,5, γs = 1,15, θ = 1.
+- Surface d'influence du poteau : **4,00 × 4,50 m** à chaque niveau ;
+- Terrasse inaccessible : G = **6,0 kN/m²** (plancher, forme de pente, étanchéité, protection), Q = **1,0 kN/m²** ;
+- Étage courant : plancher 16+4 et revêtements G = **4,8 kN/m²**, Q = **1,5 kN/m²** (habitation) ;
+- Poutres 20 × 40 cm : longueur reprise par niveau **4,00 + 4,50 = 8,50 m** ;
+- Poteau 25 × 25 cm, hauteur **3,00 m** par niveau (deux tronçons : RDC et étage) ;
+- Poteau voisin d'un appui de rive de poutre continue : majoration **1,15** de la charge ;
+- Contrainte admissible du sol : **0,20 MPa** (à l'ELS).
+
+### Partie A — Charges permanentes (8 points)
+1. Calculer la surface d'influence. (1 pt)
+2. Calculer les charges G apportées par la terrasse, l'étage, les poutres et le poteau. (5 pts)
+3. En déduire G en pied de poteau. (2 pts)
+
+### Partie B — Exploitation et combinaisons (6 points)
+4. Calculer Q en pied de poteau. (2 pts)
+5. Calculer Nu et Nser, puis Nu majoré de 15 %. (4 pts)
+
+### Partie C — Semelle (6 points)
+6. Calculer l'aire minimale de la semelle carrée et choisir ses dimensions (au multiple de 5 cm). (4 pts)
+7. Pourquoi la semelle se dimensionne-t-elle à l'ELS ? (2 pts)`,
+  corrige:`### Partie A — Permanentes (8 pts)
+1. S = 4,00 × 4,50 = **18,0 m²**. *(1 pt)*
+2. *(5 pts)*
+
+| Élément | Calcul | G (kN) |
+|---|---|---|
+| Terrasse | 6,0 × 18 | 108,0 |
+| Poutres terrasse | 0,20 × 0,40 × 25 × 8,50 | 17,0 |
+| Poteau étage | 0,25² × 3,00 × 25 | 4,7 |
+| Étage | 4,8 × 18 | 86,4 |
+| Poutres étage | idem | 17,0 |
+| Poteau RDC | idem | 4,7 |
+
+3. **G = 237,8 kN** en pied de poteau. *(2 pts)*
+
+### Partie B — Combinaisons (6 pts)
+4. Q = 1,0 × 18 + 1,5 × 18 = 18 + 27 = **45 kN**. *(2 pts)*
+5. **Nu = 1,35 × 237,8 + 1,5 × 45 = 321,0 + 67,5 = 388,5 kN** ; **Nser = 282,8 kN** ; Nu majoré : 1,15 × 388,5 = **446,8 kN** (valeur pour le ferraillage du poteau). *(4 pts)*
+
+### Partie C — Semelle (6 pts)
+6. A ≥ Nser / σsol = 282,8 / 200 = **1,41 m²** (on ajoute ensuite le poids de la semelle) → côté √1,41 = 1,19 m → **1,20 × 1,20 m** (1,44 m²) ou 1,25 m pour couvrir le poids propre de la semelle. *(4 pts)*
+7. La contrainte admissible du sol est une valeur de **service** (elle inclut déjà un coefficient de sécurité sur la portance et limite les tassements) : on la compare aux charges de service. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le poids des poutres et du poteau.
+> - Compter deux fois la terrasse ou oublier un niveau.
+> - Comparer Nu à la contrainte admissible du sol.`},
  exercices:[
   {t:"Surface d'influence", d:1, e:`Un bâtiment a des poteaux espacés de 4,20 m dans un sens et de 3,60 m et 5,00 m dans l'autre. Calculer la surface d'influence :
 1. d'un poteau intérieur entre les travées de 3,60 m et 5,00 m ;
@@ -390,6 +515,46 @@ Une **reprise** (joint entre deux bétonnages) est un point faible. On la place 
 > - eh ≥ max(φ ; 1,5 cg) ; ev ≥ max(φ ; cg).
 > - d ≈ 0,9 h ; deux lits si les barres ne passent pas.
 > - Non-fragilité : As ≥ 0,23 b d ft28 / fe.`,
+ sujet:{titre:"Enrobages, espacements et sections minimales d'une poutre et d'un poteau", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le contrôleur technique vérifie les dispositions constructives d'une poutre de façade et d'un poteau d'une maison en bord de lagune.
+
+**Données** : BAEL 91 révisé 99 — béton fc28 = 25 MPa, aciers HA FeE500, γb = 1,5, γs = 1,15, θ = 1.
+- Poutre **20 × 40 cm**, enrobage **3 cm** (ouvrage exposé aux intempéries), cadres **HA6**, aciers principaux **HA14**, gros granulat **Dmax = 20 mm** ;
+- Espacement libre minimal entre barres : max (Ø ; 1,5 Dmax) ;
+- Condition de non-fragilité d'une poutre : A ≥ 0,23 b d ft28 / fe ;
+- Poteau **25 × 25 cm**, aciers HA12 ; section minimale : max (4 cm² par mètre de périmètre ; 0,2 % B) ; section maximale : 5 % B ; cadres : Øt ≥ Øl / 3 ; espacement ≤ min (40 cm ; a + 10 cm ; 15 Øl).
+
+### Partie A — Enrobage et hauteur utile (5 points)
+1. Pourquoi faut-il un enrobage suffisant ? Quelle valeur en milieu marin ? (2 pts)
+2. Calculer la hauteur utile d de la poutre. (3 pts)
+
+### Partie B — Placement des barres (7 points)
+3. Calculer la largeur disponible entre les cadres. (2 pts)
+4. Peut-on placer 3 HA14 sur un seul lit ? et 4 HA14 ? (4 pts)
+5. Que faire si 4 HA14 sont nécessaires ? (1 pt)
+
+### Partie C — Sections minimales (8 points)
+6. Calculer la section minimale de non-fragilité de la poutre. (2 pts)
+7. Calculer les sections minimale et maximale d'aciers du poteau ; proposer un ferraillage. (4 pts)
+8. Choisir le diamètre et l'espacement des cadres du poteau. (2 pts)`,
+  corrige:`### Partie A — Enrobage (5 pts)
+1. L'enrobage protège les aciers de la **corrosion** (le béton est basique) et du **feu**, et assure l'**adhérence**. En milieu marin ou très agressif : **5 cm**. *(2 pts)*
+2. d = h − enrobage − Øcadre − Ø/2 = 40 − 3 − 0,6 − 0,7 = **35,7 cm**. *(3 pts)*
+
+### Partie B — Barres (7 pts)
+3. Largeur libre intérieure aux cadres : 20 − 2 × 3 − 2 × 0,6 = **12,8 cm**. *(2 pts)*
+4. Espacement minimal : max (1,4 ; 1,5 × 2) = **3 cm**. 3 HA14 : 12,8 − 3 × 1,4 = 8,6 cm pour 2 espaces → **4,3 cm ≥ 3** ✔. 4 HA14 : 12,8 − 5,6 = 7,2 cm pour 3 espaces → **2,4 cm < 3** ✘ : le béton passerait mal entre les barres (nids de cailloux). *(4 pts)*
+5. Placer les barres sur **deux lits** (en recalculant d, plus faible), ou passer à 2 HA20 + 1 HA14, ou élargir la poutre. *(1 pt)*
+
+### Partie C — Minimums (8 pts)
+6. A min = 0,23 × 20 × 35,7 × 2,1 / 500 = **0,69 cm²**. *(2 pts)*
+7. Périmètre 4 × 0,25 = 1 m → 4 cm² ; 0,2 % × 625 = 1,25 cm² → **A min = 4 cm²** ; **A max = 5 % × 625 = 31,25 cm²** → **4 HA12 = 4,52 cm²** (une barre par angle). *(4 pts)*
+8. Øt ≥ 12 / 3 = 4 mm → **HA6** ; st ≤ min (40 ; 35 ; 15 × 1,2 = 18 cm) → **18 cm** au plus, on retient **15 cm** (resserré à 10 cm aux jonctions). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer d avec la hauteur totale ou oublier le cadre.
+> - Serrer les barres sans respecter l'espacement minimal : le béton ne passe plus.
+> - Oublier les cadres resserrés en zones de recouvrement et aux nœuds.`},
  exercices:[
   {t:"Choisir l'enrobage", d:1, e:`Indiquer l'enrobage (BAEL) à retenir pour :
 1. une poutre intérieure d'un salon ;
@@ -474,6 +639,48 @@ Les cadres doivent être **fermés** et leurs extrémités ancrées par des **cr
 > - Recouvrement : lr = ls en traction, 0,6 ls en compression ; décaler les jonctions.
 > - Sur appui de rive : ancrer As ≥ Vu / σs.
 > - Cadres fermés par crochets à 135°.`,
+ sujet:{titre:"Ancrages et recouvrements des aciers d'une poutre de rive", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le plan de ferraillage d'une poutre, les aciers inférieurs doivent être ancrés dans un appui de **25 cm** de large (poteau de rive). Le chef de chantier demande aussi les longueurs de recouvrement.
+
+**Données** : BAEL 91 révisé 99 — béton fc28 = 25 MPa, aciers HA FeE500, γb = 1,5, γs = 1,15, θ = 1.
+- ft28 = 2,1 MPa ; coefficient de scellement des HA : ψs = 1,5 ;
+- Contrainte d'adhérence limite : τsu = 0,6 ψs² ft28 ; longueur de scellement droit : ls = Ø fe / (4 τsu) ;
+- Un crochet normal (à 180°) permet de réduire la longueur d'ancrage mesurée hors crochet à **0,4 ls** ;
+- Enrobage côté extérieur de l'appui : **3 cm**.
+
+### Partie A — Adhérence (6 points)
+1. Expliquer le phénomène d'adhérence et le rôle des verrous des barres HA. (2 pts)
+2. Calculer τsu. (2 pts)
+3. Calculer ls en fonction de Ø, puis pour un HA12 et un HA16. (2 pts)
+
+### Partie B — Ancrage sur appui (9 points)
+4. Calculer la longueur disponible dans l'appui. (1 pt)
+5. Un HA16 peut-il être ancré par scellement droit ? avec un crochet ? (4 pts)
+6. Même question pour un HA12. (2 pts)
+7. Proposer une solution si la poutre exige des HA16. (2 pts)
+
+### Partie C — Recouvrements (5 points)
+8. Deux barres HA12 bout à bout doivent être raboutées par recouvrement : quelle longueur prévoir ? (2 pts)
+9. Pourquoi décaler les recouvrements et ne pas les placer dans les zones les plus sollicitées ? (3 pts)`,
+  corrige:`### Partie A — Adhérence (6 pts)
+1. L'effort de l'acier passe au béton par **frottement et butée** sur la surface de la barre ; les verrous (nervures) des HA augmentent fortement cette liaison, d'où ψs = 1,5 au lieu de 1 pour les ronds lisses. *(2 pts)*
+2. $$ τsu = 0,6 × 1,5² × 2,1 = 2,835 MPa *(2 pts)*
+3. ls = Ø × 500 / (4 × 2,835) = **44,1 Ø** → HA12 : **52,9 cm** ; HA16 : **70,5 cm**. *(2 pts)*
+
+### Partie B — Appui (9 pts)
+4. Disponible : 25 − 3 = **22 cm**. *(1 pt)*
+5. HA16 : 70,5 cm > 22 cm → droit impossible ; avec crochet : 0,4 × 70,5 = **28,2 cm > 22 cm** → **impossible** aussi. *(4 pts)*
+6. HA12 : crochet 0,4 × 52,9 = **21,2 cm ≤ 22 cm** ✔ → ancrage possible avec crochet. *(2 pts)*
+7. Remplacer les HA16 par un nombre équivalent de HA12 (section égale ou supérieure), élargir l'appui (poteau 30 cm), ou prolonger l'ancrage dans le poteau par un retour vertical (équerre). *(2 pts)*
+
+### Partie C — Recouvrements (5 pts)
+8. Pour des barres tendues de même diamètre, recouvrement **= ls = 52,9 cm** → on retient **55 cm** (ou 40 à 50 Ø selon les prescriptions de l'entreprise). *(2 pts)*
+9. Un recouvrement crée une zone de transfert d'effort par le béton : en les **décalant** on évite que toutes les barres soient interrompues dans la même section (fissure préférentielle), et on les place là où l'effort est faible (près des points de moment nul pour les aciers inférieurs). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mesurer l'ancrage depuis le nu intérieur de l'appui sans retirer l'enrobage.
+> - Croire qu'un crochet suffit toujours.
+> - Placer tous les recouvrements au même endroit.`},
  exercices:[
   {t:"Longueurs de scellement", d:1, e:`Calculer la longueur de scellement droit (valeur forfaitaire) pour des HA10, HA14 et HA20 en FeE400, puis pour un HA16 en FeE500.`, c:`FeE400 : ls = 40 φ → HA10 : **40 cm** ; HA14 : **56 cm** ; HA20 : **80 cm**.
 FeE500 : ls = 50 φ → HA16 : **80 cm**.`},
@@ -582,6 +789,55 @@ Avant chaque bétonnage, le chef de chantier (ou le contrôleur) vérifie avec l
 > - Masse = 0,006 17 φ² × longueur ; un cadre = périmètre + 2 crochets.
 > - Ratios de contrôle : 80 à 120 kg/m³ pour les poutres.
 > - Contrôler nombre, diamètres, cadres, chapeaux, enrobage et cales avant chaque coulage.`,
+ sujet:{titre:"Nomenclature et contrôle du ferraillage d'une poutre", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le chef d'équipe ferrailleur reçoit le plan d'une poutre **20 × 40 cm** de **5,20 m** de long. Vous devez établir la nomenclature, le poids d'acier et la liste des contrôles avant coulage.
+
+**Données**
+- Aciers inférieurs : **3 HA14** filants avec un retour de **15 cm** à chaque extrémité ;
+- Aciers supérieurs de montage : **2 HA10** filants droits ;
+- Cadres **HA6** espacés de **15 cm**, le premier à 5 cm de chaque extrémité ; longueur développée d'un cadre : **1,08 m** ;
+- Enrobage 3 cm à chaque extrémité ;
+- Masses linéiques : HA6 : 0,222 kg/m ; HA10 : 0,617 kg/m ; HA14 : 1,208 kg/m.
+
+### Partie A — Lecture du plan (4 points)
+1. Que signifient les repères « 3 HA14 » et « HA6 e = 15 » ? (2 pts)
+2. Calculer la longueur droite des barres (longueur de poutre moins les enrobages). (2 pts)
+
+### Partie B — Nomenclature (10 points)
+3. Calculer la longueur développée d'un HA14 et la longueur totale. (2 pts)
+4. Calculer la longueur totale des HA10. (1 pt)
+5. Calculer le nombre de cadres et la longueur totale de HA6. (3 pts)
+6. Calculer la masse de chaque diamètre et la masse totale. (3 pts)
+7. Calculer le ratio d'acier en kg par m³ de béton. (1 pt)
+
+### Partie C — Contrôle avant coulage (6 points)
+8. Donner six points de contrôle du ferraillage avant de couler le béton. (6 pts)`,
+  corrige:`### Partie A — Lecture (4 pts)
+1. **3 HA14** : trois barres à haute adhérence de 14 mm de diamètre ; **HA6 e = 15** : cadres en HA6 espacés de 15 cm. *(2 pts)*
+2. 5,20 − 2 × 0,03 = **5,14 m**. *(2 pts)*
+
+### Partie B — Nomenclature (10 pts)
+3. HA14 : 5,14 + 2 × 0,15 = **5,44 m** ; 3 barres → **16,32 m**. *(2 pts)*
+4. HA10 : 2 × 5,14 = **10,28 m**. *(1 pt)*
+5. Longueur à équiper : 5,20 − 2 × 0,05 = 5,10 m → n = 5,10 / 0,15 + 1 = **35 cadres** ; HA6 : 35 × 1,08 = **37,80 m**. *(3 pts)*
+6. *(3 pts)*
+
+| Diamètre | Longueur (m) | kg/m | Masse (kg) |
+|---|---|---|---|
+| HA14 | 16,32 | 1,208 | 19,71 |
+| HA10 | 10,28 | 0,617 | 6,34 |
+| HA6 | 37,80 | 0,222 | 8,39 |
+| **Total** | | | **34,4 kg** |
+
+7. Béton : 0,20 × 0,40 × 5,20 = 0,416 m³ → **82,8 kg/m³** (valeur courante pour une poutre : 80 à 120 kg/m³). *(1 pt)*
+
+### Partie C — Contrôles (6 pts)
+8. Nombre et diamètre des barres conformes au plan ; position (aciers principaux en bas en travée, chapeaux en haut sur appuis) ; espacement et fermeture des cadres ; longueurs d'ancrage et de recouvrement ; **cales d'enrobage** en place (3 cm) ; ligatures solides (la cage ne bouge pas au coulage) ; aciers propres (sans terre, huile ni rouille non adhérente). *(6 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter le nombre d'intervalles au lieu du nombre de cadres (il y a un cadre de plus).
+> - Oublier les retours (crochets) dans la longueur développée.
+> - Couler sans cales : l'enrobage disparaît et les aciers rouillent.`},
  exercices:[
   {t:"Lire une désignation", d:1, e:`Expliquer les désignations suivantes lues sur un plan :
 1. ④ 4 HA16 L = 6,40 ;
@@ -656,6 +912,44 @@ Il ne faut donc pas donner au tirant une section de béton trop grande par rappo
 > - FP : σ̄s ≈ 202 MPa (FeE400) ; FTP : ≈ 161 MPa.
 > - Non-fragilité : As fe ≥ B ft28.
 > - Barres nombreuses et fines, bien ancrées, recouvrements décalés.`,
+ sujet:{titre:"Tirant suspendant une passerelle : aciers à l'ELU et à l'ELS", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une passerelle légère entre deux bâtiments est suspendue à une poutre haute par des **tirants en béton armé**. Les tirants sont exposés à la pluie (**fissuration préjudiciable**).
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa ; coefficient de fissuration η = 1,6 (HA).
+- Effort dans le tirant le plus chargé : **Nu = 250 kN**, **Nser = 180 kN** ;
+- Contrainte limite des aciers en fissuration préjudiciable : σs = min [ 2/3 fe ; max (0,5 fe ; 110 √(η ft28)) ] ;
+- Condition de non-fragilité d'un tirant : A fe ≥ B ft28 (B : section de béton) ;
+- Sections : HA12 = 1,13 cm² ; HA14 = 1,54 cm² ; HA16 = 2,01 cm².
+
+### Partie A — Principe (3 points)
+1. Dans un tirant, quel matériau reprend l'effort de traction ? À quoi sert le béton ? (3 pts)
+
+### Partie B — Aciers (11 points)
+2. Calculer la section d'acier nécessaire à l'ELU. (3 pts)
+3. Calculer σs en fissuration préjudiciable. (3 pts)
+4. Calculer la section nécessaire à l'ELS. (2 pts)
+5. Retenir la section et choisir les barres (nombre pair, disposition symétrique). (3 pts)
+
+### Partie C — Section de béton et détails (6 points)
+6. Calculer la section de béton maximale permise par la condition de non-fragilité. Une section 20 × 20 cm convient-elle ? (3 pts)
+7. Comment ancrer les aciers du tirant dans la poutre haute et dans la passerelle ? (3 pts)`,
+  corrige:`### Partie A — Principe (3 pts)
+1. **Les aciers seuls** reprennent la traction (le béton tendu fissure). Le béton les **protège** (corrosion, feu), donne la forme, et permet l'ancrage aux extrémités. *(3 pts)*
+
+### Partie B — Aciers (11 pts)
+2. Au = Nu / fsu = 250 000 / 434,8 = **575 mm² = 5,75 cm²**. *(3 pts)*
+3. 110 √(1,6 × 2,1) = 110 × 1,833 = 201,6 ; max (250 ; 201,6) = 250 ; min (333 ; 250) → **σs = 250 MPa**. *(3 pts)*
+4. Aser = 180 000 / 250 = **720 mm² = 7,20 cm²**. *(2 pts)*
+5. L'ELS est déterminant : A ≥ 7,20 cm² → **4 HA16 = 8,04 cm²** (une barre par angle). *(3 pts)*
+
+### Partie C — Béton (6 pts)
+6. B ≤ A fe / ft28 = 804 × 500 / 2,1 = 191 430 mm² = **1 914 cm²**. Section 20 × 20 = 400 cm² ✔ (si le béton est trop gros, il fissure en arrachant brutalement des aciers trop faibles : c'est la fragilité). *(3 pts)*
+7. Ancrer chaque barre sur sa longueur de scellement (≈ 44 Ø, soit 70 cm pour un HA16) ou par crochets/retours enveloppant les aciers de la poutre haute et de la passerelle ; ajouter des cadres de confinement aux extrémités. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Ne vérifier que l'ELU : en fissuration préjudiciable, l'ELS gouverne souvent.
+> - Compter sur la résistance du béton tendu.
+> - Négliger les ancrages : un tirant lâche par ses extrémités.`},
  exercices:[
   {t:"Suspente d'un plancher", d:1, e:`Une suspente en béton armé porte une partie de plancher : Nu = 180 kN. Fissuration peu préjudiciable, FeE400. Calculer la section d'acier et choisir les barres.`, c:`As ≥ 180 000 / 347,8 = 518 mm² = **5,18 cm²**.
 Choix : **4 HA14 (6,16 cm²)**, un dans chaque angle d'une section de 20 × 20 cm.
@@ -738,6 +1032,44 @@ L'Eurocode 2 vérifie les poteaux en **flexion composée** avec une excentricit�
 > - Nu ≤ α [Br fc28 / (0,9 γb) + A fe / γs], Br = (a − 2 cm)(b − 2 cm).
 > - Amin = max(4 cm²/m de périmètre ; 0,2 % B) ; Amax = 5 % B.
 > - Cadres : φt ≥ φl/3 ; st ≤ min(15 φl ; 40 cm ; a + 10 cm).`,
+ sujet:{titre:"Ferraillage d'un poteau en compression centrée", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le poteau intérieur le plus chargé d'un immeuble R+2 doit être ferraillé.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Section **25 × 25 cm**, hauteur libre **3,00 m**, longueur de flambement **lf = 0,7 × 3,00 m** ;
+- Effort normal ultime **Nu = 900 kN** ;
+- Effort résistant : Nu ≤ α [ Br fc28 / (0,9 γb) + A fe / γs ], avec Br = (a − 2 cm)² et α = 0,85 / [1 + 0,2 (λ/35)²] pour λ ≤ 50 ;
+- Sections minimales : max (4 cm² par mètre de périmètre ; 0,2 % B) ; maximum 5 % B ;
+- HA12 = 1,13 cm² ; HA14 = 1,54 cm² ; HA16 = 2,01 cm².
+
+### Partie A — Élancement (6 points)
+1. Calculer lf, le rayon de giration i et l'élancement λ. (3 pts)
+2. Calculer α. (3 pts)
+
+### Partie B — Aciers longitudinaux (10 points)
+3. Calculer Br et la part de l'effort reprise par le béton. (3 pts)
+4. En déduire la section d'acier nécessaire. (4 pts)
+5. Vérifier les sections minimale et maximale et choisir les barres. (3 pts)
+
+### Partie C — Armatures transversales (4 points)
+6. Choisir le diamètre et l'espacement des cadres (Øt ≥ Øl/3 ; st ≤ min [40 cm ; a + 10 cm ; 15 Øl]). (4 pts)`,
+  corrige:`### Partie A — Élancement (6 pts)
+1. lf = 2,10 m ; i = a / √12 = 0,25 / 3,464 = 0,0722 m ; **λ = 2,10 / 0,0722 = 29,1** (≤ 50 ✔). *(3 pts)*
+2. $$ α = 0,85 / [1 + 0,2 × (29,1 / 35)²] = 0,85 / 1,138 = 0,747 *(3 pts)*
+
+### Partie B — Aciers (10 pts)
+3. Br = (25 − 2)² = **529 cm²** ; béton : 52 900 × 25 / (0,9 × 1,5) = **979,6 kN**. *(3 pts)*
+4. 900 / 0,747 = 1 204,8 kN ; reste pour l'acier : 1 204,8 − 979,6 = 225,2 kN →
+$$ A ≥ 225 200 × 1,15 / 500 = 518 mm² = 5,18 cm² *(4 pts)*
+5. Minimum : max (4 × 1,00 ; 0,2 % × 625) = 4 cm² ; maximum : 31,25 cm² → **4 HA14 = 6,16 cm²** ✔ (4 HA12 = 4,52 serait insuffisant). *(3 pts)*
+
+### Partie C — Cadres (4 pts)
+6. Øt ≥ 14 / 3 = 4,7 mm → **HA6** ; st ≤ min (40 ; 35 ; 15 × 1,4 = 21 cm) → **st = 20 cm** en partie courante, resserré à 10 cm aux recouvrements et en tête/pied. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser B au lieu de Br (on retire 1 cm de béton sur chaque face).
+> - Oublier α : sans lui, le flambement n'est pas pris en compte.
+> - Prendre 4 HA12 parce que « c'est le minimum » alors que le calcul demande plus.`},
  exercices:[
   {t:"Élancement et coefficient α", d:1, e:`Un poteau de 25 × 30 cm a une hauteur libre de 3,20 m (Lf = 0,7 l0). Calculer λ et α.`, c:`Lf = 0,7 × 3,20 = 2,24 m. Le flambement se fait selon le petit côté a = 0,25 m.
 **λ = 3,46 × 2,24 / 0,25 = 31,0** → **α = 0,85 / (1 + 0,2 × (31,0 / 35)²) = 0,85 / 1,157 = 0,735**.`},
@@ -824,6 +1156,49 @@ L'Eurocode 2 utilise la même démarche (diagramme rectangulaire 0,8 x, μ rédu
 > - Contrôle rapide : z ≈ 0,9 d.
 > - Non-fragilité : As ≥ 0,23 b d ft28 / fe.
 > - μ > μl : augmenter h de préférence, sinon aciers comprimés.`,
+ sujet:{titre:"Flexion simple à l'ELU d'une poutre 25 × 50", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de plancher de section **25 × 50 cm** (hauteur utile **d = 45 cm**) doit être ferraillée en travée. On étudie aussi le cas d'une surcharge plus forte.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- μ = Mu / (b d² fbu) ; α = 1,25 (1 − √(1 − 2 μ)) ; z = d (1 − 0,4 α) ; A = Mu / (z fsu) ;
+- Pour FeE500 : αl = 3,5 / (3,5 + 2,17) = 0,617 et **μl = 0,372** ;
+- Aciers comprimés éventuels à **d' = 5 cm**, contrainte prise égale à fsu ;
+- Enrobage 3 cm, cadres HA8, Dmax = 20 mm ; HA20 = 3,14 cm².
+
+### Partie A — Moment Mu = 180 kN·m (10 points)
+1. Calculer μ et le comparer à μl. Conclure. (3 pts)
+2. Calculer α, z puis la section d'aciers tendus. (4 pts)
+3. Choisir les barres et vérifier qu'elles tiennent sur un lit. (2 pts)
+4. Vérifier la condition de non-fragilité A ≥ 0,23 b d ft28 / fe. (1 pt)
+
+### Partie B — Moment Mu = 300 kN·m (8 points)
+5. Calculer μ. Conclure. (2 pts)
+6. Calculer le moment limite Ml que la section peut reprendre sans aciers comprimés. (2 pts)
+7. Calculer la section d'aciers comprimés A' et la section totale d'aciers tendus. (4 pts)
+
+### Partie C — Réflexion (2 points)
+8. Quelle autre solution que les aciers comprimés ? (2 pts)`,
+  corrige:`### Partie A — Mu = 180 kN·m (10 pts)
+1. $$ μ = 180 × 10⁶ / (250 × 450² × 14,17) = 0,251 < μl = 0,372
+   **Pas d'aciers comprimés** (section simplement armée). *(3 pts)*
+2. α = 1,25 (1 − √(1 − 0,502)) = **0,368** ; z = 45 × (1 − 0,147) = **38,4 cm** ;
+$$ A = 180 × 10⁶ / (384 × 434,8) = 1 079 mm² = 10,8 cm² *(4 pts)*
+3. **4 HA20 = 12,57 cm²**. Largeur libre : 25 − 2 × 3 − 2 × 0,8 = 17,4 cm ; 17,4 − 4 × 2 = 9,4 cm pour 3 espaces → 3,13 cm ≥ max (2 ; 3) ✔ : un seul lit. *(2 pts)*
+4. 0,23 × 25 × 45 × 2,1 / 500 = 1,09 cm² ≤ 12,57 ✔. *(1 pt)*
+
+### Partie B — Mu = 300 kN·m (8 pts)
+5. μ = 300 / (250 × 450² × 14,17 × 10⁻⁶) = **0,418 > 0,372** → le béton comprimé ne suffit pas : **aciers comprimés** nécessaires (ou section à redimensionner). *(2 pts)*
+6. Ml = μl b d² fbu = 0,372 × 717,4 = **266,6 kN·m**. *(2 pts)*
+7. ΔM = 300 − 266,6 = 33,4 kN·m → **A' = 33,4 × 10⁶ / ((450 − 50) × 434,8) = 192 mm² = 1,92 cm²** (2 HA12) ;
+   zl = 45 (1 − 0,4 × 0,617) = 33,9 cm → A = 266,6 × 10⁶ / (339 × 434,8) + 192 = 1 809 + 192 = **2 001 mm² = 20,0 cm²** (par exemple **4 HA25 + 2 HA12 = 21,9 cm²** sur deux lits ; la solution de la partie C est plus économique). *(4 pts)*
+
+### Partie C — Réflexion (2 pts)
+8. **Augmenter la hauteur** de la poutre (d² intervient) : avec h = 60 cm (d = 55 cm), μ = 300 / (250 × 550² × 14,17 × 10⁻⁶) = 0,28 < 0,372 : plus d'aciers comprimés et moins d'acier au total. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser h au lieu de d.
+> - Oublier de comparer μ à μl avant de calculer.
+> - Mélanger N·mm et kN·m dans μ (tout en N et mm).`},
  exercices:[
   {t:"Poutre de plancher", d:1, e:`Poutre de 20 × 40 cm (d = 36 cm), Mu = 60 kN·m, fc28 = 25 MPa, FeE400. Calculer As et choisir les barres.`, c:`μ = 0,060 / (0,20 × 0,36² × 14,17) = 0,060 / 0,3673 = **0,163** ≤ 0,392.
 α = 1,25 × (1 − √(1 − 0,327)) = **0,224** ; z = 0,36 × (1 − 0,090) = **0,328 m**.
@@ -914,6 +1289,44 @@ En plus du calcul, on limite l'ouverture des fissures en fissuration préjudicia
 > - n = 15 ; b y1²/2 = n As (d − y1) ; I = b y1³/3 + n As (d − y1)².
 > - σbc = Mser y1 / I ; σs = n Mser (d − y1) / I.
 > - En FP/FTP, l'ELS commande souvent les aciers.`,
+ sujet:{titre:"Vérification à l'ELS d'une poutre en fissuration préjudiciable", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** La poutre 25 × 50 (d = 45 cm) ferraillée avec **4 HA20** en travée est une poutre de façade exposée : **fissuration préjudiciable**. On vérifie les contraintes de service.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Moment de service **Mser = 128 kN·m** ; coefficient d'équivalence **n = 15** ;
+- 4 HA20 : A = **12,57 cm²** ; 5 HA20 : 15,71 cm² ;
+- Limites : σbc ≤ 0,6 fc28 = **15 MPa** ; σs ≤ **250 MPa** (fissuration préjudiciable) ;
+- Section homogène fissurée (sans aciers comprimés) : position de l'axe neutre b y² / 2 − n A (d − y) = 0 ; I = b y³ / 3 + n A (d − y)² ; σbc = Mser y / I ; σs = n Mser (d − y) / I.
+
+### Partie A — Section fissurée (8 points)
+1. Expliquer le principe de la section homogénéisée et le rôle de n. (2 pts)
+2. Calculer la position y de l'axe neutre. (3 pts)
+3. Calculer le moment quadratique I de la section fissurée. (3 pts)
+
+### Partie B — Contraintes (6 points)
+4. Calculer σbc et σs. (4 pts)
+5. Les vérifications sont-elles satisfaites ? (2 pts)
+
+### Partie C — Correction (6 points)
+6. Refaire le calcul avec 5 HA20 (sur deux lits, on conservera d = 45 cm pour simplifier) et conclure. (4 pts)
+7. Pourquoi l'ELS gouverne-t-il en fissuration préjudiciable ? (2 pts)`,
+  corrige:`### Partie A — Section fissurée (8 pts)
+1. On remplace l'acier par une aire de béton fictive **n fois plus grande** (n = Es/Eb ≈ 15) pour calculer comme un seul matériau ; le béton tendu, fissuré, est négligé. *(2 pts)*
+2. En cm : 12,5 y² − 15 × 12,57 × (45 − y) = 0 → 12,5 y² + 188,6 y − 8 485 = 0 → **y = 19,6 cm**. *(3 pts)*
+3. I = 25 × 19,58³ / 3 + 188,6 × (45 − 19,58)² = 62 550 + 121 840 = **184 400 cm⁴**. *(3 pts)*
+
+### Partie B — Contraintes (6 pts)
+4. σbc = 128 × 10⁶ × 195,8 / (184 400 × 10⁴) = **13,6 MPa** ; σs = 15 × 128 × 10⁶ × 254,2 / (184 400 × 10⁴) = **264,7 MPa**. *(4 pts)*
+5. Béton : 13,6 ≤ 15 ✔ ; acier : **264,7 > 250 MPa ✘** → ouverture de fissures excessive. *(2 pts)*
+
+### Partie C — Correction (6 pts)
+6. 5 HA20 : n A = 235,7 → y = 21,2 cm ; I = 212 900 cm⁴ ; σbc = **12,7 MPa** ✔ ; σs = 15 × 128 × 10⁶ × 238,1 / (212 900 × 10⁴) = **214,8 MPa ≤ 250** ✔. On retient **5 HA20** (ou 4 HA20 + 1 HA16 selon le calcul exact de d). *(4 pts)*
+7. La contrainte limite de l'acier à l'ELS (250 MPa) est bien inférieure à fsu (435 MPa) : pour limiter l'ouverture des fissures et protéger les aciers de la corrosion, il faut souvent **plus d'acier** que l'ELU n'en demande. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le coefficient n dans le calcul de σs.
+> - Prendre y comme si la section était entièrement comprimée.
+> - Conclure sur le seul béton : c'est souvent l'acier qui ne passe pas.`},
  exercices:[
   {t:"Contraintes de service d'une poutre", d:2, e:`Poutre de 20 × 40 cm (d = 36 cm) armée de 3 HA14 (4,62 cm²), Mser = 40 kN·m, fc28 = 25 MPa, FeE400, n = 15.
 1. Calculer la position de l'axe neutre.
@@ -991,6 +1404,43 @@ La table ne participe que si elle est bien **liée** à la nervure : les aciers 
 > - Mtu = b h0 fbu (d − h0/2) : si Mu ≤ Mtu, calcul rectangulaire de largeur b.
 > - Sinon : débords (As1) + nervure (As2).
 > - Sur appui (moment négatif) : section rectangulaire de largeur b0.`,
+ sujet:{titre:"Poutre en T d'un plancher : position de l'axe neutre et aciers", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre de plancher coulée avec la dalle travaille en **section en T**. On calcule ses aciers en travée.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Largeur de table participante **b = 80 cm**, épaisseur de table **h0 = 12 cm**, largeur d'âme **b0 = 20 cm**, hauteur utile **d = 45 cm** ;
+- Moment ultime en travée **Mu = 250 kN·m** ;
+- Moment équilibré par la table entièrement comprimée : Mt = b h0 fbu (d − h0/2) ;
+- HA20 = 3,14 cm².
+
+### Partie A — Comportement (5 points)
+1. Pourquoi une partie de la dalle participe-t-elle à la résistance de la poutre ? Comment limite-t-on la largeur participante ? (3 pts)
+2. Calculer Mt. (2 pts)
+
+### Partie B — Calcul des aciers (10 points)
+3. Comparer Mu et Mt : où se trouve l'axe neutre ? Comment calcule-t-on alors la section ? (3 pts)
+4. Calculer μ, α, z et la section d'aciers. (5 pts)
+5. Choisir les barres pour une âme de 20 cm (enrobage 3 cm, cadres HA8, espacement libre ≥ 3 cm). (2 pts)
+
+### Partie C — Comparaison (5 points)
+6. Calculer la section d'aciers d'une poutre rectangulaire 20 × 50 (d = 45 cm) soumise au même moment. Conclure. (5 pts)`,
+  corrige:`### Partie A — Comportement (5 pts)
+1. La dalle est coulée avec la poutre : en travée, sa partie proche de la poutre est **comprimée** avec la face supérieure de la poutre ; elle augmente beaucoup la zone de béton comprimé. La largeur participante est limitée (au dixième de la portée de part et d'autre de l'âme, et à la moitié de la distance entre poutres). *(3 pts)*
+2. $$ Mt = 800 × 120 × 14,17 × (450 − 60) = 530,4 × 10⁶ N·mm = 530,4 kN·m *(2 pts)*
+
+### Partie B — Aciers (10 pts)
+3. **Mu = 250 < Mt = 530,4** : l'axe neutre est **dans la table** ; la section se calcule comme une **section rectangulaire b × d = 80 × 45** (le béton tendu sous l'axe neutre est négligé). *(3 pts)*
+4. μ = 250 × 10⁶ / (800 × 450² × 14,17) = **0,109** ; α = **0,145** ; z = 45 × (1 − 0,058) = **42,4 cm** ;
+$$ A = 250 × 10⁶ / (424 × 434,8) = 1 356 mm² = 13,6 cm² *(5 pts)*
+5. 3 HA25 sur un lit ne passent pas (espacements de 2,45 cm < 3 cm) → **5 HA20 = 15,71 cm²** sur deux lits (3 + 2), en vérifiant que d reste voisin de 45 cm. *(2 pts)*
+
+### Partie C — Comparaison (5 pts)
+6. Rectangle 20 × 45 : μ = 250 × 10⁶ / (200 × 450² × 14,17) = **0,436 > 0,372** → aciers comprimés indispensables et section d'acier bien plus forte. La table divise μ par 4 : la section en T est **beaucoup plus efficace**. *(5 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer avec b0 alors que l'axe neutre est dans la table.
+> - Oublier de vérifier la position de l'axe neutre avant de choisir la méthode.
+> - Prendre une largeur de table supérieure à la largeur participante réglementaire.`},
  exercices:[
   {t:"Largeur de table", d:1, e:`Des poutres de 5 m de portée, de 20 cm de large, sont espacées de 3,5 m entre axes. Calculer la largeur de table participante d'une poutre intermédiaire et d'une poutre de rive.`, c:`l1 = 3,50 − 0,20 = 3,30 m ; b1 = min(5/10 ; 3,30/2) = min(0,50 ; 1,65) = **0,50 m**.
 Poutre intermédiaire : **b = 0,20 + 2 × 0,50 = 1,20 m**.
@@ -1077,6 +1527,45 @@ condition presque toujours vérifiée pour les dalles de bâtiment (sauf poinço
 > - At / (b0 st) ≥ (τu − 0,3 ft28 k) / (0,9 fe / γs) ; minimum At fe / (b0 st) ≥ 0,4 MPa ; st ≤ min(0,9 d ; 40 cm).
 > - Caquot : premier cadre à st0/2, puis 7, 8, 9, 10, 11, 13, 16, 20, 25, 35, 40, répétés n fois.
 > - Appui : Vu ≤ 0,267 a b0 fc28 et As ancrée ≥ Vu / σs.`,
+ sujet:{titre:"Armatures d'effort tranchant d'une poutre et vérifications d'appui", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** La poutre 25 × 50 cm (d = 45 cm) d'un plancher de bureaux reprend un effort tranchant ultime **Vu = 180 kN** au nu de l'appui. Fissuration peu préjudiciable, reprise de bétonnage non traitée (k = 1).
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- τu = Vu / (b0 d) ; limite : τu ≤ min (0,2 fc28 / γb ; 5 MPa) ;
+- At / st ≥ b0 (τu − 0,3 ft28 k) / (0,9 fe / γs) ; st ≤ min (0,9 d ; 40 cm) ; At fe / (b0 st) ≥ 0,4 MPa ;
+- Cadre HA8 + étrier HA8 : on retient **2 brins HA8 = 1,005 cm²** par nappe ;
+- Bielle d'appui : Vu ≤ 0,267 a b0 fc28 (a : longueur d'appui de la bielle) ;
+- Aciers inférieurs à ancrer sur l'appui : A ≥ Vu γs / fe ;
+- Suite de Caquot (cm) : 7 – 8 – 9 – 10 – 11 – 13 – 16 – 20 – 25 – 35 – 40.
+
+### Partie A — Contrainte tangente (5 points)
+1. Calculer τu et la contrainte limite. Conclure. (5 pts)
+
+### Partie B — Armatures transversales (9 points)
+2. Calculer At / st puis l'espacement st0 au voisinage de l'appui. (4 pts)
+3. Vérifier l'espacement maximal et le pourcentage minimal. (2 pts)
+4. Expliquer la méthode de Caquot pour répartir les cadres sur une demi-portée de 3 m (on ne demande que le principe et les premiers espacements). (3 pts)
+
+### Partie C — Appui (6 points)
+5. Calculer la longueur minimale d'appui de la bielle a. (3 pts)
+6. Calculer la section d'aciers inférieurs à prolonger et ancrer sur l'appui. (3 pts)`,
+  corrige:`### Partie A — τu (5 pts)
+1. τu = 180 000 / (250 × 450) = **1,60 MPa** ; limite = min (0,2 × 25 / 1,5 = 3,33 ; 5) = **3,33 MPa** → **1,60 ≤ 3,33** ✔ : les bielles de béton ne s'écrasent pas, des armatures droites suffisent. *(5 pts)*
+
+### Partie B — Cadres (9 pts)
+2. $$ At / st ≥ 250 × (1,60 − 0,3 × 2,1) / (0,9 × 434,8) = 250 × 0,97 / 391,3 = 0,620 mm²/mm
+   st0 ≤ 100,5 / 0,620 = **162 mm** → **st0 = 15 cm**. *(4 pts)*
+3. st max = min (0,9 × 45 = 40,5 ; 40) = **40 cm** ✔ ; pourcentage minimal : st ≤ 100,5 × 500 / (250 × 0,4) = 502 mm ✔. *(2 pts)*
+4. Caquot : on place le **premier cadre à st0 / 2 = 7,5 cm** du nu de l'appui, puis on répète chaque espacement de la suite **autant de fois qu'il y a de mètres dans la demi-portée** (ici 3 fois), en partant de la valeur de la suite immédiatement inférieure ou égale à st0 : **3 × 13 cm, 3 × 16 cm, 3 × 20 cm, 3 × 25 cm…** jusqu'au milieu de la travée. *(3 pts)*
+
+### Partie C — Appui (6 pts)
+5. a ≥ 180 000 / (0,267 × 250 × 25) = **108 mm** → la bielle doit s'appuyer sur au moins **11 cm** (largeur du poteau moins enrobage et rayon de courbure : un poteau de 25 cm convient). *(3 pts)*
+6. A ≥ 180 000 × 1,15 / 500 = **414 mm² = 4,14 cm²** à prolonger jusqu'à l'appui et ancrer (par exemple 2 HA20 = 6,28 cm² avec crochets). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter un seul brin pour un cadre (un cadre fermé travaille par ses deux branches verticales).
+> - Commencer la suite de Caquot à st0 sans placer le premier cadre à st0 / 2.
+> - Oublier d'ancrer les aciers inférieurs sur l'appui : la bielle d'appui doit être « retenue ».`},
  exercices:[
   {t:"Vérifier la contrainte tangentielle", d:1, e:`Une poutre de 20 × 40 cm (d = 36 cm) subit Vu = 95 kN. fc28 = 25 MPa, fissuration peu préjudiciable. Calculer τu et conclure.`, c:`**τu = 0,095 / (0,20 × 0,36) = 1,32 MPa ≤ 3,33 MPa** ✔ : la section est suffisante vis-à-vis des bielles ; il reste à calculer les cadres.`},
   {t:"Espacement des cadres", d:2, e:`Même poutre (20 × 40, d = 36 cm, Vu = 95 kN), FeE400, k = 1, cadres HA6 (2 brins).
@@ -1172,6 +1661,47 @@ Pour l'exemple : Ay ≥ 0,0008 × 100 × 15 = 1,20 cm²/m ; Ax ≥ 0,0008 × 1,1
 > - Continuité : 0,85 / 0,75 M0 en travée ; 0,3 / 0,5 M0 sur appuis.
 > - Minimum : ρ0 = 0,0008 (FeE400) ; espacements ≤ min(3h ; 33 cm).
 > - φ ≤ h/10 ; pas d'étriers si τu ≤ 1,17 MPa.`,
+ sujet:{titre:"Dalle pleine portant dans deux directions", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le séjour d'une villa est couvert par un panneau de **dalle pleine de 15 cm**, de dimensions entre nus **lx = 4,00 m** et **ly = 5,00 m**, continu sur ses quatre côtés.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Poids propre 25 × 0,15 = 3,75 kN/m², revêtements 1,25 kN/m² → **G = 5,0 kN/m²** ; **Q = 1,5 kN/m²** ;
+- Coefficients (ν = 0, ELU) pour α = lx / ly = 0,80 : **μx = 0,0561 ; μy = 0,5959** ; Mx = μx pu lx² ; My = μy Mx ;
+- Panneau continu : moment en travée 0,75 M ; moment sur appui 0,5 M ;
+- Hauteur utile : dx = 12 cm (lit inférieur), dy = 11,2 cm ;
+- Section minimale (FeE500) : Ax ≥ 0,0006 × (3 − α)/2 × b h ; espacement ≤ min (3 h ; 33 cm) ;
+- HA8 = 0,503 cm² ; HA10 = 0,785 cm².
+
+### Partie A — Comportement (4 points)
+1. Calculer α. La dalle porte-t-elle dans un ou deux sens ? Justifier. (2 pts)
+2. Vérifier l'épaisseur (h ≥ lx / 40 pour un panneau continu). (2 pts)
+
+### Partie B — Moments (6 points)
+3. Calculer pu. (1 pt)
+4. Calculer Mx et My, puis les moments en travée et sur appui. (5 pts)
+
+### Partie C — Aciers (10 points)
+5. Calculer la section d'aciers en travée dans le sens lx (bande de 1 m). (4 pts)
+6. Calculer la section minimale et choisir les barres et leur espacement. (3 pts)
+7. Faire de même dans le sens ly. (3 pts)`,
+  corrige:`### Partie A — Comportement (4 pts)
+1. α = 4,00 / 5,00 = **0,80 > 0,4** → la dalle porte dans **les deux sens** (les deux portées sont voisines : la charge se partage). *(2 pts)*
+2. lx / 40 = 400 / 40 = 10 cm ≤ 15 cm ✔. *(2 pts)*
+
+### Partie B — Moments (6 pts)
+3. pu = 1,35 × 5,0 + 1,5 × 1,5 = 6,75 + 2,25 = **9,0 kN/m²**. *(1 pt)*
+4. **Mx = 0,0561 × 9,0 × 4,00² = 8,08 kN·m/m** ; **My = 0,5959 × 8,08 = 4,81 kN·m/m**. Travée : 0,75 Mx = **6,06** et 0,75 My = **3,61 kN·m/m** ; appuis : 0,5 Mx = **4,04 kN·m/m**. *(5 pts)*
+
+### Partie C — Aciers (10 pts)
+5. μ = 6,06 × 10⁶ / (1 000 × 120² × 14,17) = **0,0297** ; α = 0,038 ; z = 11,8 cm ;
+$$ Ax = 6,06 × 10⁶ / (118 × 434,8) = 118 mm²/m = 1,18 cm²/m *(4 pts)*
+6. A min = 0,0006 × (3 − 0,8)/2 × 1 000 × 150 = **99 mm²/m** ; espacement max = min (45 ; 33) = 33 cm → **HA8 tous les 25 cm** (2,01 cm²/m) ✔ (on évite les espacements trop grands pour la fissuration et la manutention). *(3 pts)*
+7. μ = 3,61 × 10⁶ / (1 000 × 112² × 14,17) = 0,0203 → Ay = **0,75 cm²/m** ; minimum dans ce sens : 0,0006 × 1 000 × 150 = 0,90 cm²/m → **HA8 tous les 25 cm** également (2,01 cm²/m ≥ 0,90). Sur appuis : chapeaux HA8 e = 25 sur environ lx/4 = 1,00 m. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la dalle comme une poutre de 4 m portant dans un seul sens.
+> - Oublier les chapeaux sur appuis continus (fissures au-dessus des poutres).
+> - Placer les aciers du sens ly sous ceux du sens lx (le sens le plus sollicité est en dessous).`},
  exercices:[
   {t:"Un sens ou deux sens ?", d:1, e:`Pour chacun des panneaux suivants, calculer α et dire comment il porte : 3,0 × 8,0 m ; 4,0 × 6,0 m ; 4,5 × 4,5 m.`, c:`- 3,0 × 8,0 : α = 0,375 < 0,4 → **un seul sens** (portée 3,0 m).
 - 4,0 × 6,0 : α = 0,667 → **deux sens**.
@@ -1261,6 +1791,43 @@ Dispositions :
 > - (A − a)/4 ≤ d ≤ A − a ; h = d + 5 cm.
 > - As = Nu (A − a) / (8 d σs) dans chaque direction.
 > - Béton de propreté, enrobage 4–5 cm, crochets si ls > A/4.`,
+ sujet:{titre:"Semelle isolée sous poteau : coffrage et ferraillage", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un poteau 30 × 30 cm transmet ses charges à une semelle isolée carrée sur un sol dont la contrainte admissible est connue par l'étude géotechnique.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- **Nu = 900 kN**, **Nser = 650 kN** ; contrainte admissible du sol **σsol = 0,25 MPa** ;
+- Hauteur utile par la méthode des bielles : d ≥ (B − b) / 4 ; hauteur totale h = d + 5 cm ;
+- Aciers (méthode des bielles, chaque sens) : A = Nu (B − b) / (8 d fsu) ;
+- Poids volumique du béton 25 kN/m³ ; HA12 = 1,13 cm² ; HA14 = 1,54 cm².
+
+### Partie A — Coffrage (9 points)
+1. Calculer l'aire minimale et le côté B (multiple de 5 cm). (3 pts)
+2. Calculer d et h. (2 pts)
+3. Vérifier la contrainte sur le sol en tenant compte du poids de la semelle. (4 pts)
+
+### Partie B — Ferraillage (7 points)
+4. Expliquer le fonctionnement par bielles et tirant. (2 pts)
+5. Calculer la section d'aciers dans chaque sens et choisir les barres. (5 pts)
+
+### Partie C — Exécution (4 points)
+6. Citer quatre précautions d'exécution (béton de propreté, enrobage, attentes du poteau…). (4 pts)`,
+  corrige:`### Partie A — Coffrage (9 pts)
+1. A ≥ 650 / 250 = **2,60 m²** → B ≥ √2,60 = 1,61 m → **B = 1,70 m** (on prévoit le poids propre). *(3 pts)*
+2. d ≥ (1,70 − 0,30) / 4 = **0,35 m** → **h = 0,40 m**. *(2 pts)*
+3. Poids : 1,70² × 0,40 × 25 = **28,9 kN** ; σ = (650 + 28,9) / 1,70² = 678,9 / 2,89 = **234,9 kPa ≤ 250** ✔. *(4 pts)*
+
+### Partie B — Ferraillage (7 pts)
+4. La charge descend du poteau par des **bielles de béton comprimé** inclinées vers les bords ; leurs poussées horizontales sont reprises en partie basse par la **nappe d'aciers**, qui joue le rôle de tirant. *(2 pts)*
+5. $$ A = 900 000 × (1 700 − 300) / (8 × 350 × 434,8) = 1 035 mm² = 10,35 cm²
+   par sens → **7 HA14 (10,78 cm²)** ou 10 HA12 (11,31 cm²) dans chaque direction, espacement ≈ 25 cm (7 HA14) avec crochets aux extrémités. *(5 pts)*
+
+### Partie C — Exécution (4 pts)
+6. Béton de propreté (5 à 10 cm) au fond de fouille propre et sec ; cales d'enrobage (5 cm en fondation) ; aciers en croix bien ligaturés, les plus longs en dessous si la semelle n'est pas carrée ; **attentes du poteau** ancrées sur la nappe inférieure et maintenues verticales ; vibration ; réception du fond de fouille par le géotechnicien. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Dimensionner la surface avec Nu au lieu de Nser.
+> - Oublier le poids de la semelle (et des terres au-dessus) dans la vérification du sol.
+> - Prendre d trop faible : les bielles deviennent trop inclinées et les aciers explosent.`},
  exercices:[
   {t:"Dimensions d'une semelle carrée", d:1, e:`Un poteau de 25 × 25 cm transmet Nser = 450 kN (poids de la semelle compris). σ̄sol = 0,25 MPa. Déterminer A, B, d et h.`, c:`A = B ≥ √(450 / 250) = √1,8 = 1,34 m → **A = B = 1,40 m**.
 d ≥ (1,40 − 0,25) / 4 = 0,29 m → **d = 30 cm**, **h = 35 cm**.
@@ -1351,6 +1918,43 @@ Pour un calcul précis, on trace la **courbe enveloppe des moments**, on la déc
 > - Conditions : Q ≤ max(2G ; 5 kN/m²), portées dans un rapport 0,8–1,25, inertie constante, FPN.
 > - Caquot : Ma = −(qw l'w³ + qe l'e³) / (8,5 (l'w + l'e)), l' = 0,8 l pour les travées intermédiaires.
 > - Chapeaux sur au moins L/5 (L/4 près des rives) ; la moitié des aciers inférieurs filent jusqu'aux appuis.`,
+ sujet:{titre:"Poutre continue à trois travées : méthode forfaitaire et chapeaux", duree:75, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une poutre continue de plancher comporte **trois travées égales de 4,50 m**. On utilise la méthode forfaitaire du BAEL.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- G = **15 kN/m**, Q = **5 kN/m** sur toutes les travées ; α = Q / (G + Q) ;
+- M0 = pu L² / 8 (moment de la travée supposée isostatique) ;
+- Moments sur appuis : 0,5 M0 pour un appui voisin d'un appui de rive d'une poutre à trois travées ; 0 sur les appuis de rive (on prévoit des aciers forfaitaires de 0,15 M0) ;
+- Moments en travée Mt : Mt + (Mw + Me)/2 ≥ max [ (1 + 0,3 α) M0 ; 1,05 M0 ], avec Mt ≥ (1,2 + 0,3 α) M0 / 2 en travée de rive et Mt ≥ (1 + 0,3 α) M0 / 2 en travée intermédiaire ;
+- Longueur des chapeaux : 1/5 de la plus grande portée adjacente (appui voisin d'un appui de rive).
+
+### Partie A — Conditions d'application (4 points)
+1. Citer les quatre conditions d'application de la méthode forfaitaire et vérifier celle sur les charges (Q ≤ max [2 G ; 5 kN/m²]). (4 pts)
+
+### Partie B — Moments (12 points)
+2. Calculer pu, M0 et α. (3 pts)
+3. Calculer les moments sur les appuis intermédiaires. (2 pts)
+4. Calculer le moment en travée de rive. (4 pts)
+5. Calculer le moment en travée intermédiaire. (3 pts)
+
+### Partie C — Arrêt des barres (4 points)
+6. Calculer la longueur des chapeaux sur les appuis intermédiaires et indiquer où arrêter une partie des aciers inférieurs. (4 pts)`,
+  corrige:`### Partie A — Conditions (4 pts)
+1. Plancher à charge d'exploitation modérée (Q ≤ max [2G ; 5 kN/m²]) ; moments d'inertie identiques dans les travées ; portées successives dans un rapport compris entre 0,8 et 1,25 ; fissuration peu préjudiciable. Ici Q = 5 ≤ 2 × 15 = 30 ✔ ; portées égales ✔. *(4 pts)*
+
+### Partie B — Moments (12 pts)
+2. pu = 1,35 × 15 + 1,5 × 5 = **27,75 kN/m** ; M0 = 27,75 × 4,5² / 8 = **70,24 kN·m** ; α = 5 / 20 = **0,25**. *(3 pts)*
+3. Appuis B et C : **0,5 M0 = 35,1 kN·m** (moments négatifs). *(2 pts)*
+4. Travée de rive (Mw = 0, Me = 0,5 M0) : (1 + 0,075) M0 − 0,25 M0 = **0,825 M0** ; 1,05 M0 − 0,25 M0 = 0,80 M0 ; minimum 0,6375 M0 → **Mt = 0,825 × 70,24 = 57,9 kN·m**. *(4 pts)*
+5. Travée intermédiaire (Mw = Me = 0,5 M0) : 1,075 M0 − 0,5 M0 = **0,575 M0** ; minimum 0,5375 M0 → **Mt = 40,4 kN·m**. *(3 pts)*
+
+### Partie C — Arrêt des barres (4 pts)
+6. Chapeaux sur B et C : 4,50 / 5 = **0,90 m** de part et d'autre de l'appui (mesuré depuis le nu), et au moins la longueur d'ancrage. Aciers inférieurs : la moitié peut être arrêtée à environ L/10 du nu des appuis, l'autre moitié est prolongée jusqu'aux appuis et ancrée. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer la méthode forfaitaire hors de son domaine (charges fortes, portées très différentes).
+> - Oublier les aciers de chapeau forfaitaires sur les appuis de rive (0,15 M0).
+> - Confondre la travée de rive et la travée intermédiaire.`},
  exercices:[
   {t:"Conditions de la méthode forfaitaire", d:1, e:`Vérifier si la méthode forfaitaire s'applique :
 1. plancher de logement, G = 6 kN/m², Q = 1,5 kN/m², portées 3,8 – 4,2 – 4,0 m, même section ;
@@ -1434,6 +2038,49 @@ Pour l = 60 cm et un treillis fe = 500 MPa : A⊥ ≥ 4 × 60 / 500 = **0,48 cm�
 > - Poutrelle : q = p × 0,60 ; section en T (b = 60, h0 = 4, b0 = 12).
 > - Dalle de compression : A⊥ ≥ 4 l / fe, A// ≥ A⊥/2.
 > - Étaiement, chapeaux sur appuis, nervures de chaînage, renforts sous cloisons.`,
+ sujet:{titre:"Plancher à corps creux 16+4 : poutrelle et dalle de compression", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le plancher de l'étage d'une villa est un plancher à **corps creux 16+4** (hourdis de 16 cm, dalle de compression de 4 cm), avec des poutrelles en béton armé coulées sur place tous les **60 cm**.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Portée des poutrelles (entre nus) **4,20 m**, appuis simples ;
+- Plancher : **G = 5,0 kN/m²** (plancher + revêtements + cloisons), **Q = 1,5 kN/m²** ;
+- Section en T de la poutrelle : b = **60 cm**, h0 = **4 cm**, b0 = **12 cm**, h = **20 cm**, d = **18 cm** ;
+- Dalle de compression : treillis soudé avec A⊥ ≥ 4 l / fe (l : entraxe des poutrelles en cm, A en cm²/m) et A// ≥ A⊥ / 2 ;
+- Condition de flèche : h / L ≥ 1 / 22,5 ; HA10 = 0,785 cm², HA12 = 1,131 cm².
+
+### Partie A — Charges (4 points)
+1. Calculer la charge ultime par poutrelle (bande de 60 cm). (2 pts)
+2. Calculer Mu et Vu. (2 pts)
+
+### Partie B — Aciers de la poutrelle (9 points)
+3. Calculer le moment équilibré par la table et conclure sur la position de l'axe neutre. (3 pts)
+4. Calculer les aciers inférieurs et choisir les barres. (4 pts)
+5. Vérifier la contrainte tangente (limite 3,33 MPa). (2 pts)
+
+### Partie C — Dalle de compression et flèche (7 points)
+6. Calculer les sections du treillis soudé et choisir un panneau (TS 5 mm maille 20 × 20 = 0,98 cm²/m). (4 pts)
+7. Vérifier la condition de flèche. (1 pt)
+8. Pourquoi le treillis soudé est-il indispensable dans la dalle de compression ? (2 pts)`,
+  corrige:`### Partie A — Charges (4 pts)
+1. pu = (1,35 × 5,0 + 1,5 × 1,5) × 0,60 = 9,0 × 0,60 = **5,40 kN/m**. *(2 pts)*
+2. **Mu = 5,40 × 4,20² / 8 = 11,91 kN·m** ; **Vu = 5,40 × 4,20 / 2 = 11,34 kN**. *(2 pts)*
+
+### Partie B — Poutrelle (9 pts)
+3. Mt = 600 × 40 × 14,17 × (180 − 20) = **54,4 kN·m > Mu** → axe neutre dans la table : calcul en section rectangulaire **60 × 18**. *(3 pts)*
+4. μ = 11,91 × 10⁶ / (600 × 180² × 14,17) = **0,043** ; α = 0,055 ; z = 17,6 cm ;
+$$ A = 11,91 × 10⁶ / (176 × 434,8) = 156 mm² = 1,56 cm²
+   → **2 HA10 (1,57 cm²)** ou 1 HA12 + 1 HA10 (1,92 cm²). *(4 pts)*
+5. τu = 11 340 / (120 × 180) = **0,53 MPa ≤ 3,33** ✔ (épingles HA6 de liaison). *(2 pts)*
+
+### Partie C — Dalle de compression (7 pts)
+6. A⊥ ≥ 4 × 60 / 500 = **0,48 cm²/m** (espacement ≤ 20 cm) ; A// ≥ **0,24 cm²/m** (espacement ≤ 33 cm) → **TS 5 mm maille 20 × 20** (0,98 cm²/m dans chaque sens) ✔. *(4 pts)*
+7. 20 / 420 = **0,0476 ≥ 1 / 22,5 = 0,0444** ✔ : pas de calcul de flèche nécessaire. *(1 pt)*
+8. Il répartit les charges localisées entre poutrelles, limite la fissuration de retrait de la dalle mince et lie le plancher aux chaînages (diaphragme). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la poutrelle comme une section rectangulaire 12 × 20 en oubliant la table.
+> - Oublier que la charge d'une poutrelle est celle d'une bande égale à l'entraxe.
+> - Poser les hourdis dans le mauvais sens ou sans étaiement des poutrelles pendant le coulage.`},
  exercices:[
   {t:"Choisir le plancher", d:1, e:`Les poutrelles d'un plancher franchissent 5,0 m entre nus d'appuis. Quelle hauteur de plancher choisir ? Et pour 3,8 m ?`, c:`5,0 m : ht ≥ 500 / 22,5 = **22,2 cm** → plancher **20+4** (24 cm).
 3,8 m : ht ≥ 380 / 22,5 = **16,9 cm** → plancher **16+4** (20 cm).`},
@@ -1503,6 +2150,47 @@ Avantages : répartition des charges, tassements plus uniformes, protection cont
 > - Poteau en limite : semelle excentrée + longrine de redressement ; Rrive = N L / (L − e).
 > - Longrines : porter les murs, solidariser, redresser ; au moins 4 HA12.
 > - Radier si sol médiocre ou semelles > 50 % de l'emprise.`,
+ sujet:{titre:"Semelle excentrée en limite de propriété et choix d'un radier", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un immeuble est construit en limite de propriété : le poteau de rive ne peut pas avoir une semelle centrée. On le relie par une **longrine de redressement** à la semelle du poteau intérieur. On étudie aussi un autre bâtiment sur sol très médiocre.
+
+**Données**
+- Poteau de rive P1 (30 × 30 cm, axe à 0,15 m de la limite) : **Nser,1 = 400 kN** ; poteau intérieur P2 à **5,00 m** (entre axes) : **Nser,2 = 600 kN** ;
+- Semelle de P1 : largeur **1,40 m** perpendiculairement à la limite (elle va de la limite vers l'intérieur) ;
+- Contrainte admissible du sol : **0,20 MPa** ;
+- Second bâtiment : emprise **12 × 10 m**, charge totale de service **5 400 kN**, sol de **60 kPa** admissibles.
+
+### Partie A — Excentrement (5 points)
+1. Calculer l'excentricité e entre l'axe du poteau P1 et le centre de sa semelle. (2 pts)
+2. Expliquer pourquoi une semelle excentrée sans longrine basculerait. (3 pts)
+
+### Partie B — Longrine de redressement (9 points)
+3. En écrivant l'équilibre de la longrine (moments autour de l'axe de P2), calculer la réaction R1 sous la semelle de rive. (4 pts)
+4. En déduire la réaction R2 sous la semelle intérieure. (2 pts)
+5. Dimensionner la semelle de rive (longueur parallèle à la limite). (2 pts)
+6. Évaluer le moment maximal dans la longrine (≈ Nser,1 × e). (1 pt)
+
+### Partie C — Radier (6 points)
+7. Calculer la surface totale de semelles isolées nécessaire pour le second bâtiment et la comparer à l'emprise. (3 pts)
+8. Calculer la contrainte moyenne sous un radier général et conclure. (3 pts)`,
+  corrige:`### Partie A — Excentrement (5 pts)
+1. Centre de la semelle à 1,40 / 2 = 0,70 m de la limite ; axe du poteau à 0,15 m → **e = 0,55 m**. *(2 pts)*
+2. La charge du poteau ne passe pas par le centre de la semelle : la réaction du sol (au centre) et la charge forment un **couple** qui fait tourner la semelle ; le sol est surchargé côté limite et le poteau s'incline. *(3 pts)*
+
+### Partie B — Longrine (9 pts)
+3. La longrine relie P1 et P2 ; R1 agit au centre de la semelle de rive, à 5,00 − 0,55 = 4,45 m de P2 :
+$$ Σ M/P2 : R1 × 4,45 = N1 × 5,00 → R1 = 400 × 5,00 / 4,45 = 449,4 kN *(4 pts)*
+4. Σ F : R1 + R2 = N1 + N2 → **R2 = 1 000 − 449,4 = 550,6 kN** (la semelle intérieure est soulagée de 49,4 kN). *(2 pts)*
+5. A1 = 449,4 / 200 = 2,25 m² → longueur = 2,25 / 1,40 = 1,61 m → **1,40 × 1,65 m**. *(2 pts)*
+6. M ≈ 400 × 0,55 = **220 kN·m** (service) : la longrine est une vraie poutre (par exemple 30 × 70 cm), avec aciers principaux en partie haute. *(1 pt)*
+
+### Partie C — Radier (6 pts)
+7. Surface de semelles : 5 400 / 60 = **90 m²**, soit **75 %** de l'emprise (120 m²) : les semelles se toucheraient presque. *(3 pts)*
+8. σ = 5 400 / 120 = **45 kPa ≤ 60 kPa** ✔ : un **radier général** est la solution adaptée (règle pratique : radier dès que les semelles dépassent la moitié de l'emprise), et il réduit les tassements différentiels. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier que la longrine modifie aussi la charge de la semelle intérieure.
+> - Placer les aciers principaux de la longrine en bas (le moment est négatif côté rive).
+> - Choisir des semelles isolées géantes là où un radier est plus simple et plus sûr.`},
  exercices:[
   {t:"Semelle sous moment", d:2, e:`Semelle de 1,60 × 1,60 m sous un poteau de portique : Nser = 380 kN, Mser = 50 kN·m. σ̄sol = 0,20 MPa. Vérifier la semelle.`, c:`e = 50 / 380 = **0,132 m** ≤ A/6 = 0,267 m ✔.
 σmoy = 380 / 2,56 = 148,4 kPa ; **σmax = 148,4 × (1 + 6 × 0,132 / 1,60) = 221,7 kPa** ; **σmin = 75,2 kPa**.
@@ -1578,6 +2266,45 @@ $$ Mu = pu × l² / 2 + Pu × l      (Pu : garde-corps ou charge en bout)
 > - Paillasse : charges ramenées à l'horizontale (25 e / cos α), portée horizontale, Mt = 0,85 M0, Ma = 0,5 M0.
 > - Ne pas plier les aciers inférieurs dans un angle rentrant : les croiser.
 > - Balcon : moment négatif, aciers en haut, prolongés dans la dalle intérieure ; Q = 3,5 kN/m².`,
+ sujet:{titre:"Escalier droit et balcon en console", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Dans une villa R+1, on étudie l'escalier droit menant à l'étage et le balcon en console de la chambre parentale.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Escalier : hauteur à monter **2,80 m** en **16 marches**, giron **28 cm**, paillasse d'épaisseur **e = 17 cm**, portée horizontale de la paillasse **4,20 m** (appuis simples), revêtement **1,0 kN/m²**, **Q = 2,5 kN/m²** ; hauteur utile d = 14 cm ;
+- Balcon : console de **1,50 m**, dalle de 15 cm + revêtements : **G = 5,0 kN/m²**, **Q = 3,5 kN/m²**, garde-corps **1,0 kN/m** en bout ; hauteur utile d = 12 cm ;
+- HA10 = 0,785 cm² ; HA12 = 1,131 cm².
+
+### Partie A — Géométrie de l'escalier (4 points)
+1. Calculer la hauteur de marche, vérifier la loi de Blondel (60 ≤ 2h + g ≤ 64 cm) et calculer l'inclinaison. (4 pts)
+
+### Partie B — Paillasse (8 points)
+2. Calculer la charge permanente projetée par m² (paillasse inclinée 25 e / cos α, marches 25 h / 2, revêtement). (3 pts)
+3. Calculer pu et Mu pour une bande de 1 m. (2 pts)
+4. Calculer les aciers et choisir les barres. (3 pts)
+
+### Partie C — Balcon (8 points)
+5. Calculer le moment d'encastrement ultime par mètre de balcon. (3 pts)
+6. Calculer les aciers et préciser leur position. (3 pts)
+7. Comment les ancrer et pourquoi est-ce vital ? (2 pts)`,
+  corrige:`### Partie A — Géométrie (4 pts)
+1. h = 280 / 16 = **17,5 cm** ; 2 × 17,5 + 28 = **63 cm** ✔ (confortable) ; α = arctan (17,5 / 28) = **32,0°**. *(4 pts)*
+
+### Partie B — Paillasse (8 pts)
+2. Paillasse : 25 × 0,17 / cos 32° = 5,01 ; marches : 25 × 0,175 / 2 = 2,19 ; revêtement 1,0 → **G = 8,2 kN/m²**. *(3 pts)*
+3. pu = 1,35 × 8,2 + 1,5 × 2,5 = **14,82 kN/m** ; **Mu = 14,82 × 4,20² / 8 = 32,7 kN·m/m**. *(2 pts)*
+4. μ = 32,7 × 10⁶ / (1 000 × 140² × 14,17) = **0,118** ; α = 0,157 ; z = 13,1 cm ;
+$$ A = 32,7 × 10⁶ / (131 × 434,8) = 573 mm²/m = 5,73 cm²/m
+   → **HA12 tous les 15 cm (7,54 cm²/m)** en nappe inférieure, aciers de répartition HA8 e = 20. *(3 pts)*
+
+### Partie C — Balcon (8 pts)
+5. pu = 1,35 × 5 + 1,5 × 3,5 = 12,0 kN/m² ; $$ Mu = 12,0 × 1,5² / 2 + 1,35 × 1,0 × 1,5 = 13,50 + 2,03 = 15,5 kN·m/m *(3 pts)*
+6. μ = 15,5 × 10⁶ / (1 000 × 120² × 14,17) = 0,076 → A = **3,10 cm²/m** → **HA10 tous les 20 cm (3,93 cm²/m)**, placés en **partie supérieure** (la console est tendue en haut). *(3 pts)*
+7. Les aciers supérieurs doivent pénétrer dans la dalle intérieure sur au moins la longueur de la console ou une longueur d'ancrage suffisante (≥ 1,5 m), et être maintenus en haut par des chaises : s'ils sont descendus au coulage, le balcon s'effondre. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mettre les aciers d'un balcon en bas (erreur grave, cause d'effondrements).
+> - Oublier le poids des marches et l'inclinaison de la paillasse.
+> - Ne pas respecter la loi de Blondel (escalier inconfortable et dangereux).`},
  exercices:[
   {t:"Dessiner un escalier", d:1, e:`Hauteur d'étage : 3,06 m. On choisit des marches de 17 cm. Calculer le nombre de marches, la hauteur réelle, le giron selon Blondel (2h + g = 63 cm) et l'inclinaison.`, c:`n = 306 / 17 = 18 marches → **h = 306 / 18 = 17,0 cm**.
 Giron : g = 63 − 2 × 17 = **29 cm**. Inclinaison : tan α = 17 / 29 = 0,586 → **α = 30,4°**.
@@ -1647,6 +2374,48 @@ Pré-dimensionnement courant : largeur de la semelle B ≈ 0,5 à 0,7 H, talon �
 > - Poussée : Ka = tan²(45° − φ/2), P = ½ Ka γ H² à H/3 ; surcharge : Ka q H à H/2.
 > - Voile de soutènement = console : M = Ka γ H³ / 6 ; aciers verticaux côté terres.
 > - Stabilité : renversement, glissement, portance ; drainage et barbacanes indispensables.`,
+ sujet:{titre:"Mur de soutènement en T renversé : poussée, ferraillage et stabilité", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Pour aménager une cour en contrebas, on construit un mur de soutènement en béton armé retenant **3,00 m** de remblai.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Remblai : γ = **18 kN/m³**, φ = **30°** (Ka = 1/3), surface horizontale, pas de surcharge ni de nappe ;
+- Voile : épaisseur **20 cm**, hauteur 3,00 m au-dessus de la semelle (d = 16 cm) ;
+- Semelle : épaisseur **0,30 m**, largeur totale **2,00 m** = patin avant **0,40 m** + voile **0,20 m** + talon **1,40 m** ;
+- Poussée active : Pa = ½ Ka γ H², appliquée à H/3 de la base ;
+- Frottement semelle-sol : tan δ avec δ = 2φ/3 ; coefficients de sécurité exigés : **1,5** au glissement et au renversement.
+
+### Partie A — Voile (8 points)
+1. Calculer la poussée sur le voile (H = 3,00 m) et son moment à l'encastrement en pied de voile. (3 pts)
+2. Calculer les aciers à l'ELU (coefficient 1,35) et préciser leur face. (5 pts)
+
+### Partie B — Stabilité (10 points)
+3. Calculer la poussée totale sur la hauteur 3,30 m (voile + semelle). (2 pts)
+4. Calculer les poids stabilisants (voile, semelle, terres sur le talon). (3 pts)
+5. Vérifier la stabilité au renversement autour de l'arête avant du patin. (3 pts)
+6. Vérifier la stabilité au glissement. Conclure et proposer une solution. (2 pts)
+
+### Partie C — Drainage (2 points)
+7. Pourquoi prévoir barbacanes et drain derrière le mur ? (2 pts)`,
+  corrige:`### Partie A — Voile (8 pts)
+1. Pa = ½ × (1/3) × 18 × 3,00² = **27,0 kN/m**, à 1,00 m du pied → **Mser = 27,0 kN·m/m**. *(3 pts)*
+2. Mu = 1,35 × 27,0 = 36,5 kN·m/m ; μ = 36,5 × 10⁶ / (1 000 × 160² × 14,17) = 0,100 ; z = 15,2 cm ;
+$$ A = 36,5 × 10⁶ / (152 × 434,8) = 553 mm²/m → HA12 e = 20 cm (5,65 cm²/m)
+   sur la face **côté terres** (tendue), avec aciers de répartition et un treillis constructif côté air. *(5 pts)*
+
+### Partie B — Stabilité (10 pts)
+3. Pa = ½ × (1/3) × 18 × 3,30² = **32,7 kN/m**, à 1,10 m de la base. *(2 pts)*
+4. Voile : 0,20 × 3,00 × 25 = 15,0 kN (bras 0,50 m) ; semelle : 2,00 × 0,30 × 25 = 15,0 kN (bras 1,00 m) ; terres : 1,40 × 3,00 × 18 = 75,6 kN (bras 1,30 m) → **W = 105,6 kN/m**. *(3 pts)*
+5. Ms = 15 × 0,5 + 15 × 1,0 + 75,6 × 1,3 = **120,8 kN·m/m** ; Mr = 32,7 × 1,10 = **35,9 kN·m/m** → **FS = 3,36 ≥ 1,5** ✔. *(3 pts)*
+6. $$ FS = W tan 20° / Pa = 105,6 × 0,364 / 32,7 = 1,18 < 1,5 ✘
+   Le mur **glisse**. Solutions : **bêche** sous la semelle (butée des terres), talon plus long, ou semelle plus large. *(2 pts)*
+
+### Partie C — Drainage (2 pts)
+7. L'eau accumulée derrière le mur ajoute la **poussée hydrostatique** (beaucoup plus forte que celle des terres) : barbacanes, couche drainante et drain évitent cette mise en charge. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Placer les aciers du voile côté air.
+> - Oublier les terres sur le talon, qui stabilisent le mur.
+> - Ne vérifier que le renversement : le glissement est souvent déterminant.`},
  exercices:[
   {t:"Poussée sur un mur", d:1, e:`Un mur retient 2,50 m de terre (φ = 30°, γ = 18 kN/m³). Calculer Ka, la poussée totale et son point d'application.`, c:`Ka = tan²(30°) = **0,333**.
 P = ½ × 0,333 × 18 × 2,5² = **18,75 kN/m**, appliquée à 2,5 / 3 = **0,83 m** au-dessus de la base.`},
@@ -1715,6 +2484,45 @@ Les bureaux d'études utilisent des **diagrammes d'interaction** (courbes N–M)
 > - Mua = Mu + Nu (d − h/2) ; flexion simple sous Mua → A1 ; As = A1 − Nu / σs.
 > - Ajouter ea = max(2 cm ; L/250) et le second ordre pour les poteaux élancés.
 > - Moments réversibles (vent, séisme) → armatures symétriques.`,
+ sujet:{titre:"Poteau de portique en flexion composée", duree:75, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un poteau de rive de portique, de section **30 × 40 cm** (40 cm dans le plan de flexion), reçoit un effort normal et le moment d'encastrement de la poutre.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- **Nu = 600 kN** (compression), **Mu = 90 kN·m** (au centre de gravité de la section béton) ;
+- d = **36 cm**, d' = **4 cm** ;
+- Moment rapporté aux aciers tendus : Mua = Nu × e, avec e = e0 + (d − h/2) et e0 = Mu / Nu ;
+- Section partiellement comprimée si : Nu (d − d') − Mua ≤ (0,337 h − 0,81 d') b h fbu ;
+- Dans ce cas : on calcule A1 en flexion simple avec Mua, puis A = A1 − Nu / fsu ;
+- Section minimale de non-fragilité : 0,23 b d ft28 / fe ; minimum d'un poteau : 4 cm² par mètre de périmètre.
+
+### Partie A — Excentricités (6 points)
+1. Calculer e0 et le comparer au noyau central h/6. (2 pts)
+2. Calculer e et Mua. (4 pts)
+
+### Partie B — Nature de la section (4 points)
+3. Vérifier si la section est partiellement comprimée. (4 pts)
+
+### Partie C — Aciers (10 points)
+4. Calculer μ, z et A1. (4 pts)
+5. En déduire la section A d'aciers tendus. Commenter. (3 pts)
+6. Retenir le ferraillage du poteau en tenant compte des minimums. (3 pts)`,
+  corrige:`### Partie A — Excentricités (6 pts)
+1. **e0 = 90 / 600 = 0,15 m** ; h/6 = 0,40/6 = 0,067 m → e0 > h/6 : une partie de la section est tendue. *(2 pts)*
+2. e = 0,15 + (0,36 − 0,20) = **0,31 m** ; **Mua = 600 × 0,31 = 186 kN·m**. *(4 pts)*
+
+### Partie B — Nature (4 pts)
+3. Gauche : 600 × 0,32 − 186 = **6,0 kN·m** ; droite : (0,337 × 0,40 − 0,81 × 0,04) × 0,30 × 0,40 × 14 170 = **174,1 kN·m** → 6,0 ≤ 174,1 : **section partiellement comprimée**. *(4 pts)*
+
+### Partie C — Aciers (10 pts)
+4. μ = 186 × 10⁶ / (300 × 360² × 14,17) = **0,338 < μl = 0,372** (pas d'aciers comprimés) ; α = 0,538 ; z = 36 (1 − 0,215) = **28,3 cm** ;
+$$ A1 = 186 × 10⁶ / (283 × 434,8) = 1 514 mm² *(4 pts)*
+5. A = 1 514 − 600 000 / 434,8 = 1 514 − 1 380 = **134 mm² = 1,34 cm²** : l'effort de compression **soulage** les aciers tendus ; le moment seul aurait demandé bien plus d'acier. *(3 pts)*
+6. Non-fragilité : 0,23 × 30 × 36 × 2,1 / 500 = 1,04 cm² ; minimum poteau : 4 × 1,40 = 5,6 cm² au total → **6 HA12 (6,79 cm²)**, 3 par face, cadres HA6 e = 15 cm (le moment pouvant changer de signe avec le vent, on ferraille symétriquement). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Prendre Mu au lieu de Mua dans le calcul de flexion.
+> - Oublier de retrancher Nu / fsu.
+> - Ferrailler un seul côté alors que le vent inverse le moment.`},
  exercices:[
   {t:"Calculer l'excentricité", d:1, e:`Un poteau reçoit Nu = 650 kN et Mu = 26 kN·m. Section 30 × 30 cm. Calculer l'excentricité totale en ajoutant l'excentricité additionnelle (hauteur libre 3,0 m). La section est-elle partiellement comprimée ?`, c:`e1 = 26 / 650 = **0,040 m** ; ea = max(2 cm ; 300/250 = 1,2 cm) = **2 cm** → **e = 6,0 cm**.
 h/6 = 5 cm : e est à peine supérieur → la section est presque entièrement comprimée ; le calcul en flexion composée donnera peu ou pas d'acier tendu : le **minimum de poteau** (et la vérification en compression) sera vraisemblablement déterminant.`},
@@ -1791,6 +2599,44 @@ Un ouvrage en béton armé doit durer 50 ans et plus. Les principales causes de 
 > - Sinon : inerties fictives Ifi, Ifv ; f = Mser L² / (10 E If) ; Δft = fgv − fji + fpi − fgi.
 > - Limites : L/500 (L ≤ 5 m) ou 0,5 cm + L/1 000.
 > - Durabilité : enrobage, compacité, cure, vibration.`,
+ sujet:{titre:"Flèche d'une poutre et durabilité d'un bâtiment en zone humide", duree:75, niveau:"Licence", bareme:20,
+  enonce:`**Contexte.** Une poutre de **6,00 m** de portée (25 × 50 cm, d = 45 cm, **4 HA20**) supporte des cloisons en carreaux de plâtre. On vérifie sa flèche, puis on étudie la durabilité du bâtiment situé près de la lagune Ébrié.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Moment de service **Mser = 128 kN·m** (charge uniforme) ; inertie de la section fissurée homogénéisée **I = 184 400 cm⁴** ;
+- Modules : **Ei = 32 164 MPa** (instantané), **Ev = 10 819 MPa** (différé) ;
+- Flèche sous charge uniforme : f = 5 Mser L² / (48 E I) ;
+- Flèche admissible pour L > 5 m : **0,5 cm + L/1 000** ;
+- Conditions de dispense de calcul (poutre isostatique) : h/L ≥ 1/16 ; h/L ≥ Mt / (10 M0) ; A / (b0 d) ≤ 4,2 / fe.
+
+### Partie A — Dispense de calcul (5 points)
+1. Vérifier les trois conditions. Le calcul de la flèche est-il nécessaire ? (5 pts)
+
+### Partie B — Calcul de la flèche (9 points)
+2. Calculer la flèche instantanée et la flèche à long terme (en majorant, on prend tout le chargement de longue durée). (5 pts)
+3. Calculer la flèche admissible et conclure. (2 pts)
+4. Proposer deux solutions. (2 pts)
+
+### Partie C — Durabilité (6 points)
+5. Quel enrobage et quelle classe de fissuration retenir près de la lagune ? (2 pts)
+6. Citer quatre dispositions qui améliorent la durabilité du béton armé. (4 pts)`,
+  corrige:`### Partie A — Dispenses (5 pts)
+1. h/L = 50/600 = **0,083 ≥ 0,0625** ✔ ; Mt / (10 M0) = 0,10 (isostatique, Mt = M0) → 0,083 < 0,10 ✘ ; A / (b0 d) = 12,57 / (25 × 45) = **0,0112 > 4,2/500 = 0,0084** ✘ → **le calcul de la flèche est nécessaire**. *(5 pts)*
+
+### Partie B — Flèche (9 pts)
+2. $$ fi = 5 × 128 × 10⁶ × 6 000² / (48 × 32 164 × 1,844 × 10⁹) = 8,1 mm
+$$ fv = 5 × 128 × 10⁶ × 6 000² / (48 × 10 819 × 1,844 × 10⁹) = 24,1 mm *(5 pts)*
+3. f adm = 5 + 6 000 / 1 000 = **11 mm** → la flèche à long terme (24 mm) **dépasse** l'admissible : les cloisons en carreaux de plâtre fissureront. *(2 pts)*
+4. Augmenter la **hauteur** (I croît comme h³) : 25 × 60 ; ajouter des aciers (5 HA20, et des aciers comprimés qui réduisent le fluage) ; poser les cloisons le plus tard possible ; contre-flèche au coffrage. *(2 pts)*
+
+### Partie C — Durabilité (6 pts)
+5. Ambiance humide et saline : **fissuration préjudiciable** (voire très préjudiciable en bord de mer), enrobage **3 cm** minimum (5 cm pour les ouvrages en contact avec l'eau saumâtre). *(2 pts)*
+6. Béton compact et bien vibré (rapport E/C faible, dosage suffisant) ; **cure** humide de 7 jours ; respect de l'enrobage avec des cales ; ciment adapté ; ouverture de fissures limitée (σs ≤ 250 MPa) ; écoulement de l'eau (pentes, gouttes d'eau). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la flèche avec l'inertie de la section brute non fissurée (on la sous-estime).
+> - Oublier le fluage : la flèche réelle est environ trois fois la flèche instantanée.
+> - Réduire l'enrobage pour « gagner » de la hauteur utile.`},
  exercices:[
   {t:"Conditions de dispense", d:1, e:`Une poutre continue de 25 × 40 cm a une portée de 5,5 m. En travée, Mt = 0,75 M0. Elle est armée de 3 HA16 (6,03 cm², d = 36 cm), FeE400. Faut-il calculer la flèche ?`, c:`h / L = 0,40 / 5,5 = **0,073** ≥ 1/16 = 0,0625 ✔.
 Mt / (10 M0) = 0,75 / 10 = 0,075 → 0,073 < 0,075 ✘ (de peu).
@@ -1875,6 +2721,48 @@ Les bureaux d'études utilisent des logiciels (descente de charges, éléments f
 > - Prédimensionnement : poutres L/10 à L/16, planchers L/22,5, poteaux Br ≈ 0,64 Nu.
 > - BAEL et Eurocode 2 : mêmes principes, valeurs voisines.
 > - Toujours contrôler un logiciel par un calcul simple.`,
+ sujet:{titre:"Mini-projet : de la dalle à la semelle d'un module de bureaux", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un module de bureaux R+1 a une trame de **4,50 m × 5,00 m**. On suit le chemin des charges d'un bout à l'autre : dalle, poutre, poteau, semelle.
+
+**Données** : BAEL 91 révisé 99 — fc28 = 25 MPa, FeE500, fbu = 14,17 MPa, fsu = 434,8 MPa, ft28 = 2,1 MPa.
+- Dalle pleine 15 cm + revêtements : **G = 5,0 kN/m²** ; bureaux : **Q = 1,5 kN/m²** (on prend cette valeur pour simplifier) ;
+- Poutre principale **20 × 45 cm** (d = 40,5 cm), portée **5,00 m** (appuis simples), reprenant une bande de **4,50 m** ;
+- Poteau 25 × 25 cm, lf = 2,10 m (α = 0,747), reçoit à chaque niveau **deux réactions** de poutres principales (on néglige les poutres secondaires) ; deux niveaux identiques ;
+- Sol : **0,20 MPa** admissibles ; on prendra Nser ≈ Nu / 1,40 ;
+- HA14 = 1,54 cm² ; HA16 = 2,01 cm² ; HA20 = 3,14 cm².
+
+### Partie A — Poutre (9 points)
+1. Calculer G et Q linéiques sur la poutre (poids propre compris), puis pu. (3 pts)
+2. Calculer Mu, puis les aciers et choisir les barres. (4 pts)
+3. Calculer Vu et τu. (2 pts)
+
+### Partie B — Poteau (6 points)
+4. Calculer Nu au pied du poteau (poids propre 1,35 × 4,7 kN par niveau). (3 pts)
+5. Vérifier la résistance du poteau avec 4 HA12 (4,52 cm² ; Br = 529 cm²). (3 pts)
+
+### Partie C — Semelle (5 points)
+6. Calculer Nser et dimensionner la semelle carrée. (3 pts)
+7. Expliquer en trois lignes le « chemin des charges » de la dalle au sol. (2 pts)`,
+  corrige:`### Partie A — Poutre (9 pts)
+1. G = 5,0 × 4,50 + 0,20 × 0,45 × 25 = 22,5 + 2,25 = **24,75 kN/m** ; Q = 1,5 × 4,50 = **6,75 kN/m** ; **pu = 1,35 × 24,75 + 1,5 × 6,75 = 43,54 kN/m**. *(3 pts)*
+2. **Mu = 43,54 × 25 / 8 = 136,1 kN·m** ; μ = 136,1 × 10⁶ / (200 × 405² × 14,17) = **0,293** ; α = 0,445 ; z = 33,3 cm ;
+$$ A = 136,1 × 10⁶ / (333 × 434,8) = 940 mm² = 9,40 cm²
+   → **3 HA20 (9,42 cm²)** (un lit dans 20 cm : 20 − 6 − 1,2 − 6 = 6,8 cm pour 2 espaces = 3,4 cm ✔). *(4 pts)*
+3. **Vu = 43,54 × 2,5 = 108,9 kN** ; τu = 108 900 / (200 × 405) = **1,34 MPa ≤ 3,33** ✔. *(2 pts)*
+
+### Partie B — Poteau (6 pts)
+4. Par niveau : 2 × 108,9 + 1,35 × 4,7 = 217,8 + 6,3 = 224,1 kN → deux niveaux : **Nu ≈ 448 kN**. *(3 pts)*
+5. $$ Nrésistant = 0,747 × [52 900 × 25 / 1,35 + 452 × 500 / 1,15] = 0,747 × (979,6 + 196,5) kN = 878,6 kN ≥ 448 kN ✔
+   Le poteau est largement suffisant ; 4 HA12 respectent le minimum de 4 cm². *(3 pts)*
+
+### Partie C — Semelle (5 pts)
+6. Nser ≈ 448 / 1,40 = **320 kN** ; A ≥ 320 / 200 = 1,60 m² → **1,30 × 1,30 m** (1,69 m²), h ≈ (1,30 − 0,25)/4 + 0,05 ≈ 0,30 m. *(3 pts)*
+7. La dalle porte les charges vers les poutres ; les poutres les ramènent aux poteaux par leurs réactions d'appui ; les poteaux les cumulent niveau par niveau jusqu'aux semelles, qui les répartissent sur une surface de sol suffisante pour que la pression reste admissible. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le poids propre de la poutre et du poteau.
+> - Additionner des charges ELU et ELS dans un même calcul.
+> - Dimensionner la semelle avec Nu (on la dimensionne avec les charges de service).`},
  exercices:[
   {t:"Prédimensionner une ossature", d:1, e:`Un bâtiment a des poutres principales isostatiques de 6,0 m, des poutres continues de 4,5 m, un plancher à corps creux de 4,5 m de portée et des poteaux portant Nu = 700 kN. Prédimensionner chaque élément.`, c:`Poutres isostatiques de 6 m : h ≈ 600/10 à 600/12 = 50 à 60 cm → **25 × 55 cm**.
 Poutres continues de 4,5 m : h ≈ 450/12 à 450/16 = 28 à 38 cm → **20 × 35 cm** (ou 25 × 40).

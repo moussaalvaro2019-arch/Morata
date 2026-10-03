@@ -78,6 +78,48 @@ Pour un sol **saturé** (Sr = 1) : e = w × γs / γw.
 > - γd = γ / (1 + w) ; e = γs/γd − 1 ; n = e/(1 + e) ; Sr = w γs / (e γw).
 > - Sous la nappe, on utilise le poids volumique déjaugé γ' = γsat − γw.
 > - Teneur en eau mesurée par séchage à l'étuve à 105 °C jusqu'à masse constante.`,
+ sujet:{titre:"Paramètres d'état d'un échantillon prélevé au cylindre", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur le site d'un futur lycée à Agboville, le laboratoire prélève un échantillon intact de sable argileux au cylindre. Vous calculez ses paramètres d'état.
+
+**Données**
+- Volume du cylindre : **950 cm³** ;
+- Masse du sol humide : **1 805 g** ; masse après étuvage à 105 °C : **1 552 g** ;
+- Poids volumique des grains : **γs = 26,8 kN/m³** ; γw = **9,81 kN/m³** ; g = 9,81 m/s².
+
+### Partie A — Les trois phases (4 points)
+1. Faire le schéma des trois phases d'un sol (grains, eau, air) en indiquant volumes et poids. (2 pts)
+2. Pourquoi sèche-t-on à 105 °C et pas plus ? (2 pts)
+
+### Partie B — Paramètres de base (8 points)
+3. Calculer la teneur en eau w. (2 pts)
+4. Calculer le poids volumique humide γ et le poids volumique sec γd. (3 pts)
+5. Calculer l'indice des vides e et la porosité n. (3 pts)
+
+### Partie C — Saturation (8 points)
+6. Calculer le degré de saturation Sr. (2 pts)
+7. Calculer la teneur en eau qu'aurait ce sol s'il était saturé (même e). (2 pts)
+8. Calculer γsat et le poids volumique déjaugé γ' utilisés sous la nappe. (2 pts)
+9. Quel volume d'eau faut-il ajouter à 1 m³ de ce sol pour le saturer ? (2 pts)`,
+  corrige:`### Partie A — Phases (4 pts)
+1. Schéma : volume total V = Vs + Vw + Va (vides Vv = Vw + Va) ; poids W = Ws + Ww (l'air ne pèse pas). *(2 pts)*
+2. À 105 °C on chasse l'eau libre et capillaire sans détruire l'eau de constitution des argiles ni brûler la matière organique (ce qui fausserait w). *(2 pts)*
+
+### Partie B — Paramètres (8 pts)
+3. w = (1 805 − 1 552) / 1 552 = **16,3 %**. *(2 pts)*
+4. γ = 1,805 kg / 0,000 95 m³ × 9,81 = **18,64 kN/m³** ; γd = 1,552 / 0,000 95 × 9,81 = **16,03 kN/m³** (contrôle : γ / (1 + w) = 18,64 / 1,163 = 16,03). *(3 pts)*
+5. e = γs / γd − 1 = 26,8 / 16,03 − 1 = **0,672** ; n = e / (1 + e) = **0,402** (40 % de vides). *(3 pts)*
+
+### Partie C — Saturation (8 pts)
+6. $$ Sr = w × γs / (e × γw) = 0,163 × 26,8 / (0,672 × 9,81) = 0,66
+   Les vides sont remplis d'eau aux deux tiers. *(2 pts)*
+7. wsat = e × γw / γs = 0,672 × 9,81 / 26,8 = **24,6 %**. *(2 pts)*
+8. γsat = γd + n γw = 16,03 + 0,402 × 9,81 = **19,97 kN/m³** ; γ' = 19,97 − 9,81 = **10,16 kN/m³**. *(2 pts)*
+9. Volume d'air = (1 − Sr) × n = 0,34 × 0,402 = **0,136 m³ ≈ 136 litres** par m³. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer w par rapport à la masse humide (il se rapporte à la masse **sèche**).
+> - Confondre masse (kg) et poids (kN) : multiplier par g.
+> - Utiliser γ au lieu de γ' sous la nappe.`},
  exercices:[
   {t:"Teneur en eau", d:1, e:`Un échantillon pèse 312 g à l'état naturel et 268 g après séchage à l'étuve. Calculer sa teneur en eau.`, c:`**w = (312 − 268) / 268 = 44 / 268 = 16,4 %**.`},
   {t:"Paramètres d'état", d:2, e:`Un sable argileux a un poids volumique humide γ = 19,2 kN/m³ et une teneur en eau w = 14 %. γs = 26,7 kN/m³. Calculer γd, e, n et Sr.`, c:`**γd = 19,2 / 1,14 = 16,84 kN/m³** ; **e = 26,7 / 16,84 − 1 = 0,585** ; **n = 0,585 / 1,585 = 0,37** ; **Sr = 0,14 × 26,7 / (0,585 × 9,81) = 65 %**.`},
@@ -130,6 +172,50 @@ On ne fonde **jamais** un immeuble sans **étude de sol**. Pour une maison indiv
 > - Argiles gonflantes : fonder plus profond, vide sanitaire, drainage.
 > - Nappe proche : pompage, cuvelage, poussée d'Archimède.
 > - Pas de fondation sans reconnaissance du sol.`,
+ sujet:{titre:"Quatre terrains, quatre sols : diagnostic et choix des fondations en Côte d'Ivoire", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un promoteur hésite entre quatre terrains pour construire des immeubles R+3. Vous donnez un premier avis géotechnique avant l'étude de sol.
+
+**Terrains**
+- **T1 — Cocody (plateau)** : sables argileux rouges du Continental terminal, nappe profonde ;
+- **T2 — Marcory (bord de lagune)** : 8 m de vase grise très molle (module œdométrique **Eoed = 1,5 MPa**) sur un sable dense ; nappe à 0,50 m ;
+- **T3 — région de Bouaké** : argile d'altération avec **IP = 45** sur 1,50 m (zone de variation de teneur en eau), gonflement libre mesuré **4 %** ;
+- **T4 — Yopougon** : ancienne carrière remblayée sur **2,00 m** de gravats et déchets, emprise du bâtiment **12 × 10 m**.
+
+### Partie A — Les sols (5 points)
+1. Présenter brièvement les grandes familles de sols de Côte d'Ivoire et leur localisation. (3 pts)
+2. Pourquoi ne fonde-t-on jamais un immeuble sans étude de sol, même « là où les voisins ont construit » ? (2 pts)
+
+### Partie B — Terrain T2 (5 points)
+3. Estimer le tassement de la vase sous un supplément de contrainte moyen de **40 kPa** (s ≈ H × Δσ / Eoed). Conclure. (3 pts)
+4. Proposer deux solutions de fondation. (2 pts)
+
+### Partie C — Terrain T3 (5 points)
+5. Estimer le soulèvement possible d'une semelle superficielle. (2 pts)
+6. Décrire les dispositions constructives adaptées aux argiles gonflantes. (3 pts)
+
+### Partie D — Terrain T4 (5 points)
+7. On purge le remblai sous l'emprise et on le remplace par un remblai compacté. Calculer le volume purgé, le volume foisonné à évacuer (1,25) et le volume de matériau à approvisionner (coefficient 1,30). (3 pts)
+8. Quelle autre solution peut-on envisager ? (2 pts)`,
+  corrige:`### Partie A — Les sols (5 pts)
+1. **Graveleux latéritiques** et cuirasses (presque partout, bons sols et matériaux) ; **arènes granitiques** (socle du centre, nord, ouest) ; **argiles d'altération** (parfois gonflantes) ; **sables argileux du Continental terminal** (plateaux d'Abidjan) ; **sables et vases lagunaires** (bords de lagune, bas-fonds) ; **remblais anciens** en ville. *(3 pts)*
+2. Les sols varient sur quelques mètres (poche de vase, ancien talweg remblayé), les charges d'un immeuble sont bien supérieures à celles d'une maison, et une erreur de fondation est presque irréparable. *(2 pts)*
+
+### Partie B — T2 (5 pts)
+3. s ≈ 8 × 40 / 1 500 = **0,21 m** : plus de 20 cm, et surtout très différentiel → **inacceptable** pour une structure en béton armé (tolérance ≈ 5 cm). *(3 pts)*
+4. **Pieux** ancrés dans le sable dense sous la vase (en tenant compte du frottement négatif) ; ou amélioration du sol (préchargement avec drains, colonnes) + radier pour un ouvrage léger. *(2 pts)*
+
+### Partie C — T3 (5 pts)
+5. 1,50 × 0,04 = **6 cm** de soulèvement possible, non uniforme → fissures. *(2 pts)*
+6. Fonder **sous la zone active** (≥ 1,50 m) ; dallage sur **vide sanitaire** ; **trottoir étanche** et drainage périphérique pour stabiliser la teneur en eau ; éloigner les arbres ; chaînages soignés pour rigidifier. *(3 pts)*
+
+### Partie D — T4 (5 pts)
+7. Purge : 12 × 10 × 2,00 = **240 m³** ; évacuation : 240 × 1,25 = **300 m³** foisonnés ; apport : 240 × 1,30 = **312 m³**. *(3 pts)*
+8. **Traverser** le remblai jusqu'au terrain naturel par des puits en gros béton ou des pieux courts, le dallage étant alors porté (plancher) et non posé sur le remblai. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Fonder sur un remblai non contrôlé parce qu'il « paraît dur » en saison sèche.
+> - Sous-estimer les vases : leurs tassements durent des années.
+> - Oublier que l'eau (pluies, fuites, arbres) commande le comportement des argiles gonflantes.`},
  exercices:[
   {t:"Identifier un risque", d:1, e:`Pour chaque situation, indiquer le risque principal et une précaution :
 1. maison sur un terrain récemment remblayé avec des déchets de démolition ;
@@ -194,6 +280,63 @@ On en déduit, de façon empirique et prudente, une contrainte admissible de l'o
 > - Description : couleur, texture (rugueux, doux, collant), compacité, eau.
 > - PDL : qd = (M g H / (A e)) × M / (M + P) ; qadm indicative ≈ qd / 20.
 > - Profondeur de reconnaissance ≥ 1,5 B sous les fondations.`,
+ sujet:{titre:"Reconnaissance d'un terrain : puits, pénétromètre dynamique et choix du niveau d'assise", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Pour un groupe de villas à Abatta, vous organisez une reconnaissance simple : un puits à la pelle et un essai au pénétromètre dynamique léger (PDL).
+
+**Données — puits** : 0 à 0,30 m terre végétale noire ; 0,30 à 1,20 m sable argileux brun, humide ; 1,20 à 2,10 m graveleux latéritique rouge compact ; pas d'eau à 2,10 m.
+
+**Données — PDL** : M = **10 kg**, H = **0,50 m**, pointe **A = 10 cm²**, masse des tiges et de l'enclume **P = 6 kg** ; formule des Hollandais :
+qd = (M g H / (A e)) × M / (M + P) ; contrainte admissible indicative ≈ qd / 20.
+
+| Profondeur | Coups pour 10 cm |
+|---|---|
+| 0 à 0,40 m | 4 |
+| 0,40 à 1,20 m | 7 |
+| 1,20 à 2,00 m | 14 |
+
+### Partie A — Méthodes (5 points)
+1. Classer du plus simple au plus complet : puits, tarière, pénétromètre, sondage carotté, pressiomètre. Que donne chaque méthode ? (3 pts)
+2. Quelles observations noter dans un puits ? (2 pts)
+
+### Partie B — Essai PDL (9 points)
+3. Calculer l'enfoncement par coup e dans chaque couche. (2 pts)
+4. Calculer qd et la contrainte admissible indicative dans chaque couche. (6 pts)
+5. Comparer avec la coupe du puits. (1 pt)
+
+### Partie C — Décision (6 points)
+6. Proposer un niveau d'assise et une contrainte de calcul pour des semelles de villas. (3 pts)
+7. Une semelle doit reprendre **180 kN** : calculer ses dimensions (carrée). (2 pts)
+8. Pourquoi ces résultats ne suffisent-ils pas pour un immeuble R+4 ? (1 pt)`,
+  corrige:`### Partie A — Méthodes (5 pts)
+1. *(3 pts)*
+   - **Puits** : vue directe des couches, échantillons, eau ;
+   - **tarière** : échantillons remaniés, plus profond ;
+   - **pénétromètre** : résistance continue, sans échantillon ;
+   - **sondage carotté** : échantillons intacts pour le laboratoire ;
+   - **pressiomètre** : module et pression limite pour le calcul des fondations.
+2. Profondeur et nature de chaque couche (couleur, texture, humidité, compacité), venues d'eau, éboulements des parois, racines, remblais, photos. *(2 pts)*
+
+### Partie B — PDL (9 pts)
+3. e = 10 cm / nombre de coups : **2,5 cm** ; **1,43 cm** ; **0,71 cm**. *(2 pts)*
+4. M g H = 10 × 9,81 × 0,50 = 49,05 J ; M / (M + P) = 10 / 16 = 0,625. *(6 pts)*
+
+| Couche | e (m) | qd (MPa) | qadm indicative (MPa) |
+|---|---|---|---|
+| 0 – 0,40 m | 0,025 | 1,23 | 0,06 |
+| 0,40 – 1,20 m | 0,0143 | 2,15 | 0,11 |
+| 1,20 – 2,00 m | 0,0071 | 4,29 | 0,21 |
+
+5. Concordance : la résistance double dans le graveleux latéritique compact rencontré à 1,20 m dans le puits. *(1 pt)*
+
+### Partie C — Décision (6 pts)
+6. Asseoir les semelles dans le graveleux latéritique, à **1,20 – 1,30 m** ; contrainte de calcul prudente **0,15 à 0,20 MPa** (on retient 0,15 MPa en l'absence d'essais de laboratoire). *(3 pts)*
+7. A = 180 / 150 = 1,20 m² → côté √1,20 = 1,10 m → **semelle 1,10 × 1,10 m** (ou 1,20 × 1,20). *(2 pts)*
+8. Les charges et la profondeur influencée sont bien plus grandes : il faut des **sondages** et des **essais pressiométriques** jusqu'à plusieurs mètres sous les fondations (mission géotechnique G2). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le facteur M / (M + P) qui tient compte de la masse frappée.
+> - Prendre qd directement comme contrainte admissible.
+> - Fonder dans la terre végétale ou la couche humide superficielle.`},
  exercices:[
   {t:"Décrire un sol", d:1, e:`Sur un chantier, un sol humide est collant aux doigts, forme un boudin fin sans se casser, et laisse une trace brillante sous l'ongle. De quel type de sol s'agit-il ? Quelle précaution prendre pour fonder ?`, c:`C'est une **argile** (plastique). Précautions : vérifier par des essais (limites d'Atterberg) si elle est **gonflante**, fonder sous la zone de variation saisonnière de teneur en eau (souvent plus de 1 à 1,5 m), éviter de laisser les fouilles exposées à la pluie ou au soleil, drainer autour du bâtiment.`},
   {t:"Résistance au pénétromètre", d:2, e:`Avec le même PDL que dans le cours (M = 10 kg, H = 0,50 m, A = 10 cm², P = 6 kg), on compte 15 coups pour enfoncer la pointe de 20 cm. Calculer qd et la contrainte admissible indicative.`, c:`e = 0,20 / 15 = 0,0133 m par coup.
@@ -249,6 +392,50 @@ $$ v = k × i      Q = k × i × A
 > - Darcy : Q = k i A ; k de 10⁻¹ (graviers) à 10⁻¹¹ m/s (argiles).
 > - L'eau affaiblit les sols fins, pousse les murs et soulève les ouvrages vides.
 > - Drains, arases étanches, vides sanitaires, pentes d'évacuation.`,
+ sujet:{titre:"L'eau dans le sol : venues d'eau, remontées capillaires et soulèvement d'une bâche", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Construction d'une résidence avec bâche à eau enterrée à Grand-Bassam (nappe peu profonde). Vous étudiez les effets de l'eau.
+
+**Données**
+- Fouille de **45 m²** dans un sable fin (**k = 2 × 10⁻⁵ m/s**), gradient hydraulique **i = 0,6** ; ailleurs, fouille de **80 m²** dans un sable grossier (**k = 1,5 × 10⁻⁴ m/s**), **i = 0,75** ;
+- Logements en rez-de-chaussée sur un limon ; nappe à **1,20 m** sous le dallage ;
+- Bâche en béton armé (25 kN/m³) : dimensions extérieures **4,40 × 3,40 m**, hauteur **2,90 m**, intérieures **4,00 × 3,00 × 2,50 m** ; dessus au niveau du terrain ; nappe à **1,00 m** sous le terrain ; γw = **10 kN/m³** ;
+- Coefficient de sécurité exigé au soulèvement : **1,20**.
+
+### Partie A — Formes de l'eau (4 points)
+1. Distinguer eau libre, eau capillaire et eau adsorbée. (2 pts)
+2. Énoncer la loi de Darcy et donner l'ordre de grandeur de k pour un gravier, un sable, un limon, une argile. (2 pts)
+
+### Partie B — Venues d'eau (5 points)
+3. Calculer le débit à pomper dans chaque fouille (en m³/h). (3 pts)
+4. Quelle solution envisager pour la seconde fouille ? (2 pts)
+
+### Partie C — Capillarité (4 points)
+5. La frange capillaire d'un limon peut atteindre 1 à 5 m. Quel risque pour le dallage et les murs ? Quelles dispositions prendre ? (4 pts)
+
+### Partie D — Soulèvement de la bâche vide (7 points)
+6. Calculer la hauteur d'eau sous le radier et la poussée verticale de l'eau (sous-pression). (3 pts)
+7. Calculer le poids propre de la bâche. (2 pts)
+8. Vérifier la sécurité au soulèvement et proposer une solution. (2 pts)`,
+  corrige:`### Partie A — Formes de l'eau (4 pts)
+1. **Libre** : circule et forme la nappe ; **capillaire** : retenue au-dessus de la nappe dans les petits vides ; **adsorbée** : film lié aux argiles (plasticité). *(2 pts)*
+2. **Q = k × i × A**. Graviers 10⁻² à 10⁻¹ ; sables 10⁻⁵ à 10⁻³ ; limons 10⁻⁸ à 10⁻⁵ ; argiles 10⁻¹¹ à 10⁻⁸ m/s. *(2 pts)*
+
+### Partie B — Venues d'eau (5 pts)
+3. Q1 = 2 × 10⁻⁵ × 0,6 × 45 = 5,4 × 10⁻⁴ m³/s = **1,9 m³/h** ; Q2 = 1,5 × 10⁻⁴ × 0,75 × 80 = 9 × 10⁻³ m³/s = **32,4 m³/h**. *(3 pts)*
+4. Pompage puissant en continu (avec puisard filtrant), ou mieux un **rabattement de nappe** (puits filtrants, pointes filtrantes) avant d'ouvrir la fouille, pour éviter la boulance du fond. *(2 pts)*
+
+### Partie C — Capillarité (4 pts)
+5. L'eau remonte jusqu'au dallage et dans les murs : humidité, salpêtre, peintures qui cloquent, carrelage décollé. Dispositions : **hérisson** de pierres (rupture capillaire) avec film polyane, **arase étanche** (chape hydrofuge) à la base des murs, drainage périphérique, ou **vide sanitaire** ventilé. *(4 pts)*
+
+### Partie D — Soulèvement (7 pts)
+6. Dessous du radier à 2,90 m, nappe à 1,00 m → **hw = 1,90 m** ; U = 10 × 1,90 × 4,40 × 3,40 = **284,2 kN**. *(3 pts)*
+7. Béton : 4,40 × 3,40 × 2,90 − 4,00 × 3,00 × 2,50 = 43,38 − 30,00 = **13,38 m³** → P = **334,6 kN**. *(2 pts)*
+8. F = 334,6 / 284,2 = **1,18 < 1,20** : insuffisant quand la bâche est vide. Solutions : **débord du radier** (bêche) qui mobilise le poids des terres au-dessus, ou épaissir le radier (≈ 0,3 m³ de béton suffit ici), ou ne jamais vider la bâche (consigne fragile). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier la sous-pression : des bâches et piscines vides sont déjà remontées de plusieurs centimètres.
+> - Compter l'eau contenue dans la bâche comme poids stabilisant (elle peut être vidée).
+> - Poser un dallage directement sur un limon humide sans rupture capillaire.`},
  exercices:[
   {t:"Débit d'une fouille", d:1, e:`Une fouille de 6 × 10 m est creusée sous la nappe dans un sable grossier (k = 2 × 10⁻⁴ m/s). Le gradient hydraulique est estimé à 0,8. Calculer le débit à pomper.`, c:`Q = k i A = 2 × 10⁻⁴ × 0,8 × 60 = 9,6 × 10⁻³ m³/s = **34,6 m³/h**. Il faut une pompe d'au moins 40 m³/h (avec une pompe de secours) et un puisard au point bas de la fouille.`},
   {t:"Soulèvement d'une bâche enterrée", d:2, e:`Une bâche à eau en béton de 4 × 3 m en plan est enterrée ; son fond est à 2,5 m sous le terrain et la nappe peut monter jusqu'à 0,5 m sous le terrain. Son poids propre (vide) est de 210 kN. Est-elle stable au soulèvement quand elle est vide ? (γw = 10 kN/m³, on néglige le frottement des terres)`, c:`Hauteur d'eau sous le fond : 2,5 − 0,5 = 2,0 m → pression 20 kN/m² ; poussée d'Archimède : 20 × 4 × 3 = **240 kN**.
@@ -322,6 +509,59 @@ Pour les **sables** et graves : on agite le sol dans une solution floculante et 
 > - Atterberg : IP = wL − wP (plasticité) ; IC = (wL − w)/IP (consistance).
 > - VBS : argilosité ; ES : propreté des sables.
 > - Ces essais servent à classer le sol (chapitre suivant).`,
+ sujet:{titre:"Identification d'un sol : granulométrie, limites d'Atterberg, VBS et équivalent de sable", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Deux matériaux sont proposés pour les remblais d'une zone industrielle à Yamoussoukro. Vous dépouillez les essais d'identification.
+
+**Matériau 1 — analyse granulométrique (passants cumulés)**
+
+| Tamis (mm) | 20 | 10 | 5 | 2 | 1 | 0,5 | 0,2 | 0,1 | 0,08 |
+|---|---|---|---|---|---|---|---|---|---|
+| Passant (%) | 100 | 95 | 84 | 66 | 52 | 38 | 22 | 13 | 8 |
+
+Équivalent de sable : **ES = 58** ; VBS = **0,4**.
+
+**Matériau 2 — sol fin (65 % de fines)**
+- Casagrande : **42,9 %** d'eau à **22 coups** et **41,4 %** à **28 coups** ;
+- Limite de plasticité **wP = 21 %** ; teneur en eau naturelle **w = 28 %** ; VBS = **3,2**.
+
+### Partie A — Granulométrie (8 points)
+1. Déterminer par interpolation logarithmique D10, D30 et D60. (4 pts)
+2. Calculer Cu et Cc. Le matériau est-il bien gradué ? (3 pts)
+3. Quel est le pourcentage de fines ? (1 pt)
+
+### Partie B — Atterberg (7 points)
+4. Déterminer wL par interpolation (abscisse en log du nombre de coups). (2 pts)
+5. Calculer IP et IC ; qualifier la plasticité et la consistance. (3 pts)
+6. Que devient IC si w monte à 36 % en saison des pluies ? (2 pts)
+
+### Partie C — VBS et ES (3 points)
+7. Interpréter la VBS des deux matériaux et l'ES du matériau 1. Ce sable convient-il pour un béton ? (3 pts)
+
+### Partie D — Conclusion (2 points)
+8. Quel matériau choisir pour les remblais sous les dallages ? Pourquoi ? (2 pts)`,
+  corrige:`### Partie A — Granulométrie (8 pts)
+1. log D = log d1 + (p − p1) / (p2 − p1) × (log d2 − log d1) : *(4 pts)*
+   - D10 (entre 0,08 → 8 % et 0,1 → 13 %) : **0,087 mm** ;
+   - D30 (entre 0,2 → 22 % et 0,5 → 38 %) : **0,32 mm** ;
+   - D60 (entre 1 → 52 % et 2 → 66 %) : **1,49 mm**.
+2. Cu = 1,49 / 0,087 = **17** (granulométrie étalée) ; Cc = 0,32² / (0,087 × 1,49) = **0,77** < 1 → **pas bien gradué** au sens strict (il manque une fraction intermédiaire), malgré un Cu élevé. *(3 pts)*
+3. Passant à 0,08 mm : **8 %** de fines. *(1 pt)*
+
+### Partie B — Atterberg (7 pts)
+4. wL = 42,9 + (log 25 − log 22) / (log 28 − log 22) × (41,4 − 42,9) = 42,9 − 0,53 × 1,5 = **42,1 % ≈ 42 %**. *(2 pts)*
+5. IP = 42 − 21 = **21** (moyennement plastique) ; IC = (42 − 28) / 21 = **0,67** → **ferme**. *(3 pts)*
+6. IC = (42 − 36) / 21 = **0,29** → **molle** : portance fortement réduite. *(2 pts)*
+
+### Partie C — VBS et ES (3 pts)
+7. Matériau 1 : VBS 0,4 → sablo-limoneux peu sensible à l'eau ; ES 58 < 60 → sable un peu argileux, **déconseillé pour les bétons**. Matériau 2 : VBS 3,2 → limono-argileux, sensible à l'eau. *(3 pts)*
+
+### Partie D — Conclusion (2 pts)
+8. Le **matériau 1** : peu de fines, peu sensible à l'eau, se compacte bien. Le matériau 2, plastique et sensible à l'eau, serait difficile à compacter en saison des pluies. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Interpoler linéairement sur les diamètres au lieu de leurs logarithmes.
+> - Conclure « bien gradué » sur le seul Cu.
+> - Calculer IC avec wP au lieu de wL au numérateur.`},
  exercices:[
   {t:"Indices d'Atterberg", d:1, e:`Une argile a wL = 55 %, wP = 25 % et une teneur en eau naturelle de 40 %. Calculer IP et IC et décrire le sol.`, c:`**IP = 55 − 25 = 30** : argile **plastique**.
 **IC = (55 − 40) / 30 = 0,50** : à la limite entre **molle** et **ferme**. Sol sensible à l'eau, portance modeste ; un IP de 30 fait aussi craindre un comportement gonflant à vérifier.`},
@@ -373,6 +613,58 @@ Matériaux de base des routes et des remblais en Côte d'Ivoire, ils se classent
 > - A1 à A4 selon IP croissant ; A4 = argiles très plastiques à éviter.
 > - USCS : G, S, M, C, O + W, P, L, H ; ligne A : IP = 0,73 (wL − 20).
 > - Graveleux latéritiques : souvent B ou C, contrôlés par CBR pour les chaussées.`,
+ sujet:{titre:"Classer quatre sols (GTR et USCS) et décider de leur emploi en terrassement", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le terrassement d'une plate-forme logistique à Bouaké mobilise quatre sols. Vous les classez et décidez de leur emploi.
+
+**Données**
+
+| Sol | Fines < 80 µm | wL | wP | VBS | Remarques |
+|---|---|---|---|---|---|
+| S1 | 58 % | 36 | 22 | 2,3 | w naturelle 19 %, wOPN 14 % |
+| S2 | 18 % | — | — | 0,9 | graveleux latéritique, Dmax 20 mm |
+| S3 | 4 % | — | — | 0,05 | sable de rivière propre |
+| S4 | 72 % | 68 | 24 | 7,5 | argile noire de bas-fond |
+
+Ligne A de Casagrande : IP = 0,73 (wL − 20).
+Pour une couche de fondation de chaussée, on exige IP ≤ 15 à 20 et **CBR ≥ 30** ; le CBR mesuré sur S2 est **42**.
+
+### Partie A — GTR (8 points)
+1. Classer chaque sol dans le GTR (A1 à A4, B, D). (6 pts)
+2. Qu'appelle-t-on état hydrique ? Donner celui du sol S1. (2 pts)
+
+### Partie B — USCS (4 points)
+3. Classer S1 et S4 dans le système USCS à l'aide de la ligne A. (4 pts)
+
+### Partie C — Emploi (8 points)
+4. Pour chaque sol, indiquer l'emploi possible : remblai courant, couche de forme, couche de fondation de chaussée, à éviter. (4 pts)
+5. Que faire du sol S1 trop humide si on doit l'utiliser en remblai ? (2 pts)
+6. Le sol S2 convient-il en couche de fondation ? En couche de base (CBR ≥ 80) ? (2 pts)`,
+  corrige:`### Partie A — GTR (8 pts)
+1. *(6 pts)*
+   - **S1** : 58 % de fines > 35 % → sol fin ; IP = 14 → **A2** ;
+   - **S2** : 18 % de fines (12 à 35 %) → **B** (graveleux argileux, sensible à l'eau selon ses fines) ;
+   - **S3** : 4 % de fines et VBS ≤ 0,1 → **D** (insensible à l'eau) ;
+   - **S4** : 72 % de fines ; IP = 44 > 40 → **A4** (très plastique, gonflante).
+2. L'état hydrique situe la teneur en eau par rapport à l'optimum Proctor (th, h, m, s, ts). S1 : w = 19 % pour wOPN = 14 % → **humide (h)** : trop humide pour être bien compacté. *(2 pts)*
+
+### Partie B — USCS (4 pts)
+3. *(4 pts)*
+   - S1 : ligne A = 0,73 × 16 = 11,7 ; IP 14 au-dessus, wL < 50 → **CL** (argile peu plastique) ;
+   - S4 : ligne A = 0,73 × 48 = 35,0 ; IP 44 au-dessus, wL > 50 → **CH** (argile très plastique).
+
+### Partie C — Emploi (8 pts)
+4. *(4 pts)*
+   - S1 : remblai courant après aération ou traitement ;
+   - S2 : remblai, couche de forme, couche de fondation ;
+   - S3 : excellent remblai (drainant), lit de pose, sable à béton ;
+   - S4 : **à éviter** (gonflant, impossible à compacter correctement), à mettre en dépôt.
+5. L'**aérer** (scarifier et laisser sécher par temps sec) ou le **traiter à la chaux** (1 à 3 %), qui assèche et améliore le sol. *(2 pts)*
+6. Fondation : CBR 42 ≥ 30 ✔ (vérifier l'IP des fines). Base : 42 < 80 ✘ → traitement au ciment ou concassé. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Classer un sol fin sans calculer son IP.
+> - Utiliser une argile très plastique en remblai sous un dallage.
+> - Oublier que l'état hydrique peut changer la classe d'emploi d'un même sol.`},
  exercices:[
   {t:"Classer selon le GTR", d:1, e:`Classer selon le GTR (classe principale) :
 1. sable de rivière lavé, 2 % de fines, VBS = 0,05 ;
@@ -447,6 +739,59 @@ On contrôle en place la densité par :
 > - CBR = max(F2,5/13,2 ; F5/19,8) × 100, souvent après imbibition.
 > - Compacité = γd en place / γd max ≥ 95 %.
 > - Couches de 20–30 cm, teneur en eau proche de l'optimum, contrôles réguliers.`,
+ sujet:{titre:"Proctor, CBR et réception du compactage d'une couche de forme", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** La plate-forme d'un parking à Daloa reçoit une couche de forme en graveleux latéritique. Vous exploitez les essais de laboratoire puis vous contrôlez le compactage sur le chantier.
+
+**Essai Proctor modifié**
+
+| w (%) | 7 | 9 | 11 | 13 | 15 |
+|---|---|---|---|---|---|
+| γd (kN/m³) | 17,9 | 18,8 | 19,3 | 19,0 | 18,3 |
+
+γs = **27,0 kN/m³** ; γw = **9,81 kN/m³**.
+
+**Essai CBR** (éprouvette compactée à l'OPM, imbibée 4 jours) : force à 2,5 mm **7,4 kN** ; à 5 mm **12,3 kN** ; CBR = max(F2,5 / 13,2 ; F5 / 19,8) × 100.
+
+**Contrôle au densitomètre à membrane** : volume du trou **2,10 L** ; masse de sol humide extrait **4,30 kg** ; teneur en eau **10,4 %** ; spécification : **95 % de l'OPM**.
+
+Le matériau en dépôt a une teneur en eau de **6 %**.
+
+### Partie A — Proctor (7 points)
+1. Expliquer le principe de l'essai Proctor et la différence entre Proctor normal et modifié. (2 pts)
+2. En ajustant une parabole sur les trois points autour du sommet, déterminer wOPM et γd max. (3 pts)
+3. Calculer le γd de saturation à w = 13 % et vérifier que le point mesuré est bien en dessous. (2 pts)
+
+### Partie B — CBR (4 points)
+4. Calculer l'indice CBR et conclure (couche de forme : CBR ≥ 20 ; fondation : ≥ 30). (3 pts)
+5. Pourquoi imbibe-t-on l'éprouvette 4 jours ? (1 pt)
+
+### Partie C — Arrosage (3 points)
+6. Calculer la quantité d'eau à ajouter par m³ compacté pour porter le matériau de 6 % à 11 % (γd visé : 95 % de l'OPM). (3 pts)
+
+### Partie D — Contrôle (6 points)
+7. Calculer γ, γd et la compacité de la couche. La couche est-elle réceptionnée ? (4 pts)
+8. Proposer deux actions correctives. (2 pts)`,
+  corrige:`### Partie A — Proctor (7 pts)
+1. On compacte le sol dans un moule avec une énergie normalisée à différentes teneurs en eau et on mesure γd : la courbe passe par un **optimum**. Le Proctor **modifié** (dame plus lourde, plus de coups) correspond aux compacteurs lourds des routes ; le **normal** aux remblais courants. *(2 pts)*
+2. Parabole par (9 ; 18,8), (11 ; 19,3), (13 ; 19,0) : sommet en **wOPM ≈ 11,2 %** et **γd max ≈ 19,31 kN/m³**. *(3 pts)*
+3. $$ γd sat = γs / (1 + w γs / γw) = 27,0 / (1 + 0,13 × 27,0 / 9,81) = 19,89 kN/m³
+   19,0 < 19,89 ✔ (il reste de l'air : aucun compactage ne peut dépasser la courbe de saturation). *(2 pts)*
+
+### Partie B — CBR (4 pts)
+4. 7,4 / 13,2 = 56 % ; 12,3 / 19,8 = 62 % → **CBR = 62** : convient en couche de forme et même en couche de fondation. *(3 pts)*
+5. Pour se placer dans le cas le plus défavorable : sol saturé en saison des pluies. *(1 pt)*
+
+### Partie C — Arrosage (3 pts)
+6. γd visé = 0,95 × 19,31 = 18,34 kN/m³ → masse sèche ≈ 18,34 / 9,81 = **1,87 t/m³** ; eau = 0,05 × 1 870 = **≈ 94 L par m³** (plus les pertes par évaporation, à ajouter au moment du malaxage). *(3 pts)*
+
+### Partie D — Contrôle (6 pts)
+7. γ = 4,30 / 2,10 × 9,81 = **20,09 kN/m³** ; γd = 20,09 / 1,104 = **18,19 kN/m³** ; compacité = 18,19 / 19,31 = **94,2 % < 95 %** → **refusée**. *(4 pts)*
+8. Ajouter des passes de compacteur (en restant près de l'OPM) ; vérifier l'épaisseur des couches (≤ 25 – 30 cm) et la teneur en eau ; changer de compacteur si besoin, puis refaire le contrôle. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compacter trop sec (fines non lubrifiées) ou trop humide (matelassage).
+> - Comparer γ humide à γd max.
+> - Réceptionner une couche sur un seul essai : multiplier les points de contrôle.`},
  exercices:[
   {t:"Compacité d'un remblai", d:1, e:`L'OPM d'une latérite donne γd max = 19,1 kN/m³. Un contrôle en place donne γd = 17,9 kN/m³. La spécification est de 95 % de l'OPM. La couche est-elle acceptée ?`, c:`Compacité = 17,9 / 19,1 = **93,7 % < 95 %** → **refusée** : il faut compacter à nouveau (passes supplémentaires, éventuellement après arrosage ou séchage pour se rapprocher de l'optimum) puis recontrôler.`},
   {t:"Densité en place", d:2, e:`Au densitomètre à membrane : volume du trou 2,10 L ; masse humide extraite 4,28 kg ; teneur en eau 9,5 %. Calculer γd et la compacité par rapport à γd max = 19,4 kN/m³.`, c:`γ = 4,28 / 2,10 × 9,81 = **19,99 kN/m³** ; γd = 19,99 / 1,095 = **18,26 kN/m³** ; compacité = 18,26 / 19,4 = **94,1 %** : légèrement insuffisante pour 95 %.`},
@@ -509,6 +854,52 @@ La surcharge devient faible (moins de 10 à 20 % de q) à une profondeur d'envir
 > - Rabattre la nappe augmente σ' → tassements des voisins.
 > - Boussinesq : Δσ = 3Q/(2π z²) sur l'axe ; méthode 2/1 : Δσ = q B L / ((B + z)(L + z)).
 > - Zone d'influence ≈ 1,5 à 2 B (isolée), 3 à 4 B (filante).`,
+ sujet:{titre:"Profil des contraintes dans le sol et diffusion des charges d'une semelle", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sous un futur immeuble à Port-Bouët, le sondage donne la coupe ci-dessous. Vous calculez les contraintes avant et après construction.
+
+**Coupe**
+- 0 à 2 m : remblai latéritique, **γ = 19 kN/m³** ; nappe à **2 m** ;
+- 2 à 6 m : sable saturé, **γsat = 20 kN/m³** ;
+- 6 à 11 m : argile saturée, **γsat = 17,5 kN/m³** ; γw = **9,81 kN/m³**.
+
+**Ouvrage**
+- Semelle rectangulaire **2,00 × 2,50 m** à **1,50 m** de profondeur, contrainte appliquée **q = 180 kPa** ;
+- Ailleurs, une charge concentrée **Q = 600 kN** (poteau sur petit massif, assimilé à une charge ponctuelle en surface).
+
+### Partie A — Contraintes initiales (9 points)
+1. Calculer σv, u et σ'v à 2 m, 6 m, 8,5 m (milieu de l'argile) et 11 m. Présenter un tableau. (6 pts)
+2. Énoncer le principe de Terzaghi et expliquer pourquoi c'est σ' qui gouverne le comportement du sol. (3 pts)
+
+### Partie B — Diffusion (7 points)
+3. Calculer le supplément de contrainte au milieu de l'argile sous la semelle (méthode 2/1 : Δσ = q B L / ((B + z)(L + z))). (3 pts)
+4. Calculer Δσ sous la charge Q à 3 m de profondeur sur l'axe, puis à 1,50 m de l'axe (Boussinesq). (4 pts)
+
+### Partie C — Rabattement de nappe (4 points)
+5. Un pompage voisin abaisse la nappe de 2 m (le sable entre 2 et 4 m reste humide, γ = 18 kN/m³). Calculer le nouveau σ'v au milieu de l'argile et l'augmentation. Conséquence ? (4 pts)`,
+  corrige:`### Partie A — Contraintes initiales (9 pts)
+1. *(6 pts)*
+
+| z (m) | σv (kPa) | u (kPa) | σ'v (kPa) |
+|---|---|---|---|
+| 2 | 2 × 19 = 38,0 | 0 | 38,0 |
+| 6 | 38 + 4 × 20 = 118,0 | 4 × 9,81 = 39,2 | 78,8 |
+| 8,5 | 118 + 2,5 × 17,5 = 161,8 | 6,5 × 9,81 = 63,8 | 98,0 |
+| 11 | 118 + 5 × 17,5 = 205,5 | 9 × 9,81 = 88,3 | 117,2 |
+
+2. **σ' = σ − u** : la contrainte effective est celle que se transmettent les grains ; c'est elle qui produit les tassements et la résistance au cisaillement (l'eau ne résiste pas au cisaillement). *(3 pts)*
+
+### Partie B — Diffusion (7 pts)
+3. z = 8,5 − 1,5 = 7,0 m → Δσ = 180 × 2,00 × 2,50 / (9,00 × 9,50) = **10,5 kPa** (6 % de q). *(3 pts)*
+4. $$ Δσ = 3 Q / (2π z²) = 3 × 600 / (2π × 9) = 31,8 kPa
+   À r = 1,50 m : r/z = 0,5 → × (1 / 1,25)^2,5 = × 0,572 → **18,2 kPa**. *(4 pts)*
+
+### Partie C — Rabattement (4 pts)
+5. σv à 8,5 m : 2 × 19 + 2 × 18 + 2 × 20 + 2,5 × 17,5 = 157,8 kPa ; u = (8,5 − 4) × 9,81 = 44,1 kPa → **σ'v = 113,6 kPa**, soit **+ 15,6 kPa** : l'argile se consolide → **tassements** des bâtiments voisins, même sans charge nouvelle. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser γsat au-dessus de la nappe ou oublier u sous la nappe.
+> - Calculer z depuis la surface au lieu du niveau de la semelle pour la diffusion.
+> - Penser que pomper la nappe est sans effet sur les voisins.`},
  exercices:[
   {t:"Contrainte effective", d:1, e:`Sable : γ = 18 kN/m³ au-dessus de la nappe (à 2 m de profondeur), γsat = 20 kN/m³ en dessous. Calculer σv, u et σ'v à 6 m de profondeur.`, c:`σv = 2 × 18 + 4 × 20 = **116 kPa** ; u = 4 × 9,81 = **39,2 kPa** ; **σ'v = 76,8 kPa**.`},
   {t:"Effet d'un rabattement de nappe", d:2, e:`Dans le sol de l'exercice précédent, on pompe pour rabattre la nappe de 2 m à 5 m de profondeur (le sable dénoyé garde γ = 18 kN/m³). Calculer la nouvelle contrainte effective à 6 m et son augmentation. Quelle conséquence pour les bâtiments voisins ?`, c:`σv = 5 × 18 + 1 × 20 = **110 kPa** ; u = 1 × 9,81 = 9,8 kPa → **σ'v = 100,2 kPa**, soit **+ 23,4 kPa**.
@@ -572,6 +963,51 @@ $$ Q = π × k × (H² − h²) / ln(R / r)
 > - Gradient critique ic = γ'/γw ≈ 1 → boulance si l'écoulement ascendant est trop fort.
 > - Dupuit : Q = π k (H² − h²) / ln(R/r) ; Sichardt : R ≈ 3 000 s √k.
 > - Rabattement : épuisement, pointes filtrantes, puits ; surveiller les avoisinants.`,
+ sujet:{titre:"Perméabilité en laboratoire, rabattement de nappe et risque de boulance", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Construction d'une station de pompage enterrée à Treichville, avec une fouille de 3 m sous la nappe. Vous déterminez les perméabilités et dimensionnez le rabattement.
+
+**Données — laboratoire**
+- Sable, perméamètre à **charge constante** : volume recueilli **250 cm³** en **120 s** ; longueur **L = 12 cm** ; section **A = 78,5 cm²** ; charge **h = 40 cm** ;
+- Limon, perméamètre à **charge variable** : tube **a = 0,8 cm²** ; A = 78,5 cm² ; L = 12 cm ; h1 = **120 cm**, h2 = **80 cm** en **1 800 s**.
+
+**Données — rabattement**
+- Nappe de **H = 12 m** d'épaisseur dans un sable (**k = 2 × 10⁻⁴ m/s**) ; rabattement voulu **3,5 m** dans le puits (h = 8,5 m) ; rayon du puits **r = 0,20 m** ;
+- Formules : R ≈ 3 000 × (H − h) × √k ; Q = π k (H² − h²) / ln(R / r).
+
+**Données — boulance** : palplanches avec une fiche de **4 m** sous le fond de fouille ; différence de niveau d'eau entre l'extérieur et le fond : **3 m** ; γ' = **10 kN/m³**.
+
+### Partie A — Perméabilités (6 points)
+1. Calculer k du sable (m/s). (3 pts)
+2. Calculer k du limon (m/s). Pourquoi utilise-t-on deux appareils différents ? (3 pts)
+
+### Partie B — Rabattement (8 points)
+3. Calculer le rayon d'action R. (2 pts)
+4. Calculer le débit d'un puits en m³/s et m³/h. (4 pts)
+5. Quels risques ce rabattement fait-il courir aux bâtiments voisins ? (2 pts)
+
+### Partie C — Boulance (6 points)
+6. Estimer le gradient hydraulique de l'écoulement remontant (longueur d'écoulement ≈ 2 × fiche). (2 pts)
+7. Calculer le gradient critique et le coefficient de sécurité. (2 pts)
+8. Décrire le phénomène de boulance et deux moyens de l'éviter. (2 pts)`,
+  corrige:`### Partie A — Perméabilités (6 pts)
+1. $$ k = Q L / (A h t) = 250 × 12 / (78,5 × 40 × 120) = 7,96 × 10⁻³ cm/s
+   → **k ≈ 8,0 × 10⁻⁵ m/s** (sable). *(3 pts)*
+2. k = (a L / (A t)) × ln(h1 / h2) = (0,8 × 12 / (78,5 × 1 800)) × ln 1,5 = 2,75 × 10⁻⁵ cm/s → **k ≈ 2,8 × 10⁻⁷ m/s** (limon). À charge constante, le débit à travers un limon serait trop faible pour être mesuré : on suit la baisse du niveau dans un tube fin. *(3 pts)*
+
+### Partie B — Rabattement (8 pts)
+3. R = 3 000 × 3,5 × √(2 × 10⁻⁴) = **148 m**. *(2 pts)*
+4. Q = π × 2 × 10⁻⁴ × (144 − 72,25) / ln(148,5 / 0,20) = 0,0451 / 6,61 = **6,8 × 10⁻³ m³/s ≈ 24,6 m³/h**. *(4 pts)*
+5. L'abaissement de la nappe augmente σ' sous les bâtiments voisins (jusqu'à 150 m) → **tassements** et fissures, assèchement des puits ; entraînement de fines si les filtres sont mal faits. *(2 pts)*
+
+### Partie C — Boulance (6 pts)
+6. i ≈ 3 / (2 × 4) = **0,375**. *(2 pts)*
+7. ic = γ' / γw = 10 / 10 = **1,0** ; F = 1,0 / 0,375 = **2,7** ✔ (on exige souvent F ≥ 1,5 à 2). *(2 pts)*
+8. Si l'écoulement remontant annule la contrainte effective, le sable « bout » et perd toute résistance : le fond de fouille se soulève, les engins s'enfoncent. On l'évite en **allongeant la fiche** des palplanches (gradient plus faible) ou en **rabattant la nappe** sous le fond de fouille ; un tapis filtrant lesté aide aussi. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de convertir les cm/s en m/s.
+> - Utiliser le rabattement (H − h) au lieu de H² − h² dans la formule du débit.
+> - Ouvrir une fouille sous la nappe dans un sable fin sans vérifier la boulance.`},
  exercices:[
   {t:"Perméamètre à charge constante", d:1, e:`Un sable de 12 cm de long et de section 78,5 cm² laisse passer 150 cm³ d'eau en 60 s sous une charge constante de 30 cm. Calculer k en m/s.`, c:`k = 150 × 12 / (78,5 × 30 × 60) = 1 800 / 141 300 = **0,0127 cm/s = 1,27 × 10⁻⁴ m/s** (sable moyen).`},
   {t:"Risque de boulance", d:2, e:`Au fond d'une fouille dans un sable (γsat = 20 kN/m³), l'écoulement ascendant crée un gradient i = 0,7. Calculer le gradient critique et le coefficient de sécurité. Conclure.`, c:`γ' = 20 − 9,81 = 10,19 kN/m³ → **ic = 10,19 / 9,81 = 1,04**.
@@ -641,6 +1077,53 @@ Pour les argiles molles, c'est souvent le **court terme** qui est le plus défav
 > - Sable : c = 0, φ = 28 à 42° ; argile : c et φ plus faibles, cu à court terme.
 > - Court terme (non drainé, cu) souvent critique pour les argiles molles.
 > - Essais : boîte de cisaillement, triaxial (UU, CU, CD), scissomètre.`,
+ sujet:{titre:"Résistance au cisaillement : boîte de Casagrande, triaxial et critère de Coulomb", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Pour un mur de soutènement et une fondation à Man, le laboratoire réalise des essais de cisaillement sur deux sols.
+
+**Sol 1 — sable argileux, boîte de cisaillement (essais drainés)**
+
+| Essai | σ (kPa) | τmax (kPa) |
+|---|---|---|
+| 1 | 50 | 46 |
+| 2 | 100 | 74 |
+| 3 | 200 | 130 |
+
+**Sol 2 — sable propre, triaxial drainé** : pression de confinement **σ3 = 100 kPa**, contrainte axiale à la rupture **σ1 = 300 kPa**.
+
+**Sol 3 — argile saturée, essai non consolidé non drainé (UU)** : déviateur à la rupture **σ1 − σ3 = 70 kPa**.
+
+### Partie A — Critère de Coulomb (8 points)
+1. Écrire le critère de Coulomb et expliquer c et φ. (2 pts)
+2. Déterminer c et φ du sol 1 (tracer la droite intrinsèque). (4 pts)
+3. Calculer la résistance au cisaillement du sol 1 à 4 m de profondeur (σ'v = 76 kPa). (2 pts)
+
+### Partie B — Triaxial (6 points)
+4. Tracer le cercle de Mohr à la rupture du sol 2 (centre et rayon). (2 pts)
+5. Calculer φ du sol 2 (c = 0) : sin φ = (σ1 − σ3) / (σ1 + σ3). (2 pts)
+6. Quelle serait la contrainte σ1 de rupture sous σ3 = 150 kPa ? (2 pts)
+
+### Partie C — Comportement non drainé (6 points)
+7. Calculer cu du sol 3. (2 pts)
+8. Expliquer la différence entre comportement à court terme (non drainé) et à long terme (drainé) d'une argile. Lequel est le plus défavorable pour une fondation ? Pour un talus de déblai ? (4 pts)`,
+  corrige:`### Partie A — Coulomb (8 pts)
+1. **τ = c + σ tan φ** : c = cohésion (liaisons entre grains fins), φ = angle de frottement interne (frottement et enchevêtrement des grains). *(2 pts)*
+2. Pente entre les essais 1 et 3 : (130 − 46) / (200 − 50) = 0,56 → **φ = arctan 0,56 = 29,2°** ; c = 46 − 0,56 × 50 = **18 kPa** (l'essai 2 tombe exactement sur la droite : 18 + 56 = 74 ✔). *(4 pts)*
+3. τ = 18 + 76 × 0,56 = **60,6 kPa**. *(2 pts)*
+
+### Partie B — Triaxial (6 pts)
+4. Centre (σ1 + σ3) / 2 = **200 kPa** ; rayon (σ1 − σ3) / 2 = **100 kPa**. *(2 pts)*
+5. sin φ = 200 / 400 = 0,5 → **φ = 30°**. *(2 pts)*
+6. $$ σ1 = σ3 × (1 + sin φ) / (1 − sin φ) = 150 × 3 = 450 kPa
+   *(2 pts)*
+
+### Partie C — Non drainé (6 pts)
+7. cu = 70 / 2 = **35 kPa** (φu = 0). *(2 pts)*
+8. Sous une charge rapide, l'eau n'a pas le temps de s'évacuer : la surpression interstitielle réduit σ' et l'argile se comporte avec cu (φ = 0). À long terme, l'eau s'est évacuée : on utilise c', φ'. **Fondation** (chargement) : le court terme est le plus défavorable, l'argile se renforce en se consolidant. **Talus de déblai** (déchargement) : c'est le long terme, l'argile gonfle et se ramollit avec le temps. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Lire c sur l'axe des σ au lieu de l'axe des τ.
+> - Utiliser des contraintes totales dans un calcul drainé.
+> - Croire qu'une tranchée stable le premier jour le restera des semaines.`},
  exercices:[
   {t:"Paramètres de cisaillement", d:2, e:`Deux essais à la boîte de cisaillement donnent : σ = 100 kPa → τ = 80 kPa ; σ = 200 kPa → τ = 135 kPa. Calculer c et φ.`, c:`tan φ = (135 − 80) / (200 − 100) = 0,55 → **φ = 28,8°** ; **c = 80 − 100 × 0,55 = 25 kPa**.`},
   {t:"Essai triaxial drainé", d:2, e:`Un sable est cisaillé au triaxial drainé avec σ3 = 150 kPa ; la rupture se produit pour σ1 = 450 kPa. Calculer φ'.`, c:`sin φ' = (450 − 150) / (450 + 150) = 300 / 600 = 0,5 → **φ' = 30°**.`},
@@ -745,6 +1228,47 @@ Une charge **inclinée** (poussée d'un mur, vent sur un portique) réduit aussi
 > - Argile à court terme : qu = 5,14 sc cu + γ D.
 > - Nappe : γ' ≈ 10 kN/m³ dans les termes immergés.
 > - Charge excentrée : largeur réduite B' = B − 2e.`,
+ sujet:{titre:"Capacité portante de semelles sur sable et sur argile, influence de la nappe", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Immeuble R+2 à Gagnoa. On vérifie une semelle carrée sur sable, l'effet d'une remontée de nappe, puis une semelle filante sur argile.
+
+**Données — semelle carrée**
+- B = **1,80 m** ; ancrage **D = 1,20 m** ; sable : **γ = 18 kN/m³**, **φ = 32°**, **c = 0** ; charge de service **N = 820 kN** ;
+- φ = 32° : **Nγ = 27,7** ; **Nq = 23,2** ; semelle carrée : **sγ = 0,8** ;
+- qu = 0,5 sγ γ1 B Nγ + sc c Nc + γ2 D Nq ; qadm = qu / 3 ;
+- En saison des pluies, la nappe peut remonter jusqu'au niveau d'assise : γ1 = γ' = **10 kN/m³** sous la semelle.
+
+**Données — semelle filante**
+- Mur porteur de **95 kN/m** (service) ; argile saturée : **cu = 40 kPa**, γ = **19 kN/m³** ; D = **1,00 m** ; à court terme : qu = 5,14 sc cu + γ D.
+
+### Partie A — Semelle carrée sur sable (8 points)
+1. Calculer le terme de surface et le terme de profondeur. (4 pts)
+2. Calculer qu, qadm et la charge admissible. Vérifier la semelle. (4 pts)
+
+### Partie B — Influence de la nappe (5 points)
+3. Recalculer qu, qadm et la charge admissible avec la nappe au niveau d'assise. (3 pts)
+4. Conclure et proposer une solution. (2 pts)
+
+### Partie C — Semelle filante sur argile (7 points)
+5. Calculer qu et qadm à court terme. (2 pts)
+6. Calculer la largeur minimale de la semelle filante. Pourquoi qu ne dépend-il pas de B ici ? (3 pts)
+7. Pour un poteau sur semelle carrée dans cette argile (sc = 1,2), calculer qadm. (2 pts)`,
+  corrige:`### Partie A — Sable (8 pts)
+1. Surface : 0,5 × 0,8 × 18 × 1,80 × 27,7 = **359,0 kPa** ; profondeur : 18 × 1,20 × 23,2 = **501,1 kPa**. *(4 pts)*
+2. qu = **860,1 kPa** ; qadm = **286,7 kPa** ; charge admissible = 286,7 × 1,80² = **929 kN ≥ 820 kN** ✔. *(4 pts)*
+
+### Partie B — Nappe (5 pts)
+3. Surface : 0,5 × 0,8 × 10 × 1,80 × 27,7 = 199,4 kPa → qu = **700,6 kPa** ; qadm = **233,5 kPa** ; charge admissible = **757 kN < 820 kN** ✘. *(3 pts)*
+4. La remontée de la nappe réduit la portance de **19 %** : la semelle n'est plus vérifiée. Il faut l'agrandir (B = 1,95 à 2,00 m), ou l'approfondir si la nappe le permet, et drainer le site. *(2 pts)*
+
+### Partie C — Argile (7 pts)
+5. qu = 5,14 × 40 + 19 × 1,00 = **224,6 kPa** ; qadm = **74,9 kPa**. *(2 pts)*
+6. B ≥ 95 / 74,9 = 1,27 → **B = 1,30 m**. Avec φu = 0, Nγ = 0 : le terme de surface disparaît, la portance par m² ne dépend plus de la largeur. *(3 pts)*
+7. qu = 5,14 × 1,2 × 40 + 19 = **265,7 kPa** ; qadm = **88,6 kPa**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le coefficient de forme sγ = 0,8 pour une semelle carrée.
+> - Garder γ = 18 sous la nappe au lieu de γ' ≈ 10.
+> - Négliger le court terme dans une argile saturée : c'est souvent le cas le plus défavorable.`},
  exercices:[
   {t:"Semelle filante sur sol cohérent et frottant", d:1, e:`Semelle filante B = 1,00 m, D = 0,80 m. Sol : γ = 18 kN/m³, c = 10 kPa, φ = 25°. Calculer qu et qadm, puis la charge admissible par mètre.`, c:`Pour φ = 25° : Nγ = 9,0 ; Nc = 20,7 ; Nq = 10,7.
 - Surface : 0,5 × 18 × 1,00 × 9,0 = **81,0 kPa**
@@ -866,6 +1390,53 @@ La **distorsion angulaire** est le tassement différentiel entre deux appuis div
 > - NC : sc = H/(1+e0) × Cc log(σ'f/σ'0) ; SC : terme Cs jusqu'à σ'p, puis Cc.
 > - t = Tv Hdr² / cv ; U 50 % : Tv = 0,197 ; U 90 % : Tv = 0,848.
 > - Ce sont les tassements **différentiels** qui fissurent.`,
+ sujet:{titre:"Tassements d'un bâtiment : immédiat, consolidation, durée et tassement différentiel", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un bâtiment de bureaux à Jacqueville repose sur un sable de 6 m, puis une couche d'argile de **5 m** drainée en haut et en bas par des sables.
+
+**Données**
+- Semelle carrée isolée : **B = 2,00 m**, **q = 200 kPa** ; sable : **E = 25 MPa**, **ν = 0,3**, **Cf = 0,88** ; si = q B (1 − ν²) Cf / E ;
+- Argile : **e0 = 1,05** ; **Cc = 0,38** ; **Cs = 0,06** ; au milieu de la couche **σ'0 = 72 kPa** ; supplément dû au bâtiment **Δσ = 45 kPa** ;
+- Coefficient de consolidation **cv = 2,5 m²/an** ; Tv(50 %) = **0,197** ; Tv(90 %) = **0,848** ;
+- Tassements calculés sous deux poteaux voisins distants de **6,00 m** : **4,0 cm** et **2,2 cm** ; distorsion admissible pour une ossature béton armé : **1/500**.
+
+### Partie A — Tassement immédiat (3 points)
+1. Calculer le tassement immédiat de la semelle sur le sable. (3 pts)
+
+### Partie B — Consolidation (8 points)
+2. L'argile est normalement consolidée : calculer son tassement de consolidation. (3 pts)
+3. Les essais œdométriques montrent en fait une pression de préconsolidation **σ'p = 100 kPa**. Recalculer le tassement. Conclure. (4 pts)
+4. Expliquer pourquoi la consolidation d'une argile prend du temps. (1 pt)
+
+### Partie C — Durée (5 points)
+5. Calculer la longueur de drainage, puis t50 et t90. (3 pts)
+6. Que deviendraient ces durées si l'argile reposait sur un rocher imperméable ? (2 pts)
+
+### Partie D — Tassements différentiels (4 points)
+7. Calculer la distorsion angulaire entre les deux poteaux et conclure. (2 pts)
+8. Citer deux dispositions pour limiter les désordres. (2 pts)`,
+  corrige:`### Partie A — Immédiat (3 pts)
+1. si = 200 × 2,00 × (1 − 0,09) × 0,88 / 25 000 = **0,0128 m ≈ 13 mm**. *(3 pts)*
+
+### Partie B — Consolidation (8 pts)
+2. $$ sc = H / (1 + e0) × Cc × log(σ'f / σ'0) = 5 / 2,05 × 0,38 × log(117 / 72) = 2,439 × 0,38 × 0,211 = 0,195 m
+   → **≈ 20 cm**. *(3 pts)*
+3. σ'f = 117 > σ'p = 100 : *(4 pts)*
+   sc = 2,439 × [0,06 × log(100 / 72) + 0,38 × log(117 / 100)] = 2,439 × (0,0086 + 0,0259) = **0,084 m ≈ 8 cm**.
+   La surconsolidation divise le tassement par plus de deux : d'où l'importance des essais œdométriques sur échantillons intacts.
+4. Le sol ne se tasse que si l'eau sort des vides ; dans une argile très peu perméable, elle met des mois ou des années à s'évacuer. *(1 pt)*
+
+### Partie C — Durée (5 pts)
+5. Drainée des deux côtés : **Hdr = 2,5 m** ; t50 = 0,197 × 2,5² / 2,5 = **0,49 an (≈ 6 mois)** ; t90 = 0,848 × 6,25 / 2,5 = **2,1 ans**. *(3 pts)*
+6. Drainage d'un seul côté : Hdr = 5 m → durées **× 4** : t90 ≈ **8,5 ans**. *(2 pts)*
+
+### Partie D — Différentiels (4 pts)
+7. δ / L = (4,0 − 2,2) / 600 = **1/333** > 1/500 → **risque de fissuration**. *(2 pts)*
+8. Homogénéiser les contraintes sous les semelles (dimensionner à tassement égal), rigidifier par des **longrines** ou passer à un **radier**, prévoir des **joints** entre parties d'ouvrages de charges différentes, ou traiter l'argile (préchargement). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser Cc sur toute la plage de charge pour une argile surconsolidée.
+> - Prendre Hdr = H pour une couche drainée des deux côtés.
+> - Juger un tassement sur sa valeur absolue sans regarder les différentiels.`},
  exercices:[
   {t:"Tassement avec le module œdométrique", d:1, e:`Une couche de limon argileux de 3 m d'épaisseur (Eoed = 5 MPa) reçoit un supplément de contrainte moyen Δσ = 50 kPa. Calculer le tassement.`, c:`sc = Δσ × H / Eoed = 50 × 3 / 5 000 = **0,030 m = 3 cm**.`},
   {t:"Remblai sur argile normalement consolidée", d:2, e:`Un remblai de 2 m (γ = 20 kN/m³) est construit sur une argile de 6 m d'épaisseur, normalement consolidée, saturée : γsat = 17 kN/m³, e0 = 1,50, Cc = 0,60. Nappe en surface. Calculer le tassement de consolidation (une seule couche, contrainte au milieu).`, c:`Au milieu (z = 3 m) : σ'0 = (17 − 10) × 3 = **21 kPa**.
@@ -976,6 +1547,46 @@ On fait deux cycles : **EV1** (premier chargement) puis **EV2** (rechargement). 
 > - SPT : N coups / 30 cm ; φ' ≈ 27,1 + 0,3 N.
 > - Pressiomètre : EM (tassement), pl* (portance) ; qELS = q0 + kp ple*/3.
 > - Plaque : EV = 1,5 q r / w ; k = EV2/EV1 ≤ 2.`,
+ sujet:{titre:"Exploiter des essais in situ : pénétromètre statique, pressiomètre et essai de plaque", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Le rapport de sol d'un centre commercial à Bingerville contient trois types d'essais in situ. Vous les exploitez pour le dimensionnement.
+
+**Pénétromètre statique (CPT)** à 6 m : **qc = 0,8 MPa** ; frottement latéral **fs = 36 kPa** ; σv0 = **105 kPa** ; cu ≈ (qc − σv0) / Nk avec **Nk = 15**.
+
+**Pressiomètre Ménard** — semelle carrée **B = 2,00 m**, ancrée à **D = 1,50 m** (γ = 18 kN/m³), limon argileux (**kp = 0,8**) ; pressions limites nettes sous la base : **0,55 – 0,70 – 0,95 MPa** (à 1, 2 et 3 m sous la base) ;
+ple* = moyenne géométrique ; qELS = q0 + kp ple* / 3.
+
+**Essai de plaque** sur la couche de forme : plaque de rayon **r = 0,30 m**, pression **q = 0,25 MPa** ; enfoncements : **2,10 mm** au premier chargement, **0,95 mm** au second ; EV = 1,5 q r / w ; exigences : **EV2 ≥ 50 MPa** et **EV2/EV1 ≤ 2,2**.
+
+### Partie A — CPT (5 points)
+1. Décrire l'essai CPT et ce qu'il mesure. (2 pts)
+2. Calculer le rapport de frottement Rf = fs / qc et estimer cu. Quel sol ? (3 pts)
+
+### Partie B — Pressiomètre (9 points)
+3. Décrire l'essai pressiométrique et les deux paramètres obtenus. (2 pts)
+4. Calculer ple*. Pourquoi une moyenne géométrique ? (3 pts)
+5. Calculer q0, qELS et la charge admissible de la semelle. (4 pts)
+
+### Partie C — Plaque (6 points)
+6. Calculer EV1, EV2 et leur rapport. (4 pts)
+7. La couche de forme est-elle réceptionnée ? Que signifie un rapport EV2/EV1 élevé ? (2 pts)`,
+  corrige:`### Partie A — CPT (5 pts)
+1. On enfonce à vitesse constante (2 cm/s) une pointe conique et on mesure la **résistance de pointe qc** et le **frottement latéral fs** sur un manchon : profil continu de résistance. *(2 pts)*
+2. Rf = 36 / 800 = **4,5 %** → sol **argileux** (Rf élevé) ; cu ≈ (800 − 105) / 15 = **46 kPa** (argile moyennement consistante). *(3 pts)*
+
+### Partie B — Pressiomètre (9 pts)
+3. Une sonde gonflable dilate la paroi d'un forage par paliers de pression : on obtient le **module pressiométrique EM** (pour les tassements) et la **pression limite pl** (pour la portance). *(2 pts)*
+4. $$ ple* = (0,55 × 0,70 × 0,95)^(1/3) = 0,715 MPa
+   La moyenne géométrique atténue l'influence d'une valeur forte isolée : elle est prudente. *(3 pts)*
+5. q0 = 18 × 1,50 = **27 kPa** ; qELS = 27 + 0,8 × 715 / 3 = **218 kPa** ; charge admissible = 218 × 4,00 = **871 kN**. *(4 pts)*
+
+### Partie C — Plaque (6 pts)
+6. EV1 = 1,5 × 0,25 × 0,30 / 0,0021 = **53,6 MPa** ; EV2 = 1,5 × 0,25 × 0,30 / 0,000 95 = **118,4 MPa** ; EV2 / EV1 = **2,21**. *(4 pts)*
+7. EV2 = 118 ≥ 50 ✔ mais rapport 2,21 > 2,2 : **limite** → couche **insuffisamment compactée** (le premier chargement l'a encore densifiée). On compacte à nouveau et on refait l'essai. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser la moyenne arithmétique des pl*.
+> - Oublier q0 (poids des terres) dans qELS.
+> - Réceptionner une plate-forme sur le seul EV2.`},
  exercices:[
   {t:"Interpréter un sondage au pénétromètre statique", d:1, e:`Un CPT donne : à 2 m, qc = 0,5 MPa et fs = 25 kPa ; à 6 m, qc = 3 MPa et fs = 45 kPa ; à 10 m, qc = 12 MPa et fs = 80 kPa. Calculer Rf et identifier les sols. Où fonder ?`, c:`| Profondeur | Rf = fs/qc | Sol probable |
 |---|---|---|
@@ -1069,6 +1680,52 @@ Sur les grands chantiers, on réalise aussi des **essais de chargement statique*
 > - Argile : qp ≈ 9 cu ; qs = α cu.
 > - Le frottement négatif est une charge supplémentaire.
 > - Entraxe ≥ 3 d ; efficacité de groupe Ce < 1.`,
+ sujet:{titre:"Pieux forés dans une vase : portance, frottement négatif et effet de groupe", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un immeuble R+6 à Marcory-Zone 4 est fondé sur pieux forés, car le sol comporte 9 m de vase sous un remblai récent. Vous vérifiez un pieu et un groupe.
+
+**Coupe et paramètres**
+- 0 à 9 m : vase sous remblai récent (elle tasse encore) : frottement négatif **qsn = 15 kPa** ;
+- 9 à 13 m : argile raide, **cu = 120 kPa**, α = **0,5** (qs = α cu) ;
+- 13 à 16 m : sable dense, **qs = 90 kPa** ; pointe à 16 m : **qp = 4 500 kPa**.
+
+**Pieu** : foré, **Ø 0,80 m**, longueur **16 m** ; Qadm = Qp / 3 + Qs / 2.
+
+**Groupe** : poteau de **3 800 kN** (service) ; pieux à l'entraxe **s = 3 Ø = 2,40 m** ; efficacité (Converse-Labarre) : Ce = 1 − (θ / 90) × [(n − 1) m + (m − 1) n] / (m n), θ = arctan(d / s) en degrés.
+
+### Partie A — Pieu isolé (9 points)
+1. Calculer le périmètre et la section du pieu. (1 pt)
+2. Calculer le frottement positif Qs (dans l'argile et le sable seulement) et la résistance de pointe Qp. (4 pts)
+3. Calculer Qadm. (2 pts)
+4. Pourquoi ne compte-t-on pas de frottement positif dans la vase ? (2 pts)
+
+### Partie B — Frottement négatif (4 points)
+5. Expliquer le frottement négatif et calculer Fn. (3 pts)
+6. En déduire la charge utile admissible du pieu. (1 pt)
+
+### Partie C — Groupe (7 points)
+7. Calculer θ et l'efficacité d'un groupe de 2 × 2 pieux. La capacité du groupe suffit-elle ? (4 pts)
+8. Vérifier un groupe de 2 × 3 pieux. (3 pts)`,
+  corrige:`### Partie A — Pieu isolé (9 pts)
+1. P = π × 0,80 = **2,513 m** ; Ap = π × 0,80² / 4 = **0,503 m²**. *(1 pt)*
+2. Argile : qs = 0,5 × 120 = 60 kPa. *(4 pts)*
+   - Qs = 2,513 × (4 × 60 + 3 × 90) = 2,513 × 510 = **1 282 kN** ;
+   - Qp = 4 500 × 0,503 = **2 262 kN**.
+3. Qadm = 2 262 / 3 + 1 282 / 2 = 754 + 641 = **1 395 kN**. *(2 pts)*
+4. La vase tasse encore sous le remblai : elle descend **plus vite** que le pieu et le tire vers le bas au lieu de le porter. *(2 pts)*
+
+### Partie B — Frottement négatif (4 pts)
+5. Le sol qui tasse « s'accroche » au pieu et lui ajoute une charge. $$ Fn = P × h × qsn = 2,513 × 9 × 15 = 339 kN
+   *(3 pts)*
+6. Charge utile : 1 395 − 339 = **1 056 kN** par pieu. *(1 pt)*
+
+### Partie C — Groupe (7 pts)
+7. θ = arctan(0,80 / 2,40) = **18,4°** ; m = n = 2 : Ce = 1 − (18,4 / 90) × (2 + 2) / 4 = **0,795** ; capacité : 0,795 × 4 × 1 056 = **3 357 kN < 3 800 kN** ✘. *(4 pts)*
+8. m = 2, n = 3 : Ce = 1 − 0,205 × (2 × 2 + 1 × 3) / 6 = **0,761** ; capacité : 0,761 × 6 × 1 056 = **4 820 kN ≥ 3 800** ✔ (ou pieux plus longs dans le sable). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter la vase comme couche porteuse.
+> - Oublier que l'effet de groupe réduit la capacité de chaque pieu.
+> - Appliquer le même coefficient de sécurité à la pointe et au frottement.`},
  exercices:[
   {t:"Charge admissible d'un pieu foré", d:1, e:`Pieu foré Ø 0,80 m de 12 m : de 0 à 8 m argile (qs = 30 kPa), de 8 à 12 m grave latéritique (qs = 90 kPa), qp = 3 500 kPa. Calculer Qp, Qs et Qadm.`, c:`P = π × 0,80 = 2,513 m ; Ap = π × 0,80² / 4 = 0,5027 m².
 Qs = 2,513 × (8 × 30 + 4 × 90) = 2,513 × 600 = **1 508 kN**.
@@ -1175,6 +1832,55 @@ D'où l'importance du **drainage** derrière les murs : couche drainante, barbac
 > - Pa = 0,5 Ka γ H² à H/3 ; surcharge : Ka q H à H/2.
 > - L'eau s'ajoute avec K = 1 : drainer derrière les murs.
 > - Mur poids : renversement ≥ 1,5 ; glissement ≥ 1,5 ; e ≤ B/6 ; σmax ≤ qadm.`,
+ sujet:{titre:"Mur poids en béton : poussée, surcharge et vérifications de stabilité", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un mur poids en béton cyclopéen soutient la plate-forme d'une école à Man, en terrain pentu.
+
+**Données**
+- Hauteur **H = 4,00 m** ; crête **0,60 m** ; base **2,20 m** ; parement côté terres **vertical**, parement aval incliné ; béton **γb = 23 kN/m³** ;
+- Remblai : **φ = 32°**, **c = 0**, **γ = 18 kN/m³** ; surcharge sur le terre-plein **q = 10 kPa** (cour de récréation) ;
+- Rankine : Ka = tan²(45° − φ/2) ; frottement sol-base : **tan φ** ; contrainte admissible du sol de fondation : **200 kPa** ;
+- Coefficients de sécurité exigés : renversement **1,5**, glissement **1,5**.
+
+### Partie A — Poussées (6 points)
+1. Calculer Ka. (1 pt)
+2. Calculer la poussée des terres Pa et la poussée due à la surcharge Pq, avec leurs points d'application. (3 pts)
+3. Calculer le moment de renversement par rapport à l'arête aval de la base. (2 pts)
+
+### Partie B — Poids et renversement (5 points)
+4. Décomposer le mur en un rectangle et un triangle : calculer leurs poids et leurs bras de levier par rapport à l'arête aval. (3 pts)
+5. Vérifier la sécurité au renversement. (2 pts)
+
+### Partie C — Glissement et contraintes (6 points)
+6. Vérifier la sécurité au glissement. Proposer une solution si besoin. (3 pts)
+7. Calculer l'excentricité de la résultante et les contraintes sous la base. (3 pts)
+
+### Partie D — Eau (3 points)
+8. Si les barbacanes se bouchent et que l'eau monte derrière le mur sur toute sa hauteur, quelle poussée supplémentaire ? Conclure. (3 pts)`,
+  corrige:`### Partie A — Poussées (6 pts)
+1. Ka = tan²(29°) = **0,307**. *(1 pt)*
+2. Pa = 0,5 × 0,307 × 18 × 4² = **44,2 kN/m** à H/3 = **1,33 m** ; Pq = 0,307 × 10 × 4 = **12,3 kN/m** à H/2 = **2,00 m**. *(3 pts)*
+3. Mr = 44,2 × 1,333 + 12,3 × 2,00 = **83,6 kN·m/m**. *(2 pts)*
+
+### Partie B — Renversement (5 pts)
+4. *(3 pts)*
+   - Rectangle (côté terres) : 0,60 × 4 × 23 = **55,2 kN**, à 2,20 − 0,30 = **1,90 m** ;
+   - Triangle (aval) : 0,5 × 1,60 × 4 × 23 = **73,6 kN**, à 2/3 × 1,60 = **1,07 m** ;
+   - W = **128,8 kN/m** ; Ms = 55,2 × 1,90 + 73,6 × 1,067 = **183,4 kN·m/m**.
+5. Fr = 183,4 / 83,6 = **2,19 ≥ 1,5** ✔. *(2 pts)*
+
+### Partie C — Glissement et contraintes (6 pts)
+6. Fg = 128,8 × tan 32° / 56,5 = 80,5 / 56,5 = **1,42 < 1,5** ✘ → ajouter une **bêche** sous la base (butée), incliner la base, ou élargir le mur. *(3 pts)*
+7. x = (183,4 − 83,6) / 128,8 = 0,775 m ; e = 1,10 − 0,775 = **0,325 m ≤ B/6 = 0,367** ✔ (base entièrement comprimée). *(3 pts)*
+$$ σ = (128,8 / 2,20) × (1 ± 6 × 0,325 / 2,20)   →   σmax = 110 kPa ; σmin = 7 kPa
+   110 ≤ 200 kPa ✔.
+
+### Partie D — Eau (3 pts)
+8. Pw = 0,5 × 10 × 4² = **80 kN/m**, plus que la poussée des terres elle-même : le mur glisserait et basculerait. D'où l'importance des **barbacanes**, du **drain** et du **massif drainant** derrière le mur, et de leur entretien. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Placer la poussée des terres à H/2 (elle est triangulaire : H/3).
+> - Oublier la surcharge, ou la placer à H/3.
+> - Prendre les bras de levier depuis l'arête amont pour le renversement.`},
  exercices:[
   {t:"Poussée sur un muret", d:1, e:`Un muret de 2,50 m retient un sable φ = 32°, γ = 19 kN/m³. Calculer Ka, Kp et la poussée active Pa (valeur et point d'application).`, c:`Ka = tan²(45 − 16) = tan² 29° = **0,307** ; Kp = tan² 61° = **3,25**.
 Pa = 0,5 × 0,307 × 19 × 2,50² = **18,2 kN/m**, appliquée à 2,50 / 3 = **0,83 m** au-dessus de la base.`},
@@ -1271,6 +1977,62 @@ On essaie de nombreux cercles (logiciels) ; le cercle donnant le **F minimal** e
 > - F ≥ 1,5 pour un ouvrage permanent.
 > - L'eau est la première cause des glissements : drainer.
 > - Tranchée de plus de 1,30 m : blindage ou talutage obligatoire.`,
+ sujet:{titre:"Stabilité des pentes : talus infini, méthode de Fellenius et tranchées", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Lotissement en pente à Abobo-Anonkoua : on étudie un talus sableux, un glissement circulaire possible sous une voie et la sécurité des tranchées de réseaux.
+
+**Talus sableux** : φ' = **34°**, c' = 0, pente **β = 26°** ; en saison des pluies, nappe affleurante avec écoulement parallèle à la pente (γ'/γsat ≈ **0,5**).
+
+**Cercle de glissement (Fellenius)** : c' = **12 kPa**, φ' = **26°**, sol sec (u = 0) ; F = Σ [c' l + W cos α tan φ'] / Σ W sin α.
+
+| Tranche | W (kN/m) | α (°) | l (m) |
+|---|---|---|---|
+| 1 | 40 | − 10 | 2,1 |
+| 2 | 120 | 12 | 2,0 |
+| 3 | 160 | 32 | 2,4 |
+| 4 | 90 | 52 | 3,2 |
+
+**Tranchée** dans une argile : cu = **25 kPa**, γ = **19 kN/m³** ; hauteur critique Hc ≈ 3,85 cu / γ.
+
+### Partie A — Talus infini (6 points)
+1. Calculer F en saison sèche. (2 pts)
+2. Calculer F avec la nappe affleurante. Conclure. (2 pts)
+3. Proposer deux mesures de confortement. (2 pts)
+
+### Partie B — Fellenius (9 points)
+4. Calculer pour chaque tranche le terme résistant et le terme moteur. (5 pts)
+5. Calculer F et conclure (F ≥ 1,5 exigé). (2 pts)
+6. Quel rôle joue la tranche 1 ? Quelle erreur de chantier faut-il éviter ? (2 pts)
+
+### Partie C — Tranchées (5 points)
+7. Calculer la hauteur critique et la hauteur admissible avec F = 1,5. (3 pts)
+8. Pourquoi la règle impose-t-elle quand même de blinder ou taluter toute tranchée de plus de 1,30 m ? (2 pts)`,
+  corrige:`### Partie A — Talus infini (6 pts)
+1. F = tan 34° / tan 26° = 0,675 / 0,488 = **1,38**. *(2 pts)*
+2. F ≈ 0,5 × 1,38 = **0,69 < 1** → **glissement** en saison des pluies. *(2 pts)*
+3. **Drainage** (tranchées drainantes, masques drainants) pour supprimer l'écoulement ; **adoucir** la pente ; **végétaliser** et protéger contre le ruissellement ; mur ou gabions en pied. *(2 pts)*
+
+### Partie B — Fellenius (9 pts)
+4. Résistant : c' l + W cos α tan φ' (tan 26° = 0,488) ; moteur : W sin α. *(5 pts)*
+
+| Tranche | Résistant (kN/m) | Moteur (kN/m) |
+|---|---|---|
+| 1 | 25,2 + 19,2 = 44,4 | − 6,9 |
+| 2 | 24,0 + 57,2 = 81,2 | 24,9 |
+| 3 | 28,8 + 66,2 = 95,0 | 84,8 |
+| 4 | 38,4 + 27,0 = 65,4 | 70,9 |
+| **Σ** | **286,1** | **173,7** |
+
+5. F = 286,1 / 173,7 = **1,65 ≥ 1,5** ✔ (en sol sec). *(2 pts)*
+6. α < 0 : son poids **retient** le glissement (butée de pied). Il ne faut jamais **terrasser le pied** d'un talus (pour élargir une voie ou une cour) sans étude. *(2 pts)*
+
+### Partie C — Tranchées (5 pts)
+7. Hc = 3,85 × 25 / 19 = **5,07 m** ; admissible : 5,07 / 1,5 = **3,38 m**. *(3 pts)*
+8. La cohésion chute avec l'eau, les fissures de dessiccation, les vibrations et les surcharges en bord de fouille ; un éboulement même de 1 m³ peut ensevelir un ouvrier. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le signe négatif de la tranche de pied.
+> - Juger un talus en saison sèche seulement.
+> - Stocker les déblais en bord de tranchée.`},
  exercices:[
   {t:"Pente maximale d'un remblai sableux", d:1, e:`Un remblai en sable (φ' = 33°, c' = 0) doit avoir un coefficient de sécurité de 1,5. Quelle pente maximale (angle et pente H/V) peut-on donner à ses talus ?`, c:`tan β = tan 33° / 1,5 = 0,649 / 1,5 = **0,433** → **β = 23,4°**.
 Pente H/V = 1 / 0,433 = **2,3 / 1** : 2,3 m d'horizontal pour 1 m de hauteur.`},
@@ -1364,6 +2126,58 @@ Le dosage se calcule en **pourcentage de la masse de sol sec**.
 > - Compactage dynamique : D ≈ 0,5 √(M H).
 > - Préchargement + drains : on fait tasser avant de construire ; les drains divisent la durée par des dizaines.
 > - Chaux pour les argiles humides, ciment pour les sables.`,
+ sujet:{titre:"Améliorer un sol de vase : purge, préchargement, drains verticaux, colonnes et chaulage", duree:120, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une zone d'entrepôts est prévue à Vridi sur **12 m de vase** reposant sur une argile compacte imperméable (drainage par le haut seulement). Vous comparez plusieurs techniques d'amélioration.
+
+**Données**
+- Surface de la plate-forme : **4 000 m²** ; contrainte apportée par les entrepôts : **55 kPa** ;
+- Vase : **cv = ch = 2 m²/an** ; Tv(90 %) = **0,848** ;
+- Drains préfabriqués : dw = **0,065 m**, maillage **carré de 1,40 m** (De = 1,13 × entraxe) ; Uh = 1 − exp(− 8 Th / F(n)), F(n) = ln(n) − 0,75, t = Th De² / ch ;
+- Colonnes ballastées : **Ø 0,80 m** en maille **2,00 × 2,00 m** ; rapport de concentration des contraintes **n = 4** ; β = 1 + a (n − 1) ; tassement sans traitement **25 cm** ;
+- Couche de forme en limon traité à la chaux : épaisseur **0,35 m**, γd = **17 kN/m³**, dosage **2 %** ;
+- Bureau d'accueil sur une ancienne décharge : emprise **12 × 10 m**, purge sur **1,50 m**.
+
+### Partie A — Purge et substitution (3 points)
+1. Calculer le volume purgé, le volume à évacuer (foisonnement 1,25) et le remblai d'apport (coefficient 1,30). (3 pts)
+
+### Partie B — Préchargement et drains (9 points)
+2. Calculer la contrainte de préchargement (1,2 fois l'ouvrage) et la hauteur de remblai (20 kN/m³). (2 pts)
+3. Calculer le temps nécessaire pour 90 % de consolidation sans drains. (2 pts)
+4. Avec les drains : calculer De, n, F(n), Th pour U = 90 % et la durée. (4 pts)
+5. Conclure. (1 pt)
+
+### Partie C — Colonnes ballastées (4 points)
+6. Calculer le taux d'incorporation a, le facteur d'amélioration β et le tassement résiduel. (3 pts)
+7. Pourquoi les colonnes accélèrent-elles aussi la consolidation ? (1 pt)
+
+### Partie D — Chaulage (4 points)
+8. Calculer la masse de chaux pour la couche de forme. (2 pts)
+9. Expliquer les deux effets de la chaux vive sur un limon humide et une précaution de sécurité. (2 pts)`,
+  corrige:`### Partie A — Purge (3 pts)
+1. 12 × 10 × 1,50 = **180 m³** ; évacuation 180 × 1,25 = **225 m³** ; apport 180 × 1,30 = **234 m³**. *(3 pts)*
+
+### Partie B — Préchargement (9 pts)
+2. 1,2 × 55 = **66 kPa** → 66 / 20 = **3,3 m** de remblai. *(2 pts)*
+3. Drainage par le haut : Hdr = 12 m → t90 = 0,848 × 144 / 2 = **61 ans** : impossible. *(2 pts)*
+4. *(4 pts)*
+   - De = 1,13 × 1,40 = **1,582 m** ; n = 1,582 / 0,065 = **24,3** ;
+   - F(n) = ln 24,3 − 0,75 = **2,44** ;
+   - Th = − F(n) × ln(1 − 0,90) / 8 = 2,44 × 2,303 / 8 = **0,703** ;
+   - t = 0,703 × 1,582² / 2 = **0,88 an ≈ 10,5 mois**.
+5. Les drains ramènent la durée de 61 ans à moins d'un an : préchargement **avec drains**, suivi par tassomètres et piézomètres avant de construire. *(1 pt)*
+
+### Partie C — Colonnes (4 pts)
+6. a = (π × 0,80² / 4) / 4,00 = 0,503 / 4 = **0,126** ; β = 1 + 0,126 × 3 = **1,38** ; tassement : 25 / 1,38 = **18 cm**. *(3 pts)*
+7. Le gravier est très perméable : chaque colonne est aussi un **drain vertical**. *(1 pt)*
+
+### Partie D — Chaulage (4 pts)
+8. Masse sèche : 4 000 × 0,35 × 17 / 9,81 = **2 426 t** → chaux : 2 % = **48,5 t**. *(2 pts)*
+9. **Effet immédiat** : la chaux vive consomme de l'eau en s'hydratant et en chauffant → le sol s'assèche et devient compactable ; **effet à long terme** : réaction avec les argiles (floculation, liants) → meilleure portance et moindre sensibilité à l'eau. Sécurité : produit **caustique** (lunettes, gants, masque), pas d'épandage par grand vent. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Utiliser la longueur verticale Hdr dans la formule des drains (c'est De qui compte).
+> - Retirer le préchargement avant d'avoir vérifié la fin des tassements.
+> - Oublier la chaux dans le volume des approvisionnements et les mesures de sécurité.`},
  exercices:[
   {t:"Purge et remplacement", d:1, e:`Sous un bâtiment de 20 × 15 m, on purge 1,20 m de remblai d'ordures. Coefficient de foisonnement 1,30 ; coefficient de compactage de l'apport 1,25. Calculer les volumes à évacuer et à commander, et le nombre de rotations de camions de 12 m³ pour l'évacuation.`, c:`Volume en place : 20 × 15 × 1,20 = **360 m³**.
 À évacuer : 360 × 1,30 = **468 m³** → 468 / 12 = 39 → **39 rotations**.
@@ -1434,6 +2248,62 @@ Un rapport G2 comprend :
 > - Reconnaissance : ≥ 3 points, 1 point pour 200 à 400 m², profondeur ≥ 1,5 à 2 B (≥ 5 m), 5 m sous les pieux.
 > - Le rapport donne le modèle géotechnique, les valeurs de calcul et les recommandations.
 > - Coût de l'étude : 0,5 à 2 % de l'ouvrage.`,
+ sujet:{titre:"La mission géotechnique : programmer l'étude et exploiter un rapport de sol", duree:90, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Un maître d'ouvrage veut construire un immeuble R+4 de **900 m² d'emprise** à Cocody-Angré. Vous l'accompagnez pour l'étude géotechnique, puis vous exploitez le rapport.
+
+**Extrait de la synthèse du rapport (mission G2 AVP)**
+- 0 à 0,80 m : remblai hétérogène ; 0,80 à 4,50 m : sable argileux rouge ; au-delà : sable argileux compact ;
+- Nappe non rencontrée jusqu'à 12 m (sondages de saison sèche) ;
+- **Semelles isolées ancrées à 1,50 m minimum**, **qELS = 0,25 MPa**, tassements estimés < 2 cm ;
+- Dallage sur terre-plein **après purge du remblai** ; drainage périphérique conseillé ;
+- Réserve : « niveau d'assise à confirmer à l'ouverture des fouilles ».
+
+**Charges de service** : poteau de rive **620 kN** ; poteau central **1 050 kN**.
+
+### Partie A — Les missions (6 points)
+1. Présenter les missions G1 à G5 de la norme NF P 94-500 et dire à quel moment intervient chacune. (4 pts)
+2. Pourquoi G3 et G4 sont-elles complémentaires ? (2 pts)
+
+### Partie B — Programmer la reconnaissance (5 points)
+3. Combien de points de sondage prévoir (un point pour 200 à 400 m², au moins 3) ? Où les placer ? (3 pts)
+4. Jusqu'à quelle profondeur, pour des semelles de 2 m de large ? (2 pts)
+
+### Partie C — Exploiter le rapport (7 points)
+5. Dimensionner les semelles carrées des deux poteaux. (3 pts)
+6. Quel volume de remblai faut-il purger sous un dallage de 900 m² ? (1 pt)
+7. Quelle précaution prendre au sujet de la nappe ? (1 pt)
+8. Que faire de la réserve « à confirmer à l'ouverture des fouilles » ? (2 pts)
+
+### Partie D — Coût (2 points)
+9. L'étude coûte **12 millions F** pour un ouvrage de **1,2 milliard F**. Quel pourcentage ? Comparer avec le coût d'une reprise en sous-œuvre (souvent 10 à 20 % de l'ouvrage). (2 pts)`,
+  corrige:`### Partie A — Missions (6 pts)
+1. *(4 pts)*
+   - **G1** étude préalable (achat, faisabilité) : enquête, visite, premiers sondages, principes généraux ;
+   - **G2** étude de conception (AVP, PRO, DCE) : reconnaissance complète, choix et prédimensionnement des fondations ;
+   - **G3** étude et suivi d'exécution (pour l'entreprise) ;
+   - **G4** supervision d'exécution (pour le maître d'ouvrage) ;
+   - **G5** diagnostic (sinistre, extension).
+2. G3 adapte le projet aux sols réellement rencontrés pour l'entreprise ; G4 contrôle ces adaptations pour le maître d'ouvrage : deux regards indépendants sur le chantier. *(2 pts)*
+
+### Partie B — Programme (5 pts)
+3. 900 / 300 ≈ **3 à 4 points**, plutôt **4** : aux angles de l'emprise et au droit des charges les plus fortes (et un point supplémentaire si les premiers résultats varient). *(3 pts)*
+4. Au moins **1,5 à 2 fois la largeur** sous les fondations : 1,50 + 2 × 2 = **≈ 5,5 m minimum**, plus pour vérifier l'absence de couche molle profonde (en pratique 8 à 10 m). *(2 pts)*
+
+### Partie C — Rapport (7 pts)
+5. *(3 pts)*
+   - Rive : 620 / 250 = 2,48 m² → **1,60 × 1,60 m** (2,56 m²) ;
+   - Central : 1 050 / 250 = 4,20 m² → **2,10 × 2,10 m** (4,41 m²).
+6. 900 × 0,80 = **720 m³** de remblai à purger et remplacer. *(1 pt)*
+7. Sondages faits en **saison sèche** : la nappe peut remonter ; prévoir le drainage périphérique et vérifier les sous-pressions éventuelles. *(1 pt)*
+8. Faire **réceptionner les fonds de fouille** par le géotechnicien (mission G3/G4) avant de couler le béton de propreté ; adapter la profondeur si le sable compact n'est pas atteint. *(2 pts)*
+
+### Partie D — Coût (2 pts)
+9. 12 / 1 200 = **1 %** du coût de l'ouvrage, contre **10 à 20 %** pour une reprise en sous-œuvre : l'étude de sol est l'assurance la moins chère du projet. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Lancer les plans d'exécution sans étude G2.
+> - Ignorer les réserves du rapport.
+> - Fonder dans le remblai superficiel parce qu'il semble compact.`},
  exercices:[
   {t:"Quelle mission commander ?", d:1, e:`Indiquer la mission géotechnique adaptée à chaque situation : a) un promoteur hésite à acheter un terrain en bordure de lagune ; b) l'architecte termine l'avant-projet d'un immeuble R+6 ; c) l'entreprise de gros œuvre découvre une poche de vase en ouvrant les fouilles ; d) une école existante présente des fissures en escalier ; e) le maître d'ouvrage veut un contrôle indépendant des travaux de fondations.`, c:`a) **G1** (étude préalable : faisabilité, risques).
 b) **G2** (conception, phase AVP puis PRO).

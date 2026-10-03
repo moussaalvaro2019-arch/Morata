@@ -40,7 +40,8 @@ A.page('app/exercices', {space:'app', title:'Exercices & annales', crumb:'S\'ent
   const tabs = [['mat', 'Par matière', 'book'], ['sol', 'Solveurs guidés', 'target'], ['ep', 'Épreuves d\'entraînement', 'clock'], ['ann', 'Annales officielles', 'doc']];
   let body = '';
   if(hubTab === 'mat') body = `<div class="mgrid">${cat.map(m => { const ns = SOL.byMat(m.id).length, ne = EXO.byMat(m.id).length, na = annOf(m.id).length;
-      return `<a class="mcard" href="#/app/exercices/${m.id}">${A.matIcon(m)}<b>${esc(m.titre)}</b><div class="meta"><span>${ic('target')} ${ns} solveur${ns > 1 ? 's' : ''}</span><span>${ic('book')} ${ne} exercice${ne > 1 ? 's' : ''}</span>${na ? `<span>${ic('doc')} ${na} annale${na > 1 ? 's' : ''}</span>` : ''}</div></a>`; }).join('')}</div>`;
+      const nsj = m.chapitres.filter(c => c.ns || c.sujet).length;
+      return `<a class="mcard" href="#/app/exercices/${m.id}">${A.matIcon(m)}<b>${esc(m.titre)}</b><div class="meta">${nsj ? `<span>${ic('doc')} ${nsj} sujet${nsj > 1 ? 's' : ''} d'examen</span>` : ''}<span>${ic('target')} ${ns} solveur${ns > 1 ? 's' : ''}</span><span>${ic('book')} ${ne} exercice${ne > 1 ? 's' : ''}</span>${na ? `<span>${ic('doc')} ${na} annale${na > 1 ? 's' : ''}</span>` : ''}</div></a>`; }).join('')}</div>`;
   else if(hubTab === 'sol') body = A.GROUPES.map(g => { const ms = cat.filter(m => m.groupe === g.id); const list = ms.flatMap(m => SOL.L.filter(s => s.mat === m.id));
       return list.length ? `<div class="stack s8"><h3>${esc(g.n)}</h3><div class="exlist">${list.map(solRow).join('')}</div></div>` : ''; }).join('');
   else if(hubTab === 'ep') body = epList(EXO.EP);
@@ -84,7 +85,11 @@ A.page('app/exercices/:mat', {space:'app', title:p => (A.mat(p.mat) || {}).titre
   const m = A.mat(p.mat); if(!m) return A.empty('search', 'Matière introuvable.');
   if(!AN) loadAnnales().then(() => A.refresh());
   const sols = SOL.byMat(m.id).sort((a, b) => a.niv - b.niv), exs = EXO.byMat(m.id).filter(e => !exNiv || (exNiv === 'BTS' ? !/lic|master/i.test(e.niv) : /lic|master/i.test(e.niv)));
+  const sjs = m.chapitres.filter(c => c.ns || c.sujet);
   return `<div class="stack">${A.matHead(m)}
+   ${sjs.length ? `<div class="card stack"><div class="row between"><h3 style="margin:0;justify-content:flex-start">${ic('doc')} Sujets d'examen par chapitre</h3><span class="sub">${sjs.length}</span></div>
+    <p class="sub">Un sujet type examen (BTS, Licence) pour chaque chapitre du cours : contexte de chantier, données, questions notées, puis corrigé détaillé et barème. Faites-le en temps limité en « mode examen ».</p>
+    ${A.NIVEAUX.map(N => { const L = sjs.filter(c => A.nivOf(c) === N.id); return L.length ? `<div class="stack s8"><b style="color:${N.c}">${'●'.repeat(N.id)} ${N.n}</b><div class="exlist">${L.map(c => `<a class="exrow" href="#/app/sujet/${c.id}"><span class="tag" style="background:${N.bg};color:${N.c}">${ic('doc')}Sujet</span><span style="min-width:0"><span class="ti">${esc(c.titre)}</span><div class="sub">${c.sujet && c.sujet.titre ? esc(c.sujet.titre) + ' · ' : ''}${(c.sujet && c.sujet.duree) || ''}${c.sujet && c.sujet.duree ? ' min' : 'sujet noté sur 20'}</div></span>${A.canRead(c.id) ? ic('chev') : ic('lock')}</a>`).join('')}</div></div>` : ''; }).join('')}</div>` : ''}
    <div class="g2" style="align-items:start">
     <div class="stack">
      <div class="card stack"><div class="row between"><h3 style="margin:0;justify-content:flex-start">${ic('target')} Solveurs guidés</h3><span class="sub">${sols.length}</span></div>

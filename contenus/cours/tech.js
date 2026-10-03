@@ -74,6 +74,67 @@ Le coût des **travaux** n'est qu'une partie du coût total : il faut ajouter le
 > - Le MOA décide et paie, le MOE conçoit et contrôle, l'entreprise construit, le bureau de contrôle vérifie la sécurité.
 > - Étapes : programme → esquisse, APS, APD, permis → PRO, DCE → consultation → préparation → travaux → réception.
 > - Coût d'opération = travaux + honoraires + taxes + branchements + aléas (+ terrain).`,
+ sujet:{titre:"Les acteurs, les étapes et le budget d'une opération : une clinique à Daloa", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un groupe de médecins veut construire une petite clinique à Daloa. Ils vous demandent d'expliquer qui intervient, dans quel ordre, et combien coûtera réellement l'opération.
+
+**Données budgétaires**
+- Travaux estimés : **180 millions F HT** ;
+- Honoraires : architecte **7 %**, bureau d'études techniques (BET) **2,5 %**, bureau de contrôle **1,2 %** des travaux ;
+- Étude de sol **1,5 M F** ; géomètre **0,8 M F** ; branchements (eau, électricité) et taxes **4,5 M F** ;
+- Aléas : **5 %** des travaux.
+
+### Partie A — Les acteurs (6 points)
+1. Définir maître d'ouvrage et maître d'œuvre. Qui est qui dans ce projet ? (2 pts)
+2. Donner le rôle de : l'architecte, le BET, le bureau de contrôle, le géotechnicien, le géomètre, l'entreprise. (4 pts)
+
+### Partie B — Les étapes (6 points)
+3. Remettre dans l'ordre : appel d'offres, esquisse, réception, permis de construire, APD, programme, exécution des travaux, APS, DCE, signature des marchés. (4 pts)
+4. Pourquoi le programme doit-il être précis dès le départ ? (2 pts)
+
+### Partie C — Gros œuvre et second œuvre (3 points)
+5. Classer en gros œuvre ou second œuvre : fondations, carrelage, poteaux, menuiseries, dalles, électricité, maçonnerie, peinture, charpente, plomberie. (3 pts)
+
+### Partie D — Budget (5 points)
+6. Calculer chaque poste annexe et le coût total de l'opération hors terrain. (4 pts)
+7. De combien (en %) dépasse-t-il le seul montant des travaux ? (1 pt)`,
+  corrige:`### Partie A — Acteurs (6 pts)
+1. **Maître d'ouvrage** : celui qui commande et paie l'ouvrage (le groupe de médecins). **Maître d'œuvre** : celui qui conçoit et dirige les travaux pour lui (l'architecte, avec le BET). *(2 pts)*
+2. *(4 pts)*
+   - **Architecte** : conception, plans, permis, direction des travaux ;
+   - **BET** : calculs de structure et des lots techniques (plans de béton armé, fluides) ;
+   - **Bureau de contrôle** : vérifie la solidité et la sécurité (avis sur les plans, visites) ;
+   - **Géotechnicien** : étude du sol et recommandations de fondations ;
+   - **Géomètre** : levé du terrain, bornage, implantation ;
+   - **Entreprise** : exécute les travaux selon le marché.
+
+### Partie B — Étapes (6 pts)
+3. Programme → esquisse → APS → APD → permis de construire → DCE → appel d'offres → signature des marchés → exécution des travaux → réception. *(4 pts)*
+4. Tout changement tardif (nombre de lits, bloc opératoire, groupe électrogène) oblige à refaire les plans, retarde et coûte cher ; une clinique a aussi des normes sanitaires précises. *(2 pts)*
+
+### Partie C — Classement (3 pts)
+5. **Gros œuvre** : fondations, poteaux, dalles, maçonnerie, charpente (structure de la couverture). **Second œuvre** : carrelage, menuiseries, électricité, peinture, plomberie. *(3 pts)*
+
+### Partie D — Budget (5 pts)
+6. *(4 pts)*
+
+| Poste | Calcul | M F |
+|---|---|---|
+| Travaux | | 180,00 |
+| Architecte | 7 % | 12,60 |
+| BET | 2,5 % | 4,50 |
+| Bureau de contrôle | 1,2 % | 2,16 |
+| Étude de sol | | 1,50 |
+| Géomètre | | 0,80 |
+| Branchements et taxes | | 4,50 |
+| Aléas | 5 % | 9,00 |
+| **Total hors terrain** | | **215,06** |
+
+7. 35,06 / 180 = **+ 19,5 %** : un budget limité aux travaux est toujours sous-estimé. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Confondre maître d'ouvrage et maître d'œuvre.
+> - Oublier les honoraires, les études et les branchements dans le budget.
+> - Démarrer les travaux avant le permis de construire.`},
  exercices:[
   {t:"Qui fait quoi ?", d:1, e:`Indiquer l'acteur concerné : a) calcule les sections d'acier d'une poutre ; b) signe le marché et paie les situations ; c) dessine les plans du permis de construire ; d) recommande des pieux ; e) implante les axes du bâtiment ; f) vérifie la sécurité incendie d'une école pour le compte du client.`, c:`a) **BET structure** ; b) **maître d'ouvrage** ; c) **architecte** (maître d'œuvre) ; d) **géotechnicien** ; e) **géomètre** ; f) **bureau de contrôle**.`},
   {t:"Remettre les étapes dans l'ordre", d:1, e:`Classer : réception ; APD ; consultation des entreprises ; esquisse ; exécution des travaux ; permis de construire ; DCE ; APS ; préparation du chantier.`, c:`Esquisse → **APS** → **APD** → **permis de construire** → **DCE** → **consultation des entreprises** → **préparation du chantier** → **exécution des travaux** → **réception**.`},
@@ -132,6 +193,47 @@ Le bâtiment est **hors d'eau** quand la toiture est posée, **hors d'air** quan
 > - Infrastructure (sous le RDC) / superstructure (au-dessus).
 > - Porteurs : fondations, poteaux, poutres, voiles, planchers ; non porteurs : cloisons, remplissages.
 > - Hauteur d'étage = HSP + épaisseur du plancher.`,
+ sujet:{titre:"Anatomie d'un immeuble R+3 : vocabulaire, niveaux et hauteurs", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un immeuble R+3 à toiture-terrasse est en projet à Koumassi. Vous devez présenter ses ouvrages et calculer ses niveaux.
+
+**Données**
+- Sol fini du RDC : **± 0,00** ; terrain naturel : **− 0,45** ;
+- Hauteur sous plafond (HSP) : **2,85 m** à tous les niveaux ; épaisseur des planchers (brut + revêtement) : **0,20 m** ;
+- Acrotère de **0,80 m** au-dessus du plancher terrasse.
+
+### Partie A — Vocabulaire (8 points)
+1. Classer en infrastructure ou superstructure : semelles, longrines, poteaux, dallage, poutres, planchers, acrotère, amorces de poteaux, soubassement, linteaux. (4 pts)
+2. Citer les ouvrages d'un bâtiment de bas en haut (au moins huit). (4 pts)
+
+### Partie B — Porteur ou non porteur (4 points)
+3. Dans une ossature poteaux-poutres avec remplissage en agglos, les murs sont-ils porteurs ? Peut-on en supprimer un sans précaution ? Et un poteau ? (4 pts)
+
+### Partie C — Niveaux (6 points)
+4. Calculer la hauteur d'étage. (1 pt)
+5. Calculer les niveaux des planchers R+1, R+2, R+3 et terrasse. (3 pts)
+6. Calculer l'altitude du sommet de l'acrotère et la hauteur totale au-dessus du terrain naturel. (2 pts)
+
+### Partie D — Clos et couvert (2 points)
+7. Que signifie « bâtiment clos et couvert » ? Pourquoi est-ce une étape importante ? (2 pts)`,
+  corrige:`### Partie A — Vocabulaire (8 pts)
+1. **Infrastructure** : semelles, longrines, amorces de poteaux, soubassement, dallage (sur terre-plein). **Superstructure** : poteaux, poutres, planchers, acrotère, linteaux. *(4 pts)*
+2. Fondations (semelles) → amorces et longrines → soubassement → dallage → poteaux et murs → linteaux et chaînages → poutres et planchers → escaliers → toiture ou terrasse (acrotère, étanchéité) → menuiseries et finitions. *(4 pts)*
+
+### Partie B — Porteur (4 pts)
+3. Les murs de remplissage ne portent pas les planchers (ce sont les poteaux et poutres) : on peut en déplacer un, mais il participe parfois au contreventement et porte ses propres réseaux — avis du BET recommandé. Un **poteau** porte les étages : on ne le supprime **jamais** sans étude et renforcement (poutre de reprise). *(4 pts)*
+
+### Partie C — Niveaux (6 pts)
+4. 2,85 + 0,20 = **3,05 m**. *(1 pt)*
+5. R+1 : **+ 3,05** ; R+2 : **+ 6,10** ; R+3 : **+ 9,15** ; terrasse : **+ 12,20**. *(3 pts)*
+6. Sommet de l'acrotère : 12,20 + 0,80 = **+ 13,00** ; au-dessus du TN : 13,00 + 0,45 = **13,45 m**. *(2 pts)*
+
+### Partie D — Clos et couvert (2 pts)
+7. Le bâtiment est fermé (menuiseries extérieures posées) et couvert (toiture ou étanchéité faite) : il est **hors d'eau et hors d'air**, on peut commencer les finitions intérieures sans risque de les abîmer. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre HSP et hauteur d'étage.
+> - Compter les niveaux depuis le terrain naturel au lieu du ± 0,00.
+> - Démolir une cloison sans vérifier si elle porte ou contrevente.`},
  exercices:[
   {t:"Infrastructure ou superstructure ?", d:1, e:`Classer : semelle ; poteau du R+1 ; longrine ; acrotère ; dallage du RDC ; poutre de plancher ; soubassement ; escalier ; amorce de poteau.`, c:`**Infrastructure** : semelle, longrine, dallage du RDC, soubassement, amorce de poteau.
 **Superstructure** : poteau du R+1, acrotère, poutre de plancher, escalier.`},
@@ -188,6 +290,59 @@ Un bâtiment long se dilate et se rétracte : on le coupe par des **joints de di
 > - Murs porteurs, ossature poteaux-poutres, voiles, ossatures métal et bois.
 > - Charges : plancher → poutres → poteaux → fondations → sol ; surface d'influence.
 > - Contreventement contre vent et séisme ; joints de dilatation tous les 25 à 30 m.`,
+ sujet:{titre:"Choisir un système constructif et suivre le cheminement des charges", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un bureau d'études vous confie quatre projets et une première descente de charges.
+
+**Projets**
+- P1 : maison R+1 à Yopougon avec de grandes baies vitrées ;
+- P2 : entrepôt de 36 m de portée à Vridi ;
+- P3 : immeuble R+9 au Plateau ;
+- P4 : centre de santé rural économique près de Katiola.
+
+**Descente de charges (projet R+3)**
+- Poteau intérieur, trame **4,50 × 5,00 m** ;
+- Chaque plancher : **G = 5,5 kN/m²**, **Q = 1,5 kN/m²** ; 4 planchers au-dessus du RDC (R+1, R+2, R+3, terrasse) ;
+- Poteaux **25 × 25**, hauteur d'étage **3,05 m**, béton **25 kN/m³**.
+
+### Partie A — Systèmes (8 points)
+1. Comparer murs porteurs, ossature poteaux-poutres, voiles en béton armé et ossature métallique (avantages, limites). (4 pts)
+2. Proposer un système pour chaque projet P1 à P4 et justifier. (4 pts)
+
+### Partie B — Descente de charges (8 points)
+3. Calculer la surface d'influence du poteau. (1 pt)
+4. Calculer la charge ELU par m² de plancher puis par plancher. (3 pts)
+5. Calculer la charge au pied du poteau du RDC, poids propre des 4 tronçons de poteau compris. (3 pts)
+6. Pourquoi les poteaux sont-ils plus gros en bas qu'en haut ? (1 pt)
+
+### Partie C — Stabilité (4 points)
+7. Qu'est-ce que le contreventement ? Citer deux moyens de l'assurer. (2 pts)
+8. Un bâtiment fait 64 m de long : combien de joints de dilatation prévoir ? Qu'est-ce qu'un joint de rupture ? (2 pts)`,
+  corrige:`### Partie A — Systèmes (8 pts)
+1. *(4 pts)*
+   - **Murs porteurs** : économiques, simples ; ouvertures limitées, plans rigides, petits bâtiments ;
+   - **Poteaux-poutres** : plans libres, grandes baies, étages ; remplissage non porteur ;
+   - **Voiles** : très rigides (contreventement), immeubles hauts ; coffrages importants ;
+   - **Métal** : grandes portées (20 à 60 m), montage rapide ; protection contre corrosion et feu.
+2. *(4 pts)*
+   - P1 : **portiques BA + remplissage agglos de 15** (grandes baies) ;
+   - P2 : **charpente métallique** (36 m de portée) ;
+   - P3 : **portiques + voiles** de contreventement (cages d'escalier et d'ascenseur) ;
+   - P4 : **murs porteurs en BTC** chaînés, toiture légère (économique, matériaux locaux).
+
+### Partie B — Descente de charges (8 pts)
+3. 4,50 × 5,00 = **22,5 m²**. *(1 pt)*
+4. 1,35 × 5,5 + 1,5 × 1,5 = **9,675 kN/m²** → 9,675 × 22,5 = **217,7 kN** par plancher. *(3 pts)*
+5. Planchers : 4 × 217,7 = 870,8 kN ; poteaux : 1,35 × 25 × 0,25 × 0,25 × 3,05 × 4 = 25,7 kN → **≈ 897 kN**. *(3 pts)*
+6. Chaque niveau ajoute sa charge : le poteau du RDC porte tous les étages au-dessus. *(1 pt)*
+
+### Partie C — Stabilité (4 pts)
+7. Le contreventement reprend les efforts horizontaux (vent, séismes, chocs) et empêche le bâtiment de se déformer ou de basculer : **voiles** BA, **portiques** à nœuds rigides, **croix de Saint-André** (métal), planchers formant diaphragme. *(2 pts)*
+8. Joints tous les 25 à 30 m : 64 / 25 ≈ 2,6 → **2 joints** (3 blocs d'environ 21 m). Le **joint de rupture** coupe aussi les fondations, entre deux parties de hauteurs ou de sols différents, pour qu'elles tassent indépendamment. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le poids propre des poteaux et des poutres dans la descente de charges.
+> - Mélanger charges de service (G + Q) et charges ultimes (1,35 G + 1,5 Q).
+> - Faire un bâtiment très long sans joint : fissures de dilatation garanties.`},
  exercices:[
   {t:"Choisir un système constructif", d:1, e:`Proposer un système pour : a) un marché couvert de 40 × 25 m sans poteau intérieur ; b) une villa R+1 avec un séjour de 7 m de large ; c) un immeuble de bureaux R+10 ; d) un logement économique de plain-pied en zone rurale.`, c:`a) **Charpente métallique** (portiques de 25 m) sur poteaux en béton ou en acier.
 b) **Ossature poteaux-poutres en béton armé** avec remplissage en agglos ; la poutre du séjour (7 m) sera dimensionnée en conséquence.
@@ -244,6 +399,47 @@ Avec un niveau de chantier : altitude du plan de visée = altitude du repère + 
 > - Bornage, permis, étude de sol et plan d'implantation avant tout.
 > - Installation de chantier planifiée.
 > - Implantation : axes, équerrage (diagonales, 3-4-5), chaises, cordeaux, niveaux depuis un repère.`,
+ sujet:{titre:"Préparer le terrain : installation de chantier, implantation et report des niveaux", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous démarrez le chantier d'une maison de **14,00 × 10,50 m** à Bingerville, sur un terrain légèrement en pente.
+
+**Données**
+- Rectangle d'implantation : **14,00 × 10,50 m** ; diagonales mesurées après un premier piquetage : **17,53 m** et **17,47 m** ;
+- Repère de nivellement R : altitude **25,000 m** ; lecture arrière sur R : **1,318 m** ;
+- Fond de fouille des semelles : **24,15 m**.
+
+### Partie A — Avant de commencer (5 points)
+1. Citer les démarches et vérifications avant le premier coup de pelle (au moins quatre). (3 pts)
+2. Pourquoi faut-il repérer les réseaux existants (eau, électricité, télécoms) ? (2 pts)
+
+### Partie B — Installation de chantier (5 points)
+3. Dresser la liste des installations d'un chantier de maison et proposer leur disposition sur la parcelle (accès, stockages, gâchage, baraque, sanitaires, eau, électricité, clôture, panneau). (5 pts)
+
+### Partie C — Implantation (6 points)
+4. Calculer la diagonale théorique. Le rectangle est-il d'équerre ? Comment le corriger ? (3 pts)
+5. Expliquer l'implantation par chaises et cordeaux. Pourquoi placer les chaises à 1,50 – 2,00 m des fouilles ? (3 pts)
+
+### Partie D — Niveaux (4 points)
+6. Calculer l'altitude du plan de visée et la lecture à obtenir au fond de fouille. (2 pts)
+7. Pourquoi reporte-t-on aussi un trait de niveau sur les chaises ? (2 pts)`,
+  corrige:`### Partie A — Avant de commencer (5 pts)
+1. Permis de construire affiché ; titre foncier / ACD et **bornage** vérifié ; étude de sol ; plans visés ; déclaration d'ouverture de chantier ; état des lieux des voisins (photos) ; branchements provisoires d'eau et d'électricité. *(3 pts)*
+2. Pour éviter de les endommager (coupures, accidents graves sur une ligne électrique) et de bâtir dessus. *(2 pts)*
+
+### Partie B — Installation (5 pts)
+3. Clôture et portail, **panneau de chantier** ; accès camions près de la voie ; aires de stockage du sable, du gravier, des agglos et des aciers (à l'abri et sur cales) ; **magasin** fermé pour le ciment (sur palettes) et l'outillage ; aire de gâchage près des stocks et de l'eau ; baraque du chef de chantier ; sanitaires ; point d'eau (fût, branchement) ; coffret électrique protégé ; zone de déchets. Les stocks lourds près de l'accès, le gâchage au centre des ouvrages à couler. *(5 pts)*
+
+### Partie C — Implantation (6 pts)
+4. √(14,00² + 10,50²) = **17,50 m**. Diagonales de 17,53 et 17,47 m : différence 6 cm > 1 cm → pas d'équerre (parallélogramme). On déplace les deux angles opposés jusqu'à obtenir **deux diagonales égales à 17,50 m**, les côtés restant à leurs longueurs. *(3 pts)*
+5. Des chaises (planches horizontales sur piquets) sont posées hors de l'emprise ; on y reporte les axes par des clous ; les **cordeaux** tendus entre chaises matérialisent les axes au moment voulu. À 1,50 – 2,00 m des fouilles, elles ne sont ni détruites par le terrassement ni gênantes pour les engins. *(3 pts)*
+
+### Partie D — Niveaux (4 pts)
+6. Plan de visée : 25,000 + 1,318 = **26,318 m** ; lecture au fond : 26,318 − 24,15 = **2,168 m**. *(2 pts)*
+7. Le trait sert de référence de hauteur permanente pour régler les fonds de fouille, les arases et le dallage sans refaire de nivellement à chaque fois. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Implanter sans contrôler les diagonales.
+> - Poser les chaises trop près des fouilles.
+> - Stocker le ciment à même le sol, sous la pluie.`},
  exercices:[
   {t:"Vérifier l'équerrage", d:1, e:`Un bâtiment rectangulaire de 15,00 × 8,00 m est implanté. Quelle doit être la diagonale ? On mesure 17,03 m et 16,99 m : que faire ?`, c:`Diagonale théorique : √(15² + 8²) = √289 = **17,00 m**.
 Les mesures diffèrent de 4 cm : le rectangle est légèrement déformé (parallélogramme). On déplace les angles jusqu'à obtenir deux diagonales égales à **17,00 m** (± 1 cm), en gardant les longueurs des côtés.`},
@@ -306,6 +502,49 @@ Si le bon sol est trop profond ou très médiocre : **fondations profondes** (pi
 > - Semelle isolée (poteau), filante (mur), radier (sol médiocre), puits (bon sol à 2 – 5 m).
 > - A = N / σsol ; h ≥ (B − b)/4 + 5 cm.
 > - Propreté → semelles → amorces → longrines → soubassement → remblai → anti-termites → hérisson → polyane → dallage.`,
+ sujet:{titre:"Fondations superficielles d'une maison : semelles, infrastructure et mise en œuvre", duree:90, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Maison R+1 à Abatta. L'étude de sol donne une contrainte admissible de **0,18 MPa** à 1,20 m pour les semelles isolées et **0,15 MPa** pour les semelles filantes.
+
+**Données**
+- Poteau **25 × 25** apportant **520 kN** (service) ;
+- Mur porteur de 20 cm apportant **85 kN/m** (service) ; on prendra une semelle filante de largeur multiple de 5 cm ;
+- Hauteur d'une semelle : h ≥ (B − b) / 4 + 0,05 m (b : largeur du poteau ou du mur) ; béton **25 kN/m³** ; les terres au-dessus de la semelle sont négligées.
+
+### Partie A — Rôle et types (4 points)
+1. Quel est le rôle des fondations ? (1 pt)
+2. Dans quels cas utilise-t-on des semelles isolées, des semelles filantes, un radier ? (3 pts)
+
+### Partie B — Semelle isolée (8 points)
+3. Calculer la surface nécessaire et le côté B (sans le poids de la semelle). (2 pts)
+4. Calculer la hauteur h. (1 pt)
+5. Vérifier la contrainte en ajoutant le poids de la semelle. Conclure et redimensionner si besoin. (5 pts)
+
+### Partie C — Semelle filante (3 points)
+6. Calculer la largeur et la hauteur de la semelle filante. (3 pts)
+
+### Partie D — Infrastructure et mise en œuvre (5 points)
+7. Décrire l'infrastructure de bas en haut : du fond de fouille au dallage. (3 pts)
+8. Citer quatre règles de mise en œuvre des fondations. (2 pts)`,
+  corrige:`### Partie A — Rôle et types (4 pts)
+1. Transmettre les charges du bâtiment au sol **sans dépasser sa résistance** et **sans tassements excessifs**. *(1 pt)*
+2. **Isolées** : sous les poteaux d'une ossature ; **filantes** : sous les murs porteurs ou des poteaux rapprochés ; **radier** : sol faible ou charges fortes (semelles qui couvriraient plus de la moitié de l'emprise), ou présence d'eau. *(3 pts)*
+
+### Partie B — Semelle isolée (8 pts)
+3. A = 520 / 180 = 2,89 m² → B = √2,89 = **1,70 m**. *(2 pts)*
+4. h ≥ (1,70 − 0,25) / 4 + 0,05 = 0,41 → **h = 0,45 m**. *(1 pt)*
+5. Poids : 1,70² × 0,45 × 25 = 32,5 kN → σ = (520 + 32,5) / 2,89 = **191 kPa > 180** ✘. Avec B = **1,80 m** (h = 0,45) : poids 36,5 kN → σ = 556,5 / 3,24 = **172 kPa ≤ 180** ✔. Le poids propre de la semelle ne doit pas être oublié. *(5 pts)*
+
+### Partie C — Semelle filante (3 pts)
+6. B = 85 / 150 = 0,57 → **0,60 m** ; h ≥ (0,60 − 0,20) / 4 + 0,05 = 0,15 → **h = 0,20 m** (vérification : (85 + 0,60 × 0,20 × 25) / 0,60 = 147 kPa ✔). *(3 pts)*
+
+### Partie D — Infrastructure (5 pts)
+7. Fond de fouille propre et horizontal → **béton de propreté** (5 cm) → **semelles** (armées) → **amorces de poteaux** → **longrines** ou soubassement en agglos pleins → **remblai compacté** → **hérisson** + film → **dallage** armé. *(3 pts)*
+8. Fond de fouille réceptionné (bon sol, sec, sans boue) ; béton de propreté ; enrobage de **5 cm** (cales) ; aciers en attente bien placés et ligaturés ; bétonnage sans délai après l'ouverture des fouilles ; profondeur minimale respectée ; cure. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Dimensionner sans le poids propre de la semelle.
+> - Couler sur un fond de fouille boueux ou remanié par la pluie.
+> - Oublier les cales d'enrobage : les aciers rouillent au contact du sol.`},
  exercices:[
   {t:"Choisir le type de fondation", d:1, e:`Choisir la fondation : a) villa à ossature poteaux-poutres, bon sol latéritique à 1 m ; b) maison en murs porteurs BTC, sol moyen ; c) entrepôt sur sol sableux médiocre et homogène, charges réparties ; d) bon sol à 3,50 m sous un remblai.`, c:`a) **Semelles isolées** reliées par des longrines.
 b) **Semelles filantes** sous les murs.
@@ -365,6 +604,55 @@ Fondation filante, **poteaux raidisseurs tous les 3 à 4 m**, chaînage haut, **
 > - Joints décalés, pleins, de 1 à 1,5 cm ; aplomb, alignement, niveau.
 > - Chaînages horizontaux et verticaux ; liaison avec les poteaux.
 > - Linteaux avec 20 cm d'appui de chaque côté ; clôtures : raidisseurs tous les 3 à 4 m.`,
+ sujet:{titre:"Murs en agglos, chaînages, ouvertures et mur de clôture", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous encadrez une équipe de maçons sur une villa à Bonoua, puis sur le mur de clôture de la parcelle.
+
+**Données**
+- Mur de façade de **11,40 m** entre poteaux d'angle, hauteur de maçonnerie **3,00 m**, agglos de **20 cm** de haut (joint compris) ;
+- Fenêtre de **1,40 m** de large dans ce mur ;
+- Mur de clôture de **45,00 m**, hauteur **2,40 m**.
+
+### Partie A — Matériaux et réception (4 points)
+1. Quel agglo choisir pour : une cloison, un mur extérieur, un soubassement, une clôture haute ? (2 pts)
+2. Comment reconnaître un agglo de mauvaise qualité à la livraison ? (2 pts)
+
+### Partie B — Règles de l'art (8 points)
+3. Citer six règles de l'art pour monter un mur d'agglos. (6 pts)
+4. Combien de rangs pour le mur de 3,00 m ? Combien de lits de fers de liaison (tous les 2 rangs) à chaque poteau ? Combien de jours au minimum pour le monter (1,50 m par jour) ? (2 pts)
+
+### Partie C — Chaînages et ouverture (4 points)
+5. Combien de raidisseurs intermédiaires faut-il dans le mur de 11,40 m (au plus tous les 4 à 5 m) ? (2 pts)
+6. Quelle longueur de linteau pour la fenêtre ? (2 pts)
+
+### Partie D — Mur de clôture (4 points)
+7. Calculer le nombre de poteaux raidisseurs (tous les 3 à 4 m) et le nombre de joints de dilatation (tous les 15 à 20 m). (3 pts)
+8. Pourquoi un mur de clôture non chaîné est-il dangereux ? (1 pt)`,
+  corrige:`### Partie A — Matériaux (4 pts)
+1. Cloison : **agglo creux de 10** ; mur extérieur : **creux de 15** ; soubassement : **plein de 15 ou 20** ; clôture haute : **creux de 20**. *(2 pts)*
+2. Il s'effrite à l'ongle, sonne creux, a des arêtes cassées, des dimensions irrégulières ; il n'a pas été arrosé 7 jours. On le refuse (ou on fait tester sa résistance). *(2 pts)*
+
+### Partie B — Règles de l'art (8 pts)
+3. *(6 pts)*
+   - appareillage **en quinconce** (joints verticaux décalés d'un demi-bloc) ;
+   - joints pleins de 1 à 1,5 cm au mortier dosé à 300 ;
+   - **aplomb, alignement, niveau** contrôlés à chaque rang ;
+   - **liaison avec les poteaux** (fers d'attente tous les 2 à 3 rangs) ;
+   - **chaînages** horizontaux et verticaux ;
+   - **linteaux** et appuis aux baies ; blocs humidifiés par temps chaud ; 1,50 m par jour au plus.
+4. 3,00 / 0,20 = **15 rangs** ; fers tous les 2 rangs → **7 lits** ; 3,00 / 1,50 = **2 jours** au minimum. *(2 pts)*
+
+### Partie C — Chaînages (4 pts)
+5. 11,40 / 4,5 = 2,5 → **3 travées** → **2 raidisseurs intermédiaires** (travées de 3,80 m). *(2 pts)*
+6. 1,40 + 2 × 0,20 = **1,80 m** (appuis de 20 cm de chaque côté). *(2 pts)*
+
+### Partie D — Clôture (4 pts)
+7. 45 / 3,5 ≈ 12,9 → **13 travées** → **14 poteaux** ; 45 / 15 = 3 tronçons → **2 joints** de dilatation. *(3 pts)*
+8. Sans chaînage ni raidisseurs, un mur mince et haut bascule sous le vent ou un choc (et s'effondre parfois sur des enfants). *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Monter le mur avant les poteaux sans fers d'attente : il se décolle.
+> - Joints verticaux alignés d'un rang à l'autre.
+> - Monter 3 m de mur dans la journée : le mortier frais s'écrase.`},
  exercices:[
   {t:"Nombre de rangs", d:1, e:`Un mur doit atteindre 2,85 m sous le chaînage. Les agglos font 20 cm de haut joint compris. Combien de rangs faut-il ? Que faire de la hauteur restante ?`, c:`2,85 / 0,20 = 14,25 → **14 rangs** = 2,80 m ; il reste **5 cm**, que l'on rattrape dans l'épaisseur du joint sous le chaînage ou en ajustant la hauteur du chaînage (on évite les morceaux d'agglos découpés en tête de mur).`},
   {t:"Raidisseurs d'une clôture", d:1, e:`Mur de clôture rectiligne de 36 m. Poteaux raidisseurs tous les 3 m, joints de dilatation tous les 18 m au plus. Combien de poteaux et de joints ?`, c:`Poteaux : 36 / 3 + 1 = **13 poteaux**.
@@ -429,6 +717,52 @@ La résistance du béton augmente avec le temps : environ 65 % à 7 jours et 100
 > - Coffrage étanche, rigide, huilé et étayé ; ferraillage conforme, propre, calé (enrobage).
 > - Béton : dosage et eau respectés, affaissement 5 – 10 cm, vibration, cure de 7 jours.
 > - Décoffrer les fonds de dalle après 14 à 21 jours ; éprouvettes à 7 et 28 jours.`,
+ sujet:{titre:"Couler une dalle en béton armé : coffrage, ferraillage, bétonnage et cure", duree:90, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous préparez le coulage de la dalle pleine d'une salle de classe à Divo : **6,20 × 5,40 m**, épaisseur **15 cm**, béton dosé à **350 kg/m³**.
+
+**Données**
+- Bétonnière de **350 L** (environ **250 L** de béton par gâchée), **6 minutes** par gâchée ;
+- Pour 1 m³ : **7 sacs** de ciment, **0,40 m³** de sable, **0,80 m³** de gravier ;
+- Au contrôle, le premier béton donne un affaissement au cône de **18 cm** ;
+- fc28 visé : **25 MPa** ; environ 65 % de fc28 à 7 jours.
+
+### Partie A — Coffrage et étaiement (4 points)
+1. Citer trois qualités d'un bon coffrage. (2 pts)
+2. À quel espacement placer les étais ? Sur quoi les poser ? (2 pts)
+
+### Partie B — Ferraillage (4 points)
+3. Donner les enrobages à respecter en fondation, à l'extérieur et à l'intérieur, et le moyen de les garantir. (2 pts)
+4. Que vérifier sur le ferraillage avant le coulage ? (2 pts)
+
+### Partie C — Organisation du bétonnage (6 points)
+5. Calculer le volume de béton, le nombre de gâchées et la durée de fabrication. (3 pts)
+6. Calculer les quantités de ciment, sable et gravier à avoir sur place. (3 pts)
+
+### Partie D — Contrôles et cure (6 points)
+7. Le béton avec 18 cm d'affaissement est-il acceptable ? Pourquoi ? (2 pts)
+8. Quelle résistance attendre à 7 jours ? À quoi servent les éprouvettes ? (2 pts)
+9. Comment faire la cure et combien de temps ? Quand peut-on décoffrer les joues et le fond de la dalle ? (2 pts)`,
+  corrige:`### Partie A — Coffrage (4 pts)
+1. **Étanche** (pas de fuite de laitance), **rigide et stable** (pas de déformation), aux **bonnes cotes** et propre, huilé pour le décoffrage. *(2 pts)*
+2. Étais tous les **1,00 à 1,50 m**, sur un sol stable et **calé** (madriers), jamais sur de la terre meuble. *(2 pts)*
+
+### Partie B — Ferraillage (4 pts)
+3. **5 cm** en fondation, **3 cm** à l'extérieur, **2 à 2,5 cm** à l'intérieur ; garantis par des **cales** en béton ou plastique. *(2 pts)*
+4. Diamètres, nombres et espacements conformes au plan ; ancrages et recouvrements ; chapeaux en place ; ligatures ; enrobages ; propreté (pas de terre, pas de rouille non adhérente) ; réservations. *(2 pts)*
+
+### Partie C — Organisation (6 pts)
+5. V = 6,20 × 5,40 × 0,15 = **5,02 m³** ; 5,02 / 0,25 = 20,1 → **21 gâchées** ; 21 × 6 min = **2 h 06** de fabrication (prévoir l'équipe de transport et de vibration). *(3 pts)*
+6. Ciment : 5,02 × 7 = 35,2 → **36 sacs** (+ réserve) ; sable : **2,0 m³** ; gravier : **4,0 m³**. *(3 pts)*
+
+### Partie D — Contrôles (6 pts)
+7. **Non** : l'affaissement courant est de 5 à 10 cm ; 18 cm signale un excès d'eau, qui fait chuter la résistance. On refait la gâchée en respectant l'eau (E/C ≈ 0,5). *(2 pts)*
+8. ≈ 0,65 × 25 = **16 MPa** à 7 jours. Les éprouvettes, écrasées à 7 et 28 jours, prouvent que le béton a la résistance prévue. *(2 pts)*
+9. Garder le béton **humide au moins 7 jours** (arrosage, toile humide, produit de cure). Joues : 1 à 2 jours ; fond de dalle : **14 à 21 jours**, avec étais de sécurité. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Ajouter de l'eau pour faciliter la mise en œuvre.
+> - Décoffrer le fond de dalle au bout de quelques jours.
+> - Laisser sécher la dalle au soleil sans cure : fissures de retrait.`},
  exercices:[
   {t:"Organiser un coulage", d:2, e:`On coule 6,2 m³ de béton dosé à 350 kg/m³ avec une bétonnière de volume utile 250 L, à raison d'une gâchée toutes les 6 minutes. Calculer le nombre de gâchées, la durée de fabrication et les sacs de ciment.`, c:`Gâchées : 6,2 / 0,25 = 24,8 → **25 gâchées** ; durée : 25 × 6 = 150 min = **2 h 30**.
 Ciment : 6,2 × 7 = 43,4 → **44 sacs** (+ quelques sacs de réserve). Commencer tôt le matin pour couler à la fraîche.`},
@@ -503,6 +837,57 @@ Porter les charges (poids propre, cloisons, revêtements, occupants, mobilier) e
 > - Corps creux h ≈ L/22,5 ; dalle sur 4 appuis ≈ Lx/40 ; poutre h ≈ L/10 à L/12.
 > - Poids : 16 + 4 ≈ 2,85 kN/m² ; dalle de 15 cm = 3,75 kN/m².
 > - Consoles : aciers en haut.`,
+ sujet:{titre:"Choisir et prédimensionner les planchers d'une villa R+1", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Villa R+1 à Cocody. Vous proposez les types de planchers et leurs épaisseurs, puis vous évaluez les charges.
+
+**Données**
+- Séjour : poutrelles de **4,80 m** de portée ;
+- Salle d'eau de l'étage : dalle pleine sur 4 appuis, petite portée **Lx = 3,60 m** ;
+- Balcon en console de **1,20 m** ;
+- Poutre de **5,40 m** de portée ;
+- Règles : corps creux h ≈ L / 22,5 (16 + 4 jusqu'à 4,50 m ; 20 + 5 jusqu'à 5,60 m) ; dalle sur 4 appuis e ≈ Lx / 40, au moins 12 cm ; console e ≈ L / 10 ; poutre h ≈ L / 10 à L / 12, b ≈ 0,3 à 0,5 h ;
+- Poids : 16 + 4 ≈ **2,85 kN/m²** ; 20 + 5 ≈ **3,30 kN/m²** ; revêtement **1,0** ; cloisons **1,0 kN/m²** ; Q = **1,5 kN/m²**.
+
+### Partie A — Types de planchers (4 points)
+1. Comparer plancher à corps creux, dalle pleine et dalles alvéolées (constitution, usage, portées). (3 pts)
+2. Pourquoi réalise-t-on souvent les salles d'eau et les balcons en dalle pleine ? (1 pt)
+
+### Partie B — Prédimensionnement (8 points)
+3. Choisir le plancher du séjour. (2 pts)
+4. Choisir l'épaisseur de la dalle de la salle d'eau. (2 pts)
+5. Choisir l'épaisseur du balcon. (2 pts)
+6. Proposer une section pour la poutre. (2 pts)
+
+### Partie C — Charges (4 points)
+7. Calculer G, puis la charge ELU (1,35 G + 1,5 Q) du plancher du séjour. (4 pts)
+
+### Partie D — Mise en œuvre (4 points)
+8. Décrire dans l'ordre la mise en œuvre d'un plancher à corps creux. (3 pts)
+9. Quand peut-on désétayer ? (1 pt)`,
+  corrige:`### Partie A — Types (4 pts)
+1. *(3 pts)*
+   - **Corps creux** : poutrelles + entrevous + table de compression 4 à 5 cm ; logements, bureaux ; 4 à 6 m ;
+   - **Dalle pleine** : béton armé coulé en place, 12 à 25 cm ; porte dans deux directions ; balcons, terrasses ;
+   - **Dalles alvéolées** précontraintes : préfabriquées, grandes portées (10 à 15 m) ; bureaux, parkings.
+2. La dalle pleine supporte mieux l'humidité et les percements (siphons), et seule elle peut travailler en **console**. *(1 pt)*
+
+### Partie B — Prédimensionnement (8 pts)
+3. 4,80 / 22,5 = 0,213 m > 0,20 → **20 + 5** (valable jusqu'à 5,60 m). *(2 pts)*
+4. 3,60 / 40 = 0,09 m < 12 cm → **e = 12 cm** (minimum). *(2 pts)*
+5. 1,20 / 10 = **0,12 m** → **12 cm** (souvent 15 cm à l'encastrement). *(2 pts)*
+6. h = 5,40 / 12 à 5,40 / 10 = 0,45 à 0,54 → **h = 0,50 m** ; b = 0,15 à 0,25 → **b = 0,20 m** (ou 0,25). *(2 pts)*
+
+### Partie C — Charges (4 pts)
+7. G = 3,30 + 1,0 + 1,0 = **5,30 kN/m²** ; ELU : 1,35 × 5,30 + 1,5 × 1,5 = **9,41 kN/m²**. *(4 pts)*
+
+### Partie D — Mise en œuvre (4 pts)
+8. Pose des **poutrelles** (appuis ≥ 5 à 10 cm, entraxe du calepinage) → **étaiement** à mi-portée → pose des **entrevous**, obturation des rives → **chapeaux**, **treillis soudé**, réservations → arrosage des entrevous → **coulage** de la table avec poutres et chaînages en une fois → cure. *(3 pts)*
+9. Après **14 à 21 jours**. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Prendre un 16 + 4 pour 4,80 m de portée : flèche excessive, fissures des cloisons.
+> - Poser les poutrelles dans le mauvais sens par rapport au plan.
+> - Couler la table sans étaiement.`},
  exercices:[
   {t:"Choisir l'épaisseur des corps creux", d:1, e:`Choisir le plancher à corps creux pour des portées de poutrelles de 3,80 m, 4,50 m et 5,20 m (h ≈ L/22,5 ; types disponibles : 16 + 4, 20 + 5, 25 + 5).`, c:`3,80 / 22,5 = 0,17 m → **16 + 4** (20 cm).
 4,50 / 22,5 = 0,20 m → **16 + 4** (limite).
@@ -574,6 +959,48 @@ Coffrage de la paillasse et des contremarches, ferraillage (aciers principaux en
 > - Blondel : 60 ≤ 2h + g ≤ 64 cm ; h ≈ 17 cm, g ≈ 28 cm.
 > - n = H/h ; volée droite : n − 1 girons ; palier au-delà de 18 à 20 marches.
 > - Échappée ≥ 2,00 m ; garde-corps ≥ 1,00 m ; toutes les marches finies identiques.`,
+ sujet:{titre:"Tracer un escalier droit : loi de Blondel, trémie et échappée", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un escalier droit en béton armé doit relier le rez-de-chaussée à l'étage d'un duplex à Riviera.
+
+**Données**
+- Hauteur d'étage (sol fini à sol fini) : **3,06 m** ; épaisseur du plancher fini : **0,22 m** ;
+- Hauteur de marche visée : environ **17 cm** ; loi de Blondel : **60 ≤ 2h + g ≤ 64 cm** (idéal 63) ;
+- Échappée minimale : **2,00 m** ; largeur de l'escalier : **1,00 m**.
+
+### Partie A — Vocabulaire (4 points)
+1. Définir : marche, contremarche, giron, emmarchement, volée, palier, limon, échappée, reculement. (4 pts)
+
+### Partie B — Calcul de l'escalier (9 points)
+2. Calculer le nombre de contremarches et la hauteur exacte de marche. (2 pts)
+3. Calculer le giron par la loi de Blondel et vérifier 2h + g. (2 pts)
+4. Calculer le nombre de girons, le reculement (projection horizontale) et la pente (en % et en degrés). (3 pts)
+5. Calculer la longueur minimale de la trémie. (2 pts)
+
+### Partie C — Variante (4 points)
+6. La place disponible n'est que de **3,00 m** de long. Proposer une forme d'escalier et calculer le reculement de chaque volée si l'on fait deux volées de 9 contremarches avec un palier intermédiaire. (4 pts)
+
+### Partie D — Réalisation (3 points)
+7. Décrire les étapes de réalisation d'un escalier en béton armé coulé en place. (3 pts)`,
+  corrige:`### Partie A — Vocabulaire (4 pts)
+1. **Marche** : surface horizontale où l'on pose le pied ; **contremarche** : face verticale ; **giron** : profondeur de marche (g) ; **emmarchement** : largeur utile ; **volée** : suite de marches entre deux paliers ; **palier** : plate-forme de repos ou d'arrivée ; **limon** : élément rampant qui porte les marches côté vide ; **échappée** : hauteur libre au-dessus des marches ; **reculement** : longueur horizontale occupée par la volée. *(4 pts)*
+
+### Partie B — Calcul (9 pts)
+2. 3,06 / 0,17 = **18 contremarches** de h = 3,06 / 18 = **17,0 cm**. *(2 pts)*
+3. g = 63 − 2 × 17 = **29 cm** ; 2h + g = 34 + 29 = **63 cm** ✔. *(2 pts)*
+4. 17 girons (la dernière marche est le palier) : 17 × 0,29 = **4,93 m** ; pente 17 / 29 = **58,6 %**, soit **30,4°**. *(3 pts)*
+5. $$ L ≥ (échappée + épaisseur du plancher) / pente = (2,00 + 0,22) / 0,586 = 3,79 m
+   *(2 pts)*
+
+### Partie C — Variante (4 pts)
+6. Escalier à **deux volées** (en U ou en L) avec palier intermédiaire : chaque volée de 9 contremarches a **8 girons** → 8 × 0,29 = **2,32 m** ≤ 3,00 m ✔ (plus un palier d'au moins 1,00 m de profondeur). *(4 pts)*
+
+### Partie D — Réalisation (3 pts)
+7. Tracé sur le mur (ligne de foulée, marches) → coffrage de la paillasse et des contremarches, étaiement → ferraillage (paillasse, chapeaux, ancrages dans les planchers) → bétonnage du bas vers le haut, vibration → cure, décoffrage après 14 à 21 jours. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter autant de girons que de contremarches.
+> - Marches de hauteurs différentes (la première ou la dernière) : cause de chutes.
+> - Trémie trop courte : on se cogne la tête.`},
  exercices:[
   {t:"Calculer un escalier droit", d:1, e:`Hauteur d'étage (sol fini à sol fini) : 2,80 m. Déterminer le nombre de contremarches, la hauteur de marche, le giron, vérifier Blondel et calculer la longueur de la volée.`, c:`n = 2,80 / 0,17 = 16,5 → **16 contremarches** : h = 2,80 / 16 = **17,5 cm**.
 g = 63 − 35 = **28 cm** → 2h + g = **63 cm** ✔.
@@ -640,6 +1067,52 @@ La tôle chauffe énormément au soleil : faux plafond, **isolant** (laine miné
 > - Ancrer la charpente dans le chaînage et fixer chaque tôle sur chaque panne.
 > - Pentes minimales : bac alu 10 – 15 %, ondulée 15 – 20 %, tuiles ≥ 30 %.
 > - Gouttières à 0,5 – 1 % ; isoler et ventiler sous la tôle.`,
+ sujet:{titre:"Toiture à deux pans en tôles : charpente, pente, eaux pluviales et ancrage au vent", duree:90, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Couverture d'une école primaire à Sinfra : bâtiment de **14,00 × 10,00 m** (portée **10,00 m** entre sablières), toiture à deux pans en tôles bac aluminium.
+
+**Données**
+- Pente **25 %** ; débords **0,60 m** sur tout le pourtour ; fermes tous les **3,50 m** ; pannes à **1,20 m** maximum ;
+- Gouttières sur les grands côtés, pente **0,5 %** ; descentes : **1 cm² par m² de toiture projetée** ; Ø 100 = 78,5 cm², Ø 125 = 122,7 cm² ;
+- Vent : dépression (soulèvement) de **0,9 kN/m²** sur la surface projetée ; poids de la couverture et de la charpente : **0,25 kN/m²** de rampant ;
+- Chaque ferme est ancrée à ses deux extrémités.
+
+### Partie A — Charpente et pente (7 points)
+1. Nommer les éléments d'une ferme triangulée et d'une toiture (au moins six). (2 pts)
+2. Calculer la hauteur du faîtage au-dessus des sablières et l'angle de la toiture. La pente convient-elle pour du bac alu ? (2 pts)
+3. Calculer le rampant (débord compris) et le nombre de lignes de pannes par pan. (2 pts)
+4. Calculer le nombre de fermes (longueur 14,00 m). (1 pt)
+
+### Partie B — Eaux pluviales (5 points)
+5. Calculer la longueur d'une gouttière et sa dénivelée. (2 pts)
+6. Choisir les descentes d'un pan. (3 pts)
+
+### Partie C — Ancrage au vent (6 points)
+7. Calculer la force de soulèvement totale et le poids de la toiture. (3 pts)
+8. Calculer l'effort à reprendre par chaque ancrage. Comment réaliser les ancrages ? (3 pts)
+
+### Partie D — Confort (2 points)
+9. Proposer deux dispositions pour limiter la chaleur sous la toiture. (2 pts)`,
+  corrige:`### Partie A — Charpente (7 pts)
+1. Ferme : **entrait**, **arbalétriers**, **poinçon**, **contrefiches** ; toiture : **pannes** (faîtière, intermédiaires, sablières), chevrons ou liteaux selon la couverture, **faîtage**, **rives**, **égout**, **débords**. *(2 pts)*
+2. 5,00 × 0,25 = **1,25 m** ; arctan 0,25 = **14,0°**. Le bac alu demande 10 à 15 % : **25 % convient** (bon écoulement). *(2 pts)*
+3. Projection 5,00 + 0,60 = 5,60 m → rampant = 5,60 × √1,0625 = **5,77 m** ; 5,77 / 1,20 = 4,8 → 5 intervalles → **6 lignes** par pan. *(2 pts)*
+4. 14,00 / 3,50 = 4 intervalles → **5 fermes** (ou 3 fermes et 2 pignons maçonnés). *(1 pt)*
+
+### Partie B — Eaux pluviales (5 pts)
+5. 14,00 + 2 × 0,60 = **15,20 m** ; dénivelée 15,20 × 0,005 = **7,6 cm**. *(2 pts)*
+6. Surface projetée d'un pan : 15,20 × 5,60 = **85,1 m²** → section **85 cm²** : une Ø 100 (78,5) est insuffisante → **une Ø 125** (122,7 cm²) ou **deux Ø 100** par pan. *(3 pts)*
+
+### Partie C — Ancrage (6 pts)
+7. Surface projetée : 15,20 × 11,20 = 170,2 m² → soulèvement 0,9 × 170,2 = **153,2 kN** ; rampant 2 × 5,77 × 15,20 = 175,4 m² → poids 0,25 × 175,4 = **43,9 kN**. *(3 pts)*
+8. Effort net : 153,2 − 43,9 = **109,3 kN** ; 5 fermes × 2 ancrages = 10 → **≈ 11 kN par ancrage**. Ancrages par **fers en attente** ou platines scellées dans le **chaînage haut** (et non dans les agglos), boulonnés ou soudés ; tôles fixées par tire-fonds à rondelles sur chaque panne. *(3 pts)*
+
+### Partie D — Confort (2 pts)
+9. Faux plafond **isolé** et ventilé, isolant sous tôle (laine de roche, film réfléchissant), **ventilation des combles** par les pignons et le faîtage, tôle de couleur claire. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Ancrer la charpente dans la maçonnerie : c'est la toiture entière qui s'envole avec le haut du mur.
+> - Sous-dimensionner les descentes sous les pluies tropicales.
+> - Débords de plus de 60 cm non renforcés.`},
  exercices:[
   {t:"Hauteur au faîtage", d:1, e:`Maison de 10,20 m de large (portée entre murs), toiture à deux pans à 25 %. Calculer la hauteur du faîtage au-dessus des sablières et l'angle de la pente.`, c:`Demi-portée : 5,10 m → hauteur : 5,10 × 0,25 = **1,28 m** ; angle : arctan 0,25 = **14,0°**.`},
   {t:"Vérifier une pente", d:1, e:`Un artisan propose une couverture en tuiles mécaniques sur une charpente à 18 % de pente. Est-ce acceptable ? Que proposer ?`, c:`Non : les tuiles mécaniques demandent **30 à 40 %** ; à 18 %, l'eau poussée par le vent passera aux recouvrements.
@@ -700,6 +1173,54 @@ Cuves, fosses, sous-sols, piscines :
 > - Relevés ≥ 15 cm, au moins 2 évacuations + trop-plein, essai à l'eau 48 h.
 > - Salles d'eau : SPEC, pente 1 – 2 % vers le siphon.
 > - Enterrés : béton compact, waterstop, hydrofuge, drainage.`,
+ sujet:{titre:"Étanchéité d'une toiture-terrasse, d'une salle d'eau et d'un local enterré", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Immeuble à Marcory : toiture-terrasse inaccessible de **12,00 × 9,00 m**, salles d'eau dans les logements et local technique enterré.
+
+**Données**
+- Une évacuation au moins par versant et par 100 m² de terrasse, plus un **trop-plein** ;
+- Forme de pente à **1,5 %** sur une longueur d'écoulement de **4,50 m**, épaisseur minimale **4 cm** ;
+- Protection en gravillons de **5 cm** ; relevés d'étanchéité d'au moins **15 cm** au-dessus de la protection ;
+- Essai de mise en eau : **5 cm** d'eau pendant **48 h**.
+
+### Partie A — Terrasse (10 points)
+1. Décrire le complexe d'une toiture-terrasse de la dalle à la protection. (3 pts)
+2. Calculer la surface et le nombre d'évacuations. (2 pts)
+3. Calculer l'épaisseur de la forme de pente au point haut. (2 pts)
+4. Calculer la hauteur minimale de l'acrotère (forme au point haut + 1 cm d'étanchéité + protection + relevé, + 5 cm pour l'engravure). (2 pts)
+5. Calculer le volume d'eau de l'essai et la charge ajoutée sur la dalle. (1 pt)
+
+### Partie B — Points singuliers (4 points)
+6. Citer quatre points singuliers où naissent les fuites et la précaution pour chacun. (4 pts)
+
+### Partie C — Salles d'eau (3 points)
+7. Décrire l'étanchéité d'une douche à l'italienne. (3 pts)
+
+### Partie D — Local enterré (3 points)
+8. Comparer cuvelage et drainage pour un local enterré sous la nappe. (3 pts)`,
+  corrige:`### Partie A — Terrasse (10 pts)
+1. **Dalle** → **forme de pente** (1,5 à 2 %) → **isolant** (recommandé) → **revêtement d'étanchéité** (bicouche bitume SBS, membrane PVC/EPDM ou résine) → **protection** (gravillons, dallettes). *(3 pts)*
+2. 12 × 9 = **108 m²** → **2 évacuations** (une par versant, chacune < 100 m²) + **1 trop-plein**. *(2 pts)*
+3. 4 + 450 × 0,015 = 4 + 6,75 = **10,75 cm ≈ 11 cm**. *(2 pts)*
+4. 11 + 1 + 5 + 15 + 5 = **37 cm** → acrotère d'au moins **40 cm** au-dessus de la dalle. *(2 pts)*
+5. 108 × 0,05 = **5,4 m³** d'eau, soit **0,5 kN/m²** (supportable). *(1 pt)*
+
+### Partie B — Points singuliers (4 pts)
+6. *(4 pts)*
+   - **Relevés** sur acrotère : hauteur suffisante, protégés en tête (bande de solin, engravure) ;
+   - **Évacuations** : platine raccordée à l'étanchéité, crapaudine contre les feuilles ;
+   - **Traversées** (tuyaux, supports de climatiseurs) : fourreaux et colliers étanches ;
+   - **Joints de dilatation** : traitement spécial souple ; **angles** : renforts.
+
+### Partie C — Salles d'eau (3 pts)
+7. Forme de pente de **1 à 2 %** vers le siphon ; **étanchéité sous carrelage** (SPEC : résine ou natte) au sol et sur les murs jusqu'à **2 m**, remontée de 10 cm ailleurs ; bandes d'angle ; raccord étanche au siphon ; joints soignés et silicone autour des appareils. *(3 pts)*
+
+### Partie D — Local enterré (3 pts)
+8. **Cuvelage** : enveloppe en béton armé étanche (béton compact dosé à 350 – 400, enrobage 4 à 5 cm, joints traités) qui résiste à la pression de l'eau — indispensable sous la nappe. **Drainage** : on évacue l'eau avant qu'elle n'atteigne le mur (drain périphérique, gravier, géotextile) — suffisant au-dessus de la nappe. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Forme de pente trop faible : flaques qui stagnent et vieillissent l'étanchéité.
+> - Relevés trop bas : l'eau passe par-dessus quand une évacuation se bouche.
+> - Oublier le trop-plein.`},
  exercices:[
   {t:"Épaisseurs de forme de pente", d:1, e:`Terrasse de 12 m de large avec un seul versant vers une rive (longueur d'écoulement 12 m), pente 1,5 %, épaisseur minimale 4 cm. Calculer l'épaisseur maximale. Proposer une meilleure disposition.`, c:`Maximum : 4 + 1 200 × 0,015 = **22 cm** : beaucoup trop lourd et coûteux.
 Avec **deux versants** (écoulement de 6 m) : 4 + 600 × 0,015 = **13 cm** ; avec des évacuations au centre de zones de 6 × 6 m, encore moins. On multiplie les évacuations plutôt que d'épaissir la forme.`},
@@ -760,6 +1281,56 @@ Simple vitrage clair ou teinté, **feuilleté** (sécurité : il ne se disperse 
 > - Bois, aluminium, PVC, acier : choisir selon usage, entretien et budget.
 > - Pose d'aplomb, de niveau, d'équerre ; appui avec goutte d'eau.
 > - Vitrage ≥ 1/6 de la surface du sol ; ventilation et protection solaire.`,
+ sujet:{titre:"Menuiseries d'une maison : éclairage naturel, choix et pose des fenêtres", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous choisissez les menuiseries d'une maison à Yamoussoukro et vous contrôlez leur pose.
+
+**Données**
+- Chambre 1 : **4,00 × 3,50 m** ; chambre 2 : **3,60 × 3,00 m** ; séjour : **5,20 × 4,20 m** ;
+- Règle : surface vitrée ≥ **1/6** de la surface du sol ;
+- Fenêtres standard : **1,20 × 1,00** ; **1,20 × 1,40** ; **1,40 × 1,40** ; jeu de pose ≈ **1 cm** de chaque côté.
+
+### Partie A — Rôles et vocabulaire (5 points)
+1. Citer quatre fonctions d'une menuiserie extérieure. (2 pts)
+2. Définir : dormant, ouvrant, tableau, appui, rejingot, jet d'eau, larmier, calfeutrement. (3 pts)
+
+### Partie B — Éclairage naturel (6 points)
+3. Calculer la surface vitrée minimale de chaque pièce et choisir les fenêtres. (4 pts)
+4. Pourquoi préférer deux fenêtres sur deux façades différentes ? (2 pts)
+
+### Partie C — Choix (4 points)
+5. Comparer bois, aluminium, PVC et métal (acier) pour une maison en climat chaud et humide. (2 pts)
+6. Quel type d'ouvrant et de vitrage conseiller pour une chambre côté rue bruyante et ensoleillée ? (2 pts)
+
+### Partie D — Pose (5 points)
+7. Pour une fenêtre de 1,20 × 1,40, quelles dimensions de réservation demander au maçon ? (1 pt)
+8. Décrire les points de contrôle d'une pose de fenêtre (fixation, aplomb, étanchéité, appui). (4 pts)`,
+  corrige:`### Partie A — Rôles (5 pts)
+1. Éclairer, **ventiler**, protéger des intempéries, **sécuriser** (effraction), isoler du bruit et de la chaleur, donner vue. *(2 pts)*
+2. **Dormant** : cadre fixe scellé ; **ouvrant** : partie mobile ; **tableau** : côté de la baie ; **appui** : partie basse de la baie, en pente vers l'extérieur ; **rejingot** : relief de l'appui contre lequel bute le dormant ; **jet d'eau** : profil qui rejette l'eau en bas de l'ouvrant ; **larmier** : goutte d'eau sous l'appui ; **calfeutrement** : joint entre dormant et maçonnerie. *(3 pts)*
+
+### Partie B — Éclairage (6 pts)
+3. *(4 pts)*
+
+| Pièce | Surface | Vitrage minimal | Choix |
+|---|---|---|---|
+| Chambre 1 | 14,00 m² | 2,33 m² | 2 × (1,20 × 1,00) = 2,40 m² |
+| Chambre 2 | 10,80 m² | 1,80 m² | 1 × (1,40 × 1,40) = 1,96 m² |
+| Séjour | 21,84 m² | 3,64 m² | 2 × (1,40 × 1,40) = 3,92 m² |
+
+4. Pour la **ventilation traversante** (l'air entre par une façade et sort par l'autre) : indispensable au confort sans climatisation. *(2 pts)*
+
+### Partie C — Choix (4 pts)
+5. **Aluminium** : léger, durable, sans entretien, le plus courant ; **bois** : chaleureux mais sensible aux termites et à l'humidité (traitement) ; **PVC** : isolant, se déforme au soleil s'il est de mauvaise qualité ; **acier** : robuste (portes, grilles), rouille sans protection. *(2 pts)*
+6. Coulissant ou battant aluminium à rupture de pont thermique avec **vitrage feuilleté** (acoustique, sécurité) et **teinté ou à contrôle solaire** ; protection extérieure (volet, brise-soleil). *(2 pts)*
+
+### Partie D — Pose (5 pts)
+7. **1,22 × 1,42 m** (menuiserie + 1 cm de chaque côté). *(1 pt)*
+8. Fixations par pattes ou chevilles dans la maçonnerie saine (pas dans un joint) ; **aplomb, niveau, équerrage** (ouvrants qui ferment sans frotter) ; **calfeutrement** continu (mastic, mousse + joint) ; appui en **pente** vers l'extérieur avec **rejingot** et **larmier** ; trous d'évacuation des eaux non bouchés ; protection pendant les travaux. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Réservations trop justes : on casse la maçonnerie pour poser.
+> - Appui horizontal : l'eau entre sous la fenêtre.
+> - Une seule petite fenêtre par chambre : chaleur et humidité.`},
  exercices:[
   {t:"Surface vitrée minimale", d:1, e:`Vérifier l'éclairement naturel (règle du 1/6) : a) séjour de 5,60 × 4,20 m avec une baie de 2,40 × 2,20 et une fenêtre de 1,20 × 1,20 ; b) chambre de 3,40 × 3,00 m avec une fenêtre de 1,20 × 1,20.`, c:`a) Sol : 23,52 m² → minimum 3,92 m² ; vitrages : 5,28 + 1,44 = **6,72 m²** ✔.
 b) Sol : 10,20 m² → minimum **1,70 m²** ; fenêtre : 1,44 m² ✘ → agrandir (1,40 × 1,40 = 1,96 m²) ou ajouter une seconde fenêtre.`},
@@ -828,6 +1399,52 @@ Choisir le produit selon le support : vinylique/acrylique (murs intérieurs), pe
 > - Ordre : réseaux testés → enduits → plafonds, chapes → carrelage → équipements → peinture.
 > - Enduit : gobetis, corps, finition ; 5 mm sous la règle de 2 m.
 > - Carrelage : calepinage, joints, fractionnement ; peinture : support sec, impression + 2 couches.`,
+ sujet:{titre:"Organiser et contrôler les finitions : enduits, chapes, carrelages, faux plafonds, peintures", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Vous êtes conducteur de travaux d'un immeuble de bureaux à Treichville, en phase de finitions.
+
+**Données**
+- Contrôle d'un enduit : flèche de **7 mm** sous la règle de 2 m ; tolérance : **5 mm** ;
+- Hall de **15,00 × 8,00 m** à carreler ; joints de fractionnement tous les **40 à 60 m²** ;
+- Bureau de **4,80 × 3,60 m** en dalles de faux plafond **60 × 60** (+ 5 %) ;
+- Peinture sur un enduit ciment posé il y a **une semaine** (encore humide).
+
+### Partie A — Ordre des finitions (5 points)
+1. Remettre dans l'ordre : peinture, carrelage, enduits, faux plafonds et chapes, réseaux encastrés testés, appareils sanitaires et appareillage électrique, bâtiment hors d'eau et hors d'air. Justifier deux places. (5 pts)
+
+### Partie B — Enduits et chapes (6 points)
+2. Décrire l'enduit extérieur en trois couches et la précaution aux jonctions béton/agglos. (3 pts)
+3. L'enduit contrôlé est-il accepté ? Que faire ? (1 pt)
+4. Quelle épaisseur et quel dosage pour une chape ? Qu'est-ce qu'une chape désolidarisée ? (2 pts)
+
+### Partie C — Carrelage et faux plafond (5 points)
+5. Combien de zones de fractionnement faut-il dans le hall ? Où placer les joints ? (2 pts)
+6. Calculer le nombre de dalles de faux plafond du bureau. (2 pts)
+7. Pourquoi laisser un joint souple en périphérie d'un carrelage ? (1 pt)
+
+### Partie D — Peinture (4 points)
+8. Que risque-t-on à peindre sur l'enduit d'une semaine ? (2 pts)
+9. Décrire le système de peinture correct. (2 pts)`,
+  corrige:`### Partie A — Ordre (5 pts)
+1. Hors d'eau et hors d'air → réseaux encastrés testés → **enduits** → faux plafonds et chapes → **carrelage** → appareils sanitaires et appareillage électrique → **peinture**. Les réseaux sont testés **avant** d'être cachés par les enduits ; la peinture vient en **dernier** pour ne pas être salie ou abîmée par les autres corps d'état. *(5 pts)*
+
+### Partie B — Enduits et chapes (6 pts)
+2. **Gobetis** (accrochage, mortier riche et fluide) → **corps d'enduit** (dressage) → **finition** (talochée, lissée, grattée) ; épaisseur totale 1,5 à 2 cm ; **grillage** ou toile de verre aux jonctions béton/agglos pour éviter les fissures ; cure 2 à 3 jours. *(3 pts)*
+3. 7 mm > 5 mm → **refusé** : reprise (ponçage des bosses, recharge des creux) avant la peinture. *(1 pt)*
+4. **3 à 6 cm**, dosée à **350 – 400 kg/m³** ; désolidarisée : coulée sur un film (polyane) qui la sépare du support, pour limiter la fissuration et les bruits d'impact. *(2 pts)*
+
+### Partie C — Carrelage et faux plafond (5 pts)
+5. 15 × 8 = 120 m² → **2 à 3 zones** (par exemple 3 zones de 5,00 × 8,00 m = 40 m²) ; joints au droit des joints du gros œuvre et des changements de pièce. *(2 pts)*
+6. 4,80 × 3,60 = 17,28 m² / 0,36 = 48 → + 5 % → **51 dalles**. *(2 pts)*
+7. Le carrelage se dilate (chaleur, humidité) : sans joint souple contre les murs, il se soulève (« tuilage ») ou se fissure. *(1 pt)*
+
+### Partie D — Peinture (4 pts)
+8. Cloquage, décollement, taches de salpêtre et réaction de l'alcalinité du ciment frais avec la peinture. *(2 pts)*
+9. Support **sec** (plusieurs semaines), propre, poncé, rebouché → **impression** (sous-couche) → **deux couches de finition** croisées, en respectant le temps de séchage entre couches. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Peindre avant la pose des appareils : retouches partout.
+> - Carreler un grand hall sans joints de fractionnement.
+> - Accepter un enduit gondolé : la peinture souligne tous les défauts.`},
  exercices:[
   {t:"Remettre les travaux dans l'ordre", d:1, e:`Classer : peinture de finition ; pose des prises et interrupteurs ; enduits intérieurs ; saignées et gaines électriques ; carrelage ; faux plafonds ; impression ; test des canalisations.`, c:`Saignées et gaines électriques → **test des canalisations** → **enduits intérieurs** → **faux plafonds** → **carrelage** → **pose des prises et interrupteurs** → **impression** → **peinture de finition**.`},
   {t:"Planning des finitions", d:2, e:`Les enduits intérieurs d'une maison sont terminés le 1er mars. Délais minimaux : faux plafonds 1 semaine après les enduits ; chape 7 jours avant carrelage ; carrelage 10 jours ; peinture sur enduit ciment au moins 4 semaines après les enduits. Quand peut-on commencer la peinture ? Le carrelage peut-il se faire pendant le séchage des enduits ?`, c:`Peinture : au plus tôt **4 semaines** après le 1er mars, soit vers le **29 mars**.
@@ -881,6 +1498,48 @@ Gouttières, descentes, regards, caniveaux, puisards ou raccordement au réseau 
 > - Électricité : disjoncteur de branchement, différentiels 30 mA, un disjoncteur par circuit, terre obligatoire ; P = U × I.
 > - Plomberie : essai en pression ; évacuations à 1 – 3 %, siphons, ventilation des chutes.
 > - Assainissement autonome : fosse toutes eaux + épandage ou puisard, loin des puits.`,
+ sujet:{titre:"Équipements d'une villa : puissance électrique, circuits, évacuations et assainissement", duree:90, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Villa de **6 pièces principales** à Angré, sans réseau public d'égouts.
+
+**Électricité** : 3 climatiseurs de **1 200 W** ; chauffe-eau **1 500 W** ; éclairage **600 W** ; prises (réfrigérateur, TV, ordinateurs…) **2 500 W** ; plaques de cuisson **2 000 W** ; coefficient de simultanéité **0,7** ; U = **230 V**.
+
+**Plomberie** : WC raccordé à la chute par **6 m** de canalisation horizontale ; pente **2 %**.
+
+**Assainissement** : fosse septique toutes eaux de volume utile **3 m³ jusqu'à 5 pièces principales, + 1 m³ par pièce supplémentaire**.
+
+### Partie A — Électricité (9 points)
+1. Décrire la chaîne de l'installation du réseau au point d'utilisation. (2 pts)
+2. Calculer la puissance installée, la puissance probable et l'intensité. Choisir le calibre du disjoncteur de branchement. (4 pts)
+3. Donner la section des conducteurs et le calibre de protection : circuit d'éclairage, prises 16 A, climatiseur, plaques. (2 pts)
+4. Quel est le rôle d'un interrupteur différentiel 30 mA ? (1 pt)
+
+### Partie B — Plomberie (6 points)
+5. Distinguer eaux usées, eaux vannes et eaux pluviales ; donner les diamètres usuels d'évacuation. (3 pts)
+6. Calculer la dénivelée de la canalisation du WC. Pourquoi une pente ni trop faible ni trop forte ? (2 pts)
+7. À quoi sert un siphon ? (1 pt)
+
+### Partie C — Assainissement (5 points)
+8. Calculer le volume de la fosse septique. (1 pt)
+9. Expliquer le fonctionnement fosse septique + épandage (ou puisard) et les règles d'implantation. (4 pts)`,
+  corrige:`### Partie A — Électricité (9 pts)
+1. Réseau → **branchement** → **compteur** → **disjoncteur de branchement** → **tableau** (interrupteurs différentiels, disjoncteurs divisionnaires) → **circuits** → points d'utilisation ; liaison à la **terre**. *(2 pts)*
+2. P = 3 600 + 1 500 + 600 + 2 500 + 2 000 = **10 200 W** ; probable : 0,7 × 10 200 = **7 140 W** ; I = 7 140 / 230 = **31 A** → calibre supérieur (**32 A**) ou branchement triphasé. *(4 pts)*
+3. Éclairage **1,5 mm² / 10 A** ; prises **2,5 mm² / 16 à 20 A** ; climatiseur **2,5 mm² / 20 A** ; plaques **6 mm² / 32 A**. *(2 pts)*
+4. Il coupe le courant dès qu'une fuite de 30 mA passe à la terre (souvent à travers une personne) : **protection des personnes** contre l'électrocution. *(1 pt)*
+
+### Partie B — Plomberie (6 pts)
+5. **EU** : lavabos, douches, éviers (Ø 40 à 50) ; **EV** : WC (Ø 100) ; **EP** : toitures et cours (descentes, caniveaux), évacuées **séparément**. *(3 pts)*
+6. 6 × 0,02 = **12 cm**. Trop faible : dépôts et bouchages ; trop forte : l'eau file seule et laisse les matières (1 à 3 %). *(2 pts)*
+7. La garde d'eau du siphon bloque les **odeurs** et les insectes venant du réseau. *(1 pt)*
+
+### Partie C — Assainissement (5 pts)
+8. 3 + 1 × (6 − 5) = **4 m³**. *(1 pt)*
+9. La fosse **décante** les matières et les **digère** (bactéries) ; l'effluent prétraité est infiltré par **épandage** (tranchées filtrantes) ou un **puisard** selon le sol. Règles : fosse ventilée, accessible pour la vidange, à distance des puits et des limites (souvent 5 m de l'habitation, 35 m d'un puits d'eau potable), épandage au-dessus de la nappe. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mettre tous les climatiseurs sur un circuit de prises.
+> - Raccorder les eaux pluviales à la fosse septique : elle déborde à chaque pluie.
+> - Puisard près d'un puits d'eau de boisson.`},
  exercices:[
   {t:"Intensité appelée", d:1, e:`Calculer l'intensité appelée sous 230 V par : a) un climatiseur de 2 300 W ; b) une plaque de cuisson de 3 500 W ; c) un chauffe-eau de 1 500 W. Quel calibre de protection et quelle section de câble pour chacun ?`, c:`a) I = 2 300 / 230 = **10 A** → disjoncteur 16 ou 20 A, câble **2,5 mm²**.
 b) I = 3 500 / 230 = **15,2 A** → circuit spécialisé **32 A**, câble **6 mm²** (plaques et cuisinière).
@@ -938,6 +1597,51 @@ Le **bétonnage sous l'eau ou la boue** se fait au **tube plongeur** : le béton
 > - Radier : répartit les charges sur toute l'emprise ; pieux : transmettent la charge au bon sol profond.
 > - Foré simple, tubé, à la boue, tarière creuse, battu, micropieu ; bétonnage au tube plongeur, recépage.
 > - Ouvrages enterrés : poussée des terres et de l'eau, cuvelage, drainage ; soutènements de fouilles.`,
+ sujet:{titre:"Radier ou pieux ? Choisir et préparer des fondations spéciales", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un immeuble R+5 de **20 × 15 m** est prévu à Port-Bouët, sur un sol médiocre. Le BET hésite entre semelles, radier et pieux.
+
+**Données**
+- 24 poteaux ; avec la contrainte admissible du sol, chaque semelle ferait **2,60 × 2,60 m** ;
+- Variante pieux : **30 pieux forés Ø 0,80 m**, longueur **16 m** ; surconsommation de béton **15 %** ; recépage sur **0,50 m** ;
+- Sous-sol partiel prévu avec une fouille de **3 m** sous la nappe, à **2 m** d'un bâtiment voisin.
+
+### Partie A — Quand changer de fondations (4 points)
+1. Citer trois situations où les fondations superficielles ne suffisent plus. (2 pts)
+2. Calculer la surface totale des semelles et le rapport à l'emprise. Conclure (seuil courant : 50 %). (2 pts)
+
+### Partie B — Radier (4 points)
+3. Décrire le radier général (plat, nervuré) et ses avantages. (2 pts)
+4. Quelles précautions de mise en œuvre pour un radier (bétonnage, joints, étanchéité) ? (2 pts)
+
+### Partie C — Pieux (7 points)
+5. Décrire l'exécution d'un pieu foré (avec tube ou boue) et d'un pieu battu. (3 pts)
+6. Calculer le volume de béton théorique et commandé par pieu, puis pour les 30 pieux. (3 pts)
+7. Qu'est-ce que le recépage ? Calculer le volume de béton démoli par pieu. (1 pt)
+
+### Partie D — Fouille du sous-sol (5 points)
+8. Proposer un soutènement de fouille adapté (comparer berlinoise, palplanches, paroi moulée). (3 pts)
+9. Quelles précautions vis-à-vis du bâtiment voisin ? (2 pts)`,
+  corrige:`### Partie A — Changer de fondations (4 pts)
+1. Bon sol trop profond (remblais, vases) ; charges trop fortes ; semelles trop grandes qui se touchent ; tassements différentiels à craindre ; nappe haute ; voisinage proche. *(2 pts)*
+2. 24 × 2,60² = **162,2 m²** pour 300 m² d'emprise, soit **54 % > 50 %** → un **radier** (ou des pieux) devient plus rationnel. *(2 pts)*
+
+### Partie B — Radier (4 pts)
+3. Dalle épaisse sous tout le bâtiment (**plat**), ou dalle plus mince raidie par des **nervures** sous les files de poteaux. Il répartit les charges sur toute l'emprise : **contrainte faible**, **tassements plus uniformes**, sert de plancher bas et de cuvelage. *(2 pts)*
+4. Béton de propreté, ferraillage en deux nappes avec chaises, bétonnage continu par zones avec **reprises traitées** (joints waterstop), vibration, **cure** soignée ; étanchéité ou cuvelage si nappe, et vérification au soulèvement. *(2 pts)*
+
+### Partie C — Pieux (7 pts)
+5. **Foré** : forage à la tarière ou au grappin, maintenu par un **tube** de travail ou de la **boue** bentonitique si le terrain s'éboule ; mise en place de la cage d'armatures ; bétonnage **au tube plongeur** de bas en haut. **Battu** : pieu préfabriqué (béton, acier) enfoncé au mouton jusqu'au refus (bruit, vibrations). *(3 pts)*
+6. π × 0,40² × 16 = **8,04 m³** ; commandé : × 1,15 = **9,25 m³** ; 30 pieux : **277,5 m³**. *(3 pts)*
+7. On démolit le haut du pieu, béton pollué par la boue et la laitance, pour retrouver du béton sain et dégager les aciers : π × 0,40² × 0,50 = **0,25 m³** par pieu. *(1 pt)*
+
+### Partie D — Fouille (5 pts)
+8. **Berlinoise** (profilés + blindage bois ou béton projeté) : économique mais **pas étanche** → inadaptée sous la nappe ; **palplanches** métalliques battues : étanches, rapides, mais vibrations près du voisin ; **paroi moulée** béton armé : étanche, rigide, sans vibration, peut devenir le mur définitif → la meilleure ici (ou palplanches vibrofoncées avec précaution). *(3 pts)*
+9. Constat d'huissier et **état des lieux** avant travaux ; étude de l'interaction (tassements dus au pompage et à la décompression) ; **suivi** par cibles topographiques et témoins de fissures ; limiter les vibrations ; tirants ou butons si nécessaire. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Bétonner un pieu foré à sec dans un terrain noyé.
+> - Oublier la surconsommation de béton dans les commandes.
+> - Ouvrir une fouille sous la nappe contre un voisin sans soutènement étanche.`},
  exercices:[
   {t:"Choisir une fondation", d:1, e:`Choisir la solution : a) immeuble R+6 à Treichville sur 9 m de vase, bon sable dessous ; b) entrepôt sur sable lâche homogène, charges faibles et réparties ; c) reprise en sous-œuvre d'une maison fissurée dans une cour étroite ; d) château d'eau sur bon sol à 4 m.`, c:`a) **Pieux** (forés à la boue ou tarière creuse) ancrés dans le sable.
 b) **Radier** ou dallage épais sur sol compacté/amélioré.
@@ -993,6 +1697,49 @@ Garde-corps périphériques à chaque plancher, **trémies** protégées, filets
 > - Cycle d'étage répétitif ; étaiement de reprise sur 2 – 3 niveaux.
 > - Grue : charge × portée ≤ moment.
 > - Gaines verticales, ascenseur au-delà de 4 – 5 niveaux, escaliers encloisonnés.`,
+ sujet:{titre:"Immeuble R+5 : descente de charges, cycle d'étage, grue et sécurité", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Construction d'un immeuble de logements R+5 à Cocody-Riviera.
+
+**Données**
+- Poteau intérieur : surface d'influence **20 m²** ; charge ELU par plancher **9,0 kN/m²** ; 6 planchers au-dessus du RDC (R+1 à R+5 et terrasse) ;
+- Cycle d'étage prévu : **10 jours par niveau** ; 7 niveaux de structure (RDC à terrasse) ;
+- Grue à tour de **50 t·m** ; benne à béton de **0,8 m³** (béton 2,4 t/m³) pesant **0,4 t** à vide.
+
+### Partie A — Structure (5 points)
+1. Calculer la charge au pied du poteau du RDC et au pied du poteau du R+5. Conclure. (3 pts)
+2. Pourquoi faut-il des voiles ou des portiques de contreventement dans un immeuble ? (2 pts)
+
+### Partie B — Organisation (6 points)
+3. Décrire les tâches d'un cycle d'étage (de l'implantation au décoffrage). (3 pts)
+4. Calculer la durée de la structure. Pourquoi garde-t-on des étais sur 2 ou 3 niveaux (étaiement de reprise) ? (3 pts)
+
+### Partie C — Grue (5 points)
+5. Calculer la charge admissible à 25 m et la masse d'une benne pleine. (2 pts)
+6. Calculer la portée maximale pour lever la benne pleine. Conséquence pour l'implantation de la grue ? (3 pts)
+
+### Partie D — Réseaux et sécurité (4 points)
+7. Qu'est-ce qu'une gaine technique ? Que contient-elle ? (2 pts)
+8. Citer quatre mesures de sécurité du chantier en hauteur. (2 pts)`,
+  corrige:`### Partie A — Structure (5 pts)
+1. Par plancher : 9,0 × 20 = 180 kN. Pied du RDC : 6 × 180 = **1 080 kN** ; pied du R+5 : 1 plancher (terrasse) → **180 kN**. Les poteaux du bas portent six fois plus : on augmente leur section en descendant. *(3 pts)*
+2. Plus le bâtiment est haut, plus le vent (et un séisme) crée de grands efforts horizontaux et de grands moments à la base : il faut des éléments très rigides (voiles des cages d'escalier et d'ascenseur, portiques) pour les reprendre et limiter les déplacements. *(2 pts)*
+
+### Partie B — Organisation (6 pts)
+3. Implantation des axes et des niveaux → poteaux et voiles (ferraillage, coffrage, bétonnage) → coffrage et étaiement du plancher → ferraillage des poutres et du plancher, réservations, réseaux → **bétonnage** du plancher → cure → décoffrage des joues, transfert des banches au niveau suivant. *(3 pts)*
+4. 7 × 10 = **70 jours** (plus les fondations). Le béton jeune ne porte pas seul son poids et celui du plancher coulé au-dessus : les étais de reprise répartissent la charge sur plusieurs planchers. *(3 pts)*
+
+### Partie C — Grue (5 pts)
+5. À 25 m : 50 / 25 = **2,0 t** ; benne pleine : 0,8 × 2,4 + 0,4 = **2,32 t**. *(2 pts)*
+6. Portée max : 50 / 2,32 = **21,6 m**. La grue doit être implantée pour que les zones de bétonnage soient à moins de 21,6 m, ou on utilise une benne plus petite (ou une pompe à béton pour les zones éloignées). *(3 pts)*
+
+### Partie D — Réseaux et sécurité (4 pts)
+7. Conduit vertical continu d'un étage à l'autre, accessible par des trappes, qui regroupe **colonnes d'eau**, **chutes** EU/EV ventilées, **colonne montante** électrique, télécoms, désenfumage. *(2 pts)*
+8. **Garde-corps** périphériques et protection des trémies ; **filets** ; harnais pour les travaux en rive ; casques et chaussures ; balisage de la zone sous la grue ; échafaudages réceptionnés ; accès sûrs (escaliers provisoires). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Lever une charge sans vérifier la courbe charge-portée de la grue.
+> - Désétayer trop tôt les planchers inférieurs.
+> - Laisser des trémies sans protection.`},
  exercices:[
   {t:"Charge cumulée", d:1, e:`Un poteau reçoit 160 kN (ELU) par plancher. Calculer sa charge au pied du RDC pour un R+3 à toiture-terrasse, puis pour un R+6. Commenter.`, c:`R+3 : 4 planchers (R+1, R+2, R+3, terrasse) → **640 kN** ; R+6 : 7 planchers → **1 120 kN**.
 La charge (et donc la section du poteau, les aciers et la semelle) augmente avec chaque étage : on ne peut pas ajouter des niveaux sans recalcul.`},
@@ -1057,6 +1804,52 @@ Réception des massifs (implantation et niveaux des tiges d'ancrage), levage des
 > - Protéger contre la corrosion (galvanisation, peinture) et le feu.
 > - Bois : sec, traité contre les termites, isolé de l'humidité.
 > - Contreventer dès le montage.`,
+ sujet:{titre:"Portiques métalliques d'un hangar : poids, protection et montage", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un hangar agricole de **24 m** de portée et **36 m** de long est prévu à Bouaflé, en charpente métallique.
+
+**Données**
+- Portiques tous les **6 m** (donc **7 portiques**) ; poteaux **HEA 220** de **7 m** (**50,5 kg/m**, surface à peindre **1,26 m²/m**) ;
+- Traverses **IPE 360** (**57,1 kg/m**, **1,35 m²/m**), deux rampants de **12 m** en projection, pente **15 %** ;
+- Peinture : 2 couches de finition à **10 m²/L** par couche (plus un primaire anticorrosion) ;
+- Une variante en charpente bois est envisagée pour un auvent.
+
+### Partie A — Pourquoi le métal (4 points)
+1. Citer les avantages et les inconvénients d'une ossature métallique pour ce hangar. (2 pts)
+2. Nommer les éléments d'une ossature de hangar : portique, poteaux, traverses, pannes, lisses, contreventements, platines, tiges d'ancrage. Donner le rôle de quatre d'entre eux. (2 pts)
+
+### Partie B — Poids et peinture (7 points)
+3. Calculer la longueur d'un rampant de traverse. (1 pt)
+4. Calculer la masse d'un portique et des 7 portiques. (3 pts)
+5. Calculer la surface à peindre d'un portique et le volume de peinture de finition. (3 pts)
+
+### Partie C — Protection (5 points)
+6. Décrire deux systèmes de protection contre la corrosion. (2 pts)
+7. Pourquoi l'acier doit-il être protégé contre le feu ? Citer deux moyens. (3 pts)
+
+### Partie D — Bois et montage (4 points)
+8. Quels traitements et précautions pour une charpente bois en Côte d'Ivoire ? (2 pts)
+9. Décrire l'ordre de montage d'un hangar métallique. (2 pts)`,
+  corrige:`### Partie A — Métal (4 pts)
+1. Avantages : **grandes portées**, légèreté, **montage rapide**, préfabrication en atelier, démontable. Inconvénients : **corrosion** (climat humide, littoral), mauvaise tenue au **feu**, besoin de soudeurs et monteurs qualifiés, coût de l'acier. *(2 pts)*
+2. Portique (poteaux + traverses) : structure principale ; **pannes** : portent la couverture ; **lisses** : portent le bardage ; **contreventements** (croix de Saint-André) : stabilité longitudinale ; **platines et tiges d'ancrage** : liaison aux fondations. *(2 pts)*
+
+### Partie B — Poids et peinture (7 pts)
+3. 12 × √(1 + 0,15²) = **12,13 m**. *(1 pt)*
+4. Poteaux : 2 × 7 × 50,5 = 707,0 kg ; traverses : 2 × 12,13 × 57,1 = 1 385,7 kg → **2 093 kg par portique** ; 7 portiques : **14,65 t** (sans pannes, lisses et contreventements). *(3 pts)*
+5. 2 × 7 × 1,26 + 2 × 12,13 × 1,35 = 17,64 + 32,76 = **50,4 m²** ; finition : 2 × 50,4 / 10 = **10,1 L** par portique (≈ 71 L pour les 7). *(3 pts)*
+
+### Partie C — Protection (5 pts)
+6. **Galvanisation à chaud** (bain de zinc, très durable) ; **système de peinture** : préparation (sablage), primaire anticorrosion riche en zinc, couches intermédiaire et de finition ; entretien périodique. *(2 pts)*
+7. L'acier perd environ la moitié de sa résistance vers 550 °C : la structure peut s'effondrer en quelques minutes d'incendie. Moyens : **peinture intumescente**, **flocage** (projection fibreuse), **encoffrement** en plaques ou béton. *(3 pts)*
+
+### Partie D — Bois et montage (4 pts)
+8. Essences durables (iroko, teck…) ou bois **traités** contre les **termites** et champignons (traitement en autoclave) ; bois **secs** ; éviter le contact avec le sol et l'humidité ; ventilation ; assemblages protégés. *(2 pts)*
+9. Contrôle des massifs et des tiges d'ancrage (position, niveau) → levage du **premier portique** et de la **travée contreventée** (stabilité) → portiques suivants reliés par les pannes → contreventements définitifs, serrage des boulons → couverture et bardage. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Monter des portiques sans contreventement provisoire : ils basculent comme des dominos.
+> - Peindre sur un acier rouillé sans préparation.
+> - Oublier la protection au feu d'un bâtiment recevant du public.`},
  exercices:[
   {t:"Masse d'un hangar", d:1, e:`Un hangar compte 6 portiques identiques de 1 368,5 kg, des pannes et lisses représentant 35 % de la masse des portiques, et 4 % d'assemblages. Calculer la masse totale et le coût à 1 600 F/kg posé.`, c:`Portiques : 6 × 1 368,5 = **8 211 kg** ; pannes et lisses : 0,35 × 8 211 = **2 874 kg**.
 Sous-total : 11 085 kg ; assemblages (4 %) : 443 kg → **≈ 11 528 kg**.
@@ -1116,6 +1909,53 @@ Tri des déchets, limitation des nuisances (bruit, poussière, boues sur la voir
 > - Débord : d = h / tan α.
 > - Matériaux locaux : BTC stabilisées, terre cuite, bois traité.
 > - Eau de pluie : surface × pluie × 0,8 ; énergie : solaire, LED, appareils économes.`,
+ sujet:{titre:"Maison bioclimatique en climat tropical : protections solaires, eau de pluie, solaire et BTC", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une ONG veut construire une maison-témoin économe en énergie près de Bouaké.
+
+**Données**
+- Fenêtres de **1,50 m** de haut, face au sud, soleil de milieu de journée à **70°** au-dessus de l'horizon ; le débord de toiture est à **0,30 m** au-dessus du linteau ;
+- Toiture de **150 m²** ; pluie annuelle (on prend la valeur d'Abidjan) : **1,8 m** ; coefficient de récupération **0,8** ;
+- Consommation d'eau : **300 L/jour** ; saison sèche de **90 jours** ;
+- Consommation électrique : **6 kWh/jour** ; ensoleillement : **4,5 kWh/m²/jour** (heures équivalentes) ; rendement global du système : **0,75** ; panneaux de **400 Wc** ;
+- BTC stabilisées à **6 %** de ciment, masse d'une brique **7 kg**.
+
+### Partie A — Principes bioclimatiques (5 points)
+1. Citer cinq principes de conception bioclimatique en climat chaud et humide. (3 pts)
+2. Pourquoi les façades est et ouest sont-elles les plus difficiles à protéger ? (2 pts)
+
+### Partie B — Protection solaire (4 points)
+3. Calculer le débord nécessaire pour protéger la fenêtre (d = hauteur à protéger / tan α). (2 pts)
+4. Quelle protection proposer sur la façade ouest ? (2 pts)
+
+### Partie C — Eau et énergie (8 points)
+5. Calculer le volume d'eau de pluie récupérable par an. (2 pts)
+6. Calculer le volume de citerne pour couvrir la saison sèche. (2 pts)
+7. Calculer la puissance crête nécessaire et le nombre de panneaux. (4 pts)
+
+### Partie D — Matériaux locaux (3 points)
+8. Calculer la masse de ciment pour 1 000 BTC et le nombre de sacs de 50 kg. (2 pts)
+9. Comment protéger les murs en BTC de la pluie ? (1 pt)`,
+  corrige:`### Partie A — Principes (5 pts)
+1. Orientation des grandes façades **nord-sud** ; **protections solaires** (débords, brise-soleil) ; **ventilation traversante** naturelle ; **toiture isolée** et ventilée, teintes claires ; végétation et ombrage autour ; matériaux à **inertie** (BTC) ; récupération des eaux de pluie. *(3 pts)*
+2. Le soleil y est **bas** le matin et le soir : les rayons arrivent presque horizontalement et passent sous les débords ; la façade ouest reçoit en plus le soleil aux heures les plus chaudes. *(2 pts)*
+
+### Partie B — Protection solaire (4 pts)
+3. d = (1,50 + 0,30) / tan 70° = 1,80 / 2,75 = **0,65 m** (sans le décalage : 0,55 m). *(2 pts)*
+4. Des **protections verticales** : lames orientables, volets persiennés, claustras, écran de végétation ; et réduire les ouvertures à l'ouest. *(2 pts)*
+
+### Partie C — Eau et énergie (8 pts)
+5. 150 × 1,8 × 0,8 = **216 m³/an**. *(2 pts)*
+6. 0,300 × 90 = **27 m³** (citerne de 27 à 30 m³, avec filtration et première chasse). *(2 pts)*
+7. P = 6 / (4,5 × 0,75) = **1,78 kWc** → 1 780 / 400 = 4,4 → **5 panneaux** (2,0 kWc), plus batteries et onduleur. *(4 pts)*
+
+### Partie D — BTC (3 pts)
+8. 7 × 0,06 = 0,42 kg par brique → 1 000 BTC : **420 kg**, soit **8,4 → 9 sacs**. *(2 pts)*
+9. Grands **débords** de toiture, **soubassement** en maçonnerie dure ou béton (pas de BTC au contact du sol et des éclaboussures), enduit ou badigeon perméable à la vapeur, gouttières. *(1 pt)*
+
+> [!attention] Erreurs à éviter
+> - Mettre de grandes baies vitrées à l'ouest sans protection.
+> - Dimensionner la citerne sur la pluie annuelle et non sur la durée de la saison sèche.
+> - Confondre puissance crête (kWc) et énergie (kWh).`},
  exercices:[
   {t:"Orienter une maison", d:1, e:`Une maison rectangulaire de 15 × 8 m peut être orientée avec ses grandes façades au nord et au sud, ou à l'est et à l'ouest. Laquelle choisir et pourquoi ? Où placer les chambres ?`, c:`Grandes façades **au nord et au sud** : le soleil y est haut à midi et facile à arrêter avec des débords ; les petites façades (est, ouest) reçoivent le soleil bas du matin et de l'après-midi, très chaud et difficile à arrêter : peu de baies de ce côté.
 Les **chambres** sont à placer de préférence à l'est ou protégées de l'ouest (elles sont occupées le soir, quand les murs ouest restituent la chaleur de l'après-midi).`},
@@ -1187,6 +2027,53 @@ La forme et l'orientation d'une fissure renseignent sur sa cause :
 > - Escalier = tassement ; verticale au milieu de poutre = flexion ; 45° près des appuis = effort tranchant ; le long des aciers = corrosion ; réseau fin = retrait.
 > - Diagnostic : relevé, suivi par témoins, investigations, recalcul.
 > - Traiter la cause avant de réparer l'effet.`,
+ sujet:{titre:"Diagnostiquer des fissures et préparer la surélévation d'une maison", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une maison de plain-pied à Yopougon présente des fissures. Le propriétaire veut aussi ajouter un étage. Vous menez le diagnostic.
+
+**Constats**
+- F1 : fissure **oblique à 45°** partant de l'angle d'une fenêtre vers le bas, côté d'un angle de la maison ;
+- F2 : fissure **verticale** continue à la jonction entre un poteau et le mur d'agglos ;
+- F3 : fissure **horizontale** sous la dalle de toiture-terrasse, sur le mur de façade ensoleillé ;
+- F4 : éclatement du béton d'une poutre de salle d'eau, aciers rouillés apparents ;
+- Suivi de F1 par jauge : **0,20 mm** (1er février), **0,32 mm** (1er mars), **0,44 mm** (1er avril).
+
+**Surélévation** : une semelle de **0,90 × 0,90 m** porte **80 kN** ; l'étage ajoutera **75 kN** ; sol : **150 kN/m²** ; facteur 1,08 pour le poids propre de la semelle.
+
+### Partie A — Lecture des fissures (8 points)
+1. Pour chaque fissure F1 à F4, proposer la cause la plus probable. (4 pts)
+2. Classer les fissures selon leur largeur (esthétique, à surveiller, structurelle). (2 pts)
+3. Interpréter le suivi de F1. Que faut-il faire avant de reboucher ? (2 pts)
+
+### Partie B — Démarche de diagnostic (5 points)
+4. Décrire les étapes d'un diagnostic de pathologie. (3 pts)
+5. Proposer la réparation de la poutre F4. (2 pts)
+
+### Partie C — Surélévation (7 points)
+6. Calculer la contrainte sur le sol après surélévation. Conclure. (3 pts)
+7. Calculer le côté de la nouvelle semelle. (2 pts)
+8. Quels autres éléments faut-il vérifier avant d'ajouter un étage ? (2 pts)`,
+  corrige:`### Partie A — Fissures (8 pts)
+1. *(4 pts)*
+   - **F1** : **tassement différentiel** de la fondation près de l'angle (le mur « descend » d'un côté) ;
+   - **F2** : absence de **liaison** poteau-maçonnerie (pas de fers d'attente) et retrait différentiel béton/agglos ;
+   - **F3** : **dilatation thermique** de la dalle de terrasse (pas d'isolation, pas de joint de glissement) ;
+   - **F4** : **corrosion des armatures** (enrobage insuffisant, humidité, carbonatation) qui fait éclater le béton.
+2. < 0,2 mm : esthétique ; 0,2 à 2 mm : à surveiller et traiter ; > 2 mm : souvent structurel. *(2 pts)*
+3. Ouverture de **0,12 mm par mois** : la fissure est **active** (tassement en cours). Il faut traiter la **cause** (fondation, fuite d'eau, sol) avant de reboucher, sinon elle se rouvrira. *(2 pts)*
+
+### Partie B — Diagnostic (5 pts)
+4. **Relevé** (plans, photos, cartographie et largeur des fissures) → **suivi** par témoins datés → **investigations** (sondage des fondations, étude de sol, détection des aciers, humidité) → **recalcul** avec les charges réelles → **préconisations** et chiffrage. *(3 pts)*
+5. Purger le béton dégradé, dégager les aciers, les **brosser** (ou remplacer s'ils ont perdu de la section), appliquer un **passivant**, reconstituer l'enrobage au **mortier de réparation** ; supprimer la cause (étanchéité de la salle d'eau, ventilation). *(2 pts)*
+
+### Partie C — Surélévation (7 pts)
+6. N = 80 + 75 = 155 kN → σ = 155 / 0,81 = **191 kN/m² > 150** ✘. *(3 pts)*
+7. B = √(155 × 1,08 / 150) = **1,06 → 1,10 m** (renforcement par élargissement ou micropieux). *(2 pts)*
+8. Les **poteaux** (souvent 4 HA10 insuffisants), les **poutres**, la dalle actuelle (qui devient plancher : charges plus fortes), les **chaînages**, l'ancrage du nouvel étage, l'**étude de sol** et le permis. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Reboucher une fissure active : elle réapparaît.
+> - Peindre sur des aciers rouillés sans les traiter.
+> - Ajouter un étage sans vérifier fondations et poteaux.`},
  exercices:[
   {t:"Identifier la cause d'une fissure", d:1, e:`Associer chaque fissure à sa cause : a) fissure oblique à 45° au bout d'une poutre ; b) fissures en escalier au-dessus d'une fenêtre d'angle ; c) éclatement du béton d'un poteau en bord de mer avec aciers rouillés ; d) fines fissures en toile d'araignée sur un enduit neuf.`, c:`a) **Effort tranchant** (cadres insuffisants) ; b) **tassement différentiel** des fondations sous l'angle ; c) **corrosion** des armatures (enrobage insuffisant, air salin) ; d) **retrait** de l'enduit (trop riche, séché trop vite).`},
   {t:"Fissure active ou stabilisée ?", d:2, e:`Une jauge posée sur une fissure indique : 0,30 mm (1er mars), 0,45 mm (1er avril), 0,60 mm (1er mai), 0,60 mm (1er juin), 0,61 mm (1er juillet). Interpréter. Quand peut-on la reboucher ?`, c:`De mars à mai, ouverture de **0,15 mm/mois** : désordre **actif**. Puis stabilisation (0,60 → 0,61 mm, dans la précision de la mesure).
@@ -1254,6 +2141,56 @@ La **retenue de garantie** (souvent 5 %) est restituée à la fin de la garantie
 > - Points d'arrêt avant de cacher un ouvrage ; essais à chaque étape.
 > - Réception avec ou sans réserves (PV) : transfert de garde et départ des garanties.
 > - Garanties : parfait achèvement 1 an, bon fonctionnement 2 ans, décennale 10 ans.`,
+ sujet:{titre:"Contrôles d'exécution, réception avec réserves et garanties après réception", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Fin de chantier d'un immeuble R+2 de bureaux à Plateau-Dokui (marché de **120 M F HT**). Vous assistez le maître d'œuvre pour les derniers contrôles et la réception.
+
+**Constats**
+- Faux aplomb mesuré en tête d'un poteau d'angle du R+2 : **4,5 cm** (tolérance ≈ 1 cm par étage) ;
+- Planéité d'une chape : flèche de **9 mm** sous la règle de 2 m (tolérance 5 à 7 mm) ;
+- Terrasse : l'essai de mise en eau n'a duré que **24 h** ;
+- Retenue de garantie : **5 %** du marché.
+
+**Désordres apparus après réception**
+- D1 : une porte frotte et une poignée se casse (18 mois après) ;
+- D2 : peinture qui s'écaille dans un bureau (8 mois après) ;
+- D3 : fissure traversante d'une poutre avec flèche importante (6 ans après) ;
+- D4 : infiltrations d'eau par la terrasse rendant deux bureaux inutilisables (3 ans après).
+
+### Partie A — Contrôles (7 points)
+1. Citer un contrôle pour chaque étape : implantation, fondations, ferraillage, béton, maçonnerie, étanchéité. (3 pts)
+2. Le poteau et la chape sont-ils acceptables ? (2 pts)
+3. L'essai de la terrasse est-il valable ? (2 pts)
+
+### Partie B — Réception (6 points)
+4. Qu'est-ce que la réception ? Qui la prononce ? (2 pts)
+5. Qu'est-ce qu'une réception avec réserves ? Comment sont-elles levées ? (2 pts)
+6. Que contient le dossier des ouvrages exécutés (DOE) ? (2 pts)
+
+### Partie C — Garanties (7 points)
+7. Rattacher chaque désordre D1 à D4 à la bonne garantie (parfait achèvement, bon fonctionnement, décennale). (4 pts)
+8. Calculer la retenue de garantie. Quand est-elle restituée ? (3 pts)`,
+  corrige:`### Partie A — Contrôles (7 pts)
+1. Implantation : **diagonales** et axes ; fondations : **réception du fond de fouille** ; ferraillage : conformité au plan et enrobages **avant** bétonnage ; béton : **affaissement** et **éprouvettes** ; maçonnerie : aplomb, alignement, liaison aux poteaux ; étanchéité : **mise en eau 48 h**. *(3 pts)*
+2. Poteau : tolérance 2 étages × 1 cm ≈ 2 à 3 cm → 4,5 cm **hors tolérance** (expertise, vérification structurelle). Chape : 9 mm > 7 mm → **refusée** (ragréage ou reprise). *(2 pts)*
+3. **Non** : l'essai doit durer **48 h** ; à refaire avant la réception. *(2 pts)*
+
+### Partie B — Réception (6 pts)
+4. Acte par lequel le **maître d'ouvrage** accepte l'ouvrage, contradictoirement avec l'entreprise (assisté du maître d'œuvre) : il en prend possession et les **garanties commencent**. *(2 pts)*
+5. L'ouvrage est accepté mais des défauts sont listés au **procès-verbal** avec un délai ; l'entreprise les corrige et un nouveau constat **lève les réserves**. *(2 pts)*
+6. Plans conformes à l'exécution (béton armé, réseaux), notices et fiches techniques des matériaux et équipements, garanties des fabricants, PV d'essais, notice d'entretien. *(2 pts)*
+
+### Partie C — Garanties (7 pts)
+7. *(4 pts)*
+   - **D1** : équipements dissociables → **bon fonctionnement** (2 ans) ✔ à 18 mois ;
+   - **D2** : désordre apparu dans l'année → **parfait achèvement** (1 an) ;
+   - **D3** : solidité compromise → **décennale** (10 ans) ;
+   - **D4** : ouvrage **impropre à sa destination** → **décennale**.
+8. 5 % × 120 = **6 M F**, restitués à la fin de la garantie de **parfait achèvement** (1 an), si les réserves sont levées (ou remplacés par une caution bancaire). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Couler sans contrôle des aciers : on ne pourra plus vérifier.
+> - Réceptionner sans PV écrit.
+> - Confondre garantie de bon fonctionnement (équipements) et décennale (solidité, destination).`},
  exercices:[
   {t:"Points d'arrêt", d:1, e:`Citer cinq points d'arrêt sur un chantier de maison et dire pourquoi on ne peut pas les passer sans contrôle.`, c:`1. **Fonds de fouille** (bon sol) avant le béton de propreté ; 2. **Ferraillage** des semelles, longrines, poteaux, planchers avant coulage ; 3. **Réseaux enterrés** (eaux usées, fourreaux) avant remblai et dallage ; 4. **Réseaux encastrés** (gaines, tuyaux testés) avant enduits ; 5. **Étanchéité** de la terrasse (essai à l'eau) avant protection.
 Une fois recouverts, ces ouvrages ne peuvent plus être vérifiés sans démolition.`},

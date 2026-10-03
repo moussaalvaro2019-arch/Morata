@@ -93,6 +93,59 @@ Avant de taper sur la calculatrice, on fait un calcul mental grossier : la secti
 > - Surfaces : 2 rangs par unité ; volumes : 3 rangs ; 1 m³ = 1 000 L.
 > - 1 MPa = 1 N/mm² ; 1 bar = 0,1 MPa.
 > - Masse = ρ × V ; arrondir à la fin, contrôler l'ordre de grandeur.`,
+ sujet:{titre:"Calcul numérique et conversions d'unités sur un chantier", duree:60, niveau:"BT / CAP", bareme:20,
+  enonce:`**Contexte.** Sur le chantier d'une école à Dimbokro, le chef de chantier vous confie plusieurs calculs rapides.
+
+**Données**
+- Citerne de chantier : **12 500 L** ;
+- Dalle de **6,00 × 5,00 m**, épaisseur **16 cm**, béton armé de masse volumique **2,5 t/m³** ; on prend g = 10 m/s² ;
+- Poteau de **30 × 30 cm** portant **450 kN** ;
+- Terrain de **2,5 ha** ;
+- Un camion roule à **72 km/h** ;
+- Coefficient de dilatation de l'acier : **0,000 012** par °C ;
+- Consommation d'une bétonnière : **3 600 000 J** par heure.
+
+### Partie A — Volumes et masses (6 points)
+1. Convertir la contenance de la citerne en m³. (1 pt)
+2. Calculer le volume, la masse et le poids de la dalle. (3 pts)
+3. Calculer la charge de la dalle par m² en kN/m². (2 pts)
+
+### Partie B — Contraintes et surfaces (6 points)
+4. Calculer la contrainte sous le poteau en kN/m², puis en MPa (1 MPa = 1 N/mm² = 1 000 kN/m²). (3 pts)
+5. Convertir 2,5 ha en m² et en ares. (2 pts)
+6. Combien de lots de 500 m² peut-on théoriquement y découper (sans les voies) ? (1 pt)
+
+### Partie C — Autres unités (5 points)
+7. Convertir 72 km/h en m/s. (1 pt)
+8. Écrire 0,000 012 en notation scientifique. (1 pt)
+9. Convertir 3 600 000 J en kWh (1 kWh = 3,6 × 10⁶ J). (1 pt)
+10. Combien de litres dans 1 m³ ? dans 1 dm³ ? Combien de cm³ dans 1 L ? (2 pts)
+
+### Partie D — Ordres de grandeur (3 points)
+11. Un collègue annonce que la dalle pèse 1,2 t. Montrer par un ordre de grandeur que c'est faux et trouver son erreur probable. (3 pts)`,
+  corrige:`### Partie A — Volumes (6 pts)
+1. 12 500 L = **12,5 m³** (1 m³ = 1 000 L). *(1 pt)*
+2. V = 6,00 × 5,00 × 0,16 = **4,8 m³** ; masse : 4,8 × 2,5 = **12 t** ; poids : 12 000 × 10 = 120 000 N = **120 kN**. *(3 pts)*
+3. 120 / 30 = **4 kN/m²** (ou directement 25 kN/m³ × 0,16 m). *(2 pts)*
+
+### Partie B — Contraintes (6 pts)
+4. Aire : 0,30 × 0,30 = 0,09 m² → 450 / 0,09 = **5 000 kN/m² = 5 MPa**. *(3 pts)*
+5. 1 ha = 10 000 m² → **25 000 m²** = **250 ares**. *(2 pts)*
+6. 25 000 / 500 = **50 lots** (en réalité 35 à 40 avec les voies et réserves). *(1 pt)*
+
+### Partie C — Unités (5 pts)
+7. 72 / 3,6 = **20 m/s**. *(1 pt)*
+8. **1,2 × 10⁻⁵**. *(1 pt)*
+9. **1 kWh**. *(1 pt)*
+10. 1 m³ = **1 000 L** ; 1 dm³ = **1 L** ; 1 L = **1 000 cm³**. *(2 pts)*
+
+### Partie D — Ordre de grandeur (3 pts)
+11. Environ 5 m³ de béton à 2,5 t/m³ → plus de 10 t : 1,2 t est 10 fois trop faible. Erreur probable : épaisseur prise à 1,6 cm (0,016 m) au lieu de 16 cm, ou oubli d'un facteur 10. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre masse (t, kg) et poids (kN).
+> - Oublier de convertir les cm en m avant de calculer un volume.
+> - Ne jamais vérifier un résultat par un ordre de grandeur.`},
  exercices:[
   {t:"Conversions", d:1, e:`Convertir : a) 0,85 m² en cm² ; b) 45 000 cm² en m² ; c) 3,2 ha en m² ; d) 750 L en m³ ; e) 0,035 m³ en litres ; f) 25 MPa en N/mm² et en kPa.`, c:`a) **8 500 cm²** ; b) **4,5 m²** ; c) **32 000 m²** ; d) **0,75 m³** ; e) **35 L** ; f) **25 N/mm²** = **25 000 kPa**.`},
   {t:"Écriture scientifique", d:1, e:`Écrire en notation scientifique : a) 0,000 012 ; b) 210 000 ; c) 0,0045 ; d) 7 850. Calculer 2,1 × 10⁵ × 1,2 × 10⁻⁵.`, c:`a) **1,2 × 10⁻⁵** ; b) **2,1 × 10⁵** ; c) **4,5 × 10⁻³** ; d) **7,85 × 10³**.
@@ -162,6 +215,55 @@ Deux hausses ou baisses successives **se multiplient**, elles ne s'additionnent 
 > - Priorités : parenthèses, puissances, × et ÷, puis + et −.
 > - Fractions : même dénominateur pour additionner.
 > - × (1 + p/100) pour augmenter ; ÷ (1 + p/100) pour retrouver la valeur initiale.`,
+ sujet:{titre:"Fractions, priorités opératoires et pourcentages dans un budget de construction", duree:60, niveau:"BT / CAP", bareme:20,
+  enonce:`**Contexte.** Une famille de Bouaflé prépare le budget de sa maison et le partage d'un terrain.
+
+**Données**
+- Calculs du métreur à vérifier : **3 + 4 × 5 − 2³** et **(3 + 4) × (5 − 2)² ÷ 7** ;
+- Héritage d'un terrain vendu **18 M F** : l'aîné reçoit **2/5**, le second **1/3**, le reste va au troisième ;
+- Facture de matériaux : **250 000 F HT**, remise de **7 %**, puis TVA de **18 %** ;
+- Mortier « 1 volume de ciment pour 3 volumes de sable » ;
+- Budget de **24 M F** dont **45 %** pour le gros œuvre.
+
+### Partie A — Priorités opératoires (4 points)
+1. Calculer les deux expressions en détaillant l'ordre des opérations. (4 pts)
+
+### Partie B — Fractions (6 points)
+2. Quelle fraction du terrain reçoit le troisième héritier ? (2 pts)
+3. Calculer la part de chacun en F. (3 pts)
+4. Vérifier que la somme des parts redonne 18 M F. (1 pt)
+
+### Partie C — Pourcentages (6 points)
+5. Calculer le montant après remise, puis le montant TTC. (3 pts)
+6. La remise et la TVA font-elles « + 11 % » ? Calculer la variation réelle. (2 pts)
+7. Calculer le budget du gros œuvre. (1 pt)
+
+### Partie D — Proportions d'un mélange (4 points)
+8. Quelle fraction du mélange sec est du ciment ? du sable ? (2 pts)
+9. Pour 0,80 m³ de mélange sec, quels volumes de ciment et de sable ? (2 pts)`,
+  corrige:`### Partie A — Priorités (4 pts)
+1. *(4 pts)*
+   - 3 + 4 × 5 − 2³ = 3 + 20 − 8 = **15** (puissances, puis multiplications, puis additions et soustractions de gauche à droite) ;
+   - (3 + 4) × (5 − 2)² ÷ 7 = 7 × 9 ÷ 7 = **9** (parenthèses d'abord).
+
+### Partie B — Fractions (6 pts)
+2. 1 − 2/5 − 1/3 = 15/15 − 6/15 − 5/15 = **4/15**. *(2 pts)*
+3. Aîné : 2/5 × 18 = **7,2 M** ; second : 1/3 × 18 = **6,0 M** ; troisième : 4/15 × 18 = **4,8 M F**. *(3 pts)*
+4. 7,2 + 6,0 + 4,8 = **18 M F** ✔. *(1 pt)*
+
+### Partie C — Pourcentages (6 pts)
+5. Après remise : 250 000 × 0,93 = **232 500 F HT** ; TTC : 232 500 × 1,18 = **274 350 F**. *(3 pts)*
+6. Non : × 0,93 × 1,18 = × 1,0974 → **+ 9,74 %** (les pourcentages successifs se multiplient). *(2 pts)*
+7. 0,45 × 24 = **10,8 M F**. *(1 pt)*
+
+### Partie D — Mélange (4 pts)
+8. 1 + 3 = 4 parts : ciment **1/4**, sable **3/4**. *(2 pts)*
+9. Ciment : 0,80 / 4 = **0,20 m³** ; sable : **0,60 m³**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer de gauche à droite sans respecter les priorités.
+> - Additionner des fractions sans dénominateur commun.
+> - Additionner des pourcentages successifs.`},
  exercices:[
   {t:"Priorités", d:1, e:`Calculer : a) 12 − 4 × 2 ; b) (12 − 4) × 2 ; c) 3 + 2 × 5² ; d) 0,5 × 9 × 4² / 8.`, c:`a) 12 − 8 = **4** ; b) 8 × 2 = **16** ; c) 3 + 2 × 25 = **53** ; d) 0,5 × 9 × 16 / 8 = 72 / 8 = **9** (les puissances se calculent avant les multiplications).`},
   {t:"Fractions", d:1, e:`Calculer et simplifier : a) 1/2 + 1/3 ; b) 5/6 − 1/4 ; c) 3/8 × 4/9 ; d) (2/3) / (4/5).`, c:`a) 3/6 + 2/6 = **5/6** ; b) 10/12 − 3/12 = **7/12** ; c) 12/72 = **1/6** ; d) 2/3 × 5/4 = 10/12 = **5/6**.`},
@@ -234,6 +336,53 @@ La règle de trois ne s'applique qu'à la partie variable (voir les fonctions af
 > - Proportionnalité : y = k x ; règle de trois.
 > - Proportionnalité inverse : ouvriers × durée = constante.
 > - Échelle 1/n : réel = plan × n ; surfaces × n².`,
+ sujet:{titre:"Proportionnalité, règle de trois et échelles au service du chantier", duree:60, niveau:"BT / CAP", bareme:20,
+  enonce:`**Contexte.** Vous préparez l'organisation d'un petit chantier à Agboville.
+
+**Données**
+- **3 maçons** montent un mur en **9 jours** ;
+- Un camion consomme **28 L** de gasoil pour **70 km** ;
+- Une gâchée d'un sac de ciment (50 kg) donne **0,143 m³** de béton dosé à 350 ;
+- Un plan est à l'échelle **1/50** ; une carte au **1/50 000** ;
+- Un ouvrier est payé **4 500 F** par jour ; une équipe de **12 ouvriers** travaille **6 jours**.
+
+### Partie A — Proportionnalité directe (6 points)
+1. Combien de gasoil pour un trajet de 175 km ? (2 pts)
+2. Combien de sacs pour couler **1,20 m³** de béton ? (2 pts)
+3. Calculer le coût de la main-d'œuvre de l'équipe. (2 pts)
+
+### Partie B — Proportionnalité inverse (4 points)
+4. Combien de jours faut-il à **5 maçons** pour le même mur ? (2 pts)
+5. Justifier que la durée et le nombre de maçons sont inversement proportionnels. Quelle est la limite de ce modèle ? (2 pts)
+
+### Partie C — Échelles (7 points)
+6. Sur le plan au 1/50, une pièce mesure **8,4 cm × 6,2 cm**. Calculer ses dimensions réelles et sa surface. (3 pts)
+7. Sur la carte, la distance entre la carrière et le chantier est de **9 cm**. Distance réelle ? (2 pts)
+8. À quelle échelle faut-il dessiner une façade de **24 m** pour qu'elle occupe **12 cm** ? (2 pts)
+
+### Partie D — Pourcentage et proportion (3 points)
+9. Sur 400 agglos livrés, **14** sont cassés. Quel pourcentage ? Combien en prévoir de cassés sur une livraison de 2 500 ? (3 pts)`,
+  corrige:`### Partie A — Directe (6 pts)
+1. 28 × 175 / 70 = **70 L**. *(2 pts)*
+2. 1,20 / 0,143 = 8,4 → **9 sacs**. *(2 pts)*
+3. 12 × 6 × 4 500 = **324 000 F**. *(2 pts)*
+
+### Partie B — Inverse (4 pts)
+4. Le travail vaut 3 × 9 = 27 jours-maçon → 27 / 5 = **5,4 jours** (≈ 6 jours). *(2 pts)*
+5. Le produit (nombre de maçons × durée) reste constant (quantité de travail). Limite : au-delà d'un certain nombre, les maçons se gênent, l'approvisionnement ne suit pas, le mortier et les poteaux imposent leur rythme. *(2 pts)*
+
+### Partie C — Échelles (7 pts)
+6. 8,4 × 50 = 420 cm = **4,20 m** ; 6,2 × 50 = **3,10 m** ; surface **13,02 m²**. *(3 pts)*
+7. 9 × 50 000 = 450 000 cm = **4,5 km**. *(2 pts)*
+8. 12 cm / 2 400 cm = 1/200 → échelle **1/200**. *(2 pts)*
+
+### Partie D — Pourcentage (3 pts)
+9. 14 / 400 = **3,5 %** ; sur 2 500 : 2 500 × 0,035 = **≈ 88 agglos** cassés à prévoir. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer une règle de trois directe à une situation inverse (plus d'ouvriers → moins de jours).
+> - Oublier de convertir les cm en m ou en km avec l'échelle.
+> - Arrondir les sacs à l'unité inférieure.`},
  exercices:[
   {t:"Règle de trois", d:1, e:`a) 12,5 agglos par m² : combien pour 36,8 m² ? b) 0,40 m³ de sable par m³ de béton : combien pour 6,5 m³ ? c) Un ouvrier enduit 15 m² par jour : combien de jours pour 96 m² ?`, c:`a) 36,8 × 12,5 = **460 agglos** ; b) 6,5 × 0,40 = **2,6 m³** ; c) 96 / 15 = 6,4 → **7 jours**.`},
   {t:"Proportionnalité inverse", d:1, e:`5 manœuvres creusent une tranchée en 8 jours. Combien de jours avec 4 manœuvres ? Combien de manœuvres pour finir en 5 jours ?`, c:`Travail : 5 × 8 = **40 jours-manœuvre**.
@@ -310,6 +459,48 @@ Un pignon est formé d'un rectangle de **8,00 × 3,00 m** surmonté d'un triangl
 > - Rectangle L × l ; triangle b h / 2 ; trapèze (B + b)/2 × h ; cercle π R².
 > - Figures composées : découper ou soustraire.
 > - Toujours convertir en mètres avant de calculer.`,
+ sujet:{titre:"Aires et périmètres : terrain composé, pièce en L et bassin circulaire", duree:60, niveau:"BT / CAP", bareme:20,
+  enonce:`**Contexte.** Un propriétaire de Grand-Bassam veut clôturer son terrain, carreler une pièce en L et construire un bassin.
+
+**Données**
+- Terrain composé d'un **rectangle de 20 × 12 m**, d'un **triangle isocèle** de base 12 m (côté commun avec le rectangle) et de hauteur **8 m** d'un côté, et d'un **demi-cercle** de diamètre 12 m de l'autre côté ;
+- Pièce en L : un rectangle de **5,00 × 4,00 m** accolé à un rectangle de **3,00 × 2,50 m** ;
+- Carreaux en cartons de **1,44 m²**, chutes **8 %** ;
+- Bassin circulaire de **5,00 m** de diamètre ; π ≈ 3,1416.
+
+### Partie A — Le terrain (9 points)
+1. Faire un croquis coté du terrain. (1 pt)
+2. Calculer l'aire de chaque partie et l'aire totale. (4 pts)
+3. Calculer la longueur des côtés du triangle (Pythagore) et le périmètre du terrain (longueur de clôture). (4 pts)
+
+### Partie B — La pièce en L (6 points)
+4. Calculer l'aire de la pièce de deux façons différentes (découpage ou soustraction) si le grand rectangle englobant mesure 8,00 × 4,00 m. (3 pts)
+5. Calculer le nombre de cartons à commander. (3 pts)
+
+### Partie C — Le bassin (5 points)
+6. Calculer l'aire du fond et la longueur de la bordure. (3 pts)
+7. Si on double le diamètre, comment varient le périmètre et l'aire ? (2 pts)`,
+  corrige:`### Partie A — Terrain (9 pts)
+1. Rectangle 20 × 12 au centre, triangle sur un côté de 12 m, demi-cercle sur l'autre côté de 12 m. *(1 pt)*
+2. *(4 pts)*
+   - Rectangle : 20 × 12 = **240 m²** ;
+   - Triangle : 12 × 8 / 2 = **48 m²** ;
+   - Demi-cercle : π × 6² / 2 = **56,55 m²** ;
+   - Total : **344,55 m²**.
+3. Côté du triangle : √(6² + 8²) = **10 m** (deux côtés) ; demi-cercle : π × 6 = **18,85 m** ; périmètre : 20 + 20 + 10 + 10 + 18,85 = **78,85 m** (les côtés de 12 m sont intérieurs). *(4 pts)*
+
+### Partie B — Pièce en L (6 pts)
+4. Découpage : 5,00 × 4,00 + 3,00 × 2,50 = 20 + 7,5 = **27,5 m²**. Soustraction : 8,00 × 4,00 − 3,00 × 1,50 = 32 − 4,5 = **27,5 m²** ✔. *(3 pts)*
+5. 27,5 × 1,08 = 29,7 m² → 29,7 / 1,44 = 20,6 → **21 cartons**. *(3 pts)*
+
+### Partie C — Bassin (5 pts)
+6. Aire : π × 2,5² = **19,63 m²** ; bordure : π × 5 = **15,71 m**. *(3 pts)*
+7. Le périmètre est **multiplié par 2**, l'aire par **4** (elle dépend du carré du rayon). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Compter dans le périmètre les côtés intérieurs communs.
+> - Utiliser le diamètre à la place du rayon dans πr².
+> - Oublier les chutes dans la commande de carreaux.`},
  exercices:[
   {t:"Surface d'un logement", d:1, e:`Un appartement comprend : séjour 5,20 × 4,30 m ; 2 chambres de 3,50 × 3,20 m ; cuisine 3,00 × 2,40 m ; salle d'eau 2,20 × 1,80 m ; couloir 4,00 × 1,10 m. Calculer la surface totale.`, c:`Séjour 22,36 ; chambres 2 × 11,20 = 22,40 ; cuisine 7,20 ; salle d'eau 3,96 ; couloir 4,40 → **60,32 m²**.`},
   {t:"Terrain en trapèze", d:1, e:`Un terrain a la forme d'un trapèze rectangle : bases 22 m et 30 m, hauteur 25 m. Calculer sa surface et la longueur de clôture (le côté oblique mesure 25,96 m).`, c:`Surface : (22 + 30) / 2 × 25 = **650 m²**.
@@ -383,6 +574,45 @@ Pour implanter un bâtiment de **12 × 9 m**, on trace les quatre côtés puis o
 > - Triangle : 180° ; polygone : (n − 2) × 180°.
 > - Thalès : parallèles → longueurs proportionnelles ; triangles semblables.
 > - Angle droit par 3-4-5 ; arc = 2πR × α/360.`,
+ sujet:{titre:"Angles, triangles et Thalès : hauteur d'un bâtiment, équerre 3-4-5 et ferme", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur un chantier à Bondoukou, vous n'avez qu'un ruban et un jalon. Vous résolvez plusieurs problèmes de géométrie.
+
+**Données**
+- À la même heure, un jalon vertical de **1,20 m** projette une ombre de **1,80 m**, et un château d'eau une ombre de **14,40 m** ;
+- Dans un triangle de charpente, deux angles mesurent **38°** et **71°** ;
+- Pour implanter un angle droit, on dispose d'un cordeau ;
+- Ferme triangulaire : à **1,60 m** du sommet le long de l'arbalétrier, la largeur entre arbalétriers est de **2,40 m** ; l'entrait est à **4,00 m** du sommet (mesuré de la même façon).
+
+### Partie A — Angles (4 points)
+1. Calculer le troisième angle du triangle de charpente. Quel type de triangle est-ce ? (2 pts)
+2. Rappeler les propriétés des angles d'un triangle isocèle et d'un triangle équilatéral. (2 pts)
+
+### Partie B — Thalès (9 points)
+3. Faire un schéma et calculer la hauteur du château d'eau. (4 pts)
+4. Énoncer le théorème de Thalès utilisé. (2 pts)
+5. Calculer la longueur de l'entrait de la ferme. (3 pts)
+
+### Partie C — Angle droit (7 points)
+6. Expliquer la méthode « 3-4-5 » pour tracer un angle droit et la justifier par la réciproque de Pythagore. (4 pts)
+7. Avec un ruban de 30 m, quelles longueurs proportionnelles choisir pour plus de précision ? (3 pts)`,
+  corrige:`### Partie A — Angles (4 pts)
+1. 180 − 38 − 71 = **71°** → deux angles égaux : triangle **isocèle**. *(2 pts)*
+2. Isocèle : deux côtés égaux et les **deux angles à la base égaux** ; équilatéral : trois côtés égaux, trois angles de **60°**. *(2 pts)*
+
+### Partie B — Thalès (9 pts)
+3. Les rayons du soleil sont parallèles : les triangles (jalon, ombre) et (château, ombre) sont semblables. *(4 pts)*
+   $$ H / 14,40 = 1,20 / 1,80   →   H = 14,40 × 1,20 / 1,80 = 9,60 m
+4. Si deux droites sécantes sont coupées par deux parallèles, les longueurs des segments sont **proportionnelles**. *(2 pts)*
+5. 2,40 / 1,60 = L / 4,00 → L = 2,40 × 4,00 / 1,60 = **6,00 m**. *(3 pts)*
+
+### Partie C — Angle droit (7 pts)
+6. On mesure **3 m** sur un côté depuis le sommet, **4 m** sur l'autre, et on règle l'ouverture pour que la distance entre les deux points vaille **5 m**. Comme 3² + 4² = 9 + 16 = 25 = 5², la **réciproque de Pythagore** prouve que l'angle est droit. *(4 pts)*
+7. Les plus grands multiples tenant sur le ruban : **6 – 8 – 10 m** ou **9 – 12 – 15 m** (une erreur de mesure pèse moins sur de grandes longueurs). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Mettre les longueurs dans le désordre dans les rapports de Thalès.
+> - Mesurer l'ombre à des heures différentes.
+> - Tracer un angle droit « à l'œil ».`},
  exercices:[
   {t:"Hauteur par Thalès", d:1, e:`Un poteau de 2,40 m projette une ombre de 1,60 m. Au même moment, l'ombre d'un château d'eau mesure 14,40 m. Quelle est sa hauteur ?`, c:`Hauteur = 2,40 × 14,40 / 1,60 = **21,60 m**.`},
   {t:"Angles d'une ferme", d:1, e:`Une ferme de charpente forme un triangle isocèle dont l'angle au faîte vaut 140°. Calculer les deux angles à la base. Quelle est la pente du toit en degrés ?`, c:`Angles à la base : (180 − 140) / 2 = **20°** chacun → la pente du toit est de **20°** (≈ 36 %).`},
@@ -451,6 +681,49 @@ On mesure la distance horizontale d au pied de l'ouvrage et l'angle α sous lequ
 > - Pythagore : c² = a² + b² ; réciproque pour contrôler un angle droit.
 > - sin = opposé/hypoténuse ; cos = adjacent/hypoténuse ; tan = opposé/adjacent.
 > - Pente = tan α ; calculatrice en mode degrés.`,
+ sujet:{titre:"Pythagore et trigonométrie : rampant, escalier, poteau et échelle", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Plusieurs calculs de triangles rectangles se posent sur le chantier d'une villa à Daoukro.
+
+**Données**
+- Toiture : demi-portée **4,50 m**, hauteur du faîtage au-dessus des sablières **1,35 m** ;
+- Escalier : **18 contremarches** de **17 cm** et **17 girons** de **28 cm** ;
+- Un technicien placé à **12 m** d'un poteau électrique vise son sommet sous un angle de **38°** (œil à **1,60 m** du sol) ;
+- Une échelle de **6,00 m** est posée contre un mur, son pied à **1,50 m** du mur.
+
+### Partie A — Toiture (6 points)
+1. Calculer la longueur du rampant. (2 pts)
+2. Calculer la pente en % et l'angle en degrés. (4 pts)
+
+### Partie B — Escalier (4 points)
+3. Calculer la hauteur et la longueur horizontale de la volée, puis la longueur de la paillasse (ligne inclinée). (4 pts)
+
+### Partie C — Poteau (4 points)
+4. Calculer la hauteur du poteau. (4 pts)
+
+### Partie D — Échelle (6 points)
+5. À quelle hauteur l'échelle touche-t-elle le mur ? (2 pts)
+6. Calculer l'angle de l'échelle avec le sol. La règle de sécurité demande environ **75°** : est-elle respectée ? (2 pts)
+7. À quelle distance du mur placer le pied pour avoir exactement 75° ? (2 pts)`,
+  corrige:`### Partie A — Toiture (6 pts)
+1. $$ rampant = √(4,50² + 1,35²) = √22,07 = 4,70 m
+   *(2 pts)*
+2. Pente : 1,35 / 4,50 = 0,30 = **30 %** ; angle : arctan 0,30 = **16,7°**. *(4 pts)*
+
+### Partie B — Escalier (4 pts)
+3. Hauteur : 18 × 0,17 = **3,06 m** ; longueur : 17 × 0,28 = **4,76 m** ; paillasse : √(3,06² + 4,76²) = **5,66 m**. *(4 pts)*
+
+### Partie C — Poteau (4 pts)
+4. tan 38° = h / 12 → h = 12 × 0,781 = 9,38 m au-dessus de l'œil → poteau : 9,38 + 1,60 = **10,98 m**. *(4 pts)*
+
+### Partie D — Échelle (6 pts)
+5. √(6² − 1,5²) = √33,75 = **5,81 m**. *(2 pts)*
+6. cos α = 1,50 / 6,00 = 0,25 → α = **75,5°** ✔ (proche de 75°). *(2 pts)*
+7. d = 6,00 × cos 75° = 6,00 × 0,259 = **1,55 m**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre pente (%) et angle (degrés).
+> - Oublier la hauteur de l'œil dans une visée.
+> - Utiliser sin au lieu de cos (côté adjacent / hypoténuse).`},
  exercices:[
   {t:"Diagonales et équerrage", d:1, e:`a) Diagonale d'un rectangle de 8 × 6 m ? b) Un maçon mesure 3,00 m et 4,00 m sur deux murs depuis l'angle, puis 5,04 m entre les deux points : l'angle est-il droit ?`, c:`a) √(64 + 36) = **10 m**.
 b) Il faudrait 5,00 m : avec 5,04 m, l'angle est **un peu ouvert** (plus de 90°) : on corrige jusqu'à 5,00 m.`},
@@ -521,6 +794,48 @@ Une fouille de semelle a un fond de **2,00 × 2,00 m**, un haut de **3,00 × 3,0
 > - Prisme, cylindre : base × hauteur ; pyramide, cône : base × hauteur / 3.
 > - Tronc de pyramide : h/3 (S1 + S2 + √S1S2) ; sphère : 4/3 π R³.
 > - 1 m³ d'eau = 1 000 L = 1 t.`,
+ sujet:{titre:"Volumes et surfaces dans l'espace : château d'eau, tas de sable et toiture en pyramide", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Plusieurs ouvrages d'un village à Tiébissou demandent des calculs de volumes et de surfaces.
+
+**Données** (π ≈ 3,1416)
+- Château d'eau : cuve **cylindrique** de diamètre intérieur **3,00 m** et de hauteur **4,00 m**, surmontée d'un toit **conique** de même diamètre et de hauteur **1,20 m** ;
+- Tas de sable conique : diamètre au sol **5,00 m**, hauteur **1,50 m** ;
+- Toiture en pyramide sur un bâtiment de **12 × 9 m**, hauteur **2,50 m** (sommet au-dessus du centre).
+
+### Partie A — Château d'eau (8 points)
+1. Calculer le volume de la cuve en m³ et en litres. (2 pts)
+2. Calculer le volume sous le toit conique. (2 pts)
+3. Calculer la surface intérieure des parois de la cuve (enduit étanche), fond compris. (2 pts)
+4. Calculer la surface du toit conique (génératrice g = √(r² + h²), aire latérale = π r g). (2 pts)
+
+### Partie B — Tas de sable (5 points)
+5. Calculer le volume du tas. (2 pts)
+6. Combien de camions de **6 m³** cela représente-t-il ? Combien de brouettes de **60 L** ? (3 pts)
+
+### Partie C — Toiture pyramidale (7 points)
+7. Calculer le volume des combles. (2 pts)
+8. Calculer la hauteur de chaque triangle (apothème) et la surface totale de couverture. (5 pts)`,
+  corrige:`### Partie A — Château d'eau (8 pts)
+1. V = π × 1,5² × 4,00 = **28,27 m³** ≈ **28 270 L**. *(2 pts)*
+2. V = π × 1,5² × 1,20 / 3 = **2,83 m³**. *(2 pts)*
+3. Paroi : 2π × 1,5 × 4,00 = 37,70 m² ; fond : π × 1,5² = 7,07 m² → **44,77 m²**. *(2 pts)*
+4. g = √(1,5² + 1,2²) = 1,92 m → aire : π × 1,5 × 1,92 = **9,05 m²**. *(2 pts)*
+
+### Partie B — Tas de sable (5 pts)
+5. V = π × 2,5² × 1,50 / 3 = **9,82 m³**. *(2 pts)*
+6. 9,82 / 6 = 1,6 → **2 camions** (un plein et un partiel) ; 9 820 / 60 = **164 brouettes**. *(3 pts)*
+
+### Partie C — Pyramide (7 pts)
+7. V = (12 × 9) × 2,50 / 3 = **90 m³**. *(2 pts)*
+8. *(5 pts)*
+   - Triangles sur les côtés de 12 m : apothème √(4,5² + 2,5²) = **5,15 m** → aire 12 × 5,15 / 2 = 30,9 m² (× 2) ;
+   - Triangles sur les côtés de 9 m : apothème √(6² + 2,5²) = **6,50 m** → aire 9 × 6,50 / 2 = 29,25 m² (× 2) ;
+   - Total : 2 × 30,9 + 2 × 29,25 = **120,3 m²**.
+
+> [!attention] Erreurs à éviter
+> - Oublier le facteur 1/3 pour un cône ou une pyramide.
+> - Utiliser le diamètre au lieu du rayon.
+> - Prendre la hauteur de la pyramide au lieu de l'apothème pour l'aire des faces.`},
  exercices:[
   {t:"Béton de poteaux ronds", d:1, e:`6 poteaux circulaires de 40 cm de diamètre et 4,00 m de haut. Calculer le volume de béton et la surface de coffrage.`, c:`Volume : 6 × π × 0,20² × 4,00 = **3,02 m³** ; coffrage : 6 × π × 0,40 × 4,00 = **30,2 m²**.`},
   {t:"Tas de gravier", d:1, e:`Un tas de gravier conique a 5 m de diamètre et 1,80 m de hauteur. Quel volume ? Combien de camions de 8 m³ ont été livrés ?`, c:`V = π × 2,5² × 1,80 / 3 = **11,78 m³** → environ **1,5 camion** (un camion de 8 m³ et une partie d'un second).`},
@@ -592,6 +907,47 @@ Deux inconnues, deux équations : méthode par **substitution** (exprimer une in
 > - Retourner les formules : σ = F/A ⇔ A = F/σ.
 > - Inéquation : inverser le sens si l'on multiplie par un négatif.
 > - Systèmes : substitution ou combinaison.`,
+ sujet:{titre:"Équations, inéquations et systèmes : prix, mélanges et choix d'un devis", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le gérant d'une quincaillerie de Divo et un entrepreneur se posent plusieurs problèmes qui se mettent en équation.
+
+**Données**
+- Facture 1 : **120 agglos** et **8 sacs** de ciment pour **87 400 F** ; facture 2 : **200 agglos** et **15 sacs** pour **152 500 F** ;
+- Deux sables : carrière A (module de finesse **2,2**), carrière B (**3,1**) ; on veut **10 m³** de mélange de module **2,6** (le module du mélange est la moyenne pondérée par les volumes) ;
+- Location d'une bétonnière : loueur A **250 000 F** de forfait + **9 000 F/jour** ; loueur B **400 000 F** + **7 500 F/jour** ;
+- Semelle carrée : charge **650 kN**, contrainte admissible du sol **180 kN/m²**.
+
+### Partie A — Système (6 points)
+1. Mettre le problème des factures en équations (x : prix d'un agglo ; y : prix d'un sac). (2 pts)
+2. Résoudre le système et vérifier. (4 pts)
+
+### Partie B — Mélange de sables (5 points)
+3. Écrire l'équation et calculer les volumes de chaque sable. (5 pts)
+
+### Partie C — Inéquation (5 points)
+4. Écrire les coûts en fonction du nombre de jours n. (2 pts)
+5. Pour quelle durée le loueur B est-il plus avantageux ? (3 pts)
+
+### Partie D — Dimensionnement (4 points)
+6. Écrire l'inéquation que doit vérifier le côté B de la semelle et la résoudre. Choisir B (multiple de 5 cm). (4 pts)`,
+  corrige:`### Partie A — Système (6 pts)
+1. **120 x + 8 y = 87 400** et **200 x + 15 y = 152 500**. *(2 pts)*
+2. Par combinaison (ou substitution) : x = (87 400 × 15 − 152 500 × 8) / (120 × 15 − 200 × 8) = 91 000 / 200 = **455 F** ; puis 8 y = 87 400 − 120 × 455 = 32 800 → **y = 4 100 F**. Vérification : 200 × 455 + 15 × 4 100 = 91 000 + 61 500 = 152 500 ✔. *(4 pts)*
+
+### Partie B — Mélange (5 pts)
+3. Soit a le volume de sable A : $$ 2,2 a + 3,1 (10 − a) = 2,6 × 10   →   31 − 0,9 a = 26   →   a = 5,56 m³
+   → **5,56 m³** de A et **4,44 m³** de B. *(5 pts)*
+
+### Partie C — Inéquation (5 pts)
+4. CA(n) = **250 000 + 9 000 n** ; CB(n) = **400 000 + 7 500 n**. *(2 pts)*
+5. CB < CA ⇔ 400 000 + 7 500 n < 250 000 + 9 000 n ⇔ 150 000 < 1 500 n ⇔ **n > 100 jours**. Pour moins de 100 jours, A est moins cher ; au-delà, B. *(3 pts)*
+
+### Partie D — Semelle (4 pts)
+6. 650 / B² ≤ 180 ⇔ B² ≥ 3,61 ⇔ **B ≥ 1,90 m** → **B = 1,90 m** (1,95 m avec le poids propre de la semelle). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier de vérifier la solution d'un système dans les deux équations.
+> - Changer le sens d'une inéquation sans raison (on ne le change qu'en multipliant par un négatif).
+> - Garder une racine négative pour une longueur.`},
  exercices:[
   {t:"Équations", d:1, e:`Résoudre : a) 4 x − 7 = 21 ; b) 2,5 x + 3 = 0,5 x + 11 ; c) x / 0,15 = 80 ; d) 1,35 G + 1,5 × 2 = 12.`, c:`a) x = 28 / 4 = **7** ; b) 2 x = 8 → **x = 4** ; c) x = 80 × 0,15 = **12** ; d) 1,35 G = 9 → **G = 6,67**.`},
   {t:"Retourner des formules", d:1, e:`a) Un poteau doit porter 900 kN avec σ = 10 MPa : quelle section en cm² ? b) Un appareil de 2 300 W sous 230 V : quelle intensité ? c) Une dalle de 6,4 m³ couvre 40 m² : quelle épaisseur ?`, c:`a) A = F / σ = 900 000 / 10 = 90 000 mm² = **900 cm²** (30 × 30 cm) ; b) I = 2 300 / 230 = **10 A** ; c) h = 6,4 / 40 = **0,16 m**.`},
@@ -661,6 +1017,45 @@ Offre A : 60 000 F par jour + 500 F/km ; offre B : 40 000 F + 900 F/km.
 > - f(x) = a x + b ; a = Δy / Δx.
 > - Coût = fixe + variable ; comparer = chercher l'intersection.
 > - Interpolation : y = y1 + (y2 − y1)(x − x1)/(x2 − x1).`,
+ sujet:{titre:"Fonctions affines et graphiques : choisir un transporteur et lire un abaque", duree:60, niveau:"BT / BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Un entrepreneur de Toumodi doit choisir un transporteur pour ses granulats et exploiter une table de résistance du béton.
+
+**Données**
+- Transporteur A : **50 000 F** de prise en charge + **800 F/km** ; transporteur B : **1 200 F/km** sans prise en charge ;
+- Table : résistance du béton selon le rapport E/C : **E/C = 0,45 → 38 MPa** ; **E/C = 0,55 → 30 MPa** (on admet une variation linéaire entre ces points) ;
+- Un niveau de nappe mesuré dans un piézomètre : **2,10 m** de profondeur le 1er juin, **1,30 m** le 21 juin (variation supposée régulière).
+
+### Partie A — Transport (10 points)
+1. Exprimer le coût de chaque transporteur en fonction de la distance d (km). Quelle est la nature de chaque fonction ? (2 pts)
+2. Représenter les deux fonctions sur un même graphique pour d de 0 à 200 km. (3 pts)
+3. Calculer la distance pour laquelle les deux coûts sont égaux. (2 pts)
+4. Quel transporteur choisir pour 150 km ? Calculer les deux coûts. (3 pts)
+
+### Partie B — Interpolation (6 points)
+5. Exprimer la résistance R en fonction de E/C (fonction affine). (3 pts)
+6. Calculer R pour E/C = 0,52 et E/C cherché pour obtenir 34 MPa. (3 pts)
+
+### Partie C — Nappe (4 points)
+7. Calculer la vitesse de remontée de la nappe (m/jour). (2 pts)
+8. Si elle continue, à quelle date atteindrait-elle **0,50 m** de profondeur (fond des fouilles prévu à 0,80 m) ? Conséquence ? (2 pts)`,
+  corrige:`### Partie A — Transport (10 pts)
+1. CA(d) = **50 000 + 800 d** (affine) ; CB(d) = **1 200 d** (linéaire). *(2 pts)*
+2. Deux droites : CA part de 50 000 avec une pente de 800 ; CB part de 0 avec une pente de 1 200 ; elles se croisent à d = 125 km. *(3 pts)*
+3. 50 000 + 800 d = 1 200 d ⇔ 400 d = 50 000 ⇔ **d = 125 km** (coût 150 000 F). *(2 pts)*
+4. CA(150) = 50 000 + 120 000 = **170 000 F** ; CB(150) = **180 000 F** → **A** (au-delà de 125 km). *(3 pts)*
+
+### Partie B — Interpolation (6 pts)
+5. Pente : (30 − 38) / (0,55 − 0,45) = − 80 MPa par unité → **R = 38 − 80 × (E/C − 0,45)**. *(3 pts)*
+6. E/C = 0,52 : R = 38 − 80 × 0,07 = **32,4 MPa** ; R = 34 : 34 = 38 − 80 (x − 0,45) → x − 0,45 = 0,05 → **E/C = 0,50**. *(3 pts)*
+
+### Partie C — Nappe (4 pts)
+7. (2,10 − 1,30) / 20 = **0,04 m/jour** (4 cm par jour). *(2 pts)*
+8. (1,30 − 0,50) / 0,04 = 20 jours → **11 juillet** ; dès le **1er juillet** environ, la nappe atteindrait le fond des fouilles à 0,80 m : prévoir pompage ou rabattement, et terrasser plutôt avant. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre ordonnée à l'origine (prise en charge) et pente (prix au km).
+> - Extrapoler loin hors du domaine de la table.
+> - Oublier les unités sur les axes d'un graphique.`},
  exercices:[
   {t:"Équation d'une droite", d:1, e:`Trouver l'équation de la droite passant par A (1 ; 4) et B (4 ; 13). Calculer f(10).`, c:`a = (13 − 4) / (4 − 1) = **3** ; b = 4 − 3 = **1** → f(x) = 3 x + 1 ; f(10) = **31**.`},
   {t:"Location d'une bétonnière", d:2, e:`Loueur A : 20 000 F de transport + 8 000 F par jour. Loueur B : 12 000 F par jour, transport compris. À partir de combien de jours A est-il moins cher ?`, c:`20 000 + 8 000 j < 12 000 j → 20 000 < 4 000 j → **j > 5** : au-delà de 5 jours, le loueur A est moins cher (égalité à 5 jours : 60 000 F).`},
@@ -723,6 +1118,48 @@ On dispose de **60 m** de grillage pour clore un dépôt rectangulaire adossé �
 > - Δ = b² − 4ac ; x = (− b ± √Δ)/(2a).
 > - Sommet en x = − b/(2a) : maximum ou minimum.
 > - Moment d'une poutre uniformément chargée : parabole, max q L²/8 au milieu.`,
+ sujet:{titre:"Second degré : enclos optimal, dimensions d'une salle, arc parabolique et moment maximal", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Plusieurs problèmes d'optimisation et de forme se posent sur un projet de centre artisanal à Korhogo.
+
+**Données**
+- Une aire de stockage rectangulaire est fermée par **60 m** de grillage sur trois côtés, le quatrième étant un mur existant ;
+- Une salle rectangulaire doit avoir une aire de **96 m²** et un périmètre de **40 m** ;
+- Un arc en béton a une forme parabolique : portée **8 m**, flèche (hauteur) **3 m** ; on prend l'axe des x au sol et l'origine au pied de l'axe de symétrie : y(x) = 3 − a x² ;
+- Poutre sur deux appuis, portée **L = 6 m**, charge **q = 12 kN/m** : moment fléchissant M(x) = q x (L − x) / 2.
+
+### Partie A — Aire de stockage (6 points)
+1. En notant x la largeur (côtés perpendiculaires au mur), exprimer la longueur puis l'aire A(x). (2 pts)
+2. Déterminer x pour que l'aire soit maximale, et cette aire maximale. (4 pts)
+
+### Partie B — Salle (4 points)
+3. Montrer que les dimensions sont solutions de x² − 20 x + 96 = 0 et les calculer. (4 pts)
+
+### Partie C — Arc parabolique (5 points)
+4. Calculer a sachant que l'arc touche le sol à x = ± 4 m. (2 pts)
+5. Calculer la hauteur de l'arc à 2 m et à 3 m de l'axe. Un camion de **2,50 m** de large et **2,20 m** de haut passe-t-il centré ? (3 pts)
+
+### Partie D — Moment fléchissant (5 points)
+6. Développer M(x) et montrer que c'est une fonction du second degré. (2 pts)
+7. Pour quelle valeur de x le moment est-il maximal ? Calculer Mmax et comparer à q L² / 8. (3 pts)`,
+  corrige:`### Partie A — Aire (6 pts)
+1. Longueur : 60 − 2x ; **A(x) = x (60 − 2x) = − 2x² + 60x**. *(2 pts)*
+2. Sommet de la parabole : x = − 60 / (2 × (− 2)) = **15 m** ; longueur 30 m ; **Amax = 15 × 30 = 450 m²**. *(4 pts)*
+
+### Partie B — Salle (4 pts)
+3. Longueur L et largeur l : L + l = 20 et L × l = 96 → L et l sont racines de x² − 20 x + 96 = 0 ; Δ = 400 − 384 = 16 → x = (20 ± 4) / 2 → **12 m et 8 m**. *(4 pts)*
+
+### Partie C — Arc (5 pts)
+4. y(4) = 0 → 3 − 16 a = 0 → **a = 3/16 = 0,1875**. *(2 pts)*
+5. y(2) = 3 − 0,1875 × 4 = **2,25 m** ; y(3) = 3 − 0,1875 × 9 = **1,31 m**. Camion centré : ses bords sont à x = ± 1,25 m → y(1,25) = 3 − 0,1875 × 1,5625 = **2,71 m** > 2,20 ✔ : il passe. *(3 pts)*
+
+### Partie D — Moment (5 pts)
+6. M(x) = (q L / 2) x − (q / 2) x² = 36 x − 6 x² : polynôme du second degré (a = − 6 < 0, parabole tournée vers le bas). *(2 pts)*
+7. Maximum en x = 36 / 12 = **3 m** (milieu) ; Mmax = 36 × 3 − 6 × 9 = **54 kN·m** = q L² / 8 = 12 × 36 / 8 ✔. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier qu'un des côtés est le mur (pas de grillage).
+> - Garder une solution négative pour une longueur.
+> - Vérifier le passage d'un véhicule à l'axe au lieu de ses bords.`},
  exercices:[
   {t:"Résoudre des équations", d:1, e:`Résoudre : a) x² − 5 x + 6 = 0 ; b) 2 x² − 8 = 0 ; c) x² + 2 x + 5 = 0.`, c:`a) Δ = 25 − 24 = 1 → x = (5 ± 1)/2 → **2 et 3** ; b) x² = 4 → **x = 2 ou − 2** ; c) Δ = 4 − 20 = − 16 < 0 → **pas de solution réelle**.`},
   {t:"Enclos le long d'un mur", d:2, e:`Avec 60 m de grillage, on veut clôturer une aire de stockage rectangulaire adossée à un mur (3 côtés à clôturer). Quelles dimensions donnent la plus grande surface ?`, c:`Côtés perpendiculaires au mur : x ; côté parallèle : 60 − 2 x. Surface : S = x (60 − 2 x) = − 2 x² + 60 x.
@@ -799,6 +1236,42 @@ Moyenne : 50 / 5 = **10 cm** ; s = √(10 / 4) = **1,58 cm**.
 > - Moyenne, médiane, étendue, écart-type.
 > - fck ≈ fcm − 1,64 s (95 % des résultats au-dessus).
 > - Régularité (s faible) = fabrication maîtrisée.`,
+ sujet:{titre:"Statistiques : analyser douze résultats d'écrasement de béton", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Sur un chantier d'immeuble à Abidjan, le laboratoire a écrasé **12 éprouvettes** de béton à 28 jours (MPa) :
+**27,2 – 29,8 – 31,5 – 26,4 – 30,1 – 28,7 – 33,0 – 29,2 – 27,9 – 30,6 – 28,4 – 31,2**.
+
+Le béton est prescrit avec une résistance caractéristique **fck = 25 MPa** ; on estime fck ≈ moyenne − 1,64 × écart-type.
+
+### Partie A — Organisation des données (5 points)
+1. Ranger les valeurs par ordre croissant. Calculer l'étendue. (2 pts)
+2. Regrouper en classes [26 ; 28[, [28 ; 30[, [30 ; 32[, [32 ; 34[ et tracer l'histogramme. (3 pts)
+
+### Partie B — Paramètres (9 points)
+3. Calculer la moyenne et la médiane. (3 pts)
+4. Calculer l'écart-type (formule avec n − 1). (4 pts)
+5. Quel pourcentage des valeurs se trouve dans l'intervalle [moyenne − σ ; moyenne + σ] ? (2 pts)
+
+### Partie C — Interprétation (6 points)
+6. Estimer la résistance caractéristique. Le béton est-il conforme ? (3 pts)
+7. Que signifierait un écart-type de 5 MPa avec la même moyenne ? (3 pts)`,
+  corrige:`### Partie A — Organisation (5 pts)
+1. 26,4 – 27,2 – 27,9 – 28,4 – 28,7 – 29,2 – 29,8 – 30,1 – 30,6 – 31,2 – 31,5 – 33,0 ; étendue : 33,0 − 26,4 = **6,6 MPa**. *(2 pts)*
+2. [26 ; 28[ : **3** ; [28 ; 30[ : **4** ; [30 ; 32[ : **4** ; [32 ; 34[ : **1**. Histogramme : rectangles de même largeur (2 MPa) et de hauteurs 3, 4, 4, 1. *(3 pts)*
+
+### Partie B — Paramètres (9 pts)
+3. Moyenne : 354,0 / 12 = **29,5 MPa** ; médiane : (29,2 + 29,8) / 2 = **29,5 MPa**. *(3 pts)*
+4. $$ σ = √(Σ (xi − 29,5)² / 11) = √(40,2 / 11) = 1,91 MPa
+   *(4 pts)*
+5. Intervalle [27,59 ; 31,41] : 27,9 ; 28,4 ; 28,7 ; 29,2 ; 29,8 ; 30,1 ; 30,6 ; 31,2 → **8 valeurs sur 12 = 67 %** (environ deux tiers, comme pour une loi normale). *(2 pts)*
+
+### Partie C — Interprétation (6 pts)
+6. fck ≈ 29,5 − 1,64 × 1,91 = **26,4 MPa ≥ 25** ✔ → béton **conforme**. *(3 pts)*
+7. fck ≈ 29,5 − 1,64 × 5 = 21,3 MPa < 25 : **non conforme** malgré la même moyenne. Une fabrication irrégulière (dosages, eau) oblige à viser une moyenne plus haute, donc plus de ciment : la régularité fait faire des économies. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer la médiane sans avoir rangé les valeurs.
+> - Juger un béton sur sa seule moyenne.
+> - Diviser par n au lieu de n − 1 pour un échantillon.`},
  exercices:[
   {t:"Moyenne et médiane", d:1, e:`Densités sèches mesurées sur un remblai (t/m³) : 1,92 ; 1,88 ; 1,95 ; 1,90 ; 1,86. Calculer la moyenne, la médiane et l'étendue.`, c:`Moyenne : 9,51 / 5 = **1,902 t/m³** ; série rangée : 1,86 ; 1,88 ; 1,90 ; 1,92 ; 1,95 → médiane **1,90** ; étendue : **0,09 t/m³**.`},
   {t:"Écart-type", d:2, e:`Résistances (MPa) : 24 ; 26 ; 28 ; 30 ; 32. Calculer la moyenne et l'écart-type (diviser par n − 1).`, c:`Moyenne : **28 MPa**. Écarts : − 4 ; − 2 ; 0 ; 2 ; 4 → carrés : 16 ; 4 ; 0 ; 4 ; 16 → somme 40 → s = √(40 / 4) = √10 = **3,16 MPa**.`},
@@ -868,6 +1341,49 @@ Quand on connaît deux côtés et un angle **non compris**, sin B = valeur donne
 > - Sinus : a/sin A = b/sin B = c/sin C (deux angles et un côté).
 > - Cosinus : c² = a² + b² − 2ab cos C (deux côtés et l'angle compris, ou trois côtés).
 > - Aire : ½ ab sin C ou Héron.`,
+ sujet:{titre:"Trigonométrie dans les triangles quelconques : terrain, rivière et ferme dissymétrique", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Trois problèmes de triangles non rectangles pour un projet à Tiassalé.
+
+**Données**
+- Terrain triangulaire : deux côtés de **38 m** et **45 m** formant un angle de **72°** ;
+- Pour mesurer la distance d'une borne C située de l'autre côté du fleuve, on trace une base **AB = 60 m** sur la rive ; on mesure les angles **CAB = 68°** et **CBA = 54°** ;
+- Ferme de charpente dissymétrique : entrait **AB = 9,00 m**, arbalétriers **AC = 5,20 m** et **BC = 4,60 m**.
+
+Formules : Al-Kashi : c² = a² + b² − 2ab cos C ; loi des sinus : a / sin A = b / sin B = c / sin C ; aire = ½ a b sin C.
+
+### Partie A — Terrain (6 points)
+1. Calculer le troisième côté du terrain. (3 pts)
+2. Calculer l'aire du terrain. (3 pts)
+
+### Partie B — Rivière (7 points)
+3. Calculer l'angle en C. (1 pt)
+4. Calculer la distance AC. (3 pts)
+5. Calculer la largeur du fleuve, c'est-à-dire la distance de C à la droite AB. (3 pts)
+
+### Partie C — Ferme (7 points)
+6. Calculer les angles en A, B et C. (5 pts)
+7. Calculer la hauteur du faîtage au-dessus de l'entrait. (2 pts)`,
+  corrige:`### Partie A — Terrain (6 pts)
+1. $$ c² = 38² + 45² − 2 × 38 × 45 × cos 72° = 1 444 + 2 025 − 1 056,8 = 2 412,2   →   c = 49,11 m
+   *(3 pts)*
+2. Aire = ½ × 38 × 45 × sin 72° = **813,2 m²**. *(3 pts)*
+
+### Partie B — Rivière (7 pts)
+3. C = 180 − 68 − 54 = **58°**. *(1 pt)*
+4. AC / sin 54° = AB / sin 58° → AC = 60 × 0,809 / 0,848 = **57,24 m**. *(3 pts)*
+5. Hauteur issue de C : AC × sin 68° = 57,24 × 0,927 = **53,07 m**. *(3 pts)*
+
+### Partie C — Ferme (7 pts)
+6. *(5 pts)*
+   - cos A = (AC² + AB² − BC²) / (2 × AC × AB) = (27,04 + 81 − 21,16) / 93,6 = 0,928 → **A = 21,8°** ;
+   - cos B = (BC² + AB² − AC²) / (2 × BC × AB) = (21,16 + 81 − 27,04) / 82,8 = 0,907 → **B = 24,9°** ;
+   - C = 180 − 21,8 − 24,9 = **133,3°**.
+7. h = AC × sin A = 5,20 × sin 21,8° = **1,93 m**. *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Appliquer Pythagore à un triangle qui n'est pas rectangle.
+> - Associer un côté au mauvais angle dans la loi des sinus (le côté est **opposé** à l'angle).
+> - Calculatrice en radians.`},
  exercices:[
   {t:"Angle d'un triangle connu par ses côtés", d:2, e:`Un triangle a pour côtés 5, 6 et 7 m. Calculer l'angle opposé au côté de 7 m et l'aire.`, c:`cos C = (25 + 36 − 49) / (2 × 5 × 6) = 12 / 60 = 0,2 → **C = 78,5°**.
 Aire (Héron) : s = 9 → √(9 × 4 × 3 × 2) = **14,70 m²** (contrôle : ½ × 5 × 6 × sin 78,5° = 14,70 ✔).`},
@@ -934,6 +1450,44 @@ u · v = ux vx + uy vy. Deux vecteurs non nuls sont **perpendiculaires** si et s
 > - Distance : √(Δx² + Δy²) ; milieu : moyenne des coordonnées.
 > - Droite : pente m = Δy/Δx ; parallèles : même pente ; perpendiculaires : m × m' = − 1.
 > - Vecteurs : somme des coordonnées ; Fx = F cos α, Fy = F sin α.`,
+ sujet:{titre:"Coordonnées et vecteurs : vérifier qu'une parcelle est un carré", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Le plan d'une parcelle de Bingerville donne ses bornes dans un repère orthonormé (unité : le mètre) : **A (2 ; 1)**, **B (14 ; 6)**, **C (9 ; 18)**, **D (− 3 ; 13)**. Le vendeur affirme que la parcelle est un **carré**.
+
+### Partie A — Vecteurs (6 points)
+1. Calculer les coordonnées des vecteurs AB, AD et DC. (3 pts)
+2. Comparer AB et DC. Que peut-on en déduire pour ABCD ? (3 pts)
+
+### Partie B — Distances et angle (7 points)
+3. Calculer les longueurs AB et AD. (2 pts)
+4. Calculer le produit scalaire AB · AD. Conclure sur l'angle en A. (3 pts)
+5. Démontrer que ABCD est un carré. (2 pts)
+
+### Partie C — Diagonales et aire (5 points)
+6. Calculer les coordonnées des milieux de [AC] et [BD]. Que constate-t-on ? (2 pts)
+7. Calculer la longueur de la diagonale AC et l'aire de la parcelle. (3 pts)
+
+### Partie D — Droite (2 points)
+8. Déterminer l'équation de la droite (AB) sous la forme y = m x + p. (2 pts)`,
+  corrige:`### Partie A — Vecteurs (6 pts)
+1. **AB (12 ; 5)** ; **AD (− 5 ; 12)** ; **DC (12 ; 5)**. *(3 pts)*
+2. AB = DC (mêmes coordonnées) → **ABCD est un parallélogramme**. *(3 pts)*
+
+### Partie B — Distances et angle (7 pts)
+3. AB = √(12² + 5²) = **13 m** ; AD = √(5² + 12²) = **13 m**. *(2 pts)*
+4. AB · AD = 12 × (− 5) + 5 × 12 = **0** → les vecteurs sont orthogonaux : **angle droit en A**. *(3 pts)*
+5. Parallélogramme avec un angle droit → rectangle ; avec deux côtés consécutifs égaux → losange ; donc **carré**. *(2 pts)*
+
+### Partie C — Diagonales (5 pts)
+6. Milieu de [AC] : (5,5 ; 9,5) ; milieu de [BD] : (5,5 ; 9,5) → **les diagonales ont le même milieu** (propriété du parallélogramme). *(2 pts)*
+7. AC = √(7² + 17²) = **18,38 m** (= 13 √2) ; aire : 13² = **169 m²**. *(3 pts)*
+
+### Partie D — Droite (2 pts)
+8. m = 5 / 12 = 0,417 ; p = 1 − 0,417 × 2 = 0,167 → **y = 0,417 x + 0,167** (y = (5x + 2) / 12). *(2 pts)*
+
+> [!attention] Erreurs à éviter
+> - Calculer un vecteur « arrivée − départ » dans le mauvais sens.
+> - Conclure « carré » à partir de quatre côtés égaux seulement (c'est un losange).
+> - Oublier le carré dans la formule de la distance.`},
  exercices:[
   {t:"Distance et milieu", d:1, e:`Les angles d'un bâtiment ont pour coordonnées A (512,40 ; 803,10) et C (530,40 ; 827,10). Calculer la diagonale AC et les coordonnées de son milieu.`, c:`Δx = 18,00 ; Δy = 24,00 → AC = √(324 + 576) = **30,00 m** ; milieu **(521,40 ; 815,10)**.`},
   {t:"Équation d'une limite de parcelle", d:2, e:`Une limite passe par P (0 ; 2) et Q (40 ; 22). Écrire son équation. Un poteau en R (20 ; 13) est-il sur la limite ?`, c:`m = 20 / 40 = **0,5** ; p = 2 → y = 0,5 x + 2.
@@ -994,6 +1548,47 @@ Si le premier terme est noté u(1) au lieu de u(0), la formule devient **u(n) = 
 > - Arithmétique : + r ; u(n) = u(0) + n r ; somme = n (premier + dernier)/2.
 > - Géométrique : × q ; u(n) = u(0) qⁿ ; somme = u(0)(qⁿ − 1)/(q − 1).
 > - Amortissement linéaire (arithmétique), inflation et intérêts composés (géométriques).`,
+ sujet:{titre:"Suites arithmétiques et géométriques : salaires, piles de tuyaux, dépréciation et inflation", duree:60, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Plusieurs situations d'une entreprise de BTP de Yamoussoukro se modélisent par des suites.
+
+**Données**
+- Un chef d'équipe gagne **150 000 F/mois** la première année ; son salaire mensuel augmente de **12 000 F** chaque année ;
+- Des tuyaux sont empilés en triangle : **10** tuyaux sur la rangée du bas, **9** au-dessus, … jusqu'à **1** ;
+- Une bétonnière achetée **4,5 M F** perd **15 %** de sa valeur chaque année ;
+- Le coût de construction augmente de **4 %** par an ; une petite maison coûte aujourd'hui **20 M F** ;
+- Un placement de **2,5 M F** à **6 %** par an (intérêts composés).
+
+### Partie A — Suite arithmétique (8 points)
+1. Montrer que le salaire mensuel de l'année n forme une suite arithmétique ; donner u1 et la raison. (2 pts)
+2. Calculer le salaire mensuel de la 12e année. (2 pts)
+3. Calculer le total perçu sur les 12 premières années. (2 pts)
+4. Calculer le nombre de tuyaux de la pile. (2 pts)
+
+### Partie B — Suite géométrique (8 points)
+5. Exprimer la valeur de la bétonnière après n années ; calculer sa valeur après 5 ans. (3 pts)
+6. Calculer le coût de la maison dans 10 ans. De quel pourcentage a-t-il augmenté ? (3 pts)
+7. Calculer la valeur du placement au bout de 8 ans. (2 pts)
+
+### Partie C — Comparaison (4 points)
+8. Expliquer la différence de croissance entre une suite arithmétique et une suite géométrique, avec un exemple tiré du sujet. (4 pts)`,
+  corrige:`### Partie A — Arithmétique (8 pts)
+1. Chaque année on **ajoute** 12 000 F : suite arithmétique de premier terme **u1 = 150 000** et de raison **r = 12 000** ; un = 150 000 + (n − 1) × 12 000. *(2 pts)*
+2. u12 = 150 000 + 11 × 12 000 = **282 000 F/mois**. *(2 pts)*
+3. Somme des salaires mensuels : 12 × (150 000 + 282 000) / 2 = 2 592 000 ; × 12 mois = **31 104 000 F**. *(2 pts)*
+4. 1 + 2 + … + 10 = 10 × 11 / 2 = **55 tuyaux**. *(2 pts)*
+
+### Partie B — Géométrique (8 pts)
+5. Vn = 4,5 × 0,85ⁿ (M F) ; V5 = 4,5 × 0,85⁵ = **2,00 M F** (elle a perdu plus de la moitié de sa valeur). *(3 pts)*
+6. 20 × 1,04¹⁰ = **29,6 M F** : **+ 48 %** en 10 ans (et non + 40 %). *(3 pts)*
+7. 2,5 × 1,06⁸ = **3,98 M F**. *(2 pts)*
+
+### Partie C — Comparaison (4 pts)
+8. Une suite **arithmétique** ajoute toujours la même quantité (croissance linéaire : le salaire gagne 12 000 F chaque année) ; une suite **géométrique** multiplie par le même coefficient (croissance exponentielle : 4 % d'un montant qui grandit) — sur une longue durée, la géométrique finit toujours par l'emporter. *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Écrire un = u1 + n r au lieu de u1 + (n − 1) r.
+> - Calculer une hausse de 4 % par an sur 10 ans comme + 40 %.
+> - Oublier le facteur 12 (mois) dans le total des salaires.`},
  exercices:[
   {t:"Hauteurs des marches", d:1, e:`Un escalier a 16 marches de 17,5 cm. À quelle hauteur se trouve le dessus de la 10ᵉ marche ? de la dernière ?`, c:`u(n) = 17,5 n → 10ᵉ marche : **175 cm** ; 16ᵉ : **280 cm** (hauteur d'étage).`},
   {t:"Amortissement linéaire", d:1, e:`Une pelle achetée 45 M F est amortie linéairement sur 9 ans. Quelle est sa valeur comptable après 4 ans ? Quand vaut-elle 10 M F ?`, c:`Amortissement annuel : 45 / 9 = **5 M F** → après 4 ans : 45 − 20 = **25 M F** ; 45 − 5 n = 10 → **n = 7 ans**.`},
@@ -1060,6 +1655,46 @@ L'amplitude d'une vibration amortie suit A = A0 e^(− k t). Avec k = 0,5 s⁻¹
 > - log(10ⁿ) = n ; log(ab) = log a + log b ; log(aⁿ) = n log a.
 > - Décibels : + 3 dB quand on double, + 10 dB quand on multiplie par 10.
 > - aⁿ = b ⇔ n = log b / log a.`,
+ sujet:{titre:"Logarithmes et exponentielles : bruit de chantier, séchage d'un mur et dépréciation", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Des phénomènes rencontrés dans le bâtiment suivent des lois logarithmiques ou exponentielles.
+
+**Données**
+- Niveau sonore : L = 10 log (I / I0) ; pour additionner deux sources : L = 10 log (10^(L1/10) + 10^(L2/10)) ;
+- Machines : un marteau-piqueur à **85 dB** ; une bétonnière à **80 dB** ; quatre compacteurs identiques à **82 dB** chacun ;
+- Après une inondation, l'humidité d'un mur suit w(t) = **30 e^(−0,15 t)** (w en %, t en jours) ; on peut peindre quand w ≤ **12 %** ;
+- Un engin de **60 M F** perd **20 %** de sa valeur par an ;
+- Inflation des coûts de **4 %** par an.
+
+### Partie A — Bruit (8 points)
+1. Que vaut 10 log 2 ? En déduire le niveau de deux marteaux-piqueurs identiques. (3 pts)
+2. Calculer le niveau du marteau-piqueur et de la bétonnière ensemble. (3 pts)
+3. Calculer le niveau des quatre compacteurs. (2 pts)
+
+### Partie B — Séchage (6 points)
+4. Calculer l'humidité après 10 jours. (2 pts)
+5. Au bout de combien de jours pourra-t-on peindre ? (4 pts)
+
+### Partie C — Dépréciation et inflation (6 points)
+6. Calculer la valeur de l'engin après 3 ans. Au bout de combien d'années aura-t-il perdu la moitié de sa valeur ? (3 pts)
+7. Au bout de combien d'années les coûts auront-ils doublé avec 4 % par an ? Comparer à la « règle de 70 » (70 / 4). (3 pts)`,
+  corrige:`### Partie A — Bruit (8 pts)
+1. 10 log 2 = **3,0 dB** : doubler la source ajoute 3 dB → **88 dB** (et non 170 dB). *(3 pts)*
+2. L = 10 log (10^8,5 + 10^8,0) = 10 log (3,162 × 10⁸ + 1,0 × 10⁸) = **86,2 dB** : la bétonnière n'ajoute que 1,2 dB. *(3 pts)*
+3. L = 82 + 10 log 4 = 82 + 6 = **88 dB**. *(2 pts)*
+
+### Partie B — Séchage (6 pts)
+4. w(10) = 30 e^(−1,5) = 30 × 0,223 = **6,7 %**. *(2 pts)*
+5. $$ 30 e^(−0,15 t) ≤ 12   ⇔   e^(−0,15 t) ≤ 0,4   ⇔   t ≥ ln(2,5) / 0,15 = 6,1 jours
+   → à partir du **7e jour**. *(4 pts)*
+
+### Partie C — Dépréciation (6 pts)
+6. 60 × 0,8³ = **30,72 M F** ; moitié : 0,8ⁿ = 0,5 → n = ln 0,5 / ln 0,8 = **3,1 ans**. *(3 pts)*
+7. 1,04ⁿ = 2 → n = ln 2 / ln 1,04 = **17,7 ans** ; règle de 70 : 70 / 4 = 17,5 ans ✔ (bonne approximation). *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Additionner directement des décibels.
+> - Confondre log (base 10) et ln (népérien).
+> - Inverser le sens de l'inégalité en divisant par un nombre négatif (− 0,15).`},
  exercices:[
   {t:"Calculs de logarithmes", d:1, e:`Calculer sans calculatrice : a) log(10 000) ; b) log(0,001) ; c) log(2) + log(5) ; d) log(1 000 / 10).`, c:`a) **4** ; b) **− 3** ; c) log(10) = **1** ; d) log(100) = **2**.`},
   {t:"Addition de bruits", d:2, e:`Une bétonnière produit 85 dB. Quel niveau avec deux bétonnières identiques ? Avec quatre ? Un compresseur de 70 dB placé à côté d'une machine de 85 dB change-t-il beaucoup le niveau ?`, c:`Deux : 85 + 3 = **88 dB** ; quatre : 85 + 6 = **91 dB**.
@@ -1127,6 +1762,47 @@ Un plan **plus tolérant** (« refus à partir de 2 défauts sur 10 ») accepte 
 > - P(au moins un) = 1 − P(aucun).
 > - Binomiale : C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ ; espérance n p.
 > - Un plan d'échantillonnage a un risque d'accepter un mauvais lot : choisir la taille en conséquence.`,
+ sujet:{titre:"Probabilités : contrôle d'un lot d'agglos par échantillonnage et choix d'un fournisseur", duree:60, niveau:"BTS / Licence", bareme:20,
+  enonce:`**Contexte.** Une entreprise achète ses agglos à deux fabricants et contrôle les livraisons par échantillons.
+
+**Données**
+- Proportion d'agglos défectueux dans un lot : **p = 4 %** ;
+- On prélève au hasard **20 agglos** (prélèvement assimilé à un tirage avec remise) ; X = nombre de défectueux ; loi binomiale : P(X = k) = C(n, k) p^k (1 − p)^(n − k) ;
+- Règle d'acceptation : le lot est **accepté si X ≤ 1** ;
+- Fabricant A : **60 %** des achats, **3 %** de défectueux ; fabricant B : **40 %** des achats, **8 %** de défectueux.
+
+### Partie A — Loi binomiale (9 points)
+1. Justifier que X suit une loi binomiale et donner ses paramètres. (2 pts)
+2. Calculer P(X = 0) et P(X = 1). (4 pts)
+3. Calculer la probabilité d'accepter le lot, puis de le refuser. (2 pts)
+4. Calculer l'espérance de X et l'interpréter. (1 pt)
+
+### Partie B — Deux fabricants (7 points)
+5. Construire l'arbre des probabilités (fabricant puis état de l'agglo). (2 pts)
+6. Calculer la probabilité qu'un agglo pris au hasard soit défectueux. (2 pts)
+7. Un agglo est défectueux : quelle est la probabilité qu'il vienne de B ? (3 pts)
+
+### Partie C — Décision (4 points)
+8. Que conseiller à l'entreprise au vu de ces résultats ? Comment rendre le contrôle plus sévère ? (4 pts)`,
+  corrige:`### Partie A — Binomiale (9 pts)
+1. 20 épreuves **identiques et indépendantes** (tirage avec remise), deux issues (défectueux ou non), probabilité de succès constante : **X ~ B(20 ; 0,04)**. *(2 pts)*
+2. P(X = 0) = 0,96²⁰ = **0,442** ; P(X = 1) = 20 × 0,04 × 0,96¹⁹ = **0,368**. *(4 pts)*
+3. P(accepter) = P(X ≤ 1) = **0,810** ; P(refuser) = **0,190**. *(2 pts)*
+4. E(X) = n p = **0,8** : en moyenne, moins d'un agglo défectueux par échantillon de 20. *(1 pt)*
+
+### Partie B — Fabricants (7 pts)
+5. Arbre : A (0,6) → D (0,03) / non D (0,97) ; B (0,4) → D (0,08) / non D (0,92). *(2 pts)*
+6. P(D) = 0,6 × 0,03 + 0,4 × 0,08 = 0,018 + 0,032 = **0,05**. *(2 pts)*
+7. $$ P(B | D) = P(B ∩ D) / P(D) = 0,032 / 0,05 = 0,64
+   Bien que B ne fournisse que 40 % des agglos, il est à l'origine de **64 %** des défectueux. *(3 pts)*
+
+### Partie C — Décision (4 pts)
+8. Exiger de B une amélioration (contrôle de fabrication, dosage, cure) ou réduire sa part ; intensifier le contrôle de ses livraisons. Contrôle plus sévère : **échantillon plus grand** et/ou acceptation seulement si **X = 0** (au prix de plus de refus de bons lots). *(4 pts)*
+
+> [!attention] Erreurs à éviter
+> - Oublier le coefficient C(20 ; 1) = 20 dans P(X = 1).
+> - Confondre P(D | B) (8 %) et P(B | D) (64 %).
+> - Calculer P(X ≤ 1) comme P(X = 1).`},
  exercices:[
   {t:"Tirage au hasard", d:1, e:`Une palette contient 60 agglos dont 3 cassés. On en prend un au hasard. Probabilité qu'il soit cassé ? qu'il soit intact ?`, c:`P(cassé) = 3 / 60 = **0,05** ; P(intact) = 1 − 0,05 = **0,95**.`},
   {t:"Jours de pluie", d:2, e:`En saison des pluies, la probabilité d'une pluie empêchant le coulage est 0,4 par jour (jours indépendants). Pour une période de 3 jours, calculer la probabilité de n'avoir aucune pluie, puis au moins un jour de pluie. Combien de jours de pluie en moyenne ?`, c:`Aucune pluie : 0,6³ = **0,216** ; au moins un jour : **0,784** ; moyenne : 3 × 0,4 = **1,2 jour**.
@@ -1194,6 +1870,56 @@ Les intérêts **diminuent** et la part de capital remboursée **augmente** chaq
 > - Simples : C t n ; composés : C (1 + t)ⁿ ; actualisation : F / (1 + t)ⁿ.
 > - Annuité d'emprunt : C t / [1 − (1 + t)⁻ⁿ].
 > - Amortissement linéaire (arithmétique) ou dégressif (géométrique).`,
+ sujet:{titre:"Mathématiques financières : intérêts, actualisation, emprunt et amortissement d'un matériel", duree:90, niveau:"BTS Bâtiment", bareme:20,
+  enonce:`**Contexte.** Une PME de construction de Gagnoa gère sa trésorerie et ses investissements.
+
+**Données**
+- Placement de **4 M F** à **7 %** par an pendant **3 ans** ;
+- Créance de **10 M F** à recevoir dans **5 ans** ; taux d'actualisation **8 %** ;
+- Location d'un local : **1,2 M F** par an pendant **6 ans** (fin d'année), taux **8 %** ;
+- Emprunt de **18 M F** à **10 %** par an, remboursable en **5 annuités constantes** : a = C × i / [1 − (1 + i)⁻ⁿ] ;
+- Bétonnière achetée **9 M F**, amortie linéairement sur **5 ans**.
+
+### Partie A — Intérêts (4 points)
+1. Calculer la valeur acquise du placement en intérêts simples puis composés. (4 pts)
+
+### Partie B — Actualisation (5 points)
+2. Calculer la valeur actuelle de la créance. (2 pts)
+3. Calculer la valeur actuelle des 6 loyers. (3 pts)
+
+### Partie C — Emprunt (8 points)
+4. Calculer l'annuité et le coût total des intérêts. (3 pts)
+5. Établir le tableau d'amortissement complet (intérêts, amortissement, capital restant dû). (5 pts)
+
+### Partie D — Amortissement du matériel (3 points)
+6. Calculer la dotation annuelle et la valeur nette comptable chaque année. (3 pts)`,
+  corrige:`### Partie A — Intérêts (4 pts)
+1. Simples : 4 × (1 + 0,07 × 3) = **4,84 M F** ; composés : 4 × 1,07³ = **4,90 M F**. *(4 pts)*
+
+### Partie B — Actualisation (5 pts)
+2. 10 / 1,08⁵ = **6,81 M F**. *(2 pts)*
+3. 1,2 × (1 − 1,08⁻⁶) / 0,08 = 1,2 × 4,623 = **5,55 M F** (pour 7,2 M F versés). *(3 pts)*
+
+### Partie C — Emprunt (8 pts)
+4. $$ a = 18 × 0,10 / (1 − 1,10⁻⁵) = 4,748 M F
+   Total : 5 × 4,748 = 23,74 M → intérêts **5,74 M F**. *(3 pts)*
+5. *(5 pts)*
+
+| Année | Intérêts | Amortissement | Capital restant dû |
+|---|---|---|---|
+| 1 | 1 800 000 | 2 948 355 | 15 051 645 |
+| 2 | 1 505 165 | 3 243 190 | 11 808 455 |
+| 3 | 1 180 846 | 3 567 509 | 8 240 946 |
+| 4 | 824 095 | 3 924 260 | 4 316 686 |
+| 5 | 431 669 | 4 316 686 | 0 |
+
+### Partie D — Matériel (3 pts)
+6. Dotation : 9 / 5 = **1,8 M F/an** ; VNC : **7,2 – 5,4 – 3,6 – 1,8 – 0 M F**. *(3 pts)*
+
+> [!attention] Erreurs à éviter
+> - Confondre amortissement financier (remboursement du capital) et amortissement comptable (usure du matériel).
+> - Additionner des sommes reçues à des dates différentes sans les actualiser.
+> - Vérifier que le capital restant dû est bien nul à la dernière échéance.`},
  exercices:[
   {t:"Placement", d:1, e:`On place 3 M F à 7 % par an. Quelle somme au bout de 5 ans en intérêts composés ? Combien d'intérêts ?`, c:`3 × 1,07⁵ = 3 × 1,4026 = **4,21 M F** → intérêts : **1,21 M F**.`},
   {t:"Valeur actuelle", d:1, e:`On recevra 10 M F dans 4 ans. Quelle est leur valeur actuelle au taux de 8 % ?`, c:`10 / 1,08⁴ = 10 / 1,3605 = **7,35 M F**.`},
