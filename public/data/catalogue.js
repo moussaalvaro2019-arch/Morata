@@ -314,23 +314,23 @@ A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", gr
   "Résistance des sols et des fondations (Mohr-Coulomb)",
   "Appareils d'appui, assemblages boulonnés, jauges de déformation",
   "Contrôle des résultats d'un logiciel aux éléments finis"
- ], src:"data/cours/mmc.js?v=dea99f46", chapitres:[
-  {id:"mmc-1", niv:1, titre:"Hypothèses et notion de milieu continu", duree:40, nq:5, nex:5},
-  {id:"mmc-6", niv:1, titre:"Forces, contraintes et déformations en traction simple", duree:45, nq:5, nex:5},
-  {id:"mmc-7", niv:1, titre:"Comportement des matériaux : essais de traction et de compression", duree:45, nq:5, nex:5},
-  {id:"mmc-10", niv:1, titre:"Cisaillement simple et contraintes tangentielles", duree:40, nq:5, nex:5},
-  {id:"mmc-11", niv:1, titre:"Efforts intérieurs : coupure et torseur de cohésion", duree:40, nq:5, nex:5},
-  {id:"mmc-2", niv:2, titre:"L'état de contrainte en un point : vecteur et tenseur des contraintes", duree:50, nq:5, nex:5},
-  {id:"mmc-3", niv:2, titre:"Les déformations : allongements, distorsions et jauges", duree:45, nq:5, nex:5},
-  {id:"mmc-4", niv:2, titre:"Loi de Hooke généralisée et déformations thermiques", duree:50, nq:5, nex:5},
-  {id:"mmc-12", niv:2, titre:"Contraintes dans les poutres : flexion et cisaillement", duree:55, nq:5, nex:5},
-  {id:"mmc-13", niv:2, titre:"Torsion et sollicitations composées", duree:50, nq:5, nex:5},
-  {id:"mmc-8", niv:3, titre:"Contraintes principales et cercle de Mohr", duree:50, nq:5, nex:5},
-  {id:"mmc-5", niv:3, titre:"Critères de résistance : Rankine, Tresca, von Mises et Mohr-Coulomb", duree:50, nq:5, nex:5},
-  {id:"mmc-14", niv:3, titre:"Contraintes dans les sols : contraintes effectives et rupture", duree:55, nq:5, nex:5},
-  {id:"mmc-15", niv:3, titre:"Énergie de déformation et méthodes énergétiques", duree:50, nq:5, nex:5},
-  {id:"mmc-16", niv:3, titre:"Plasticité, concentrations de contraintes, fatigue et rupture", duree:50, nq:5, nex:5},
-  {id:"mmc-9", niv:3, titre:"La méthode des éléments finis : principe et contrôle des résultats", duree:50, nq:5, nex:5}
+ ], src:"data/cours/mmc.js?v=44819b62", chapitres:[
+  {id:"mmc-1", niv:1, titre:"Hypothèses et notion de milieu continu", duree:40, nq:5, nex:5, ns:1},
+  {id:"mmc-6", niv:1, titre:"Forces, contraintes et déformations en traction simple", duree:45, nq:5, nex:5, ns:1},
+  {id:"mmc-7", niv:1, titre:"Comportement des matériaux : essais de traction et de compression", duree:45, nq:5, nex:5, ns:1},
+  {id:"mmc-10", niv:1, titre:"Cisaillement simple et contraintes tangentielles", duree:40, nq:5, nex:5, ns:1},
+  {id:"mmc-11", niv:1, titre:"Efforts intérieurs : coupure et torseur de cohésion", duree:40, nq:5, nex:5, ns:1},
+  {id:"mmc-2", niv:2, titre:"L'état de contrainte en un point : vecteur et tenseur des contraintes", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-3", niv:2, titre:"Les déformations : allongements, distorsions et jauges", duree:45, nq:5, nex:5, ns:1},
+  {id:"mmc-4", niv:2, titre:"Loi de Hooke généralisée et déformations thermiques", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-12", niv:2, titre:"Contraintes dans les poutres : flexion et cisaillement", duree:55, nq:5, nex:5, ns:1},
+  {id:"mmc-13", niv:2, titre:"Torsion et sollicitations composées", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-8", niv:3, titre:"Contraintes principales et cercle de Mohr", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-5", niv:3, titre:"Critères de résistance : Rankine, Tresca, von Mises et Mohr-Coulomb", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-14", niv:3, titre:"Contraintes dans les sols : contraintes effectives et rupture", duree:55, nq:5, nex:5, ns:1},
+  {id:"mmc-15", niv:3, titre:"Énergie de déformation et méthodes énergétiques", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-16", niv:3, titre:"Plasticité, concentrations de contraintes, fatigue et rupture", duree:50, nq:5, nex:5, ns:1},
+  {id:"mmc-9", niv:3, titre:"La méthode des éléments finis : principe et contrôle des résultats", duree:50, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", groupe:"fond", icone:"fx", couleur:"#5B45A8", niveau:"Intermédiaire", heures:55, ordre:2, prerequis:["math"], resume:"Les outils mathématiques de l'ingénieur et du technicien supérieur : vecteurs et moments, fonctions, dérivées et extremums, exponentielle et logarithme, intégrales (résultantes, centres de gravité, inerties, déformées), matrices et systèmes, équations différentielles, méthodes numériques, calcul matriciel des structures, régression et incertitudes, avec applications à la RDM et exercices corrigés.", objectifs:[
   "Manipuler vecteurs, produits scalaires et moments",
