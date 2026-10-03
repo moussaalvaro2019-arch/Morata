@@ -324,21 +324,38 @@ A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", grou
   {id:"om-13", niv:3, titre:"Statistiques et régression linéaire appliquées aux essais", duree:50, nq:5, nex:5},
   {id:"om-14", niv:3, titre:"Approximations, ordres de grandeur et incertitudes", duree:45, nq:5, nex:5}
  ]});
-A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", groupe:"phys", icone:"sun", couleur:"#D9921B", niveau:"Intermédiaire", heures:18, ordre:1, prerequis:["sp"], resume:"Climat, confort, humidité, éclairage, ventilation et sécurité incendie : concevoir des bâtiments sains, frais et sûrs en climat tropical.", objectifs:[
-  "Adapter un bâtiment au climat tropical humide",
-  "Prévenir la condensation et les remontées d'humidité",
-  "Dimensionner l'éclairage naturel et la ventilation",
-  "Connaître les principes de la sécurité incendie"
- ], applications:["Orientation et protections solaires", "Arases étanches et traitement de l'humidité", "Taille des fenêtres", "Évacuation et compartimentage des immeubles"], src:"data/cours/pb.js?v=ddc2206c", chapitres:[
-  {id:"pb-1", niv:1, titre:"Le bâtiment et son climat", duree:25, nq:4, nex:0},
-  {id:"pb-3", niv:1, titre:"Éclairage naturel et artificiel", duree:20, nq:4, nex:0},
-  {id:"pb-6", niv:1, titre:"Le confort de l'occupant : chaleur, humidité, air et lumière", duree:25, nq:4, nex:0},
-  {id:"pb-2", niv:2, titre:"L'humidité dans le bâtiment", duree:30, nq:4, nex:0},
-  {id:"pb-4", niv:2, titre:"Ventilation et qualité de l'air", duree:20, nq:4, nex:0},
-  {id:"pb-5", niv:2, titre:"Sécurité incendie", duree:25, nq:4, nex:0},
-  {id:"pb-7", niv:3, titre:"Air humide, point de rosée et condensation", duree:30, nq:4, nex:0},
-  {id:"pb-8", niv:3, titre:"Conception bioclimatique en climat tropical humide", duree:35, nq:4, nex:0},
-  {id:"pb-9", niv:3, titre:"Énergie solaire photovoltaïque : dimensionner une installation", duree:35, nq:4, nex:0}
+A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", groupe:"phys", icone:"sun", couleur:"#D9921B", niveau:"Intermédiaire", heures:55, ordre:1, prerequis:["sp"], resume:"Concevoir des bâtiments sains, frais, lumineux et sûrs en climat tropical : climats de Côte d'Ivoire, course du soleil et protections solaires, confort, éclairage naturel et artificiel, eau et humidité, air humide et condensation, ventilation naturelle et qualité de l'air, sécurité et résistance au feu, énergie solaire photovoltaïque.", objectifs:[
+  "Lire les données climatiques et adapter le bâtiment au climat",
+  "Calculer la hauteur du soleil, les ombres et la profondeur d'un débord",
+  "Évaluer le confort thermique, visuel et la qualité de l'air",
+  "Dimensionner les ouvertures, l'éclairage artificiel et la ventilation",
+  "Prévenir remontées capillaires, condensation et moisissures",
+  "Appliquer les principes de sécurité incendie (dégagements, résistance au feu)",
+  "Dimensionner une installation photovoltaïque autonome"
+ ], applications:[
+  "Orientation, débords de toiture et brise-soleil",
+  "Arases étanches, drainage et traitement de l'humidité",
+  "Taille des fenêtres et nombre de luminaires",
+  "Débits de ventilation des logements, classes et bureaux",
+  "Dégagements et compartimentage des immeubles",
+  "Kit solaire d'un logement ou d'un dispensaire"
+ ], src:"data/cours/pb.js?v=38ba2dc6", chapitres:[
+  {id:"pb-1", niv:1, titre:"Le bâtiment et son climat", duree:40, nq:5, nex:5},
+  {id:"pb-10", niv:1, titre:"Le soleil et le bâtiment : course, orientation et ombres", duree:45, nq:5, nex:5},
+  {id:"pb-6", niv:1, titre:"Le confort de l'occupant : chaleur, humidité, air et lumière", duree:45, nq:5, nex:5},
+  {id:"pb-3", niv:1, titre:"Éclairage naturel et artificiel : les bases", duree:45, nq:5, nex:5},
+  {id:"pb-11", niv:1, titre:"L'eau et le bâtiment : pluie, sol et remontées capillaires", duree:45, nq:5, nex:5},
+  {id:"pb-2", niv:2, titre:"L'humidité dans le bâtiment : diagnostic et traitements", duree:50, nq:5, nex:5},
+  {id:"pb-12", niv:2, titre:"Dimensionner les protections solaires : débords, brise-soleil et masques", duree:50, nq:5, nex:5},
+  {id:"pb-4", niv:2, titre:"Ventilation et qualité de l'air intérieur", duree:50, nq:5, nex:5},
+  {id:"pb-13", niv:2, titre:"Éclairage artificiel : la méthode des flux", duree:45, nq:5, nex:5},
+  {id:"pb-5", niv:2, titre:"Sécurité incendie : réaction au feu, compartimentage et évacuation", duree:55, nq:5, nex:5},
+  {id:"pb-7", niv:3, titre:"Air humide, point de rosée et condensation", duree:55, nq:5, nex:5},
+  {id:"pb-15", niv:3, titre:"Migration de vapeur dans les parois : la méthode de Glaser", duree:55, nq:5, nex:5},
+  {id:"pb-16", niv:3, titre:"Ventilation naturelle : effet du vent et tirage thermique", duree:50, nq:5, nex:5},
+  {id:"pb-8", niv:3, titre:"Conception bioclimatique en climat tropical : méthode et vérifications", duree:55, nq:5, nex:5},
+  {id:"pb-17", niv:3, titre:"Résistance au feu des structures : béton, acier et bois", duree:50, nq:5, nex:5},
+  {id:"pb-9", niv:3, titre:"Énergie solaire photovoltaïque : dimensionner une installation", duree:55, nq:5, nex:5}
  ]});
 A.addMatiere({id:"rdm", titre:"Résistance des matériaux", court:"RDM", groupe:"struct", icone:"beam", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:90, ordre:2, prerequis:["math", "sp", "om"], resume:"Des charges aux contraintes : équilibre, réactions d'appuis, efforts N, V, M, diagrammes, flexion, flèches, flambement, structures hyperstatiques, portiques et méthode de Cross, avec applications et exercices corrigés.", objectifs:[
   "Évaluer les charges qui s'appliquent sur un ouvrage et les transmettre jusqu'aux appuis",
