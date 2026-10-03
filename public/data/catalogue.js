@@ -557,23 +557,23 @@ A.addMatiere({id:"therm", titre:"Thermique du bâtiment", court:"Thermique", gro
   "Dimensionnement des climatiseurs d'un bureau ou d'une villa",
   "Réduction de la facture de climatisation",
   "Eau chaude solaire d'un hôtel ou d'un centre de santé"
- ], src:"data/cours/therm.js?v=2a0b5d3d", chapitres:[
-  {id:"therm-1", niv:1, titre:"Chaleur, température et modes de transfert", duree:45, nq:5, nex:5},
-  {id:"therm-6", niv:1, titre:"Matériaux isolants et inertie : les bases", duree:45, nq:5, nex:5},
-  {id:"therm-10", niv:1, titre:"Calculer le flux à travers une paroi simple", duree:40, nq:5, nex:5},
-  {id:"therm-11", niv:1, titre:"D'où vient la chaleur dans un logement ?", duree:40, nq:5, nex:5},
-  {id:"therm-7", niv:1, titre:"Le confort d'été : dix choix simples et efficaces", duree:40, nq:5, nex:5},
-  {id:"therm-2", niv:2, titre:"Parois multicouches : résistance thermique et coefficient U", duree:50, nq:5, nex:5},
-  {id:"therm-12", niv:2, titre:"Échanges en surface, rayonnement et profil de température", duree:50, nq:5, nex:5},
-  {id:"therm-3", niv:2, titre:"Toitures, isolation et ponts thermiques", duree:50, nq:5, nex:5},
-  {id:"therm-4", niv:2, titre:"Apports solaires par les vitrages et les parois opaques", duree:50, nq:5, nex:5},
-  {id:"therm-13", niv:2, titre:"Vitrages et menuiseries : U, facteur solaire et transmission lumineuse", duree:45, nq:5, nex:5},
-  {id:"therm-14", niv:2, titre:"Renouvellement d'air : charges sensibles et latentes", duree:45, nq:5, nex:5},
-  {id:"therm-5", niv:3, titre:"Bilan thermique d'un local et choix du climatiseur", duree:60, nq:5, nex:5},
-  {id:"therm-8", niv:3, titre:"Régime variable : inertie, déphasage et amortissement", duree:50, nq:5, nex:5},
-  {id:"therm-15", niv:3, titre:"Les systèmes de climatisation : choisir, implanter, entretenir", duree:50, nq:5, nex:5},
-  {id:"therm-9", niv:3, titre:"Performance énergétique et consommation de climatisation", duree:50, nq:5, nex:5},
-  {id:"therm-16", niv:3, titre:"Eau chaude solaire : dimensionner un chauffe-eau solaire", duree:45, nq:5, nex:5}
+ ], src:"data/cours/therm.js?v=cceea70c", chapitres:[
+  {id:"therm-1", niv:1, titre:"Chaleur, température et modes de transfert", duree:45, nq:5, nex:5, ns:1},
+  {id:"therm-6", niv:1, titre:"Matériaux isolants et inertie : les bases", duree:45, nq:5, nex:5, ns:1},
+  {id:"therm-10", niv:1, titre:"Calculer le flux à travers une paroi simple", duree:40, nq:5, nex:5, ns:1},
+  {id:"therm-11", niv:1, titre:"D'où vient la chaleur dans un logement ?", duree:40, nq:5, nex:5, ns:1},
+  {id:"therm-7", niv:1, titre:"Le confort d'été : dix choix simples et efficaces", duree:40, nq:5, nex:5, ns:1},
+  {id:"therm-2", niv:2, titre:"Parois multicouches : résistance thermique et coefficient U", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-12", niv:2, titre:"Échanges en surface, rayonnement et profil de température", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-3", niv:2, titre:"Toitures, isolation et ponts thermiques", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-4", niv:2, titre:"Apports solaires par les vitrages et les parois opaques", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-13", niv:2, titre:"Vitrages et menuiseries : U, facteur solaire et transmission lumineuse", duree:45, nq:5, nex:5, ns:1},
+  {id:"therm-14", niv:2, titre:"Renouvellement d'air : charges sensibles et latentes", duree:45, nq:5, nex:5, ns:1},
+  {id:"therm-5", niv:3, titre:"Bilan thermique d'un local et choix du climatiseur", duree:60, nq:5, nex:5, ns:1},
+  {id:"therm-8", niv:3, titre:"Régime variable : inertie, déphasage et amortissement", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-15", niv:3, titre:"Les systèmes de climatisation : choisir, implanter, entretenir", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-9", niv:3, titre:"Performance énergétique et consommation de climatisation", duree:50, nq:5, nex:5, ns:1},
+  {id:"therm-16", niv:3, titre:"Eau chaude solaire : dimensionner un chauffe-eau solaire", duree:45, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"topo", titre:"Topographie", court:"Topographie", groupe:"sol", icone:"map", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:80, ordre:2, prerequis:["math"], resume:"Mesurer, calculer et implanter : unités et échelles, instruments, distances, nivellement, angles, gisements et coordonnées, surfaces, implantation des bâtiments, profils, polygonation, station totale, GNSS, tracé routier et cubatures, avec applications et exercices corrigés.", objectifs:[
   "Utiliser les unités d'angles (grades, degrés) et les échelles des plans",
