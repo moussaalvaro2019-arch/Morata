@@ -286,7 +286,8 @@ Affecter n équipes à n tâches (une équipe par tâche) en minimisant le temps
 {id:"ro-9", niv:3, titre:"Décider dans l'incertain : risques et simulation", duree:30, contenu:`## La matrice de décision
 Quand le résultat d'un choix dépend d'événements incertains (météo, prix du ciment, délais de livraison), on construit une **matrice** : décisions en lignes, scénarios en colonnes, conséquences (coûts ou gains) dans les cases.
 
-> [!exemple] Couler une dalle en saison des pluies (coûts en millions de F)
+> [!exemple]
+> Couler une dalle en saison des pluies (coûts en millions de F)
 | Décision | Pluie forte (p = 0,3) | Normale (p = 0,5) | Sèche (p = 0,2) |
 |---|---|---|---|
 | A. Couler maintenant | 3,0 | 1,0 | 0,5 |
@@ -301,7 +302,8 @@ Quand le résultat d'un choix dépend d'événements incertains (météo, prix d
 ## Durées incertaines : la méthode PERT probabiliste
 Pour chaque tâche on estime une durée optimiste a, probable m et pessimiste b :
 $$ te = (a + 4m + b) / 6      σ = (b − a) / 6
-> [!exemple] Maçonnerie : a = 10 j, m = 14 j, b = 24 j → te = 90 / 6 = **15 j**, σ = 14 / 6 = 2,3 j.
+> [!exemple]
+> Maçonnerie : a = 10 j, m = 14 j, b = 24 j → te = 90 / 6 = **15 j**, σ = 14 / 6 = 2,3 j.
 
 Sur le chemin critique, on additionne les durées moyennes et les **variances** (σ²). Si la durée prévue est de 60 jours avec σ = 4 jours, la probabilité de finir en 66 jours se lit sur la loi normale pour z = (66 − 60)/4 = 1,5 : **environ 93 %**.
 

@@ -49,11 +49,13 @@ Construire mobilise beaucoup d'argent : celui du **maître d'ouvrage** (particul
 
 ## Les indices
 Un **indice** suit l'évolution d'un prix par rapport à une base (souvent 100) : variation = (I / I₀ − 1) × 100. Les marchés utilisent des index (ciment, acier, salaires, bâtiment) pour **réviser les prix**.
-> [!exemple] Index du bâtiment passé de 112 à 121 : variation = (121 / 112 − 1) × 100 = **+ 8,0 %**.
+> [!exemple]
+> Index du bâtiment passé de 112 à 121 : variation = (121 / 112 − 1) × 100 = **+ 8,0 %**.
 
 ## L'inflation
 Les prix montent avec le temps : à **i % par an** pendant n années, un coût est multiplié par **(1 + i)ⁿ**.
-> [!exemple] Coût de construction de 200 000 F/m² avec 4 % d'inflation par an : dans 3 ans, 200 000 × 1,04³ = **224 973 F/m²**. Attendre pour construire peut coûter cher.
+> [!exemple]
+> Coût de construction de 200 000 F/m² avec 4 % d'inflation par an : dans 3 ans, 200 000 × 1,04³ = **224 973 F/m²**. Attendre pour construire peut coûter cher.
 
 ## Prix, coût, valeur
 - **Coût** : ce que dépense celui qui produit (l'entreprise) ;
@@ -336,7 +338,8 @@ Prix nouveau : 3 190 × 1,331 = **≈ 4 246 F/ml HT**, à faire accepter par éc
 
 ## Estimation par ratio global
 Coût = surface × ratio au m², selon le standing (ordres de grandeur à actualiser : économique 180 000 à 280 000 F/m², moyen standing 280 000 à 380 000, haut standing 400 000 à 600 000 et plus).
-> [!exemple] Maison de 120 m² moyen standing : 120 × 330 000 = **39,6 M F** (± 25 %, soit entre ≈ 30 et 50 M).
+> [!exemple]
+> Maison de 120 m² moyen standing : 120 × 330 000 = **39,6 M F** (± 25 %, soit entre ≈ 30 et 50 M).
 
 ## Estimation par lots
 | Lot | Maison courante |
@@ -405,7 +408,8 @@ Les marchés de l'État et des collectivités suivent le **Code des marchés pub
 ## La révision des prix
 Pour les chantiers longs, le prix suit l'évolution des coûts (ciment, acier, salaires) par une **formule paramétrique** :
 $$ P = P₀ × (a + b × I / I₀)      a + b = 1 (a : partie fixe, souvent 0,15)
-> [!exemple] Situation de 10 000 000 F, a = 0,15, b = 0,85, index passé de 100 à 108 : P = 10 000 000 × (0,15 + 0,85 × 1,08) = **10 680 000 F**.
+> [!exemple]
+> Situation de 10 000 000 F, a = 0,15, b = 0,85, index passé de 100 à 108 : P = 10 000 000 × (0,15 + 0,85 × 1,08) = **10 680 000 F**.
 Une formule peut combiner plusieurs index pondérés : P = P₀ × (0,15 + 0,35 × S/S₀ + 0,30 × C/C₀ + 0,20 × A/A₀) (salaires, ciment, acier).
 
 > [!retenir]
@@ -498,7 +502,8 @@ $$ Seuil de rentabilité = charges fixes / taux de MCV
 ## Le besoin en fonds de roulement (BFR)
 Une entreprise de BTP avance de l'argent : elle paie ses ouvriers et fournisseurs avant d'être payée par ses clients.
 $$ BFR = créances clients + stocks − dettes fournisseurs
-> [!exemple] CA mensuel 25 M, clients payant à 60 jours (50 M de créances), stocks 8 M, fournisseurs payés à 30 jours (15 M) : **BFR = 43 M F** à financer (fonds propres, crédit de trésorerie, avances de démarrage).
+> [!exemple]
+> CA mensuel 25 M, clients payant à 60 jours (50 M de créances), stocks 8 M, fournisseurs payés à 30 jours (15 M) : **BFR = 43 M F** à financer (fonds propres, crédit de trésorerie, avances de démarrage).
 
 ## Les indicateurs de santé
 Taux de marge brute par chantier, résultat / CA, trésorerie, délais de paiement clients, carnet de commandes (nombre de mois de travail assurés), taux d'accidents. Une entreprise rentable peut faire faillite par **manque de trésorerie**.

@@ -141,7 +141,8 @@ Quand l'une double, l'autre est divisée par 2 : **nombre d'ouvriers × durée =
 $$ longueur sur le plan = longueur réelle × échelle      échelle = 1/n
 - 1/100 : 1 cm sur le plan = 1 m ; 1/50 : 1 cm = 0,50 m ; 1/200 : 1 cm = 2 m ;
 - Les **surfaces** varient comme le **carré** de l'échelle : 1 cm² au 1/100 représente 1 m² ; au 1/50, 0,25 m².
-> [!exemple] Une pièce mesure 4,2 × 3,6 cm sur un plan au 1/100 : en réalité **4,20 × 3,60 m** = 15,12 m².
+> [!exemple]
+> Une pièce mesure 4,2 × 3,6 cm sur un plan au 1/100 : en réalité **4,20 × 3,60 m** = 15,12 m².
 
 ## Vitesses, débits, rendements
 Ce sont des rapports : vitesse = distance / temps ; débit = volume / temps ; rendement = quantité / temps. Ex. : une pompe de 1,2 m³/h remplit 6 m³ en **5 h**.
@@ -259,7 +260,8 @@ Rayon, diamètre, corde, arc ; longueur d'un arc d'angle α : 2 π R × α / 360
 Dans un triangle rectangle d'hypoténuse c (côté opposé à l'angle droit) : **c² = a² + b²**.
 - Calculer une diagonale, un rampant, une longueur inclinée ;
 - **Réciproque** : si c² = a² + b², le triangle est rectangle (contrôle d'équerrage : 3-4-5, 6-8-10).
-> [!exemple] Diagonale d'une dalle de 12 × 9 m : √(144 + 81) = √225 = **15 m**.
+> [!exemple]
+> Diagonale d'une dalle de 12 × 9 m : √(144 + 81) = √225 = **15 m**.
 
 ## Les rapports trigonométriques
 Pour un angle aigu α d'un triangle rectangle :
@@ -346,7 +348,8 @@ Résoudre a x + b = c : on isole x en faisant la même opération des deux côt�
 
 ## Transformer une formule
 Les formules techniques se « retournent » : σ = F / A → **A = F / σ** ; P = U × I → **I = P / U** ; V = L × l × h → **h = V / (L × l)**.
-> [!exemple] Semelle : A = N / σsol = 400 kN / 200 kPa = **2,00 m²**.
+> [!exemple]
+> Semelle : A = N / σsol = 400 kN / 200 kPa = **2,00 m²**.
 
 ## Les inéquations
 On les résout comme des équations, mais on **inverse le sens** de l'inégalité quand on multiplie ou divise par un nombre **négatif**. Ex. : budget : 5 500 x ≤ 400 000 → x ≤ 72,7 → **72 sacs** au plus.
@@ -385,7 +388,8 @@ Dans (1) : 4 b = 87 000 − 55 000 = 32 000 → **b = 8 000 F**. Contrôle (2) :
 f(x) = **a x + b** : sa représentation est une **droite** ; a est le **coefficient directeur** (pente), b l'**ordonnée à l'origine**. Si b = 0, la fonction est **linéaire** (proportionnalité).
 - Coefficient directeur entre deux points : **a = (y2 − y1) / (x2 − x1)** ;
 - Puis b = y1 − a x1.
-> [!exemple] Droite passant par (2 ; 7) et (5 ; 13) : a = 6 / 3 = **2** ; b = 7 − 4 = **3** → f(x) = 2 x + 3.
+> [!exemple]
+> Droite passant par (2 ; 7) et (5 ; 13) : a = 6 / 3 = **2** ; b = 7 − 4 = **3** → f(x) = 2 x + 3.
 
 ## Les fonctions de coût
 Beaucoup de coûts sont affines : **partie fixe + partie proportionnelle**. Comparer deux offres revient à chercher l'**intersection** de deux droites.
@@ -398,7 +402,8 @@ Choisir une échelle pour chaque axe, placer les points, relier (droite si affin
 ## L'interpolation linéaire
 Pour lire une valeur **entre deux lignes d'un tableau**, on suppose une variation linéaire :
 $$ y = y1 + (y2 − y1) × (x − x1) / (x2 − x1)
-> [!exemple] Facteur de portance Nq : 18,4 pour φ = 30°, 23,2 pour φ = 32° → pour φ = 31° : 18,4 + 4,8 × 1/2 = **20,8**.
+> [!exemple]
+> Facteur de portance Nq : 18,4 pour φ = 30°, 23,2 pour φ = 32° → pour φ = 31° : 18,4 + 4,8 × 1/2 = **20,8**.
 
 > [!retenir]
 > - f(x) = a x + b ; a = Δy / Δx.
@@ -511,7 +516,8 @@ $$ a / sin A = b / sin B = c / sin C
 ## La loi des cosinus (Al-Kashi)
 $$ c² = a² + b² − 2 a b cos C
 Utile quand on connaît **deux côtés et l'angle compris**, ou **les trois côtés** (pour trouver un angle : cos C = (a² + b² − c²) / (2ab)). C'est Pythagore généralisé (si C = 90°, cos C = 0).
-> [!exemple] Deux côtés de 7 et 9 m formant 40° : c² = 49 + 81 − 126 × cos 40° = 33,48 → **c = 5,79 m**.
+> [!exemple]
+> Deux côtés de 7 et 9 m formant 40° : c² = 49 + 81 − 126 × cos 40° = 33,48 → **c = 5,79 m**.
 
 ## L'aire d'un triangle quelconque
 - Avec deux côtés et l'angle compris : **S = ½ a b sin C** (ex. ½ × 7 × 9 × sin 40° = **20,25 m²**) ;
@@ -546,7 +552,8 @@ Un point est repéré par ses coordonnées (x ; y) dans un repère orthonormé (
 - **Distance** entre A et B : AB = √[(xB − xA)² + (yB − yA)²] ;
 - **Milieu** : ((xA + xB)/2 ; (yA + yB)/2) ;
 - **Direction** : l'angle de AB avec l'axe des x vaut arctan[(yB − yA)/(xB − xA)] (attention au quadrant) ; en topographie, on utilise le **gisement** compté depuis le Nord (voir Topographie).
-> [!exemple] A (100 ; 200), B (160 ; 280) : AB = √(60² + 80²) = **100 m** ; milieu **(130 ; 240)** ; direction : arctan(80/60) = **53,13°** au-dessus de l'axe des x.
+> [!exemple]
+> A (100 ; 200), B (160 ; 280) : AB = √(60² + 80²) = **100 m** ; milieu **(130 ; 240)** ; direction : arctan(80/60) = **53,13°** au-dessus de l'axe des x.
 
 ## L'équation d'une droite
 y = m x + p, avec m = (yB − yA)/(xB − xA). Deux droites sont **parallèles** si elles ont la même pente, **perpendiculaires** si le produit des pentes vaut − 1.
@@ -627,7 +634,8 @@ eˣ (e ≈ 2,718) et ln(x) sont réciproques : ln(eˣ) = x. Ils décrivent les p
 
 ## Résoudre aⁿ = b
 On prend le logarithme : **n = log b / log a**.
-> [!exemple] Temps de doublement à 5 % par an : 1,05ⁿ = 2 → n = log 2 / log 1,05 = 0,301 / 0,0212 = **14,2 ans**.
+> [!exemple]
+> Temps de doublement à 5 % par an : 1,05ⁿ = 2 → n = log 2 / log 1,05 = 0,301 / 0,0212 = **14,2 ans**.
 
 > [!retenir]
 > - log(10ⁿ) = n ; log(ab) = log a + log b ; log(aⁿ) = n log a.
@@ -694,19 +702,22 @@ Un coulage de 3 jours consécutifs a donc près de 80 % de risques d'être pertu
 - **Intérêts simples** : I = C × t × n (prêts courts, découverts) ;
 - **Intérêts composés** : Cn = C × (1 + t)ⁿ (placements, crédits longs) ;
 - **Taux proportionnel** mensuel = taux annuel / 12 ; **taux équivalent** = (1 + t)^(1/12) − 1.
-> [!exemple] 5 M F à 6 % pendant 3 ans : simples → 5,9 M ; composés → 5 × 1,06³ = **5,955 M**.
+> [!exemple]
+> 5 M F à 6 % pendant 3 ans : simples → 5,9 M ; composés → 5 × 1,06³ = **5,955 M**.
 
 ## L'actualisation
 Une somme F reçue dans n années vaut aujourd'hui **F / (1 + t)ⁿ** : c'est ce qui permet de comparer des projets (VAN, voir Économie).
 
 ## Les annuités constantes
 Une suite de n versements a placés à t % vaut, à la fin : a × [(1 + t)ⁿ − 1] / t ; aujourd'hui : a × [1 − (1 + t)⁻ⁿ] / t. Un emprunt C se rembourse par des annuités **a = C × t / [1 − (1 + t)⁻ⁿ]**.
-> [!exemple] Emprunt de 20 M F à 9 % sur 10 ans (mensualités, t = 0,75 %/mois, n = 120) : **253 352 F** par mois ; intérêts totaux : **10,4 M F**.
+> [!exemple]
+> Emprunt de 20 M F à 9 % sur 10 ans (mensualités, t = 0,75 %/mois, n = 120) : **253 352 F** par mois ; intérêts totaux : **10,4 M F**.
 
 ## L'amortissement du matériel
 - **Linéaire** : annuité = (valeur d'achat − valeur résiduelle) / durée ;
 - **Dégressif** : on applique chaque année un taux fixe à la valeur restante (plus fort au début, suite géométrique).
-> [!exemple] Bétonnière de 1 200 000 F sur 3 ans, sans valeur résiduelle : **400 000 F par an** en linéaire ; en dégressif à 50 % : 600 000 ; 300 000 ; puis le solde 300 000.
+> [!exemple]
+> Bétonnière de 1 200 000 F sur 3 ans, sans valeur résiduelle : **400 000 F par an** en linéaire ; en dégressif à 50 % : 600 000 ; 300 000 ; puis le solde 300 000.
 
 > [!retenir]
 > - Simples : C t n ; composés : C (1 + t)ⁿ ; actualisation : F / (1 + t)ⁿ.

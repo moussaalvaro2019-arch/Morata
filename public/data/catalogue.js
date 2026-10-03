@@ -104,7 +104,7 @@ A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", group
   "Contrôle des devis d'entreprises",
   "Montage d'un projet de location ou de vente d'appartements",
   "Choix d'investissements économes en énergie"
- ], src:"data/cours/eco.js?v=45f13254", chapitres:[
+ ], src:"data/cours/eco.js?v=2a262f8a", chapitres:[
   {id:"eco-10", niv:1, titre:"Les notions de base : pourcentages, indices et inflation", duree:45, nq:5, nex:5},
   {id:"eco-6", niv:1, titre:"Prix, coûts, marges et TVA", duree:50, nq:5, nex:5},
   {id:"eco-1", niv:1, titre:"Le coût global d'une opération de construction", duree:45, nq:5, nex:5},
@@ -202,7 +202,7 @@ A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", i
   "Lecture des plans au 1/50 et au 1/100",
   "Contrôle statistique des résistances du béton",
   "Calculs topographiques et financiers"
- ], src:"data/cours/math.js?v=e89b0a5f", chapitres:[
+ ], src:"data/cours/math.js?v=2db4cb4f", chapitres:[
   {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, nq:5, nex:5},
   {id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, nq:5, nex:5},
   {id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, nq:5, nex:5},
@@ -382,7 +382,7 @@ A.addMatiere({id:"ro", titre:"Recherche opérationnelle", court:"Recherche op.",
   "Répartition des camions entre carrières et chantiers",
   "Affectation des équipes aux tâches",
   "Quantité économique de commande de ciment"
- ], src:"data/cours/ro.js?v=32833946", chapitres:[
+ ], src:"data/cours/ro.js?v=465c2111", chapitres:[
   {id:"ro-1", niv:1, titre:"Modéliser un problème de décision", duree:20, nq:4, nex:0},
   {id:"ro-7", niv:1, titre:"Organiser des tâches : antériorités et Gantt", duree:25, nq:4, nex:0},
   {id:"ro-8", niv:1, titre:"Graphes et plus court chemin", duree:25, nq:4, nex:0},
