@@ -91,22 +91,36 @@ A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Ge
   {id:"chant-16", niv:3, titre:"Piloter par la valeur acquise : délais et coûts", duree:50, nq:5, nex:5},
   {id:"chant-17", niv:3, titre:"Étude de cas : préparer et piloter le chantier d'une villa", duree:70, nq:5, nex:5}
  ]});
-A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", groupe:"gest", icone:"coins", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:20, ordre:2, prerequis:["metre"], resume:"Coût global d'une opération, sous-détail des prix, coefficient de vente, estimations par ratios, marchés et appels d'offres, rentabilité d'un projet immobilier.", objectifs:[
-  "Décomposer le coût global d'une opération de construction",
-  "Établir un sous-détail de prix et un prix de vente",
-  "Estimer un projet aux différentes phases",
-  "Comprendre les marchés, les appels d'offres et la révision des prix",
-  "Évaluer la rentabilité d'une opération immobilière"
- ], applications:["Budget d'une maison individuelle", "Réponse à un appel d'offres", "Contrôle des devis d'entreprises", "Projet de location ou de vente d'appartements"], src:"data/cours/eco.js?v=8e3a5a60", chapitres:[
-  {id:"eco-1", niv:1, titre:"Le coût global d'une opération", duree:25, nq:4, nex:0},
-  {id:"eco-6", niv:1, titre:"Les bases : prix, coûts, marges et TVA", duree:25, nq:4, nex:0},
-  {id:"eco-7", niv:1, titre:"Lire un devis et comparer des offres", duree:25, nq:4, nex:0},
-  {id:"eco-2", niv:2, titre:"Le sous-détail de prix et le prix de vente", duree:35, nq:4, nex:0},
-  {id:"eco-3", niv:2, titre:"Les méthodes d'estimation", duree:30, nq:4, nex:0},
-  {id:"eco-4", niv:2, titre:"Marchés, appels d'offres et révision des prix", duree:30, nq:4, nex:0},
-  {id:"eco-5", niv:3, titre:"Rentabilité d'un projet immobilier", duree:30, nq:4, nex:0},
-  {id:"eco-8", niv:3, titre:"Financement : actualisation, VAN et TRI", duree:35, nq:4, nex:0},
-  {id:"eco-9", niv:3, titre:"Contrôle des coûts : valeur acquise, avenants et réclamations", duree:35, nq:4, nex:0}
+A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", groupe:"gest", icone:"coins", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:60, ordre:2, prerequis:["metre"], resume:"Comprendre et maîtriser l'argent de la construction : coûts, prix, marges et TVA, coût global d'une opération, devis et appels d'offres, budget d'un particulier, sous-détail de prix, estimation, marchés et révision des prix, emprunts et intérêts, gestion de l'entreprise de BTP, garanties et assurances, rentabilité immobilière, VAN et TRI, coût global énergétique et contrôle des coûts, avec applications et exercices corrigés.", objectifs:[
+  "Calculer prix, marges, TVA, pourcentages et indices",
+  "Décomposer le coût global d'une opération et établir un budget",
+  "Établir un sous-détail de prix et estimer un projet à chaque phase",
+  "Comprendre les marchés, les appels d'offres, la révision des prix et les garanties",
+  "Calculer un emprunt, une VAN, un TRI et la rentabilité d'un projet",
+  "Contrôler les coûts et argumenter une réclamation"
+ ], applications:[
+  "Budget et financement d'une maison individuelle",
+  "Réponse à un appel d'offres et analyse des offres",
+  "Contrôle des devis d'entreprises",
+  "Montage d'un projet de location ou de vente d'appartements",
+  "Choix d'investissements économes en énergie"
+ ], src:"data/cours/eco.js?v=45f13254", chapitres:[
+  {id:"eco-10", niv:1, titre:"Les notions de base : pourcentages, indices et inflation", duree:45, nq:5, nex:5},
+  {id:"eco-6", niv:1, titre:"Prix, coûts, marges et TVA", duree:50, nq:5, nex:5},
+  {id:"eco-1", niv:1, titre:"Le coût global d'une opération de construction", duree:45, nq:5, nex:5},
+  {id:"eco-7", niv:1, titre:"Lire un devis et comparer des offres", duree:45, nq:5, nex:5},
+  {id:"eco-11", niv:1, titre:"Le budget d'un particulier : financer sa maison", duree:45, nq:5, nex:5},
+  {id:"eco-2", niv:2, titre:"Le sous-détail de prix et le prix de vente", duree:55, nq:5, nex:5},
+  {id:"eco-3", niv:2, titre:"Les méthodes d'estimation", duree:50, nq:5, nex:5},
+  {id:"eco-4", niv:2, titre:"Marchés, appels d'offres et révision des prix", duree:55, nq:5, nex:5},
+  {id:"eco-12", niv:2, titre:"Mathématiques financières : intérêts, emprunts et amortissements", duree:55, nq:5, nex:5},
+  {id:"eco-13", niv:2, titre:"L'entreprise de BTP : charges, résultat et seuil de rentabilité", duree:50, nq:5, nex:5},
+  {id:"eco-14", niv:2, titre:"Garanties, cautions et assurances de la construction", duree:45, nq:5, nex:5},
+  {id:"eco-5", niv:3, titre:"Rentabilité d'un projet immobilier : promotion et location", duree:55, nq:5, nex:5},
+  {id:"eco-8", niv:3, titre:"Choisir un investissement : actualisation, VAN et TRI", duree:55, nq:5, nex:5},
+  {id:"eco-15", niv:3, titre:"Coût global et choix d'investissements économes en énergie", duree:45, nq:5, nex:5},
+  {id:"eco-9", niv:3, titre:"Contrôle des coûts, avenants et réclamations", duree:50, nq:5, nex:5},
+  {id:"eco-16", niv:3, titre:"Étude de cas : montage financier d'un immeuble de rapport", duree:60, nq:5, nex:5}
  ]});
 A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"sol", icone:"mountain", couleur:"#8B5A2B", niveau:"Intermédiaire", heures:75, ordre:1, prerequis:["mmc", "sp"], resume:"Connaître le sol pour bien fonder : paramètres d'état, sols tropicaux et lagunaires, reconnaissance, identification et classification, compactage, contraintes et eau dans le sol, cisaillement, capacité portante, tassements, essais in situ, pieux, poussée des terres, stabilité des pentes et amélioration des sols, avec applications et exercices corrigés.", objectifs:[
   "Calculer les paramètres d'état d'un sol (w, γ, γd, e, n, Sr)",
