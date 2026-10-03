@@ -14,22 +14,22 @@ A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", gr
   "Salle de classe, salle de réunion, lieu de culte",
   "Groupes électrogènes, climatiseurs et pompes",
   "Bruit de chantier et protection auditive"
- ], src:"data/cours/acou.js?v=8bff7663", chapitres:[
-  {id:"acou-1", niv:1, titre:"Le son et les décibels", duree:45, nq:5, nex:5},
-  {id:"acou-10", niv:1, titre:"La propagation du son : distance, obstacles et réflexions", duree:40, nq:5, nex:5},
-  {id:"acou-11", niv:1, titre:"Mesurer le bruit : sonomètre, niveau équivalent et indicateurs", duree:40, nq:5, nex:5},
-  {id:"acou-5", niv:1, titre:"Les bruits du quotidien et la gêne : santé et bonnes pratiques", duree:40, nq:5, nex:5},
-  {id:"acou-6", niv:1, titre:"Absorber ou isoler ? Choisir ses matériaux", duree:40, nq:5, nex:5},
-  {id:"acou-2", niv:2, titre:"Isolation aux bruits aériens : loi de masse et parois doubles", duree:55, nq:5, nex:5},
-  {id:"acou-12", niv:2, titre:"Parois composites : fenêtres, portes, entrées d'air et fuites", duree:45, nq:5, nex:5},
-  {id:"acou-3", niv:2, titre:"Bruits de choc et bruits d'équipements", duree:45, nq:5, nex:5},
-  {id:"acou-4", niv:2, titre:"Correction acoustique : réverbération et formule de Sabine", duree:50, nq:5, nex:5},
-  {id:"acou-15", niv:2, titre:"Le bruit des chantiers et la protection des travailleurs", duree:45, nq:5, nex:5},
-  {id:"acou-7", niv:3, titre:"Isolement entre locaux : transmissions latérales et DnT", duree:50, nq:5, nex:5},
-  {id:"acou-8", niv:3, titre:"Acoustique des salles : classes, salles polyvalentes, lieux de culte", duree:50, nq:5, nex:5},
-  {id:"acou-9", niv:3, titre:"Bruit de l'environnement : circulation, écrans et urbanisme", duree:50, nq:5, nex:5},
-  {id:"acou-14", niv:3, titre:"Équipements techniques : niveaux de puissance, capotages et antivibratiles", duree:50, nq:5, nex:5},
-  {id:"acou-16", niv:3, titre:"Concevoir un bâtiment calme : méthode de synthèse", duree:45, nq:5, nex:5}
+ ], src:"data/cours/acou.js?v=6a32800c", chapitres:[
+  {id:"acou-1", niv:1, titre:"Le son et les décibels", duree:45, nq:5, nex:5, ns:1},
+  {id:"acou-10", niv:1, titre:"La propagation du son : distance, obstacles et réflexions", duree:40, nq:5, nex:5, ns:1},
+  {id:"acou-11", niv:1, titre:"Mesurer le bruit : sonomètre, niveau équivalent et indicateurs", duree:40, nq:5, nex:5, ns:1},
+  {id:"acou-5", niv:1, titre:"Les bruits du quotidien et la gêne : santé et bonnes pratiques", duree:40, nq:5, nex:5, ns:1},
+  {id:"acou-6", niv:1, titre:"Absorber ou isoler ? Choisir ses matériaux", duree:40, nq:5, nex:5, ns:1},
+  {id:"acou-2", niv:2, titre:"Isolation aux bruits aériens : loi de masse et parois doubles", duree:55, nq:5, nex:5, ns:1},
+  {id:"acou-12", niv:2, titre:"Parois composites : fenêtres, portes, entrées d'air et fuites", duree:45, nq:5, nex:5, ns:1},
+  {id:"acou-3", niv:2, titre:"Bruits de choc et bruits d'équipements", duree:45, nq:5, nex:5, ns:1},
+  {id:"acou-4", niv:2, titre:"Correction acoustique : réverbération et formule de Sabine", duree:50, nq:5, nex:5, ns:1},
+  {id:"acou-15", niv:2, titre:"Le bruit des chantiers et la protection des travailleurs", duree:45, nq:5, nex:5, ns:1},
+  {id:"acou-7", niv:3, titre:"Isolement entre locaux : transmissions latérales et DnT", duree:50, nq:5, nex:5, ns:1},
+  {id:"acou-8", niv:3, titre:"Acoustique des salles : classes, salles polyvalentes, lieux de culte", duree:50, nq:5, nex:5, ns:1},
+  {id:"acou-9", niv:3, titre:"Bruit de l'environnement : circulation, écrans et urbanisme", duree:50, nq:5, nex:5, ns:1},
+  {id:"acou-14", niv:3, titre:"Équipements techniques : niveaux de puissance, capotages et antivibratiles", duree:50, nq:5, nex:5, ns:1},
+  {id:"acou-16", niv:3, titre:"Concevoir un bâtiment calme : méthode de synthèse", duree:45, nq:5, nex:5, ns:1}
  ]});
 A.addMatiere({id:"ba", titre:"Béton armé", court:"Béton armé", groupe:"struct", icone:"column", couleur:"#14202E", niveau:"Intermédiaire", heures:100, ordre:3, prerequis:["rdm", "mat"], resume:"Du principe du béton armé au plan de ferraillage : matériaux, états limites, descente de charges, dispositions constructives, tirants, poteaux, poutres (ELU, ELS, sections en T, effort tranchant), dalles, fondations, poutres continues, escaliers, voiles, flexion composée et étude complète d'un bâtiment, selon le BAEL 91 et l'Eurocode 2.", objectifs:[
   "Connaître les caractéristiques de calcul du béton et des aciers",
