@@ -90,12 +90,34 @@ A.DEF = {
   heroTitle:'Apprenez le bâtiment', heroAccent:'de A à Z.',
   heroText:"Toutes les matières du génie civil, de la mathématique au béton armé, la construction d'une maison expliquée étape par étape, un atelier de dessin de plans, le métré et un professeur IA disponible jour et nuit.",
   about:"BâtiPro Académie est une plateforme d'apprentissage créée pour former techniciens, étudiants, ouvriers et passionnés aux métiers du bâtiment. Les cours suivent les référentiels de BTS et de licence en génie civil, avec des exemples tirés des chantiers d'Afrique de l'Ouest.",
-  city:"Abidjan, Côte d'Ivoire", phone:'', whatsapp:'', email:'',
+  city:"Abidjan, Côte d'Ivoire", phone:'', whatsapp:'0544176359', email:'',
   openSignup:true, preview:1,
+  // accès payant : inscription unique (ou abonnement mensuel), validée par la direction
+  paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
+  pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
 };
-A.cfg = () => Object.assign({}, A.DEF, (A.S.settings||{}).main || {});
+A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {})}); };
+
+/* ---------- accès payant ---------- */
+A.paywallOn = () => A.cfg().paywall !== false;
+A.hasAccess = () => {
+  const me = A.S.me; if(!me) return false;
+  if(me.isAdmin || !A.paywallOn()) return true;
+  if(me.status === 'suspendu') return false;
+  return me.acces === 'actif' && (!me.acces_fin || ts(me.acces_fin) > now());
+};
+A.accesFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.acces_fin ? ts(me.acces_fin) : null; };
+A.prixTxt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA (paiement unique)`; };
+A.prixCourt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA une seule fois`; };
+/* chapitre gratuit : les « preview » premiers chapitres de chaque matière, dans l'ordre du programme */
+A.isFree = id => {
+  const pv = +A.cfg().preview || 0; if(!pv) return false;
+  for(const m of A.M){ const i = m.chapitres.findIndex(c => c.id === id); if(i >= 0) return i < pv; }
+  return false;
+};
+A.canRead = id => { const f = A.chap(id); if(f && f.c.verrou) return false; return A.hasAccess() || A.isFree(id); };
 
 /* ---------- matières : catalogue (data/catalogue.js) puis contenu à la demande (data/cours/<id>.js) ---------- */
 A.M = [];
@@ -110,8 +132,8 @@ A.addMatiere = m => {
   m.chapitres = m.chapitres || [];
   const prev = A.M.find(x => x.id === m.id);
   if(prev){ // contenu complet d'une matière déjà présente dans le catalogue (data/cours/<id>.js)
-    m.chapitres.forEach(c => { const o = prev.chapitres.find(x => x.id === c.id); if(o) Object.assign(o, c, {niv:A.nivOf(c)}); else prev.chapitres.push(Object.assign(c, {mat:m.id, niv:A.nivOf(c), ordre:prev.chapitres.length})); });
-    prev.loaded = true; A.coursVer++; return;
+    m.chapitres.forEach(c => { const o = prev.chapitres.find(x => x.id === c.id); if(o) Object.assign(o, c, {niv:A.nivOf(c), verrou:!!c.verrou}); else prev.chapitres.push(Object.assign(c, {mat:m.id, niv:A.nivOf(c), ordre:prev.chapitres.length})); });
+    prev.loaded = true; prev.full = !(m.acces && m.acces.full === false); A.coursVer++; return;
   }
   m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.niv = A.nivOf(c); c._i = i; }); m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = c.ordre ?? i; });
   if(!m.src) m.loaded = true; A.M.push(m);
@@ -122,6 +144,15 @@ const coursLoading = {};
 A.loadMat = id => {
   const m = A.M.find(x => x.id === id);
   if(!m || m.loaded || !m.src) return Promise.resolve(m);
+  if(S.mode === 'sb') return coursLoading[id] || (coursLoading[id] = (async () => {
+    // cours protégés : la fonction serveur n'envoie le contenu complet qu'aux accès actifs
+    const {data:{session}} = await sb.auth.getSession();
+    let r;
+    try{ r = await fetch('/api/cours?m=' + encodeURIComponent(id) + '&v=' + encodeURIComponent((m.src.split('v=')[1] || '') + (session ? '.' + S.me.id.slice(0, 8) : '')), {headers: session ? {Authorization:'Bearer ' + session.access_token} : {}, cache:'no-store'}); }
+    catch(e){ throw new Error('Cours indisponible : vérifiez votre connexion internet.'); }
+    if(!r.ok) throw new Error(r.status === 404 ? 'Cours introuvable sur le serveur (fonction /api/cours absente : voir le guide d\'installation).' : 'Cours momentanément indisponible, réessayez.');
+    A.addMatiere(await r.json()); m.loaded = true; return m;
+  })().finally(() => { delete coursLoading[id]; }));
   return coursLoading[id] || (coursLoading[id] = new Promise((res, rej) => {
     const sc = document.createElement('script'); sc.src = m.src; sc.async = true;
     sc.onload = () => { delete coursLoading[id]; m.loaded = true; A.coursVer++; res(m); };
@@ -131,10 +162,12 @@ A.loadMat = id => {
 };
 /* Le chapitre a-t-il son contenu ? sinon on le charge puis on réaffiche la page */
 A.chapReady = (f, after) => {
-  if(!f || f.c.contenu != null) return true;
+  if(!f || f.c.contenu != null || f.c.verrou) return true;
   A.loadMat(f.m.id).then(() => (after || A.render)()).catch(e => { toast(e.message, 'x'); });
   return false;
 };
+/* contenu oublié quand la personne connectée ou ses droits changent */
+A.resetCours = () => { A.M.forEach(m => { if(!m.src) return; m.loaded = false; delete m.full; m.chapitres.forEach(c => { ['contenu','exercices','quiz','sujet','verrou'].forEach(k => delete c[k]); }); }); A.coursVer++; };
 A.chapLoading = () => `<div class="card row" style="justify-content:center;padding:40px">${ic('refresh')}<span class="sub">Chargement du cours…</span></div>`;
 A.nq = c => c.quiz ? c.quiz.length : (c.nq || 0);
 A.nex = c => c.exercices ? c.exercices.length : (c.nex || 0);
@@ -193,7 +226,7 @@ let sb = null;
 
 /* ---- démo locale : tout est gardé dans ce navigateur ---- */
 function demoSeed(){
-  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}};
+  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}, paiements:[]};
   const t = now(), day = 86400000;
   const people = [
     ['u_ak','Koné Aminata','Élève / étudiant','Yopougon'],['u_kj','Kouassi Jean-Marc','Technicien','Cocody'],
@@ -201,7 +234,10 @@ function demoSeed(){
     ['u_bs','Bamba Souleymane','Entrepreneur','San-Pédro'],['u_np',"N'Guessan Paul",'Ingénieur','Marcory']
   ];
   people.forEach(([id,name,profil,city],i) => {
-    d.users[id] = {email: name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]+/g,'.').replace(/^\.|\.$/g,'') + '@exemple.ci', pass:'', data:{name, profil, city, phone:'07'+String(10203040+i*1111111).slice(0,8)}, status:'actif', created_at: t - (20+i*3)*day, last_seen: t - [2,40,300,2000,9000,90000][i]*60000, last_page:['#/app/cours/ba-2','#/app/atelier','#/app/matieres','#/app','#/app/metre','#/app/ia'][i]};
+    d.users[id] = {email: name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]+/g,'.').replace(/^\.|\.$/g,'') + '@exemple.ci', pass:'', data:{name, profil, city, phone:'07'+String(10203040+i*1111111).slice(0,8)}, status:'actif', created_at: t - (20+i*3)*day, last_seen: t - [2,40,300,2000,9000,90000][i]*60000, last_page:['#/app/cours/ba-2','#/app/atelier','#/app/matieres','#/app','#/app/metre','#/app/ia'][i],
+      acces: i < 4 ? 'actif' : 'gratuit', acces_at: i < 4 ? t - (18+i*3)*day : null};
+    if(i < 4) d.paiements.push({id:d.paiements.length + 1, owner:id, at:t - (18+i*3)*day - 3600000, montant:4000, moyen:i % 2 ? 'mtn' : 'wave', numero:d.users[id].data.phone, reference:(i % 2 ? 'MP' : 'T') + (240610 + i*733), formule:'unique', mois:0, statut:'valide', note:'', traite_at:t - (18+i*3)*day});
+    else d.paiements.push({id:d.paiements.length + 1, owner:id, at:t - (i - 3)*5*3600000, montant:4000, moyen:i % 2 ? 'mtn' : 'wave', numero:d.users[id].data.phone, reference:(i % 2 ? 'MP' : 'T') + (251003 + i*911), formule:'unique', mois:0, statut:'en_attente', note:''});
     for(let k=0;k<6+i;k++) d.connexions.push({id:uid('cx'), owner:id, at: t - (k*1.7+i*.4)*day - i*3600000, data:{ua: i%2 ? 'Mozilla/5.0 (Linux; Android 13) Chrome/124' : 'Mozilla/5.0 (Windows NT 10.0) Chrome/124', page:'#/app'}});
   });
   const pick = {u_ak:['math-1','math-2','math-3','rdm-1','rdm-2','ba-1','ba-2'], u_kj:['ba-1','ba-2','ba-3','ba-4','rdm-1','rdm-2','rdm-3','metre-1','metre-2','geo-1'], u_ti:['tech-1','tech-2','mat-1'], u_yc:['math-1','om-1','sp-1','sp-2'], u_bs:['metre-1','metre-2','metre-3','eco-1','eco-2','chant-1','chant-2'], u_np:['rdm-1','rdm-2','rdm-3','rdm-4','ba-1','ba-2','ba-3','ba-4','ba-5','geo-1','geo-2','mmc-1']};
@@ -215,7 +251,7 @@ function demoSeed(){
 }
 const L = {
   db: null,
-  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } },
+  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = []; },
   save(){ ls.set('db', this.db); },
   sess(){ return ls.get('sess', null); }
 };
@@ -253,7 +289,8 @@ A.loadAdmin = async function(){
   if(S.mode === 'local'){
     const d = L.db;
     S.adm = {
-      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
+      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
+      paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
       connexions: d.connexions.slice().sort((a,b)=>b.at-a.at),
       progress: Object.values(d.progress).map(p => ({owner:p.owner, ...p.data})),
       quiz: Object.values(d.quiz).map(q => ({owner:q.owner, ...q.data})),
@@ -263,18 +300,20 @@ A.loadAdmin = async function(){
     };
     return;
   }
-  const [pr, cx, pg, qz, ia, wk, ad] = await Promise.all([
-    sb.from('profiles').select('id,email,data,status,created_at,last_seen,last_page').limit(5000),
+  const [pr, cx, pg, qz, ia, wk, ad, py] = await Promise.all([
+    sb.from('profiles').select('id,email,data,status,acces,acces_fin,acces_at,created_at,last_seen,last_page').limit(5000),
     sb.from('connexions').select('id,owner,at,data').order('at',{ascending:false}).limit(1000),
     sb.from('progress').select('owner,data').limit(10000),
     sb.from('quiz_results').select('owner,data').limit(10000),
     sb.from('ia_logs').select('owner,at,data').order('at',{ascending:false}).limit(1000),
     sb.from('works').select('id,owner,kind,updated_at,data').order('updated_at',{ascending:false}).limit(500),
-    sb.from('admins').select('uid')
+    sb.from('admins').select('uid'),
+    sb.from('paiements').select('*').order('at',{ascending:false}).limit(2000)
   ]);
   const admins = new Set((ad.data||[]).map(x=>x.uid));
   S.adm = {
-    profiles: (pr.data||[]).map(p => ({...p, data:p.data||{}, status:p.status||'actif', admin: admins.has(p.id)})),
+    profiles: (pr.data||[]).map(p => ({...p, data:p.data||{}, status:p.status||'actif', acces:p.acces||'gratuit', admin: admins.has(p.id)})),
+    paiements: (py.data||[]).map(x => ({...x, at: ts(x.at), traite_at: x.traite_at ? ts(x.traite_at) : null})),
     connexions: (cx.data||[]).map(c => ({...c, at: ts(c.at)})),
     progress: (pg.data||[]).map(p => ({owner:p.owner, ...p.data})),
     quiz: (qz.data||[]).map(q => ({owner:q.owner, ...q.data})),
@@ -286,16 +325,18 @@ A.loadAdmin = async function(){
 
 /* ---- connexion / session ---- */
 async function afterAuth(user){
-  if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; return; }
+  A.resetCours();
+  if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; S.pay = []; return; }
   if(S.mode === 'local'){
     const u = L.db.users[user.id]; if(!u){ S.me = null; return; }
-    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
+    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
   }else{
     const [{data:roles}, {data:prof}] = await Promise.all([sb.rpc('my_roles'), sb.from('profiles').select('*').eq('id', user.id).maybeSingle()]);
     S.adminExists = !!(roles && roles.admin_exists);
-    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
+    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
   }
   await loadMine();
+  await A.db.myPayments().catch(e => console.warn(e));
   if(S.me.isAdmin) await A.loadAdmin().catch(e => console.warn(e));
   if(!ss.get('cx_'+S.me.id)){ ss.set('cx_'+S.me.id, '1'); A.db.logConnexion(); }
   A.db.touch();
@@ -446,6 +487,49 @@ A.db = {
     if(S.mode === 'local'){ delete L.db.annonces[id]; L.save(); return; }
     const {error} = await sb.from('annonces').delete().eq('id', id); if(error) toast(sbErr(error), 'x');
   },
+  /* ---- accès payant ---- */
+  async myPayments(){
+    if(!S.me){ S.pay = []; return []; }
+    if(S.mode === 'local'){ S.pay = (L.db.paiements||[]).filter(x => x.owner === S.me.id).sort((a,b)=>b.at-a.at); return S.pay; }
+    const {data, error} = await sb.from('paiements').select('*').eq('owner', S.me.id).order('at', {ascending:false}).limit(50);
+    if(error) throw error; S.pay = (data||[]).map(x => ({...x, at:ts(x.at)})); return S.pay;
+  },
+  async declarePayment(moyen, numero, reference){
+    const c = A.cfg();
+    if(S.mode === 'local'){
+      const d = L.db; if((numero.replace(/\D/g,'')).length < 8) return {ok:false, msg:'Numéro de téléphone incomplet'};
+      if(reference.trim().length < 4) return {ok:false, msg:'Référence de la transaction incomplète'};
+      if(d.paiements.filter(x => x.owner === S.me.id && x.statut === 'en_attente').length >= 3) return {ok:false, msg:'Vous avez déjà des paiements en attente de validation'};
+      const mens = c.formule === 'mensuel';
+      d.paiements.push({id:(d.paiements.reduce((a,x)=>Math.max(a, x.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:mens ? +c.prixMois : +c.prixAcces, moyen, numero:numero.trim(), reference:reference.trim(), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'en_attente', note:''});
+      L.save(); await this.myPayments(); return {ok:true};
+    }
+    const {error} = await sb.rpc('declarer_paiement', {p_moyen:moyen, p_numero:numero, p_reference:reference});
+    if(error) return {ok:false, msg:sbErr(error)};
+    await this.myPayments(); return {ok:true};
+  },
+  async refreshAccess(){ // après validation par la direction : relit les droits sans se déconnecter
+    if(!S.me) return;
+    if(S.mode === 'local'){ const u = L.db.users[S.me.id]; if(u){ S.me.acces = u.acces||'gratuit'; S.me.acces_fin = u.acces_fin||null; } }
+    else{ const {data} = await sb.from('profiles').select('acces,acces_fin,status').eq('id', S.me.id).maybeSingle(); if(data){ S.me.acces = data.acces||'gratuit'; S.me.acces_fin = data.acces_fin||null; S.me.status = data.status||'actif'; }
+      const ct = await sb.from('contents').select('id,data'); if(!ct.error) S.contents = rows2obj(ct.data); }
+    A.resetCours(); await this.myPayments().catch(()=>{});
+  },
+  async treatPayment(id, ok, note){
+    if(S.mode === 'local'){
+      const d = L.db, x = d.paiements.find(p => p.id === id); if(!x) return false;
+      x.statut = ok ? 'valide' : 'refuse'; x.note = note || ''; x.traite_at = now();
+      if(ok){ const u = d.users[x.owner]; if(u){ u.acces = 'actif'; u.acces_at = u.acces_at || now();
+        u.acces_fin = x.formule === 'mensuel' ? new Date(Math.max(now(), u.acces_fin ? ts(u.acces_fin) : 0) + (x.mois||1)*30.44*86400000).toISOString() : null; } }
+      L.save();
+    }else{ const {error} = await sb.rpc('admin_traiter_paiement', {p_id:id, p_ok:ok, p_note:note||''}); if(error){ toast(sbErr(error), 'x'); return false; } }
+    await A.loadAdmin(); return true;
+  },
+  async setAccess(id, acces, fin){
+    if(S.mode === 'local'){ const u = L.db.users[id]; if(!u) return false; u.acces = acces; if(acces === 'actif'){ u.acces_fin = fin || null; u.acces_at = u.acces_at || now(); } L.save(); }
+    else{ const {error} = await sb.rpc('admin_set_acces', {p_uid:id, p_acces:acces, p_fin:fin || null}); if(error){ toast(sbErr(error), 'x'); return false; } }
+    await A.loadAdmin(); return true;
+  },
   async setStatus(id, status){
     if(S.mode === 'local'){ L.db.users[id].status = status; L.save(); }
     else{ const {error} = await sb.rpc('admin_set_status', {p_uid:id, p_status:status}); if(error){ toast(sbErr(error), 'x'); return; } }
@@ -454,7 +538,7 @@ A.db = {
   async deleteUser(id){
     if(S.mode === 'local'){
       const d = L.db; delete d.users[id]; delete d.admins[id];
-      d.connexions = d.connexions.filter(c => c.owner !== id); d.ia = d.ia.filter(c => c.owner !== id);
+      d.connexions = d.connexions.filter(c => c.owner !== id); d.ia = d.ia.filter(c => c.owner !== id); d.paiements = (d.paiements||[]).filter(c => c.owner !== id);
       ['progress','quiz','works'].forEach(k => Object.keys(d[k]).forEach(x => { if(d[k][x].owner === id) delete d[k][x]; }));
       L.save();
     }else{ const {error} = await sb.rpc('admin_delete_user', {p_uid:id}); if(error){ toast(sbErr(error), 'x'); return false; } }
@@ -560,6 +644,8 @@ A.render = function(opts={}){
   if(sp === 'app' && !S.me){ A.ss.set('next', location.hash); location.replace('#/connexion'); return; }
   if(sp === 'admin' && !(S.me && S.me.isAdmin)){ location.replace('#/direction'); return; }
   if(S.me && S.me.status === 'suspendu' && sp !== 'site' && sp !== 'bare'){ app.innerHTML = suspended(); return; }
+  // accès payant : hors pages libres (tableau de bord, programme, chapitres gratuits, profil, abonnement), on présente l'inscription
+  if(sp === 'app' && !m.def.free && !A.hasAccess() && A.paywallPage) m = {def:{title:'Activez votre accès', crumb:'Espace apprenant', free:true, render:() => A.paywallPage(m.path)}, params:m.params, path:m.path};
   if(opts.soft && current && current.path === m.path && current.def.static) return;
   if(current && current.def.unmount && (!opts.soft || current.path !== m.path)) try{ current.def.unmount(); }catch(e){ console.warn(e); }
   const keepScroll = opts.soft && current && current.path === m.path;
@@ -619,11 +705,11 @@ function siteShell(body, m){
 
 const LNAV = [
   ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
-  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/profil','Mon profil','user']
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/abonnement','Mon abonnement','coins'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],
-  ['Apprenants'],['admin/apprenants','Apprenants','users'],['admin/progression','Progression & quiz','target'],
+  ['Apprenants'],['admin/apprenants','Apprenants','users'],['admin/abonnements','Abonnements & paiements','coins'],['admin/progression','Progression & quiz','target'],
   ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annales','Annales d\'examens','doc'],['admin/annonces','Annonces','bell'],
   ['Outils'],['admin/ia','Intelligence artificielle','spark'],['admin/travaux','Travaux des apprenants','folder'],
   ['Réglages'],['admin/parametres','Paramètres','cog']
@@ -638,7 +724,7 @@ function navActive(path, h){
 function appShell(body, m, title, crumb, actions, adm){
   const me = S.me, name = (me.data && me.data.name) || me.email;
   const nav = (adm ? ANAV : LNAV).map(n => n.length === 1 ? `<div class="sec">${n[0]}</div>` :
-    `<a class="nav" href="#/${n[0]}" ${navActive(m.path, n[0])?'aria-current="page"':''}>${ic(n[2])}${n[1]}${n[0]==='admin/connexions'&&S.adm?`<span class="cnt">${onlineCount()}</span>`:''}</a>`).join('');
+    `<a class="nav" href="#/${n[0]}" ${navActive(m.path, n[0])?'aria-current="page"':''}>${ic(n[2])}${n[1]}${n[0]==='admin/connexions'&&S.adm?`<span class="cnt">${onlineCount()}</span>`:''}${n[0]==='admin/abonnements'&&S.adm&&(S.adm.paiements||[]).some(x=>x.statut==='en_attente')?`<span class="cnt" style="background:var(--or);color:#fff">${S.adm.paiements.filter(x=>x.statut==='en_attente').length}</span>`:''}${n[0]==='app/abonnement'&&!A.hasAccess()?'<span class="cnt" style="background:var(--or);color:#fff">!</span>':''}</a>`).join('');
   const foot = adm
     ? `<a class="nav" href="#/app">${ic('book')}Voir l'espace apprenant</a><a class="nav" href="#/">${ic('globe')}Voir le site public</a>`
     : `${me.isAdmin?`<a class="nav" href="#/admin">${ic('crown')}Espace PDG</a>`:''}<a class="nav" href="#/">${ic('globe')}Site public</a>`;

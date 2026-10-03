@@ -1,13 +1,14 @@
 // =====================================================================
-// BâtiPro Académie · génère public/data/catalogue.js à partir de public/data/cours/*.js
-// Le catalogue (léger) liste les matières et les titres des chapitres ; le contenu
-// complet d'une matière n'est chargé que lorsqu'un apprenant l'ouvre.
+// BâtiPro Académie · génère public/data/catalogue.js à partir de contenus/cours/*.js
+// Le catalogue (léger, public) liste les matières et les titres des chapitres ; le contenu
+// complet d'une matière reste hors du site publié (dossier « contenus ») et n'est envoyé
+// que par la fonction serveur /api/cours, selon les droits d'accès de l'apprenant.
 // Usage : node outils/catalogue.mjs      (à relancer après chaque modification d'un cours)
 // =====================================================================
 import fs from 'fs'; import vm from 'vm'; import crypto from 'crypto'; import path from 'path'; import { fileURLToPath } from 'url';
 import { ser } from './jsser.mjs';
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
-const DIR = path.join(ROOT, 'data', 'cours');
+const BASE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..'), ROOT = path.join(BASE, 'public');
+const DIR = path.join(BASE, 'contenus', 'cours');
 const errors = [], warn = [];
 const mats = [];
 for (const f of fs.readdirSync(DIR).filter(f => f.endsWith('.js')).sort()) {
@@ -31,6 +32,7 @@ for (const { m, f } of mats) {
       if (!q.q || !Array.isArray(q.o) || q.o.length < 2 || !(q.r >= 0 && q.r < q.o.length)) errors.push(`${w} : question ${k + 1} mal formée`);
     });
     (c.exercices || []).forEach((x, k) => { if (!x.t || !x.e || !x.c) errors.push(`${w} : exercice ${k + 1} incomplet (t, e, c)`); });
+    if (c.sujet && (!c.sujet.titre || !c.sujet.enonce || !c.sujet.corrige)) errors.push(`${w} : sujet d'examen incomplet (titre, enonce, corrige)`);
     if (!(c.quiz || []).length) warn.push(`${w} : pas de quiz`);
     if (!(c.exercices || []).length) warn.push(`${w} : pas d'exercice corrigé`);
     const fences = (c.contenu.match(/^```/gm) || []).length; if (fences % 2) errors.push(`${w} : bloc de code non fermé`);
@@ -39,13 +41,13 @@ for (const { m, f } of mats) {
   if (by.some(n => !n)) warn.push(`${f} : un niveau n'a aucun chapitre (${by.join('/')})`);
 }
 if (errors.length) { console.error('ERREURS :\n- ' + errors.join('\n- ')); process.exit(1); }
-let out = `/* Fichier généré par outils/catalogue.mjs — ne pas modifier à la main.\n   Liste des matières et des chapitres ; le contenu est dans data/cours/<matière>.js */\n`;
+let out = `/* Fichier généré par outils/catalogue.mjs — ne pas modifier à la main.\n   Liste des matières et des chapitres ; le contenu est servi par /api/cours (dossier contenus/cours) */\n`;
 let nch = 0, nq = 0, nex = 0, size = 0;
 for (const { m, f } of mats) {
   const meta = { ...m }; delete meta.chapitres;
   const buf = fs.readFileSync(path.join(DIR, f)), st = { size: buf.length };
   meta.src = 'data/cours/' + f + '?v=' + crypto.createHash('sha1').update(buf).digest('hex').slice(0, 8);
-  meta.chapitres = (m.chapitres || []).map(c => ({ id: c.id, niv: c.niv, titre: c.titre, duree: c.duree || 20, nq: (c.quiz || []).length, nex: (c.exercices || []).length }));
+  meta.chapitres = (m.chapitres || []).map(c => ({ id: c.id, niv: c.niv, titre: c.titre, duree: c.duree || 20, nq: (c.quiz || []).length, nex: (c.exercices || []).length, ...(c.sujet ? { ns: 1 } : {}) }));
   nch += meta.chapitres.length; nq += meta.chapitres.reduce((a, c) => a + c.nq, 0); nex += meta.chapitres.reduce((a, c) => a + c.nex, 0); size += st.size;
   out += 'A.addMatiere(' + ser(meta, '') + ');\n';
 }

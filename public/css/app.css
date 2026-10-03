@@ -710,3 +710,24 @@ table.t.click td.mono b{color:var(--navy)}
 @media(max-width:1000px){.solg.wide .bmcols{grid-template-columns:minmax(0,1fr)}}
 
 .md .fx b{color:var(--ink);background:#FFF1D6;border-radius:4px;padding:0 3px}
+
+/* ---------- accès payant ---------- */
+.abo-wall{max-width:860px;margin:0 auto;gap:16px;border:1px solid var(--line)}
+.abo-lock{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--or3);color:var(--or2);flex:none}
+.abo-lock .i{width:24px;height:24px}
+.abo-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px 18px}
+.abo-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--bluebg);color:var(--blue);flex:none}
+.abo-steps{margin:0;padding-left:22px;display:grid;gap:14px;font-size:14.5px}
+.abo-steps li{padding-left:4px}
+.abo-num{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 6px}
+.abo-num .mono{font-size:clamp(20px,3.4vw,26px);font-weight:700;letter-spacing:.04em;color:var(--ink);background:var(--soft);border:1px dashed var(--line2);border-radius:12px;padding:6px 14px}
+.abo-band{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;border-radius:18px;padding:16px 18px;background:linear-gradient(120deg,#FDEEE2,#FFF7EC);border:1px solid #F3C9A3;color:#5B3416}
+.abo-band b{color:#3E2410}
+.abo-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.chap.locked .i:last-child{opacity:.55}
+.price-card{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,3vw,28px)}
+.price-card .stack{min-width:0;flex:1 1 320px}
+.price-big{font-family:var(--fd);font-size:clamp(34px,5vw,48px);line-height:1;color:var(--or2)}
+.price-big small{font-size:16px;color:var(--muted);font-weight:600}
+.abo-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.abo-cards .kv{margin:4px 0}

@@ -1,6 +1,12 @@
-# Netlify : le site est dans le dossier « public », l'assistant IA dans netlify/edge-functions
+# Netlify : le site est dans le dossier « public », l'assistant IA dans netlify/edge-functions,
+# les cours protégés dans netlify/functions (contenu dans le dossier « contenus »)
 [build]
   publish = "public"
+
+# Cours protégés : la fonction netlify/functions/cours.mjs lit le dossier « contenus »
+# (non publié) et n'envoie le contenu complet qu'aux apprenants dont l'accès est actif.
+[functions]
+  included_files = ["contenus/cours/*.js"]
 
 [[headers]]
   for = "/config.js"

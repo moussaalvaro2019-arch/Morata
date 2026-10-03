@@ -27,7 +27,29 @@ create table if not exists public.ia_logs       (id bigint generated always as i
 -- Annales : sujets officiels importés par la direction (meta = examen, année, matière, titre, publié ; pages = photos compressées)
 create table if not exists public.annales       (id text primary key, meta jsonb not null default '{}'::jsonb, enonce text not null default '', corrige text not null default '', pages jsonb not null default '[]'::jsonb, updated_at timestamptz not null default now());
 
+-- Accès payant : inscription (paiement unique) ou abonnement mensuel, validés par la direction
+alter table public.profiles add column if not exists acces     text not null default 'gratuit';  -- gratuit | actif
+alter table public.profiles add column if not exists acces_fin timestamptz;                     -- fin de l'abonnement (vide = sans limite)
+alter table public.profiles add column if not exists acces_at  timestamptz;                     -- première activation
+create table if not exists public.paiements (
+  id bigint generated always as identity primary key,
+  owner uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  at timestamptz not null default now(),
+  montant integer not null default 0,
+  moyen text not null default '',              -- wave | mtn | orange | moov | djamo | autre
+  numero text not null default '',             -- numéro de téléphone utilisé pour payer
+  reference text not null default '',          -- identifiant de la transaction (SMS de confirmation)
+  formule text not null default 'unique',      -- unique | mensuel
+  mois integer not null default 0,
+  statut text not null default 'en_attente',   -- en_attente | valide | refuse
+  note text not null default '',
+  traite_at timestamptz,
+  traite_par uuid
+);
+
 create index if not exists connexions_at_idx    on public.connexions (at desc);
+create index if not exists paiements_owner_idx  on public.paiements (owner);
+create index if not exists paiements_statut_idx on public.paiements (statut, at desc);
 create index if not exists connexions_owner_idx on public.connexions (owner);
 create index if not exists progress_owner_idx   on public.progress (owner);
 create index if not exists quiz_owner_idx       on public.quiz_results (owner);
@@ -43,6 +65,15 @@ $$;
 create or replace function public.is_active() returns boolean
 language sql stable security definer set search_path = public as $$
   select auth.uid() is not null and coalesce((select status from public.profiles where id = auth.uid()), 'actif') <> 'suspendu';
+$$;
+
+-- Accès complet aux cours : direction, accès payant désactivé, ou accès actif (non expiré)
+create or replace function public.has_access() returns boolean
+language sql stable security definer set search_path = public as $$
+  select public.is_admin()
+      or coalesce((select (data->>'paywall')::boolean from public.settings where id = 'main'), true) = false
+      or exists (select 1 from public.profiles p where p.id = auth.uid() and p.status <> 'suspendu'
+                 and p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()));
 $$;
 
 create or replace function public.is_real_user() returns boolean
@@ -81,10 +112,11 @@ alter table public.works         enable row level security;
 alter table public.connexions    enable row level security;
 alter table public.ia_logs       enable row level security;
 alter table public.annales       enable row level security;
+alter table public.paiements     enable row level security;
 
 do $$ declare r record; begin
   for r in select policyname, tablename from pg_policies where schemaname = 'public'
-    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales')
+    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales','paiements')
   loop execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename); end loop;
 end $$;
 
@@ -100,7 +132,7 @@ create policy invites_admin    on public.admin_invites for all using (public.is_
 -- Paramètres, contenus pédagogiques, annonces : lecture publique, écriture par la direction
 create policy settings_read  on public.settings for select using (true);
 create policy settings_write on public.settings for all using (public.is_admin()) with check (public.is_admin());
-create policy contents_read  on public.contents for select using (true);
+create policy contents_read  on public.contents for select using (id not like 'chap:%' or public.has_access());  -- chapitres modifiés : réservés aux accès actifs
 create policy contents_write on public.contents for all using (public.is_admin()) with check (public.is_admin());
 create policy annonces_read  on public.annonces for select using (true);
 create policy annonces_write on public.annonces for all using (public.is_admin()) with check (public.is_admin());
@@ -129,12 +161,15 @@ create policy cx_delete on public.connexions for delete using (public.is_admin()
 create policy ia_read on public.ia_logs for select using (owner = auth.uid() or public.is_admin());
 
 -- Annales : les apprenants lisent les sujets publiés, la direction gère tout
-create policy annales_read  on public.annales for select using (coalesce((meta->>'pub')::boolean, false) or public.is_admin());
+create policy annales_read  on public.annales for select using ((coalesce((meta->>'pub')::boolean, false) and public.has_access()) or public.is_admin());
+
+-- Paiements : chacun voit les siens, la direction voit tout ; écriture uniquement par les fonctions ci-dessous
+create policy pay_read on public.paiements for select using (owner = auth.uid() or public.is_admin());
 create policy annales_write on public.annales for all using (public.is_admin()) with check (public.is_admin());
 
 -- ---------- Droits d'accès aux tables ----------
 revoke all on public.profiles, public.admins, public.admin_invites, public.settings, public.contents, public.annonces,
-              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales from anon, authenticated;
+              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales, public.paiements from anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select on public.settings, public.contents, public.annonces to anon, authenticated;
 grant insert, update, delete on public.settings, public.contents, public.annonces to authenticated;
@@ -148,6 +183,7 @@ grant select on public.annales to anon, authenticated;
 grant insert, update, delete on public.annales to authenticated;
 grant select, insert, delete on public.connexions to authenticated;
 grant select on public.ia_logs to authenticated;
+grant select on public.paiements to authenticated;
 grant usage, select on all sequences in schema public to authenticated;
 
 -- ---------- Fonctions appelées par l'application ----------
@@ -161,8 +197,68 @@ language sql stable security definer set search_path = public as $$
   select json_build_object(
     'is_admin', public.is_admin(),
     'admin_exists', exists (select 1 from public.admins),
-    'status', coalesce((select status from public.profiles where id = auth.uid()), 'actif'));
+    'status', coalesce((select status from public.profiles where id = auth.uid()), 'actif'),
+    'acces', coalesce((select acces from public.profiles where id = auth.uid()), 'gratuit'),
+    'acces_fin', (select acces_fin from public.profiles where id = auth.uid()),
+    'has_access', public.has_access());
 $$;
+
+-- Cours protégés : la fonction Netlify /api/cours demande ici si le contenu complet peut être envoyé
+create or replace function public.cours_acces() returns json
+language sql stable security definer set search_path = public as $$
+  select json_build_object('full', public.has_access(),
+    'preview', coalesce(nullif((select data->>'preview' from public.settings where id = 'main'), '')::int, 1));
+$$;
+
+-- Apprenant : déclarer un paiement Wave / Mobile Money (montant et formule fixés par les réglages de la direction)
+create or replace function public.declarer_paiement(p_moyen text, p_numero text, p_reference text) returns bigint
+language plpgsql security definer set search_path = public as $$
+declare v_set jsonb; v_formule text; v_montant int; v_id bigint;
+begin
+  if auth.uid() is null or not public.is_real_user() then raise exception 'Connectez-vous d''abord'; end if;
+  if length(regexp_replace(coalesce(p_numero, ''), '\D', '', 'g')) < 8 then raise exception 'Numéro de téléphone incomplet'; end if;
+  if length(trim(coalesce(p_reference, ''))) < 4 then raise exception 'Référence de la transaction incomplète'; end if;
+  if (select count(*) from public.paiements where owner = auth.uid() and statut = 'en_attente') >= 3 then
+    raise exception 'Vous avez déjà des paiements en attente de validation : patientez ou contactez la direction'; end if;
+  select data into v_set from public.settings where id = 'main';
+  v_formule := coalesce(nullif(v_set->>'formule', ''), 'unique');
+  v_montant := case when v_formule = 'mensuel' then coalesce(nullif(v_set->>'prixMois', '')::int, 2000) else coalesce(nullif(v_set->>'prixAcces', '')::int, 4000) end;
+  insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois)
+  values (auth.uid(), v_montant, left(lower(coalesce(p_moyen, '')), 20), left(trim(p_numero), 30), left(trim(p_reference), 60), v_formule, case when v_formule = 'mensuel' then 1 else 0 end)
+  returning id into v_id;
+  return v_id;
+end $$;
+
+-- Direction : valider (accès activé, prolongé d'un mois pour un abonnement) ou refuser un paiement
+create or replace function public.admin_traiter_paiement(p_id bigint, p_ok boolean, p_note text) returns boolean
+language plpgsql security definer set search_path = public as $$
+declare v_p public.paiements; v_fin timestamptz;
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  select * into v_p from public.paiements where id = p_id for update;
+  if not found then raise exception 'Paiement introuvable'; end if;
+  update public.paiements set statut = case when p_ok then 'valide' else 'refuse' end, note = left(coalesce(p_note, ''), 300), traite_at = now(), traite_par = auth.uid() where id = p_id;
+  if p_ok then
+    if v_p.formule = 'mensuel' then
+      select greatest(now(), coalesce(acces_fin, now())) + make_interval(months => greatest(1, v_p.mois)) into v_fin from public.profiles where id = v_p.owner;
+    else v_fin := null; end if;
+    update public.profiles set acces = 'actif', acces_fin = v_fin, acces_at = coalesce(acces_at, now()) where id = v_p.owner;
+  end if;
+  return true;
+end $$;
+
+-- Direction : activer ou désactiver l'accès d'un apprenant (p_fin vide = sans limite de durée)
+create or replace function public.admin_set_acces(p_uid uuid, p_acces text, p_fin timestamptz) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  if p_acces not in ('gratuit', 'actif') then raise exception 'Accès inconnu'; end if;
+  update public.profiles set acces = p_acces,
+    acces_fin = case when p_acces = 'actif' then p_fin else acces_fin end,
+    acces_at = case when p_acces = 'actif' then coalesce(acces_at, now()) else acces_at end
+  where id = p_uid;
+  return true;
+end $$;
 
 -- Premier compte PDG : possible uniquement tant qu'aucun administrateur n'existe
 create or replace function public.claim_first_admin(p_name text) returns boolean
@@ -227,6 +323,9 @@ begin
   v_set := coalesce(v_set, '{}'::jsonb);
   v_admin := public.is_admin();
   if not public.is_active() then return json_build_object('ok', false, 'code', 'suspendu', 'msg', 'Votre compte est suspendu.'); end if;
+  if not v_admin and not public.has_access() then
+    return json_build_object('ok', false, 'code', 'acces', 'msg', 'Activez votre accès (inscription) pour utiliser l''assistant IA.');
+  end if;
   if not v_admin and coalesce(v_set->>'iaActive', 'true') = 'false' then
     return json_build_object('ok', false, 'code', 'off', 'msg', 'L''assistant IA est momentanément désactivé par la direction.');
   end if;
@@ -244,15 +343,23 @@ begin
 end $$;
 
 revoke execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
-  public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles() from public, anon;
-grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user() to anon, authenticated;
+  public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
+  public.declarer_paiement(text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz) from public, anon;
+grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces() to anon, authenticated;
 grant execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
-  public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles() to authenticated;
+  public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
+  public.declarer_paiement(text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz) to authenticated;
 
 -- ---------- Paramètres de départ ----------
 -- Insérés seulement s'ils n'existent pas : vos réglages ne sont jamais écrasés.
 insert into public.settings (id, data) values ('main', '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro","tagline":"Académie du bâtiment","ceo":"DOUMBIA Moussa","iaActive":true,"iaModel":"claude-opus-5-5","iaQuota":30,"openSignup":true,"preview":1,"tva":18,"devise":"FCFA"}'::jsonb)
 on conflict (id) do nothing;
+-- Accès payant (une seule fois) : inscription 4 000 FCFA, premier chapitre de chaque matière gratuit,
+-- paiement Wave / MTN Mobile Money au 05 44 17 63 59. Vos réglages existants sont conservés.
+update public.settings
+   set data = '{"paywall":true,"prixAcces":4000,"formule":"unique","prixMois":2000,"preview":1,"whatsapp":"0544176359","pay":{"wave":"0544176359","mtn":"0544176359","orange":"","moov":"","djamo":"","titulaire":"DOUMBIA Moussa"}}'::jsonb || data,
+       updated_at = now()
+ where id = 'main' and not (data ? 'paywall');
 -- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
 update public.settings
    set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,

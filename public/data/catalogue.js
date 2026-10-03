@@ -1,5 +1,5 @@
 /* Fichier généré par outils/catalogue.mjs — ne pas modifier à la main.
-   Liste des matières et des chapitres ; le contenu est dans data/cours/<matière>.js */
+   Liste des matières et des chapitres ; le contenu est servi par /api/cours (dossier contenus/cours) */
 A.addMatiere({id:"acou", titre:"Acoustique du bâtiment", court:"Acoustique", groupe:"phys", icone:"sound", couleur:"#0E8C95", niveau:"Intermédiaire", heures:50, ordre:3, prerequis:["sp"], resume:"Le son et les décibels, propagation et mesure du bruit, gêne et santé, isolation aux bruits aériens (loi de masse, parois doubles et composites), bruits de choc et d'équipements, réverbération et acoustique des salles, bruit des chantiers, de la circulation et des groupes électrogènes, conception de bâtiments calmes.", objectifs:[
   "Calculer, additionner et soustraire des niveaux sonores en décibels",
   "Prévoir la décroissance du bruit avec la distance et derrière un écran",

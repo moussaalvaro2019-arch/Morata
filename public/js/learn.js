@@ -27,13 +27,13 @@ function globalStats(){
 }
 
 /* ---------- Tableau de bord ---------- */
-A.page('app', {space:'app', title:'Tableau de bord', crumb:'Espace apprenant', render(){
+A.page('app', {space:'app', free:true, title:'Tableau de bord', crumb:'Espace apprenant', render(){
   const st = globalStats(), nx = lastChapter(), cat = A.catalog();
   const enCours = cat.filter(m => { const p = A.matProgress(m); return p.done > 0 && p.pct < 100; });
   const sugg = enCours.length ? enCours : cat.filter(m => ['math','ba','rdm','metre','tech'].includes(m.id)).slice(0,4);
   const ann = Object.entries(S.annonces||{}).map(([id,a])=>({id,...a})).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,3);
   const quiz = (S.quiz||[]).slice(0,5);
-  return `
+  return `${A.aboBanner ? A.aboBanner() : ''}
   <div class="welcome"><div class="stack s8"><span class="kick" style="color:var(--amber)">Bonjour ${esc(first())}</span><h2>${st.done ? 'Continuons sur votre lancée.' : 'Bienvenue sur votre espace de formation.'}</h2>
    <p>${st.done ? `Vous avez terminé ${st.done} chapitre${st.done>1?'s':''} sur ${st.total}.` : 'Choisissez une matière ou suivez le parcours Construction de A à Z.'}</p>
    ${nx?`<div class="row" style="margin-top:6px"><a class="btn b-pri" href="#/app/cours/${nx.c.id}">${ic('play')}${st.done?'Reprendre':'Commencer'} : ${esc(nx.c.titre)}</a><span class="sub" style="color:#B7C3D3">${esc(nx.m.titre)}</span></div>`:''}</div>
@@ -66,7 +66,7 @@ A.page('app', {space:'app', title:'Tableau de bord', crumb:'Espace apprenant', r
 
 /* ---------- Matières ---------- */
 let mQ = '';
-A.page('app/matieres', {space:'app', title:'Matières', crumb:'Programme complet', render(){
+A.page('app/matieres', {space:'app', free:true, title:'Matières', crumb:'Programme complet', render(){
   let list = A.catalog();
   if(mQ){ const q = mQ.toLowerCase(); list = list.filter(m => (m.titre+' '+(m.resume||'')+' '+m.chapitres.map(c=>c.titre).join(' ')).toLowerCase().includes(q)); }
   return `<div class="toolbar"><label class="search">${ic('search')}<input id="mQ" placeholder="Rechercher une matière ou un chapitre…" value="${esc(mQ)}"></label><span class="sub">${A.catalog().length} matières · ${globalStats().total} chapitres</span></div>
@@ -75,7 +75,7 @@ A.page('app/matieres', {space:'app', title:'Matières', crumb:'Programme complet
 A.on('input', '#mQ', el => { mQ = el.value; A.refresh(); });
 
 let mLv = {};
-A.page('app/matiere/:id', {space:'app', title:p => (A.mat(p.id)||{}).titre || 'Matière', crumb:'<a href="#/app/matieres">Matières</a>', render(p){
+A.page('app/matiere/:id', {space:'app', free:true, title:p => (A.mat(p.id)||{}).titre || 'Matière', crumb:'<a href="#/app/matieres">Matières</a>', render(p){
   const m = A.mat(p.id); if(!m) return A.empty('book','Matière introuvable.');
   const pr = A.matProgress(m), LV = A.matLevels(m), mine = A.myNiv(m.id);
   const cur = mLv[m.id] || mine || (LV.find(l => l.total && l.pct < 100) || LV[0]).id, lv = LV[cur-1], nxtL = LV.slice(cur).find(l => l.total);
@@ -88,7 +88,8 @@ A.page('app/matiere/:id', {space:'app', title:p => (A.mat(p.id)||{}).titre || 'M
     <div class="lvcards">${LV.map(l => `<button class="lvcard ${l.id===cur?'on':''}" style="--lc:${l.c};--lb:${l.bg}" data-mlv="${l.id}" data-m="${m.id}"><span class="row between"><b>${'●'.repeat(l.id)} ${l.n}</b>${mine===l.id?'<span class="pill" style="background:var(--lc);color:#fff">Mon niveau</span>':l.pct===100?`<span class="pill p-ok">${ic('check')}Terminé</span>`:''}</span><span class="sub">${l.d}</span><span class="small">${l.total} chapitres · ${Math.max(1, Math.round(l.min/60))} h</span>${A.bar(l.pct)}<span class="small mono">${l.done}/${l.total} terminés</span></button>`).join('')}</div></div>
    <div class="card stack"><div class="row between"><h3 style="margin:0;color:${lv.c}">${'●'.repeat(lv.id)} Niveau ${lv.n}</h3><div class="row">${nx?`<a class="btn b-pri" href="#/app/cours/${nx.id}">${ic('play')}${lv.done?'Continuer':'Commencer'}</a>`:''}${mine!==lv.id?`<button class="btn b-line" data-setniv="${lv.id}" data-m="${m.id}">${ic('flag')}Choisir comme mon niveau</button>`:''}</div></div>
     <div class="chlist">${lv.ch.map((c,i) => { const d = S.progress[c.id] && S.progress[c.id].done; const best = qz.filter(q=>q.chap===c.id).reduce((a,q)=>Math.max(a,Math.round(q.score/q.total*100)),-1);
-     return `<a class="chap ${d?'done':''}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min${A.nex(c) ? ` · ${A.nex(c)} exercice${A.nex(c) > 1 ? 's' : ''} corrigé${A.nex(c) > 1 ? 's' : ''}` : ''} · ${A.nq(c)} questions${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${ic('chev')}</a>`; }).join('') || A.empty('book','Aucun chapitre à ce niveau pour le moment.')}</div>
+     const open = A.canRead(c.id), free = !A.hasAccess() && A.isFree(c.id);
+     return `<a class="chap ${d?'done':''} ${open?'':'locked'}" href="#/app/cours/${c.id}"><span class="n">${d?ic('check'):i+1}</span><span><b>${esc(c.titre)}</b><span class="sub">${c.duree||20} min${A.nex(c) ? ` · ${A.nex(c)} exercice${A.nex(c) > 1 ? 's' : ''} corrigé${A.nex(c) > 1 ? 's' : ''}` : ''} · ${A.nq(c)} questions${c.ns || c.sujet ? ' · sujet d\'examen' : ''}${best>=0?` · meilleur score ${best}%`:''}${c.custom?' · nouveau':''}</span></span>${free ? '<span class="pill p-ok">Gratuit</span>' : open ? ic('chev') : ic('lock')}</a>`; }).join('') || A.empty('book','Aucun chapitre à ce niveau pour le moment.')}</div>
     ${lv.pct===100 && lv.total ? `<div class="note ok">${ic('award')}<span>Niveau ${lv.n} terminé. <a href="#/app/attestation/${m.id}?n=${lv.id}">Voir mon attestation de niveau</a>${nxtL?` · <a href="#" data-mlv="${nxtL.id}" data-m="${m.id}">Passer au niveau ${nxtL.n} →</a>`:''}</span></div>` : ''}
    </div>
    ${pr.pct===100?`<a class="btn b-amber" style="justify-self:start" href="#/app/attestation/${m.id}">${ic('award')}Attestation complète de la matière</a>`:''}
@@ -107,12 +108,14 @@ A.on('click', '[data-setniv]', async el => { const n = +el.dataset.setniv; if(aw
 
 /* ---------- Lecteur de cours + quiz ---------- */
 let QZ = null;
-A.page('app/cours/:id', {space:'app', title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', crumb:p => { const f = A.chap(p.id); return f ? `<a href="#/app/matieres">Matières</a> › <a href="#/app/matiere/${f.m.id}">${esc(f.m.titre)}</a>` : ''; },
+A.page('app/cours/:id', {space:'app', free:true, title:p => ((A.chap(p.id)||{}).c||{}).titre || 'Cours', crumb:p => { const f = A.chap(p.id); return f ? `<a href="#/app/matieres">Matières</a> › <a href="#/app/matiere/${f.m.id}">${esc(f.m.titre)}</a>` : ''; },
  actions:p => `<button class="ibtn noprint" data-act="print" title="Imprimer le chapitre">${ic('print')}</button>`,
  render(p){
   const f0 = A.chap(p.id); if(!f0) return A.empty('book','Chapitre introuvable.');
+  if(!A.hasAccess() && !A.isFree(p.id)) return A.lockedChapter(f0.c, A.mat(f0.m.id) || f0.m);
   if(!A.chapReady(f0)) return A.chapLoading();
   const f = A.chap(p.id), m = A.mat(f.m.id) || f.m, c = f.c;
+  if(c.verrou) return A.lockedChapter(c, m);
   const list = m.chapitres, idx = list.findIndex(x => x.id === c.id);
   const prev = list[idx-1], next = list[idx+1];
   const done = S.progress[c.id] && S.progress[c.id].done;
@@ -195,7 +198,7 @@ A.on('click', '[data-iaq]', el => {
 });
 
 /* ---------- Profil ---------- */
-A.page('app/profil', {space:'app', title:'Mon profil', crumb:'Compte', render(){
+A.page('app/profil', {space:'app', free:true, title:'Mon profil', crumb:'Compte', render(){
   const me = S.me, d = me.data || {}, st = globalStats(), cat = A.catalog();
   const certs = cat.filter(m => m.chapitres.length && A.matProgress(m).pct === 100);
   const works = Object.entries(S.works||{}).sort((a,b)=>String(b[1].updated_at).localeCompare(String(a[1].updated_at)));

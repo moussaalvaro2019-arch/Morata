@@ -1,0 +1,205 @@
+/* =====================================================================
+   ACCÈS PAYANT : inscription (paiement unique) ou abonnement mensuel
+   - Apprenant : page « Mon abonnement », déclaration du paiement Wave / Mobile Money
+   - Partout : écran « Activez votre accès » pour les parties réservées
+   - PDG : validation des paiements, activation / désactivation des accès, réglages
+   Le paiement se fait directement sur le numéro de la direction ; la direction
+   vérifie la réception (SMS Wave / MTN) puis valide en un clic.
+   ===================================================================== */
+(function(){
+'use strict';
+const {$, $$, esc, ic, F, toast, S, fd, fdt, ago, ts, now} = A;
+const DAY = 86400000;
+const MOYENS = [['wave','Wave','#1DC4FF'],['mtn','MTN Mobile Money','#FFCB05'],['orange','Orange Money','#FF7900'],['moov','Moov Money','#0066B3'],['djamo','Djamo','#111827']];
+const moyenN = k => (MOYENS.find(m => m[0] === k) || [k, k || 'Autre'])[1];
+const telFmt = t => String(t || '').replace(/\D/g, '').replace(/(\d{2})(?=\d)/g, '$1 ').trim();
+const waLink = (num, txt) => { const d = String(num || '').replace(/\D/g, ''); return d ? `https://wa.me/${d.length <= 10 ? '225' + d : d}${txt ? '?text=' + encodeURIComponent(txt) : ''}` : ''; };
+const moyensActifs = () => { const p = A.cfg().pay || {}; return MOYENS.filter(m => String(p[m[0]] || '').trim()); };
+const montant = () => { const c = A.cfg(); return c.formule === 'mensuel' ? +c.prixMois : +c.prixAcces; };
+const pending = () => (S.pay || []).filter(x => x.statut === 'en_attente');
+const statutPill = s => s === 'valide' ? '<span class="pill p-ok dot">Validé</span>' : s === 'refuse' ? '<span class="pill p-bad dot">Refusé</span>' : '<span class="pill p-warn dot">En attente</span>';
+A.accesPill = p => {
+  if(p.admin) return '<span class="pill p-amber">Admin</span>';
+  if(p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) < now()) return '<span class="pill p-bad dot">Expiré</span>';
+  if(p.acces === 'actif') return `<span class="pill p-ok dot">${p.acces_fin ? 'Abonné' : 'Payé'}</span>`;
+  return '<span class="pill p-mute dot">Non payé</span>';
+};
+
+/* ---------- ce que l'inscription débloque ---------- */
+function avantages(){
+  const cat = A.catalog(), ch = cat.reduce((a, m) => a + m.chapitres.length, 0), ex = cat.reduce((a, m) => a + m.chapitres.reduce((b, c) => b + A.nex(c), 0), 0), su = cat.reduce((a, m) => a + m.chapitres.filter(c => c.ns || c.sujet).length, 0);
+  return [
+    ['book', `${ch} chapitres de cours`, 'les 18 matières, du niveau Débutant au niveau Avancé'],
+    ['edit', `${F(ex)} exercices corrigés`, 'à la fin de chaque chapitre, corrigés pas à pas'],
+    ['doc', su ? `${su} sujets d'examen corrigés` : 'Sujets d\'examen corrigés', 'un sujet type examen par chapitre, avec barème et corrigé'],
+    ['target', 'Quiz, solveurs guidés et annales', 'pour s\'entraîner et préparer le BTS, la Licence, les concours'],
+    ['spark', 'Professeur IA 24 h/24', 'questions, explications, exercice en photo corrigé'],
+    ['crane', 'Construction A→Z, atelier de dessin, métré', 'projets réels, plans 2D / 3D, devis en FCFA']
+  ];
+}
+const avantagesHtml = () => `<div class="abo-list">${avantages().map(([i, b, s]) => `<div class="row nw" style="align-items:flex-start;gap:10px"><span class="abo-ic">${ic(i)}</span><span><b>${esc(b)}</b><span class="sub" style="display:block">${esc(s)}</span></span></div>`).join('')}</div>`;
+
+/* ---------- écran des parties réservées ---------- */
+A.paywallPage = path => {
+  const c = A.cfg(), wait = pending()[0];
+  return `<div class="abo-wall card stack">
+   <div class="row" style="gap:14px"><span class="abo-lock">${ic('lock')}</span><div><span class="kick">Accès complet</span><h2 style="font-size:clamp(20px,2.6vw,26px);margin-top:4px">Cette partie est réservée aux inscrits</h2></div></div>
+   ${wait ? `<div class="note info">${ic('clock')}<span>Votre paiement de <b>${F(wait.montant)} FCFA</b> (${esc(moyenN(wait.moyen))}, réf. ${esc(wait.reference)}) a été déclaré ${ago(wait.at)}. Il sera validé dès que la direction aura vérifié la réception ; votre accès s'ouvrira alors automatiquement.</span></div>`
+     : `<p class="sub" style="font-size:15px">Vous avez lu gratuitement le premier chapitre de chaque matière. Pour continuer, activez votre accès : <b style="color:var(--ink)">${esc(A.prixTxt())}</b>, payé par ${moyensActifs().map(m => m[1]).join(' ou ') || 'Mobile Money'}.</p>`}
+   ${avantagesHtml()}
+   <div class="row"><a class="btn b-pri b-lg" href="#/app/abonnement">${ic('coins')}${wait ? 'Suivre mon paiement' : 'Activer mon accès'}</a>${wait ? `<button class="btn b-line" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}<a class="btn b-ghost" href="#/app/matieres">${ic('book')}Lire les chapitres gratuits</a></div>
+  </div>`;
+};
+/* encart dans un chapitre réservé */
+A.lockedChapter = (c, m) => `<div class="stack s20"><div class="lesson"><span class="kick">${A.nivPill(c)} ${esc(m.titre)}</span><h1 style="font-size:clamp(24px,3vw,32px);margin:8px 0 6px">${esc(c.titre)}</h1><p class="sub">${c.duree || 20} min de lecture · ${A.nex(c)} exercices corrigés · ${A.nq(c)} questions de quiz${c.ns || c.sujet ? ' · 1 sujet d\'examen corrigé' : ''}</p></div>${A.paywallPage('')}</div>`;
+/* bandeau du tableau de bord */
+A.aboBanner = () => {
+  if(!S.me || S.me.isAdmin || !A.paywallOn()) return '';
+  const fin = A.accesFin();
+  if(A.hasAccess()) return fin && fin - now() < 7*DAY ? `<div class="note">${ic('clock')}<span>Votre abonnement se termine le <b>${fd(fin)}</b>. <a href="#/app/abonnement">Le renouveler</a></span></div>` : '';
+  const wait = pending()[0];
+  return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">${wait ? 'Paiement en cours de validation' : 'Activez votre accès complet'}</b><span>${wait ? `Déclaré ${ago(wait.at)} : votre accès s'ouvrira dès la validation par la direction.` : `Le premier chapitre de chaque matière est gratuit. Pour tout le reste : ${esc(A.prixTxt())}.`}</span></div><div class="row">${wait ? `<button class="btn b-line" style="background:#fff" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}<a class="btn b-pri" href="#/app/abonnement">${ic('coins')}${wait ? 'Voir mon paiement' : 'Payer ' + F(montant()) + ' FCFA'}</a></div></div>`;
+};
+
+/* ---------- page apprenant : Mon abonnement ---------- */
+let payMoyen = '';
+A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:'Accès complet à la plateforme', render(){
+  const c = A.cfg(), P = c.pay || {}, ms = moyensActifs(), has = A.hasAccess(), fin = A.accesFin(), wait = pending()[0], hist = S.pay || [];
+  if(!payMoyen || !ms.find(m => m[0] === payMoyen)) payMoyen = (ms[0] || ['wave'])[0];
+  const num = P[payMoyen] || '', name = (S.me.data && S.me.data.name) || S.me.email;
+  const waTxt = `Bonjour, je suis ${name} (${S.me.email}). Je viens de payer ${F(montant())} FCFA par ${moyenN(payMoyen)} pour mon accès à ${A.brandText()}.`;
+  const etat = !A.paywallOn() ? `<div class="note ok">${ic('check')}<span>L'accès à la plateforme est actuellement <b>gratuit pour tous</b>.</span></div>`
+    : S.me.isAdmin ? `<div class="note ok">${ic('crown')}<span>Compte administrateur : accès complet.</span></div>`
+    : has ? `<div class="note ok">${ic('check')}<span><b>Votre accès est actif</b>${fin ? ` jusqu'au <b>${fd(fin)}</b>` : ' (sans limite de durée)'}. Bonne formation !</span></div>`
+    : wait ? `<div class="note info">${ic('clock')}<span><b>Paiement déclaré ${ago(wait.at)}</b> : ${F(wait.montant)} FCFA par ${esc(moyenN(wait.moyen))}, référence ${esc(wait.reference)}. La direction vérifie la réception puis active votre accès.</span></div>`
+    : `<div class="note">${ic('lock')}<span>Vous utilisez la <b>version gratuite</b> : premier chapitre de chaque matière.</span></div>`;
+  const showPay = A.paywallOn() && !S.me.isAdmin && (!has || (fin && c.formule === 'mensuel'));
+  return `<div class="cols"><div class="stack">
+   ${etat}
+   ${showPay ? `<div class="card stack">
+    <div class="row between"><div><span class="kick">${c.formule === 'mensuel' ? 'Abonnement mensuel' : 'Inscription'}</span><h2 style="font-size:24px;margin-top:4px">${F(montant())} <small style="font-size:15px;color:var(--muted)">FCFA${c.formule === 'mensuel' ? ' / mois' : ' · une seule fois'}</small></h2></div>${ms.length > 1 ? `<div class="tabs">${ms.map(m => `<button class="tab ${payMoyen === m[0] ? 'on' : ''}" data-paym="${m[0]}"><i class="abo-dot" style="background:${m[2]}"></i>${esc(m[1])}</button>`).join('')}</div>` : ''}</div>
+    <ol class="abo-steps">
+     <li><b>Envoyez ${F(montant())} FCFA par ${esc(moyenN(payMoyen))}</b> au numéro :
+      <div class="abo-num"><span class="mono">${esc(telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div>
+      <span class="sub">Bénéficiaire : ${esc(P.titulaire || c.ceo)}. ${payMoyen === 'wave' ? 'Dans l\'application Wave : « Envoyer », saisissez le numéro et le montant.' : payMoyen === 'mtn' ? 'Avec MTN MoMo : composez *133# puis « Transfert d\'argent », ou utilisez l\'application MoMo.' : payMoyen === 'orange' ? 'Avec Orange Money : composez #144# ou utilisez l\'application Max it.' : payMoyen === 'moov' ? 'Avec Moov Money : composez *155# ou utilisez l\'application Moov Money.' : 'Depuis votre application, faites un transfert vers ce compte.'}</span></li>
+     <li><b>Gardez le SMS de confirmation</b> : il contient la référence (identifiant) de la transaction.</li>
+     <li><b>Déclarez votre paiement ci-dessous</b> : la direction vérifie la réception et active votre accès, en général dans la journée.</li>
+    </ol>
+    <form class="stack" id="fPay">
+     <div class="g2"><label class="fld"><span>Numéro utilisé pour payer</span><input class="inp" id="payNum" type="tel" inputmode="tel" placeholder="07 00 00 00 00" value="${esc((S.me.data && S.me.data.phone) || '')}" required></label>
+      <label class="fld"><span>Référence de la transaction</span><input class="inp" id="payRef" placeholder="ex. TXN123456 ou MP2410.1234.A5678" required></label></div>
+     <div class="row"><button class="btn b-pri" type="submit">${ic('check')}J'ai payé : déclarer mon paiement</button>${c.whatsapp ? `<a class="btn b-ok" target="_blank" rel="noopener" href="${esc(waLink(c.whatsapp, waTxt))}">${ic('whatsapp')}Envoyer la capture sur WhatsApp</a>` : ''}</div>
+     <p class="sub">${c.whatsapp ? `WhatsApp de la direction : <b class="mono" style="color:var(--ink)">${esc(telFmt(c.whatsapp))}</b>. ` : ''}N'envoyez jamais votre code secret (PIN) : personne de la plateforme ne vous le demandera.</p>
+    </form></div>` : ''}
+   ${hist.length ? `<div class="card"><h3>Mes paiements <small>${hist.length}</small></h3><div class="tw"><table class="t"><thead><tr><th>Date</th><th>Moyen</th><th>Référence</th><th class="r">Montant</th><th>Statut</th></tr></thead><tbody>${hist.map(x => `<tr><td class="nowrap">${fdt(x.at)}</td><td>${esc(moyenN(x.moyen))}<div class="small faint">${esc(telFmt(x.numero))}</div></td><td class="mono small">${esc(x.reference)}</td><td class="r mono">${F(x.montant)} F</td><td>${statutPill(x.statut)}${x.note ? `<div class="small faint">${esc(x.note)}</div>` : ''}</td></tr>`).join('')}</tbody></table></div>${wait ? `<button class="btn b-line b-sm" style="margin-top:10px" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}</div>` : ''}
+  </div><div class="stack">
+   <div class="card stack"><h3 style="margin:0">Ce que comprend l'accès</h3>${avantagesHtml()}</div>
+   <div class="card"><h3>Questions fréquentes</h3><div class="stack s8 small">
+    <p><b>Combien de temps pour l'activation ?</b><br>Dès que la direction a vérifié la réception du paiement, en général dans la journée. Le bouton « Vérifier mon accès » met à jour votre compte.</p>
+    <p><b>Je me suis trompé de montant ou de numéro.</b><br>Écrivez à la direction sur WhatsApp avec la capture du paiement.</p>
+    <p><b>${c.formule === 'mensuel' ? 'Que se passe-t-il à la fin du mois ?' : 'Dois-je payer chaque mois ?'}</b><br>${c.formule === 'mensuel' ? 'Votre accès reste actif jusqu\'à la date indiquée ; renouvelez-le avant pour ne rien perdre. Votre progression est conservée.' : 'Non : l\'inscription actuelle est un paiement unique.'}</p>
+   </div></div>
+  </div></div>`;
+}});
+A.on('click', '[data-paym]', el => { payMoyen = el.dataset.paym; A.refresh(); });
+A.on('submit', '#fPay', async () => {
+  const num = A.val('payNum'), ref = A.val('payRef');
+  const r = await A.db.declarePayment(payMoyen, num, ref);
+  if(!r.ok){ toast(r.msg || 'Erreur', 'x'); return; }
+  toast('Paiement déclaré : la direction va le vérifier', 'check'); A.refresh();
+});
+A.on('click', '[data-act="abocheck"]', async () => {
+  const had = A.hasAccess(); await A.db.refreshAccess();
+  if(A.hasAccess()){ toast(had ? 'Accès à jour' : 'Votre accès est activé, bonne formation !', 'check'); }
+  else toast(pending().length ? 'Paiement toujours en attente de validation' : 'Accès non activé pour le moment', 'clock');
+  A.render();
+});
+
+/* ---------- Espace PDG : abonnements et paiements ---------- */
+const AD = () => S.adm || {profiles:[], paiements:[]};
+const nm = p => (p && p.data && p.data.name) || (p && p.email) || '—';
+const profOf = id => AD().profiles.find(p => p.id === id) || {id, email:'(compte supprimé)', data:{name:'Compte supprimé'}};
+let abF = 'attente', abQ = '';
+A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', crumb:'Accès payant à la plateforme', actions:() => `<button class="btn b-line b-sm" data-act="admrefresh">${ic('refresh')}<span class="hs">Actualiser</span></button>`, render(){
+  const c = A.cfg(), P = c.pay || {}, D = AD(), pay = D.paiements || [], L = D.profiles.filter(p => !p.admin), t = now();
+  const ok = pay.filter(x => x.statut === 'valide'), wait = pay.filter(x => x.statut === 'en_attente');
+  const actifs = L.filter(p => p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t)), exp = L.filter(p => p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) <= t);
+  const mois = new Date(); mois.setDate(1); mois.setHours(0, 0, 0, 0);
+  const recM = ok.filter(x => ts(x.traite_at || x.at) >= mois.getTime()).reduce((a, x) => a + (+x.montant || 0), 0), rec = ok.reduce((a, x) => a + (+x.montant || 0), 0);
+  let rows = abF === 'attente' ? wait : abF === 'historique' ? pay.filter(x => x.statut !== 'en_attente') : null;
+  let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'nonpayes' ? L.filter(p => p.acces !== 'actif') : abF === 'expires' ? exp : null;
+  if(abQ){ const q = abQ.toLowerCase(), hit = p => (nm(p) + ' ' + p.email + ' ' + ((p.data || {}).phone || '')).toLowerCase().includes(q);
+    if(rows) rows = rows.filter(x => hit(profOf(x.owner)) || String(x.reference).toLowerCase().includes(q) || String(x.numero).includes(q)); if(users) users = users.filter(hit); }
+  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['nonpayes', 'Non payés', L.filter(p => p.acces !== 'actif').length], ['expires', 'Expirés', exp.length], ['reglages', 'Réglages', '']];
+  const payRow = x => { const p = profOf(x.owner); return `<tr><td class="nowrap">${fdt(x.at)}<div class="small faint">${ago(x.at)}</div></td><td><a href="#/admin/apprenant/${x.owner}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}${(p.data || {}).phone ? ' · ' + esc(telFmt(p.data.phone)) : ''}</div></td><td>${esc(moyenN(x.moyen))}<div class="small faint mono">${esc(telFmt(x.numero))}</div></td><td class="mono small">${esc(x.reference)}</td><td class="r mono nowrap">${F(x.montant)} F<div class="small faint">${x.formule === 'mensuel' ? 'mensuel' : 'inscription'}</div></td>
+    <td>${x.statut === 'en_attente' ? `<div class="row nw"><button class="btn b-ok b-xs" data-payok="${x.id}">${ic('check')}Valider</button><button class="btn b-line b-xs" data-payno="${x.id}">${ic('x')}Refuser</button></div>` : statutPill(x.statut) + (x.note ? `<div class="small faint">${esc(x.note)}</div>` : '') + (x.traite_at ? `<div class="small faint">${fd(x.traite_at)}</div>` : '')}</td></tr>`; };
+  const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${p.acces === 'actif' ? `<div class="small faint">${p.acces_fin ? 'jusqu\'au ' + fd(p.acces_fin) : 'sans limite'}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
+  let body;
+  if(abF === 'reglages') body = reglages(c, P);
+  else if(rows && abF === 'attente') body = `<div class="abo-cards">${rows.map(x => { const p = profOf(x.owner); return `<div class="card stack s8"><div class="row between nw"><a href="#/admin/apprenant/${x.owner}" style="text-decoration:none;min-width:0"><b>${esc(nm(p))}</b><div class="small faint" style="overflow-wrap:anywhere">${esc(p.email)}${(p.data || {}).phone ? ' · ' + esc(telFmt(p.data.phone)) : ''}</div></a><b class="mono nowrap" style="font-size:17px">${F(x.montant)} F</b></div>
+      <dl class="kv"><dt>Moyen</dt><dd>${esc(moyenN(x.moyen))}</dd><dt>Payé depuis</dt><dd class="mono">${esc(telFmt(x.numero))}</dd><dt>Référence</dt><dd class="mono" style="overflow-wrap:anywhere">${esc(x.reference)}</dd><dt>Déclaré</dt><dd>${fdt(x.at)} · ${ago(x.at)}</dd><dt>Formule</dt><dd>${x.formule === 'mensuel' ? 'Abonnement d\'un mois' : 'Inscription'}</dd></dl>
+      <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}Valider : activer l'accès</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
+    ${rows.length ? `<div class="note info">${ic('info')}<span>Avant de valider, vérifiez sur votre téléphone (${moyensActifs().map(m => m[1] + ' ' + telFmt(P[m[0]])).join(' · ')}) que le montant est bien arrivé avec cette référence.</span></div>` : ''}`;
+  else if(rows) body = `<div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Déclaré le</th><th>Apprenant</th><th>Moyen / numéro</th><th>Référence</th><th class="r">Montant</th><th>${abF === 'attente' ? 'Action' : 'Statut'}</th></tr></thead><tbody>${rows.map(payRow).join('') || `<tr><td colspan="6">${A.empty('coins', abF === 'attente' ? 'Aucun paiement à valider.' : 'Aucun paiement traité.')}</td></tr>`}</tbody></table></div></div>
+    ${abF === 'attente' && rows.length ? `<div class="note info">${ic('info')}<span>Avant de valider, vérifiez sur votre téléphone (${moyensActifs().map(m => m[1] + ' ' + telFmt(P[m[0]])).join(' · ')}) que le montant est bien arrivé avec cette référence.</span></div>` : ''}`;
+  else body = `<div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Apprenant</th><th>Téléphone</th><th>Inscrit le</th><th>Accès</th><th>Action</th></tr></thead><tbody>${users.map(userRow).join('') || `<tr><td colspan="5">${A.empty('users', 'Aucun apprenant.')}</td></tr>`}</tbody></table></div></div>`;
+  return `<div class="kpis">
+   <div class="kpi hl"><small>${ic('clock')}Paiements à valider</small><b>${wait.length}</b><em>${wait.length ? F(wait.reduce((a, x) => a + (+x.montant || 0), 0)) + ' FCFA déclarés' : 'rien en attente'}</em></div>
+   <div class="kpi"><small>${ic('users')}Accès actifs</small><b style="color:var(--ok)">${actifs.length}</b><em>sur ${L.length} inscrit${L.length > 1 ? 's' : ''}</em></div>
+   <div class="kpi"><small>${ic('coins')}Encaissé ce mois</small><b>${F(recM)} F</b><em>paiements validés</em></div>
+   <div class="kpi"><small>${ic('chart')}Encaissé au total</small><b>${F(rec)} F</b><em>${ok.length} paiement${ok.length > 1 ? 's' : ''} validé${ok.length > 1 ? 's' : ''}</em></div>
+  </div>
+  ${A.paywallOn() ? '' : `<div class="note">${ic('alert')}<span>L'accès payant est <b>désactivé</b> : toute la plateforme est gratuite. Réactivez-le dans l'onglet Réglages.</span></div>`}
+  <div class="toolbar">${abF === 'reglages' ? '' : `<label class="search">${ic('search')}<input id="abQ" placeholder="Nom, e-mail, téléphone, référence…" value="${esc(abQ)}"></label>`}<div class="tabs">${tabs.map(x => `<button class="tab ${abF === x[0] ? 'on' : ''}" data-abf="${x[0]}">${x[1]}${x[2] !== '' ? ` <span class="cnt">${x[2]}</span>` : ''}</button>`).join('')}</div></div>
+  ${body}`;
+}});
+function reglages(c, P){
+  return `<div class="cols"><div class="card stack">
+   <h3 style="margin:0">Accès payant</h3>
+   <label class="check"><input type="checkbox" id="ab_paywall" ${c.paywall !== false ? 'checked' : ''}>Activer l'accès payant (sinon toute la plateforme est gratuite)</label>
+   <div class="g2"><label class="fld"><span>Formule</span><select class="inp" id="ab_formule"><option value="unique" ${c.formule !== 'mensuel' ? 'selected' : ''}>Inscription : paiement unique</option><option value="mensuel" ${c.formule === 'mensuel' ? 'selected' : ''}>Abonnement mensuel</option></select></label>
+    <label class="fld"><span>Chapitres gratuits par matière</span><input class="inp" type="number" min="0" id="ab_preview" value="${esc(c.preview)}"></label></div>
+   <div class="g2"><label class="fld"><span>Prix de l'inscription (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixAcces" value="${esc(c.prixAcces)}"></label>
+    <label class="fld"><span>Prix de l'abonnement mensuel (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixMois" value="${esc(c.prixMois)}"></label></div>
+   <p class="sub">Passer à la formule mensuelle ne retire rien aux inscrits déjà payés : leur accès reste sans limite de durée. Chaque paiement mensuel validé prolonge l'accès d'un mois.</p>
+   <h3 style="margin:8px 0 0">Où les apprenants paient</h3>
+   <div class="g2">${MOYENS.map(m => `<label class="fld"><span>${esc(m[1])}${m[0] === 'djamo' ? ' (numéro de téléphone du compte)' : ''}</span><input class="inp" id="ab_pay_${m[0]}" inputmode="tel" value="${esc(P[m[0]] || '')}" placeholder="laisser vide si non utilisé"></label>`).join('')}
+    <label class="fld"><span>Nom du bénéficiaire affiché</span><input class="inp" id="ab_pay_titulaire" value="${esc(P.titulaire || '')}"></label></div>
+   <label class="fld" style="max-width:320px"><span>WhatsApp pour les preuves de paiement</span><input class="inp" id="ab_whatsapp" inputmode="tel" value="${esc(c.whatsapp || '')}"></label>
+   <div class="note bad">${ic('shield')}<span>N'inscrivez jamais un <b>numéro de carte bancaire</b> (16 chiffres, carte Visa Djamo…) : il serait visible par tous les visiteurs et pourrait servir à des fraudes. Pour Djamo, indiquez le numéro de téléphone lié au compte.</span></div>
+   <button class="btn b-pri" style="justify-self:start" data-act="absave">${ic('save')}Enregistrer</button>
+  </div><div class="card stack"><h3 style="margin:0">Comment ça marche</h3>
+   <ol class="abo-steps"><li><b>L'apprenant paie</b> le montant sur votre numéro Wave ou Mobile Money, depuis son téléphone.</li><li><b>Il déclare le paiement</b> sur la plateforme (numéro utilisé et référence du SMS), et peut vous envoyer la capture sur WhatsApp.</li><li><b>Vous vérifiez</b> la réception sur votre téléphone, puis cliquez sur <b>Valider</b> dans l'onglet « À valider » : son accès s'ouvre aussitôt.</li><li>Vous pouvez à tout moment <b>activer ou désactiver</b> un apprenant (onglets Apprenants), par exemple en cas de paiement en espèces ou d'abonnement non renouvelé.</li></ol>
+   <p class="sub">Les cours complets ne sont envoyés par le serveur qu'aux comptes dont l'accès est actif : un visiteur ne peut lire que les chapitres gratuits.</p>
+   <p class="sub">Pour encaisser automatiquement (sans validation manuelle), il faut un compte marchand chez un agrégateur de paiement (CinetPay, PayDunya ou l'API Wave Business) : il peut être branché sur cette page plus tard.</p></div></div>`;
+}
+A.accesBtns = p => {
+  if(p.admin) return '<span class="sub">—</span>';
+  const act = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > now());
+  return `<div class="row nw">${act ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="gratuit">${ic('lock')}Désactiver</button>` : `<button class="btn b-ok b-xs" data-acc="${p.id}" data-v="actif">${ic('check')}Activer</button>`}${A.cfg().formule === 'mensuel' || p.acces_fin ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="mois">${ic('cal')}+1 mois</button>` : ''}</div>`;
+};
+A.accesCard = u => u.admin ? '' : `<div class="card"><h3>Accès payant ${A.accesPill(u)}</h3><dl class="kv"><dt>Accès</dt><dd>${u.acces === 'actif' ? (u.acces_fin ? 'Actif jusqu\'au ' + fd(u.acces_fin) : 'Actif, sans limite') : 'Non payé (chapitres gratuits seulement)'}</dd>${u.acces_at ? `<dt>Activé le</dt><dd>${fd(u.acces_at)}</dd>` : ''}</dl>
+  ${(() => { const L = (AD().paiements || []).filter(x => x.owner === u.id); return L.length ? `<div class="stack s8" style="margin:10px 0">${L.slice(0, 6).map(x => `<div class="row between nw small"><span>${fd(x.at)} · ${esc(moyenN(x.moyen))} · <span class="mono">${esc(x.reference)}</span></span><span class="row nw">${F(x.montant)} F ${x.statut === 'en_attente' ? `<button class="btn b-ok b-xs" data-payok="${x.id}">Valider</button>` : statutPill(x.statut)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:8px 0">Aucun paiement déclaré.</p>'; })()}
+  ${A.accesBtns(u)}</div>`;
+A.on('input', '#abQ', el => { abQ = el.value; A.refresh(); });
+A.on('click', '[data-abf]', el => { abF = el.dataset.abf; A.refresh(); });
+A.on('click', '[data-payok]', async el => { el.disabled = true; if(await A.db.treatPayment(+el.dataset.payok, true, '')){ toast('Paiement validé : accès activé', 'check'); A.refresh(); } else el.disabled = false; });
+A.on('click', '[data-payno]', async el => {
+  if(el.dataset.c !== '1'){ el.dataset.c = '1'; el.innerHTML = ic('alert') + 'Confirmer le refus'; return; }
+  if(await A.db.treatPayment(+el.dataset.payno, false, 'Paiement non reçu')){ toast('Paiement refusé', 'x'); A.refresh(); }
+});
+A.on('click', '[data-acc]', async el => {
+  const id = el.dataset.acc, v = el.dataset.v, p = profOf(id);
+  let ok;
+  if(v === 'mois'){ const base = Math.max(now(), p.acces_fin ? ts(p.acces_fin) : 0); ok = await A.db.setAccess(id, 'actif', new Date(base + 30.44*DAY).toISOString()); }
+  else if(v === 'actif') ok = await A.db.setAccess(id, 'actif', A.cfg().formule === 'mensuel' ? new Date(now() + 30.44*DAY).toISOString() : null);
+  else { if(el.dataset.c !== '1'){ el.dataset.c = '1'; el.innerHTML = ic('alert') + 'Confirmer'; return; } ok = await A.db.setAccess(id, 'gratuit', null); }
+  if(ok){ toast(v === 'gratuit' ? 'Accès désactivé' : 'Accès activé', v === 'gratuit' ? 'lock' : 'check'); A.refresh(); }
+});
+A.on('click', '[data-act="absave"]', async () => {
+  const pay = {}; MOYENS.forEach(m => pay[m[0]] = A.val('ab_pay_' + m[0]).trim()); pay.titulaire = A.val('ab_pay_titulaire').trim();
+  if(Object.values(pay).concat([A.val('ab_whatsapp')]).some(v => String(v).replace(/\D/g, '').length >= 16)){ toast('Un numéro de carte bancaire ne doit pas être affiché : indiquez un numéro de téléphone', 'x'); return; }
+  const patch = {paywall:$('#ab_paywall').checked, formule:A.val('ab_formule'), preview:Math.max(0, +A.val('ab_preview') || 0), prixAcces:Math.max(0, +A.val('ab_prixAcces') || 0), prixMois:Math.max(0, +A.val('ab_prixMois') || 0), pay, whatsapp:A.val('ab_whatsapp').trim()};
+  if(await A.db.saveSettings(patch)){ A.resetCours(); toast('Réglages de l\'accès payant enregistrés', 'coins'); A.refresh(); }
+});
+})();
