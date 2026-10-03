@@ -212,7 +212,7 @@ A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", i
   "Lecture des plans au 1/50 et au 1/100",
   "Contrôle statistique des résistances du béton",
   "Calculs topographiques et financiers"
- ], src:"data/cours/math.js?v=2db4cb4f", chapitres:[
+ ], src:"data/cours/math.js?v=29cf3356", chapitres:[
   {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, nq:5, nex:5},
   {id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, nq:5, nex:5},
   {id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, nq:5, nex:5},

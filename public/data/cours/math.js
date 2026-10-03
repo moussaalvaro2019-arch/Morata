@@ -65,6 +65,30 @@ Pour les surfaces, on décale de **2 rangs** par unité ; pour les volumes, de *
 ## Arrondis et ordres de grandeur
 On arrondit le **résultat final** (pas les calculs intermédiaires) avec un nombre de chiffres cohérent avec la précision des données : 2 décimales en mètres pour le métré, au sac entier pour le ciment (arrondi supérieur). Vérifier l'**ordre de grandeur** évite les erreurs grossières (une semelle de maison ne fait pas 30 m³ !).
 
+## Application détaillée : le poids d'une dalle
+Une dalle pleine de **6,00 × 4,50 m** et de **16 cm** d'épaisseur, en béton armé de masse volumique **2,5 t/m³**. Quelle charge apporte-t-elle par m² ?
+1. **Tout convertir en mètres** : 16 cm = 0,16 m ;
+2. **Volume** : 6,00 × 4,50 × 0,16 = **4,32 m³** ;
+3. **Masse** : 4,32 × 2,5 = **10,8 t** ;
+4. **Poids** : 10,8 t ≈ 10,8 × 10 = **108 kN** ;
+5. **Charge par m²** : 108 / (6,00 × 4,50) = 108 / 27 = **4 kN/m²** (on retrouve 0,16 × 25 kN/m³ = 4 kN/m² : c'est la règle « épaisseur × 25 »).
+
+## Estimer avant de calculer
+Avant de taper sur la calculatrice, on fait un calcul mental grossier : la section d'un tuyau de Ø 0,62 m vaut π × 0,62² / 4 ≈ 3 × 0,4 / 4 = **0,3 m²** ; la calculatrice donne 0,302 m² : le résultat est plausible. Si elle affiche 3,02 ou 0,0302, une virgule a été mal placée.
+
+| Grandeur | Conversion utile |
+|---|---|
+| Masse volumique | 2 400 kg/m³ = 2,4 t/m³ = 24 kN/m³ environ |
+| Débit | 0,72 m³/h = 720 L / 3 600 s = **0,2 L/s** |
+| Contrainte | 25 MPa = 25 N/mm² = 25 000 kN/m² |
+| Surface | 1 cm² = 10⁻⁴ m² ; 1 mm² = 10⁻⁶ m² |
+
+> [!attention] Erreurs fréquentes
+> - Mélanger cm et m dans un même produit (6 × 4,5 × 16 = 432 « m³ » au lieu de 4,32 m³).
+> - Convertir les surfaces ou les volumes comme des longueurs : 1 m² = 10 000 cm², pas 100 cm².
+> - Arrondir trop tôt : on garde 3 ou 4 chiffres dans les calculs et on arrondit le résultat final.
+> - Oublier l'unité dans la réponse : « 4 » ne veut rien dire, « 4 kN/m² » si.
+
 > [!retenir]
 > - Surfaces : 2 rangs par unité ; volumes : 3 rangs ; 1 m³ = 1 000 L.
 > - 1 MPa = 1 N/mm² ; 1 bar = 0,1 MPa.
@@ -106,6 +130,34 @@ Parenthèses → puissances → multiplications et divisions → additions et so
 ## Les pentes
 Une pente en % est un rapport : dénivelé / longueur horizontale × 100. 1 cm par mètre = **1 %** ; une pente de 1/20 = **5 %** ; 2 cm/m = 2 %.
 
+## Méthode : les pourcentages successifs
+Deux hausses ou baisses successives **se multiplient**, elles ne s'additionnent pas :
+- + 10 % puis + 10 % : × 1,10 × 1,10 = × 1,21 → **+ 21 %** (et non + 20 %) ;
+- + 20 % puis − 20 % : × 1,20 × 0,80 = × 0,96 → **− 4 %** (on ne revient pas au prix de départ) ;
+- **Taux d'évolution** entre deux valeurs : (valeur finale − valeur initiale) / valeur initiale × 100. Le sac de ciment passe de 4 800 F à 5 400 F : 600 / 4 800 = **+ 12,5 %**.
+
+> [!exemple] Remise puis TVA sur une facture
+> Montant HT 1 500 000 F, remise de 5 %, puis TVA 18 %.
+> Après remise : 1 500 000 × 0,95 = **1 425 000 F HT** ; TTC : 1 425 000 × 1,18 = **1 681 500 F**.
+> La TVA s'applique toujours **après** la remise, sur le net HT.
+
+> [!exemple] Mortier dosé 1 : 4 pour une gâchée de 200 L
+> 1 + 4 = 5 parts ; une part = 200 / 5 = 40 L.
+> Ciment : **40 L** ; sable : 4 × 40 = **160 L**.
+> Contrôle : 40 + 160 = 200 L.
+
+## Méthode pour une proportion « a : b : c »
+1. Additionner les parts (1 + 2 + 3 = 6) ;
+2. Diviser la quantité totale par ce total : on obtient **une part** ;
+3. Multiplier la part par chaque coefficient ;
+4. Vérifier que la somme redonne le total.
+
+> [!attention] Erreurs fréquentes
+> - Retrouver un montant HT en retirant 18 % : 2 360 000 × 0,82 = 1 935 200 F (faux) ; il faut **diviser** par 1,18 → 2 000 000 F.
+> - Additionner des pourcentages successifs.
+> - Calculer 2 + 3 × 4 de gauche à droite (20 au lieu de 14).
+> - Additionner des fractions en additionnant numérateurs et dénominateurs (1/2 + 1/3 ≠ 2/5 ; = 5/6).
+
 > [!retenir]
 > - Priorités : parenthèses, puissances, × et ÷, puis + et −.
 > - Fractions : même dénominateur pour additionner.
@@ -146,6 +198,37 @@ $$ longueur sur le plan = longueur réelle × échelle      échelle = 1/n
 
 ## Vitesses, débits, rendements
 Ce sont des rapports : vitesse = distance / temps ; débit = volume / temps ; rendement = quantité / temps. Ex. : une pompe de 1,2 m³/h remplit 6 m³ en **5 h**.
+
+## Méthode : reconnaître une situation proportionnelle
+On dresse un **tableau** : si l'on passe d'une ligne à l'autre en multipliant toujours par le même nombre, il y a proportionnalité.
+
+| Surface carrelée (m²) | 12 | 24 | 60 | 150 |
+|---|---|---|---|---|
+| Durée pour un carreleur (j) | 1 | 2 | 5 | 12,5 |
+
+Un carreleur qui pose **12 m²/jour** met 150 / 12 = **12,5 jours** pour 150 m² ; deux carreleurs mettent **6,25 jours** (proportionnalité inverse). Trois maçons à 10 m²/j chacun montent 180 m² de mur en 180 / (3 × 10) = **6 jours**.
+
+> [!exemple] Retrouver l'échelle d'un plan
+> Un mur de 15 m mesure 7,5 cm sur le plan.
+> Échelle = 7,5 cm / 1 500 cm = 1/200.
+> Toujours mettre les deux longueurs dans la **même unité** avant de diviser.
+
+## Quand ce n'est pas proportionnel
+Un coût comportant une **partie fixe** n'est pas proportionnel. Location d'une bétonnière : 15 000 F/jour + 20 000 F de transport.
+- 2 jours : 20 000 + 2 × 15 000 = **50 000 F** ;
+- 4 jours : 20 000 + 4 × 15 000 = **80 000 F** (et non 2 × 50 000 = 100 000 F).
+La règle de trois ne s'applique qu'à la partie variable (voir les fonctions affines au niveau 2).
+
+> [!exemple] Pente d'un dallage
+> Pente de 2 % sur 12 m.
+> Dénivelé = 12 × 2 / 100 = 0,24 m = **24 cm**.
+> Le dénivelé est proportionnel à la longueur.
+
+> [!attention] Erreurs fréquentes
+> - Appliquer une règle de trois à une situation de proportionnalité **inverse** (plus d'ouvriers ne donne pas plus de jours).
+> - Oublier la partie fixe d'un coût.
+> - Convertir une surface d'un plan avec l'échelle simple au lieu de l'échelle au carré.
+> - Arrondir les sacs ou les jours vers le bas : on arrondit à l'**unité supérieure**.
 
 > [!retenir]
 > - Proportionnalité : y = k x ; règle de trois.
@@ -193,6 +276,36 @@ On **découpe** en figures simples, ou on **soustrait** (surface totale − vide
 > [!exemple] Regard circulaire
 > Tampon Ø 0,60 m : π × 0,60² / 4 = **0,283 m²** ; dalle annulaire Ø ext 1,20, Ø int 1,00 : π (1,44 − 1,00) / 4 = **0,346 m²**.
 
+## Application détaillée : peindre un pignon
+Un pignon est formé d'un rectangle de **8,00 × 3,00 m** surmonté d'un triangle de **8,00 m** de base et **2,00 m** de hauteur. Il comporte une fenêtre de 1,60 × 1,50 m et une porte de 0,90 × 2,10 m.
+1. Rectangle : 8,00 × 3,00 = **24,00 m²** ;
+2. Triangle : 8,00 × 2,00 / 2 = **8,00 m²** ;
+3. Surface brute : **32,00 m²** ;
+4. Ouvertures : 1,60 × 1,50 + 0,90 × 2,10 = 2,40 + 1,89 = **4,29 m²** ;
+5. Surface à peindre : 32,00 − 4,29 = **27,71 m²**. Avec un rendement de 10 m²/L par couche et deux couches : 27,71 × 2 / 10 = 5,5 L → **6 L**.
+
+> [!exemple] Plinthes d'une chambre
+> Chambre de 4,20 × 3,60 m avec une porte de 0,90 m.
+> Périmètre : 2 × (4,20 + 3,60) = 15,60 m.
+> Plinthes : 15,60 − 0,90 = **14,70 ml**.
+
+> [!exemple] Bassin circulaire de Ø 6 m
+> Aire du radier : π × 6² / 4 = **28,27 m²** (étanchéité).
+> Périmètre : π × 6 = **18,85 m** (longueur de la margelle).
+
+## Méthode pour une figure composée
+1. Faire un **croquis coté** et numéroter les morceaux ;
+2. Convertir toutes les cotes en mètres ;
+3. Calculer chaque morceau sur une ligne séparée ;
+4. Additionner les « pleins », soustraire les « vides » ;
+5. Contrôler l'ordre de grandeur avec un rectangle englobant.
+
+> [!attention] Erreurs fréquentes
+> - Oublier de diviser par 2 l'aire d'un triangle.
+> - Confondre rayon et diamètre dans π R².
+> - Confondre périmètre (ml) et aire (m²).
+> - Déduire de petites ouvertures que les règles de métré ne déduisent pas (voir le cours de métré).
+
 > [!retenir]
 > - Rectangle L × l ; triangle b h / 2 ; trapèze (B + b)/2 × h ; cercle π R².
 > - Figures composées : découper ou soustraire.
@@ -238,6 +351,34 @@ Rayon, diamètre, corde, arc ; longueur d'un arc d'angle α : 2 π R × α / 360
 - **Parallèles** par report de deux distances égales ;
 - **Arc de cercle** (escalier, bassin) avec un cordeau fixé au centre.
 
+## Application : contrôler l'implantation d'un rectangle
+Pour implanter un bâtiment de **12 × 9 m**, on trace les quatre côtés puis on mesure les **deux diagonales** : dans un rectangle, elles sont **égales**. Avec les dimensions 9-12-15 (le triangle 3-4-5 multiplié par 3), chaque diagonale doit mesurer **15,00 m**. Si l'on trouve 15,04 m et 14,96 m, la figure est un parallélogramme : on fait pivoter les côtés jusqu'à l'égalité.
+
+> [!exemple] Thalès dans une ferme
+> Un rampant monte de 2,00 m sur une demi-portée horizontale de 4,00 m.
+> Hauteur d'un potelet placé à 1,50 m de l'appui : 2,00 × 1,50 / 4,00 = **0,75 m**.
+> Les triangles formés par le potelet et par la demi-ferme sont semblables.
+
+## Les polygones réguliers et les coupes
+- Angle intérieur d'un polygone régulier à n côtés : (n − 2) × 180° / n ;
+- Octogone : 6 × 180 / 8 = **135°** ; pour assembler deux pièces de bois, chacune est coupée à (180 − 135) / 2 = **22,5°** ;
+- Hexagone : 120° ; coupe à 30°.
+
+> [!exemple] Longueur d'une bordure en arc
+> Arc de rayon 5,00 m et d'angle 90°.
+> Longueur : 2 × π × 5,00 × 90 / 360 = **7,85 m**.
+> Contrôle : c'est le quart du périmètre du cercle (31,42 / 4).
+
+## Méthode pour un problème de Thalès
+1. Repérer les deux droites **parallèles** (verticales, potelets, ombres prises au même instant) ;
+2. Écrire l'égalité des rapports en mettant les côtés **correspondants** face à face ;
+3. Faire le produit en croix et vérifier que le résultat est plausible.
+
+> [!attention] Erreurs fréquentes
+> - Mettre en rapport des côtés qui ne se correspondent pas.
+> - Appliquer Thalès sans droites parallèles.
+> - Oublier que la somme des angles d'un triangle vaut toujours 180°.
+
 > [!retenir]
 > - Triangle : 180° ; polygone : (n − 2) × 180°.
 > - Thalès : parallèles → longueurs proportionnelles ; triangles semblables.
@@ -279,6 +420,32 @@ $$ sin α = côté opposé / hypoténuse      cos α = côté adjacent / hypoté
 
 ## Mesurer une hauteur inaccessible
 On mesure la distance horizontale d au pied de l'ouvrage et l'angle α sous lequel on voit le sommet : hauteur = d × tan α + hauteur de l'œil.
+
+## Méthode : quel rapport choisir ?
+1. Repérer l'**angle** utilisé et nommer les côtés par rapport à lui : opposé, adjacent, hypoténuse (toujours face à l'angle droit, c'est le plus long) ;
+2. Noter les deux côtés concernés (le connu et l'inconnu) ;
+3. Choisir le rapport qui les relie (moyen mnémotechnique **SOH-CAH-TOA** : Sinus = Opposé/Hypoténuse ; Cosinus = Adjacent/Hypoténuse ; Tangente = Opposé/Adjacent) ;
+4. Isoler l'inconnue et calculer en mode **degrés**.
+
+> [!exemple] Rampe d'accès PMR
+> Dénivelé 0,60 m, pente maximale 5 %.
+> Longueur horizontale : 0,60 / 0,05 = **12,00 m** ; longueur de la rampe : √(12² + 0,60²) = **12,01 m**.
+> Angle : arctan 0,05 = **2,86°**.
+
+> [!exemple] Escalier droit : 2,80 m en 16 marches
+> Hauteur de marche : 2,80 / 16 = **17,5 cm** ; giron choisi : 28 cm.
+> Angle : arctan(17,5 / 28) = **32,0°** ; reculement : 15 girons × 0,28 = **4,20 m**.
+> Longueur de la paillasse : √(4,20² + 2,80²) = **5,05 m**.
+
+> [!exemple] Hauteur d'un château d'eau
+> On se place à 25 m du pied, l'œil à 1,60 m, et l'on vise le sommet sous 32°.
+> Hauteur = 25 × tan 32° + 1,60 = 15,62 + 1,60 = **17,22 m**.
+
+> [!attention] Erreurs fréquentes
+> - Calculatrice en radians (sin 30 = − 0,99 au lieu de 0,5).
+> - Prendre pour hypoténuse un côté qui n'est pas face à l'angle droit.
+> - Confondre pente et angle : 100 % correspond à 45°, pas à 90°.
+> - Utiliser Pythagore dans un triangle non rectangle (voir la loi des cosinus au niveau 3).
 
 > [!retenir]
 > - Pythagore : c² = a² + b² ; réciproque pour contrôler un angle droit.
@@ -322,6 +489,34 @@ b) Il faudrait 5,00 m : avec 5,04 m, l'angle est **un peu ouvert** (plus de 90°
 ## Volume et masse
 Masse = masse volumique × volume ; poids (kN) ≈ masse (t) × 10. Une sphère d'eau de 1,5 m de rayon contient 4/3 × π × 1,5³ = **14,14 m³**, soit 14,1 t.
 
+## Application détaillée : fouille, déblais et camions
+Une fouille de semelle a un fond de **2,00 × 2,00 m**, un haut de **3,00 × 3,00 m** (talus) et une profondeur de **1,50 m** : c'est un tronc de pyramide.
+1. S1 = 4,00 m² ; S2 = 9,00 m² ; √(S1 S2) = 6,00 m² ;
+2. V = 1,50 / 3 × (4 + 9 + 6) = **9,50 m³** en place ;
+3. Avec un **foisonnement** de 25 % : 9,50 × 1,25 = **11,88 m³** à évacuer ;
+4. Avec des camions de 6 m³ : 11,88 / 6 = 1,98 → **2 rotations**.
+
+> [!exemple] Poteau rond Ø 30 cm, hauteur 3,00 m
+> Béton : π × 0,15² × 3,00 = **0,212 m³**.
+> Coffrage (surface latérale) : 2 × π × 0,15 × 3,00 = **2,83 m²**.
+
+> [!exemple] Coffrage d'une poutre 20 × 40 cm de 5 m
+> Fond : 0,20 × 5 = 1,00 m² ; joues : 2 × 0,40 × 5 = 4,00 m².
+> Total : **5,00 m²** de coffrage pour 0,20 × 0,40 × 5 = **0,40 m³** de béton.
+
+## Méthode pour un volume de chantier
+1. Identifier la **forme** de chaque élément (pavé, cylindre, tronc…) ;
+2. Convertir les cotes en mètres ;
+3. Appliquer la formule et garder le détail par élément ;
+4. Multiplier par le **nombre** d'éléments identiques ;
+5. Ajouter pertes ou foisonnement à la fin.
+
+> [!attention] Erreurs fréquentes
+> - Oublier le « / 3 » des cônes et pyramides.
+> - Mettre le diamètre au lieu du rayon dans π R² h.
+> - Convertir des cm³ en m³ en divisant par 1 000 (il faut diviser par 1 000 000).
+> - Confondre volume en place et volume foisonné pour les terres.
+
 > [!retenir]
 > - Prisme, cylindre : base × hauteur ; pyramide, cône : base × hauteur / 3.
 > - Tronc de pyramide : h/3 (S1 + S2 + √S1S2) ; sphère : 4/3 π R³.
@@ -362,6 +557,35 @@ Deux inconnues, deux équations : méthode par **substitution** (exprimer une in
 
 > [!exemple] Réactions d'une poutre
 > Poutre de 6 m, charge de 50 kN à 2 m de A : RA + RB = 50 et 6 RB = 50 × 2 → **RB = 16,7 kN**, **RA = 33,3 kN**.
+
+## Méthode : mettre un problème en équation
+1. **Choisir l'inconnue** et l'écrire en toutes lettres (« x = nombre de jours de location ») ;
+2. **Traduire** chaque phrase de l'énoncé en relation mathématique ;
+3. **Résoudre** en isolant x ;
+4. **Vérifier** en remplaçant x dans l'énoncé de départ ;
+5. **Conclure** par une phrase avec l'unité et l'arrondi adapté.
+
+> [!exemple] Location d'un compacteur
+> 18 000 F/jour + 25 000 F de transport, budget 150 000 F.
+> 25 000 + 18 000 x ≤ 150 000 → x ≤ 125 000 / 18 000 = 6,94.
+> On peut louer **6 jours** (6,94 n'est pas un nombre entier de jours : on arrondit vers le bas pour respecter le budget).
+
+> [!exemple] Commande de sable et de gravier
+> 20 m³ au total pour 264 000 F ; sable 12 000 F/m³, gravier 15 000 F/m³.
+> x + y = 20 et 12 000 x + 15 000 y = 264 000.
+> Substitution : 12 000 x + 15 000 (20 − x) = 264 000 → − 3 000 x = − 36 000.
+> **x = 12 m³ de sable**, **y = 8 m³ de gravier** ; vérification : 144 000 + 120 000 = 264 000 F.
+
+## Retourner une formule plus complexe
+- Pression d'eau p = ρ g h → **h = p / (ρ g)** ;
+- Moment d'inertie I = b h³ / 12 → h³ = 12 I / b → **h = ∛(12 I / b)** ;
+- Aire d'un trapèze S = (B + b) h / 2 → **h = 2 S / (B + b)**.
+
+> [!attention] Erreurs fréquentes
+> - Faire passer un terme de l'autre côté sans changer son signe.
+> - Diviser un seul terme d'une somme : (3 + 0,09 x) / 0,09 ≠ 3 + x.
+> - Oublier d'inverser le sens d'une inéquation après division par un négatif.
+> - Ne pas vérifier la solution dans l'énoncé.
 
 > [!retenir]
 > - Isoler l'inconnue en faisant la même opération des deux côtés.
@@ -405,6 +629,34 @@ $$ y = y1 + (y2 − y1) × (x − x1) / (x2 − x1)
 > [!exemple]
 > Facteur de portance Nq : 18,4 pour φ = 30°, 23,2 pour φ = 32° → pour φ = 31° : 18,4 + 4,8 × 1/2 = **20,8**.
 
+## Application : choisir entre deux offres de transport
+Offre A : 60 000 F par jour + 500 F/km ; offre B : 40 000 F + 900 F/km.
+1. Fonctions : A(x) = 500 x + 60 000 ; B(x) = 900 x + 40 000 ;
+2. Égalité : 500 x + 60 000 = 900 x + 40 000 → 400 x = 20 000 → **x = 50 km** ;
+3. Conclusion : en dessous de 50 km, B est moins chère ; au-delà, A l'emporte (pour 80 km : A = 100 000 F, B = 112 000 F).
+
+> [!exemple] Prévoir une fin de chantier
+> Avancement : 35 % en semaine 4 et 60 % en semaine 8.
+> a = (60 − 35) / (8 − 4) = 6,25 %/semaine ; b = 35 − 6,25 × 4 = 10.
+> 100 % est atteint pour x = (100 − 10) / 6,25 = **14,4 semaines**, soit en semaine 15 si le rythme se maintient.
+
+## Méthode pour tracer une droite
+1. Calculer **deux points** (trois pour contrôler) ;
+2. Choisir une échelle qui utilise toute la feuille et la noter sur chaque axe avec l'unité ;
+3. Placer les points, tracer à la règle ;
+4. Lire les valeurs utiles (intersection, ordonnée à l'origine) et les vérifier par le calcul.
+
+> [!astuce] Interpoler entre deux lignes
+> Écrire les deux lignes encadrantes l'une sous l'autre.
+> Calculer la fraction parcourue (x − x1) / (x2 − x1).
+> Appliquer cette fraction à l'écart des y.
+
+> [!attention] Erreurs fréquentes
+> - Inverser Δx et Δy dans le calcul de la pente.
+> - **Extrapoler** loin en dehors du tableau : la variation n'y est plus forcément linéaire.
+> - Oublier les unités et les graduations sur les axes.
+> - Comparer deux offres à un seul point sans chercher le point d'équilibre.
+
 > [!retenir]
 > - f(x) = a x + b ; a = Δy / Δx.
 > - Coût = fixe + variable ; comparer = chercher l'intersection.
@@ -441,6 +693,31 @@ Discriminant **Δ = b² − 4 a c** :
 - **Optimisation** : surface maximale pour une longueur de clôture donnée, coût minimal.
 > [!exemple] Moment d'une poutre
 > q = 12 kN/m, L = 5 m : M(x) = 6 x (5 − x) ; sommet en x = 2,5 m → M max = 12 × 25 / 8 = **37,5 kN·m**.
+
+## Application : l'aire maximale contre un mur
+On dispose de **60 m** de grillage pour clore un dépôt rectangulaire adossé à un mur (trois côtés à clôturer). Côtés perpendiculaires au mur : x ; côté parallèle : 60 − 2x.
+1. Aire : S(x) = x (60 − 2x) = − 2x² + 60x ;
+2. a = − 2 < 0 : parabole tournée vers le bas, il y a un **maximum** ;
+3. Sommet : x = − 60 / (2 × (− 2)) = **15 m** ; côté parallèle : 60 − 30 = **30 m** ;
+4. Aire maximale : 15 × 30 = **450 m²**.
+
+> [!exemple] Hauteur d'un arc parabolique
+> Portée 10 m, flèche 2,50 m ; origine au milieu, au niveau des appuis : y = 2,50 − 0,1 x².
+> À 3 m de l'axe : y = 2,50 − 0,9 = **1,60 m**.
+> Contrôle : à x = 5 m (appui), y = 2,50 − 2,50 = 0.
+
+## Méthode de résolution
+1. Mettre l'équation sous la forme **a x² + b x + c = 0** (tout d'un côté) ;
+2. Relever a, b, c avec leurs **signes** ;
+3. Calculer Δ, puis les solutions ;
+4. Garder seulement les solutions qui ont un sens (une longueur est positive) ;
+5. Vérifier en remplaçant dans l'équation de départ.
+
+> [!attention] Erreurs fréquentes
+> - Oublier que le carré d'un nombre négatif est positif : (− 50)² = + 2 500.
+> - Écrire − b / 2a au lieu de − b / (2a) dans la calculatrice.
+> - Garder une solution négative pour une longueur.
+> - Chercher un maximum alors que a > 0 (la parabole n'a qu'un minimum).
 
 > [!retenir]
 > - Δ = b² − 4ac ; x = (− b ± √Δ)/(2a).
@@ -484,6 +761,40 @@ On regroupe les valeurs en **classes** (ex. 25–27, 27–29…) et on trace un 
 ## L'esprit du contrôle
 Une moyenne correcte ne suffit pas : une **dispersion** élevée signale une fabrication irrégulière (dosages au jugé, eau variable) et un risque de valeurs faibles. On agit sur la **régularité** autant que sur le niveau moyen.
 
+## Application détaillée : l'écart-type à la main
+Affaissements au cône d'Abrams (cm) sur 5 gâchées : 8 ; 10 ; 9 ; 12 ; 11.
+
+| Valeur xi | Écart xi − x̄ | Carré |
+|---|---|---|
+| 8 | − 2 | 4 |
+| 10 | 0 | 0 |
+| 9 | − 1 | 1 |
+| 12 | + 2 | 4 |
+| 11 | + 1 | 1 |
+| Somme 50 | 0 | 10 |
+
+Moyenne : 50 / 5 = **10 cm** ; s = √(10 / 4) = **1,58 cm**.
+
+## Le coefficient de variation
+**CV = s / x̄** compare la dispersion de séries de niveaux différents : 1,58 / 10 = **15,8 %** pour les affaissements ; 1,88 / 28,7 = **6,6 %** pour les résistances de l'exemple ci-dessus. Pour un béton, un CV inférieur à 10 % traduit une fabrication bien maîtrisée.
+
+> [!astuce] Sur la calculatrice
+> Utiliser le mode statistique (STAT).
+> Prendre l'écart-type « σn−1 » ou « s » (échantillon).
+> La touche « σn » divise par n et sous-estime la dispersion.
+
+## Méthode de contrôle d'un lot de béton
+1. Ranger les résultats et repérer d'éventuelles valeurs aberrantes ;
+2. Calculer moyenne et écart-type ;
+3. Calculer fck ≈ x̄ − 1,64 s ;
+4. Comparer à la classe commandée (C25/30 : 25 MPa) et vérifier qu'aucun résultat isolé n'est trop faible ;
+5. Conclure : conforme, ou investigations complémentaires (carottages).
+
+> [!attention] Erreurs fréquentes
+> - Calculer la médiane sans ranger la série.
+> - Se fier à la moyenne seule : un lot très dispersé peut avoir une bonne moyenne et des valeurs dangereuses.
+> - Diviser par n au lieu de n − 1 pour un échantillon.
+
 > [!retenir]
 > - Moyenne, médiane, étendue, écart-type.
 > - fck ≈ fcm − 1,64 s (95 % des résultats au-dessus).
@@ -526,6 +837,33 @@ Utile quand on connaît **deux côtés et l'angle compris**, ou **les trois côt
 ## Application : distance inaccessible
 Pour mesurer la largeur d'une rivière, on mesure une **base** AB sur une rive et les angles vers un point C de l'autre rive ; la loi des sinus donne AC, puis la largeur = AC × sin A.
 
+## Méthode : quelle loi utiliser ?
+| On connaît | On utilise |
+|---|---|
+| 2 angles et 1 côté | Somme des angles = 180°, puis loi des sinus |
+| 2 côtés et l'angle compris | Loi des cosinus pour le 3ᵉ côté |
+| 3 côtés | Loi des cosinus pour un angle (le plus grand d'abord) |
+| 2 côtés et un angle non compris | Loi des sinus, avec prudence (cas ambigu) |
+
+> [!exemple] Terrain triangulaire de 40, 55 et 70 m
+> Héron : s = 82,5 ; S = √(82,5 × 42,5 × 27,5 × 12,5) = **1 098 m²**.
+> Plus grand angle (face à 70 m) : cos C = (40² + 55² − 70²) / (2 × 40 × 55) = − 0,0625 → **C = 93,6°**.
+> Les autres : **34,8°** et **51,6°** (somme 180° : contrôle).
+
+> [!exemple] Largeur d'une rivière
+> Base AB = 50 m ; angles A = 65° et B = 70° vers un arbre C de l'autre rive ; C = 45°.
+> AC = 50 × sin 70° / sin 45° = **66,45 m**.
+> Largeur = AC × sin 65° = **60,22 m**.
+
+## Le cas ambigu
+Quand on connaît deux côtés et un angle **non compris**, sin B = valeur donne deux angles possibles : B et 180° − B. Il faut vérifier lequel est compatible (somme des angles inférieure à 180°, cohérence avec le croquis).
+
+> [!attention] Erreurs fréquentes
+> - Associer un côté à un angle qui ne lui est pas opposé.
+> - Oublier le signe moins dans c² = a² + b² − 2ab cos C.
+> - Calculer un angle obtus avec la loi des sinus (arcsin ne donne que des angles inférieurs à 90°) : préférer la loi des cosinus.
+> - Calculatrice en radians.
+
 > [!retenir]
 > - Sinus : a/sin A = b/sin B = c/sin C (deux angles et un côté).
 > - Cosinus : c² = a² + b² − 2ab cos C (deux côtés et l'angle compris, ou trois côtés).
@@ -565,6 +903,33 @@ Un vecteur a une **direction**, un **sens** et une **norme** (longueur). Ses coo
 > [!exemple] Forces F1 (3 ; 4) kN et F2 (5 ; − 2) kN : résultante R (8 ; 2), norme √68 = **8,25 kN**.
 > Une force de 10 kN inclinée à 30° : Fx = **8,66 kN**, Fy = **5,00 kN**.
 
+## Application : surface d'une parcelle par coordonnées
+Parcelle A (0 ; 0), B (40 ; 0), C (45 ; 30), D (5 ; 35), sommets pris dans l'ordre. **Formule de Gauss** (des « lacets ») :
+$$ S = ½ × | Σ (xi × yi+1 − xi+1 × yi) |
+- A→B : 0 × 0 − 40 × 0 = 0 ;
+- B→C : 40 × 30 − 45 × 0 = 1 200 ;
+- C→D : 45 × 35 − 5 × 30 = 1 425 ;
+- D→A : 5 × 0 − 0 × 35 = 0 ;
+- S = ½ × 2 625 = **1 312,5 m²**.
+
+## Le produit scalaire : contrôler un angle droit
+u · v = ux vx + uy vy. Deux vecteurs non nuls sont **perpendiculaires** si et seulement si u · v = 0.
+> [!exemple] Les côtés AB et BC sont-ils perpendiculaires ?
+> AB (40 ; 0) et BC (5 ; 30) : 40 × 5 + 0 × 30 = 200 ≠ 0.
+> L'angle en B n'est **pas** droit (il vaut 99,5°).
+
+## Méthode : intersection de deux droites
+1. Écrire les deux équations y = m x + p ;
+2. Égaler les deux expressions de y et résoudre en x ;
+3. Reporter x pour obtenir y ;
+4. Contrôler sur un croquis.
+
+> [!attention] Erreurs fréquentes
+> - Prendre arctan sans regarder le quadrant (Δx négatif : ajouter 180°).
+> - Inverser l'ordre des points dans une différence (xA − xB au lieu de xB − xA) : la distance ne change pas, mais la direction si.
+> - Parcourir les sommets dans le désordre dans la formule de Gauss.
+> - Additionner les normes des forces au lieu de leurs coordonnées.
+
 > [!retenir]
 > - Distance : √(Δx² + Δy²) ; milieu : moyenne des coordonnées.
 > - Droite : pente m = Δy/Δx ; parallèles : même pente ; perpendiculaires : m × m' = − 1.
@@ -598,6 +963,32 @@ Chaque terme s'obtient en **multipliant** par une même raison q : u(n) = u(0) �
 
 ## Reconnaître le type de suite
 On calcule les **différences** (constantes → arithmétique) ou les **quotients** (constants → géométrique) entre termes successifs.
+
+## Attention à l'indice de départ
+Si le premier terme est noté u(1) au lieu de u(0), la formule devient **u(n) = u(1) + (n − 1) r**. Nombre de termes entre deux valeurs : (dernier − premier) / r + 1.
+> [!exemple] Piquets tous les 2 m sur 30 m
+> (30 − 0) / 2 + 1 = **16 piquets** (et non 15).
+> C'est l'erreur dite « des intervalles et des poteaux ».
+
+> [!exemple] Tuyaux empilés en triangle
+> 10 tuyaux au rang du bas, puis un de moins à chaque rang jusqu'à 1.
+> Suite arithmétique de raison − 1 : 10 × (10 + 1) / 2 = **55 tuyaux**.
+
+> [!exemple] Amortissement dégressif à 30 %
+> Engin de 10 M F perdant 30 % de sa valeur restante chaque année.
+> Raison q = 0,7 : après 3 ans, 10 × 0,7³ = **3,43 M F**.
+
+## Méthode
+1. Écrire les 3 ou 4 premiers termes ;
+2. Calculer différences et quotients pour identifier le type ;
+3. Écrire la formule générale avec le bon indice de départ ;
+4. Calculer le terme ou la somme demandée ;
+5. Contrôler en recalculant un terme à la main.
+
+> [!attention] Erreurs fréquentes
+> - Confondre la raison d'une suite géométrique (1,05) et le taux (5 %).
+> - Se tromper d'un terme dans le comptage (intervalles et piquets).
+> - Utiliser la somme arithmétique pour une suite géométrique.
 
 > [!retenir]
 > - Arithmétique : + r ; u(n) = u(0) + n r ; somme = n (premier + dernier)/2.
@@ -636,6 +1027,34 @@ eˣ (e ≈ 2,718) et ln(x) sont réciproques : ln(eˣ) = x. Ils décrivent les p
 On prend le logarithme : **n = log b / log a**.
 > [!exemple]
 > Temps de doublement à 5 % par an : 1,05ⁿ = 2 → n = log 2 / log 1,05 = 0,301 / 0,0212 = **14,2 ans**.
+
+## Application : additionner des niveaux sonores
+On additionne les **intensités**, pas les décibels : L = 10 log(10^(L1/10) + 10^(L2/10)).
+> [!exemple] Une machine à 85 dB et une à 80 dB
+> 10 log(10^8,5 + 10^8) = **86,2 dB** : la plus faible n'ajoute que 1,2 dB.
+> Quand deux niveaux diffèrent de plus de 10 dB, le plus faible est négligeable.
+
+> [!exemple] Atténuation avec la distance
+> Source ponctuelle en champ libre : L2 = L1 − 20 log(d2 / d1).
+> 90 dB à 2 m deviennent à 16 m : 90 − 20 log 8 = **71,9 dB** (− 6 dB par doublement de distance).
+
+## Application : décroissance exponentielle
+L'amplitude d'une vibration amortie suit A = A0 e^(− k t). Avec k = 0,5 s⁻¹, le temps pour descendre à 10 % : e^(− 0,5 t) = 0,1 → t = ln 10 / 0,5 = **4,6 s**.
+
+> [!exemple] Quand le coût atteindra-t-il 40 M F ?
+> Coût de 30 M F, inflation 5 %/an : 30 × 1,05ⁿ = 40.
+> n = log(40 / 30) / log 1,05 = **5,9 ans**.
+
+## Méthode
+1. Isoler la puissance ou l'exponentielle d'un côté ;
+2. Prendre le log (ou ln) des deux côtés ;
+3. Utiliser log(aⁿ) = n log a pour faire « descendre » l'exposant ;
+4. Arrondir à l'unité qui a du sens (années entières : on arrondit au-dessus).
+
+> [!attention] Erreurs fréquentes
+> - Écrire log(a + b) = log a + log b (c'est faux : c'est le produit qui devient une somme).
+> - Additionner des décibels comme des nombres ordinaires.
+> - Confondre les touches log (base 10) et ln (base e).
 
 > [!retenir]
 > - log(10ⁿ) = n ; log(ab) = log a + log b ; log(aⁿ) = n log a.
@@ -678,6 +1097,31 @@ On ne peut pas tester tous les agglos ou toutes les barres : on prélève un **�
 > P(aucun défectueux) = 0,95¹⁰ = **0,60** ; P(au moins un) = **0,40** ; P(exactement un) = 10 × 0,05 × 0,95⁹ = **0,32**.
 > Si la règle est « refuser le lot dès qu'un agglo défectueux apparaît », un lot à 5 % de défauts n'est refusé que 4 fois sur 10 : l'échantillon est trop petit pour être sévère.
 
+## Application : deux fournisseurs (arbre de probabilités)
+60 % des agglos viennent du fournisseur A (2 % de défauts), 40 % du fournisseur B (5 % de défauts).
+1. P(défectueux) = 0,6 × 0,02 + 0,4 × 0,05 = 0,012 + 0,020 = **0,032** (3,2 %) ;
+2. Un agglo défectueux est trouvé : la probabilité qu'il vienne de B vaut 0,020 / 0,032 = **0,625**.
+On multiplie le long des branches et on additionne les chemins qui mènent au même résultat.
+
+## Rendre un contrôle plus sévère
+Reprenons le lot à 5 % de défauts et la règle « refus dès un défaut » :
+| Taille de l'échantillon | P(aucun défaut) | P(refus du lot) |
+|---|---|---|
+| 10 | 0,60 | 0,40 |
+| 30 | 0,21 | 0,79 |
+Un plan **plus tolérant** (« refus à partir de 2 défauts sur 10 ») accepte le lot avec la probabilité P(0) + P(1) = 0,60 + 0,32 = **0,91**.
+
+## Méthode
+1. Définir précisément les événements et vérifier l'indépendance ;
+2. Faire un arbre ou un tableau ;
+3. Passer par le contraire pour « au moins un » ;
+4. Contrôler que les probabilités restent entre 0 et 1 et que les branches d'un même nœud totalisent 1.
+
+> [!attention] Erreurs fréquentes
+> - Additionner les probabilités d'événements qui ne sont pas incompatibles.
+> - Supposer l'indépendance à tort (des jours de pluie consécutifs sont liés).
+> - Confondre « au moins un » (1 − P(aucun)) et le nombre moyen n p.
+
 > [!retenir]
 > - P(non A) = 1 − P(A) ; indépendance : P(A et B) = P(A) P(B).
 > - P(au moins un) = 1 − P(aucun).
@@ -718,6 +1162,33 @@ Une suite de n versements a placés à t % vaut, à la fin : a × [(1 + t)ⁿ �
 - **Dégressif** : on applique chaque année un taux fixe à la valeur restante (plus fort au début, suite géométrique).
 > [!exemple]
 > Bétonnière de 1 200 000 F sur 3 ans, sans valeur résiduelle : **400 000 F par an** en linéaire ; en dégressif à 50 % : 600 000 ; 300 000 ; puis le solde 300 000.
+
+## Application : tableau d'amortissement d'un emprunt
+Emprunt de **3 000 000 F** à **10 %** remboursé en 3 annuités constantes : a = 3 000 000 × 0,1 / (1 − 1,1⁻³) = **1 206 344 F**.
+
+| Année | Capital dû en début | Intérêts (10 %) | Amortissement (a − intérêts) | Capital restant |
+|---|---|---|---|---|
+| 1 | 3 000 000 | 300 000 | 906 344 | 2 093 656 |
+| 2 | 2 093 656 | 209 366 | 996 979 | 1 096 677 |
+| 3 | 1 096 677 | 109 668 | 1 096 677 | 0 |
+
+Les intérêts **diminuent** et la part de capital remboursée **augmente** chaque année ; coût total du crédit : 3 × 1 206 344 − 3 000 000 = **619 032 F**.
+
+> [!exemple] Payer comptant ou plus tard ?
+> Un fournisseur propose 10 M F comptant ou 11,5 M F dans 2 ans ; taux d'actualisation 8 %.
+> Valeur actuelle du paiement différé : 11,5 / 1,08² = **9,86 M F** < 10 M F.
+> Le paiement différé est plus avantageux.
+
+## Méthode
+1. Ramener taux et durée à la **même période** (mois avec mois, années avec années) ;
+2. Choisir la formule : capitalisation, actualisation ou annuité ;
+3. Calculer et présenter un tableau quand il s'agit d'un échéancier ;
+4. Comparer des sommes uniquement à la **même date**.
+
+> [!attention] Erreurs fréquentes
+> - Utiliser un taux annuel avec un nombre de mois.
+> - Comparer des sommes versées à des dates différentes sans les actualiser.
+> - Confondre annuité (versement total) et amortissement (part de capital).
 
 > [!retenir]
 > - Simples : C t n ; composés : C (1 + t)ⁿ ; actualisation : F / (1 + t)ⁿ.
