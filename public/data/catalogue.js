@@ -189,26 +189,37 @@ A.addMatiere({id:"mat", titre:"Matériaux de construction", court:"Matériaux", 
   {id:"mat-17", niv:3, titre:"Les essais de laboratoire et la lecture des procès-verbaux", duree:50, nq:5, nex:5},
   {id:"mat-9", niv:3, titre:"Matériaux écologiques et construction bas carbone", duree:45, nq:5, nex:5}
  ]});
-A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", icone:"sigma", couleur:"#2F6FDB", niveau:"Débutant", heures:24, ordre:1, resume:"Calcul numérique, unités, géométrie, trigonométrie, volumes, équations et proportionnalité : les outils de calcul de tous les jours sur un chantier.", objectifs:[
-  "Maîtriser les puissances de 10, les unités et les conversions",
+A.addMatiere({id:"math", titre:"Mathématiques", court:"Maths", groupe:"fond", icone:"sigma", couleur:"#2F6FDB", niveau:"Débutant", heures:65, ordre:1, resume:"Les mathématiques utiles au bâtiment, du calcul de base aux outils avancés : unités et conversions, fractions et pourcentages, proportionnalité et échelles, géométrie plane et dans l'espace, Pythagore et trigonométrie, équations, fonctions, statistiques, triangles quelconques, repérage, suites, logarithmes, probabilités et calculs financiers, avec applications de chantier et exercices corrigés.", objectifs:[
+  "Calculer avec les unités, les puissances de 10, les fractions et les pourcentages",
   "Calculer aires, périmètres et volumes d'ouvrages",
-  "Utiliser Pythagore et la trigonométrie (pentes, toitures, escaliers)",
-  "Résoudre des équations et lire une échelle de plan"
+  "Utiliser Pythagore, Thalès et la trigonométrie (pentes, toitures, escaliers, topographie)",
+  "Résoudre des équations et des systèmes, utiliser des fonctions",
+  "Exploiter des statistiques et des probabilités pour le contrôle qualité",
+  "Utiliser suites, logarithmes et calculs financiers"
  ], applications:[
-  "Surfaces de carrelage et de peinture",
-  "Volumes de béton et de fouilles",
+  "Surfaces de carrelage et de peinture, volumes de béton et de fouilles",
   "Pente d'une toiture, d'une rampe ou d'une canalisation",
-  "Lecture des plans au 1/50 et au 1/100"
- ], src:"data/cours/math.js?v=cea7e7aa", chapitres:[
-  {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:25, nq:5, nex:0},
-  {id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:25, nq:4, nex:0},
-  {id:"math-6", niv:1, titre:"Proportionnalité, échelles et statistiques", duree:25, nq:4, nex:0},
-  {id:"math-3", niv:2, titre:"Pythagore et trigonométrie", duree:30, nq:5, nex:0},
-  {id:"math-4", niv:2, titre:"Volumes : béton, fouilles et déblais", duree:30, nq:4, nex:0},
-  {id:"math-5", niv:2, titre:"Équations, fonctions et systèmes", duree:30, nq:4, nex:0},
-  {id:"math-7", niv:3, titre:"Trigonométrie appliquée aux ouvrages", duree:30, nq:4, nex:0},
-  {id:"math-8", niv:3, titre:"Mathématiques financières : intérêts et emprunts", duree:30, nq:4, nex:0},
-  {id:"math-9", niv:3, titre:"Statistiques du contrôle qualité", duree:30, nq:4, nex:0}
+  "Lecture des plans au 1/50 et au 1/100",
+  "Contrôle statistique des résistances du béton",
+  "Calculs topographiques et financiers"
+ ], src:"data/cours/math.js?v=e89b0a5f", chapitres:[
+  {id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, nq:5, nex:5},
+  {id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, nq:5, nex:5},
+  {id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, nq:5, nex:5},
+  {id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:45, nq:5, nex:5},
+  {id:"math-11", niv:1, titre:"Angles, triangles, Thalès et constructions", duree:45, nq:5, nex:5},
+  {id:"math-3", niv:2, titre:"Pythagore et trigonométrie dans le triangle rectangle", duree:50, nq:5, nex:5},
+  {id:"math-4", niv:2, titre:"Géométrie dans l'espace : volumes et surfaces", duree:50, nq:5, nex:5},
+  {id:"math-5", niv:2, titre:"Équations, inéquations et systèmes", duree:50, nq:5, nex:5},
+  {id:"math-12", niv:2, titre:"Fonctions affines, graphiques et interpolation", duree:45, nq:5, nex:5},
+  {id:"math-13", niv:2, titre:"Le second degré : paraboles et optimisation", duree:45, nq:5, nex:5},
+  {id:"math-9", niv:2, titre:"Statistiques et contrôle qualité", duree:50, nq:5, nex:5},
+  {id:"math-7", niv:3, titre:"Trigonométrie dans les triangles quelconques", duree:50, nq:5, nex:5},
+  {id:"math-16", niv:3, titre:"Repérage, coordonnées et vecteurs", duree:45, nq:5, nex:5},
+  {id:"math-14", niv:3, titre:"Les suites numériques", duree:45, nq:5, nex:5},
+  {id:"math-17", niv:3, titre:"Logarithmes et exponentielles", duree:45, nq:5, nex:5},
+  {id:"math-15", niv:3, titre:"Probabilités et contrôle par échantillonnage", duree:45, nq:5, nex:5},
+  {id:"math-8", niv:3, titre:"Mathématiques financières : intérêts, actualisation et amortissements", duree:45, nq:5, nex:5}
  ]});
 A.addMatiere({id:"mdf", titre:"Mécanique des fluides", court:"Méca. fluides", groupe:"phys", icone:"wave", couleur:"#2F6FDB", niveau:"Intermédiaire", heures:20, ordre:4, prerequis:["sp", "math"], resume:"Pression, hydrostatique, débit, Bernoulli, pertes de charge, réseaux d'eau potable, eaux pluviales et assainissement autonome.", objectifs:[
   "Calculer une pression et une poussée hydrostatique",

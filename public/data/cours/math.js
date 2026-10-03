@@ -1,5 +1,12 @@
 /* =====================================================================
    Mathématiques — cours complet (3 niveaux)
+   Débutant : calcul numérique et unités, fractions et pourcentages,
+              proportionnalité et échelles, aires et périmètres, angles,
+              triangles et Thalès
+   Intermédiaire : Pythagore et trigonométrie, volumes, équations et
+              systèmes, fonctions affines, second degré, statistiques
+   Avancé : triangles quelconques, repérage et vecteurs, suites,
+            logarithmes et exponentielles, probabilités, calculs financiers
    ===================================================================== */
 A.addMatiere({
  id:"math",
@@ -9,364 +16,715 @@ A.addMatiere({
  icone:"sigma",
  couleur:"#2F6FDB",
  niveau:"Débutant",
- heures:24,
+ heures:65,
  ordre:1,
- resume:"Calcul numérique, unités, géométrie, trigonométrie, volumes, équations et proportionnalité : les outils de calcul de tous les jours sur un chantier.",
+ resume:"Les mathématiques utiles au bâtiment, du calcul de base aux outils avancés : unités et conversions, fractions et pourcentages, proportionnalité et échelles, géométrie plane et dans l'espace, Pythagore et trigonométrie, équations, fonctions, statistiques, triangles quelconques, repérage, suites, logarithmes, probabilités et calculs financiers, avec applications de chantier et exercices corrigés.",
  objectifs:[
-  "Maîtriser les puissances de 10, les unités et les conversions",
+  "Calculer avec les unités, les puissances de 10, les fractions et les pourcentages",
   "Calculer aires, périmètres et volumes d'ouvrages",
-  "Utiliser Pythagore et la trigonométrie (pentes, toitures, escaliers)",
-  "Résoudre des équations et lire une échelle de plan"
+  "Utiliser Pythagore, Thalès et la trigonométrie (pentes, toitures, escaliers, topographie)",
+  "Résoudre des équations et des systèmes, utiliser des fonctions",
+  "Exploiter des statistiques et des probabilités pour le contrôle qualité",
+  "Utiliser suites, logarithmes et calculs financiers"
  ],
  applications:[
-  "Surfaces de carrelage et de peinture",
-  "Volumes de béton et de fouilles",
+  "Surfaces de carrelage et de peinture, volumes de béton et de fouilles",
   "Pente d'une toiture, d'une rampe ou d'une canalisation",
-  "Lecture des plans au 1/50 et au 1/100"
+  "Lecture des plans au 1/50 et au 1/100",
+  "Contrôle statistique des résistances du béton",
+  "Calculs topographiques et financiers"
  ],
  chapitres:[
-{id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:25, contenu:`## Les puissances de 10
-Les ingénieurs manipulent des nombres très grands (charges en newtons) et très petits (déformations). On les écrit avec des **puissances de 10** :
-- 10³ = 1 000 ; 10⁶ = 1 000 000 ; 10⁻³ = 0,001.
-- **Notation scientifique** : 25 000 000 = 2,5 × 10⁷ ; 0,000 45 = 4,5 × 10⁻⁴.
-- Règles : 10ᵃ × 10ᵇ = 10ᵃ⁺ᵇ ; 10ᵃ / 10ᵇ = 10ᵃ⁻ᵇ ; (10ᵃ)ᵇ = 10ᵃᵇ.
+{id:"math-1", niv:1, titre:"Calcul numérique, unités et conversions", duree:45, contenu:`## Les puissances de 10 et l'écriture scientifique
+- 10³ = 1 000 ; 10⁶ = 1 000 000 ; 10⁻³ = 0,001 ; 10⁻⁶ = 0,000 001 ;
+- Règles : 10ᵃ × 10ᵇ = 10ᵃ⁺ᵇ ; 10ᵃ / 10ᵇ = 10ᵃ⁻ᵇ ;
+- **Écriture scientifique** : un nombre entre 1 et 10 multiplié par une puissance de 10 : 0,000 012 = **1,2 × 10⁻⁵** (dilatation de l'acier) ; 210 000 MPa = **2,1 × 10⁵ MPa**.
 
-## Les préfixes
-| Préfixe | Symbole | Valeur |
+## Les préfixes et les unités SI
+| Préfixe | Symbole | Facteur |
 |---|---|---|
 | méga | M | 10⁶ |
 | kilo | k | 10³ |
 | centi | c | 10⁻² |
 | milli | m | 10⁻³ |
 | micro | µ | 10⁻⁶ |
+Longueur (m), masse (kg), temps (s), force (N), pression (Pa = N/m²), énergie (J), puissance (W).
 
-## Conversions indispensables sur un chantier
-- **Longueurs** : 1 m = 100 cm = 1 000 mm.
-- **Surfaces** : 1 m² = 10 000 cm² (car 100 × 100). 1 hectare = 10 000 m².
-- **Volumes** : 1 m³ = 1 000 litres = 1 000 000 cm³ ; 1 litre = 1 dm³.
-- **Masses** : 1 tonne = 1 000 kg.
-- **Forces** : un poids de 1 kg exerce environ **10 N** (9,81 N exactement). 1 kN = 1 000 N ≈ 100 kg ; 1 t ≈ 10 kN.
-- **Contraintes et pressions** : 1 MPa = 1 N/mm² = 1 000 kPa = 10 bars ; 1 bar ≈ 1 kg/cm² ≈ 10 t/m².
+## Les conversions
+- **Surfaces** : 1 m² = 100 dm² = 10 000 cm² ; 1 ha = 10 000 m² ; 1 km² = 100 ha ;
+- **Volumes** : 1 m³ = 1 000 dm³ = 1 000 L ; 1 L = 1 dm³ ;
+- **Masses** : 1 t = 1 000 kg ;
+- **Forces et pressions** : 1 kN = 1 000 N ; 1 MPa = 1 N/mm² = 1 000 kPa ; 1 bar = 100 kPa = 0,1 MPa.
+Pour les surfaces, on décale de **2 rangs** par unité ; pour les volumes, de **3 rangs**.
+> [!exemple] Conversions de chantier
+> 3 450 cm² = **0,345 m²** ; 2,5 m³ = **2 500 L** ; 0,75 t = **750 kg** ; un débit de 12 L/min = 12 × 60 / 1 000 = **0,72 m³/h**.
 
-> [!attention]
-> L'erreur la plus fréquente est de convertir les **m²** et les **m³** comme des mètres. 1 m² ne vaut pas 100 cm² mais **10 000 cm²** ; 1 m³ vaut **1 000 000 cm³**.
+## Masse, volume et masse volumique
+**Masse = masse volumique × volume** : 2,5 m³ de béton à 2,4 t/m³ pèsent **6 t** ; poids ≈ 6 × 10 = 60 kN.
 
-> [!exemple] Section d'acier
-> Une barre HA12 a un diamètre de 12 mm. Sa section vaut π × 12² / 4 = 113 mm² = **1,13 cm²** (on divise par 100 pour passer des mm² aux cm²).
-
-## Pourcentages et arrondis
-- Prendre 15 % d'une quantité : multiplier par 0,15. Augmenter de 10 % : multiplier par **1,10**.
-- On arrondit les quantités à commander **par excès** : 6,2 sacs → 7 sacs.
-- On garde 2 ou 3 chiffres significatifs pour un résultat de calcul : 4,4932 cm² → 4,49 cm².
+## Arrondis et ordres de grandeur
+On arrondit le **résultat final** (pas les calculs intermédiaires) avec un nombre de chiffres cohérent avec la précision des données : 2 décimales en mètres pour le métré, au sac entier pour le ciment (arrondi supérieur). Vérifier l'**ordre de grandeur** évite les erreurs grossières (une semelle de maison ne fait pas 30 m³ !).
 
 > [!retenir]
-> 1 t ≈ 10 kN · 1 MPa = 1 N/mm² = 10 bars · 1 m³ = 1 000 L · 1 m² = 10 000 cm².`, quiz:[
-  {q:"Combien de cm² y a-t-il dans 1 m² ?", o:["100", "1 000", "10 000", "1 000 000"], r:2, e:"1 m² = 100 cm × 100 cm = 10 000 cm²."},
-  {q:"Une contrainte de 25 MPa correspond à :", o:["25 N/mm²", "25 kN/m²", "2,5 bars", "250 N/mm²"], r:0, e:"1 MPa = 1 N/mm², donc 25 MPa = 25 N/mm² (= 250 bars)."},
-  {q:"Une charge de 3,5 tonnes vaut environ :", o:["3,5 kN", "35 kN", "350 kN", "0,35 kN"], r:1, e:"1 t ≈ 10 kN, donc 3,5 t ≈ 35 kN."},
-  {q:"Combien de litres dans 0,45 m³ de sable ?", o:["45 L", "450 L", "4 500 L", "4,5 L"], r:1, e:"1 m³ = 1 000 L, donc 0,45 m³ = 450 L."},
-  {q:"Pour commander 6,2 sacs de ciment calculés, on commande :", o:["6 sacs", "6,2 sacs", "7 sacs", "5 sacs"], r:2, e:"Les quantités à commander s'arrondissent toujours par excès."}
+> - Surfaces : 2 rangs par unité ; volumes : 3 rangs ; 1 m³ = 1 000 L.
+> - 1 MPa = 1 N/mm² ; 1 bar = 0,1 MPa.
+> - Masse = ρ × V ; arrondir à la fin, contrôler l'ordre de grandeur.`,
+ exercices:[
+  {t:"Conversions", d:1, e:`Convertir : a) 0,85 m² en cm² ; b) 45 000 cm² en m² ; c) 3,2 ha en m² ; d) 750 L en m³ ; e) 0,035 m³ en litres ; f) 25 MPa en N/mm² et en kPa.`, c:`a) **8 500 cm²** ; b) **4,5 m²** ; c) **32 000 m²** ; d) **0,75 m³** ; e) **35 L** ; f) **25 N/mm²** = **25 000 kPa**.`},
+  {t:"Écriture scientifique", d:1, e:`Écrire en notation scientifique : a) 0,000 012 ; b) 210 000 ; c) 0,0045 ; d) 7 850. Calculer 2,1 × 10⁵ × 1,2 × 10⁻⁵.`, c:`a) **1,2 × 10⁻⁵** ; b) **2,1 × 10⁵** ; c) **4,5 × 10⁻³** ; d) **7,85 × 10³**.
+Produit : 2,1 × 1,2 × 10⁵⁻⁵ = **2,52** (contrainte en MPa provoquée par une déformation de 1,2 × 10⁻⁵ dans l'acier).`},
+  {t:"Masse d'un camion de matériaux", d:1, e:`Un camion transporte 8 m³ de sable (1,6 t/m³) ; un autre 6 m³ de gravier (1,5 t/m³). Calculer les masses. Lequel est le plus chargé ?`, c:`Sable : 8 × 1,6 = **12,8 t** ; gravier : 6 × 1,5 = **9 t** → le camion de sable.`},
+  {t:"Débit et durée de remplissage", d:2, e:`Une citerne de 5 m³ est remplie par un tuyau débitant 20 L par minute. Combien de temps faut-il ? Exprimer le débit en m³/h.`, c:`5 m³ = 5 000 L → 5 000 / 20 = **250 min = 4 h 10 min**.
+Débit : 20 × 60 / 1 000 = **1,2 m³/h**.`},
+  {t:"Ordre de grandeur", d:1, e:`Un élève trouve qu'une dalle de 10 × 8 m et 15 cm d'épaisseur contient 1 200 m³ de béton. Trouver l'erreur.`, c:`Volume correct : 10 × 8 × 0,15 = **12 m³**. L'élève a pris 15 au lieu de 0,15 (oubli de la conversion des cm en m) : résultat 100 fois trop grand. Toujours convertir en mètres avant de multiplier.`}
+ ],
+ quiz:[
+  {q:"1 m³ = ", o:["1 000 L","100 L","10 L","10 000 L"], r:0, e:"1 L = 1 dm³."},
+  {q:"1 m² = ", o:["10 000 cm²","100 cm²","1 000 cm²","1 000 000 cm²"], r:0, e:"2 rangs par unité."},
+  {q:"1 MPa = ", o:["1 N/mm²","1 N/m²","1 kN/mm²","10 N/mm²"], r:0, e:"10⁶ N/m²."},
+  {q:"0,0012 en écriture scientifique :", o:["1,2 × 10⁻³","1,2 × 10³","12 × 10⁻²","0,12 × 10⁻²"], r:0, e:"Un chiffre avant la virgule."},
+  {q:"Masse de 2 m³ de béton à 2,4 t/m³ :", o:["4,8 t","2,4 t","1,2 t","48 t"], r:0, e:"ρ × V."}
  ]},
+{id:"math-10", niv:1, titre:"Fractions, priorités et pourcentages", duree:40, contenu:`## Les priorités de calcul
+Parenthèses → puissances → multiplications et divisions → additions et soustractions (de gauche à droite). Ex. : 2 + 3 × 4 = 14 (et non 20) ; (2 + 3) × 4 = 20.
 
-{id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:25, contenu:`## Les formules de base
-| Figure | Aire | Périmètre |
-|---|---|---|
-| Carré de côté a | a² | 4a |
-| Rectangle L × l | L × l | 2(L + l) |
-| Triangle (base b, hauteur h) | b × h / 2 | somme des côtés |
-| Trapèze (bases B et b, hauteur h) | (B + b) × h / 2 | somme des côtés |
-| Disque de rayon r | π r² | 2 π r |
-| Parallélogramme | b × h | 2(a + b) |
+## Les fractions
+- Simplifier : 12/16 = 3/4 ;
+- Additionner : réduire au même dénominateur : 3/4 + 2/5 = 15/20 + 8/20 = **23/20** ;
+- Multiplier : 2/3 × 3/4 = 6/12 = 1/2 ; diviser : multiplier par l'inverse.
+> [!exemple] Dosage en volumes 1 : 2 : 3
+> Un béton dosé « 1 volume de ciment, 2 de sable, 3 de gravier » contient 1/6 de ciment, 2/6 de sable et 3/6 de gravier (en volume de matériaux). Pour 300 L de matériaux : **50 L de ciment, 100 L de sable, 150 L de gravier**.
 
-## Décomposer les formes complexes
-Une pièce en L, un terrain irrégulier ou une façade avec pignon se calculent en **découpant** en figures simples, puis en additionnant (ou en soustrayant).
+## Les pourcentages
+- p % d'une quantité : quantité × p / 100 ;
+- Augmenter de p % : × (1 + p/100) ; diminuer : × (1 − p/100) ;
+- Retrouver la valeur initiale : valeur finale / (1 + p/100) ;
+- Pourcentage d'une part : part / total × 100.
+> [!exemple] Pertes et TVA
+> 120 sacs + 5 % de pertes : 120 × 1,05 = **126 sacs** ; un devis de 2 360 000 F TTC (TVA 18 %) vaut 2 360 000 / 1,18 = **2 000 000 F HT**.
 
-> [!exemple] Façade avec pignon
-> Façade de 9,00 m de large, murs de 3,00 m de haut, pignon triangulaire de 1,50 m de haut.
-> Rectangle : 9,00 × 3,00 = 27,00 m². Triangle : 9,00 × 1,50 / 2 = 6,75 m².
-> Total brut : **33,75 m²**. On retire ensuite les ouvertures : porte 1,00 × 2,20 = 2,20 m² et deux fenêtres 1,20 × 1,20 = 2,88 m². Surface nette : 33,75 − 5,08 = **28,67 m²** à enduire.
-
-## Surface d'un terrain par triangulation
-Un terrain quelconque se découpe en triangles. Si l'on connaît les trois côtés a, b, c d'un triangle, la **formule de Héron** donne l'aire :
-$$ p = (a + b + c) / 2
-$$ S = √( p (p − a)(p − b)(p − c) )
-
-> [!exemple]
-> Triangle de côtés 20 m, 25 m et 30 m : p = 37,5 ; S = √(37,5 × 17,5 × 12,5 × 7,5) = √61 523 ≈ **248 m²**.
-
-## Applications courantes
-- **Carrelage** : surface du sol + 5 à 10 % de chutes.
-- **Plinthes** : périmètre de la pièce moins les largeurs de portes.
-- **Peinture** : surface des murs (périmètre × hauteur) moins les ouvertures, plus le plafond.
-
-> [!astuce]
-> Vérifiez toujours l'ordre de grandeur : une chambre fait 9 à 16 m², un séjour 20 à 35 m². Un résultat de 120 m² pour une chambre signale une erreur d'unité.`, quiz:[
-  {q:"Aire d'un trapèze de bases 6 m et 4 m et de hauteur 3 m :", o:["15 m²", "30 m²", "12 m²", "18 m²"], r:0, e:"(6 + 4) × 3 / 2 = 15 m²."},
-  {q:"Périmètre d'une pièce de 4,00 m × 3,50 m :", o:["14,00 m", "15,00 m", "7,50 m", "14,50 m"], r:1, e:"2 × (4,00 + 3,50) = 15,00 m."},
-  {q:"Aire d'un disque de 2 m de diamètre :", o:["6,28 m²", "3,14 m²", "12,57 m²", "1,57 m²"], r:1, e:"Rayon = 1 m, aire = π × 1² ≈ 3,14 m²."},
-  {q:"Pour calculer les plinthes d'une pièce, on prend :", o:["La surface du sol", "Le périmètre moins les portes", "Le périmètre plus les portes", "La hauteur des murs"], r:1, e:"Les plinthes se posent le long des murs, sauf au droit des portes."}
- ]},
-
-{id:"math-6", niv:1, titre:"Proportionnalité, échelles et statistiques", duree:25, contenu:`## La règle de trois
-Si 1 m³ de béton dosé à 350 kg demande 7 sacs de ciment, alors 4,6 m³ demandent 4,6 × 7 = **32,2 sacs**, arrondis à 33.
-
-## Les échelles de plans
-L'échelle est le rapport **dimension sur le plan / dimension réelle**.
-| Échelle | 1 cm sur le plan = | Usage |
-|---|---|---|
-| 1/500 | 5 m | plan de masse |
-| 1/200 | 2 m | plan de situation, lotissement |
-| 1/100 | 1 m | plans de niveaux (APS, permis) |
-| 1/50 | 0,50 m | plans d'exécution |
-| 1/20 – 1/10 | 20 – 10 cm | détails, ferraillage |
-
-> [!exemple]
-> Sur un plan au 1/50, un mur mesure 9,2 cm : longueur réelle = 9,2 × 50 = 460 cm = **4,60 m**. Une pièce de 3,50 m se dessine au 1/100 avec 3,5 cm.
-
-> [!attention]
-> Ne mesurez jamais une cote au réglet sur un plan photocopié : la copie peut être agrandie ou réduite. **La cote écrite fait foi.**
-
-## Moyenne et écart-type
-Contrôle de la résistance du béton : 6 éprouvettes donnent 27, 25, 29, 24, 28 et 26 MPa.
-- **Moyenne** : (27 + 25 + 29 + 24 + 28 + 26) / 6 = **26,5 MPa**.
-- **Écart-type** : on fait la moyenne des carrés des écarts puis la racine : écarts 0,5 ; −1,5 ; 2,5 ; −2,5 ; 1,5 ; −0,5 → carrés 0,25 ; 2,25 ; 6,25 ; 6,25 ; 2,25 ; 0,25 → somme 17,5 → variance (n − 1 = 5) 3,5 → **s ≈ 1,87 MPa**.
-
-Un béton est conforme lorsque sa moyenne dépasse la résistance demandée d'une marge liée à la dispersion (par exemple fcm ≥ fck + 4 MPa pour de petits lots selon la norme béton). Ici, pour un C25/30 (fck = 25 MPa), 26,5 < 29 : **non conforme**, il faut investiguer.
+## Les pentes
+Une pente en % est un rapport : dénivelé / longueur horizontale × 100. 1 cm par mètre = **1 %** ; une pente de 1/20 = **5 %** ; 2 cm/m = 2 %.
 
 > [!retenir]
-> Proportionnalité pour les dosages, échelle pour lire les plans, moyenne et écart-type pour contrôler la qualité.`, quiz:[
-  {q:"Au 1/100, 1 cm sur le plan représente :", o:["10 cm", "1 m", "10 m", "100 m"], r:1, e:"1 cm × 100 = 100 cm = 1 m."},
-  {q:"Sur un plan au 1/50, un mur mesure 8 cm. Sa longueur réelle :", o:["4 m", "40 cm", "16 m", "8 m"], r:0, e:"8 × 50 = 400 cm = 4 m."},
-  {q:"Moyenne de 20, 24 et 28 MPa :", o:["22", "24", "26", "72"], r:1, e:"(20 + 24 + 28) / 3 = 24 MPa."},
-  {q:"Si 1 m³ de béton demande 7 sacs, combien pour 3 m³ ?", o:["14", "21", "10", "7"], r:1, e:"3 × 7 = 21 sacs."}
+> - Priorités : parenthèses, puissances, × et ÷, puis + et −.
+> - Fractions : même dénominateur pour additionner.
+> - × (1 + p/100) pour augmenter ; ÷ (1 + p/100) pour retrouver la valeur initiale.`,
+ exercices:[
+  {t:"Priorités", d:1, e:`Calculer : a) 12 − 4 × 2 ; b) (12 − 4) × 2 ; c) 3 + 2 × 5² ; d) 0,5 × 9 × 4² / 8.`, c:`a) 12 − 8 = **4** ; b) 8 × 2 = **16** ; c) 3 + 2 × 25 = **53** ; d) 0,5 × 9 × 16 / 8 = 72 / 8 = **9** (les puissances se calculent avant les multiplications).`},
+  {t:"Fractions", d:1, e:`Calculer et simplifier : a) 1/2 + 1/3 ; b) 5/6 − 1/4 ; c) 3/8 × 4/9 ; d) (2/3) / (4/5).`, c:`a) 3/6 + 2/6 = **5/6** ; b) 10/12 − 3/12 = **7/12** ; c) 12/72 = **1/6** ; d) 2/3 × 5/4 = 10/12 = **5/6**.`},
+  {t:"Dosage en volumes", d:2, e:`Un mortier est dosé 1 : 4 (1 volume de ciment pour 4 de sable). Pour 250 L de mélange sec, quels volumes ? Un sac de ciment occupe environ 35 L : combien de sacs ?`, c:`Ciment : 250 / 5 = **50 L** ; sable : **200 L**.
+Sacs : 50 / 35 = 1,43 → environ **1,5 sac** (on prépare en pratique des gâchées d'un sac pour 140 L de sable).`},
+  {t:"Retrouver un prix initial", d:2, e:`Après une hausse de 8 %, le sac de ciment coûte 5 940 F. Quel était son prix avant la hausse ? Si le prix baisse ensuite de 8 %, revient-il au prix initial ?`, c:`Avant : 5 940 / 1,08 = **5 500 F**.
+Après une baisse de 8 % : 5 940 × 0,92 = **5 465 F** ≠ 5 500 F : une hausse puis une baisse du même pourcentage ne se compensent pas.`},
+  {t:"Pente d'une canalisation", d:1, e:`Une canalisation descend de 18 cm sur 12 m. Quelle est sa pente en % ? Respecte-t-elle le minimum de 1 % ?`, c:`Pente : 0,18 / 12 × 100 = **1,5 %** ≥ 1 % ✔.`}
+ ],
+ quiz:[
+  {q:"2 + 3 × 4 = ", o:["14","20","24","9"], r:0, e:"Multiplication d'abord."},
+  {q:"1/4 + 1/4 = ", o:["1/2","2/8","1/8","1/16"], r:0, e:"2/4 = 1/2."},
+  {q:"Augmenter de 5 % revient à multiplier par :", o:["1,05","0,95","5","1,5"], r:0, e:"1 + 5/100."},
+  {q:"Une pente de 1/50 vaut :", o:["2 %","50 %","5 %","0,5 %"], r:0, e:"1/50 = 0,02."},
+  {q:"1 180 F TTC (TVA 18 %) correspondent à :", o:["1 000 F HT","967,6 F HT","1 180 F HT","982 F HT"], r:0, e:"1 180 / 1,18."}
  ]},
+{id:"math-6", niv:1, titre:"Proportionnalité, règle de trois et échelles", duree:45, contenu:`## La proportionnalité
+Deux grandeurs sont **proportionnelles** si l'une s'obtient en multipliant l'autre par un même nombre (le **coefficient de proportionnalité**). Ex. : sacs de ciment = 7 × volume de béton (dosage 350 kg/m³).
 
-{id:"math-3", niv:2, titre:"Pythagore et trigonométrie", duree:30, contenu:`## Le théorème de Pythagore
-Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés.
-!fig:triangle|Triangle rectangle : côtés et angle
+## La règle de trois
+> [!exemple] 7 sacs pour 1 m³ : combien pour 4,3 m³ ?
+> 4,3 × 7 / 1 = **30,1 → 31 sacs** (arrondi supérieur).
+Méthode : on écrit les deux grandeurs en colonnes, on multiplie en croix et on divise.
 
-$$ c² = a² + b²
+## La proportionnalité inverse
+Quand l'une double, l'autre est divisée par 2 : **nombre d'ouvriers × durée = constante** (pour un travail donné). Ex. : 3 maçons en 12 jours = 36 jours-maçon → 4 maçons en **9 jours**.
 
-**Application : l'angle droit au cordeau (3-4-5).** Un triangle de côtés 3, 4 et 5 est rectangle car 3² + 4² = 9 + 16 = 25 = 5². Sur le chantier on utilise 3 m, 4 m, 5 m ou leurs multiples (6-8-10).
+## Les échelles
+$$ longueur sur le plan = longueur réelle × échelle      échelle = 1/n
+- 1/100 : 1 cm sur le plan = 1 m ; 1/50 : 1 cm = 0,50 m ; 1/200 : 1 cm = 2 m ;
+- Les **surfaces** varient comme le **carré** de l'échelle : 1 cm² au 1/100 représente 1 m² ; au 1/50, 0,25 m².
+> [!exemple] Une pièce mesure 4,2 × 3,6 cm sur un plan au 1/100 : en réalité **4,20 × 3,60 m** = 15,12 m².
+
+## Vitesses, débits, rendements
+Ce sont des rapports : vitesse = distance / temps ; débit = volume / temps ; rendement = quantité / temps. Ex. : une pompe de 1,2 m³/h remplit 6 m³ en **5 h**.
+
+> [!retenir]
+> - Proportionnalité : y = k x ; règle de trois.
+> - Proportionnalité inverse : ouvriers × durée = constante.
+> - Échelle 1/n : réel = plan × n ; surfaces × n².`,
+ exercices:[
+  {t:"Règle de trois", d:1, e:`a) 12,5 agglos par m² : combien pour 36,8 m² ? b) 0,40 m³ de sable par m³ de béton : combien pour 6,5 m³ ? c) Un ouvrier enduit 15 m² par jour : combien de jours pour 96 m² ?`, c:`a) 36,8 × 12,5 = **460 agglos** ; b) 6,5 × 0,40 = **2,6 m³** ; c) 96 / 15 = 6,4 → **7 jours**.`},
+  {t:"Proportionnalité inverse", d:1, e:`5 manœuvres creusent une tranchée en 8 jours. Combien de jours avec 4 manœuvres ? Combien de manœuvres pour finir en 5 jours ?`, c:`Travail : 5 × 8 = **40 jours-manœuvre**.
+4 manœuvres : 40 / 4 = **10 jours** ; en 5 jours : 40 / 5 = **8 manœuvres**.`},
+  {t:"Lire un plan", d:1, e:`Sur un plan au 1/50, un mur mesure 13,6 cm et une porte 1,8 cm. Longueurs réelles ? Sur un plan au 1/200, quelle longueur dessiner pour une façade de 24 m ?`, c:`Mur : 13,6 × 50 = 680 cm = **6,80 m** ; porte : **0,90 m**.
+Façade au 1/200 : 2 400 / 200 = **12 cm**.`},
+  {t:"Surfaces et échelles", d:2, e:`Une parcelle occupe 18 cm² sur un plan au 1/500. Quelle est sa surface réelle ?`, c:`1 cm² au 1/500 représente 5 m × 5 m = **25 m²** → 18 × 25 = **450 m²**.`},
+  {t:"Débit d'une pompe", d:2, e:`Une fouille noyée contient 14 m³ d'eau. Une pompe débite 250 L/min. Combien de temps pour la vider ? Et avec deux pompes ?`, c:`Débit : 250 × 60 / 1 000 = **15 m³/h** → 14 / 15 = 0,93 h ≈ **56 min** ; avec deux pompes : **28 min** (si l'eau ne revient pas entre-temps).`}
+ ],
+ quiz:[
+  {q:"7 sacs par m³ : pour 3 m³ il faut :", o:["21 sacs","10 sacs","7 sacs","3 sacs"], r:0, e:"3 × 7."},
+  {q:"Au 1/100, 5 cm représentent :", o:["5 m","50 cm","0,5 m","50 m"], r:0, e:"5 × 100 cm."},
+  {q:"4 ouvriers mettent 6 jours ; 8 ouvriers mettent :", o:["3 jours","12 jours","6 jours","24 jours"], r:0, e:"Proportionnalité inverse."},
+  {q:"Au 1/50, 1 cm² représente :", o:["0,25 m²","50 m²","0,5 m²","2,5 m²"], r:0, e:"0,5 × 0,5."},
+  {q:"Débit pour remplir 6 m³ en 2 h :", o:["3 m³/h","12 m³/h","6 m³/h","0,33 m³/h"], r:0, e:"6/2."}
+ ]},
+{id:"math-2", niv:1, titre:"Géométrie plane : aires et périmètres", duree:45, contenu:`## Les formules de base
+| Figure | Périmètre | Aire |
+|---|---|---|
+| Carré de côté a | 4 a | a² |
+| Rectangle L × l | 2 (L + l) | L × l |
+| Triangle (base b, hauteur h) | somme des côtés | b × h / 2 |
+| Trapèze (bases B et b, hauteur h) | somme des côtés | (B + b) / 2 × h |
+| Parallélogramme | somme des côtés | base × hauteur |
+| Cercle de rayon R | 2 π R = π D | π R² = π D² / 4 |
+| Couronne (D extérieur, d intérieur) | — | π (D² − d²) / 4 |
+
+## Les figures composées
+On **découpe** en figures simples, ou on **soustrait** (surface totale − vides).
+> [!exemple] Dalle en L
+> Rectangle de 8 × 5 m auquel on retire un angle de 3 × 2 m : 40 − 6 = **34 m²**.
+
+> [!exemple] Pièce avec un pan coupé
+> Rectangle de 4,00 × 3,50 m dont un angle est coupé par un triangle rectangle de 1,00 × 1,00 m : 14,00 − 0,50 = **13,50 m²**.
+
+## Les surfaces de chantier
+- Carrelage : surface au sol (+ chutes) ; plinthes : périmètre − portes ;
+- Peinture : surfaces des murs (périmètre × hauteur − ouvertures) + plafonds ;
+- Regards circulaires, poteaux ronds : cercles et couronnes.
+> [!exemple] Regard circulaire
+> Tampon Ø 0,60 m : π × 0,60² / 4 = **0,283 m²** ; dalle annulaire Ø ext 1,20, Ø int 1,00 : π (1,44 − 1,00) / 4 = **0,346 m²**.
+
+> [!retenir]
+> - Rectangle L × l ; triangle b h / 2 ; trapèze (B + b)/2 × h ; cercle π R².
+> - Figures composées : découper ou soustraire.
+> - Toujours convertir en mètres avant de calculer.`,
+ exercices:[
+  {t:"Surface d'un logement", d:1, e:`Un appartement comprend : séjour 5,20 × 4,30 m ; 2 chambres de 3,50 × 3,20 m ; cuisine 3,00 × 2,40 m ; salle d'eau 2,20 × 1,80 m ; couloir 4,00 × 1,10 m. Calculer la surface totale.`, c:`Séjour 22,36 ; chambres 2 × 11,20 = 22,40 ; cuisine 7,20 ; salle d'eau 3,96 ; couloir 4,40 → **60,32 m²**.`},
+  {t:"Terrain en trapèze", d:1, e:`Un terrain a la forme d'un trapèze rectangle : bases 22 m et 30 m, hauteur 25 m. Calculer sa surface et la longueur de clôture (le côté oblique mesure 25,96 m).`, c:`Surface : (22 + 30) / 2 × 25 = **650 m²**.
+Clôture : 22 + 30 + 25 + 25,96 = **102,96 m**.`},
+  {t:"Peinture d'une chambre", d:2, e:`Chambre de 4,00 × 3,50 m, hauteur 2,80 m ; une porte 0,80 × 2,10 et une fenêtre 1,20 × 1,20. Calculer la surface des murs et du plafond à peindre.`, c:`Murs : 2 × (4,00 + 3,50) × 2,80 = 42,00 − 1,68 − 1,44 = **38,88 m²** ; plafond : **14,00 m²** → total **52,88 m²**.`},
+  {t:"Poteaux circulaires", d:2, e:`Un hall comporte 6 poteaux ronds de 40 cm de diamètre et 4 m de haut. Calculer la section d'un poteau, la surface latérale à peindre de chacun, puis le total.`, c:`Section : π × 0,40² / 4 = **0,126 m²**.
+Surface latérale : π × 0,40 × 4 = **5,03 m²** → 6 poteaux : **30,2 m²**.`},
+  {t:"Dalle en forme de T", d:2, e:`Une dalle en T se compose d'une barre horizontale de 9,00 × 3,00 m et d'une barre verticale de 4,00 × 3,00 m placée au milieu en dessous. Calculer sa surface et son périmètre.`, c:`Surface : 27 + 12 = **39 m²**.
+Périmètre : 9 + 3 + 3 + 4 + 3 + 4 + 3 + 3 = **32 m** (en parcourant le contour : 9 en haut, 3 à droite, 3 de retour, 4 en descente, 3 en bas, 4 en remontée, 3 de retour, 3 à gauche).`}
+ ],
+ quiz:[
+  {q:"Aire d'un triangle de base 6 m et de hauteur 4 m :", o:["12 m²","24 m²","10 m²","20 m²"], r:0, e:"6 × 4 / 2."},
+  {q:"Aire d'un cercle de diamètre 2 m :", o:["3,14 m²","6,28 m²","12,57 m²","1,57 m²"], r:0, e:"π × 1²."},
+  {q:"Périmètre d'un rectangle de 5 × 3 m :", o:["16 m","15 m","8 m","30 m"], r:0, e:"2 × (5 + 3)."},
+  {q:"Aire d'un trapèze de bases 4 et 6 m, hauteur 2 m :", o:["10 m²","20 m²","24 m²","12 m²"], r:0, e:"(4 + 6)/2 × 2."},
+  {q:"Pour une figure composée, on peut :", o:["Découper ou soustraire","Multiplier les périmètres","Ajouter les diagonales","Rien"], r:0, e:"Figures simples."}
+ ]},
+{id:"math-11", niv:1, titre:"Angles, triangles, Thalès et constructions", duree:45, contenu:`## Les angles
+- Angle droit 90°, plat 180°, tour complet 360° ;
+- Dans un **triangle**, la somme des angles vaut **180°** ;
+- Dans un **polygone** à n côtés : somme des angles intérieurs = (n − 2) × 180° ; un polygone régulier a tous ses angles égaux (hexagone : 120°).
+
+## Les triangles particuliers
+- **Isocèle** : deux côtés égaux, deux angles égaux (fermes de charpente symétriques) ;
+- **Équilatéral** : trois côtés égaux, angles de 60° ;
+- **Rectangle** : un angle droit (Pythagore, trigonométrie : chapitre suivant).
+
+## Le théorème de Thalès et les triangles semblables
+Si deux droites parallèles coupent les côtés d'un triangle, les longueurs sont **proportionnelles**. Deux triangles **semblables** ont les mêmes angles et des côtés proportionnels.
+> [!exemple] Hauteur d'un bâtiment par son ombre
+> Au même moment, un bâton de 1,50 m a une ombre de 2,00 m et le bâtiment une ombre de 24 m : hauteur = 1,50 × 24 / 2,00 = **18 m**.
+
+## Le cercle
+Rayon, diamètre, corde, arc ; longueur d'un arc d'angle α : 2 π R × α / 360 ; un angle inscrit dans un demi-cercle est **droit**.
+
+## Les constructions sur le chantier
+- **Angle droit** par le triangle 3-4-5 (ou 6-8-10) ;
+- **Médiatrice** d'un segment (axe d'une baie, d'un mur) avec deux arcs de même rayon ;
+- **Parallèles** par report de deux distances égales ;
+- **Arc de cercle** (escalier, bassin) avec un cordeau fixé au centre.
+
+> [!retenir]
+> - Triangle : 180° ; polygone : (n − 2) × 180°.
+> - Thalès : parallèles → longueurs proportionnelles ; triangles semblables.
+> - Angle droit par 3-4-5 ; arc = 2πR × α/360.`,
+ exercices:[
+  {t:"Hauteur par Thalès", d:1, e:`Un poteau de 2,40 m projette une ombre de 1,60 m. Au même moment, l'ombre d'un château d'eau mesure 14,40 m. Quelle est sa hauteur ?`, c:`Hauteur = 2,40 × 14,40 / 1,60 = **21,60 m**.`},
+  {t:"Angles d'une ferme", d:1, e:`Une ferme de charpente forme un triangle isocèle dont l'angle au faîte vaut 140°. Calculer les deux angles à la base. Quelle est la pente du toit en degrés ?`, c:`Angles à la base : (180 − 140) / 2 = **20°** chacun → la pente du toit est de **20°** (≈ 36 %).`},
+  {t:"Kiosque hexagonal", d:2, e:`Un kiosque a la forme d'un hexagone régulier de 3 m de côté. Calculer la somme des angles intérieurs, chaque angle et le périmètre.`, c:`Somme : (6 − 2) × 180 = **720°** ; chaque angle : 720 / 6 = **120°** ; périmètre : 6 × 3 = **18 m**.`},
+  {t:"Triangles semblables : pente d'une rampe", d:2, e:`Une rampe monte de 0,60 m sur 7,20 m horizontaux. À 3 m du départ (horizontalement), de combien est-elle montée ? Quelle est sa pente ?`, c:`Triangles semblables : 0,60 × 3 / 7,20 = **0,25 m**. Pente : 0,60 / 7,20 = **8,3 %**.`},
+  {t:"Arc d'un escalier", d:2, e:`La ligne de foulée d'un escalier hélicoïdal est un arc de rayon 0,90 m qui fait un tour complet (360°). Quelle est sa longueur ? Avec des girons de 25 cm, combien de marches sur un tour ?`, c:`Longueur : 2 × π × 0,90 = **5,65 m** → 5,65 / 0,25 = 22,6 → **22 marches** par tour (giron réel 25,7 cm).`}
+ ],
+ quiz:[
+  {q:"La somme des angles d'un triangle vaut :", o:["180°","360°","90°","270°"], r:0, e:"Toujours."},
+  {q:"Un angle d'hexagone régulier vaut :", o:["120°","60°","90°","135°"], r:0, e:"720/6."},
+  {q:"Le théorème de Thalès concerne :", o:["Des longueurs proportionnelles avec des parallèles","Les aires des cercles","Les volumes","Les pourcentages"], r:0, e:"Triangles semblables."},
+  {q:"Pour tracer un angle droit au cordeau, on utilise :", o:["Le triangle 3-4-5","Le triangle 1-1-1","Le cercle","La règle de trois"], r:0, e:"Pythagore."},
+  {q:"Les angles à la base d'un triangle isocèle sont :", o:["Égaux","Toujours droits","Différents","Nuls"], r:0, e:"Symétrie."}
+ ]},
+{id:"math-3", niv:2, titre:"Pythagore et trigonométrie dans le triangle rectangle", duree:50, contenu:`## Le théorème de Pythagore
+Dans un triangle rectangle d'hypoténuse c (côté opposé à l'angle droit) : **c² = a² + b²**.
+- Calculer une diagonale, un rampant, une longueur inclinée ;
+- **Réciproque** : si c² = a² + b², le triangle est rectangle (contrôle d'équerrage : 3-4-5, 6-8-10).
+> [!exemple] Diagonale d'une dalle de 12 × 9 m : √(144 + 81) = √225 = **15 m**.
 
 ## Les rapports trigonométriques
-$$ cos α = adjacent / hypoténuse
-$$ sin α = opposé / hypoténuse
-$$ tan α = opposé / adjacent
+Pour un angle aigu α d'un triangle rectangle :
+$$ sin α = côté opposé / hypoténuse      cos α = côté adjacent / hypoténuse      tan α = côté opposé / côté adjacent
+- La **pente** d'un toit ou d'une rampe est tan α : pente 25 % ↔ tan α = 0,25 ↔ α = 14,0° ;
+- Pour retrouver un angle : α = arctan(rapport) (touches sin⁻¹, cos⁻¹, tan⁻¹ de la calculatrice, en mode **degrés**).
 
-Pour retrouver l'angle : α = arctan(opposé / adjacent) (touche tan⁻¹ de la calculatrice, en mode **degrés**).
+!fig:triangle|Triangle rectangle : côtés et angle
 
-## Pente en pourcentage
-La pente est le rapport **dénivelé / distance horizontale**, exprimé en % :
-$$ p (%) = 100 × h / L = 100 × tan α
+> [!exemple] Ferme de toiture
+> Demi-portée 4,50 m, hauteur au faîtage 1,20 m : rampant = √(4,50² + 1,20²) = **4,66 m** ; pente = 1,20 / 4,50 = **26,7 %** ; angle = arctan 0,267 = **14,9°**.
 
-- Pente de 100 % = 45°. Pente de 15 % ≈ 8,5°.
-- Canalisation d'eaux usées : pente de **1 à 3 %**, soit 1 à 3 cm par mètre.
+> [!exemple] Échelle appuyée contre un mur
+> Échelle de 6 m inclinée à 75° : hauteur atteinte = 6 × sin 75° = **5,80 m** ; distance du pied au mur = 6 × cos 75° = **1,55 m**.
 
-> [!exemple] Toiture en tôle
-> Bâtiment de 9,00 m de large, toiture à deux versants avec une pente de 15 %. Demi-portée : 4,50 m.
-> Hauteur du faîtage au-dessus des murs : h = 0,15 × 4,50 = **0,675 m**.
-> Longueur du rampant : √(4,50² + 0,675²) = √(20,25 + 0,456) = **4,55 m** (avant débord). Angle : arctan(0,15) ≈ **8,5°**.
-
-> [!exemple] Contrôle d'une diagonale
-> Une pièce de 5,00 × 3,60 m doit avoir une diagonale de √(25 + 12,96) = √37,96 = **6,16 m**. Si on mesure 6,20 m, les murs ne sont pas d'équerre.
-
-## Le cercle trigonométrique
-!fig:cercle-trigo|Cercle trigonométrique de rayon 1
-Valeurs à connaître : sin 30° = 0,5 ; cos 60° = 0,5 ; sin 45° = cos 45° ≈ 0,707 ; tan 45° = 1.
+## Mesurer une hauteur inaccessible
+On mesure la distance horizontale d au pied de l'ouvrage et l'angle α sous lequel on voit le sommet : hauteur = d × tan α + hauteur de l'œil.
 
 > [!retenir]
-> Pythagore pour les longueurs, la trigonométrie pour les angles, la pente en % = 100 × h / L.`, quiz:[
-  {q:"Un triangle de côtés 6 m, 8 m et 10 m est-il rectangle ?", o:["Oui", "Non", "Seulement si l'angle est de 60°", "On ne peut pas savoir"], r:0, e:"6² + 8² = 36 + 64 = 100 = 10² : il est rectangle."},
-  {q:"Une rampe monte de 0,50 m sur 10 m horizontaux. Sa pente vaut :", o:["0,5 %", "5 %", "50 %", "20 %"], r:1, e:"100 × 0,50 / 10 = 5 %."},
-  {q:"Quelle est la diagonale d'un rectangle de 4 m × 3 m ?", o:["7 m", "5 m", "6 m", "12 m"], r:1, e:"√(16 + 9) = √25 = 5 m."},
-  {q:"tan α est égal à :", o:["opposé / hypoténuse", "adjacent / hypoténuse", "opposé / adjacent", "adjacent / opposé"], r:2, e:"La tangente est le rapport du côté opposé sur le côté adjacent."},
-  {q:"Une pente de 100 % correspond à un angle de :", o:["90°", "100°", "45°", "60°"], r:2, e:"100 % signifie h = L, donc tan α = 1 et α = 45°."}
+> - Pythagore : c² = a² + b² ; réciproque pour contrôler un angle droit.
+> - sin = opposé/hypoténuse ; cos = adjacent/hypoténuse ; tan = opposé/adjacent.
+> - Pente = tan α ; calculatrice en mode degrés.`,
+ exercices:[
+  {t:"Diagonales et équerrage", d:1, e:`a) Diagonale d'un rectangle de 8 × 6 m ? b) Un maçon mesure 3,00 m et 4,00 m sur deux murs depuis l'angle, puis 5,04 m entre les deux points : l'angle est-il droit ?`, c:`a) √(64 + 36) = **10 m**.
+b) Il faudrait 5,00 m : avec 5,04 m, l'angle est **un peu ouvert** (plus de 90°) : on corrige jusqu'à 5,00 m.`},
+  {t:"Pente et angle d'un toit", d:1, e:`Un toit a 1,50 m de hauteur pour 6,00 m de demi-portée. Calculer la pente en %, l'angle et la longueur du rampant.`, c:`Pente : 1,50 / 6,00 = **25 %** ; angle : arctan 0,25 = **14,0°** ; rampant : √(36 + 2,25) = **6,18 m**.`},
+  {t:"Rampe d'accès", d:2, e:`Une rampe pour personnes à mobilité réduite a une pente de 5 % et doit franchir 0,60 m. Calculer la longueur horizontale, la longueur inclinée et l'angle.`, c:`Horizontale : 0,60 / 0,05 = **12,00 m** ; inclinée : √(144 + 0,36) = **12,02 m** ; angle : arctan 0,05 = **2,9°**.`},
+  {t:"Hauteur d'un bâtiment", d:2, e:`Depuis un point situé à 25 m du pied d'un immeuble, on voit le sommet sous un angle de 32° ; l'œil est à 1,60 m du sol. Calculer la hauteur de l'immeuble.`, c:`h = 25 × tan 32° + 1,60 = 25 × 0,6249 + 1,60 = 15,62 + 1,60 = **17,22 m**.`},
+  {t:"Longueur d'une contrefiche", d:2, e:`Une contrefiche de charpente part d'un point situé à 1,20 m du pied d'un poteau et rejoint le poteau à 1,60 m de hauteur. Calculer sa longueur et l'angle qu'elle fait avec l'horizontale.`, c:`Longueur : √(1,20² + 1,60²) = √4 = **2,00 m** (triangle 3-4-5 agrandi) ; angle : arctan(1,60 / 1,20) = **53,1°**.`}
+ ],
+ quiz:[
+  {q:"Hypoténuse d'un triangle rectangle de côtés 6 et 8 :", o:["10","14","48","100"], r:0, e:"√(36 + 64)."},
+  {q:"tan α = ", o:["Opposé / adjacent","Adjacent / hypoténuse","Opposé / hypoténuse","Hypoténuse / opposé"], r:0, e:"La pente."},
+  {q:"Une pente de 100 % correspond à :", o:["45°","90°","100°","10°"], r:0, e:"tan 45° = 1."},
+  {q:"sin 30° = ", o:["0,5","0,866","1","0"], r:0, e:"Valeur à connaître."},
+  {q:"Le triangle 3-4-5 est :", o:["Rectangle","Équilatéral","Isocèle","Obtusangle"], r:0, e:"9 + 16 = 25."}
  ]},
+{id:"math-4", niv:2, titre:"Géométrie dans l'espace : volumes et surfaces", duree:50, contenu:`## Les formules des volumes
+| Solide | Volume | Surface latérale |
+|---|---|---|
+| Pavé (L × l × h) | L × l × h | 2 h (L + l) |
+| Prisme droit | aire de base × hauteur | périmètre de base × h |
+| Cylindre (R, h) | π R² h | 2 π R h |
+| Pyramide, cône | aire de base × h / 3 | — |
+| Tronc de pyramide | h/3 × (S1 + S2 + √(S1 S2)) | — |
+| Sphère (R) | 4/3 π R³ | 4 π R² |
 
-{id:"math-4", niv:2, titre:"Volumes : béton, fouilles et déblais", duree:30, contenu:`## Formules des volumes
-| Solide | Volume |
-|---|---|
-| Parallélépipède (L × l × h) | L × l × h |
-| Prisme (aire de base S, hauteur h) | S × h |
-| Cylindre (rayon r, hauteur h) | π r² h |
-| Pyramide ou cône (base S, hauteur h) | S × h / 3 |
-| Tronc de pyramide (bases S₁, S₂) | h/3 × (S₁ + S₂ + √(S₁ S₂)) |
+## Les applications au bâtiment
+- **Béton** : semelles, poteaux, poutres, dalles (pavés), poteaux ronds et puits (cylindres), glacis (troncs de pyramide) ;
+- **Terrassements** : fouilles (pavés, troncs de pyramide), tas de matériaux (cônes) ;
+- **Réservoirs** : cuves cylindriques ou rectangulaires (1 m³ = 1 000 L).
+> [!exemple] Tas de sable conique
+> Diamètre 4 m, hauteur 1,50 m : V = π × 2² × 1,50 / 3 = **6,28 m³**.
 
-## Applications au béton
-> [!exemple] Poteaux
-> 12 poteaux de 20 × 20 cm et de 3,00 m de haut : 12 × 0,20 × 0,20 × 3,00 = **1,44 m³**.
+> [!exemple] Citerne cylindrique couchée
+> Ø 2,50 m, longueur 6 m : V = π × 1,25² × 6 = **29,45 m³ = 29 450 L**.
 
-> [!exemple] Semelles et longrines
-> 16 semelles de 1,00 × 1,00 × 0,30 m : 16 × 0,30 = **4,80 m³**.
-> 62 m de longrines 20 × 30 : 62 × 0,20 × 0,30 = **3,72 m³**.
-
-> [!exemple] Poteau circulaire
-> Diamètre 30 cm, hauteur 3,50 m : π × 0,15² × 3,50 = **0,247 m³**.
-
-## Fouilles et déblais
-- Volume de **fouilles en place** : dimensions de la fouille (souvent plus grandes que l'ouvrage pour pouvoir travailler).
-- Les terres extraites **foisonnent** : elles occupent plus de place une fois remuées. Volume à évacuer = volume en place × **coefficient de foisonnement** (1,2 à 1,4).
-
-> [!exemple]
-> 20 m³ de fouilles dans une argile (foisonnement 1,30) : 20 × 1,30 = **26 m³** à évacuer, soit environ 4 camions de 7 m³.
-
-## Talus et tronc de pyramide
-Une fouille aux parois inclinées (talutée) est un **tronc de pyramide**. Fond 2 × 2 m (S₂ = 4 m²), haut 3 × 3 m (S₁ = 9 m²), profondeur 1,50 m :
-$$ V = 1,50 / 3 × (9 + 4 + √36) = 0,5 × 19 = 9,5 m³
+## Volume et masse
+Masse = masse volumique × volume ; poids (kN) ≈ masse (t) × 10. Une sphère d'eau de 1,5 m de rayon contient 4/3 × π × 1,5³ = **14,14 m³**, soit 14,1 t.
 
 > [!retenir]
-> Toujours mettre toutes les dimensions dans la **même unité** (le mètre) avant de multiplier. 20 cm = 0,20 m.`, quiz:[
-  {q:"Volume de 10 poteaux 20 × 20 cm de 3 m de haut :", o:["1,2 m³", "12 m³", "0,12 m³", "120 m³"], r:0, e:"10 × 0,2 × 0,2 × 3 = 1,2 m³."},
-  {q:"Volume d'un cône de base 3 m² et de hauteur 2 m :", o:["6 m³", "2 m³", "3 m³", "1,5 m³"], r:1, e:"S × h / 3 = 3 × 2 / 3 = 2 m³."},
-  {q:"Le foisonnement signifie que :", o:["La terre se tasse", "Le volume augmente une fois la terre remuée", "Le béton gonfle en séchant", "L'eau s'évapore"], r:1, e:"Une terre extraite occupe un volume plus grand qu'en place."},
-  {q:"30 m de longrines 20 × 30 cm représentent :", o:["1,8 m³", "18 m³", "0,18 m³", "6 m³"], r:0, e:"30 × 0,20 × 0,30 = 1,8 m³."}
+> - Prisme, cylindre : base × hauteur ; pyramide, cône : base × hauteur / 3.
+> - Tronc de pyramide : h/3 (S1 + S2 + √S1S2) ; sphère : 4/3 π R³.
+> - 1 m³ d'eau = 1 000 L = 1 t.`,
+ exercices:[
+  {t:"Béton de poteaux ronds", d:1, e:`6 poteaux circulaires de 40 cm de diamètre et 4,00 m de haut. Calculer le volume de béton et la surface de coffrage.`, c:`Volume : 6 × π × 0,20² × 4,00 = **3,02 m³** ; coffrage : 6 × π × 0,40 × 4,00 = **30,2 m²**.`},
+  {t:"Tas de gravier", d:1, e:`Un tas de gravier conique a 5 m de diamètre et 1,80 m de hauteur. Quel volume ? Combien de camions de 8 m³ ont été livrés ?`, c:`V = π × 2,5² × 1,80 / 3 = **11,78 m³** → environ **1,5 camion** (un camion de 8 m³ et une partie d'un second).`},
+  {t:"Citerne", d:2, e:`Une citerne enterrée rectangulaire mesure intérieurement 3,00 × 2,00 m avec 1,80 m de hauteur d'eau. Capacité en litres ? Combien de jours d'autonomie pour une famille consommant 600 L par jour ?`, c:`V = 3 × 2 × 1,8 = **10,8 m³ = 10 800 L** → 10 800 / 600 = **18 jours**.`},
+  {t:"Fouille en tronc de pyramide", d:2, e:`Fouille : fond 2,00 × 2,00 m, haut 3,20 × 3,20 m, profondeur 1,20 m. Calculer le volume.`, c:`S1 = 4 ; S2 = 10,24 ; √(S1 S2) = 6,40 → V = 1,20 / 3 × (4 + 10,24 + 6,40) = 0,40 × 20,64 = **8,26 m³**.`},
+  {t:"Réservoir sphérique", d:3, e:`Un château d'eau a une cuve sphérique de 3 m de rayon intérieur. Calculer sa capacité et la masse d'eau. Quelle surface d'étanchéité intérieure faut-il ?`, c:`V = 4/3 × π × 3³ = **113,1 m³** → **113 t** d'eau (≈ 1 130 kN sur la structure).
+Surface : 4 × π × 3² = **113,1 m²**.`}
+ ],
+ quiz:[
+  {q:"Volume d'un cylindre de rayon 1 m et hauteur 2 m :", o:["6,28 m³","3,14 m³","12,57 m³","2 m³"], r:0, e:"π × 1 × 2."},
+  {q:"Le volume d'un cône vaut :", o:["Base × hauteur / 3","Base × hauteur","Base × hauteur / 2","π R"], r:0, e:"Comme une pyramide."},
+  {q:"1 m³ d'eau pèse :", o:["1 t","1 kg","100 kg","10 t"], r:0, e:"1 000 L."},
+  {q:"Volume d'un pavé de 2 × 3 × 0,5 m :", o:["3 m³","5,5 m³","6 m³","30 m³"], r:0, e:"Produit des dimensions."},
+  {q:"Volume d'une sphère :", o:["4/3 π R³","π R²","4 π R²","2 π R"], r:0, e:"Formule à retenir."}
  ]},
+{id:"math-5", niv:2, titre:"Équations, inéquations et systèmes", duree:50, contenu:`## Les équations du premier degré
+Résoudre a x + b = c : on isole x en faisant la même opération des deux côtés : x = (c − b) / a.
+> [!exemple] Combien de sacs ?
+> Un mur nécessite 3 sacs pour la fondation plus 0,09 sac par m² ; on dispose de 12 sacs : 3 + 0,09 x = 12 → x = 9 / 0,09 = **100 m²** de mur.
 
-{id:"math-5", niv:2, titre:"Équations, fonctions et systèmes", duree:30, contenu:`## Équations du premier degré
-Résoudre a x + b = c : on isole x en effectuant la même opération des deux côtés : x = (c − b) / a.
+## Transformer une formule
+Les formules techniques se « retournent » : σ = F / A → **A = F / σ** ; P = U × I → **I = P / U** ; V = L × l × h → **h = V / (L × l)**.
+> [!exemple] Semelle : A = N / σsol = 400 kN / 200 kPa = **2,00 m²**.
 
-> [!exemple]
-> Un devis comprend un forfait d'installation de 450 000 F et 9 500 F par m² de maçonnerie. Pour un budget de 1 400 000 F : 450 000 + 9 500 x = 1 400 000 → x = 950 000 / 9 500 = **100 m²**.
+## Les inéquations
+On les résout comme des équations, mais on **inverse le sens** de l'inégalité quand on multiplie ou divise par un nombre **négatif**. Ex. : budget : 5 500 x ≤ 400 000 → x ≤ 72,7 → **72 sacs** au plus.
 
-## Fonctions affines
-Une fonction affine s'écrit **f(x) = a x + b** : a est la **pente** (coefficient directeur), b l'**ordonnée à l'origine**. Sa représentation est une droite. Exemple : coût total = coût variable × quantité + coût fixe.
+## Les systèmes de deux équations
+Deux inconnues, deux équations : méthode par **substitution** (exprimer une inconnue et la remplacer) ou par **combinaison** (additionner les équations pour éliminer une inconnue).
+> [!exemple] Prix du ciment et du sable
+> 3 sacs + 2 m³ de sable = 40 500 F ; 5 sacs + 1 m³ = 39 500 F.
+> De la 2ᵉ : s = 39 500 − 5 c → 3 c + 2 (39 500 − 5 c) = 40 500 → − 7 c = − 38 500 → **c = 5 500 F** ; s = 39 500 − 27 500 = **12 000 F/m³**.
 
-## Équation du second degré
-a x² + b x + c = 0. On calcule le discriminant **Δ = b² − 4ac** :
-- Δ > 0 : deux solutions x = (−b ± √Δ) / (2a) ;
-- Δ = 0 : une solution x = −b / (2a) ;
+> [!exemple] Réactions d'une poutre
+> Poutre de 6 m, charge de 50 kN à 2 m de A : RA + RB = 50 et 6 RB = 50 × 2 → **RB = 16,7 kN**, **RA = 33,3 kN**.
+
+> [!retenir]
+> - Isoler l'inconnue en faisant la même opération des deux côtés.
+> - Retourner les formules : σ = F/A ⇔ A = F/σ.
+> - Inéquation : inverser le sens si l'on multiplie par un négatif.
+> - Systèmes : substitution ou combinaison.`,
+ exercices:[
+  {t:"Équations", d:1, e:`Résoudre : a) 4 x − 7 = 21 ; b) 2,5 x + 3 = 0,5 x + 11 ; c) x / 0,15 = 80 ; d) 1,35 G + 1,5 × 2 = 12.`, c:`a) x = 28 / 4 = **7** ; b) 2 x = 8 → **x = 4** ; c) x = 80 × 0,15 = **12** ; d) 1,35 G = 9 → **G = 6,67**.`},
+  {t:"Retourner des formules", d:1, e:`a) Un poteau doit porter 900 kN avec σ = 10 MPa : quelle section en cm² ? b) Un appareil de 2 300 W sous 230 V : quelle intensité ? c) Une dalle de 6,4 m³ couvre 40 m² : quelle épaisseur ?`, c:`a) A = F / σ = 900 000 / 10 = 90 000 mm² = **900 cm²** (30 × 30 cm) ; b) I = 2 300 / 230 = **10 A** ; c) h = 6,4 / 40 = **0,16 m**.`},
+  {t:"Système de prix", d:2, e:`Une commande de 10 sacs de ciment et 4 barres d'acier coûte 87 000 F ; une autre de 6 sacs et 10 barres coûte 113 000 F. Trouver le prix d'un sac et d'une barre.`, c:`10 c + 4 b = 87 000 (1) ; 6 c + 10 b = 113 000 (2).
+(1) × 5 : 50 c + 20 b = 435 000 ; (2) × 2 : 12 c + 20 b = 226 000 → en soustrayant : 38 c = 209 000 → **c = 5 500 F**.
+Dans (1) : 4 b = 87 000 − 55 000 = 32 000 → **b = 8 000 F**. Contrôle (2) : 33 000 + 80 000 = 113 000 ✔.`},
+  {t:"Budget de carrelage", d:1, e:`Un client dispose de 1 200 000 F pour son carrelage posé. Le carrelage coûte 9 000 F/m² et la pose 5 000 F/m², plus un forfait de déplacement de 60 000 F. Quelle surface maximale peut-il faire réaliser ?`, c:`14 000 x + 60 000 ≤ 1 200 000 → x ≤ 81,4 → **81 m²** au maximum.`},
+  {t:"Réactions d'appui", d:2, e:`Poutre de 5 m sur deux appuis A et B, charge de 30 kN à 1,5 m de A. Écrire les deux équations d'équilibre et calculer RA et RB.`, c:`Somme des forces : RA + RB = 30 ; moments en A : 5 RB = 30 × 1,5 = 45 → **RB = 9 kN** → **RA = 21 kN**.`}
+ ],
+ quiz:[
+  {q:"Solution de 3x + 4 = 19 :", o:["5","7","15","23"], r:0, e:"3x = 15."},
+  {q:"Si σ = F/A, alors A = ", o:["F/σ","F × σ","σ/F","F − σ"], r:0, e:"On retourne la formule."},
+  {q:"−2x > 6 donne :", o:["x < −3","x > −3","x > 3","x < 3"], r:0, e:"On inverse le sens."},
+  {q:"Un système de deux équations permet de trouver :", o:["Deux inconnues","Une seule","Aucune","Trois inconnues"], r:0, e:"Autant d'équations que d'inconnues."},
+  {q:"P = U × I ; avec P = 1 150 W et U = 230 V, I = ", o:["5 A","264 500 A","0,2 A","50 A"], r:0, e:"1 150/230."}
+ ]},
+{id:"math-12", niv:2, titre:"Fonctions affines, graphiques et interpolation", duree:45, contenu:`## La fonction affine
+f(x) = **a x + b** : sa représentation est une **droite** ; a est le **coefficient directeur** (pente), b l'**ordonnée à l'origine**. Si b = 0, la fonction est **linéaire** (proportionnalité).
+- Coefficient directeur entre deux points : **a = (y2 − y1) / (x2 − x1)** ;
+- Puis b = y1 − a x1.
+> [!exemple] Droite passant par (2 ; 7) et (5 ; 13) : a = 6 / 3 = **2** ; b = 7 − 4 = **3** → f(x) = 2 x + 3.
+
+## Les fonctions de coût
+Beaucoup de coûts sont affines : **partie fixe + partie proportionnelle**. Comparer deux offres revient à chercher l'**intersection** de deux droites.
+> [!exemple] Béton : fabriquer ou acheter ?
+> Fabrication sur place : 25 000 F de mise en place + 1 500 F/m³ de surcoût de main-d'œuvre ; BPE : 4 000 F/m³ de supplément. Égalité : 25 000 + 1 500 x = 4 000 x → **x = 10 m³** : au-delà de 10 m³, l'option à coût fixe devient plus intéressante.
+
+## Lire et tracer un graphique
+Choisir une échelle pour chaque axe, placer les points, relier (droite si affine), lire une valeur ou une intersection. Les graphiques servent pour les courbes granulométriques, les plannings (courbes d'avancement), les diagrammes de contraintes…
+
+## L'interpolation linéaire
+Pour lire une valeur **entre deux lignes d'un tableau**, on suppose une variation linéaire :
+$$ y = y1 + (y2 − y1) × (x − x1) / (x2 − x1)
+> [!exemple] Facteur de portance Nq : 18,4 pour φ = 30°, 23,2 pour φ = 32° → pour φ = 31° : 18,4 + 4,8 × 1/2 = **20,8**.
+
+> [!retenir]
+> - f(x) = a x + b ; a = Δy / Δx.
+> - Coût = fixe + variable ; comparer = chercher l'intersection.
+> - Interpolation : y = y1 + (y2 − y1)(x − x1)/(x2 − x1).`,
+ exercices:[
+  {t:"Équation d'une droite", d:1, e:`Trouver l'équation de la droite passant par A (1 ; 4) et B (4 ; 13). Calculer f(10).`, c:`a = (13 − 4) / (4 − 1) = **3** ; b = 4 − 3 = **1** → f(x) = 3 x + 1 ; f(10) = **31**.`},
+  {t:"Location d'une bétonnière", d:2, e:`Loueur A : 20 000 F de transport + 8 000 F par jour. Loueur B : 12 000 F par jour, transport compris. À partir de combien de jours A est-il moins cher ?`, c:`20 000 + 8 000 j < 12 000 j → 20 000 < 4 000 j → **j > 5** : au-delà de 5 jours, le loueur A est moins cher (égalité à 5 jours : 60 000 F).`},
+  {t:"Interpolation dans un tableau", d:2, e:`Facteur de portance Nγ : 14,6 pour φ = 28° ; 20,1 pour φ = 30°. Estimer Nγ pour φ = 29,2°.`, c:`Nγ ≈ 14,6 + (20,1 − 14,6) × (29,2 − 28) / 2 = 14,6 + 5,5 × 0,6 = **17,9**.`},
+  {t:"Courbe d'avancement", d:2, e:`Un chantier de 20 semaines doit avancer de façon régulière de 0 à 100 %. Écrire la fonction avancement prévu (en %) selon la semaine s. À la semaine 8, l'avancement réel est 34 % : avance ou retard ?`, c:`Avancement prévu : f(s) = 5 s (5 % par semaine) → f(8) = **40 %**. Réel 34 % → **retard de 6 points** (environ 1,2 semaine).`},
+  {t:"Dilatation en fonction de la température", d:2, e:`Une barre d'acier mesure 12,000 m à 20 °C et 12,0036 m à 45 °C. Écrire la longueur L en fonction de la température T (fonction affine). Quelle longueur à 35 °C ?`, c:`a = 0,0036 / 25 = **0,000144 m/°C** ; L(T) = 12,000 + 0,000144 × (T − 20).
+À 35 °C : 12,000 + 0,000144 × 15 = **12,00216 m** (+ 2,2 mm).`}
+ ],
+ quiz:[
+  {q:"Le coefficient directeur de y = 3x − 2 est :", o:["3","−2","1","0"], r:0, e:"a."},
+  {q:"Une fonction linéaire passe toujours par :", o:["L'origine","Le point (1 ; 1)","Le point (0 ; 1)","Aucun point fixe"], r:0, e:"b = 0."},
+  {q:"Pente entre (0 ; 2) et (4 ; 10) :", o:["2","8","4","0,5"], r:0, e:"8/4."},
+  {q:"Interpoler entre 10 (x = 0) et 20 (x = 1) pour x = 0,3 donne :", o:["13","3","30","15"], r:0, e:"10 + 10 × 0,3."},
+  {q:"Comparer deux offres de coût affine revient à chercher :", o:["L'intersection des droites","Leur aire","Leur longueur","Leur couleur"], r:0, e:"Point d'égalité."}
+ ]},
+{id:"math-13", niv:2, titre:"Le second degré : paraboles et optimisation", duree:45, contenu:`## La fonction du second degré
+f(x) = **a x² + b x + c** (a ≠ 0) : sa courbe est une **parabole**, tournée vers le haut si a > 0, vers le bas si a < 0. Son **sommet** est en **x = − b / (2a)** : c'est là que f est maximale (a < 0) ou minimale (a > 0).
+
+## Résoudre a x² + b x + c = 0
+Discriminant **Δ = b² − 4 a c** :
+- Δ > 0 : deux solutions x = (− b ± √Δ) / (2a) ;
+- Δ = 0 : une solution x = − b / (2a) ;
 - Δ < 0 : pas de solution réelle.
+> [!exemple] Terrain rectangulaire de 600 m² et de 100 m de périmètre
+> Côtés x et 50 − x : x (50 − x) = 600 → x² − 50 x + 600 = 0 ; Δ = 2 500 − 2 400 = 100 → x = (50 ± 10) / 2 → **20 m et 30 m**.
 
-> [!exemple] Terrain rectangulaire
-> Un terrain de 600 m² a une longueur supérieure de 10 m à sa largeur : x (x + 10) = 600, soit x² + 10x − 600 = 0.
-> Δ = 100 + 2 400 = 2 500, √Δ = 50 → x = (−10 + 50)/2 = **20 m**. Le terrain fait **20 × 30 m**.
-
-## Systèmes de deux équations
-> [!exemple] Composition d'une commande
-> On achète des sacs de ciment (5 500 F) et des barres HA10 (4 200 F) : 30 articles pour 152 000 F.
-> x + y = 30 et 5 500 x + 4 200 y = 152 000.
-> En remplaçant y = 30 − x : 5 500 x + 126 000 − 4 200 x = 152 000 → 1 300 x = 26 000 → **x = 20 sacs** et **y = 10 barres**.
-> Si le calcul ne tombe pas sur des nombres entiers, la facture contient une erreur : l'équation permet de la détecter tout de suite.
-
-## Fonctions utiles en génie civil
-- **Linéaire** : allongement d'une barre proportionnel à la force (loi de Hooke).
-- **Second degré** : moment fléchissant d'une poutre sous charge uniforme (parabole).
-- **Exponentielle** : refroidissement, consolidation des sols.
+## Les paraboles dans le bâtiment
+- **Moment fléchissant** d'une poutre sur deux appuis sous charge uniforme q : M(x) = q x (L − x) / 2, parabole maximale au milieu : **M max = q L² / 8** ;
+- **Arcs** paraboliques, câbles, jets d'eau ;
+- **Optimisation** : surface maximale pour une longueur de clôture donnée, coût minimal.
+> [!exemple] Moment d'une poutre
+> q = 12 kN/m, L = 5 m : M(x) = 6 x (5 − x) ; sommet en x = 2,5 m → M max = 12 × 25 / 8 = **37,5 kN·m**.
 
 > [!retenir]
-> Mettre le problème en équation : nommer l'inconnue, écrire la relation, résoudre, puis **vérifier** le résultat dans l'énoncé.`, quiz:[
-  {q:"Solution de 3x + 6 = 21 :", o:["x = 9", "x = 5", "x = 7", "x = 3"], r:1, e:"3x = 15, donc x = 5."},
-  {q:"Pour x² − 5x + 6 = 0, Δ vaut :", o:["1", "49", "−1", "25"], r:0, e:"Δ = 25 − 24 = 1, solutions 2 et 3."},
-  {q:"Dans f(x) = 9 500 x + 450 000, le nombre 450 000 représente :", o:["La pente", "Le coût fixe", "Le coût par m²", "La quantité"], r:1, e:"C'est l'ordonnée à l'origine : le coût quand x = 0."},
-  {q:"Si Δ < 0, l'équation du second degré :", o:["A deux solutions", "A une solution double", "N'a pas de solution réelle", "Est fausse"], r:2, e:"Un discriminant négatif signifie aucune racine réelle."}
+> - Δ = b² − 4ac ; x = (− b ± √Δ)/(2a).
+> - Sommet en x = − b/(2a) : maximum ou minimum.
+> - Moment d'une poutre uniformément chargée : parabole, max q L²/8 au milieu.`,
+ exercices:[
+  {t:"Résoudre des équations", d:1, e:`Résoudre : a) x² − 5 x + 6 = 0 ; b) 2 x² − 8 = 0 ; c) x² + 2 x + 5 = 0.`, c:`a) Δ = 25 − 24 = 1 → x = (5 ± 1)/2 → **2 et 3** ; b) x² = 4 → **x = 2 ou − 2** ; c) Δ = 4 − 20 = − 16 < 0 → **pas de solution réelle**.`},
+  {t:"Enclos le long d'un mur", d:2, e:`Avec 60 m de grillage, on veut clôturer une aire de stockage rectangulaire adossée à un mur (3 côtés à clôturer). Quelles dimensions donnent la plus grande surface ?`, c:`Côtés perpendiculaires au mur : x ; côté parallèle : 60 − 2 x. Surface : S = x (60 − 2 x) = − 2 x² + 60 x.
+Sommet : x = − 60 / (2 × (− 2)) = **15 m** → côté parallèle **30 m** → S max = **450 m²**.`},
+  {t:"Moment maximal", d:1, e:`Une poutre de 6 m sur deux appuis porte 15 kN/m. Écrire M(x) et calculer le moment maximal.`, c:`M(x) = 15 x (6 − x) / 2 = 7,5 x (6 − x) ; maximum au milieu (x = 3 m) : M max = 15 × 36 / 8 = **67,5 kN·m**.`},
+  {t:"Arc parabolique", d:2, e:`L'intrados d'un arc a pour équation y = − 0,1 x² + 4 (en m, x mesuré depuis l'axe). Quelle est sa hauteur au centre ? Quelle est sa portée au sol (y = 0) ?`, c:`Hauteur : y(0) = **4 m**. Au sol : 0,1 x² = 4 → x² = 40 → x = ± 6,32 m → portée **12,65 m**.`},
+  {t:"Dimensions d'une dalle", d:2, e:`Une dalle rectangulaire a une surface de 72 m² et sa longueur dépasse sa largeur de 6 m. Trouver ses dimensions.`, c:`l (l + 6) = 72 → l² + 6 l − 72 = 0 ; Δ = 36 + 288 = 324 → l = (− 6 + 18) / 2 = **6 m** (la solution négative est rejetée) → longueur **12 m**.`}
+ ],
+ quiz:[
+  {q:"Le discriminant de x² − 4x + 4 vaut :", o:["0","8","32","−16"], r:0, e:"16 − 16."},
+  {q:"Le sommet de y = −2x² + 8x est en x = ", o:["2","4","−2","8"], r:0, e:"−8/(2 × −2)."},
+  {q:"Si a < 0, la parabole a :", o:["Un maximum","Un minimum","Ni l'un ni l'autre","Deux sommets"], r:0, e:"Tournée vers le bas."},
+  {q:"M max d'une poutre uniformément chargée vaut :", o:["q L²/8","q L/2","q L²/2","q L"], r:0, e:"Au milieu."},
+  {q:"Si Δ < 0, l'équation a :", o:["Aucune solution réelle","Deux solutions","Une solution","Une infinité"], r:0, e:"Racine d'un négatif impossible."}
  ]},
+{id:"math-9", niv:2, titre:"Statistiques et contrôle qualité", duree:50, contenu:`## Pourquoi des statistiques sur un chantier ?
+Les mesures (résistances du béton, dimensions, densités de compactage) **varient** toujours un peu. Les statistiques permettent de **résumer** ces séries et de décider si un lot est **conforme**.
 
-{id:"math-7", niv:3, titre:"Trigonométrie appliquée aux ouvrages", duree:30, contenu:`## Rappels dans le triangle rectangle
-- **sin α** = côté opposé / hypoténuse, **cos α** = côté adjacent / hypoténuse, **tan α** = côté opposé / côté adjacent.
-- Une pente en pourcentage est une tangente : **pente (%) = tan α × 100**. Une pente de 30 % correspond à α = arctan 0,30 = **16,7°**.
-
-## Les triangles quelconques
-Sur une parcelle ou une charpente, les triangles ne sont pas toujours rectangles. Deux relations suffisent :
-$$ Loi des sinus :  a / sin A = b / sin B = c / sin C
-$$ Al-Kashi :  c² = a² + b² − 2 a b cos C
-$$ Aire :  S = ½ a b sin C
-
-> [!exemple] Parcelle triangulaire
-> Deux limites de 25 m et 18 m forment un angle de 70°.
-> Troisième côté : c² = 625 + 324 − 2 × 25 × 18 × cos 70° = 949 − 307,8 = 641,2 → **c = 25,32 m**.
-> Surface : S = ½ × 25 × 18 × sin 70° = 225 × 0,9397 = **211,4 m²**.
-
-## Toitures
-- **Rampant** (longueur d'un chevron) = demi-portée / cos α.
-- **Hauteur au faîtage** = demi-portée × tan α.
-- Un **arêtier** de toiture à 4 pans a une projection en plan égale à la demi-portée × √2 (pans à 45° en plan).
-
-> [!exemple] Toiture en tuiles, portée 8 m, pente 30°
-> Rampant : 4 / cos 30° = 4 / 0,866 = **4,62 m** (+ débord de 0,50 m horizontal : 0,50 / 0,866 = 0,58 m, soit 5,20 m de chevron).
-> Faîtage : 4 × tan 30° = **2,31 m** au-dessus de l'arase.
-> Arêtier : projection 4 × √2 = 5,66 m ; longueur réelle √(5,66² + 2,31²) = **6,11 m**.
-
-## Rampes et talus
-- Rampe d'accès à 5 % pour monter 0,60 m : longueur = 0,60 / 0,05 = **12 m** (angle 2,9°).
-- Talus « 3 pour 2 » (3 m à l'horizontale pour 2 m de hauteur) : angle = arctan (2/3) = **33,7°**. Une fouille de 2 m de profondeur talutée ainsi déborde de 3 m de chaque côté.
-
-> [!attention]
-> La calculatrice doit être en **degrés** (et non en radians ou en grades) pour ces calculs.`, quiz:[
-  {q:"Une pente de 30 % correspond à un angle d'environ :", o:["16,7°", "30°", "27°", "8,5°"], r:0, e:"α = arctan 0,30 ≈ 16,7°."},
-  {q:"La relation d'Al-Kashi permet de calculer :", o:["Un côté d'un triangle quelconque connaissant les deux autres et l'angle compris", "Uniquement l'hypoténuse", "Le périmètre d'un cercle", "Une pente en %"], r:0, e:"c² = a² + b² − 2ab cos C."},
-  {q:"Une rampe à 5 % doit monter 0,40 m. Sa longueur est :", o:["2 m", "8 m", "5 m", "20 m"], r:1, e:"0,40 / 0,05 = 8 m."},
-  {q:"Demi-portée 3 m, pente 30° : le rampant mesure environ :", o:["2,60 m", "3,46 m", "1,73 m", "6,00 m"], r:1, e:"3 / cos 30° = 3 / 0,866 = 3,46 m."}
- ]},
-
-{id:"math-8", niv:3, titre:"Mathématiques financières : intérêts et emprunts", duree:30, contenu:`## Intérêts simples et composés
-- **Intérêts simples** : I = C × t × n (les intérêts ne produisent pas d'intérêts).
-- **Intérêts composés** : Cn = C0 × (1 + t)ⁿ (les intérêts s'ajoutent au capital chaque année).
-
-> [!exemple]
-> 10 000 000 F placés à 5 % pendant 3 ans : intérêts simples → 11 500 000 F ; intérêts composés → 10 000 000 × 1,05³ = **11 576 250 F**.
-
-## Emprunt à mensualités constantes
-Pour un capital C emprunté sur n mois au taux mensuel i (taux annuel / 12) :
-$$ M = C × i / (1 − (1 + i)^(−n))
-
-> [!exemple] Crédit immobilier pour une villa
-> C = 30 000 000 F sur 15 ans (n = 180 mois) à 9 % par an (i = 0,75 % par mois).
-> (1,0075)¹⁸⁰ = 3,838 → (1,0075)^(−180) = 0,2606.
-> M = 30 000 000 × 0,0075 / (1 − 0,2606) = 225 000 / 0,7394 ≈ **304 280 F par mois**.
-> Total remboursé : 304 280 × 180 = 54 770 400 F → **coût du crédit ≈ 24,8 millions F**.
-
-## Le tableau d'amortissement
-Chaque mensualité contient des **intérêts** (calculés sur le capital restant dû) et un **amortissement** du capital.
-| Mois | Capital restant dû | Intérêts | Amortissement |
-|---|---|---|---|
-| 1 | 30 000 000 | 225 000 | 79 280 |
-| 2 | 29 920 720 | 224 405 | 79 875 |
-
-Au début, la mensualité rembourse surtout des intérêts ; à la fin, surtout du capital.
-
-## Capacité d'emprunt
-Les banques limitent la mensualité à environ **33 % des revenus**. Pour 304 280 F par mois, il faut au moins 304 280 / 0,33 ≈ **922 000 F de revenus mensuels**.
-
-> [!retenir]
-> Allonger la durée diminue la mensualité mais augmente fortement le coût total du crédit. Comparez toujours le **coût total** et pas seulement la mensualité.`, quiz:[
-  {q:"1 000 000 F placés à 10 % en intérêts composés pendant 2 ans deviennent :", o:["1 200 000 F", "1 210 000 F", "1 100 000 F", "1 020 000 F"], r:1, e:"1 000 000 × 1,1² = 1 210 000 F."},
-  {q:"Dans une mensualité constante, la part des intérêts :", o:["Augmente avec le temps", "Diminue avec le temps", "Reste fixe", "Est nulle"], r:1, e:"Les intérêts sont calculés sur le capital restant dû, qui diminue."},
-  {q:"Un taux annuel de 12 % correspond à un taux mensuel de :", o:["12 %", "1 %", "0,12 %", "3 %"], r:1, e:"12 / 12 = 1 % par mois."},
-  {q:"Le coût total d'un crédit est :", o:["La mensualité × 12", "Le total des mensualités − le capital emprunté", "Le capital emprunté", "Le taux × la durée"], r:1, e:"C'est la somme des intérêts payés."}
- ]},
-
-{id:"math-9", niv:3, titre:"Statistiques du contrôle qualité", duree:30, contenu:`## Pourquoi des statistiques sur un chantier ?
-Les résultats d'essais (résistance du béton, densité d'un remblai, épaisseur d'un enduit) varient d'un prélèvement à l'autre. Les statistiques permettent de juger un **lot** à partir d'un **échantillon**.
-
-## Moyenne et écart-type
-$$ moyenne :  x̄ = Σ xi / n
-$$ écart-type :  s = √( Σ (xi − x̄)² / (n − 1) )
-Le **coefficient de variation** s / x̄ mesure la régularité de la fabrication : moins de 10 % pour un béton bien maîtrisé.
-
-> [!exemple] Six éprouvettes écrasées à 28 jours (béton C25)
-> Résultats : 30,5 · 32,0 · 28,5 · 31,0 · 33,5 · 29,5 MPa.
-> Moyenne : 185 / 6 = **30,83 MPa**.
-> Écarts au carré : 0,11 · 1,36 · 5,44 · 0,03 · 7,11 · 1,78 → somme 15,83.
-> s = √(15,83 / 5) = **1,78 MPa** ; coefficient de variation : 1,78 / 30,83 = 5,8 %.
+## Les indicateurs
+- **Moyenne** : x̄ = somme des valeurs / nombre de valeurs ;
+- **Médiane** : valeur du milieu de la série rangée (moyenne des deux du milieu si le nombre est pair) ;
+- **Étendue** : max − min ;
+- **Écart-type** s : dispersion autour de la moyenne :
+$$ s = √[ Σ (xi − x̄)² / (n − 1) ]
+Un écart-type faible traduit une **fabrication régulière**.
 
 ## La résistance caractéristique
-La **résistance caractéristique** est la valeur que 95 % des résultats dépassent (fractile 5 %). Avec une loi normale :
-$$ fck ≈ x̄ − 1,64 s = 30,83 − 1,64 × 1,78 = 27,9 MPa  ≥ 25 MPa ✔
+Pour le béton, on retient une valeur que **95 %** des résultats dépassent : **fck ≈ fcm − 1,64 s** (loi normale).
+> [!exemple] 10 résultats de compression (MPa) : 27,5 ; 29,8 ; 26,1 ; 31,2 ; 28,4 ; 30,5 ; 25,9 ; 29,1 ; 27,8 ; 30,7
+> Moyenne : **28,7 MPa** ; médiane : (28,4 + 29,1) / 2 = **28,75** ; étendue : 31,2 − 25,9 = **5,3** ; écart-type : **1,88 MPa**.
+> fck ≈ 28,7 − 1,64 × 1,88 = **25,6 MPa** ≥ 25 → béton **conforme** à la classe C25/30.
 
-> [!norme] Critère simplifié pour une petite série (NF EN 206)
-> Moyenne de 3 résultats ≥ fck + 4 MPa (ici 29 MPa) et chaque résultat ≥ fck − 4 MPa (ici 21 MPa). Les résultats ci-dessus sont **conformes**.
+## Les tableaux et graphiques
+On regroupe les valeurs en **classes** (ex. 25–27, 27–29…) et on trace un **histogramme** ; les **effectifs cumulés** donnent la courbe cumulative (comme une courbe granulométrique).
 
-## La loi normale en pratique
-- 68 % des valeurs sont entre x̄ − s et x̄ + s ;
-- 95 % entre x̄ − 2 s et x̄ + 2 s ;
-- 5 % sont en dessous de x̄ − 1,64 s.
+## L'esprit du contrôle
+Une moyenne correcte ne suffit pas : une **dispersion** élevée signale une fabrication irrégulière (dosages au jugé, eau variable) et un risque de valeurs faibles. On agit sur la **régularité** autant que sur le niveau moyen.
 
-## Organiser les prélèvements
-Au moins **un prélèvement de 3 éprouvettes par jour de bétonnage ou par 15 m³** pour les éléments porteurs, avec repérage précis de l'ouvrage (poteaux du RDC, dalle du R+1…).`, quiz:[
-  {q:"L'écart-type mesure :", o:["La valeur la plus fréquente", "La dispersion des résultats", "La valeur maximale", "Le nombre d'essais"], r:1, e:"Plus il est grand, plus les résultats sont dispersés."},
-  {q:"La résistance caractéristique correspond au fractile :", o:["50 %", "5 %", "95 %", "1 %"], r:1, e:"95 % des résultats doivent la dépasser."},
-  {q:"La moyenne de 30, 32 et 34 MPa est :", o:["32 MPa", "31 MPa", "33 MPa", "96 MPa"], r:0, e:"96 / 3 = 32 MPa."},
-  {q:"Le coefficient de variation est égal à :", o:["s × moyenne", "s / moyenne", "moyenne / s", "s²"], r:1, e:"Il s'exprime souvent en %."}
+> [!retenir]
+> - Moyenne, médiane, étendue, écart-type.
+> - fck ≈ fcm − 1,64 s (95 % des résultats au-dessus).
+> - Régularité (s faible) = fabrication maîtrisée.`,
+ exercices:[
+  {t:"Moyenne et médiane", d:1, e:`Densités sèches mesurées sur un remblai (t/m³) : 1,92 ; 1,88 ; 1,95 ; 1,90 ; 1,86. Calculer la moyenne, la médiane et l'étendue.`, c:`Moyenne : 9,51 / 5 = **1,902 t/m³** ; série rangée : 1,86 ; 1,88 ; 1,90 ; 1,92 ; 1,95 → médiane **1,90** ; étendue : **0,09 t/m³**.`},
+  {t:"Écart-type", d:2, e:`Résistances (MPa) : 24 ; 26 ; 28 ; 30 ; 32. Calculer la moyenne et l'écart-type (diviser par n − 1).`, c:`Moyenne : **28 MPa**. Écarts : − 4 ; − 2 ; 0 ; 2 ; 4 → carrés : 16 ; 4 ; 0 ; 4 ; 16 → somme 40 → s = √(40 / 4) = √10 = **3,16 MPa**.`},
+  {t:"Conformité d'un béton", d:2, e:`Un béton C25/30 donne fcm = 30,5 MPa avec s = 3,8 MPa sur 12 résultats. Calculer fck estimé. Conclure. Que faudrait-il améliorer ?`, c:`fck ≈ 30,5 − 1,64 × 3,8 = 30,5 − 6,2 = **24,3 MPa** < 25 → **non conforme**, malgré une bonne moyenne.
+Il faut **réduire la dispersion** (dosages pesés, eau mesurée, granulats réguliers) : avec s = 2 MPa, fck ≈ 27,2 MPa.`},
+  {t:"Regrouper en classes", d:1, e:`Classer les 10 résultats de l'exemple du cours dans les classes [25 ; 27[, [27 ; 29[, [29 ; 31[, [31 ; 33[ et donner les effectifs.`, c:`[25 ; 27[ : 25,9 ; 26,1 → **2** ; [27 ; 29[ : 27,5 ; 27,8 ; 28,4 → **3** ; [29 ; 31[ : 29,1 ; 29,8 ; 30,5 ; 30,7 → **4** ; [31 ; 33[ : 31,2 → **1** (total 10).`},
+  {t:"Comparer deux centrales", d:2, e:`Deux centrales livrent un C25/30 : A : fcm = 31 MPa, s = 2,0 ; B : fcm = 33 MPa, s = 4,5. Laquelle est la plus fiable ?`, c:`A : fck ≈ 31 − 3,3 = **27,7 MPa** ; B : fck ≈ 33 − 7,4 = **25,6 MPa**.
+A est plus **régulière** et offre la meilleure garantie, bien que sa moyenne soit plus faible.`}
+ ],
+ quiz:[
+  {q:"La médiane de 3 ; 7 ; 9 ; 12 ; 20 est :", o:["9","10,2","12","7"], r:0, e:"Valeur du milieu."},
+  {q:"L'écart-type mesure :", o:["La dispersion","La moyenne","Le maximum","Le nombre de valeurs"], r:0, e:"Régularité."},
+  {q:"fck ≈ ", o:["fcm − 1,64 s","fcm + 1,64 s","fcm / s","fcm × s"], r:0, e:"95 % au-dessus."},
+  {q:"Une moyenne élevée avec un écart-type fort :", o:["Peut quand même être non conforme","Est toujours conforme","Est impossible","N'a aucun sens"], r:0, e:"Valeurs faibles fréquentes."},
+  {q:"Moyenne de 10 ; 20 ; 30 :", o:["20","60","30","15"], r:0, e:"60/3."}
+ ]},
+{id:"math-7", niv:3, titre:"Trigonométrie dans les triangles quelconques", duree:50, contenu:`## Quand le triangle n'est pas rectangle
+En topographie, en charpente ou pour des terrains irréguliers, les triangles sont rarement rectangles. Trois outils permettent de les « résoudre » (trouver côtés et angles manquants).
+
+## La loi des sinus
+$$ a / sin A = b / sin B = c / sin C
+(a est le côté opposé à l'angle A). Utile quand on connaît **deux angles et un côté**.
+> [!exemple] Base de 100 m, angles 50° et 60° aux extrémités
+> Troisième angle : 180 − 50 − 60 = 70°. Côtés : 100 × sin 50° / sin 70° = **81,5 m** ; 100 × sin 60° / sin 70° = **92,2 m**.
+
+## La loi des cosinus (Al-Kashi)
+$$ c² = a² + b² − 2 a b cos C
+Utile quand on connaît **deux côtés et l'angle compris**, ou **les trois côtés** (pour trouver un angle : cos C = (a² + b² − c²) / (2ab)). C'est Pythagore généralisé (si C = 90°, cos C = 0).
+> [!exemple] Deux côtés de 7 et 9 m formant 40° : c² = 49 + 81 − 126 × cos 40° = 33,48 → **c = 5,79 m**.
+
+## L'aire d'un triangle quelconque
+- Avec deux côtés et l'angle compris : **S = ½ a b sin C** (ex. ½ × 7 × 9 × sin 40° = **20,25 m²**) ;
+- Avec les trois côtés (formule de **Héron**) : s = (a + b + c)/2 ; **S = √[s (s − a)(s − b)(s − c)]** (ex. côtés 5, 6, 7 : s = 9 → S = √216 = **14,70 m²**).
+
+## Application : distance inaccessible
+Pour mesurer la largeur d'une rivière, on mesure une **base** AB sur une rive et les angles vers un point C de l'autre rive ; la loi des sinus donne AC, puis la largeur = AC × sin A.
+
+> [!retenir]
+> - Sinus : a/sin A = b/sin B = c/sin C (deux angles et un côté).
+> - Cosinus : c² = a² + b² − 2ab cos C (deux côtés et l'angle compris, ou trois côtés).
+> - Aire : ½ ab sin C ou Héron.`,
+ exercices:[
+  {t:"Angle d'un triangle connu par ses côtés", d:2, e:`Un triangle a pour côtés 5, 6 et 7 m. Calculer l'angle opposé au côté de 7 m et l'aire.`, c:`cos C = (25 + 36 − 49) / (2 × 5 × 6) = 12 / 60 = 0,2 → **C = 78,5°**.
+Aire (Héron) : s = 9 → √(9 × 4 × 3 × 2) = **14,70 m²** (contrôle : ½ × 5 × 6 × sin 78,5° = 14,70 ✔).`},
+  {t:"Surface d'une parcelle triangulaire", d:2, e:`Une parcelle triangulaire a des côtés de 48, 55 et 62 m. Calculer sa surface et l'angle entre les côtés de 48 et 55 m.`, c:`s = 82,5 → S = √(82,5 × 34,5 × 27,5 × 20,5) = **1 266,7 m²**.
+Angle : cos = (48² + 55² − 62²) / (2 × 48 × 55) = 1 485 / 5 280 = 0,281 → **73,7°**.`},
+  {t:"Largeur d'une rivière", d:3, e:`On mesure une base AB = 80 m sur une rive ; depuis A, le point C (sur l'autre rive) est vu à 72° de AB ; depuis B, à 65°. Calculer AC puis la largeur de la rivière (distance de C à la droite AB).`, c:`Angle en C : 180 − 72 − 65 = **43°**. AC = 80 × sin 65° / sin 43° = **106,3 m**.
+Largeur : AC × sin 72° = 106,3 × 0,951 = **101,1 m**.`},
+  {t:"Arbalétrier d'une ferme dissymétrique", d:2, e:`Deux arbalétriers de 5,20 m et 4,10 m se rejoignent au faîte en formant un angle de 100°. Quelle est la longueur de l'entrait qui relie leurs pieds ?`, c:`c² = 5,20² + 4,10² − 2 × 5,20 × 4,10 × cos 100° = 27,04 + 16,81 + 7,40 = 51,25 → **c = 7,16 m**.`},
+  {t:"Aire avec deux côtés et un angle", d:1, e:`Un terrain triangulaire a deux côtés de 30 m et 45 m formant un angle de 55°. Calculer sa surface.`, c:`S = ½ × 30 × 45 × sin 55° = 675 × 0,819 = **552,9 m²**.`}
+ ],
+ quiz:[
+  {q:"La loi des sinus s'écrit :", o:["a/sin A = b/sin B = c/sin C","a² = b² + c²","a sin A = b sin B","a + b + c = 180"], r:0, e:"Côtés et angles opposés."},
+  {q:"Si C = 90°, Al-Kashi devient :", o:["Pythagore","La loi des sinus","Thalès","Héron"], r:0, e:"cos 90° = 0."},
+  {q:"Aire d'un triangle avec a = 4, b = 6, C = 30° :", o:["6","12","24","3"], r:0, e:"½ × 4 × 6 × 0,5."},
+  {q:"La formule de Héron utilise :", o:["Les trois côtés","Deux angles","Une hauteur","Le périmètre seul sans les côtés"], r:0, e:"Demi-périmètre s."},
+  {q:"Pour trouver une distance inaccessible, on mesure :", o:["Une base et deux angles","Rien","Seulement une distance","Le poids"], r:0, e:"Loi des sinus."}
+ ]},
+{id:"math-16", niv:3, titre:"Repérage, coordonnées et vecteurs", duree:45, contenu:`## Les coordonnées dans un repère
+Un point est repéré par ses coordonnées (x ; y) dans un repère orthonormé (en topographie : X vers l'Est, Y vers le Nord).
+- **Distance** entre A et B : AB = √[(xB − xA)² + (yB − yA)²] ;
+- **Milieu** : ((xA + xB)/2 ; (yA + yB)/2) ;
+- **Direction** : l'angle de AB avec l'axe des x vaut arctan[(yB − yA)/(xB − xA)] (attention au quadrant) ; en topographie, on utilise le **gisement** compté depuis le Nord (voir Topographie).
+> [!exemple] A (100 ; 200), B (160 ; 280) : AB = √(60² + 80²) = **100 m** ; milieu **(130 ; 240)** ; direction : arctan(80/60) = **53,13°** au-dessus de l'axe des x.
+
+## L'équation d'une droite
+y = m x + p, avec m = (yB − yA)/(xB − xA). Deux droites sont **parallèles** si elles ont la même pente, **perpendiculaires** si le produit des pentes vaut − 1.
+
+## Les vecteurs
+Un vecteur a une **direction**, un **sens** et une **norme** (longueur). Ses coordonnées : u (ux ; uy) ; norme √(ux² + uy²).
+- **Somme** : on additionne les coordonnées (c'est la résultante de plusieurs forces) ;
+- **Décomposer** une force F inclinée de α : Fx = F cos α ; Fy = F sin α.
+> [!exemple] Forces F1 (3 ; 4) kN et F2 (5 ; − 2) kN : résultante R (8 ; 2), norme √68 = **8,25 kN**.
+> Une force de 10 kN inclinée à 30° : Fx = **8,66 kN**, Fy = **5,00 kN**.
+
+> [!retenir]
+> - Distance : √(Δx² + Δy²) ; milieu : moyenne des coordonnées.
+> - Droite : pente m = Δy/Δx ; parallèles : même pente ; perpendiculaires : m × m' = − 1.
+> - Vecteurs : somme des coordonnées ; Fx = F cos α, Fy = F sin α.`,
+ exercices:[
+  {t:"Distance et milieu", d:1, e:`Les angles d'un bâtiment ont pour coordonnées A (512,40 ; 803,10) et C (530,40 ; 827,10). Calculer la diagonale AC et les coordonnées de son milieu.`, c:`Δx = 18,00 ; Δy = 24,00 → AC = √(324 + 576) = **30,00 m** ; milieu **(521,40 ; 815,10)**.`},
+  {t:"Équation d'une limite de parcelle", d:2, e:`Une limite passe par P (0 ; 2) et Q (40 ; 22). Écrire son équation. Un poteau en R (20 ; 13) est-il sur la limite ?`, c:`m = 20 / 40 = **0,5** ; p = 2 → y = 0,5 x + 2.
+Pour x = 20 : y = 12 ≠ 13 → R est **1 m au-dessus** (au nord) de la limite : il empiète peut-être sur la parcelle voisine selon le côté.`},
+  {t:"Résultante de deux forces", d:1, e:`Une poutre reçoit une force horizontale de 20 kN et une force verticale de 15 kN au même point. Calculer la résultante et son angle avec l'horizontale.`, c:`R = √(20² + 15²) = **25 kN** ; angle : arctan(15/20) = **36,9°**.`},
+  {t:"Décomposer une force", d:2, e:`Le câble d'un hauban tire avec 12 kN en faisant 40° avec le sol. Calculer les composantes horizontale et verticale.`, c:`Fx = 12 × cos 40° = **9,19 kN** ; Fy = 12 × sin 40° = **7,71 kN**.`},
+  {t:"Perpendicularité", d:2, e:`Un mur suit la droite y = 2 x + 1. Quelle est la pente d'un mur perpendiculaire ? Écrire l'équation du mur perpendiculaire passant par (4 ; 9).`, c:`Pente perpendiculaire : − 1/2 = **− 0,5**. Équation : y = − 0,5 x + p avec 9 = − 2 + p → p = 11 → **y = − 0,5 x + 11**.`}
+ ],
+ quiz:[
+  {q:"Distance entre (0 ; 0) et (6 ; 8) :", o:["10","14","48","7"], r:0, e:"√(36 + 64)."},
+  {q:"Milieu de (2 ; 4) et (8 ; 10) :", o:["(5 ; 7)","(10 ; 14)","(6 ; 6)","(3 ; 3)"], r:0, e:"Moyennes."},
+  {q:"Deux droites perpendiculaires ont des pentes dont le produit vaut :", o:["−1","1","0","2"], r:0, e:"m × m' = −1."},
+  {q:"Composante horizontale d'une force F inclinée de α :", o:["F cos α","F sin α","F tan α","F / α"], r:0, e:"Projection."},
+  {q:"La résultante de (3 ; 0) et (0 ; 4) a pour norme :", o:["5","7","12","1"], r:0, e:"√(9 + 16)."}
+ ]},
+{id:"math-14", niv:3, titre:"Les suites numériques", duree:45, contenu:`## Les suites arithmétiques
+Chaque terme s'obtient en **ajoutant** une même raison r : u(n) = u(0) + n r. Somme de n termes consécutifs = n × (premier + dernier) / 2.
+- Hauteurs successives des marches (17,5 cm de plus à chaque marche) ;
+- **Amortissement linéaire** : un matériel de 12 M F amorti sur 6 ans perd 2 M F par an : valeur après n années = 12 − 2 n ;
+- Paliers réguliers (rangs d'agglos : 20 cm de plus par rang).
+
+## Les suites géométriques
+Chaque terme s'obtient en **multipliant** par une même raison q : u(n) = u(0) × qⁿ. Somme de n termes : u(0) × (qⁿ − 1)/(q − 1).
+- **Inflation** : un coût de 30 M F à + 5 %/an vaut 30 × 1,05ⁿ (48,9 M dans 10 ans) ;
+- **Capitalisation** : un placement à t % : C × (1 + t)ⁿ ;
+- Épargne régulière : des versements annuels de 1 M F placés à 6 % pendant 5 ans donnent 1 × (1,06⁵ − 1) / 0,06 = **5,64 M F**.
+
+## Reconnaître le type de suite
+On calcule les **différences** (constantes → arithmétique) ou les **quotients** (constants → géométrique) entre termes successifs.
+
+> [!retenir]
+> - Arithmétique : + r ; u(n) = u(0) + n r ; somme = n (premier + dernier)/2.
+> - Géométrique : × q ; u(n) = u(0) qⁿ ; somme = u(0)(qⁿ − 1)/(q − 1).
+> - Amortissement linéaire (arithmétique), inflation et intérêts composés (géométriques).`,
+ exercices:[
+  {t:"Hauteurs des marches", d:1, e:`Un escalier a 16 marches de 17,5 cm. À quelle hauteur se trouve le dessus de la 10ᵉ marche ? de la dernière ?`, c:`u(n) = 17,5 n → 10ᵉ marche : **175 cm** ; 16ᵉ : **280 cm** (hauteur d'étage).`},
+  {t:"Amortissement linéaire", d:1, e:`Une pelle achetée 45 M F est amortie linéairement sur 9 ans. Quelle est sa valeur comptable après 4 ans ? Quand vaut-elle 10 M F ?`, c:`Amortissement annuel : 45 / 9 = **5 M F** → après 4 ans : 45 − 20 = **25 M F** ; 45 − 5 n = 10 → **n = 7 ans**.`},
+  {t:"Somme d'une suite arithmétique", d:2, e:`On empile des agglos en pyramide : 20 au premier rang, 18 au deuxième, … en retirant 2 par rang jusqu'à 2 au sommet. Combien de rangs et d'agglos ?`, c:`Rangs : de 20 à 2 par pas de 2 → **10 rangs** ; total : 10 × (20 + 2) / 2 = **110 agglos**.`},
+  {t:"Inflation des coûts", d:2, e:`Une maison coûte 30 M F aujourd'hui. Avec 5 % d'inflation par an, combien coûtera-t-elle dans 10 ans ? Au bout de combien d'années le coût aura-t-il doublé (essayer n = 14 et 15) ?`, c:`Dans 10 ans : 30 × 1,05¹⁰ = **48,87 M F**.
+1,05¹⁴ = 1,98 ; 1,05¹⁵ = 2,08 → le coût double au bout d'environ **14 à 15 ans** (14,2 ans exactement, voir logarithmes).`},
+  {t:"Épargne pour construire", d:2, e:`Un ménage place 1,5 M F chaque fin d'année à 6 % pendant 6 ans. Quel capital obtient-il ?`, c:`S = 1,5 × (1,06⁶ − 1) / 0,06 = 1,5 × 6,975 = **10,46 M F** (dont 1,46 M d'intérêts).`}
+ ],
+ quiz:[
+  {q:"La suite 5 ; 8 ; 11 ; 14 est :", o:["Arithmétique de raison 3","Géométrique de raison 3","Ni l'une ni l'autre","Géométrique de raison 1,6"], r:0, e:"Différence constante."},
+  {q:"La suite 2 ; 6 ; 18 ; 54 est :", o:["Géométrique de raison 3","Arithmétique de raison 4","Arithmétique de raison 3","Constante"], r:0, e:"Quotient constant."},
+  {q:"Somme des entiers de 1 à 10 :", o:["55","50","100","45"], r:0, e:"10 × 11/2."},
+  {q:"L'amortissement linéaire est une suite :", o:["Arithmétique","Géométrique","Constante","Aléatoire"], r:0, e:"Même baisse chaque année."},
+  {q:"Les intérêts composés suivent une suite :", o:["Géométrique","Arithmétique","Constante","Décroissante"], r:0, e:"× (1 + t)."}
+ ]},
+{id:"math-17", niv:3, titre:"Logarithmes et exponentielles", duree:45, contenu:`## Le logarithme décimal
+log(x) est l'exposant de 10 qui donne x : log(1 000) = 3 ; log(0,01) = − 2 ; log(2) ≈ 0,301.
+- log(a × b) = log a + log b ; log(a / b) = log a − log b ; log(aⁿ) = n log a ;
+- Il transforme les produits en sommes : c'est l'outil des **échelles logarithmiques**.
+
+## Les applications au bâtiment
+- **Acoustique** : niveau sonore L = 10 log(I / I₀) en décibels ; doubler la puissance d'une source ajoute **3 dB** (10 log 2) ; multiplier par 10 ajoute **10 dB** ; deux machines de 85 dB donnent **88 dB** (et non 170 !) ;
+- **Granulométrie** : l'axe des tamis est en échelle logarithmique ;
+- **Géotechnique** : le tassement œdométrique fait intervenir Cc × log(σ'f / σ'0) ;
+- **Chimie** : pH = − log[H⁺] ; un béton sain (pH ≈ 13) est 10 000 fois plus basique qu'un béton carbonaté (pH ≈ 9).
+
+## L'exponentielle et le logarithme népérien
+eˣ (e ≈ 2,718) et ln(x) sont réciproques : ln(eˣ) = x. Ils décrivent les phénomènes dont la variation est proportionnelle à la valeur : croissance d'intérêts continus, refroidissement, décroissance (consolidation, amortissement des vibrations).
+
+## Résoudre aⁿ = b
+On prend le logarithme : **n = log b / log a**.
+> [!exemple] Temps de doublement à 5 % par an : 1,05ⁿ = 2 → n = log 2 / log 1,05 = 0,301 / 0,0212 = **14,2 ans**.
+
+> [!retenir]
+> - log(10ⁿ) = n ; log(ab) = log a + log b ; log(aⁿ) = n log a.
+> - Décibels : + 3 dB quand on double, + 10 dB quand on multiplie par 10.
+> - aⁿ = b ⇔ n = log b / log a.`,
+ exercices:[
+  {t:"Calculs de logarithmes", d:1, e:`Calculer sans calculatrice : a) log(10 000) ; b) log(0,001) ; c) log(2) + log(5) ; d) log(1 000 / 10).`, c:`a) **4** ; b) **− 3** ; c) log(10) = **1** ; d) log(100) = **2**.`},
+  {t:"Addition de bruits", d:2, e:`Une bétonnière produit 85 dB. Quel niveau avec deux bétonnières identiques ? Avec quatre ? Un compresseur de 70 dB placé à côté d'une machine de 85 dB change-t-il beaucoup le niveau ?`, c:`Deux : 85 + 3 = **88 dB** ; quatre : 85 + 6 = **91 dB**.
+70 et 85 dB : la source de 70 dB est 31,6 fois moins puissante : 10 log(1 + 0,0316) ≈ 0,13 dB → **≈ 85,1 dB** : le compresseur ne change presque rien.`},
+  {t:"Temps de doublement", d:2, e:`En combien d'années un placement à 8 % double-t-il ? Et un coût qui augmente de 3 % par an ?`, c:`8 % : n = log 2 / log 1,08 = 0,301 / 0,0334 = **9,0 ans**.
+3 % : n = 0,301 / 0,01284 = **23,4 ans**.`},
+  {t:"Tassement et logarithme", d:2, e:`Calculer log(100 / 60) puis le tassement s = 4 / 2,2 × 0,45 × log(100 / 60) d'une couche d'argile.`, c:`log(100/60) = log 1,667 = **0,2218** → s = 1,818 × 0,45 × 0,2218 = **0,181 m ≈ 18 cm**.`},
+  {t:"pH et corrosion", d:1, e:`Un béton sain a un pH de 13, un béton carbonaté un pH de 9. Combien de fois la concentration en ions H⁺ est-elle plus élevée dans le béton carbonaté ? Pourquoi est-ce important ?`, c:`10^(13 − 9) = **10 000 fois** plus d'ions H⁺ (milieu bien moins basique).
+Au-dessous d'un pH d'environ 9 à 10, la couche protectrice de l'acier disparaît : les armatures peuvent **rouiller**.`}
+ ],
+ quiz:[
+  {q:"log(1 000) = ", o:["3","1 000","30","0,001"], r:0, e:"10³."},
+  {q:"Doubler la puissance d'une source sonore ajoute :", o:["3 dB","10 dB","2 dB","100 dB"], r:0, e:"10 log 2."},
+  {q:"log(a × b) = ", o:["log a + log b","log a × log b","log a − log b","a + b"], r:0, e:"Propriété fondamentale."},
+  {q:"Pour résoudre 1,05ⁿ = 2, on calcule :", o:["log 2 / log 1,05","2 / 1,05","2 − 1,05","1,05 × 2"], r:0, e:"Logarithme."},
+  {q:"Deux machines de 80 dB ensemble donnent :", o:["83 dB","160 dB","80 dB","90 dB"], r:0, e:"+ 3 dB."}
+ ]},
+{id:"math-15", niv:3, titre:"Probabilités et contrôle par échantillonnage", duree:45, contenu:`## Les notions de base
+- **Probabilité** d'un événement A : nombre de cas favorables / nombre de cas possibles (si équiprobables), entre 0 et 1 ;
+- **Événement contraire** : P(non A) = 1 − P(A) ;
+- **Événements indépendants** : P(A et B) = P(A) × P(B) ;
+- **Union** : P(A ou B) = P(A) + P(B) − P(A et B).
+
+## « Au moins un »
+Il est souvent plus simple de passer par le contraire : P(au moins un) = 1 − P(aucun).
+> [!exemple] Pluie sur une semaine de bétonnage
+> Probabilité de pluie un jour donné : 0,3 (jours supposés indépendants). Probabilité d'avoir 5 jours sans pluie : 0,7⁵ = **0,168** ; d'avoir au moins un jour de pluie : 1 − 0,168 = **0,832**. Nombre moyen de jours de pluie : 5 × 0,3 = **1,5**.
+
+## La loi binomiale
+On répète n fois une épreuve à deux issues (succès de probabilité p) de façon indépendante : la probabilité d'obtenir exactement k succès est **C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ** ; l'**espérance** (nombre moyen de succès) vaut **n p**.
+
+## Le contrôle par échantillonnage
+On ne peut pas tester tous les agglos ou toutes les barres : on prélève un **échantillon** et on décide pour le lot.
+> [!exemple] Lot d'agglos dont 5 % sont défectueux, échantillon de 10
+> P(aucun défectueux) = 0,95¹⁰ = **0,60** ; P(au moins un) = **0,40** ; P(exactement un) = 10 × 0,05 × 0,95⁹ = **0,32**.
+> Si la règle est « refuser le lot dès qu'un agglo défectueux apparaît », un lot à 5 % de défauts n'est refusé que 4 fois sur 10 : l'échantillon est trop petit pour être sévère.
+
+> [!retenir]
+> - P(non A) = 1 − P(A) ; indépendance : P(A et B) = P(A) P(B).
+> - P(au moins un) = 1 − P(aucun).
+> - Binomiale : C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ ; espérance n p.
+> - Un plan d'échantillonnage a un risque d'accepter un mauvais lot : choisir la taille en conséquence.`,
+ exercices:[
+  {t:"Tirage au hasard", d:1, e:`Une palette contient 60 agglos dont 3 cassés. On en prend un au hasard. Probabilité qu'il soit cassé ? qu'il soit intact ?`, c:`P(cassé) = 3 / 60 = **0,05** ; P(intact) = 1 − 0,05 = **0,95**.`},
+  {t:"Jours de pluie", d:2, e:`En saison des pluies, la probabilité d'une pluie empêchant le coulage est 0,4 par jour (jours indépendants). Pour une période de 3 jours, calculer la probabilité de n'avoir aucune pluie, puis au moins un jour de pluie. Combien de jours de pluie en moyenne ?`, c:`Aucune pluie : 0,6³ = **0,216** ; au moins un jour : **0,784** ; moyenne : 3 × 0,4 = **1,2 jour**.
+Un coulage de 3 jours consécutifs a donc près de 80 % de risques d'être perturbé : prévoir des bâches et un planning souple.`},
+  {t:"Contrôle d'un lot d'acier", d:2, e:`Dans un lot de barres, 10 % ont un diamètre trop faible. On contrôle 5 barres au hasard. Calculer la probabilité qu'aucune ne soit défectueuse et qu'au moins une le soit.`, c:`P(aucune) = 0,9⁵ = **0,59** ; P(au moins une) = **0,41** : avec 5 barres, on détecte le problème moins d'une fois sur deux ; contrôler davantage de barres ou peser le lot.`},
+  {t:"Événements indépendants", d:2, e:`Pour couler une dalle, il faut à la fois : la pompe disponible (probabilité 0,95), la centrale à béton disponible (0,90) et pas de pluie (0,70). En supposant l'indépendance, quelle est la probabilité de pouvoir couler le jour prévu ?`, c:`P = 0,95 × 0,90 × 0,70 = **0,60** : une chance sur deux et demie d'être reporté : confirmer la pompe et la centrale la veille et surveiller la météo.`},
+  {t:"Loi binomiale", d:3, e:`Un béton a une probabilité 0,05 de donner une éprouvette sous la résistance minimale. Sur 3 éprouvettes, calculer la probabilité d'en avoir exactement 0, exactement 1, et au moins 2 sous le minimum.`, c:`P(0) = 0,95³ = **0,857** ; P(1) = 3 × 0,05 × 0,95² = **0,135** ; P(au moins 2) = 1 − 0,857 − 0,135 = **0,007** (≈ 0,7 %).`}
+ ],
+ quiz:[
+  {q:"P(non A) = ", o:["1 − P(A)","P(A)","P(A) − 1","1 + P(A)"], r:0, e:"Événement contraire."},
+  {q:"Pour deux événements indépendants, P(A et B) = ", o:["P(A) × P(B)","P(A) + P(B)","P(A) − P(B)","1"], r:0, e:"Produit."},
+  {q:"P(au moins un succès) se calcule souvent par :", o:["1 − P(aucun)","P(un)","1 + P(aucun)","0"], r:0, e:"Contraire."},
+  {q:"Espérance d'une binomiale de paramètres n = 20, p = 0,1 :", o:["2","20","0,1","10"], r:0, e:"n p."},
+  {q:"Une probabilité est toujours comprise entre :", o:["0 et 1","−1 et 1","0 et 100","1 et 10"], r:0, e:"Ou 0 et 100 %."}
+ ]},
+{id:"math-8", niv:3, titre:"Mathématiques financières : intérêts, actualisation et amortissements", duree:45, contenu:`## Intérêts simples et composés
+- **Intérêts simples** : I = C × t × n (prêts courts, découverts) ;
+- **Intérêts composés** : Cn = C × (1 + t)ⁿ (placements, crédits longs) ;
+- **Taux proportionnel** mensuel = taux annuel / 12 ; **taux équivalent** = (1 + t)^(1/12) − 1.
+> [!exemple] 5 M F à 6 % pendant 3 ans : simples → 5,9 M ; composés → 5 × 1,06³ = **5,955 M**.
+
+## L'actualisation
+Une somme F reçue dans n années vaut aujourd'hui **F / (1 + t)ⁿ** : c'est ce qui permet de comparer des projets (VAN, voir Économie).
+
+## Les annuités constantes
+Une suite de n versements a placés à t % vaut, à la fin : a × [(1 + t)ⁿ − 1] / t ; aujourd'hui : a × [1 − (1 + t)⁻ⁿ] / t. Un emprunt C se rembourse par des annuités **a = C × t / [1 − (1 + t)⁻ⁿ]**.
+> [!exemple] Emprunt de 20 M F à 9 % sur 10 ans (mensualités, t = 0,75 %/mois, n = 120) : **253 352 F** par mois ; intérêts totaux : **10,4 M F**.
+
+## L'amortissement du matériel
+- **Linéaire** : annuité = (valeur d'achat − valeur résiduelle) / durée ;
+- **Dégressif** : on applique chaque année un taux fixe à la valeur restante (plus fort au début, suite géométrique).
+> [!exemple] Bétonnière de 1 200 000 F sur 3 ans, sans valeur résiduelle : **400 000 F par an** en linéaire ; en dégressif à 50 % : 600 000 ; 300 000 ; puis le solde 300 000.
+
+> [!retenir]
+> - Simples : C t n ; composés : C (1 + t)ⁿ ; actualisation : F / (1 + t)ⁿ.
+> - Annuité d'emprunt : C t / [1 − (1 + t)⁻ⁿ].
+> - Amortissement linéaire (arithmétique) ou dégressif (géométrique).`,
+ exercices:[
+  {t:"Placement", d:1, e:`On place 3 M F à 7 % par an. Quelle somme au bout de 5 ans en intérêts composés ? Combien d'intérêts ?`, c:`3 × 1,07⁵ = 3 × 1,4026 = **4,21 M F** → intérêts : **1,21 M F**.`},
+  {t:"Valeur actuelle", d:1, e:`On recevra 10 M F dans 4 ans. Quelle est leur valeur actuelle au taux de 8 % ?`, c:`10 / 1,08⁴ = 10 / 1,3605 = **7,35 M F**.`},
+  {t:"Annuité d'un prêt", d:2, e:`Un artisan emprunte 6 M F à 10 % sur 4 ans, remboursables par annuités constantes. Calculer l'annuité et le coût du crédit.`, c:`a = 6 × 0,10 / (1 − 1,1⁻⁴) = 0,6 / 0,3170 = **1,893 M F** → total 7,571 M → coût : **1,571 M F**.`},
+  {t:"Amortissement d'un camion", d:2, e:`Un camion acheté 36 M F a une valeur résiduelle de 6 M F après 5 ans. Calculer l'amortissement linéaire annuel et la valeur comptable après 3 ans.`, c:`Annuité : (36 − 6) / 5 = **6 M F** ; après 3 ans : 36 − 18 = **18 M F**.`},
+  {t:"Économiser ou emprunter ?", d:2, e:`Pour acheter une bétonnière de 1,2 M F, un artisan peut : a) épargner 100 000 F par mois pendant 12 mois (sans intérêts) ; b) emprunter 1,2 M F sur 12 mois à 12 %/an (mensualité ≈ 106 600 F). Coût de chaque solution ? Quand la bétonnière peut-elle rapporter ?`, c:`a) Coût : **1,2 M F**, bétonnière disponible dans 12 mois.
+b) 12 × 106 600 = 1,279 M F → coût du crédit **≈ 79 000 F**, mais la bétonnière travaille **tout de suite** : si elle évite 15 000 F de location par jour de coulage, 6 jours de coulage suffisent à payer les intérêts.`}
+ ],
+ quiz:[
+  {q:"Valeur acquise de 1 M à 10 % composés pendant 2 ans :", o:["1,21 M","1,2 M","1,1 M","2 M"], r:0, e:"1,1²."},
+  {q:"Valeur actuelle de 1,1 M reçu dans 1 an à 10 % :", o:["1 M","1,1 M","0,9 M","1,21 M"], r:0, e:"1,1/1,1."},
+  {q:"L'amortissement linéaire d'un matériel de 10 M sur 5 ans (sans valeur résiduelle) :", o:["2 M par an","5 M par an","10 M par an","1 M par an"], r:0, e:"10/5."},
+  {q:"Les intérêts composés produisent :", o:["Des intérêts sur les intérêts","Des intérêts fixes","Aucun intérêt","Une baisse du capital"], r:0, e:"Capitalisation."},
+  {q:"Un amortissement dégressif est :", o:["Plus fort les premières années","Constant","Plus fort à la fin","Nul"], r:0, e:"Taux fixe sur la valeur restante."}
  ]}
 ]});
