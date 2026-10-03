@@ -23,7 +23,7 @@ A.IA = {
     if(!res.ok){
       let msg = '';
       try{ const j = await res.json(); msg = j.error || ''; }catch(_){ }
-      if(res.status === 404 || res.status === 405) msg = OFF_MSG;
+      if(res.status === 404 || res.status === 405 || res.status === 501) msg = OFF_MSG;
       return {ok:false, error: msg || ('Erreur ' + res.status), status:res.status};
     }
     if(S.mode === 'local') A.db.logIa(req.kind, req.ref);
@@ -77,9 +77,16 @@ function parseQuiz(t){
   }catch(_){ return []; }
 }
 A.IA.parseQuiz = parseQuiz;
+/* Chapitre rédigé par l'IA : cours, puis « === EXERCICE n : titre (difficulté) === … --- CORRIGÉ --- … », puis « === QUIZ === » */
 A.IA.splitChapter = t => {
-  const k = t.indexOf('=== QUIZ ===');
-  return k < 0 ? {contenu:t.trim(), quiz:[]} : {contenu:t.slice(0, k).trim(), quiz:parseQuiz(t.slice(k))};
+  const k = t.indexOf('=== QUIZ ==='), body = k < 0 ? t : t.slice(0, k), quiz = k < 0 ? [] : parseQuiz(t.slice(k));
+  const parts = body.split(/^=== *EXERCICE\b([^\n]*?)=== *$/m), exos = [];
+  for(let i = 1; i + 1 < parts.length; i += 2){
+    const h = parts[i].replace(/^\s*\d*\s*[:.–-]?\s*/, ''), dm = h.match(/\((?:difficulté\s*)?([123])\)\s*$/i);
+    const [e, c] = parts[i + 1].split(/^--- *CORRIG[ÉE] *--- *$/mi);
+    if(e && c && e.trim() && c.trim()) exos.push({t:h.replace(/\((?:difficulté\s*)?[123]\)\s*$/i, '').trim() || 'Exercice', d:dm ? +dm[1] : 2, e:e.trim(), c:c.trim()});
+  }
+  return {contenu:parts[0].trim(), quiz, exos};
 };
 
 /* =====================================================================

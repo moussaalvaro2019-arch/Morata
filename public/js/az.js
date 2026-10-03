@@ -99,60 +99,98 @@ A.page('app/construction/element/:id', {space:'app', title:p => (Z().elements.fi
 }, mount(root){ A.runCalcs(root); }});
 
 /* ---------- Projet type ---------- */
-let pjTab = 'archi', pjLv = 0;
+let pjTab = 'archi', pjLv = 0, pjCut = 0, pjId = null;
+const pad = n => String(n).padStart(2, '0');
+function sheets(pj){
+  const L = A.PLAN.levels(pj), M = A.PRJ.model(pj), out = [];
+  L.forEach((l,i) => out.push({code:'A' + pad(i+1), t:'Plan du ' + l.nom.toLowerCase(), tab:'archi', lv:i}));
+  out.push({code:'A' + pad(L.length+1), t:'Plan de toiture', tab:'toit'});
+  out.push({code:'A' + pad(L.length+2), t:'Façade principale', tab:'facade'});
+  (pj.coupes || []).forEach((c,k) => out.push({code:'A' + pad(L.length+3+k), t:`Coupe ${c.nom}-${c.nom}`, tab:'coupe', cut:k}));
+  out.push({code:'S01', t:'Plan de fondations', tab:'fond'});
+  (M.slab ? L : L.slice(0,1)).forEach((l,i) => out.push({code:'S' + pad(i+2), t:M.slab ? 'Coffrage du plancher haut ' + l.court : 'Poteaux et chaînages', tab:'struct', lv:i}));
+  L.forEach((l,i) => out.push({code:'E' + pad(i+1), t:'Électricité · ' + l.nom, tab:'elec', lv:i}));
+  L.forEach((l,i) => out.push({code:'P' + pad(i+1), t:'Plomberie · ' + l.nom, tab:'plomb', lv:i}));
+  return out;
+}
 A.page('app/construction/projet/:id', {space:'app', title:p => (Z().projets.find(x=>x.id===p.id)||{}).titre || 'Projet', crumb:'<a href="#/app/construction">Construction A→Z</a> › Projets types',
  actions:p => `<button class="btn b-line b-sm noprint" data-act="print">${ic('print')}<span class="hs">Imprimer</span></button>`,
  render(p){
   const pj = Z().projets.find(x => x.id === p.id); if(!pj) return A.empty('building','Projet introuvable.');
-  const lvs = pj.niveaux || [pj]; if(pjLv >= lvs.length) pjLv = 0;
+  if(pjId !== pj.id){ pjId = pj.id; pjTab = 'archi'; pjLv = 0; pjCut = 0; }
+  A.PRJ.setCurrent(pj);
+  const L = A.PLAN.levels(pj), Mo = A.PRJ.model(pj);
   const M = A.PLAN.metre(pj), dq = A.METRE ? A.METRE.fromLines(M.lines) : null;
-  const tabs = [['archi','Architecture'],['fond','Fondations'],['struct', pj.struct.dalle ? 'Coffrage' : 'Structure'],['elec','Électricité'],['plomb','Plomberie'],['facade','Façade'],['coupe','Coupe type']];
+  const perLevel = {archi:L.length, struct:Mo.slab ? L.length : 1, elec:L.length, plomb:L.length};
+  if(perLevel[pjTab] && pjLv >= perLevel[pjTab]) pjLv = 0;
+  const tabs = [['archi','Architecture'],['struct', Mo.slab ? 'Coffrage' : 'Structure'],['fond','Fondations'],['toit','Toiture'],['elec','Électricité'],['plomb','Plomberie'],['facade','Façade'],['coupe','Coupes'],['v3d','Maquette 3D']];
   let plan = '';
   if(pjTab === 'archi') plan = A.PLAN.archi(pj, pjLv);
   if(pjTab === 'fond') plan = A.PLAN.fondations(pj);
   if(pjTab === 'struct') plan = A.PLAN.structure(pj, pjLv);
+  if(pjTab === 'toit') plan = A.PLAN.toiture(pj);
   if(pjTab === 'elec') plan = A.PLAN.elec(pj, pjLv);
   if(pjTab === 'plomb') plan = A.PLAN.plomberie(pj, pjLv);
   if(pjTab === 'facade') plan = A.PLAN.facade(pj);
-  if(pjTab === 'coupe') plan = A.FIG['coupe-type']();
-  const levelSel = lvs.length > 1 && ['archi','struct','elec','plomb'].includes(pjTab) ? `<div class="tabs">${lvs.map((l,i)=>`<button class="tab ${i===pjLv?'on':''}" data-pjlv="${i}">${esc(l.nom)}</button>`).join('')}</div>` : '';
+  if(pjTab === 'coupe') plan = A.PLAN.coupe(pj, pjCut);
+  if(pjTab === 'v3d') plan = A.V3D ? A.V3D.projectHtml(pj) : A.empty('cube', 'Maquette 3D indisponible.');
+  const nL = perLevel[pjTab] || 0;
+  const levelSel = nL > 1 ? `<div class="tabs lvtabs">${L.slice(0, nL).map((l,i)=>`<button class="tab ${i===pjLv?'on':''}" data-pjlv="${i}">${esc(l.court === 'RDC' ? 'Rez-de-chaussée' : l.nom)}</button>`).join('')}</div>` : '';
+  const cutSel = pjTab === 'coupe' ? `<div class="tabs lvtabs">${(pj.coupes||[]).map((c,k)=>`<button class="tab ${k===pjCut?'on':''}" data-pjcut="${k}">Coupe ${c.nom}-${c.nom}</button>`).join('')}</div>` : '';
   const legend = {
-    archi:`<span><i style="background:#2A3340"></i>Murs (ext. 20 cm, int. 15 cm)</span><span><i style="background:#FFF4E8;border:1px solid #ddd"></i>Pièces de vie</span><span><i style="background:#E6F5F6;border:1px solid #ddd"></i>Pièces d'eau</span>`,
-    fond:`<span><i style="border:1.5px dashed #C95F18"></i>Semelles</span><span><i style="background:#EEF3FA;border:1px solid #2F6FDB"></i>Longrines</span><span><i style="background:#14202E"></i>Amorces de poteaux</span>`,
-    struct:`<span><i style="background:#14202E"></i>Poteaux ${pj.struct.poteau}×${pj.struct.poteau}</span><span><i style="border:1.5px dashed #C95F18"></i>${pj.struct.dalle?'Poutres':'Chaînages'}</span>${pj.struct.dalle?'<span><i style="background:#2F6FDB"></i>Sens de portée des poutrelles</span>':''}`,
+    archi:`<span><i style="background:#2A3340"></i>Murs (ext. 20 cm, int. 15 cm)</span><span><i style="background:#FFF4E8;border:1px solid #ddd"></i>Pièces de vie</span><span><i style="background:#E6F5F6;border:1px solid #ddd"></i>Pièces d'eau</span><span style="color:#C8363B">— · — Lignes de coupe A et B</span>`,
+    fond:`<span><i style="border:1.5px dashed #C95F18"></i>Semelles (calculées poteau par poteau)</span><span><i style="background:#EEF3FA;border:1px solid #2F6FDB"></i>Longrines</span><span><i style="background:#14202E"></i>Amorces de poteaux</span><span>Touchez un élément pour ouvrir sa fiche</span>`,
+    struct:`<span><i style="background:#14202E"></i>Poteaux (repère = axes)</span><span><i style="border:1.5px dashed #C95F18"></i>${Mo.slab?'Poutres':'Chaînages'}</span>${Mo.slab?'<span><i style="background:#2F6FDB"></i>Sens des poutrelles</span>':''}<span>Touchez un poteau, une poutre ou un panneau</span>`,
     elec:`<span style="color:#C95F18">⊗ Point lumineux</span><span style="color:#2F6FDB">⊘ Interrupteur</span><span style="color:#1E9B5E">◓ Prise 16 A</span><span style="color:#8E4FD1">◓ Prise 32 A</span><span style="color:#0E8C95">▢ Chauffe-eau</span><span>▬ Tableau (TGBT)</span>`,
     plomb:`<span><i style="background:#2F6FDB"></i>Eau froide (PPR)</span><span><i style="background:#8B5A2B"></i>Évacuations (PVC Ø 100 / 40)</span><span><i style="border:1.5px solid #0E8C95"></i>Appareils sanitaires</span>`,
-    facade:'', coupe:''
+    toit:`<span><i style="background:#2F6FDB"></i>Gouttières / évacuations EP</span><span>→ sens de la pente</span>`,
+    facade:'', coupe:`<span><i style="background:#BFB6A8"></i>Béton armé coupé</span><span><i style="background:#E3D9C6"></i>Maçonnerie coupée</span><span><i style="border:1.5px dashed #14202E"></i>Éléments vus en arrière-plan</span>`, v3d:''
   }[pjTab];
   const ed = pjTab === 'elec' ? A.PLAN.elecData(pj, pjLv) : null;
   const maxW = Math.max(...pj.planning.map(r => r[1] + r[2]));
+  const SH = sheets(pj);
+  const isOn = sh => sh.tab === pjTab && (sh.lv == null || sh.lv === pjLv) && (sh.cut == null || sh.cut === pjCut);
+  const fmt = (v, d=1) => F(v, d);
+  const sizes = arr => [...new Set(arr)].sort((a,b)=>a-b).map(v => Math.round(v*100)).join(', ');
+  const descr = `<dl class="kv">
+    <dt>Sol d'assise</dt><dd>${esc(Mo.sol.nature)} · σsol = ${fmt(Mo.sol.sigma)} bar</dd>
+    <dt>Fondations</dt><dd>${Mo.semelles.length} semelles isolées, ${Mo.types.length} type(s) : ${Mo.types.map((t,i)=>`S${i+1} ${fmt(t[0],2)}×${fmt(t[0],2)}`).join(', ')} · fond de fouille −${fmt(Mo.sol.prof,2)}</dd>
+    <dt>Longrines</dt><dd>${Mo.longs.length} longrines ${pj.struct.longrine.join(' × ')} cm (${fmt(Mo.longs.reduce((a,l)=>a+l.L,0))} m)</dd>
+    <dt>Poteaux</dt><dd>${Mo.posts.length} files de poteaux · sections ${sizes(Mo.postEls.map(e=>e.d.a))} cm · ${[...new Set(Mo.postEls.map(e=>A.PRJ.barTxt(e.d.bars)))].join(', ')}</dd>
+    <dt>${Mo.slab?'Poutres':'Chaînages'}</dt><dd>${Mo.beams.length} ${Mo.slab?'poutres':'chaînages'} · hauteurs ${sizes(Mo.beams.map(b=>b.h))} cm</dd>
+    <dt>Planchers</dt><dd>${Mo.slab ? [...new Set(Mo.panels.filter(c=>!c.tremie).map(c=>c.hd))].map(h => `corps creux ${h} (${Mo.panels.filter(c=>c.hd===h&&!c.tremie).length} panneaux)`).join(', ') : 'Dallage sur terre-plein, faux plafond sous charpente'}</dd>
+    <dt>Toiture</dt><dd>${pj.toit && pj.toit.type !== 'terrasse' ? esc(pj.toit.couverture) + ' sur ' + esc(pj.toit.charpente.toLowerCase()) + ', ' + pj.toit.type + ' à ' + pj.toit.pente + '°' : 'Toiture-terrasse étanchée, acrotère ' + fmt((pj.toit||{}).acrotere||.6,2) + ' m'}</dd>
+    ${Mo.stairs.length ? `<dt>Escaliers</dt><dd>${Mo.stairs.length} volée(s) double(s) de ${Mo.stairs[0].n} marches (${fmt(Mo.stairs[0].hm*100)} × ${Math.round(Mo.stairs[0].g*100)} cm)</dd>` : ''}
+    <dt>Béton armé</dt><dd><b>${fmt(Mo.totBeton)} m³</b> · aciers <b>${fmt(Mo.totAcier/1000,2)} t</b> (${fmt(Mo.totAcier/Mo.totBeton,0)} kg/m³)</dd></dl>`;
   return `<div class="mhead" style="background:linear-gradient(130deg,#22344D,#0E1A2B)"><span class="ic">${ic(pj.id==='immeuble'?'building':'home')}</span><div><span class="kick" style="color:var(--amber)">${esc(pj.standing)} · ${esc(pj.niveauxTxt)}</span><h2>${esc(pj.titre)}</h2><p>${esc(pj.resume)}</p></div>
-   <div class="stack s8" style="text-align:right"><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('ruler')}${pj.surface} m² habitables</span><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('coins')}${F(pj.budget[0]/1e6)} – ${F(pj.budget[1]/1e6)} M FCFA</span><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('clock')}${esc(pj.duree)}</span></div></div>
+   <div class="stack s8" style="text-align:right"><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('ruler')}${pj.surface} m² habitables</span><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('coins')}${F(pj.budget[0]/1e6)} – ${F(pj.budget[1]/1e6)} M FCFA</span><span class="pill" style="background:rgba(255,255,255,.14);color:#fff">${ic('pin')}${esc((pj.site||{}).ville||'')}</span></div></div>
   <div class="card">${A.mdHtml(pj.description)}</div>
-  <div class="card stack"><div class="toolbar"><h3 style="margin:0;font-size:18px">Plans du projet</h3><div class="plantabs">${tabs.map(t=>`<button class="tab ${pjTab===t[0]?'on':''}" data-pjtab="${t[0]}">${t[1]}</button>`).join('')}</div></div>
-   ${levelSel}<div class="planbox">${plan}</div>${legend?`<div class="legend">${legend}</div>`:''}
+  <div class="card stack" id="pjPlans"><div class="toolbar"><h3 style="margin:0;font-size:18px">Plans du projet <small>${SH.length} planches</small></h3><div class="plantabs">${tabs.map(t=>`<button class="tab ${pjTab===t[0]?'on':''}" data-pjtab="${t[0]}">${t[1]}</button>`).join('')}</div></div>
+   ${levelSel}${cutSel}<div class="planbox${pjTab==='v3d'?' p3d':''}">${plan}</div>${legend?`<div class="legend">${legend}</div>`:''}
    ${ed?`<div class="tw"><table class="t"><thead><tr><th>Circuit</th><th class="r">Points</th><th class="r">Circuits</th><th>Câble</th><th>Protection</th><th class="r">Puissance estimée</th></tr></thead><tbody>${ed.circuits.filter(c=>c.nb).map(c=>`<tr><td>${esc(c.n)}</td><td class="r">${c.nb}</td><td class="r">${c.cir}</td><td>${c.cable}</td><td>${c.prot}</td><td class="r">${F(c.p)} W</td></tr>`).join('')}</tbody></table></div><p class="sub">Bilan simplifié selon les règles de la NF C 15-100 : 8 points d'éclairage ou 8 prises maximum par circuit ; protection différentielle 30 mA en tête.</p>`:''}
-   <div class="row"><button class="btn b-dark b-sm" data-pjcad="${pj.id}">${ic('compass')}Ouvrir le plan dans l'atelier de dessin</button><button class="btn b-line b-sm" data-pjdl="${pj.id}">${ic('download')}Télécharger le plan (SVG)</button></div>
+   ${pjTab==='v3d'?`<div class="row"><button class="btn b-dark b-sm" data-pjcad3d="${pj.id}">${ic('cube')}Modifier la maquette dans l'atelier 3D</button><span class="sub">Tous les niveaux, dalles, escaliers et toiture sont importés : vous pouvez dessiner, changer les hauteurs, les matériaux et les couleurs.</span></div>`:`<div class="row"><button class="btn b-dark b-sm" data-pjcad="${pj.id}">${ic('compass')}Ouvrir dans l'atelier de dessin</button><button class="btn b-line b-sm" data-pjdl="${pj.id}">${ic('download')}Télécharger la planche (SVG)</button></div>`}
+   <details class="sheets"><summary>${ic('list')}Toutes les planches du dossier (${SH.length})</summary><div class="shgrid">${SH.map((sh,i)=>`<button class="shbtn ${isOn(sh)?'on':''}" data-sheet="${i}"><b class="mono">${sh.code}</b><span>${esc(sh.t)}</span></button>`).join('')}</div></details>
   </div>
-  <div class="cols"><div class="card"><h3>Descriptif de la structure</h3><dl class="kv">
-    <dt>Fondations</dt><dd>${pj.struct.radier?'Radier général':'Semelles isolées '+pj.struct.semelle.slice(0,2).join(' × ')+' × '+pj.struct.semelle[2]+' cm'}</dd>
-    <dt>Longrines</dt><dd>${pj.struct.longrine.join(' × ')} cm</dd><dt>Poteaux</dt><dd>${pj.struct.poteau} × ${pj.struct.poteau} cm (${M.info.nPost} au total)</dd>
-    <dt>${pj.struct.dalle?'Poutres':'Chaînages'}</dt><dd>${(pj.struct.dalle?pj.struct.poutre:pj.struct.chainage).join(' × ')} cm</dd>
-    <dt>Plancher</dt><dd>${pj.struct.dalle==='hourdis'?'Corps creux 16 + 4':pj.struct.dalle?'Dalle pleine '+pj.struct.dalle+' cm':'Sans dalle (faux plafond)'}</dd>
-    <dt>Toiture</dt><dd>${pj.toiture==='terrasse'?'Toiture-terrasse étanchée':'Tôles bac alu sur charpente'}</dd>
-    <dt>Aciers</dt><dd style="font-weight:500;text-align:left">${esc(pj.struct.aciers)}</dd></dl>
-    <div class="row" style="margin-top:12px">${['poteau','poutre','semelle','dalle'].map(x=>`<a class="mtag" href="#/app/construction/element/${x}">Voir : ${x}</a>`).join('')}</div></div>
+  <div class="card stack"><div class="toolbar"><h3 style="margin:0;font-size:18px">Éléments de structure du projet <small>${Mo.all.length} éléments repérés</small></h3></div>${A.PRJ.listHtml(pj)}</div>
+  <div class="card stack"><h3 style="margin:0;font-size:18px">Les matières appliquées à ce projet <small>calculs et choix propres à ce projet</small></h3>${A.APPLI ? A.APPLI.chips(pj) : ''}</div>
+  <div class="cols"><div class="card"><h3>Descriptif de la structure <small>issu de la note de calcul</small></h3>${descr}</div>
    <div class="card"><h3>Répartition du budget <small>par lots</small></h3><div class="bars">${pj.lots.map(l=>`<div class="brow"><span>${esc(l[0])}</span><span class="mono small">${l[1]} % · ${F((pj.budget[0]+pj.budget[1])/2*l[1]/100/1e6,1)} M</span>${A.bar(l[1]*3)}</div>`).join('')}</div></div></div>
-  <div class="card"><h3>Avant-métré et devis estimatif <small>calculés automatiquement à partir des plans</small></h3>
-   <div class="kpis" style="margin-bottom:14px"><div class="kpi"><small>${ic('ruler')}Surface habitable calculée</small><b>${F(M.info.Shab,1)} m²</b></div><div class="kpi"><small>${ic('brick')}Murs extérieurs / intérieurs</small><b>${F(M.info.Lext,1)} / ${F(M.info.Lint,1)} m</b></div><div class="kpi"><small>${ic('column')}Acier estimé</small><b>${F(M.info.acier/1000,2)} t</b></div><div class="kpi hl"><small>${ic('coins')}Total TTC estimé</small><b>${dq?F(dq.ttc/1e6,1)+' M':'—'}</b><em>FCFA, prix du bordereau</em></div></div>
+  <div class="card"><h3>Avant-métré et devis estimatif <small>calculés automatiquement à partir des plans et de la note de calcul</small></h3>
+   <div class="kpis" style="margin-bottom:14px"><div class="kpi"><small>${ic('ruler')}Surface habitable calculée</small><b>${F(M.info.Shab,1)} m²</b></div><div class="kpi"><small>${ic('brick')}Murs extérieurs / intérieurs</small><b>${F(M.info.Lext,1)} / ${F(M.info.Lint,1)} m</b></div><div class="kpi"><small>${ic('column')}Acier (note de calcul)</small><b>${F(Mo.totAcier/1000,2)} t</b></div><div class="kpi hl"><small>${ic('coins')}Total TTC estimé</small><b>${dq?F(dq.ttc/1e6,1)+' M':'—'}</b><em>FCFA, prix du bordereau</em></div></div>
    ${dq ? A.METRE.recapHtml(dq) : ''}
    <div class="row" style="margin-top:12px"><button class="btn b-pri" data-pjmetre="${pj.id}">${ic('calc')}Ouvrir le détail dans l'outil Métré</button><span class="sub">Les prix unitaires sont indicatifs (Abidjan) et modifiables dans l'outil Métré.</span></div></div>
   <div class="card"><h3>Planning prévisionnel <small>en semaines</small></h3><div class="gantt">${pj.planning.map(r=>`<div class="gr"><span>${esc(r[0])}</span><div class="gt"><i style="left:${r[1]/maxW*100}%;width:${r[2]/maxW*100}%"></i></div></div>`).join('')}<div class="gr"><span></span><div class="row between small faint"><span>S1</span><span>S${Math.round(maxW/2)}</span><span>S${maxW}</span></div></div></div></div>`;
- }
+ },
+ mount(root, p){ if(pjTab === 'v3d' && A.V3D){ const pj = Z().projets.find(x => x.id === p.id); if(pj) A.V3D.mountProject(root, pj); } },
+ unmount(){ if(A.V3D) A.V3D.dispose(); }
 });
-A.on('click', '[data-pjtab]', el => { pjTab = el.dataset.pjtab; A.refresh(); });
+A.on('click', '[data-pjtab]', el => { pjTab = el.dataset.pjtab; if(pjTab !== 'coupe') pjCut = pjCut; A.refresh(); });
 A.on('click', '[data-pjlv]', el => { pjLv = +el.dataset.pjlv; A.refresh(); });
+A.on('click', '[data-pjcut]', el => { pjCut = +el.dataset.pjcut; A.refresh(); });
+A.on('click', '[data-sheet]', el => { const pj = Z().projets.find(x => x.id === pjId); const sh = sheets(pj)[+el.dataset.sheet]; pjTab = sh.tab; if(sh.lv != null) pjLv = sh.lv; if(sh.cut != null) pjCut = sh.cut; A.refresh(); const b = $('#pjPlans'); if(b) b.scrollIntoView({behavior:'smooth', block:'start'}); });
+A.on('click', '.planbox [data-el]', el => { const pj = Z().projets.find(x => x.id === pjId); if(pj) A.PRJ.openEl(pj, el.dataset.el); });
 A.on('click', '[data-pjdl]', el => { const box = $('.planbox svg'); if(box) A.download('plan-' + el.dataset.pjdl + '-' + pjTab + '.svg', box.outerHTML, 'image/svg+xml'); });
 A.on('click', '[data-pjmetre]', el => { const pj = Z().projets.find(x => x.id === el.dataset.pjmetre); A.METRE.openFromProject(pj); });
+A.on('click', '[data-pjcad3d]', el => { const pj = Z().projets.find(x => x.id === el.dataset.pjcad3d); A.CAD.openProject3D(pj); });
 A.on('click', '[data-pjcad]', el => { const pj = Z().projets.find(x => x.id === el.dataset.pjcad); A.CAD.openProject(pj, pjLv); });
 })();

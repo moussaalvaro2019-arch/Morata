@@ -339,4 +339,25 @@ F['treillis'] = () => svg(600, 240, `
  <path d="M 60 196 l -12 20 h 24 z" fill="none" stroke="${INK}"/><circle cx="540" cy="204" r="8" fill="none" stroke="${INK}"/>
  ${[180,300,420].map(x=>Ln(x,20,x,62,{c:OR,w:2,m:'fo'})).join('')}${T(300,16,'charges aux nœuds',{a:'middle',s:11,c:OR})}
  ${T(300,232,'Ferme en treillis : barres tendues ou comprimées uniquement',{a:'middle',s:11,b:1})}`, 'Treillis');
+
+/* ---------------- Physique du bâtiment ---------------- */
+F['soleil'] = () => svg(560, 300, `
+ <rect x="0" y="250" width="560" height="18" fill="url(#fsol)"/>${Ln(0,250,560,250,{w:2})}
+ <rect x="230" y="200" width="100" height="50" fill="${CO}" stroke="${INK}" stroke-width="2"/><path d="M 220 200 L 280 172 L 340 200 Z" fill="#D9C9A8" stroke="${INK}" stroke-width="2"/>
+ ${[[188,48,'#E8A33A'],[294,40,'#E8752A'],[376,66,'#C8363B']].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="13" fill="${c}" stroke="${INK}"/>`+Ln(x,y+12,280,170,{c:c,w:2,d:'6 4',m:'fo'})).join('')}
+ ${T(168,44,'21 juin : 72°',{a:'end',s:11,b:1})}${T(168,58,'soleil au nord',{a:'end',s:10,c:GR})}
+ ${T(294,16,'Équinoxes : 85° (presque au zénith)',{a:'middle',s:11,b:1})}
+ ${T(396,62,'21 décembre : 61°',{s:11,b:1})}${T(396,76,'soleil au sud',{s:10,c:GR})}
+ ${T(14,240,'NORD',{b:1,s:12})}${T(546,240,'SUD',{b:1,s:12,a:'end'})}
+ ${T(280,290,'Hauteur du soleil à midi à Abidjan (latitude 5,3° N) : h = 90° − |φ − δ|',{a:'middle',s:11,b:1})}`, 'Course du soleil à midi');
+
+F['debord'] = () => svg(520, 300, `
+ <rect x="150" y="30" width="40" height="240" fill="${CO}" stroke="${INK}" stroke-width="2"/>
+ <rect x="150" y="120" width="40" height="100" fill="#E4EDFC" stroke="${INK}"/>${T(170,174,'baie',{a:'middle',s:10,r:-90})}
+ <rect x="190" y="96" width="120" height="14" fill="${CO}" stroke="${INK}" stroke-width="2"/>${T(250,90,'débord (auvent)',{a:'middle',s:11})}
+ ${Ln(420,-12,190,220,{c:OR,w:2.4,m:'fo'})}${T(400,40,'rayon solaire',{s:11,c:OR})}
+ <path d="M 270 220 A 80 80 0 0 0 251 168" fill="none" stroke="${OR}" stroke-width="1.6"/>${T(282,196,'h',{s:13,c:OR,b:1})}${Ln(190,220,330,220,{c:GR,w:1,d:'4 3'})}
+ ${Dim(190,282,310,282,'d')}${Dim(120,110,120,220,'H')}
+ ${T(430,240,'Baie entièrement à l\'ombre si',{a:'middle',s:11})}${T(430,258,'d ≥ H / tan h',{a:'middle',s:14,b:1,c:ST})}
+ ${T(260,20,'Coupe perpendiculaire à la façade',{a:'middle',s:11,b:1})}`, 'Dimensionnement d\'un débord');
 })();

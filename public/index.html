@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Morata · Académie du bâtiment</title>
-<meta name="description" content="Plateforme d'apprentissage du bâtiment : mathématiques, RDM, béton armé, géotechnique, topographie, métré, construction de A à Z, atelier de dessin et assistant IA.">
+<title>BâtiPro Académie</title>
+<meta name="description" content="BâtiPro Académie, l'académie du bâtiment : cours et exercices corrigés de mathématiques, RDM, béton armé, géotechnique, topographie, métré, construction de A à Z, atelier de dessin et assistant IA.">
 <meta name="theme-color" content="#0E1A2B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,6 +113,8 @@
   <symbol id="i-room" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 12h8M12 8v8" opacity=".6"/></symbol>
   <symbol id="i-magnet" viewBox="0 0 24 24"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h4M14 7h4"/><path d="M10 3v8a2 2 0 0 0 4 0V3"/></symbol>
   <symbol id="i-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v6M12 16v6M2 12h6M16 12h6"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.8"/></symbol>
+  <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4.5h-4.5"/></symbol>
   <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
   <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.2A8.5 8.5 0 1 1 20.5 11.7z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2.4-1.8-2.8-2.8l.8-1-1-2z"/></symbol>
@@ -134,29 +136,33 @@
 
 <!-- Contenus pédagogiques -->
 <script src="js/core.js"></script>
-<script src="data/matieres/mathematiques.js"></script>
-<script src="data/matieres/outils-mathematiques.js"></script>
-<script src="data/matieres/sciences-physiques.js"></script>
-<script src="data/matieres/recherche-operationnelle.js"></script>
-<script src="data/matieres/physique-batiment.js"></script>
-<script src="data/matieres/thermique.js"></script>
-<script src="data/matieres/acoustique.js"></script>
-<script src="data/matieres/mecanique-fluides.js"></script>
-<script src="data/matieres/mmc.js"></script>
-<script src="data/matieres/geotechnique.js"></script>
-<script src="data/matieres/topographie.js"></script>
-<script src="data/matieres/materiaux.js"></script>
-<script src="data/matieres/technologie.js"></script>
-<script src="data/matieres/rdm.js"></script>
-<script src="data/matieres/beton-arme.js"></script>
-<script src="data/matieres/gestion-chantier.js"></script>
-<script src="data/matieres/economie.js"></script>
-<script src="data/matieres/metre.js"></script>
+<script src="data/catalogue.js"></script>
 <script src="data/construction.js"></script>
 <!-- Application -->
 <script src="js/md.js"></script>
 <script src="js/plans.js"></script>
 <script src="js/figures.js"></script>
+<script src="js/projet.js"></script>
+<script src="js/appli.js"></script>
+<script src="js/v3d.js"></script>
+<script src="js/sol.js"></script>
+<script src="js/sol-poutre.js"></script>
+<script src="js/exos.js"></script>
+<script src="js/photo.js"></script>
+<script src="data/solveurs/fond.js"></script>
+<script src="data/solveurs/phys.js"></script>
+<script src="data/solveurs/struct.js"></script>
+<script src="data/solveurs/sols.js"></script>
+<script src="data/solveurs/constr.js"></script>
+<script src="data/solveurs/gest.js"></script>
+<script src="data/exercices/fond.js"></script>
+<script src="data/exercices/phys.js"></script>
+<script src="data/exercices/struct.js"></script>
+<script src="data/exercices/sols.js"></script>
+<script src="data/exercices/constr.js"></script>
+<script src="data/exercices/gest.js"></script>
+<script src="data/exercices/licence.js"></script>
+<script src="data/exercices/epreuves.js"></script>
 <script src="js/site.js"></script>
 <script src="js/learn.js"></script>
 <script src="js/az.js"></script>

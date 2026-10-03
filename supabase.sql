@@ -1,5 +1,5 @@
 -- =====================================================================
--- Morata · Académie du bâtiment : base de données Supabase
+-- BâtiPro Académie : base de données Supabase
 -- À coller en entier dans Supabase > SQL Editor > New query > Run.
 -- Le script peut être relancé sans risque (il ne supprime aucune donnée).
 -- =====================================================================
@@ -24,6 +24,8 @@ create table if not exists public.quiz_results  (id text primary key, owner uuid
 create table if not exists public.works         (id text primary key, owner uuid not null default auth.uid() references auth.users(id) on delete cascade, kind text not null default 'dessin', data jsonb not null default '{}'::jsonb, updated_at timestamptz not null default now());
 create table if not exists public.connexions    (id bigint generated always as identity primary key, owner uuid not null default auth.uid() references auth.users(id) on delete cascade, at timestamptz not null default now(), data jsonb not null default '{}'::jsonb);
 create table if not exists public.ia_logs       (id bigint generated always as identity primary key, owner uuid references auth.users(id) on delete cascade, at timestamptz not null default now(), data jsonb not null default '{}'::jsonb);
+-- Annales : sujets officiels importés par la direction (meta = examen, année, matière, titre, publié ; pages = photos compressées)
+create table if not exists public.annales       (id text primary key, meta jsonb not null default '{}'::jsonb, enonce text not null default '', corrige text not null default '', pages jsonb not null default '[]'::jsonb, updated_at timestamptz not null default now());
 
 create index if not exists connexions_at_idx    on public.connexions (at desc);
 create index if not exists connexions_owner_idx on public.connexions (owner);
@@ -78,10 +80,11 @@ alter table public.quiz_results  enable row level security;
 alter table public.works         enable row level security;
 alter table public.connexions    enable row level security;
 alter table public.ia_logs       enable row level security;
+alter table public.annales       enable row level security;
 
 do $$ declare r record; begin
   for r in select policyname, tablename from pg_policies where schemaname = 'public'
-    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs')
+    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales')
   loop execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename); end loop;
 end $$;
 
@@ -125,9 +128,13 @@ create policy cx_delete on public.connexions for delete using (public.is_admin()
 -- Journal de l'IA : écrit uniquement par la fonction ia_check
 create policy ia_read on public.ia_logs for select using (owner = auth.uid() or public.is_admin());
 
+-- Annales : les apprenants lisent les sujets publiés, la direction gère tout
+create policy annales_read  on public.annales for select using (coalesce((meta->>'pub')::boolean, false) or public.is_admin());
+create policy annales_write on public.annales for all using (public.is_admin()) with check (public.is_admin());
+
 -- ---------- Droits d'accès aux tables ----------
 revoke all on public.profiles, public.admins, public.admin_invites, public.settings, public.contents, public.annonces,
-              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs from anon, authenticated;
+              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales from anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select on public.settings, public.contents, public.annonces to anon, authenticated;
 grant insert, update, delete on public.settings, public.contents, public.annonces to authenticated;
@@ -137,6 +144,8 @@ grant select, delete on public.admins to authenticated;
 grant select, insert, delete on public.admin_invites to authenticated;
 grant select, insert, update, delete on public.progress, public.works to authenticated;
 grant select, insert, delete on public.quiz_results to authenticated;
+grant select on public.annales to anon, authenticated;
+grant insert, update, delete on public.annales to authenticated;
 grant select, insert, delete on public.connexions to authenticated;
 grant select on public.ia_logs to authenticated;
 grant usage, select on all sequences in schema public to authenticated;
@@ -231,7 +240,7 @@ begin
   insert into public.ia_logs (owner, data) values (v_uid, jsonb_build_object('kind', left(coalesce(p_kind, ''), 20), 'ref', left(coalesce(p_ref, ''), 80)));
   return json_build_object('ok', true, 'admin', v_admin,
     'model', coalesce(nullif(v_set->>'iaModel', ''), 'claude-opus-5-5'),
-    'platform', trim(coalesce(nullif(v_set->>'name1', ''), 'Morata') || coalesce(v_set->>'name2', '')));
+    'platform', coalesce(nullif(trim(v_set->>'nom'), ''), nullif(trim(coalesce(v_set->>'name1', '') || coalesce(v_set->>'name2', '')), ''), 'BâtiPro Académie'));
 end $$;
 
 revoke execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
@@ -242,7 +251,12 @@ grant execute on function public.ia_check(text, text), public.touch(text), publi
 
 -- ---------- Paramètres de départ ----------
 -- Insérés seulement s'ils n'existent pas : vos réglages ne sont jamais écrasés.
-insert into public.settings (id, data) values ('main', '{"name1":"Morata","tagline":"Académie du bâtiment","ceo":"DOUMBIA Moussa","iaActive":true,"iaModel":"claude-opus-5-5","iaQuota":30,"openSignup":true,"preview":1,"tva":18,"devise":"FCFA"}'::jsonb)
+insert into public.settings (id, data) values ('main', '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro","tagline":"Académie du bâtiment","ceo":"DOUMBIA Moussa","iaActive":true,"iaModel":"claude-opus-5-5","iaQuota":30,"openSignup":true,"preview":1,"tva":18,"devise":"FCFA"}'::jsonb)
 on conflict (id) do nothing;
+-- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
+update public.settings
+   set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,
+       updated_at = now()
+ where id = 'main' and data->>'name1' = 'Morata';
 insert into public.annonces (id, data) values ('bienvenue', jsonb_build_object('titre', 'Bienvenue sur la plateforme', 'texte', 'Commencez par la Construction de A à Z pour voir comment toutes les matières s''enchaînent sur un vrai chantier.', 'at', (extract(epoch from now()) * 1000)::bigint))
 on conflict (id) do nothing;

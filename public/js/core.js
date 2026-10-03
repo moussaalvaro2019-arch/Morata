@@ -1,5 +1,5 @@
 /* =====================================================================
-   Morata · noyau : outils, données (Supabase ou démo locale), routeur,
+   BâtiPro Académie · noyau : outils, données (Supabase ou démo locale), routeur,
    gabarits des espaces (site public, apprenant, PDG)
    ===================================================================== */
 (function(){
@@ -86,10 +86,10 @@ A.MODELES = [
   {id:'claude-haiku-4-5',  n:'Claude Haiku 4.5 · très économique'}
 ];
 A.DEF = {
-  name1:'Morata', name2:'', tagline:'Académie du bâtiment', ceo:'DOUMBIA Moussa',
+  nom:'BâtiPro Académie', name1:'Bâti', name2:'Pro', tagline:'Académie du bâtiment', ceo:'DOUMBIA Moussa',
   heroTitle:'Apprenez le bâtiment', heroAccent:'de A à Z.',
   heroText:"Toutes les matières du génie civil, de la mathématique au béton armé, la construction d'une maison expliquée étape par étape, un atelier de dessin de plans, le métré et un professeur IA disponible jour et nuit.",
-  about:"Morata est une plateforme d'apprentissage créée pour former techniciens, étudiants, ouvriers et passionnés aux métiers du bâtiment. Les cours suivent les référentiels de BTS et de licence en génie civil, avec des exemples tirés des chantiers d'Afrique de l'Ouest.",
+  about:"BâtiPro Académie est une plateforme d'apprentissage créée pour former techniciens, étudiants, ouvriers et passionnés aux métiers du bâtiment. Les cours suivent les référentiels de BTS et de licence en génie civil, avec des exemples tirés des chantiers d'Afrique de l'Ouest.",
   city:"Abidjan, Côte d'Ivoire", phone:'', whatsapp:'', email:'',
   openSignup:true, preview:1,
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
@@ -97,13 +97,51 @@ A.DEF = {
 };
 A.cfg = () => Object.assign({}, A.DEF, (A.S.settings||{}).main || {});
 
-/* ---------- matières (remplies par data/matieres/*.js) ---------- */
+/* ---------- matières : catalogue (data/catalogue.js) puis contenu à la demande (data/cours/<id>.js) ---------- */
 A.M = [];
-A.addMatiere = m => { m.chapitres = m.chapitres || []; m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.ordre = c.ordre ?? i; }); A.M.push(m); };
+/* 3 niveaux par matière : chaque chapitre porte niv = 1 (débutant), 2 (intermédiaire) ou 3 (avancé) */
+A.NIVEAUX = [
+  {id:1, n:'Débutant', d:'Les notions de base, sans prérequis', c:'#1E9B5E', bg:'#E7F5EE'},
+  {id:2, n:'Intermédiaire', d:'Méthodes de calcul et applications courantes', c:'#D9661F', bg:'#FDEEE2'},
+  {id:3, n:'Avancé', d:'Dimensionnement, cas complexes et approfondissements', c:'#C8363B', bg:'#FBE9E9'}
+];
+A.nivOf = c => Math.min(3, Math.max(1, +(c && c.niv) || 2));
+A.addMatiere = m => {
+  m.chapitres = m.chapitres || [];
+  const prev = A.M.find(x => x.id === m.id);
+  if(prev){ // contenu complet d'une matière déjà présente dans le catalogue (data/cours/<id>.js)
+    m.chapitres.forEach(c => { const o = prev.chapitres.find(x => x.id === c.id); if(o) Object.assign(o, c, {niv:A.nivOf(c)}); else prev.chapitres.push(Object.assign(c, {mat:m.id, niv:A.nivOf(c), ordre:prev.chapitres.length})); });
+    prev.loaded = true; A.coursVer++; return;
+  }
+  m.chapitres.forEach((c,i)=>{ c.mat = m.id; c.niv = A.nivOf(c); c._i = i; }); m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = c.ordre ?? i; });
+  if(!m.src) m.loaded = true; A.M.push(m);
+};
+A.coursVer = 0;
+/* Chargement à la demande du contenu d'une matière (cours, quiz, exercices corrigés) */
+const coursLoading = {};
+A.loadMat = id => {
+  const m = A.M.find(x => x.id === id);
+  if(!m || m.loaded || !m.src) return Promise.resolve(m);
+  return coursLoading[id] || (coursLoading[id] = new Promise((res, rej) => {
+    const sc = document.createElement('script'); sc.src = m.src; sc.async = true;
+    sc.onload = () => { delete coursLoading[id]; m.loaded = true; A.coursVer++; res(m); };
+    sc.onerror = () => { delete coursLoading[id]; sc.remove(); rej(new Error('Cours indisponible : vérifiez votre connexion internet.')); };
+    document.head.appendChild(sc);
+  }));
+};
+/* Le chapitre a-t-il son contenu ? sinon on le charge puis on réaffiche la page */
+A.chapReady = (f, after) => {
+  if(!f || f.c.contenu != null) return true;
+  A.loadMat(f.m.id).then(() => (after || A.render)()).catch(e => { toast(e.message, 'x'); });
+  return false;
+};
+A.chapLoading = () => `<div class="card row" style="justify-content:center;padding:40px">${ic('refresh')}<span class="sub">Chargement du cours…</span></div>`;
+A.nq = c => c.quiz ? c.quiz.length : (c.nq || 0);
+A.nex = c => c.exercices ? c.exercices.length : (c.nex || 0);
 let catCache = null, catKey = '';
 A.catalog = function(all){
   const cont = A.S.contents || {};
-  const key = JSON.stringify(Object.keys(cont).map(k => k + (cont[k].updatedAt||'') + (cont[k].cache?'h':''))) + A.M.length + (all?'a':'');
+  const key = JSON.stringify(Object.keys(cont).map(k => k + (cont[k].updatedAt||'') + (cont[k].cache?'h':''))) + A.M.length + '/' + A.coursVer + (all?'a':'');
   if(catCache && catKey === key) return catCache;
   const mats = A.M.map(m => ({...m, chapitres: m.chapitres.map(c => ({...c}))}));
   Object.entries(cont).forEach(([id, d]) => {
@@ -120,7 +158,7 @@ A.catalog = function(all){
     mats.forEach(m => { const c = m.chapitres.find(x => x.id === cid); if(c){ found = c; Object.assign(c, d, {id:cid, mat:m.id, edited:true}); } });
     if(!found && d.mat){ const m = mats.find(x => x.id === d.mat); if(m) m.chapitres.push({...d, id:cid, custom:true}); }
   });
-  mats.forEach(m => { m.chapitres.sort((a,b) => (a.ordre??0) - (b.ordre??0)); if(!all) m.chapitres = m.chapitres.filter(c => !c.cache); });
+  mats.forEach(m => { m.chapitres.sort((a,b) => A.nivOf(a) - A.nivOf(b) || (a.ordre??0) - (b.ordre??0)); if(!all) m.chapitres = m.chapitres.filter(c => !c.cache); });
   const out = all ? mats : mats.filter(m => !m.cache);
   out.sort((a,b) => A.GROUPES.findIndex(g=>g.id===a.groupe) - A.GROUPES.findIndex(g=>g.id===b.groupe) || (a.ordre??50) - (b.ordre??50));
   catCache = out; catKey = key; return out;
@@ -132,6 +170,17 @@ A.matProgress = (m, prog) => {
   const total = m.chapitres.length, done = m.chapitres.filter(c => prog[c.id] && prog[c.id].done).length;
   return {done, total, pct: total ? Math.round(done/total*100) : 0};
 };
+A.addChapitres = (mid, list) => { const m = A.M.find(x => x.id === mid); if(!m) return; const n0 = m.chapitres.length;
+  list.forEach((c,i) => { c.mat = mid; c.niv = A.nivOf(c); c._i = 100 + n0 + i; m.chapitres.push(c); });
+  m.chapitres.sort((a,b) => a.niv - b.niv || a._i - b._i); m.chapitres.forEach((c,i) => { c.ordre = i; }); };
+A.matLevels = (m, prog) => {
+  prog = prog || A.S.progress || {};
+  return A.NIVEAUX.map(N => { const ch = m.chapitres.filter(c => A.nivOf(c) === N.id), done = ch.filter(c => prog[c.id] && prog[c.id].done).length;
+    return {...N, ch, done, total:ch.length, pct:ch.length ? Math.round(done/ch.length*100) : 0, min:ch.reduce((a,c) => a + (c.duree||20), 0)}; });
+};
+A.myNiv = mid => { const d = A.S.me && A.S.me.data; return (d && d.niv && d.niv[mid]) || 0; };
+A.setNiv = async (mid, n) => { const S = A.S; const data = Object.assign({}, S.me.data, {niv:Object.assign({}, (S.me.data||{}).niv, {[mid]:n})}); return A.db.saveProfile(data); };
+A.nivPill = c => { const N = A.NIVEAUX[A.nivOf(c)-1]; return `<span class="pill" style="background:${N.bg};color:${N.c}">${'●'.repeat(N.id)} ${N.n}</span>`; };
 A.matIcon = m => `<span class="ic" style="background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span>`;
 A.matIconSm = m => `<span style="width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none;background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span>`;
 
@@ -144,7 +193,7 @@ let sb = null;
 
 /* ---- démo locale : tout est gardé dans ce navigateur ---- */
 function demoSeed(){
-  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}};
+  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}};
   const t = now(), day = 86400000;
   const people = [
     ['u_ak','Koné Aminata','Élève / étudiant','Yopougon'],['u_kj','Kouassi Jean-Marc','Technicien','Cocody'],
@@ -161,7 +210,7 @@ function demoSeed(){
     if(k%2===0) d.quiz[u+':'+c+':'+k] = {owner:u, data:{chap:c, mat:c.split('-')[0], score: 2 + (k*7+u.length)%3, total:4, at: t - (list.length-k)*day*.8}};
   }));
   d.ia.push({owner:'u_np', at:t-3*3600000, data:{kind:'chat', ref:'ba'}},{owner:'u_kj', at:t-26*3600000, data:{kind:'expliquer', ref:'ba-2'}},{owner:'u_ak', at:t-50*3600000, data:{kind:'chat', ref:'rdm'}});
-  d.annonces.a1 = {titre:'Bienvenue sur Morata', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
+  d.annonces.a1 = {titre:'Bienvenue sur BâtiPro Académie', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
   return d;
 }
 const L = {
@@ -173,6 +222,9 @@ const L = {
 
 /* ---- chargement des données ---- */
 function applyPublic(settings, contents, annonces){
+  // réglages encore enregistrés sous l'ancien nom (Morata) : affichés sous le nouveau nom
+  const m0 = (settings || {}).main;
+  if(m0 && m0.name1 === 'Morata') settings = Object.assign({}, settings, {main:Object.assign(JSON.parse(JSON.stringify(m0).replace(/Morata/g, 'BâtiPro Académie')), {nom:'BâtiPro Académie', name1:'Bâti', name2:'Pro'})});
   S.settings = settings || {}; S.contents = contents || {}; S.annonces = annonces || {};
 }
 function rows2obj(rows){ const o = {}; (rows||[]).forEach(r => o[r.id] = r.data || {}); return o; }
@@ -352,7 +404,7 @@ A.db = {
     const {error} = await sb.from('quiz_results').insert({id, owner:S.me.id, data}); if(error) toast(sbErr(error), 'x');
   },
   async saveWork(id, kind, data){
-    id = id || uid(kind === 'dessin' ? 'd_' : 'm_');
+    id = id || uid(kind === 'dessin' ? 'd_' : kind === 'photo' ? 'ph_' : 'm_');
     const at = new Date().toISOString();
     S.works[id] = {kind, data, updated_at:at};
     if(S.mode === 'local'){ L.db.works[id] = {owner:S.me.id, kind, data, updated_at:at}; L.save(); return id; }
@@ -441,6 +493,37 @@ A.db = {
   async logIa(kind, ref){
     if(S.mode === 'local'){ L.db.ia.push({owner:S.me ? S.me.id : 'anon', at:now(), data:{kind, ref}}); L.save(); }
   },
+  /* ---- annales officielles (sujets d'examen importés par la direction) ----
+     liste = métadonnées seules ; les photos des pages ne sont chargées qu'à l'ouverture */
+  async annales(){
+    if(S.mode === 'local'){ const a = L.db.annales || {}; return Object.entries(a).map(([id, r]) => ({id, ...r})).filter(r => r.pub || (S.me && S.me.isAdmin)); }
+    const {data, error} = await sb.from('annales').select('id,meta,updated_at').order('updated_at', {ascending:false}).limit(2000);
+    if(error){ console.warn(error); return []; }
+    return (data || []).map(r => ({id:r.id, ...(r.meta || {}), updated_at:r.updated_at}));
+  },
+  async annale(id){
+    if(S.mode === 'local'){ const r = (L.db.annales || {})[id]; if(!r) return null; const x = ls.get('ann_' + id, {}); return {id, ...r, pages:x.pages || [], enonce:x.enonce || '', corrige:x.corrige || ''}; }
+    const {data, error} = await sb.from('annales').select('*').eq('id', id).maybeSingle();
+    if(error || !data) return null;
+    return {id:data.id, ...(data.meta || {}), pages:data.pages || [], enonce:data.enonce || '', corrige:data.corrige || '', updated_at:data.updated_at};
+  },
+  async saveAnnale(id, rec){
+    id = id || uid('an_');
+    const meta = {examen:rec.examen, option:rec.option || '', annee:+rec.annee || null, session:rec.session || '', mat:rec.mat || '', titre:rec.titre || '', pub:!!rec.pub, np:(rec.pages || []).length, hasC:!!String(rec.corrige || '').trim(), src:rec.src || '', at:now()};
+    if(S.mode === 'local'){
+      L.db.annales = L.db.annales || {};
+      const prev = ls.get('ann_' + id, null);
+      try{ localStorage.setItem('mrt_ann_' + id, JSON.stringify({pages:rec.pages || [], enonce:rec.enonce || '', corrige:rec.corrige || ''})); }
+      catch(_){ if(prev) ls.set('ann_' + id, prev); toast('Stockage du navigateur plein : réduisez le nombre de photos', 'alert'); return null; }
+      L.db.annales[id] = meta; L.save(); return id;
+    }
+    const {error} = await sb.from('annales').upsert({id, meta, pages:rec.pages || [], enonce:rec.enonce || '', corrige:rec.corrige || '', updated_at:new Date().toISOString()});
+    if(error){ toast(sbErr(error), 'x'); return null; } return id;
+  },
+  async delAnnale(id){
+    if(S.mode === 'local'){ if(L.db.annales) delete L.db.annales[id]; ls.del('ann_' + id); L.save(); return true; }
+    const {error} = await sb.from('annales').delete().eq('id', id); if(error){ toast(sbErr(error), 'x'); return false; } return true;
+  },
   async token(){
     if(S.mode !== 'sb') return '';
     const {data:{session}} = await sb.auth.getSession(); return session ? session.access_token : '';
@@ -509,7 +592,8 @@ window.addEventListener('hashchange', () => { closeWin(); A.render(); A.db && S.
 /* =====================================================================
    GABARITS
    ===================================================================== */
-const brandText = () => { const c = A.cfg(); return (c.name1 + (c.name2||'')).trim(); };
+// nom complet (titres, attestations, assistant IA) ; à défaut, le nom du logo
+const brandText = () => { const c = A.cfg(); return String(c.nom || '').trim() || (c.name1 + (c.name2||'')).trim(); };
 A.brandText = brandText;
 A.lockup = (dark, tag) => { const c = A.cfg(); return `<a class="lock${dark?' dk':''}" href="#/"><svg class="logo"><use href="#logo"/></svg><span class="wm"><span>${esc(c.name1)}${c.name2?`<em>${esc(c.name2)}</em>`:''}</span><small>${esc(tag==null?c.tagline:tag)}</small></span></a>`; };
 
@@ -534,13 +618,13 @@ function siteShell(body, m){
 }
 
 const LNAV = [
-  ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/construction','Construction A→Z','crane'],
-  ['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/profil','Mon profil','user']
+  ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],
   ['Apprenants'],['admin/apprenants','Apprenants','users'],['admin/progression','Progression & quiz','target'],
-  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annonces','Annonces','bell'],
+  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annales','Annales d\'examens','doc'],['admin/annonces','Annonces','bell'],
   ['Outils'],['admin/ia','Intelligence artificielle','spark'],['admin/travaux','Travaux des apprenants','folder'],
   ['Réglages'],['admin/parametres','Paramètres','cog']
 ];
@@ -548,7 +632,7 @@ function navActive(path, h){
   if(h === 'app' || h === 'admin') return path === h;
   const base = h.split('/')[1];
   const seg = path.split('/')[1] || '';
-  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil'};
+  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil', exercice:'exercices', solveur:'exercices', epreuve:'exercices', annale:path.startsWith('admin') ? 'annales' : 'exercices'};
   return seg === base || alias[seg] === base;
 }
 function appShell(body, m, title, crumb, actions, adm){
@@ -560,7 +644,7 @@ function appShell(body, m, title, crumb, actions, adm){
     : `${me.isAdmin?`<a class="nav" href="#/admin">${ic('crown')}Espace PDG</a>`:''}<a class="nav" href="#/">${ic('globe')}Site public</a>`;
   const bn = adm
     ? [['admin','Pilotage','chart'],['admin/apprenants','Apprenants','users'],['admin/contenus','Contenus','book'],['admin/connexions','Connexions','online'],['admin/parametres','Réglages','cog']]
-    : [['app','Accueil','home'],['app/matieres','Cours','book'],['app/construction','A→Z','crane'],['app/atelier','Dessin','compass'],['app/ia','IA','spark']];
+    : [['app','Accueil','home'],['app/matieres','Cours','book'],['app/resoudre','Photo','camera'],['app/exercices','Exos','target'],['app/construction','A→Z','crane']];
   return `<div class="shell${adm?' adm':''}">
   <aside class="side" id="side">
     <div class="brand">${A.lockup(adm, adm?'Direction':null)}</div>
