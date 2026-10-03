@@ -295,27 +295,34 @@ A.addMatiere({id:"mmc", titre:"Mécanique des milieux continus", court:"MMC", gr
   {id:"mmc-8", niv:3, titre:"Contraintes planes et cercle de Mohr appliqué", duree:35, nq:4, nex:0},
   {id:"mmc-9", niv:3, titre:"Introduction aux éléments finis", duree:30, nq:4, nex:0}
  ]});
-A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", groupe:"fond", icone:"fx", couleur:"#5B45A8", niveau:"Intermédiaire", heures:22, ordre:2, prerequis:["math"], resume:"Dérivées, intégrales, vecteurs, matrices et équations différentielles : les outils de l'ingénieur pour la RDM, la MMC et le calcul des structures.", objectifs:[
-  "Dériver une fonction et trouver un extremum (moment maximal)",
-  "Intégrer pour obtenir une résultante, un centre de gravité, un moment d'inertie",
-  "Manipuler vecteurs, produits scalaire et vectoriel",
-  "Résoudre un système linéaire par la méthode de Gauss",
-  "Comprendre les équations différentielles de la déformée et des vibrations"
+A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", groupe:"fond", icone:"fx", couleur:"#5B45A8", niveau:"Intermédiaire", heures:55, ordre:2, prerequis:["math"], resume:"Les outils mathématiques de l'ingénieur et du technicien supérieur : vecteurs et moments, fonctions, dérivées et extremums, exponentielle et logarithme, intégrales (résultantes, centres de gravité, inerties, déformées), matrices et systèmes, équations différentielles, méthodes numériques, calcul matriciel des structures, régression et incertitudes, avec applications à la RDM et exercices corrigés.", objectifs:[
+  "Manipuler vecteurs, produits scalaires et moments",
+  "Dériver une fonction et trouver un extremum (moment maximal, optimisation)",
+  "Intégrer pour obtenir une résultante, un centre de gravité, un moment d'inertie, une déformée",
+  "Résoudre des systèmes linéaires et comprendre la méthode des déplacements",
+  "Résoudre des équations différentielles simples (déformée, vibrations, refroidissement)",
+  "Utiliser des méthodes numériques, une régression et un calcul d'incertitudes"
  ], applications:[
-  "Position du moment maximal dans une poutre",
-  "Moment d'inertie d'une section",
-  "Moments des forces et équilibre",
-  "Calcul matriciel des structures (logiciels de calcul)"
- ], src:"data/cours/om.js?v=06ed648f", chapitres:[
-  {id:"om-3", niv:1, titre:"Vecteurs, forces et moments", duree:30, nq:4, nex:0},
-  {id:"om-6", niv:1, titre:"Fonctions usuelles et lecture de graphiques", duree:25, nq:4, nex:0},
-  {id:"om-7", niv:1, titre:"Taux de variation et notion de dérivée", duree:25, nq:4, nex:0},
-  {id:"om-1", niv:2, titre:"Dérivées et recherche d'extremum", duree:30, nq:4, nex:0},
-  {id:"om-2", niv:2, titre:"Intégrales : résultantes, centres de gravité, inerties", duree:35, nq:4, nex:0},
-  {id:"om-4", niv:2, titre:"Matrices et systèmes linéaires", duree:30, nq:4, nex:0},
-  {id:"om-5", niv:3, titre:"Équations différentielles : déformées et vibrations", duree:30, nq:4, nex:0},
-  {id:"om-8", niv:3, titre:"Méthodes numériques : Newton, trapèzes et Simpson", duree:30, nq:4, nex:0},
-  {id:"om-9", niv:3, titre:"Calcul matriciel des structures : la méthode des déplacements", duree:35, nq:4, nex:0}
+  "Position et valeur du moment maximal dans une poutre",
+  "Centre de gravité et moment d'inertie d'une section",
+  "Flèche d'une poutre et fréquence propre d'un plancher",
+  "Volumes de terrassement par Simpson",
+  "Vérification des résultats d'un logiciel de calcul"
+ ], src:"data/cours/om.js?v=086f4a4f", chapitres:[
+  {id:"om-3", niv:1, titre:"Vecteurs, forces et moments", duree:45, nq:5, nex:5},
+  {id:"om-6", niv:1, titre:"Fonctions usuelles et lecture de graphiques", duree:40, nq:5, nex:5},
+  {id:"om-7", niv:1, titre:"Taux de variation et notion de dérivée", duree:40, nq:5, nex:5},
+  {id:"om-10", niv:1, titre:"Angles en radians et fonctions trigonométriques", duree:40, nq:5, nex:5},
+  {id:"om-1", niv:2, titre:"Dérivées et recherche d'extremum", duree:50, nq:5, nex:5},
+  {id:"om-11", niv:2, titre:"Exponentielle, logarithme népérien et phénomènes d'évolution", duree:45, nq:5, nex:5},
+  {id:"om-2", niv:2, titre:"Intégrales : résultantes, centres de gravité et inerties", duree:55, nq:5, nex:5},
+  {id:"om-12", niv:2, titre:"Intégration en RDM : diagrammes et déformées", duree:55, nq:5, nex:5},
+  {id:"om-4", niv:2, titre:"Matrices et systèmes linéaires", duree:50, nq:5, nex:5},
+  {id:"om-5", niv:3, titre:"Équations différentielles : refroidissement, déformées et vibrations", duree:55, nq:5, nex:5},
+  {id:"om-8", niv:3, titre:"Méthodes numériques : dichotomie, Newton, trapèzes, Simpson, Euler", duree:55, nq:5, nex:5},
+  {id:"om-9", niv:3, titre:"Calcul matriciel des structures : la méthode des déplacements", duree:60, nq:5, nex:5},
+  {id:"om-13", niv:3, titre:"Statistiques et régression linéaire appliquées aux essais", duree:50, nq:5, nex:5},
+  {id:"om-14", niv:3, titre:"Approximations, ordres de grandeur et incertitudes", duree:45, nq:5, nex:5}
  ]});
 A.addMatiere({id:"pb", titre:"Physique du bâtiment", court:"Physique bât.", groupe:"phys", icone:"sun", couleur:"#D9921B", niveau:"Intermédiaire", heures:18, ordre:1, prerequis:["sp"], resume:"Climat, confort, humidité, éclairage, ventilation et sécurité incendie : concevoir des bâtiments sains, frais et sûrs en climat tropical.", objectifs:[
   "Adapter un bâtiment au climat tropical humide",
