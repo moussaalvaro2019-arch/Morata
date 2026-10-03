@@ -62,6 +62,40 @@ Les prix montent avec le temps : à **i % par an** pendant n années, un coût e
 - **Prix** : ce que paie l'acheteur (le client) ;
 - **Valeur** : ce que vaut le bien sur le marché (emplacement, état, demande), qui peut être supérieure ou inférieure au coût de construction.
 
+## Application : construire un indice base 100
+Prix du sac de ciment relevé chaque année ; on prend 2021 comme base 100 : indice = prix / prix de base × 100.
+
+| Année | Prix du sac | Indice (base 100 en 2021) |
+|---|---|---|
+| 2021 | 4 800 F | 100,0 |
+| 2022 | 5 100 F | 106,3 |
+| 2023 | 5 400 F | 112,5 |
+| 2024 | 5 500 F | 114,6 |
+
+Hausse totale : + 14,6 % en 3 ans. Taux **moyen** annuel : (5 500 / 4 800)^(1/3) − 1 = **4,6 % par an** (et non 14,6 / 3 = 4,9 %).
+
+> [!exemple] Actualiser un ancien devis
+> Devis de 25 M F établi quand l'index valait 112 ; l'index vaut aujourd'hui 121.
+> Montant actualisé : 25 × 121 / 112 = **27,0 M F**.
+
+> [!exemple] Taux moyen de variations successives
+> + 10 %, puis − 5 %, puis + 8 % : × 1,10 × 0,95 × 1,08 = × 1,1286.
+> Hausse globale **+ 12,9 %** ; taux moyen annuel : 1,1286^(1/3) − 1 = **4,1 %**.
+
+## Raisonner en francs constants
+Avec 4 % d'inflation par an, 30 M F disponibles dans 3 ans n'auront le pouvoir d'achat que de 30 / 1,04³ = **26,7 M F** d'aujourd'hui. Pour comparer des montants à des dates différentes, on les ramène à la même date.
+
+## Méthode
+1. Identifier la **valeur de référence** (initiale, ou base de l'indice) ;
+2. Calculer le **coefficient multiplicateur** (valeur finale / valeur initiale) ;
+3. En déduire le pourcentage : (coefficient − 1) × 100 ;
+4. Pour plusieurs périodes, multiplier les coefficients puis prendre la racine n-ième pour un taux moyen.
+
+> [!attention] Erreurs fréquentes
+> - Confondre **points** d'indice et **pourcentage** : de 112 à 121, c'est + 9 points mais + 8,0 %.
+> - Additionner des pourcentages successifs.
+> - Calculer un pourcentage par rapport à la mauvaise base (la valeur finale au lieu de l'initiale).
+
 > [!retenir]
 > - + p % : × (1 + p/100) ; variations successives : on multiplie les coefficients.
 > - Variation d'un indice : I/I₀ − 1.
@@ -112,6 +146,32 @@ Une remise s'applique sur le HT ; la TVA se calcule ensuite sur le montant remis
 > [!attention]
 > Un prix inférieur au déboursé sec n'est pas une bonne affaire : l'entreprise se rattrapera sur la qualité (dosages, aciers) ou abandonnera le chantier.
 
+## Application : le prix plafond accepté par le marché
+Le marché local paie un m² de maçonnerie **12 000 F HT**. Avec un coefficient K = 1,35, le déboursé sec ne doit pas dépasser 12 000 / 1,35 = **8 889 F/m²**. Si le DS calculé vaut 9 500 F, il faut améliorer le rendement, négocier les achats ou renoncer : baisser K revient à travailler sans bénéfice.
+
+## Passer de la marge à la marque
+- Prix de vente **avec un taux de marque** de 15 % : PV = coût / (1 − 0,15) ; pour un coût de revient de 850 000 F : **1 000 000 F** ;
+- Prix de vente **avec un taux de marge** de 15 % : PV = coût × 1,15 = **977 500 F** ;
+- Conversion : taux de marque = taux de marge / (1 + taux de marge) : 11,1 % de marge ↔ 0,111 / 1,111 = **10 %** de marque.
+
+> [!exemple] La TVA ne coûte rien à l'entreprise
+> Un sac de ciment acheté 5 900 F TTC coûte 5 000 F HT à l'entreprise, qui récupère 900 F de TVA.
+> Dans ses sous-détails, l'entreprise compte donc 5 000 F.
+> Le particulier qui achète le même sac paie réellement 5 900 F.
+
+## Méthode : établir un prix de vente
+1. Calculer le **déboursé sec** par unité d'ouvrage (matériaux avec pertes, main-d'œuvre, matériel) ;
+2. Appliquer le **coefficient K** (frais de chantier, frais généraux, bénéfice) ;
+3. Comparer au **prix du marché** et ajuster ;
+4. Appliquer les éventuelles remises sur le HT ;
+5. Ajouter la **TVA** pour obtenir le TTC.
+
+> [!attention] Erreurs fréquentes
+> - Appliquer K à un montant TTC (la TVA serait comptée dans le bénéfice).
+> - Confondre taux de marge et taux de marque.
+> - Calculer la TVA avant la remise.
+> - Retrouver un HT en multipliant le TTC par 0,82.
+
 > [!retenir]
 > - PV HT = DS × K ; TTC = HT × 1,18 ; HT = TTC / 1,18.
 > - Marge sur le coût, marque sur le prix de vente.
@@ -152,6 +212,33 @@ Sur 30 ans, le coût d'**exploitation** et d'**entretien** (électricité, clima
 - installations électriques et sanitaires bien conçues → sécurité et moindre consommation.
 > [!astuce] Temps de retour simple
 > Isolant au plafond : 1 500 000 F ; économie de climatisation : 45 000 F/mois, soit 540 000 F/an → temps de retour : 1 500 000 / 540 000 ≈ **2,8 ans**.
+
+## Application : coût global de deux toitures sur 20 ans
+Villa de 150 m². Solution A : tôle simple, 4,0 M F, climatisation 1 200 000 F/an. Solution B : tôle avec isolant et plafond ventilé, 5,2 M F, climatisation 800 000 F/an.
+
+| Poste sur 20 ans | Solution A | Solution B |
+|---|---|---|
+| Investissement | 4,0 M | 5,2 M |
+| Climatisation (20 × coût annuel) | 24,0 M | 16,0 M |
+| **Coût global (non actualisé)** | **28,0 M** | **21,2 M** |
+
+La solution la plus chère à construire fait économiser **6,8 M F** ; son surcoût (1,2 M) est remboursé en 1,2 / 0,4 = **3 ans**. (Le calcul actualisé du chapitre « Coût global et investissements économes » affine ce résultat.)
+
+## Le ratio au m²
+Il permet de comparer des projets de tailles différentes : la villa de l'exemple coûte 56,64 M F hors terrain pour 150 m², soit **377 600 F/m²** ; on le compare aux ratios du marché pour le même standing.
+
+## Méthode : établir le budget d'une opération
+1. Partir du coût des **travaux** (estimation ou devis) ;
+2. Ajouter les **études** et le suivi en pourcentage des travaux ;
+3. Ajouter **taxes, permis, branchements** ;
+4. Ajouter les **imprévus** (plus élevés si les études sont sommaires) ;
+5. Ajouter le **terrain** et ses frais, puis les **frais financiers** si l'on emprunte ;
+6. Vérifier le total avec un ratio au m².
+
+> [!attention] Erreurs fréquentes
+> - Ne budgéter que les travaux et oublier études, taxes, branchements et imprévus.
+> - Mélanger des montants HT et TTC dans un même budget.
+> - Choisir la solution la moins chère à construire sans regarder l'exploitation.
 
 > [!retenir]
 > - Coût de l'opération = terrain + études + taxes et branchements + travaux + frais financiers + imprévus.
@@ -203,6 +290,39 @@ Le paiement suit l'**avancement** réel (fondations, élévation, toiture, finit
 ## Négocier intelligemment
 On peut discuter les quantités, proposer des **variantes** ou un phasage, mais **jamais** réduire les aciers, le dosage du béton ou les fondations.
 
+## Application : vérifier un devis ligne par ligne
+| Désignation | U | Quantité | PU (F) | Montant annoncé | Montant recalculé |
+|---|---|---|---|---|---|
+| Béton de fondation dosé à 350 kg/m³ | m³ | 12,5 | 95 000 | 1 187 500 | 1 187 500 ✔ |
+| Maçonnerie d'agglos de 15 | m² | 180 | 9 500 | 1 791 000 | **1 710 000 ✘** |
+| Enduit 2 faces | m² | 360 | 2 500 | 900 000 | 900 000 ✔ |
+
+La 2ᵉ ligne est surévaluée de **81 000 F** (erreur de calcul ou de saisie) : on le signale à l'entreprise, qui corrige le total HT, la TVA et le TTC. On contrôle aussi la **cohérence des quantités** entre elles : 180 m² de murs enduits sur les deux faces donnent bien 360 m² d'enduit.
+
+## Comparer au « mieux-disant »
+On ne retient pas forcément le moins cher : on note le **prix** et la **valeur technique** (méthode, délai, références, personnel).
+- Note prix = 100 × offre la plus basse / offre étudiée ;
+- Note finale = 60 % × note prix + 40 % × note technique (pondérations fixées à l'avance).
+
+| Entreprise | Montant | Note prix | Note technique | Note finale |
+|---|---|---|---|---|
+| A | 24,5 M | 100,0 | 70 | **88,0** |
+| B | 27,8 M | 88,1 | 90 | **88,9** |
+
+L'offre C ayant été écartée comme anormalement basse, l'offre B est la **mieux-disante** malgré un prix supérieur de 13 %.
+
+## Méthode de comparaison
+1. Vérifier que toutes les offres répondent au **même périmètre** (mêmes lots, mêmes prestations) ;
+2. Comparer en **HT** (ou toutes en TTC) ;
+3. Recalculer les montants et corriger les erreurs ;
+4. Écarter ou faire justifier les offres anormalement basses ;
+5. Noter prix et technique, puis négocier avec l'offre retenue.
+
+> [!attention] Erreurs fréquentes
+> - Comparer une offre HT avec une offre TTC.
+> - Comparer des offres qui n'incluent pas les mêmes prestations.
+> - Ignorer la durée de validité du devis.
+
 > [!retenir]
 > - Vérifier calculs, quantités, prix, inclusions, échéancier, assurances.
 > - Une offre très inférieure à l'estimation doit être justifiée.
@@ -248,6 +368,37 @@ Ne jamais laisser des fers en attente ou des maçonneries exposées pendant des 
 
 ## Le coût du crédit
 Rembourser 250 000 F par mois pendant 15 ans représente 45 M F versés pour environ 26,2 M F empruntés : le crédit coûte **≈ 18,8 M F d'intérêts**, mais il permet d'habiter (ou de louer) plus tôt et d'échapper à l'inflation des coûts de construction.
+
+## Application : la durée change tout
+Pour une mensualité de 300 000 F à 8 % par an (taux mensuel 0,667 %) :
+| Durée | Facteur | Capital empruntable |
+|---|---|---|
+| 10 ans (120 mois) | 82,4 | **24,7 M F** |
+| 15 ans (180 mois) | 104,6 | **31,4 M F** |
+| 20 ans (240 mois) | 119,6 | **35,9 M F** |
+Allonger la durée augmente la capacité d'emprunt, mais aussi le coût total du crédit.
+
+> [!exemple] Tenir compte des crédits en cours
+> Revenus 900 000 F/mois avec déjà 80 000 F/mois de crédit auto.
+> Mensualité disponible : 300 000 − 80 000 = **220 000 F**.
+> Sur 15 ans à 8 % : 220 000 × 104,6 ≈ **23,0 M F** au lieu de 31,4 M.
+
+## Épargner d'abord ou emprunter ?
+Pour une première tranche de 20 M F en épargnant 250 000 F/mois, il faut 80 mois (**6 ans et 8 mois**). Pendant ce temps, avec 4 % d'inflation par an, la même tranche coûtera 20 × 1,04^6,67 ≈ **26 M F** : l'épargne court derrière les prix. Le crédit coûte des intérêts mais fige le coût des travaux et permet d'habiter (ou de louer) plus tôt.
+
+## Méthode : bâtir son plan de financement
+| Emplois (besoins) | Ressources |
+|---|---|
+| Terrain et frais | Apport personnel |
+| Études et permis | Crédit bancaire |
+| Travaux (par tranches) | Prêt d'employeur, aides |
+| Frais de crédit, imprévus (≥ 5 %) | Épargne mensuelle |
+Les deux colonnes doivent être **égales** ; sinon, on réduit le projet ou on le phase.
+
+> [!attention] Erreurs fréquentes
+> - Oublier les frais annexes (dossier, assurance, garanties, notaire).
+> - Arrêter la première tranche avant la toiture : les murs et les fers en attente se dégradent.
+> - Se fier à la seule mensualité sans regarder le coût total du crédit.
 
 > [!retenir]
 > - Mensualité ≤ 1/3 des revenus ; capital = m × [1 − (1 + i)⁻ⁿ] / i.
@@ -307,6 +458,34 @@ Quand un ouvrage non prévu au bordereau est demandé, on établit un **prix nou
 > [!attention]
 > Un prix inférieur au déboursé sec (« prix anormalement bas ») mène l'entreprise à la faillite ou à la mauvaise qualité (dosages réduits, aciers manquants). Le maître d'ouvrage doit s'en méfier.
 
+## Application : sous-détail d'1 m² d'enduit au mortier de ciment
+**Coût de la journée d'équipe** (1 maçon + 2 manœuvres, 8 h) : (1 274 + 2 × 800) × 8 = **22 992 F/jour**. Rendement de l'équipe : 25 m²/jour.
+
+| Composant | Calcul | Montant (F/m²) |
+|---|---|---|
+| Mortier (2 cm, + 10 % de pertes) | 0,02 × 45 000 × 1,10 | 990 |
+| Main-d'œuvre | 22 992 / 25 | 920 |
+| Petit matériel | 5 % de la main-d'œuvre | 46 |
+| **Déboursé sec** | | **1 956** |
+| Prix de vente HT | 1 956 × 1,331 | **≈ 2 600 F/m²** |
+
+## La sensibilité au rendement
+Si l'équipe ne fait que 20 m²/jour (support irrégulier, échafaudage mal préparé), la main-d'œuvre passe à 1 150 F/m², le DS à 2 197 F et le prix de vente à **2 924 F/m²** (+ 12 %). Le rendement est souvent la donnée la plus incertaine d'un sous-détail : on le prend dans les relevés de chantiers comparables.
+
+## Méthode d'un sous-détail
+1. Définir l'**unité d'ouvrage** et ce qu'elle comprend (fourniture, pose, nettoyage) ;
+2. Chiffrer les **matériaux** avec leurs pertes et leur prix rendu chantier ;
+3. Chiffrer la **main-d'œuvre** : coût de l'équipe divisé par son rendement ;
+4. Ajouter le **matériel** (location, amortissement, carburant) ;
+5. Appliquer le coefficient K une seule fois ;
+6. Comparer au prix du marché.
+
+> [!attention] Erreurs fréquentes
+> - Oublier les pertes et la casse des matériaux.
+> - Utiliser le salaire brut sans les charges ni les heures non productives.
+> - Retenir un rendement de chantier idéal.
+> - Appliquer K deux fois (une fois sur les matériaux, une fois sur le total).
+
 > [!retenir]
 > - DS = matériaux (avec pertes) + main-d'œuvre (Tu × coût horaire chargé) + matériel.
 > - PV HT = DS × K, K = (1 + FC)(1 + FG)(1 + B).
@@ -364,6 +543,36 @@ On estime chaque grand élément par une quantité simple et un prix composé : 
 
 ## Actualiser une estimation
 Une estimation ancienne s'actualise avec un **index** : montant × I / I₀.
+
+## Application : estimation par éléments d'une maison de 120 m²
+| Élément | Quantité | Prix composé | Montant |
+|---|---|---|---|
+| Fondations et dallage | 130 m² d'emprise | 60 000 F/m² | 7,80 M |
+| Murs (élévation et enduits) | 260 m² | 30 000 F/m² | 7,80 M |
+| Toiture (charpente, couverture, plafond) | 150 m² | 45 000 F/m² | 6,75 M |
+| Menuiseries | 14 u | 250 000 F/u | 3,50 M |
+| Électricité | 120 m² | 25 000 F/m² | 3,00 M |
+| Plomberie sanitaire | 8 points d'eau | 300 000 F/u | 2,40 M |
+| Revêtements de sol et faïence | 140 m² | 35 000 F/m² | 4,90 M |
+| Peinture | 600 m² | 3 500 F/m² | 2,10 M |
+| **Total** | | | **38,25 M F** |
+
+Ratio : 38,25 M / 120 m² = **318 750 F/m²**, cohérent avec l'estimation par ratio global (39,6 M). Si le client ajoute deux fenêtres ou agrandit la toiture, on ne modifie que la ligne concernée.
+
+## L'influence de la forme
+À surface égale, une maison **compacte** coûte moins cher : un rectangle de 10 × 12 m (périmètre 44 m) demande 18 % de murs de façade de moins qu'un rectangle de 6 × 20 m (52 m). Les décrochements, les toitures complexes et les étages en porte-à-faux font monter le ratio.
+
+## Méthode
+1. Choisir la méthode adaptée à la **phase** des études ;
+2. Utiliser des ratios **récents**, du même standing et de la même région ;
+3. Actualiser les références anciennes avec un index ;
+4. Ajouter les postes souvent oubliés : VRD, clôture, branchements, aléas ;
+5. Annoncer la **fourchette** de précision avec le chiffre.
+
+> [!attention] Erreurs fréquentes
+> - Utiliser un ratio d'un autre standing, d'une autre ville ou d'une autre époque.
+> - Oublier les extérieurs (clôture, VRD, assainissement autonome).
+> - Présenter une estimation d'esquisse comme un prix ferme.
 
 > [!retenir]
 > - La précision croît avec l'avancement des études (± 30 % → ± 5 %).
@@ -456,6 +665,32 @@ C : capital emprunté ; i : taux par période ; n : nombre de périodes. Chaque 
 ## Actualiser et capitaliser
 Valeur acquise dans n ans : C × (1 + t)ⁿ ; valeur actuelle d'une somme future F : F / (1 + t)ⁿ ; valeur actuelle d'une suite de n versements constants a : a × [1 − (1 + t)⁻ⁿ] / t (même facteur que pour l'emprunt).
 
+## Application : l'effet de la durée sur un emprunt de 20 M F à 9 %
+| Durée | Mensualité | Coût total des intérêts |
+|---|---|---|
+| 10 ans (120 mois) | 253 352 F | 10,40 M F |
+| 15 ans (180 mois) | 202 853 F | 16,51 M F |
+| 20 ans (240 mois) | 179 945 F | 23,19 M F |
+Passer de 10 à 20 ans réduit la mensualité de 29 % mais **double** presque le coût du crédit.
+
+## Le capital restant dû
+Après k échéances, le capital restant dû est la valeur actuelle des échéances restantes :
+$$ CRD = m × [1 − (1 + i)^−(n − k)] / i
+> [!exemple] Remboursement anticipé à mi-parcours
+> Emprunt de 20 M F à 9 % sur 10 ans ; après 5 ans (60 mensualités) : CRD = 253 352 × [1 − 1,0075⁻⁶⁰] / 0,0075 = **12,20 M F**.
+> À mi-durée, on n'a remboursé que 7,8 M F de capital : les premières échéances sont surtout des intérêts.
+
+## Méthode
+1. Ramener le taux à la période des échéances (taux mensuel = taux annuel / 12 en pratique bancaire) ;
+2. Compter le nombre d'échéances n ;
+3. Calculer l'annuité, puis le coût total (n × a − C) ;
+4. Dresser les premières lignes du tableau d'amortissement pour contrôler (intérêts = capital restant × i).
+
+> [!attention] Erreurs fréquentes
+> - Utiliser un taux annuel avec un nombre de mois.
+> - Comparer deux crédits sur la seule mensualité, sans le coût total ni les frais.
+> - Croire qu'à mi-durée la moitié du capital est remboursée.
+
 > [!retenir]
 > - Simples : C t n ; composés : C (1 + t)ⁿ.
 > - Annuité constante : a = C i / [1 − (1 + i)⁻ⁿ] ; intérêts sur le capital restant dû.
@@ -508,6 +743,35 @@ $$ BFR = créances clients + stocks − dettes fournisseurs
 ## Les indicateurs de santé
 Taux de marge brute par chantier, résultat / CA, trésorerie, délais de paiement clients, carnet de commandes (nombre de mois de travail assurés), taux d'accidents. Une entreprise rentable peut faire faillite par **manque de trésorerie**.
 
+## Application : la date du point mort
+Avec un seuil de rentabilité de 225 M F et un chiffre d'affaires annuel de 300 M F réparti régulièrement, le seuil est atteint après 225 / 300 × 12 = **9 mois**, fin septembre : l'entreprise ne gagne de l'argent que sur le dernier trimestre.
+
+## Faire varier les hypothèses
+| Changement | Calcul | Nouveau seuil |
+|---|---|---|
+| Achat d'un camion (+ 6 M de charges fixes) | 51 / 0,20 | **255 M F** |
+| Meilleurs achats (taux de MCV 22 %) | 45 / 0,22 | **204,5 M F** |
+
+## Le levier opérationnel
+Si le CA augmente de 10 % (330 M), la MCV passe à 66 M et le résultat à 66 − 45 = **21 M** : **+ 40 %** de résultat pour + 10 % d'activité. À l'inverse, une baisse d'activité fait fondre le résultat très vite : les charges fixes ne baissent pas.
+
+> [!exemple] Accepter un petit chantier en période creuse ?
+> Chantier de 10 M F HT avec 8,5 M F de charges variables : MCV = 1,5 M F.
+> Les charges fixes sont payées de toute façon : ce chantier améliore le résultat de **1,5 M F**.
+> Il ne faut jamais accepter un prix inférieur aux charges variables.
+
+## Méthode
+1. Classer chaque charge en **fixe** ou **variable** ;
+2. Calculer la MCV et son taux (MCV / CA) ;
+3. Calculer le seuil, la marge de sécurité et la date du point mort ;
+4. Tester les hypothèses (prix, activité, investissements) ;
+5. Vérifier la **trésorerie** (BFR) en plus du résultat.
+
+> [!attention] Erreurs fréquentes
+> - Confondre MCV et résultat.
+> - Oublier l'amortissement du matériel dans les charges fixes.
+> - Croire qu'un chantier facturé est payé : le BFR peut asphyxier une entreprise bénéficiaire.
+
 > [!retenir]
 > - Charges variables (suivent l'activité) et fixes.
 > - Résultat = MCV − charges fixes ; SR = CF / taux de MCV.
@@ -555,6 +819,35 @@ Le coût des assurances est intégré dans les **frais généraux** ou les **fra
 
 ## Les garanties légales après réception
 Parfait achèvement (1 an), bon fonctionnement (2 ans), décennale (10 ans) : voir le cours de Technologie. Un maître d'ouvrage vérifie toujours que les entreprises sont **assurées** (attestations à jour) avant de signer.
+
+## Application : une situation de travaux avec retenues
+Marché de 80 M F HT ; avance de démarrage de 12 M F remboursée par un précompte de 20 % sur chaque situation ; retenue de garantie de 5 %. Situation n° 3 : **15 M F HT** de travaux exécutés dans le mois.
+| Ligne | Calcul | Montant |
+|---|---|---|
+| Travaux du mois | | 15,00 M |
+| Retenue de garantie | 15 × 5 % | − 0,75 M |
+| Remboursement de l'avance | 15 × 20 % | − 3,00 M |
+| **Net à payer HT** | | **11,25 M** |
+L'entreprise ne touche que 75 % de ses travaux du mois : sa trésorerie doit le prévoir.
+
+## Retenue de garantie ou caution ?
+Bloquer 4 M F pendant 18 mois coûte à l'entreprise, si elle doit les emprunter à 10 % par an : 4 × 0,10 × 1,5 = **600 000 F**. La caution qui la remplace ne coûte que **120 000 F** : elle est 5 fois moins chère.
+
+> [!exemple] Sinistre pendant les travaux (TRC)
+> Un orage endommage un mur en cours d'élévation : 6 M F de dégâts.
+> Franchise du contrat : 10 % avec un minimum de 500 000 F, soit 600 000 F.
+> Indemnité versée : 6 − 0,6 = **5,4 M F**.
+
+## Méthode : vérifier avant de signer
+1. Exiger les **attestations d'assurance** (RC, décennale) en cours de validité, avec les activités réellement exercées ;
+2. Vérifier les **cautions** : banque reconnue, montant, durée, conditions de mainlevée ;
+3. Préciser dans le marché le taux de retenue, les conditions de remboursement de l'avance et de libération des garanties ;
+4. Vérifier que les **sous-traitants** sont aussi assurés.
+
+> [!attention] Erreurs fréquentes
+> - Accepter une attestation périmée ou qui ne couvre pas l'activité (une entreprise de peinture qui fait du gros œuvre).
+> - Oublier de libérer la retenue ou la caution après la levée des réserves.
+> - Confondre la garantie décennale (désordres graves) et le parfait achèvement (toutes les réserves).
 
 > [!retenir]
 > - Cautions : soumission (1–2 %), bonne exécution (5–10 %), restitution d'avance (= avance), retenue de garantie (5 %).
@@ -604,6 +897,33 @@ Le bilan dépend fortement de quelques hypothèses : coût des travaux, prix de 
 ## Les leviers de rentabilité
 Maîtriser le coût de construction (conception compacte, trames régulières, matériaux standard), réduire les délais (moins de frais financiers, loyers plus tôt), bien choisir l'emplacement et le produit (type de logement demandé), limiter l'entretien futur.
 
+## Application : le compte à rebours du promoteur
+Pour savoir combien on peut payer un terrain, on part du prix de vente et de la marge visée :
+1. CA prévisionnel : 10 × 55 M = 550 M F ;
+2. Coût total admissible pour 15 % de marge : 550 × 0,85 = **467,5 M F** ;
+3. Moins travaux (336), honoraires (27) et frais (20) : 467,5 − 383 = **84,5 M F**.
+C'est la **charge foncière admissible** : au-delà, l'opération n'atteint plus 15 % de marge.
+
+## Application : tableau de sensibilité
+| Hypothèse | Coût total | CA | Marge | Taux sur CA |
+|---|---|---|---|---|
+| Base | 443 M | 550 M | 107 M | 19,5 % |
+| Travaux + 10 % | 476,6 M | 550 M | 73,4 M | 13,3 % |
+| Prix de vente − 10 % | 443 M | 495 M | 52 M | 10,5 % |
+Une baisse de 10 % du prix de vente divise la marge par deux : le **prix de vente** est l'hypothèse la plus sensible. Une étude de marché sérieuse vaut plus qu'une économie de chantier.
+
+## Méthode : bilan de promotion
+1. Estimer le **CA** à partir d'une étude de marché (prix au m², rythme de vente) ;
+2. Chiffrer toutes les dépenses (terrain, travaux, honoraires, assurances, taxes, commercialisation, frais financiers) ;
+3. Calculer la marge et son taux sur le CA ;
+4. Tester la sensibilité aux hypothèses principales ;
+5. Décider : lancer, modifier le programme ou renoncer.
+
+> [!attention] Erreurs fréquentes
+> - Oublier les frais de commercialisation et les frais financiers liés aux délais de vente.
+> - Confondre rendement brut et rendement net.
+> - Présenter un bilan sans test de sensibilité.
+
 > [!retenir]
 > - Marge = CA − (terrain + travaux + honoraires + frais) ; viser 10 à 20 % du CA.
 > - CA minimal = coût / (1 − m).
@@ -648,6 +968,35 @@ Financer une partie par un crédit augmente la rentabilité des **fonds propres*
 
 ## Le délai de récupération
 Nombre d'années pour que les flux cumulés (éventuellement actualisés) remboursent l'investissement : simple à comprendre, mais il ignore ce qui se passe ensuite. On l'utilise en complément de la VAN.
+
+## Application : comparer deux projets
+Taux d'actualisation 10 %.
+| Projet | Investissement | Flux nets | Durée | VAN | Indice de profitabilité |
+|---|---|---|---|---|---|
+| A | 50 M | 12 M/an | 6 ans | **+ 2,26 M** | 1,05 |
+| B | 80 M | 18 M/an | 7 ans | **+ 7,63 M** | 1,10 |
+Les deux projets sont rentables. B crée plus de valeur (VAN plus élevée) et rapporte plus par franc investi (indice de profitabilité IP = 1 + VAN / investissement).
+
+## Le délai de récupération actualisé
+Pour A, on cumule les flux actualisés : − 50 + 10,91 + 9,92 + 9,02 + 8,20 + 7,45 = − 4,51 M après 5 ans ; le 6ᵉ flux actualisé vaut 6,77 M. Délai ≈ 5 + 4,51 / 6,77 = **5,7 ans**, pour une durée de 6 ans : le projet A laisse peu de marge.
+
+## L'effet de levier chiffré
+Projet de 100 M F rapportant 10 %/an (10 M), financé par 40 M de fonds propres et 60 M de crédit à 7 % (4,2 M d'intérêts) :
+- rentabilité des fonds propres : (10 − 4,2) / 40 = **14,5 %** ;
+- si le projet ne rapporte que 5 % : (5 − 4,2) / 40 = **2 %** seulement.
+Le levier amplifie dans les deux sens.
+
+## Méthode
+1. Lister les flux de chaque année (investissement, recettes nettes, valeur résiduelle) ;
+2. Choisir le taux d'actualisation (coût du financement ou rendement exigé) ;
+3. Calculer la VAN, l'indice de profitabilité, le délai de récupération ;
+4. Encadrer le TRI par deux taux et interpoler ;
+5. Décider en tenant compte du risque.
+
+> [!attention] Erreurs fréquentes
+> - Oublier la valeur résiduelle ou les gros remplacements.
+> - Comparer les TRI de projets de tailles très différentes sans regarder la VAN.
+> - Additionner des flux de dates différentes sans les actualiser.
 
 > [!retenir]
 > - Actualiser : F / (1 + a)ⁿ ; flux constants : F [1 − (1 + a)⁻ⁿ] / a.
@@ -695,6 +1044,27 @@ Un équipement ou une solution constructive se compare sur **toute sa durée de 
 - Équipements efficaces : climatiseurs inverter, LED, chauffe-eau solaires ;
 - Production d'électricité **photovoltaïque** selon le prix et la fiabilité du réseau.
 
+## Application : isoler la toiture d'une villa
+Surcoût de l'isolation : 1,5 M F ; économie de climatisation : 540 000 F/an ; durée de vie : 20 ans ; taux 8 % (facteur 9,818).
+VAN = − 1 500 000 + 540 000 × 9,818 = **+ 3,80 M F**. C'est l'un des investissements les plus rentables du bâtiment.
+
+## Application : 3 kWc de panneaux photovoltaïques
+Coût 3,6 M F ; production 3 × 1 400 = **4 200 kWh/an** ; durée 25 ans (facteur à 8 % : 10,675) ; remplacement de l'onduleur à 10 ans : 400 000 F, soit 400 000 / 1,08¹⁰ = 185 000 F actualisés.
+| Prix du kWh évité | Économie annuelle | VAN |
+|---|---|---|
+| 80 F | 336 000 F | **− 0,20 M F** |
+| 100 F | 420 000 F | **+ 0,70 M F** |
+La rentabilité dépend du **prix de l'électricité** et de l'autoconsommation : on commence par réduire les besoins (isolation, protections solaires) avant de produire.
+
+## Le coût actualisé du kWh économisé
+Diviser le surcoût par le nombre total de kWh économisés (éventuellement actualisés) donne un **prix du kWh économisé** que l'on compare au tarif : si l'économie coûte 30 F/kWh et que l'électricité coûte 80 F, l'investissement est intéressant.
+
+> [!attention] Erreurs fréquentes
+> - Oublier les remplacements en cours de vie (onduleur, batteries, compresseur).
+> - Prendre une durée de vie supérieure à la durée réelle de l'équipement.
+> - Compter une économie qui suppose un usage irréaliste (climatisation 24 h/24).
+> - Comparer des solutions qui n'offrent pas le même confort.
+
 > [!retenir]
 > - Coût global = investissement + exploitation + entretien + remplacements.
 > - Temps de retour = surcoût / économie annuelle ; VAN de l'économie sur la durée de vie.
@@ -737,6 +1107,35 @@ Une réclamation (demande d'indemnisation pour un préjudice : arrêt de chantie
 
 ## Les causes fréquentes de dérive
 Métré initial erroné, prix d'achat sous-estimés, rendements trop optimistes, pertes et vols, reprises de malfaçons, modifications non chiffrées, retards (frais fixes prolongés), révision des prix mal anticipée.
+
+## Application : le tableau de bord mensuel
+Chantier de 340 M F (montants en M F) :
+| Lot | Budget | Dépensé | Reste à faire estimé | PAT | Écart |
+|---|---|---|---|---|---|
+| Terrassements | 20 | 22 | 0 | 22 | + 2 |
+| Gros œuvre | 180 | 120 | 70 | 190 | + 10 |
+| Second œuvre | 100 | 15 | 85 | 100 | 0 |
+| Provision pour aléas | 40 | 0 | 25 | 25 | − 15 |
+| **Total** | **340** | **157** | **180** | **337** | **− 3** |
+Les dépassements du terrassement et du gros œuvre sont couverts par la provision : le total reste dans le budget, mais la provision restante (25 M) doit être surveillée.
+
+> [!exemple] Cumul des avenants
+> Marché de 340 M F ; avenants : + 12 M, + 8 M, − 3 M.
+> Cumul : + 17 M F, soit **+ 5 %** ; nouveau montant du marché : **357 M F**.
+> On vérifie que le cumul reste sous le plafond réglementaire.
+
+## Méthode : traiter une modification
+1. **Ordre de service** ou demande écrite du maître d'ouvrage ;
+2. **Devis** de l'entreprise (sous-détail, prix nouveaux, incidence sur le délai) ;
+3. **Vérification** par le maître d'œuvre ;
+4. **Avenant** signé par les deux parties ;
+5. **Exécution**, puis intégration au tableau de bord.
+
+> [!attention] Erreurs fréquentes
+> - Exécuter des travaux supplémentaires sur simple accord oral.
+> - Oublier l'incidence d'une modification sur le **délai**.
+> - Ne pas tenir de journal de chantier : sans preuves, une réclamation est perdue.
+> - Consommer la provision pour aléas dès le début du chantier.
 
 > [!retenir]
 > - Budget / engagé / réalisé / reste à faire / PAT, chaque mois.
@@ -787,6 +1186,27 @@ Avec 70 % de crédit, les loyers ne couvrent pas les remboursements : l'investis
 | Apport bloqué | Récupéré à la vente | 221,5 M sur 20 ans |
 | Risque | Commercialisation | Vacance, impayés, taux |
 | Gestion | Faible | Importante |
+
+## 5. Le panachage chiffré
+Vendre 4 appartements à 55 M F rapporte **220 M F** ; il reste 443 − 220 = **223 M F** à financer pour 6 appartements loués, qui rapportent 24 × 6/10 = **14,4 M F/an** nets.
+- Rendement net : 14,4 / 223 = **6,5 %** (contre 5,4 % en location totale) ;
+- Avec 50 % de crédit (111,5 M F sur 20 ans à 7 %), l'annuité vaut **10,5 M F** et le cash-flow **+ 3,9 M F/an** ;
+- L'apport ne vaut plus que **111,5 M F** (contre 221,5 M).
+
+## 6. Optimiser le coût de construction
+Une conception plus compacte économisant 8 % des travaux (− 26,9 M F) ramène le coût total à 416,1 M F et porte le rendement net de la location totale à 24 / 416,1 = **5,8 %**.
+
+## Méthode d'une étude de cas
+1. **Rentabilité intrinsèque** : rendement, VAN, TRI, sans tenir compte du financement ;
+2. **Financement** : apport, crédit, annuités, cash-flow annuel ;
+3. **Alternatives** : vente, location, panachage, optimisation ;
+4. **Sensibilité** : coût, prix, loyers, taux d'intérêt ;
+5. **Décision** : tableau multicritère (gain, apport, risque, gestion).
+
+> [!attention] Erreurs fréquentes
+> - Juger un projet sur le seul rendement brut.
+> - Oublier que le crédit doit être remboursé avec les loyers **nets**.
+> - Négliger le risque de vacance et d'impayés.
 
 > [!retenir]
 > Un bon projet immobilier se juge sur sa **rentabilité intrinsèque** (rendement, VAN, TRI) **et** sur son **financement** (cash-flow, apport, risques). Un rendement de 5 % ne permet pas de financer l'essentiel par un crédit à 8 % sur 15 ans.`,

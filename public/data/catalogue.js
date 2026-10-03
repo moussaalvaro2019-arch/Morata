@@ -114,7 +114,7 @@ A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", group
   "Contrôle des devis d'entreprises",
   "Montage d'un projet de location ou de vente d'appartements",
   "Choix d'investissements économes en énergie"
- ], src:"data/cours/eco.js?v=2a262f8a", chapitres:[
+ ], src:"data/cours/eco.js?v=67f8ff69", chapitres:[
   {id:"eco-10", niv:1, titre:"Les notions de base : pourcentages, indices et inflation", duree:45, nq:5, nex:5},
   {id:"eco-6", niv:1, titre:"Prix, coûts, marges et TVA", duree:50, nq:5, nex:5},
   {id:"eco-1", niv:1, titre:"Le coût global d'une opération de construction", duree:45, nq:5, nex:5},
