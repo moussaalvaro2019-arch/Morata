@@ -400,27 +400,42 @@ A.addMatiere({id:"ro", titre:"Recherche opérationnelle", court:"Recherche op.",
   {id:"ro-5", niv:3, titre:"Problèmes de transport et d'affectation", duree:30, nq:4, nex:0},
   {id:"ro-9", niv:3, titre:"Décider dans l'incertain : risques et simulation", duree:30, nq:4, nex:0}
  ]});
-A.addMatiere({id:"sp", titre:"Sciences physiques", court:"Physique-chimie", groupe:"fond", icone:"atom", couleur:"#0E8C95", niveau:"Débutant", heures:22, ordre:3, resume:"Grandeurs et unités, masse et poids, forces et équilibre, énergie et puissance, électricité et chimie des matériaux de construction.", objectifs:[
-  "Utiliser le système international d'unités",
-  "Distinguer masse, poids et masse volumique",
-  "Appliquer l'équilibre d'un solide (forces et moments)",
-  "Calculer énergie, puissance et grandeurs électriques",
-  "Comprendre la prise du ciment et la corrosion des aciers"
+A.addMatiere({id:"sp", titre:"Sciences physiques", court:"Physique-chimie", groupe:"fond", icone:"atom", couleur:"#0E8C95", niveau:"Débutant", heures:60, ordre:3, resume:"La physique et la chimie utiles au technicien du bâtiment : unités, masse et poids, mouvements, forces et équilibre, machines simples, dynamique, énergie et puissance, électricité continue, alternative et triphasée, réactions chimiques, pH, chimie du ciment, de la chaux et du plâtre, corrosion des armatures, chaleur et dilatation, ondes, moteurs et transformateurs.", objectifs:[
+  "Utiliser correctement les unités du système international et les conversions",
+  "Calculer poids propres, masses volumiques et poussée d'Archimède",
+  "Décrire un mouvement (vitesse, accélération, chute, freinage)",
+  "Écrire l'équilibre d'un solide et utiliser leviers, poulies et plans inclinés",
+  "Appliquer les lois de Newton au levage et au transport des charges",
+  "Calculer travail, énergie, puissance et rendement d'un engin ou d'une pompe",
+  "Dimensionner un circuit électrique simple, monophasé ou triphasé",
+  "Écrire et exploiter une réaction chimique (chaux, ciment, plâtre, combustion)",
+  "Expliquer le pH, l'agressivité des eaux et la corrosion des armatures",
+  "Calculer quantités de chaleur, dilatations et contraintes thermiques"
  ], applications:[
-  "Poids propre des éléments (béton, acier, agglos)",
-  "Puissance d'une pompe ou d'une bétonnière",
-  "Choix d'une section de câble électrique",
-  "Protection des armatures contre la rouille"
- ], src:"data/cours/sp.js?v=a8332186", chapitres:[
-  {id:"sp-1", niv:1, titre:"Grandeurs physiques et unités SI", duree:20, nq:4, nex:0},
-  {id:"sp-2", niv:1, titre:"Masse, poids et masse volumique", duree:25, nq:4, nex:0},
-  {id:"sp-3", niv:1, titre:"Forces et équilibre d'un solide", duree:30, nq:4, nex:0},
-  {id:"sp-4", niv:2, titre:"Énergie, travail et puissance", duree:25, nq:4, nex:0},
-  {id:"sp-5", niv:2, titre:"Électricité appliquée au bâtiment", duree:30, nq:4, nex:0},
-  {id:"sp-6", niv:2, titre:"Chimie des matériaux : ciment, corrosion, durabilité", duree:25, nq:4, nex:0},
-  {id:"sp-7", niv:3, titre:"Électricité avancée : triphasé, chute de tension, sections", duree:30, nq:4, nex:0},
-  {id:"sp-8", niv:3, titre:"Chaleur, changements d'état et dilatation", duree:25, nq:4, nex:0},
-  {id:"sp-9", niv:3, titre:"Ondes : le son et la lumière", duree:25, nq:4, nex:0}
+  "Poids propre des éléments (béton, acier, agglos) et soulèvement des cuves enterrées",
+  "Sécurité du levage : élingues, palans, coefficients dynamiques",
+  "Puissance d'un monte-charge, d'une pompe d'épuisement ou d'une grue",
+  "Bilan de puissance d'un logement et choix des sections de câbles",
+  "Choix d'une eau de gâchage et d'un béton en milieu agressif",
+  "Enrobage et durabilité des armatures, joints de dilatation, bétonnage par temps chaud"
+ ], src:"data/cours/sp.js?v=f9f0d0df", chapitres:[
+  {id:"sp-1", niv:1, titre:"Grandeurs physiques, unités SI et conversions", duree:45, nq:5, nex:5},
+  {id:"sp-2", niv:1, titre:"Masse, poids, masse volumique et poussée d'Archimède", duree:45, nq:5, nex:5},
+  {id:"sp-10", niv:1, titre:"Mouvements : vitesse et accélération", duree:45, nq:5, nex:5},
+  {id:"sp-3", niv:1, titre:"Forces et équilibre d'un solide", duree:50, nq:5, nex:5},
+  {id:"sp-11", niv:1, titre:"Machines simples : leviers, poulies, plan incliné et frottement", duree:45, nq:5, nex:5},
+  {id:"sp-12", niv:1, titre:"Électricité : circuits en courant continu", duree:50, nq:5, nex:5},
+  {id:"sp-13", niv:2, titre:"Lois de Newton : dynamique du levage et des engins", duree:50, nq:5, nex:5},
+  {id:"sp-4", niv:2, titre:"Travail, énergie, puissance et rendement", duree:50, nq:5, nex:5},
+  {id:"sp-5", niv:2, titre:"Courant alternatif monophasé et installation électrique d'un logement", duree:55, nq:5, nex:5},
+  {id:"sp-14", niv:2, titre:"Atomes, molécules et réactions chimiques : la chimie de la chaux", duree:50, nq:5, nex:5},
+  {id:"sp-15", niv:2, titre:"Acides, bases et pH : eaux et sols agressifs pour le béton", duree:45, nq:5, nex:5},
+  {id:"sp-6", niv:2, titre:"Chimie des liants : plâtre, chaux et ciment", duree:55, nq:5, nex:5},
+  {id:"sp-16", niv:3, titre:"Oxydoréduction et corrosion des armatures", duree:55, nq:5, nex:5},
+  {id:"sp-7", niv:3, titre:"Électricité avancée : triphasé, moteurs, chute de tension et protections", duree:55, nq:5, nex:5},
+  {id:"sp-8", niv:3, titre:"Chaleur, changements d'état et dilatation", duree:50, nq:5, nex:5},
+  {id:"sp-9", niv:3, titre:"Ondes : son, ultrasons et lumière", duree:45, nq:5, nex:5},
+  {id:"sp-17", niv:3, titre:"Magnétisme, transformateurs et moteurs électriques", duree:50, nq:5, nex:5}
  ]});
 A.addMatiere({id:"tech", titre:"Technologie de construction", court:"Technologie", groupe:"constr", icone:"hammer", couleur:"#E8752A", niveau:"Débutant", heures:70, ordre:2, resume:"Comment se construit un bâtiment, du terrain nu à la réception : acteurs et étapes, systèmes constructifs, implantation, fondations, maçonnerie, béton armé sur chantier, planchers, escaliers, toitures, étanchéité, menuiseries, finitions, équipements, immeubles, ossatures métal et bois, construction durable, pathologies et contrôles, avec applications et exercices corrigés.", objectifs:[
   "Identifier les intervenants et les étapes d'un projet",
