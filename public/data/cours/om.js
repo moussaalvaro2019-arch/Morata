@@ -62,6 +62,40 @@ Une structure est en équilibre si la **somme des forces** est nulle **et** la *
 ## Le produit vectoriel (en 3D)
 M = r ∧ F : vecteur perpendiculaire au plan (r, F), de norme r F sin θ. Il sert pour les structures spatiales et la torsion.
 
+## Application détaillée : résultante de trois forces
+Trois forces agissent sur un même point : F1 = 10 kN à 0°, F2 = 8 kN à 90°, F3 = 6 kN à 225° (angles mesurés depuis l'horizontale).
+
+| Force | Fx = F cos α | Fy = F sin α |
+|---|---|---|
+| F1 (10 kN ; 0°) | 10,00 | 0,00 |
+| F2 (8 kN ; 90°) | 0,00 | 8,00 |
+| F3 (6 kN ; 225°) | − 4,24 | − 4,24 |
+| **Somme** | **5,76** | **3,76** |
+
+R = √(5,76² + 3,76²) = **6,87 kN**, inclinée de arctan(3,76 / 5,76) = **33,1°**. Le tableau évite les oublis de signe.
+
+> [!exemple] Élinguer une charge à la grue
+> Charge de 10 kN suspendue par deux brins symétriques inclinés de α sur l'horizontale : 2 T sin α = 10.
+> α = 60° : T = **5,77 kN** ; α = 30° : T = **10 kN** ; α = 10° : T = **28,8 kN**.
+> Plus les brins sont « à plat », plus la tension explose : on limite l'angle entre brins à 90° ou 120°.
+
+> [!exemple] Réactions d'une poutre sur deux appuis
+> Poutre AB de 6 m ; 20 kN à 2 m de A et 10 kN à 4,50 m de A.
+> Σ M/A = 0 : 6 RB = 20 × 2 + 10 × 4,5 = 85 → **RB = 14,17 kN**.
+> Σ F = 0 : RA = 30 − 14,17 = **15,83 kN**.
+> Contrôle par Σ M/B : 6 RA = 20 × 4 + 10 × 1,5 = 95 → RA = 15,83 kN ✔.
+
+## Méthode pour un problème de statique
+1. Isoler le solide et dessiner **toutes** les forces (charges et réactions) ;
+2. Choisir des axes et un sens positif pour les moments ;
+3. Écrire Σ Fx = 0, Σ Fy = 0, Σ M = 0 en prenant les moments au point qui élimine le plus d'inconnues ;
+4. Résoudre, puis **contrôler** avec une équation non utilisée.
+
+> [!attention] Erreurs fréquentes
+> - Prendre comme bras de levier une distance qui n'est pas perpendiculaire à la ligne d'action.
+> - Oublier le signe d'une composante (force orientée vers la gauche ou vers le bas).
+> - Mélanger kN et N, ou m et cm, dans un même moment.
+
 > [!retenir]
 > - Résultante = somme des vecteurs ; Fx = F cos α, Fy = F sin α.
 > - Produit scalaire : U·V = ‖U‖‖V‖ cos θ ; nul si perpendiculaires.
@@ -104,6 +138,35 @@ Croissance rapide au début puis ralentie : c'est pourquoi on garde les étais 2
 
 ## Lire un graphique : le point d'équilibre
 Louer une bétonnière coûte 15 000 F par jour ; l'acheter coûte 900 000 F plus 2 000 F par jour d'entretien : 15 000 x = 900 000 + 2 000 x → x ≈ **69 jours** : au-delà, l'achat est plus intéressant.
+
+## Méthode : étudier une fonction de chantier
+1. Identifier la **variable** (quantité, durée, effectif) et son **domaine** (une quantité est positive, un effectif est entier) ;
+2. Dresser un **tableau de valeurs** ;
+3. Tracer la courbe avec une échelle adaptée ;
+4. Interpréter : croissance, décroissance, valeur limite, intersection.
+
+> [!exemple] Coût moyen journalier de la bétonnière achetée
+> Coût total 900 000 + 2 000 x pour x jours d'utilisation ; coût moyen par jour : y = 900 000 / x + 2 000 (fonction inverse décalée).
+> 60 jours : **17 000 F/j** ; 100 jours : **11 000 F/j** ; 300 jours : **5 000 F/j**.
+> Le coût moyen baisse vers 2 000 F/j sans jamais l'atteindre : l'achat se rentabilise par l'usage.
+
+## Les fonctions définies par morceaux
+Beaucoup de tarifs changent de formule selon la tranche. Transport de matériaux :
+| Distance d | Prix |
+|---|---|
+| 0 à 10 km | 30 000 F (forfait) |
+| 10 à 30 km | 45 000 F (forfait) |
+| au-delà de 30 km | 45 000 + 1 500 × (d − 30) |
+Pour 42 km : 45 000 + 1 500 × 12 = **63 000 F**. Le graphique a des « marches » puis une droite.
+
+## Lire une courbe expérimentale
+Sur la courbe de durcissement, on lit qu'à 7 jours le béton n'a que 66 % de sa résistance : un C25/30 n'offre alors que 0,66 × 25 ≈ **16,5 MPa**. La lecture graphique donne vite un ordre de grandeur ; le calcul le confirme.
+
+> [!attention] Erreurs fréquentes
+> - Confondre fonction affine (avec partie fixe) et linéaire (proportionnelle).
+> - Lire un graphique sans regarder les unités et l'échelle des axes.
+> - Prolonger une courbe expérimentale hors du domaine mesuré.
+> - Oublier les changements de tranche d'un tarif.
 
 > [!retenir]
 > - Affine : y = ax + b ; linéaire : y = ax.
@@ -148,6 +211,40 @@ Quand l'intervalle devient très petit, le taux de variation tend vers la **dér
 > [!exemple] Moment dans une poutre
 > M(x) = 10 x − x² (kN·m) sur une poutre de 10 m. La dérivée V(x) = 10 − 2 x est l'**effort tranchant** ; elle s'annule en x = 5 m : le moment y est maximal, **M(5) = 25 kN·m**.
 
+## Du taux moyen à la dérivée : un calcul pas à pas
+Pour f(x) = x² au point x = 3, on calcule le taux de variation entre 3 et 3 + h :
+| h | (f(3 + h) − f(3)) / h |
+|---|---|
+| 1 | (16 − 9) / 1 = 7 |
+| 0,1 | (9,61 − 9) / 0,1 = 6,1 |
+| 0,01 | (9,0601 − 9) / 0,01 = 6,01 |
+Le taux tend vers **6** = 2 × 3 : c'est f'(3), conforme à la règle (x²)' = 2x.
+
+## Calculer une dérivée
+f(x) = 2x³ − 5x² + 4x − 7 → f'(x) = 6x² − 10x + 4 (chaque terme se dérive séparément ; la constante disparaît).
+
+## Le signe de la dérivée et les variations
+- f'(x) > 0 : f **croît** ; f'(x) < 0 : f **décroît** ;
+- f'(x) = 0 avec changement de signe : **maximum** ou **minimum**.
+> [!exemple] Étude de f(x) = x³ − 3x sur [− 2 ; 2]
+> f'(x) = 3x² − 3 = 3 (x − 1)(x + 1), nulle en − 1 et 1.
+> f croît sur [− 2 ; − 1], décroît sur [− 1 ; 1], croît sur [1 ; 2].
+> Maximum local f(− 1) = **2** ; minimum local f(1) = **− 2**.
+
+## La tangente
+La tangente au point d'abscisse a a pour équation **y = f'(a) (x − a) + f(a)**. Pour f(x) = x² en a = 3 : y = 6 (x − 3) + 9 = **6x − 9**. Près de a, la courbe et la tangente se confondent : c'est l'idée des approximations linéaires.
+
+> [!exemple] Pompage d'une fouille
+> Hauteur d'eau h(t) = 2 − 0,4 t + 0,02 t² (m, t en heures), pour t de 0 à 10 h.
+> h'(t) = − 0,4 + 0,04 t : au départ, l'eau baisse de **0,4 m/h** ; à t = 5 h, de **0,2 m/h**.
+> La baisse ralentit car la pompe débite moins quand la hauteur d'aspiration augmente.
+
+> [!attention] Erreurs fréquentes
+> - Dériver x³ en 3x³ au lieu de 3x².
+> - Oublier que la dérivée d'une constante est nulle.
+> - Oublier l'unité d'une dérivée : m³ par heure, kN par mètre…
+> - Conclure à un extremum sans vérifier le changement de signe.
+
 > [!retenir]
 > - Taux moyen : Δf/Δx ; dérivée : pente de la tangente.
 > - (xⁿ)' = n xⁿ⁻¹ ; (u + v)' = u' + v'.
@@ -189,6 +286,35 @@ Un angle de θ radians intercepte, sur un cercle de rayon R, un **arc de longueu
 Une vibration sinusoïdale s'écrit x(t) = A sin(ω t) : amplitude A, **pulsation ω** (rad/s), **fréquence f = ω / (2π)** (Hz), **période T = 1/f** (s).
 > [!exemple]
 > Plancher qui vibre à 8 Hz : ω = 2π × 8 = **50,3 rad/s** ; période **0,125 s**. On évite les planchers de fréquence propre trop basse (< 5 à 8 Hz), désagréables quand on marche.
+
+## Conversions pas à pas
+- Degrés → radians : × π / 180. 35° = 35 × π / 180 = **0,611 rad** ;
+- Radians → degrés : × 180 / π. 1,2 rad = **68,75°** ;
+- Gon → degrés : × 0,9. 50 gon = **45°** ; degrés → gon : ÷ 0,9.
+
+> [!astuce] Le mode de la calculatrice
+> DEG pour les degrés, RAD pour les radians, GRA pour les gons.
+> Test rapide : sin 90 doit donner 1 en DEG.
+> En gons, c'est sin 100 qui donne 1.
+
+## Arc et secteur
+Pour un angle θ en radians : arc **s = R θ** ; aire du secteur **S = R² θ / 2**.
+> [!exemple] Barre cintrée
+> Barre cintrée sur un rayon de 0,50 m et un angle de 120° (2π/3 rad).
+> Longueur développée : 0,50 × 2π/3 = **1,047 m**.
+> Secteur balayé : 0,50² × 2,094 / 2 = **0,262 m²**.
+
+## Vitesse angulaire
+Une bétonnière tournant à 20 tr/min a une vitesse angulaire ω = 2π × 20 / 60 = **2,09 rad/s** ; un point de la cuve à 0,60 m de l'axe se déplace à v = ω R = **1,26 m/s**.
+
+## Les petits angles en topographie
+1 mgon = 0,001 gon = 0,001 × π / 200 = **1,57 × 10⁻⁵ rad**. À 100 m, une erreur de visée de 1 mgon décale le point de 100 × 1,57 × 10⁻⁵ = **1,6 mm** (formule de l'arc, valable car l'angle est petit). C'est ainsi qu'on choisit la précision d'un appareil selon les distances.
+
+> [!attention] Erreurs fréquentes
+> - Calculatrice dans le mauvais mode (DEG, RAD, GRA).
+> - Utiliser s = R θ avec θ en degrés.
+> - Confondre fréquence f (Hz) et pulsation ω (rad/s) : ω = 2π f.
+> - Confondre gon et degré dans un carnet de terrain.
 
 > [!retenir]
 > - 180° = π rad = 200 gon.
@@ -241,6 +367,35 @@ Une fonction atteint un **maximum ou un minimum** là où f'(x) = 0 et change de
 ## Dérivée et petites variations
 Pour une petite variation dx : **df ≈ f'(x) dx**. Ex. : section d'une barre A = π d²/4 → dA = (π d / 2) dd ; une erreur de 0,3 mm sur un HA16 change la section de π × 16 / 2 × 0,3 ≈ **7,5 mm²** (3,75 %).
 
+## Méthode : chercher un extremum
+1. Écrire la grandeur à optimiser en fonction d'**une seule** variable (utiliser la contrainte pour éliminer les autres) ;
+2. Préciser l'intervalle utile ;
+3. Dériver et résoudre f'(x) = 0 ;
+4. Dresser le tableau de signe de f' : maximum si f' passe de + à −, minimum si − à + ;
+5. Comparer avec les valeurs aux bornes, puis conclure avec les unités.
+
+> [!exemple] Poutre la plus résistante taillée dans un tronc
+> Tronc de diamètre D = 30 cm ; section b × h avec b² + h² = D².
+> Module de flexion W = b h² / 6 = b (D² − b²) / 6.
+> W'(b) = (D² − 3b²) / 6 = 0 → b = D / √3 = **17,3 cm** ; h = D √(2/3) = **24,5 cm**.
+> Rapport h / b = √2 ≈ 1,41 : c'est la règle des charpentiers pour débiter un tronc.
+
+> [!exemple] Coût moyen minimal
+> Coût de production de x m³ : C(x) = 0,5 x² + 20 x + 800 (milliers de F).
+> Coût moyen : Cm(x) = C(x) / x = 0,5 x + 20 + 800 / x.
+> Cm'(x) = 0,5 − 800 / x² = 0 → x² = 1 600 → **x = 40 m³**.
+> Cm(40) = 20 + 20 + 20 = **60 milliers de F/m³** (contre 70 pour 20 ou 80 m³).
+
+## Utiliser les règles de dérivation
+- Produit : f(x) = x e⁻ˣ → f'(x) = e⁻ˣ − x e⁻ˣ = (1 − x) e⁻ˣ : maximum en x = 1 ;
+- Quotient : g(x) = (2x + 1) / (x + 3) → g'(x) = [2 (x + 3) − (2x + 1)] / (x + 3)² = 5 / (x + 3)² > 0 : g est croissante.
+
+> [!attention] Erreurs fréquentes
+> - Écrire (u v)' = u' v' (faux).
+> - Conclure à un extremum quand f' s'annule sans changer de signe (x³ en 0).
+> - Oublier de regarder les bornes de l'intervalle.
+> - Optimiser une fonction de deux variables sans utiliser la contrainte.
+
 > [!retenir]
 > - (uv)' = u'v + uv' ; (u/v)' = (u'v − uv')/v².
 > - Extremum : f'(x) = 0 avec changement de signe.
@@ -281,6 +436,30 @@ Quand la vitesse de variation est **proportionnelle** à la quantité (y' = k y)
 
 ## Le temps caractéristique
 Pour y = y₀ e^(− t/τ), τ est le **temps caractéristique** : au bout de τ, il reste 37 % ; au bout de 3τ, 5 % ; au bout de 4,6 τ, 1 %.
+
+## Demi-vie et temps de doublement
+- Décroissance y = y₀ e^(− k t) : la quantité est **divisée par 2** au bout de t½ = ln 2 / k ;
+- Croissance y = y₀ e^(k t) : elle **double** au bout de ln 2 / k ;
+- Exemple : k = 0,1 /h → t½ = 0,693 / 0,1 = **6,9 h**.
+
+## Déterminer k à partir de deux mesures
+Au cœur d'une dalle épaisse, avec l'air à 30 °C, on mesure 50 °C à t = 2 h et 40 °C à t = 6 h. L'écart à l'air passe de 20 à 10 °C en 4 h : e^(− 4k) = 1/2 → k = ln 2 / 4 = **0,173 /h**. En prenant le ln de l'écart, les mesures s'alignent sur une **droite** de pente − k : c'est la linéarisation.
+
+> [!exemple] Séchage d'une chape avant pose du parquet
+> Teneur en eau w(t) = 1 + 7 e^(− t/10) (%, t en jours) : 8 % au coulage, 1 % à très long terme.
+> Le parquet exige w ≤ 2 % : 7 e^(− t/10) = 1 → t = 10 ln 7 = **19,5 jours**, soit 20 jours minimum.
+
+## Méthode
+1. Repérer la valeur **finale** (limite) et la valeur **initiale** ;
+2. Écrire y(t) = limite + (initiale − limite) e^(− k t) ;
+3. Isoler l'exponentielle, puis prendre le ln des deux côtés ;
+4. Vérifier le résultat en le remplaçant dans la formule.
+
+> [!attention] Erreurs fréquentes
+> - Prendre le ln d'un nombre négatif ou nul (impossible).
+> - Écrire e^(a + b) = eᵃ + eᵇ (c'est eᵃ × eᵇ).
+> - Confondre ln (base e) et log (base 10).
+> - Oublier l'unité de k (par heure, par jour) et la cohérence avec t.
 
 > [!retenir]
 > - (e^(kx))' = k e^(kx) ; (ln x)' = 1/x ; ln(ab) = ln a + ln b.
@@ -326,6 +505,36 @@ Doubler la hauteur d'une section rectangulaire multiplie I par **8** : on augmen
 
 ## L'intégration numérique
 Quand on ne connaît f qu'en des points (profils, relevés), on approche l'aire par des trapèzes : S ≈ h × (y₀/2 + y₁ + … + yₙ₋₁ + yₙ/2) (voir chapitre Méthodes numériques).
+
+## Application : charge trapézoïdale
+Charge variant linéairement de 10 kN/m à 30 kN/m sur 5 m. On décompose :
+| Partie | Résultante | Position depuis l'extrémité à 10 kN/m |
+|---|---|---|
+| Rectangle 10 kN/m × 5 m | 50 kN | 2,50 m |
+| Triangle (de 0 à 20 kN/m) | 20 × 5 / 2 = 50 kN | 2/3 × 5 = 3,33 m |
+| **Total** | **100 kN** | (50 × 2,5 + 50 × 3,33) / 100 = **2,92 m** |
+Contrôle par l'intégrale : ∫₀⁵ (10 + 4x) dx = 50 + 50 = 100 kN ✔.
+
+> [!exemple] Cornière à ailes égales 100 × 100 × 10 mm
+> Aile horizontale 100 × 10 : A₁ = 1 000 mm², y₁ = 5 mm.
+> Aile verticale (hors recouvrement) 90 × 10 : A₂ = 900 mm², y₂ = 10 + 45 = 55 mm.
+> yG = (1 000 × 5 + 900 × 55) / 1 900 = **28,7 mm** (xG identique par symétrie).
+
+## Méthode du tableau pour une section composée
+| Colonnes | Contenu |
+|---|---|
+| Aᵢ | aire de chaque rectangle |
+| yᵢ | position de son centre de gravité |
+| Aᵢ yᵢ | moment statique |
+| IGᵢ | b h³ / 12 propre |
+| Aᵢ dᵢ² | terme de Huygens, dᵢ = yᵢ − yG |
+On somme les colonnes : yG = Σ Aᵢ yᵢ / Σ Aᵢ, puis I = Σ (IGᵢ + Aᵢ dᵢ²). Un vide (trou, évidement) s'introduit avec une aire **négative**.
+
+> [!attention] Erreurs fréquentes
+> - Appliquer Huygens avec une distance mesurée depuis un axe qui ne passe pas par le centre de gravité propre.
+> - Compter deux fois la zone de recouvrement de deux rectangles.
+> - Mal convertir : 1 cm⁴ = 10⁴ mm⁴ = 10⁻⁸ m⁴.
+> - Placer la résultante d'une charge triangulaire au milieu au lieu des 2/3.
 
 > [!retenir]
 > - ∫ₐᵇ f = F(b) − F(a) ; aire sous la courbe.
@@ -373,6 +582,32 @@ Rotation sur appui (deux appuis, charge uniforme) : θ = q L³ / (24 E I).
 ## Pourquoi c'est utile
 La déformée explique pourquoi la **hauteur** des poutres compte tant (I ∝ h³ et f ∝ L⁴ / I) : une portée 20 % plus longue augmente la flèche de 2,07 fois (1,2⁴).
 
+## Application détaillée : la console chargée en bout
+Console de longueur L encastrée en x = 0, force P en bout. Moment : M(x) = − P (L − x).
+1. EI y'' = − M = P (L − x) ;
+2. Première intégration : EI y' = P (L x − x²/2) + C1 ; encastrement : y'(0) = 0 → C1 = 0 ;
+3. Seconde intégration : EI y = P (L x²/2 − x³/6) + C2 ; y(0) = 0 → C2 = 0 ;
+4. En bout : EI f = P (L³/2 − L³/6) = **P L³ / 3** ✔ (formule du tableau).
+
+> [!exemple] Console de balcon en IPE 160
+> P = 5 kN, L = 1,50 m, E = 210 000 MPa, I = 869 cm⁴ = 8,69 × 10⁻⁶ m⁴.
+> f = 5 000 × 1,5³ / (3 × 2,1 × 10¹¹ × 8,69 × 10⁻⁶) = **3,1 mm**.
+> Limite courante pour une console : 2L/250 = 12 mm ✔.
+
+## Le principe de superposition
+En élasticité linéaire, les flèches dues à plusieurs charges **s'additionnent**. Poutre sur deux appuis (L = 6 m, EI = 3,2 × 10⁷ N·m²) avec q = 15 kN/m et P = 20 kN au milieu : f = 7,9 mm + 20 000 × 6³ / (48 × 3,2 × 10⁷) = 7,9 + 2,8 = **10,7 mm**.
+
+## Méthode
+1. Écrire M(x) sur chaque tronçon (attention aux charges ponctuelles) ;
+2. Intégrer deux fois en gardant les constantes ;
+3. Écrire autant de conditions aux limites que de constantes ;
+4. Calculer la flèche là où elle est maximale et comparer à la limite (L/250, L/500…).
+
+> [!attention] Erreurs fréquentes
+> - Mélanger les unités : E en MPa (N/mm²) et I en cm⁴ avec L en m. Tout passer en N et m (E × 10⁶, I × 10⁻⁸).
+> - Oublier une constante d'intégration.
+> - Se tromper de signe sur M ou sur la flèche.
+
 > [!retenir]
 > - dV/dx = − q ; dM/dx = V ; EI y'' = − M.
 > - Intégrer deux fois et utiliser les conditions d'appui.
@@ -413,6 +648,31 @@ On élimine les inconnues une par une (opérations sur les lignes), puis on remo
 
 ## Application : réactions et rigidités
 Les équations d'équilibre d'une poutre forment un petit système ; les matrices de rigidité des barres (k (1 − 1 ; − 1 1)) s'assemblent pour donner [K] (voir chapitre Calcul matriciel des structures).
+
+## Application : équilibre d'un nœud de treillis
+Un nœud supporte 10 kN vers le bas. Il est suspendu à deux barres tendues : la barre 1 part vers le haut à gauche, inclinée de 30° sur l'horizontale ; la barre 2 vers le haut à droite, inclinée de 60°. Équilibre horizontal et vertical :
+$$ − N1 cos 30° + N2 cos 60° = 0      N1 sin 30° + N2 sin 60° = 10
+Forme matricielle : (− 0,866  0,5 ; 0,5  0,866) {N1 ; N2} = {0 ; 10}.
+det = − 0,866 × 0,866 − 0,5 × 0,5 = − 1 ; Cramer : N1 = (0 × 0,866 − 0,5 × 10) / (− 1) = **5,00 kN** ; N2 = (− 0,866 × 10 − 0 × 0,5) / (− 1) = **8,66 kN**.
+
+> [!exemple] Deux ressorts en série
+> k1 = 2 000 kN/m, k2 = 1 000 kN/m, force de 10 kN au bout.
+> [K] = (3 000  − 1 000 ; − 1 000  1 000) ; {F} = {0 ; 10} ; det = 2 × 10⁶.
+> u1 = 10 000 / (2 × 10⁶) = **5 mm** ; u2 = 30 000 / (2 × 10⁶) = **15 mm**.
+> Contrôle : le ressort 1 s'allonge de 10 / 2 000 = 5 mm, le ressort 2 de 10 mm ✔.
+
+## Méthode : pivot de Gauss
+1. Écrire la matrice augmentée (coefficients | second membre) ;
+2. Choisir un pivot non nul dans la 1ʳᵉ colonne et annuler les termes en dessous ;
+3. Recommencer sur la sous-matrice restante jusqu'à une forme triangulaire ;
+4. Remonter : dernière inconnue d'abord ;
+5. Vérifier en remplaçant dans une équation de départ.
+
+> [!attention] Erreurs fréquentes
+> - Multiplier deux matrices de dimensions incompatibles (colonnes de A ≠ lignes de B).
+> - Inverser l'ordre d'un produit (AB ≠ BA).
+> - Ignorer un déterminant nul : en structure, il signale un **mécanisme** (structure instable, appuis insuffisants).
+> - Oublier de modifier le second membre en combinant les lignes.
 
 > [!retenir]
 > - [K]{x} = {F} : forme de tous les calculs de structures.

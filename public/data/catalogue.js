@@ -345,7 +345,7 @@ A.addMatiere({id:"om", titre:"Outils mathématiques", court:"Outils maths", grou
   "Flèche d'une poutre et fréquence propre d'un plancher",
   "Volumes de terrassement par Simpson",
   "Vérification des résultats d'un logiciel de calcul"
- ], src:"data/cours/om.js?v=086f4a4f", chapitres:[
+ ], src:"data/cours/om.js?v=a08cb8be", chapitres:[
   {id:"om-3", niv:1, titre:"Vecteurs, forces et moments", duree:45, nq:5, nex:5},
   {id:"om-6", niv:1, titre:"Fonctions usuelles et lecture de graphiques", duree:40, nq:5, nex:5},
   {id:"om-7", niv:1, titre:"Taux de variation et notion de dérivée", duree:40, nq:5, nex:5},
