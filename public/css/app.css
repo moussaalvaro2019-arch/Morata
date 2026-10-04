@@ -796,3 +796,14 @@ table.t.click td.mono b{color:var(--navy)}
 .lthumb{width:44px;flex:none}
 .lthumb .lcov{border-radius:3px 6px 6px 3px;box-shadow:0 2px 6px rgba(14,26,43,.18)}
 .lthumb .lgen{padding:10% 8%}.lthumb .lgen .lg-k,.lthumb .lgen .lg-a{display:none}.lthumb .lgen .lg-t{font-size:7px}.lthumb .lgen::after{display:none}
+/* ---------- promotions : prix normal barré en rouge ---------- */
+.px-old{color:var(--bad);text-decoration:line-through;text-decoration-thickness:2px;font-weight:600;white-space:nowrap}
+.px-pct{display:inline-block;background:var(--bad);color:#fff;border-radius:999px;padding:2px 9px;font:700 12.5px/1.4 var(--fb);white-space:nowrap;vertical-align:middle}
+.px-urg{color:var(--bad);font-weight:600;font-size:13.5px;display:inline-flex;gap:6px;align-items:center}
+.px-urg .i{width:15px;height:15px}
+.px-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px}
+.lcov .tag-l{position:absolute;top:8px;right:8px;z-index:2;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.promo-box{border:1.5px dashed #F0B9B4;background:#FFF7F6;border-radius:14px;padding:12px 14px}
+.lvpx{font-size:15px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.lvpx:empty{display:none}
+.abo-band .px-old{color:#B42318}

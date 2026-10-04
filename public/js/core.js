@@ -113,6 +113,20 @@ A.hasAccess = () => {
 };
 A.accesFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.acces_fin ? ts(me.acces_fin) : null; };
 A.prixTxt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA (paiement unique)`; };
+/* ---------- promotions : prix normal barré en rouge, prix payé, date de fin facultative ----------
+   Le prix payé reste toujours « prix » (livre) ou le prix de l'inscription : le prix barré n'est qu'affiché.
+   Après la date de fin (jour inclus), le prix barré disparaît tout seul. */
+const finJour = d => { if(!d) return 0; const t = new Date(String(d).slice(0, 10) + 'T23:59:59').getTime(); return isNaN(t) ? 0 : t; };
+A.promo = (prix, barre, fin) => {
+  prix = +prix || 0; barre = +barre || 0; const t = finJour(fin);
+  if(!(prix > 0 && barre > prix) || (t && t < now())) return null;
+  return {old:barre, pct:Math.round((1 - prix / barre) * 100), fin:t || null, jours:t ? Math.ceil((t - now()) / 86400000) : null};
+};
+A.promoFinie = (prix, barre, fin) => { const t = finJour(fin); return +barre > +prix && !!t && t < now(); };
+A.promoAcces = () => { const c = A.cfg(); return A.promo(c.formule === 'mensuel' ? c.prixMois : c.prixAcces, c.prixBarre, c.promoFin); };
+A.promoUrg = p => !p || p.jours == null ? '' : p.jours <= 1 ? 'Dernier jour de l\'offre !' : `Offre valable jusqu'au ${fd(p.fin)} · plus que ${p.jours} jours`;
+A.promoTag = p => p ? `<span class="px-pct">-${p.pct} %</span>` : '';
+A.promoOld = (p, u = 'FCFA') => p ? `<s class="px-old">${F(p.old)} ${u}</s>` : '';
 A.prixCourt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA une seule fois`; };
 /* ---------- devises : les prix sont fixés en FCFA, chacun voit l'équivalent dans sa devise ----------
    t = nombre de FCFA pour 1 unité (taux indicatifs, modifiables par la direction ; parités fixes pour le FCFA,
@@ -287,7 +301,7 @@ function demoSeed(){
   d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day};
   d.paiements.push({id:d.paiements.length + 1, owner:'u_dm', at:t - 4*day, montant:4000, moyen:'chariow', numero:'', reference:'sale_demo_1', formule:'unique', mois:0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:t - 4*day, source:'chariow', email:'mariam.diallo@exemple.fr', devise:'EUR', montant_devise:6.1, objet:'acces', applique:true});
   // livres d'exemple (à remplacer par les vôtres dans Espace PDG › Livres)
-  d.livres.lv_demo1 = {data:{titre:'Le béton armé pas à pas', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Du calcul des charges au plan de ferraillage : poutres, poteaux, dalles et semelles selon le BAEL, avec des exemples de chantiers ivoiriens.', description:"Ce livre d'exemple montre comment vos ouvrages apparaissent sur la plateforme.\n\n- Descente de charges et combinaisons ELU / ELS\n- Poutres, poteaux, dalles, semelles\n- 60 exercices corrigés\n\nRemplacez-le par vos propres livres dans l'Espace PDG, rubrique **Livres**.", prix:7500, format:'PDF', pages:184, annee:2026, couleur:'#1D4FA8', publie:true, ordre:1, vedette:true, lienAchat:'', prdChariow:''}, fichier:''};
+  d.livres.lv_demo1 = {data:{titre:'Le béton armé pas à pas', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Du calcul des charges au plan de ferraillage : poutres, poteaux, dalles et semelles selon le BAEL, avec des exemples de chantiers ivoiriens.', description:"Ce livre d'exemple montre comment vos ouvrages apparaissent sur la plateforme.\n\n- Descente de charges et combinaisons ELU / ELS\n- Poutres, poteaux, dalles, semelles\n- 60 exercices corrigés\n\nRemplacez-le par vos propres livres dans l'Espace PDG, rubrique **Livres**.", prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(t + 20*day).toISOString().slice(0, 10), format:'PDF', pages:184, annee:2026, couleur:'#1D4FA8', publie:true, ordre:1, vedette:true, lienAchat:'', prdChariow:''}, fichier:''};
   d.livres.lv_demo2 = {data:{titre:'Réussir son métré et son devis', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Avant-métré, quantitatif et devis estimatif d\'une maison : méthode, modèles de tableaux et prix unitaires en FCFA.', description:"Livre d'exemple : modifiez le titre, la couverture, le prix et la description, ou masquez-le.", prix:5000, format:'PDF et papier', pages:126, annee:2025, couleur:'#C95F18', publie:true, ordre:2, lienAchat:'', prdChariow:''}, fichier:''};
   d.achats.push({owner:'u_kj', livre:'lv_demo2', at:t - 6*day, source:'paiement'});
   d.paiements.push({id:d.paiements.length + 1, owner:'u_kj', at:t - 6*day, montant:5000, moyen:'wave', numero:d.users.u_kj.data.phone, reference:'T778812', formule:'unique', mois:0, statut:'valide', note:'', traite_at:t - 6*day, objet:'livre', livre:'lv_demo2', applique:true});
@@ -307,7 +321,9 @@ function localApply(x){
 const L = {
   db: null,
   load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = [];
-    if(!this.db.livres){ const s = demoSeed(); this.db.livres = s.livres; this.db.achats = []; this.save(); } if(!this.db.achats) this.db.achats = []; },
+    if(!this.db.livres){ const s = demoSeed(); this.db.livres = s.livres; this.db.achats = []; this.save(); } if(!this.db.achats) this.db.achats = [];
+    const ex = this.db.livres.lv_demo1;   // démo : livre d'exemple en promotion (10 000 barré → 7 000 FCFA)
+    if(ex && ex.data.prixBarre == null && /exemple/i.test(ex.data.sousTitre || '')){ Object.assign(ex.data, {prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(now() + 20*86400000).toISOString().slice(0, 10)}); this.save(); } },
   save(){ ls.set('db', this.db); },
   sess(){ return ls.get('sess', null); }
 };

@@ -21,12 +21,14 @@ const auteur = l => l.auteur || A.cfg().ceo;
 /* couverture : l'image envoyée par la direction, sinon une couverture dessinée aux couleurs du livre */
 A.livreCover = (l, big, tag) => `<div class="lcov${big ? ' lbig' : ''}">${tag || ''}${l.couverture && safeImg(l.couverture) ? `<img src="${esc(l.couverture)}" alt="Couverture du livre ${esc(l.titre)}" loading="lazy">`
   : `<div class="lgen" style="--c:${esc(coul(l))}"><span class="lg-k">${esc(A.brandText())}</span><span class="lg-t">${esc(l.titre || 'Sans titre')}</span><span class="lg-a">${esc(auteur(l))}</span></div>`}</div>`;
-const prixHtml = l => gratuit(l) ? 'Gratuit' : `${F(l.prix)} FCFA${A.eq(l.prix) ? `<small>${esc(A.eq(l.prix))}</small>` : ''}`;
-const card = (l, base) => `<a class="lcard" href="#/${base}/${l.id}">${A.livreCover(l, false, S.me && owned(l.id) ? '<span class="pill p-ok tag">Acheté</span>' : !l.publie ? '<span class="pill p-mute tag">Masqué</span>' : '')}<b>${esc(l.titre)}</b><span class="sub">${esc(auteur(l))}</span><span class="lprix">${prixHtml(l)}</span></a>`;
+const promo = l => gratuit(l) ? null : A.promo(l.prix, l.prixBarre, l.promoFin);
+const prixHtml = l => { if(gratuit(l)) return 'Gratuit'; const p = promo(l);
+  return `${p ? `<span class="px-row">${A.promoOld(p, 'F')}${A.promoTag(p)}</span>` : ''}${F(l.prix)} FCFA${A.eq(l.prix) ? `<small>${esc(A.eq(l.prix))}</small>` : ''}`; };
+const card = (l, base) => `<a class="lcard" href="#/${base}/${l.id}">${A.livreCover(l, false, (S.me && owned(l.id) ? '<span class="pill p-ok tag">Acheté</span>' : !l.publie ? '<span class="pill p-mute tag">Masqué</span>' : '') + (promo(l) && !(S.me && owned(l.id)) ? `<span class="px-pct tag-l">-${promo(l).pct} %</span>` : ''))}<b>${esc(l.titre)}</b><span class="sub">${esc(auteur(l))}</span><span class="lprix">${prixHtml(l)}</span></a>`;
 const fiche = (l, actions) => `<div class="ldet">${A.livreCover(l, true)}<div class="stack s16" style="min-width:0">
   <div class="stack s8"><span class="kick">${l.vedette ? 'Nouveauté' : 'Livre'}${l.publie ? '' : ' · masqué'}</span><h1 style="font-size:clamp(26px,3.6vw,38px)">${esc(l.titre)}</h1>${l.sousTitre ? `<p style="margin:0;font-size:17px;color:var(--muted)">${esc(l.sousTitre)}</p>` : ''}<p style="margin:0">par <b>${esc(auteur(l))}</b></p></div>
   ${(() => { const m = [l.format, l.pages ? l.pages + ' pages' : '', l.annee, l.langue, l.isbn ? 'ISBN ' + l.isbn : ''].filter(Boolean); return m.length ? `<div class="lmeta">${m.map(x => `<span class="pill p-mute">${esc(String(x))}</span>`).join('')}</div>` : ''; })()}
-  <div class="row between"><div class="stack s8"><div class="price-big" style="font-size:clamp(28px,4vw,38px)">${gratuit(l) ? 'Gratuit' : F(l.prix) + ' <small>FCFA</small>'}</div>${!gratuit(l) && A.eq(l.prix) ? `<span class="sub">${esc(A.eq(l.prix))}</span>` : ''}</div>${gratuit(l) ? '' : A.devSel()}</div>
+  <div class="row between"><div class="stack s8">${(() => { const p = promo(l); return p ? `<div class="row nw" style="gap:10px">${A.promoOld(p).replace('class="px-old"', 'class="px-old" style="font-size:20px"')}${A.promoTag(p)}${l.promoNom ? `<b class="px-urg">${esc(l.promoNom)}</b>` : ''}</div>` : ''; })()}<div class="price-big" style="font-size:clamp(28px,4vw,38px)">${gratuit(l) ? 'Gratuit' : F(l.prix) + ' <small>FCFA</small>'}</div>${!gratuit(l) && A.eq(l.prix) ? `<span class="sub">${esc(A.eq(l.prix))}${promo(l) ? ` au lieu de ${esc(A.money(promo(l).old))}` : ''}</span>` : ''}${A.promoUrg(promo(l)) ? `<span class="px-urg">${ic('clock')} ${esc(A.promoUrg(promo(l)))}</span>` : ''}</div>${gratuit(l) ? '' : A.devSel()}</div>
   ${l.resume ? `<p style="font-size:16px;margin:0">${esc(l.resume)}</p>` : ''}
   ${actions}
   ${l.description ? `<div class="md">${A.md(l.description).html}</div>` : ''}
@@ -80,7 +82,7 @@ function momoBox(l){
   if(!ms.find(m => m[0] === lvMoyen)) lvMoyen = ms[0][0];
   const num = P[lvMoyen] || '';
   return `${ms.length > 1 ? `<div class="tabs">${ms.map(m => `<button class="tab ${lvMoyen === m[0] ? 'on' : ''}" data-lvmoyen="${m[0]}"><i class="abo-dot" style="background:${m[2]}"></i>${esc(m[1])}</button>`).join('')}</div>` : ''}
-   <ol class="abo-steps"><li><b>Envoyez ${F(l.prix)} FCFA par ${esc(A.moyenN(lvMoyen))}</b> au numéro :<div class="abo-num"><span class="mono">${esc(A.telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div><span class="sub">Bénéficiaire : ${esc(P.titulaire || A.cfg().ceo)}.</span></li>
+   <ol class="abo-steps"><li><b>Envoyez ${F(l.prix)} FCFA par ${esc(A.moyenN(lvMoyen))}</b>${promo(l) ? ` (${A.promoOld(promo(l))} ${A.promoTag(promo(l))})` : ''} au numéro :<div class="abo-num"><span class="mono">${esc(A.telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div><span class="sub">Bénéficiaire : ${esc(P.titulaire || A.cfg().ceo)}.</span></li>
     <li><b>Déclarez le paiement</b> avec la référence du SMS : la direction vérifie la réception et le livre apparaît dans « Mes livres ».</li></ol>
    <form class="stack" id="fPayLv" data-livre="${l.id}"><div class="g2"><label class="fld"><span>Numéro utilisé pour payer</span><input class="inp" id="lvNum" type="tel" inputmode="tel" value="${esc((S.me.data && S.me.data.phone) || '')}" required></label><label class="fld"><span>Référence de la transaction</span><input class="inp" id="lvRef" placeholder="ex. TXN123456" required></label></div>
     <div class="row"><button class="btn b-pri" type="submit">${ic('check')}J'ai payé : déclarer mon paiement</button></div></form>`;
@@ -103,7 +105,7 @@ A.page('app/livre/:id', {space:'app', free:true, title:p => (livre(p.id) || {}).
     box = `<div class="lbuy"><b style="font-size:16px">Acheter ce livre</b>
      ${wait ? `<div class="note info">${ic('clock')}<span><b>Paiement déclaré ${ago(wait.at)}</b> (${esc(A.moyenN(wait.moyen))}, réf. ${esc(wait.reference)}) : le livre sera ajouté dès la validation par la direction.</span></div>` : ''}
      ${modes.length > 1 ? `<div class="paymodes"><button class="paymode ${lvMode === 'chariow' ? 'on' : ''}" data-lvmode="chariow"><span class="pm-ic">${ic('globe')}</span><span><b>Paiement en ligne · tous pays</b><small>carte bancaire, Mobile Money… · livre disponible tout de suite</small></span></button><button class="paymode ${lvMode === 'momo' ? 'on' : ''}" data-lvmode="momo"><span class="pm-ic">${ic('phone')}</span><span><b>Mobile Money · Côte d'Ivoire</b><small>${esc(A.moyensActifs().map(m => m[1]).join(', '))} · validé par la direction</small></span></button></div>` : ''}
-     ${lvMode === 'chariow' ? A.chwBox('livre', l.id, +l.prix) : momoBox(l)}
+     ${lvMode === 'chariow' ? A.chwBox('livre', l.id, +l.prix, promo(l)) : momoBox(l)}
      ${extrait(l) ? `<div class="row">${extrait(l)}</div>` : ''}</div>`;
   }
   return `<div class="stack s20">${A.chwRetour('livre', l.id)}${fiche(l, box)}</div>`;
@@ -131,7 +133,7 @@ A.page('admin/livres', {space:'admin', title:'Livres', crumb:'Vos livres : catal
    </div>
    ${L.length ? `<div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Livre</th><th class="r">Prix</th><th>Visible</th><th class="r">Ventes</th><th class="r">Recette</th><th>Actions</th></tr></thead><tbody>${L.map(l => `<tr>
      <td><div class="row nw" style="gap:12px"><span class="lthumb">${A.livreCover(l)}</span><span style="min-width:0"><a href="#/admin/livre/${l.id}" style="text-decoration:none"><b>${esc(l.titre)}</b></a><div class="small faint">${esc(auteur(l))}${l.format ? ' · ' + esc(l.format) : ''}${l.prdChariow || l.lienAchat ? ' · Chariow' : ''}</div></span></div></td>
-     <td class="r mono nowrap">${gratuit(l) ? 'Gratuit' : F(l.prix) + ' F'}</td>
+     <td class="r mono nowrap">${gratuit(l) ? 'Gratuit' : `${promo(l) ? `<div>${A.promoOld(promo(l), 'F')}</div>` : ''}${F(l.prix)} F${promo(l) ? `<div><span class="pill p-bad">Promo -${promo(l).pct} %</span></div>` : A.promoFinie(l.prix, l.prixBarre, l.promoFin) ? '<div><span class="pill p-mute">Promo terminée</span></div>' : ''}`}</td>
      <td>${l.publie ? '<span class="pill p-ok dot">Publié</span>' : '<span class="pill p-mute dot">Masqué</span>'}</td>
      <td class="r mono">${ventes(l.id)}${offerts(l.id) ? `<div class="small faint">+${offerts(l.id)} offert(s)</div>` : ''}</td><td class="r mono nowrap">${F(recette(l.id))} F</td>
      <td><div class="row nw"><a class="btn b-line b-xs" href="#/admin/livre/${l.id}">${ic('edit')}Modifier</a><button class="btn b-line b-xs" data-lvpub="${l.id}">${ic(l.publie ? 'eyeoff' : 'eye')}${l.publie ? 'Masquer' : 'Publier'}</button></div></td></tr>`).join('')}</tbody></table></div></div>`
@@ -152,8 +154,12 @@ A.on('click', '[data-lvpub]', async el => {
 let ED = null;
 const FORMATS = ['PDF', 'EPUB', 'Papier', 'PDF et papier', 'Livre audio'];
 const COULEURS = ['#1D4FA8', '#C95F18', '#0B4D33', '#6B2FA8', '#7A2E0E', '#0E1A2B', '#B8700A', '#C8363B'];
-const blank = () => ({titre:'', sousTitre:'', auteur:A.cfg().ceo, resume:'', description:'', prix:5000, format:'PDF', pages:'', annee:new Date().getFullYear(), langue:'Français', isbn:'', couverture:'', couleur:COULEURS[0], extrait:'', lienAchat:'', prdChariow:'', publie:false, vedette:false, ordre:((S.livres || []).length + 1)});
-const preview = () => { const el = $('#lvPrev'); if(el) el.innerHTML = A.livreCover(ED, true) + `<p class="sub" style="text-align:center;margin:8px 0 0">${gratuit(ED) ? 'Gratuit' : `${F(+ED.prix || 0)} FCFA${['EUR', 'USD'].map(c => ' · ' + A.money(+ED.prix || 0, c)).join('')}`}</p>`; };
+const blank = () => ({titre:'', sousTitre:'', auteur:A.cfg().ceo, resume:'', description:'', prix:5000, prixBarre:'', promoFin:'', promoNom:'', format:'PDF', pages:'', annee:new Date().getFullYear(), langue:'Français', isbn:'', couverture:'', couleur:COULEURS[0], extrait:'', lienAchat:'', prdChariow:'', publie:false, vedette:false, ordre:((S.livres || []).length + 1)});
+const pxPreview = () => { const el = $('#lvPx'); if(!el) return; const p = A.promo(ED.prix, ED.prixBarre, ED.promoFin);
+  el.innerHTML = +ED.prixBarre && +ED.prixBarre <= +ED.prix ? `<span class="px-urg">${ic('alert')} Le prix barré doit être plus élevé que le prix de vente.</span>`
+    : A.promoFinie(ED.prix, ED.prixBarre, ED.promoFin) ? `<span class="sub">${ic('clock')} Cette offre est terminée : seul le prix de vente s'affiche.</span>`
+    : p ? `<span class="sub">Aperçu :</span> ${A.promoOld(p)} <b>${F(ED.prix)} FCFA</b> ${A.promoTag(p)} ${ED.promoNom ? `<b class="px-urg">${esc(ED.promoNom)}</b>` : ''}${A.promoUrg(p) ? `<div class="px-urg">${esc(A.promoUrg(p))}</div>` : ''}` : ''; };
+const preview = () => { pxPreview(); const el = $('#lvPrev'); if(el) el.innerHTML = A.livreCover(ED, true) + `<p class="sub" style="text-align:center;margin:8px 0 0">${gratuit(ED) ? 'Gratuit' : `${F(+ED.prix || 0)} FCFA${['EUR', 'USD'].map(c => ' · ' + A.money(+ED.prix || 0, c)).join('')}`}</p>`; };
 A.page('admin/livre/:id', {space:'admin', title:() => ED && ED.titre ? ED.titre : 'Nouveau livre', crumb:'<a href="#/admin/livres">Livres</a>', static:true, render(p){
   if(!ED || ED._for !== p.id){
     const l = livre(p.id);
@@ -173,7 +179,11 @@ A.page('admin/livre/:id', {space:'admin', title:() => ED && ED.titre ? ED.titre 
     <div class="g2">${f('langue', 'Langue')}${f('isbn', 'ISBN (facultatif)')}</div>
    </div>
    <div class="card stack"><h3 style="margin:0">Prix et vente</h3>
-    <div class="g2">${f('prix', 'Prix en FCFA (0 = gratuit pour les inscrits)', 'type="number" min="0" step="100"')}<div class="fld"><span>Équivalents affichés</span><div class="sub" id="lvEq" style="padding-top:8px">${esc(['EUR', 'USD', 'GHS', 'NGN'].map(c => A.money(+ED.prix || 0, c)).join(' · '))}</div></div></div>
+    <div class="g2">${f('prix', 'Prix de vente en FCFA : ce que l\'acheteur paie (0 = gratuit)', 'type="number" min="0" step="100"')}<div class="fld"><span>Équivalents affichés</span><div class="sub" id="lvEq" style="padding-top:8px">${esc(['EUR', 'USD', 'GHS', 'NGN'].map(c => A.money(+ED.prix || 0, c)).join(' · '))}</div></div></div>
+    <div class="promo-box stack s8"><b class="small">Promotion (facultatif) : prix normal barré en rouge</b>
+     <div class="g3">${f('prixBarre', 'Prix normal barré (FCFA)', 'type="number" min="0" step="100"', 'ex. 10000')}${f('promoFin', 'Fin de l\'offre', 'type="date"')}${f('promoNom', 'Nom de l\'offre', 'maxlength="40"', 'Prix de lancement')}</div>
+     <div id="lvPx" class="lvpx"></div>
+     <p class="sub" style="margin:0">Laissez « Prix normal barré » vide pour ne pas afficher de promotion. Sans date de fin, l'offre reste affichée jusqu'à ce que vous l'enleviez ; avec une date, le prix barré disparaît tout seul le lendemain. Pensez à mettre le même prix de vente sur Chariow.</p></div>
     <div class="g2">${f('lienAchat', 'Lien de la page du livre sur Chariow (paiement en ligne)', 'type="url"', 'https://…')}${f('prdChariow', 'Identifiant du produit Chariow', 'spellcheck="false"', 'prd_…')}</div>
     <p class="sub">Avec l'identifiant, l'acheteur est envoyé sur la page de paiement Chariow et le livre s'ajoute à son espace dès la confirmation, sans validation. Sans Chariow, l'achat se fait par Mobile Money, validé par vous.</p>
     <label class="fld"><span>Lien du livre complet (remis uniquement aux acheteurs)</span><input class="inp" id="lv_fichier" type="url" value="${esc(ED._fichier || '')}" ${ED._fichier === null ? 'disabled placeholder="Chargement…"' : 'placeholder="https://drive.google.com/… (PDF partagé par lien)"'}></label>
@@ -204,9 +214,9 @@ A.on('input', '[data-lv]', el => {
   ED[k] = el.type === 'checkbox' ? el.checked : el.value;
   if(k === 'lienAchat' && !A.val('lv_prdChariow')){ const m = el.value.match(/prd_[A-Za-z0-9]+/); if(m){ ED.prdChariow = m[0]; const i = $('#lv_prdChariow'); if(i) i.value = m[0]; } }
   if(k === 'prix'){ const e = $('#lvEq'); if(e) e.textContent = ['EUR', 'USD', 'GHS', 'NGN'].map(c => A.money(+ED.prix || 0, c)).join(' · '); }
-  if(['titre', 'auteur', 'couverture', 'prix'].includes(k)) preview();
+  if(['titre', 'auteur', 'couverture', 'prix', 'prixBarre', 'promoFin', 'promoNom'].includes(k)) preview();
 });
-A.on('change', '[data-lv]', el => { if(ED && el.type === 'checkbox') ED[el.dataset.lv] = el.checked; if(ED && el.tagName === 'SELECT') ED[el.dataset.lv] = el.value; });
+A.on('change', '[data-lv]', el => { if(!ED) return; if(el.type === 'checkbox') ED[el.dataset.lv] = el.checked; if(el.tagName === 'SELECT' || el.type === 'date'){ ED[el.dataset.lv] = el.value; preview(); } });
 A.on('click', '[data-lvcol]', el => { ED.couleur = el.dataset.lvcol; $$('[data-lvcol]').forEach(b => b.style.borderColor = b === el ? 'var(--ink)' : 'transparent'); preview(); });
 A.on('change', '#lvImg', async el => {
   const file = el.files && el.files[0]; if(!file) return;
@@ -218,11 +228,12 @@ A.on('click', '[data-act="lvsave"]', async el => {
   if(!ED) return;
   const titre = String(ED.titre || '').trim();
   if(titre.length < 2){ toast('Indiquez le titre du livre', 'x'); return; }
+  if(+ED.prixBarre && +ED.prixBarre <= +ED.prix){ toast('Le prix barré doit être plus élevé que le prix de vente (ou laissez-le vide)', 'x'); return; }
   const urls = ['lienAchat', 'extrait'].map(k => String(ED[k] || '').trim()), fichier = $('#lv_fichier') && !$('#lv_fichier').disabled ? $('#lv_fichier').value.trim() : null;
   if(urls.concat([fichier || '']).some(u => u && !/^https?:\/\//i.test(u))){ toast('Les liens doivent commencer par https://', 'x'); return; }
   if(ED.couverture && !safeImg(ED.couverture)){ toast('Lien d\'image invalide (https://…)', 'x'); return; }
   if(/whsec_|sk_live|sk_test|sb_secret_|service_role/i.test(JSON.stringify([ED.lienAchat, ED.prdChariow, fichier]))){ toast('Une clé secrète ne doit jamais être enregistrée ici', 'x'); return; }
-  const data = {titre, sousTitre:String(ED.sousTitre || '').trim(), auteur:String(ED.auteur || '').trim(), resume:String(ED.resume || '').trim(), description:String(ED.description || ''), prix:Math.max(0, Math.round(+ED.prix || 0)),
+  const data = {titre, sousTitre:String(ED.sousTitre || '').trim(), auteur:String(ED.auteur || '').trim(), resume:String(ED.resume || '').trim(), description:String(ED.description || ''), prix:Math.max(0, Math.round(+ED.prix || 0)), prixBarre:Math.max(0, Math.round(+ED.prixBarre || 0)) || '', promoFin:/^\d{4}-\d{2}-\d{2}$/.test(ED.promoFin || '') ? ED.promoFin : '', promoNom:String(ED.promoNom || '').trim().slice(0, 40),
     format:ED.format || 'PDF', pages:Math.max(0, Math.round(+ED.pages || 0)) || '', annee:Math.round(+ED.annee || 0) || '', langue:String(ED.langue || '').trim(), isbn:String(ED.isbn || '').trim(),
     couverture:ED.couverture || '', couleur:ED.couleur || COULEURS[0], extrait:urls[1], lienAchat:urls[0], prdChariow:String(ED.prdChariow || '').trim() || (urls[0].match(/prd_[A-Za-z0-9]+/) || [''])[0],
     publie:!!ED.publie, vedette:!!ED.vedette, ordre:Math.max(1, Math.round(+ED.ordre || 1)), at:A.now()};

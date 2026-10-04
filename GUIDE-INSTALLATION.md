@@ -51,6 +51,9 @@ Enregistrez. Cette clé est prévue pour être publique : la sécurité est assu
 
 ## Étape 3 : mettre les fichiers sur GitHub
 
+**Le code est déjà sur votre dépôt GitHub `Morata`.** La dernière version se trouve sur la branche `claude/learning-platform-construction-7a9vhm` : fusionnez-la dans `main` (GitHub → **Pull requests** → la demande de fusion → **Merge pull request** → **Confirm merge**), comme pour les mises à jour précédentes. Il ne reste qu'à modifier `public/config.js` sur GitHub (ouvrir le fichier → icône crayon → coller vos 2 informations → **Commit changes**).
+
+Si vous repartez d'un dépôt vide :
 1. Sur **github.com**, ouvrez votre dépôt ou créez-en un.
 2. **Add file** → **Upload files** → glissez **le contenu** du dossier en gardant les sous-dossiers (`public`, `contenus`, `netlify`, `outils`, `package.json`, `netlify.toml`, `supabase.sql`, `GUIDE-INSTALLATION.md`, `README.md`) → **Commit changes**.
    Astuce : sur Chrome, on peut glisser directement les dossiers `public`, `contenus`, `netlify` et `outils`. **N'oubliez pas `contenus`** : sans lui, les cours ne s'affichent pas.
@@ -58,7 +61,7 @@ Enregistrez. Cette clé est prévue pour être publique : la sécurité est assu
 ## Étape 4 : publier sur Netlify
 
 1. **app.netlify.com** → connectez-vous avec GitHub.
-2. **Add new site** → **Import an existing project** → **GitHub** → choisissez le dépôt.
+2. **Add new site** (ou **Add new project**) → **Import an existing project** → **GitHub** → choisissez le dépôt `Morata`, branche **main**.
 3. Laissez **Build command** vide. **Publish directory** : `public` (déjà indiqué par `netlify.toml`). → **Deploy**. Netlify installe aussi, sans rien vous demander, la fonction des cours protégés (`/api/cours`) et l'assistant IA.
 4. Notez l'adresse du site (ex. `https://batipro-academie.netlify.app`). Vous pouvez la changer dans **Site configuration → Change site name**.
 5. Retournez dans Supabase → **Authentication** → **URL Configuration** → **Site URL** : collez l'adresse Netlify (sert au lien « Mot de passe oublié »).
@@ -114,6 +117,7 @@ Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonctio
 - **Activer l'accès payant** (décoché : toute la plateforme redevient gratuite) ;
 - **Formule** : *Inscription : paiement unique* (4 000 FCFA par défaut) ou *Abonnement mensuel* (prix par mois, à utiliser quand la plateforme sera connue) ;
 - **Chapitres gratuits par matière** : 1 par défaut (le premier de chaque matière, en lecture complète) ;
+- **Promotion (facultatif)** : **prix normal barré** (affiché en rouge, barré, à côté du prix de l'inscription, avec le pourcentage de réduction), **fin de l'offre** et **nom de l'offre** (« Offre de lancement »). Visible sur l'accueil, l'inscription, « Mon abonnement » et l'écran des parties réservées. Mettez le même prix de vente sur le produit Chariow ;
 - **Où les apprenants paient** : numéros **Wave** et **MTN Mobile Money** (0544176359 déjà rempli), Orange, Moov, Djamo, **nom du bénéficiaire affiché** et numéro **WhatsApp** pour les preuves de paiement.
 
 > **Ne mettez jamais un numéro de carte bancaire** (16 chiffres, carte Visa Djamo…) : ces numéros sont visibles par tous les visiteurs et pourraient servir à des fraudes. Pour Djamo, indiquez le **numéro de téléphone** lié au compte. La plateforme refuse d'enregistrer un numéro de 16 chiffres ou plus.
@@ -158,7 +162,10 @@ Espace PDG → **Livres** → **Ajouter un livre** : titre, sous-titre, auteur, 
 - **Vendre en ligne** : créez le livre comme produit dans votre boutique Chariow (livraison du PDF par Chariow), puis collez sur la fiche du livre le **lien** et l'**identifiant `prd_…`** du produit : l'acheteur paie par carte ou Mobile Money, le livre apparaît aussitôt dans « Mes livres ».
 - **Vendre par Mobile Money** : l'apprenant paie sur votre numéro et déclare le paiement ; vous validez dans **Abonnements & paiements** (« Valider : remettre le livre »).
 - **Offrir un livre** : sur la fiche du livre, choisissez l'apprenant → **Offrir le livre** (et **Retirer** pour annuler).
+- **Mettre un livre en promotion (prix barré)** : sur la fiche du livre, **Prix de vente** = ce que l'acheteur paie (ex. 7 000), **Prix normal barré** = le prix affiché barré en rouge (ex. 10 000). La plateforme affiche alors ~~10 000 FCFA~~ **7 000 FCFA** avec l'étiquette **-30 %** (calculée toute seule), sur la couverture, dans le catalogue et sur la fiche, avec l'équivalent dans la devise du visiteur. Facultatif : **Nom de l'offre** (« Prix de lancement », « Spécial rentrée »…) et **Fin de l'offre** : « Offre valable jusqu'au … · plus que N jours » s'affiche, puis le prix barré disparaît tout seul le lendemain de cette date. Vous changez ou retirez la promotion quand vous voulez (videz « Prix normal barré »). Le prix réellement payé reste toujours le **prix de vente** : mettez le même dans Chariow pour le paiement en ligne.
 Un visiteur sans compte peut voir le catalogue et chaque fiche ; pour acheter, il crée son compte puis revient automatiquement sur le livre.
+
+> **Conseil marketing** : une promotion convainc quand elle est vraie et limitée dans le temps. Fixez une **date de fin** (2 à 4 semaines), annoncez-la sur WhatsApp et les réseaux, puis appliquez réellement le prix normal après l'offre (ou relancez une nouvelle offre nommée : rentrée, examens, fêtes). Un prix barré qui n'a jamais été pratiqué peut être considéré comme une pratique commerciale trompeuse par la réglementation sur la consommation.
 
 ### Sujets d'examen par chapitre
 Chaque chapitre des 18 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 316 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
