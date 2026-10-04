@@ -7,6 +7,9 @@ Plateforme d'apprentissage des métiers du bâtiment et du génie civil, avec es
 - **18 matières en 3 niveaux, 316 chapitres** : mathématiques, outils mathématiques, sciences physiques, recherche opérationnelle, physique du bâtiment, thermique, acoustique, mécanique des fluides, mécanique des milieux continus, géotechnique, topographie, matériaux, technologie de construction, RDM, béton armé, organisation et gestion de chantier, économie du bâtiment, métré. Chaque matière propose les niveaux **Débutant → Intermédiaire → Avancé** : l'apprenant voit les trois, choisit le sien, progresse dans l'ordre et reçoit une attestation par niveau terminé.
 - **Dans chaque chapitre** : le cours avec applications chiffrées, méthodes et erreurs fréquentes, **5 exercices corrigés** (1 532 au total), **5 questions de quiz** (1 580 au total) et un **sujet type examen** noté sur 20 avec son **corrigé détaillé** et son barème (**316 sujets**, contextes ivoiriens, en 3 ou 4 parties, avec « Erreurs à éviter »). Le sujet s'ouvre aussi en **mode examen** chronométré (corrigé caché jusqu'à la fin, impression possible).
 - **Accès payant** : le **premier chapitre de chaque matière est gratuit** (réglable) ; pour continuer, l'apprenant s'inscrit et paie **4 000 FCFA** (inscription unique, ou abonnement mensuel plus tard) par **Wave** ou **MTN Mobile Money**, déclare son paiement, et le PDG **valide en un clic**. Le PDG peut à tout moment **activer ou désactiver** un apprenant, prolonger d'un mois, changer le prix, la formule et les numéros de paiement, ou rendre toute la plateforme gratuite. Le contenu des chapitres payants n'est jamais envoyé à un navigateur sans accès actif (fonction serveur `/api/cours`).
+- **Paiement en ligne international (Chariow)** : pour les apprenants hors de Côte d'Ivoire ou quand Wave / MTN ne passent pas, paiement par carte bancaire ou Mobile Money d'autres pays depuis la boutique Chariow de la direction. Chariow prévient la plateforme (Pulse signé, fonction `/api/chariow/webhook`) et **l'accès s'ouvre automatiquement**, avec un e-mail de confirmation ; un achat fait avant la création du compte est rattaché à l'inscription avec la même adresse e-mail. Le PDG garde la main : validation manuelle possible, accès offerts, activation et désactivation.
+- **Devises** : les prix sont fixés en FCFA ; chacun peut afficher et payer l'équivalent en franc CFA BEAC, euro, dollar américain ou canadien, livre sterling, cedi, naira, franc guinéen, leone, dollar libérien, dalasi, ouguiya ou escudo (taux modifiables par le PDG, parités fixes pour le FCFA, l'euro et l'escudo).
+- **Livres de la direction** : catalogue public « Les livres de … » (couverture, résumé, présentation, prix, extrait gratuit), achat en ligne (Chariow, livre disponible tout de suite) ou par Mobile Money (validé par le PDG), rubrique « Mes livres » pour l'apprenant ; le PDG ajoute, modifie, masque, met en avant, suit les ventes et offre un livre. Le lien du livre complet n'est remis qu'aux acheteurs.
 - **Construction de A à Z** : 14 étapes du chantier (du terrain à la réception), 10 éléments d'ouvrage avec calculateurs, et **4 projets types** (maison économique, villa moyen standing, villa haut standing R+1, immeuble R+4). Pour chaque projet :
   - plans de **tous les niveaux** (RDC, R+1… R+4, terrasse/édicule), plans de structure par niveau, plan de fondations, plan de toiture, électricité, plomberie, façades ;
   - **coupes A-A et B-B propres au projet** (hauteurs, dalles, toiture, fondations calculées) ;
@@ -21,7 +24,7 @@ Plateforme d'apprentissage des métiers du bâtiment et du génie civil, avec es
 - **Exercices & annales** : 123 exercices corrigés type BTS et Licence, 16 épreuves d'entraînement chronométrées, et un espace **annales officielles** où le PDG importe les sujets (PDF ou photos, par examen, année 2010 → aujourd'hui, matière) — un par un ou **toute une rubrique d'un site autorisé** (par exemple la rubrique BTS Génie Civil option bâtiment de Fomesoutra) —, fait transcrire l'énoncé et rédiger un corrigé par l'IA, le relit puis le publie.
 - **Métré & devis** : avant-métré par lots, bibliothèque d'ouvrages, DQE en FCFA avec TVA, sous-détail des matériaux, export CSV, calculateurs rapides.
 - **Assistant IA** (API Claude) : chat, aide contextuelle dans les cours, quiz générés, rédaction de chapitres par le PDG.
-- **Espace PDG** : tableau de bord, connexions et présence en ligne, fiches apprenants, progression, contenus, annonces, réglages IA, travaux, paramètres, administrateurs.
+- **Espace PDG** : tableau de bord, connexions et présence en ligne, fiches apprenants, abonnements et paiements (Mobile Money et en ligne), livres, progression, contenus, annonces, réglages IA, travaux, paramètres, administrateurs.
 
 ## Structure
 
@@ -35,7 +38,8 @@ public/                  site statique (Netlify publie ce dossier)
   js/md.js               mise en forme des cours, exercices et sujets
   js/site.js             pages publiques, inscription, connexion, espace direction
   js/learn.js            espace apprenant, lecteur de cours, sujets d'examen, quiz, profil, attestation
-  js/abo.js              accès payant : « Mon abonnement » (apprenant) et « Abonnements & paiements » (PDG)
+  js/abo.js              accès payant : « Mon abonnement » (apprenant), paiement en ligne Chariow, « Abonnements & paiements » (PDG)
+  js/livres.js           livres de la direction : catalogue public, achat, « Mes livres », gestion par le PDG
   js/az.js               module Construction de A à Z
   js/plans.js            dessin des plans des projets (tous niveaux, structure, coupes) + métré automatique
   js/projet.js           modèle structurel des projets types : note de calcul et fiches des éléments
@@ -60,11 +64,13 @@ public/                  site statique (Netlify publie ce dossier)
 contenus/cours/*.js      cours complets, NON publiés directement : une matière par fichier
                          (chapitres des 3 niveaux, quiz, exercices corrigés, sujets d'examen)
 netlify/functions/cours.mjs       cours protégés (GET /api/cours) : contenu complet seulement si l'accès est actif
+netlify/functions/chariow.mjs     paiement en ligne Chariow : création du paiement (/api/chariow/checkout) et
+                                  réception des ventes (/api/chariow/webhook) → accès ou livre accordé aussitôt
 netlify/edge-functions/ia.js      fonction serveur de l'IA (POST /api/ia)
 netlify/edge-functions/source.js  import des sujets d'un site autorisé (POST /api/source, PDG)
 outils/catalogue.mjs     régénère public/data/catalogue.js et vérifie les cours
 outils/serveur-local.mjs serveur de test local (site + cours protégés)
-supabase.sql             base de données, sécurité par ligne, fonctions (dont accès payant)
+supabase.sql             base de données, sécurité par ligne, fonctions (accès payant, paiements en ligne, livres)
 GUIDE-INSTALLATION.md    mise en ligne pas à pas
 ```
 
