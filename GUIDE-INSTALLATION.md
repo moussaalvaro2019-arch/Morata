@@ -7,9 +7,9 @@ Durée : environ 30 minutes, depuis un ordinateur. Même principe que pour Event
 | # | Où | Quoi faire |
 |---|---|---|
 | 1 | **Supabase** | Créer le projet, coller et exécuter `supabase.sql` (SQL Editor → Run), noter le **Project URL**, la clé **anon** et la clé **service_role** |
-| 2 | **GitHub** | Fusionner la dernière version dans `main`, puis remplir `public/config.js` (URL + clé anon) |
+| 2 | **GitHub** | Fusionner la dernière version dans `main` (demande de fusion n° 5 → **Merge**). Rien d'autre à modifier |
 | 3 | **Netlify** | Importer le dépôt `Morata` (branche `main`), **Deploy**, renommer le site (ex. `batipro-academie`) |
-| 4 | **Netlify** | *Environment variables* : `ANTHROPIC_API_KEY`, `CHARIOW_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (+ facultatif `RESEND_API_KEY`, `MAIL_FROM`, `MAIL_DIRECTION`), puis **Trigger deploy** |
+| 4 | **Netlify** | *Environment variables* : `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CHARIOW_API_KEY`, `ANTHROPIC_API_KEY` (+ facultatif `RESEND_API_KEY`, `MAIL_FROM`, `MAIL_DIRECTION`), puis **Trigger deploy** |
 | 5 | **Chariow** | *Automatisation → Pulses* : « vente réussie » vers `https://VOTRE-SITE.netlify.app/api/chariow/webhook` ; copier le secret `whsec_…` dans Netlify (`CHARIOW_WEBHOOK_SECRET`) et redéployer |
 | 6 | **Supabase** | *Authentication → URL Configuration* : **Site URL** = l'adresse Netlify |
 | 7 | **Votre site** | *Espace direction* : créer le compte PDG ; vérifier *Abonnements & paiements → Réglages* (Chariow : OK) ; faire un achat test ; ajouter vos livres et vos promotions |
@@ -21,7 +21,8 @@ Les clés secrètes (`sk_…`, `whsec_…`, service_role, `sk-ant-…`) se colle
 | Fichier / dossier | Rôle |
 |---|---|
 | `public/` | Le site et toute l'application (pages, cours, atelier de dessin, métré, espace PDG) |
-| `public/config.js` | **À remplir** avec les 2 informations de votre projet Supabase |
+| `public/config.js` | Les 2 informations de votre projet Supabase : à remplir ici **ou**, plus simple, à mettre dans Netlify (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) |
+| `netlify/functions/config.mjs` | Donne au site l'adresse et la clé publique Supabase rangées dans Netlify (`/api/config`) |
 | `contenus/cours/` | Le contenu complet des 18 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
 | `netlify/functions/cours.mjs` | Les cours protégés : n'envoie le contenu des chapitres payants qu'aux apprenants dont l'accès est actif |
 | `netlify/functions/chariow.mjs` | Le paiement en ligne Chariow : envoie l'apprenant sur la page de paiement, puis reçoit l'avis de Chariow et ouvre l'accès (ou remet le livre) tout seul |
@@ -50,9 +51,15 @@ Sans configuration, le site fonctionne en **mode démonstration** : les comptes 
    - **Project URL** (ex. `https://abcdefgh.supabase.co`)
    - la clé **anon public** ou **publishable** (longue chaîne)
 
-## Étape 2 : remplir `public/config.js`
+## Étape 2 : donner au site l'adresse de Supabase
 
-Ouvrez `public/config.js` avec le Bloc-notes et collez vos 2 informations entre les guillemets :
+**Le plus simple (rien à modifier sur GitHub)** : à l'étape 4, dans Netlify → **Site configuration** → **Environment variables**, ajoutez :
+- `SUPABASE_URL` = le **Project URL** (ex. `https://abcdefgh.supabase.co`) ;
+- `SUPABASE_ANON_KEY` = la clé **anon public** (ou **publishable**).
+
+Le site les lit tout seul au chargement (fonction `/api/config`). Par sécurité, si une clé secrète est collée par erreur dans `SUPABASE_ANON_KEY`, elle n'est jamais envoyée au navigateur.
+
+**Autre possibilité** : ouvrez `public/config.js` (sur GitHub : icône crayon) et collez vos 2 informations entre les guillemets :
 
 ```js
 window.MRT_CONFIG = {
@@ -105,7 +112,7 @@ L'assistant (chat, aide dans les cours, quiz générés, rédaction de chapitres
 
 Sécurité en place : la clé n'est jamais envoyée au navigateur ; seuls les comptes connectés et non suspendus peuvent poser des questions, dans la limite du quota ; la rédaction de chapitres est réservée à la direction. Chaque question est enregistrée dans le journal visible par le PDG.
 
-Variables facultatives : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (sinon la fonction les lit dans `config.js`), `SOURCES_AUTORISEES` (sites d'où le PDG peut importer des sujets d'examen, par défaut `fomesoutra.com`), `IA_SANS_CONNEXION=oui` uniquement pour un test en mode démonstration (déconseillé en production : n'importe qui pourrait utiliser votre crédit).
+Autres variables : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (étape 2, utilisées aussi par l'assistant IA ; sinon lues dans `config.js`), `SOURCES_AUTORISEES` (sites d'où le PDG peut importer des sujets d'examen, par défaut `fomesoutra.com`), `IA_SANS_CONNEXION=oui` uniquement pour un test en mode démonstration (déconseillé en production : n'importe qui pourrait utiliser votre crédit).
 
 ---
 
@@ -231,7 +238,7 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 
 | Message / symptôme | Solution |
 |---|---|
-| Bandeau jaune « Mode démonstration » | `public/config.js` est vide ou mal rempli (guillemets, virgule) |
+| Bandeau jaune « Mode démonstration » | Les variables Netlify `SUPABASE_URL` et `SUPABASE_ANON_KEY` manquent (ajoutez-les puis redéployez), ou `public/config.js` est mal rempli (guillemets, virgule) |
 | « Base de données inaccessible » | Le script `supabase.sql` n'a pas été exécuté, ou l'URL / la clé sont fausses |
 | « Compte créé. Ouvrez le lien reçu par e-mail… » | Désactivez « Confirm email » (étape 1.4) ou cliquez sur le lien reçu |
 | « L'assistant IA n'est pas encore activé » | Ajoutez `ANTHROPIC_API_KEY` sur Netlify puis redéployez (étape 6) |

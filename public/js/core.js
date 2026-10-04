@@ -422,6 +422,10 @@ async function afterAuth(user){
 
 A.db = {
   async init(){
+    // config.js vide : adresse et clé publique Supabase lues dans les variables Netlify (fonction /api/config)
+    if(!(CONF.supabaseUrl && CONF.supabaseAnonKey) && /^https?:$/.test(location.protocol)){
+      try{ const r = await fetch('/api/config', {cache:'no-store'}); if(r.ok){ const j = await r.json(); if(j && j.supabaseUrl && j.supabaseAnonKey) Object.assign(CONF, j); } }catch(_){}
+    }
     if(CONF.supabaseUrl && CONF.supabaseAnonKey && window.supabase){
       S.mode = 'sb';
       sb = A.sb = window.supabase.createClient(CONF.supabaseUrl, CONF.supabaseAnonKey, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}});

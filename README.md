@@ -31,7 +31,7 @@ Plateforme d'apprentissage des métiers du bâtiment et du génie civil, avec es
 ```
 public/                  site statique (Netlify publie ce dossier)
   index.html             point d'entrée
-  config.js              configuration Supabase (vide = mode démonstration)
+  config.js              configuration Supabase (vide = lue dans Netlify via /api/config, sinon mode démonstration)
   css/app.css            styles
   js/core.js             données (Supabase ou démo locale), routeur, gabarits
   js/boot.js             chargement des cours par matière (via /api/cours)
@@ -64,6 +64,7 @@ public/                  site statique (Netlify publie ce dossier)
 contenus/cours/*.js      cours complets, NON publiés directement : une matière par fichier
                          (chapitres des 3 niveaux, quiz, exercices corrigés, sujets d'examen)
 netlify/functions/cours.mjs       cours protégés (GET /api/cours) : contenu complet seulement si l'accès est actif
+netlify/functions/config.mjs      adresse et clé publique Supabase lues dans les variables Netlify (GET /api/config)
 netlify/functions/chariow.mjs     paiement en ligne Chariow : création du paiement (/api/chariow/checkout) et
                                   réception des ventes (/api/chariow/webhook) → accès ou livre accordé aussitôt
 netlify/edge-functions/ia.js      fonction serveur de l'IA (POST /api/ia)
