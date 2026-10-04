@@ -47,6 +47,36 @@ create table if not exists public.paiements (
   traite_par uuid
 );
 
+-- Paiements en ligne (Chariow : carte bancaire, Mobile Money de tous les pays…) et achats de livres
+alter table public.paiements alter column owner drop not null;                                  -- paiement en ligne reçu avant la création du compte
+alter table public.paiements add column if not exists objet    text not null default 'acces';  -- acces | livre
+alter table public.paiements add column if not exists livre    text;                            -- livre acheté
+alter table public.paiements add column if not exists source   text not null default 'manuel'; -- manuel (déclaré par l'apprenant) | chariow (paiement en ligne)
+alter table public.paiements add column if not exists email    text;                            -- e-mail de l'acheteur (paiement en ligne)
+alter table public.paiements add column if not exists ext_id   text;                            -- identifiant de la vente chez Chariow
+alter table public.paiements add column if not exists devise   text not null default 'XOF';     -- devise payée
+alter table public.paiements add column if not exists montant_devise numeric;                  -- montant dans cette devise
+alter table public.paiements add column if not exists applique boolean not null default false; -- accès ou livre déjà accordé
+update public.paiements set applique = true where statut = 'valide' and owner is not null and not applique;  -- paiements validés avant cette mise à jour
+create unique index if not exists paiements_ext_idx on public.paiements (source, ext_id);
+create index if not exists paiements_email_idx on public.paiements (lower(email)) where owner is null;
+
+-- Livres de la direction : catalogue visible de tous, livre complet remis aux acheteurs seulement
+create table if not exists public.livres (
+  id text primary key,
+  data jsonb not null default '{}'::jsonb,     -- titre, auteur, résumé, couverture, prix, liens d'achat, publié…
+  fichier text not null default '',            -- lien du livre complet (PDF…) : lisible par la direction et les acheteurs uniquement
+  updated_at timestamptz not null default now()
+);
+create table if not exists public.livres_achats (
+  owner uuid not null references auth.users(id) on delete cascade,
+  livre text not null references public.livres(id) on delete cascade,
+  at timestamptz not null default now(),
+  paiement bigint,
+  source text not null default 'paiement',     -- paiement | offert (par la direction)
+  primary key (owner, livre)
+);
+
 create index if not exists connexions_at_idx    on public.connexions (at desc);
 create index if not exists paiements_owner_idx  on public.paiements (owner);
 create index if not exists paiements_statut_idx on public.paiements (statut, at desc);
@@ -113,10 +143,12 @@ alter table public.connexions    enable row level security;
 alter table public.ia_logs       enable row level security;
 alter table public.annales       enable row level security;
 alter table public.paiements     enable row level security;
+alter table public.livres        enable row level security;
+alter table public.livres_achats enable row level security;
 
 do $$ declare r record; begin
   for r in select policyname, tablename from pg_policies where schemaname = 'public'
-    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales','paiements')
+    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales','paiements','livres','livres_achats')
   loop execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename); end loop;
 end $$;
 
@@ -167,9 +199,14 @@ create policy annales_read  on public.annales for select using ((coalesce((meta-
 create policy pay_read on public.paiements for select using (owner = auth.uid() or public.is_admin());
 create policy annales_write on public.annales for all using (public.is_admin()) with check (public.is_admin());
 
+-- Livres : les livres publiés sont visibles de tous (sans le lien du fichier complet) ; écriture par les fonctions de la direction
+create policy livres_read  on public.livres for select using (coalesce((data->>'publie')::boolean, false) or public.is_admin());
+create policy achats_read  on public.livres_achats for select using (owner = auth.uid() or public.is_admin());
+
 -- ---------- Droits d'accès aux tables ----------
 revoke all on public.profiles, public.admins, public.admin_invites, public.settings, public.contents, public.annonces,
-              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales, public.paiements from anon, authenticated;
+              public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales, public.paiements,
+              public.livres, public.livres_achats from anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select on public.settings, public.contents, public.annonces to anon, authenticated;
 grant insert, update, delete on public.settings, public.contents, public.annonces to authenticated;
@@ -184,6 +221,8 @@ grant insert, update, delete on public.annales to authenticated;
 grant select, insert, delete on public.connexions to authenticated;
 grant select on public.ia_logs to authenticated;
 grant select on public.paiements to authenticated;
+grant select (id, data, updated_at) on public.livres to anon, authenticated;   -- jamais la colonne « fichier »
+grant select on public.livres_achats to authenticated;
 grant usage, select on all sequences in schema public to authenticated;
 
 -- ---------- Fonctions appelées par l'application ----------
@@ -210,16 +249,50 @@ language sql stable security definer set search_path = public as $$
     'preview', coalesce(nullif((select data->>'preview' from public.settings where id = 'main'), '')::int, 1));
 $$;
 
--- Apprenant : déclarer un paiement Wave / Mobile Money (montant et formule fixés par les réglages de la direction)
-create or replace function public.declarer_paiement(p_moyen text, p_numero text, p_reference text) returns bigint
+-- Accorder ce qu'un paiement validé a payé : accès à la plateforme (prolongé d'un mois pour un abonnement) ou livre.
+-- Fonction interne : appelée par la validation de la direction, par le paiement en ligne et au rattachement d'un compte.
+create or replace function public.appliquer_paiement(p_id bigint) returns boolean
 language plpgsql security definer set search_path = public as $$
-declare v_set jsonb; v_formule text; v_montant int; v_id bigint;
+declare v_p public.paiements; v_fin timestamptz;
+begin
+  select * into v_p from public.paiements where id = p_id for update;
+  if not found or v_p.owner is null or v_p.statut <> 'valide' or v_p.applique then return false; end if;
+  if v_p.objet = 'livre' then
+    if v_p.livre is null or not exists (select 1 from public.livres where id = v_p.livre) then return false; end if;
+    insert into public.livres_achats (owner, livre, paiement, source) values (v_p.owner, v_p.livre, v_p.id, 'paiement') on conflict (owner, livre) do nothing;
+  else
+    if v_p.formule = 'mensuel' then   -- un mois de plus, sauf pour un accès déjà actif sans limite de durée
+      select case when acces = 'actif' and acces_fin is null then null else greatest(now(), coalesce(acces_fin, now())) + make_interval(months => greatest(1, v_p.mois)) end
+        into v_fin from public.profiles where id = v_p.owner;
+    else v_fin := null; end if;
+    update public.profiles set acces = 'actif', acces_fin = v_fin, acces_at = coalesce(acces_at, now()) where id = v_p.owner;
+  end if;
+  update public.paiements set applique = true where id = p_id;
+  return true;
+end $$;
+
+-- Apprenant : déclarer un paiement Wave / Mobile Money (montant fixé par les réglages de la direction ou par le prix du livre)
+drop function if exists public.declarer_paiement(text, text, text);
+create or replace function public.declarer_paiement(p_moyen text, p_numero text, p_reference text, p_objet text default 'acces', p_livre text default null) returns bigint
+language plpgsql security definer set search_path = public as $$
+declare v_set jsonb; v_formule text; v_montant int; v_id bigint; v_livre jsonb;
 begin
   if auth.uid() is null or not public.is_real_user() then raise exception 'Connectez-vous d''abord'; end if;
   if length(regexp_replace(coalesce(p_numero, ''), '\D', '', 'g')) < 8 then raise exception 'Numéro de téléphone incomplet'; end if;
   if length(trim(coalesce(p_reference, ''))) < 4 then raise exception 'Référence de la transaction incomplète'; end if;
   if (select count(*) from public.paiements where owner = auth.uid() and statut = 'en_attente') >= 3 then
     raise exception 'Vous avez déjà des paiements en attente de validation : patientez ou contactez la direction'; end if;
+  if coalesce(p_objet, 'acces') = 'livre' then
+    select data into v_livre from public.livres where id = p_livre and coalesce((data->>'publie')::boolean, false);
+    if not found then raise exception 'Livre introuvable'; end if;
+    v_montant := round(coalesce(nullif(v_livre->>'prix', '')::numeric, 0))::int;
+    if v_montant <= 0 then raise exception 'Ce livre est gratuit : aucun paiement n''est nécessaire'; end if;
+    if exists (select 1 from public.livres_achats where owner = auth.uid() and livre = p_livre) then raise exception 'Vous avez déjà ce livre'; end if;
+    insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois, objet, livre)
+    values (auth.uid(), v_montant, left(lower(coalesce(p_moyen, '')), 20), left(trim(p_numero), 30), left(trim(p_reference), 60), 'unique', 0, 'livre', p_livre)
+    returning id into v_id;
+    return v_id;
+  end if;
   select data into v_set from public.settings where id = 'main';
   v_formule := coalesce(nullif(v_set->>'formule', ''), 'unique');
   v_montant := case when v_formule = 'mensuel' then coalesce(nullif(v_set->>'prixMois', '')::int, 2000) else coalesce(nullif(v_set->>'prixAcces', '')::int, 4000) end;
@@ -229,22 +302,156 @@ begin
   return v_id;
 end $$;
 
--- Direction : valider (accès activé, prolongé d'un mois pour un abonnement) ou refuser un paiement
+-- Direction : valider (accès activé ou livre remis) ou refuser un paiement
 create or replace function public.admin_traiter_paiement(p_id bigint, p_ok boolean, p_note text) returns boolean
 language plpgsql security definer set search_path = public as $$
-declare v_p public.paiements; v_fin timestamptz;
 begin
   if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
-  select * into v_p from public.paiements where id = p_id for update;
-  if not found then raise exception 'Paiement introuvable'; end if;
+  if not exists (select 1 from public.paiements where id = p_id) then raise exception 'Paiement introuvable'; end if;
   update public.paiements set statut = case when p_ok then 'valide' else 'refuse' end, note = left(coalesce(p_note, ''), 300), traite_at = now(), traite_par = auth.uid() where id = p_id;
-  if p_ok then
-    if v_p.formule = 'mensuel' then
-      select greatest(now(), coalesce(acces_fin, now())) + make_interval(months => greatest(1, v_p.mois)) into v_fin from public.profiles where id = v_p.owner;
-    else v_fin := null; end if;
-    update public.profiles set acces = 'actif', acces_fin = v_fin, acces_at = coalesce(acces_at, now()) where id = v_p.owner;
-  end if;
+  if p_ok then perform public.appliquer_paiement(p_id); end if;   -- sans compte encore créé : accordé à son inscription
   return true;
+end $$;
+
+-- Apprenant (à chaque connexion) : rattacher les paiements en ligne faits avec son adresse e-mail avant la création du compte
+create or replace function public.rattacher_paiements() returns int
+language plpgsql security definer set search_path = public as $$
+declare v_email text := lower(coalesce(auth.jwt()->>'email', '')); r record; n int := 0;
+begin
+  if not public.is_real_user() or v_email = '' then return 0; end if;
+  update public.paiements set owner = auth.uid() where owner is null and lower(email) = v_email;
+  for r in select id from public.paiements where owner = auth.uid() and statut = 'valide' and not applique loop
+    if public.appliquer_paiement(r.id) then n := n + 1; end if;
+  end loop;
+  return n;
+end $$;
+
+-- Livres : enregistrer, supprimer, offrir (direction) ; lien du livre complet (direction, acheteurs, livres gratuits)
+create or replace function public.admin_livre_save(p_id text, p_data jsonb, p_fichier text) returns text
+language plpgsql security definer set search_path = public as $$
+declare v_id text := coalesce(nullif(trim(coalesce(p_id, '')), ''), 'lv_' || substr(md5(random()::text || clock_timestamp()::text), 1, 12));
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  if length(coalesce(p_data::text, '')) > 2500000 then raise exception 'Fiche trop lourde : utilisez une image de couverture plus petite'; end if;
+  insert into public.livres (id, data, fichier, updated_at) values (v_id, coalesce(p_data, '{}'::jsonb), coalesce(p_fichier, ''), now())
+  on conflict (id) do update set data = excluded.data, fichier = coalesce(p_fichier, public.livres.fichier), updated_at = now();
+  return v_id;
+end $$;
+
+create or replace function public.admin_livre_delete(p_id text) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  if exists (select 1 from public.livres_achats where livre = p_id) then raise exception 'Ce livre a déjà des acheteurs : masquez-le plutôt (ils le gardent)'; end if;
+  delete from public.livres where id = p_id;
+  return true;
+end $$;
+
+create or replace function public.admin_offrir_livre(p_uid uuid, p_livre text, p_ok boolean) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  if p_ok then insert into public.livres_achats (owner, livre, source) values (p_uid, p_livre, 'offert') on conflict (owner, livre) do nothing;
+  else delete from public.livres_achats where owner = p_uid and livre = p_livre; end if;
+  return true;
+end $$;
+
+create or replace function public.livre_fichier(p_id text) returns text
+language sql stable security definer set search_path = public as $$
+  select l.fichier from public.livres l where l.id = p_id and (
+    public.is_admin()
+    or exists (select 1 from public.livres_achats a where a.livre = l.id and a.owner = auth.uid())
+    or (auth.uid() is not null and coalesce((l.data->>'publie')::boolean, false) and coalesce(nullif(l.data->>'prix', '')::numeric, 0) = 0));
+$$;
+
+-- Paiement en ligne (Chariow) : ce que l'apprenant achète, pour la fonction Netlify /api/chariow/checkout
+create or replace function public.chariow_offre(p_objet text, p_livre text) returns json
+language plpgsql stable security definer set search_path = public as $$
+declare v_set jsonb; v_ch jsonb; v_prod text; v_prix numeric; v_titre text; v_l jsonb; v_data jsonb; v_mens boolean;
+begin
+  if not public.is_real_user() then raise exception 'Connectez-vous d''abord'; end if;
+  select data into v_set from public.settings where id = 'main';
+  v_set := coalesce(v_set, '{}'::jsonb); v_ch := coalesce(v_set->'chariow', '{}'::jsonb);
+  select data into v_data from public.profiles where id = auth.uid();
+  if coalesce(p_objet, 'acces') = 'livre' then
+    select data into v_l from public.livres where id = p_livre and coalesce((data->>'publie')::boolean, false);
+    if not found then raise exception 'Livre introuvable'; end if;
+    if exists (select 1 from public.livres_achats where owner = auth.uid() and livre = p_livre) then return json_build_object('deja', true); end if;
+    v_prod := nullif(trim(coalesce(v_l->>'prdChariow', '')), ''); v_prix := coalesce(nullif(v_l->>'prix', '')::numeric, 0); v_titre := v_l->>'titre';
+  else
+    v_mens := coalesce(v_set->>'formule', 'unique') = 'mensuel';
+    if public.has_access() and not v_mens then return json_build_object('deja', true); end if;
+    v_prod := nullif(trim(coalesce(case when v_mens then v_ch->>'prdMois' else v_ch->>'prdAcces' end, '')), '');
+    v_prix := case when v_mens then coalesce(nullif(v_set->>'prixMois', '')::numeric, 2000) else coalesce(nullif(v_set->>'prixAcces', '')::numeric, 4000) end;
+  end if;
+  return json_build_object('produit', v_prod, 'prix', v_prix, 'titre', v_titre, 'objet', coalesce(p_objet, 'acces'), 'livre', p_livre,
+    'uid', auth.uid(), 'email', lower(auth.jwt()->>'email'), 'nom', coalesce(v_data->>'name', ''), 'tel', coalesce(v_data->>'phone', ''),
+    'plateforme', coalesce(nullif(trim(v_set->>'nom'), ''), 'BâtiPro Académie'));
+end $$;
+
+-- Paiement en ligne (Chariow) reçu : appelée UNIQUEMENT par la fonction Netlify /api/chariow/webhook (clé service_role),
+-- après vérification de la signature de Chariow. Enregistre la vente une seule fois et accorde l'accès ou le livre aussitôt.
+create or replace function public.chariow_vente(p jsonb) returns json
+language plpgsql security definer set search_path = public as $$
+declare
+  v_ext text := left(nullif(trim(coalesce(p->>'ext_id', '')), ''), 120);
+  v_email text := lower(nullif(trim(coalesce(p->>'email', '')), ''));
+  v_prod text := nullif(trim(coalesce(p->>'produit', '')), '');
+  v_dev text := upper(left(coalesce(nullif(trim(p->>'devise'), ''), 'XOF'), 8));
+  v_mt numeric := case when coalesce(p->>'montant', '') ~ '^-?[0-9]+(\.[0-9]+)?$' then (p->>'montant')::numeric end;
+  v_set jsonb; v_ch jsonb; v_taux jsonb; v_old public.paiements;
+  v_objet text; v_livre text; v_titre text; v_formule text := 'unique'; v_mois int := 0; v_prix numeric;
+  v_owner uuid; v_id bigint; v_montant int; v_statut text; v_note text;
+begin
+  if v_ext is null then raise exception 'Vente sans identifiant'; end if;
+  perform pg_advisory_xact_lock(hashtext('chariow:' || v_ext));
+  select * into v_old from public.paiements where source = 'chariow' and ext_id = v_ext;
+  if coalesce(p->>'type', 'vente') = 'remboursement' then
+    if found then update public.paiements set statut = 'rembourse', note = 'Remboursé sur Chariow : retirez l''accès si nécessaire', traite_at = now() where id = v_old.id; end if;
+    return json_build_object('ok', true, 'rembourse', found);
+  end if;
+  if found then return json_build_object('ok', true, 'doublon', true, 'id', v_old.id, 'statut', v_old.statut); end if;
+
+  select data into v_set from public.settings where id = 'main';
+  v_set := coalesce(v_set, '{}'::jsonb); v_ch := coalesce(v_set->'chariow', '{}'::jsonb);
+  -- 1. le produit Chariow vendu : accès (inscription ou mois d'abonnement) ou livre
+  if v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdAcces', '')), '') then
+    v_objet := 'acces'; v_prix := coalesce(nullif(v_set->>'prixAcces', '')::numeric, 4000);
+  elsif v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdMois', '')), '') then
+    v_objet := 'acces'; v_formule := 'mensuel'; v_mois := 1; v_prix := coalesce(nullif(v_set->>'prixMois', '')::numeric, 2000);
+  elsif v_prod is not null then
+    select id, data->>'titre', coalesce(nullif(data->>'prix', '')::numeric, 0) into v_livre, v_titre, v_prix
+      from public.livres where trim(coalesce(data->>'prdChariow', '')) = v_prod limit 1;
+    if v_livre is not null then v_objet := 'livre'; end if;
+  end if;
+  -- 2. le compte de l'acheteur : identifiant transmis par la plateforme, sinon son adresse e-mail
+  if coalesce(p->>'uid', '') ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' then
+    select id into v_owner from public.profiles where id = (p->>'uid')::uuid;
+  end if;
+  if v_owner is null and v_email is not null then select id into v_owner from public.profiles where lower(email) = v_email order by created_at limit 1; end if;
+  -- 3. montant en FCFA (taux de la direction ; FCFA d'Afrique de l'Ouest et du Centre à parité)
+  v_taux := '{"XOF":1,"XAF":1,"FCFA":1,"CFA":1,"EUR":655.957,"USD":565,"CAD":410,"GBP":755,"GHS":52,"NGN":0.37,"GNF":0.065,"SLE":24.8,"LRD":2.83,"GMD":7.8,"MRU":14.2,"CVE":5.949}'::jsonb || coalesce(v_set->'devises', '{}'::jsonb);
+  if v_mt is not null and v_taux ? v_dev and coalesce(v_taux->>v_dev, '') ~ '^[0-9]+(\.[0-9]+)?$' then v_montant := round(v_mt * (v_taux->>v_dev)::numeric)::int; end if;
+  if v_prix is not null and v_prix > 0 and (v_montant is null or v_montant > v_prix * 20 or v_montant < v_prix / 20) then v_montant := v_prix::int; end if;
+  v_montant := coalesce(v_montant, 0);
+
+  v_statut := case when v_objet is not null and coalesce(v_ch->>'auto', 'true') <> 'false' then 'valide' else 'en_attente' end;
+  v_note := case when v_objet is null then 'Paiement en ligne reçu pour un produit Chariow non relié à une offre (' || coalesce(v_prod, 'produit inconnu') || ') : vérifiez puis validez'
+                 when v_statut = 'en_attente' then 'Paiement en ligne reçu (Chariow) : à confirmer'
+                 else 'Paiement en ligne Chariow : accordé automatiquement' end;
+  if v_objet is null then  -- produit non relié : on garde ce que la plateforme avait demandé, la direction décide
+    v_objet := case when p->>'objet' = 'livre' and exists (select 1 from public.livres where id = p->>'livre') then 'livre' else 'acces' end;
+    if v_objet = 'livre' then v_livre := p->>'livre'; end if;
+  end if;
+  insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois, statut, note, objet, livre, source, email, ext_id, devise, montant_devise, traite_at)
+  values (v_owner, v_montant, 'chariow', left(coalesce(p->>'telephone', ''), 30), v_ext, v_formule, v_mois, v_statut, v_note, v_objet, v_livre,
+          'chariow', v_email, v_ext, v_dev, v_mt, case when v_statut = 'valide' then now() end)
+  returning id into v_id;
+  if v_statut = 'valide' and v_owner is not null then perform public.appliquer_paiement(v_id); end if;
+  return json_build_object('ok', true, 'id', v_id, 'statut', v_statut, 'objet', v_objet, 'formule', v_formule, 'compte', v_owner is not null,
+    'email', coalesce(v_email, (select email from public.profiles where id = v_owner)), 'nom', (select data->>'name' from public.profiles where id = v_owner),
+    'livre', v_titre, 'fin', (select acces_fin from public.profiles where id = v_owner),
+    'plateforme', coalesce(nullif(trim(v_set->>'nom'), ''), 'BâtiPro Académie'));
 end $$;
 
 -- Direction : activer ou désactiver l'accès d'un apprenant (p_fin vide = sans limite de durée)
@@ -344,11 +551,18 @@ end $$;
 
 revoke execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
   public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
-  public.declarer_paiement(text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz) from public, anon;
+  public.declarer_paiement(text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
+  public.rattacher_paiements(), public.admin_livre_save(text, jsonb, text), public.admin_livre_delete(text), public.admin_offrir_livre(uuid, text, boolean),
+  public.livre_fichier(text), public.chariow_offre(text, text) from public, anon;
+-- fonctions internes : jamais appelables depuis le navigateur
+revoke execute on function public.appliquer_paiement(bigint), public.chariow_vente(jsonb) from public, anon, authenticated;
+grant execute on function public.chariow_vente(jsonb) to service_role;
 grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces() to anon, authenticated;
 grant execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
   public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
-  public.declarer_paiement(text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz) to authenticated;
+  public.declarer_paiement(text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
+  public.rattacher_paiements(), public.admin_livre_save(text, jsonb, text), public.admin_livre_delete(text), public.admin_offrir_livre(uuid, text, boolean),
+  public.livre_fichier(text), public.chariow_offre(text, text) to authenticated;
 
 -- ---------- Paramètres de départ ----------
 -- Insérés seulement s'ils n'existent pas : vos réglages ne sont jamais écrasés.
@@ -360,6 +574,12 @@ update public.settings
    set data = '{"paywall":true,"prixAcces":4000,"formule":"unique","prixMois":2000,"preview":1,"whatsapp":"0544176359","pay":{"wave":"0544176359","mtn":"0544176359","orange":"","moov":"","djamo":"","titulaire":"DOUMBIA Moussa"}}'::jsonb || data,
        updated_at = now()
  where id = 'main' and not (data ? 'paywall');
+-- Paiement en ligne (une seule fois) : boutique Chariow de la direction et produit « BâtiPro Académie : accès complet ».
+-- Modifiable ensuite dans Espace PDG › Abonnements & paiements › Réglages.
+update public.settings
+   set data = jsonb_set(data, '{chariow}', '{"boutique":"https://smart-digital.mychariow.com","lienAcces":"https://smart-digital.mychariow.shop/prd_7prkaptk","prdAcces":"prd_7prkaptk","lienMois":"","prdMois":"","auto":true}'::jsonb),
+       updated_at = now()
+ where id = 'main' and not (data ? 'chariow');
 -- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
 update public.settings
    set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,

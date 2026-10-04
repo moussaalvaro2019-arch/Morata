@@ -128,6 +128,7 @@ A.page('app/cours/:id', {space:'app', free:true, title:p => ((A.chap(p.id)||{}).
      <h1 style="font-size:clamp(24px,3vw,34px);margin-bottom:18px">${esc(c.titre)}</h1>
      ${md.html}
     </article>
+    ${A.SOL && A.SOL.chapStudies ? A.SOL.chapStudies(c) : ''}
     ${A.exosHtml(c)}
     ${A.sujetHtml(c)}
     <div class="aipanel noprint" id="aiBox">

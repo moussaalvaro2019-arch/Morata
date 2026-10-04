@@ -139,7 +139,7 @@ function stepGuided(s, i, last){
     body = `<div class="sq">${A.mdHtml(fixMd(q), {inner:true})}</div>
     <div class="sasks">${asks.map((a, j) => st.ok[j] != null ? `<div class="sav ${st.ok[j] ? 'ok' : 'shown'}">${esc(a.l)} = <b>${esc(askVal(a))}</b> ${st.ok[j] ? ic('check') : ''}</div>`
       : a.o ? `<div class="sask"><span class="small">${esc(a.l)}</span><div class="seg">${a.o.map((o, k) => `<button type="button" data-sch="${i}:${j}:${k}">${esc(o)}</button>`).join('')}</div>${st.val[j] != null ? `<span class="pill p-bad">Non</span>` : ''}</div>`
-      : `<label class="sask"><span class="small">${esc(a.l)}</span><span class="row nw"><input class="inp num" id="sa_${i}_${j}" inputmode="decimal" autocomplete="off" placeholder="?" value="${esc(st.val[j] ?? '')}"><span class="small faint">${esc(a.u || '')}</span>${st.val[j] != null && st.val[j] !== '' ? `<span class="pill p-bad">${ic('x')}</span>` : ''}</span></label>`).join('')}</div>
+      : `<label class="sask"><span class="small">${esc(a.l)}</span><span class="row nw"><input class="inp num" id="sa_${i}_${j}" inputmode="decimal" autocomplete="off" placeholder="?" value="${esc(st.draft && st.draft[j] != null ? st.draft[j] : (st.val[j] ?? ''))}"><span class="small faint">${esc(a.u || '')}</span>${st.val[j] != null && st.val[j] !== '' ? `<span class="pill p-bad">${ic('x')}</span>` : ''}</span></label>`).join('')}</div>
     ${st.hint && s.hint ? `<div class="note">${ic('zap')}<div>${A.mdHtml(fixMd(s.hint), {inner:true})}</div></div>` : ''}
     <div class="row">${asks.some(a => !a.o) ? `<button type="button" class="btn b-pri b-sm" data-scheck="${i}">${ic('check')}Vérifier</button>` : ''}${s.hint && !st.hint ? `<button type="button" class="btn b-line b-sm" data-shint="${i}">${ic('zap')}Indice</button>` : ''}<button type="button" class="btn b-ghost b-sm" data-sshow="${i}">${ic('eye')}Voir la solution</button></div>`;
   } else {
@@ -220,11 +220,12 @@ const curStep = i => { const r = SOL.run(SOL.get(ST.id), ST.p); return r.steps ?
 A.on('click', '[data-scheck]', el => { const i = +el.dataset.scheck, s = curStep(i); if(!s) return; const st = ST.st[i]; st.tries++;
   let all = true;
   (s.ask || []).forEach((a, j) => { if(st.ok[j] != null || a.o) { if(a.o && st.ok[j] == null) all = false; return; }
-    const inp = $(`#sa_${i}_${j}`), raw = inp ? inp.value : ''; st.val[j] = raw; const u = parse(raw);
+    const inp = $(`#sa_${i}_${j}`), raw = inp ? inp.value : ''; st.val[j] = raw; if(st.draft) delete st.draft[j]; const u = parse(raw);
     const tol = a.abs != null ? a.abs : Math.max(Math.abs(a.v) * (a.tol ?? .02), a.v === 0 ? .01 : 1e-12);
     if(isFinite(u) && Math.abs(u - a.v) <= tol) st.ok[j] = true; else all = false; });
   updOut(); toast(all ? 'Bonne réponse !' : 'Pas encore : vérifiez votre calcul ou demandez un indice', all ? 'check' : 'alert'); });
 A.on('click', '[data-sch]', el => { const [i, j, k] = el.dataset.sch.split(':').map(Number), s = curStep(i); if(!s) return; const st = ST.st[i];
+  st.draft = st.draft || {}; (s.ask || []).forEach((a, jj) => { const inp = $(`#sa_${i}_${jj}`); if(inp) st.draft[jj] = inp.value; }); // garder les valeurs déjà tapées
   if(s.ask[j].v === k){ st.ok[j] = true; toast('Bonne réponse !', 'check'); } else { st.val[j] = k; toast('Ce n\'est pas ça : réfléchissez encore', 'alert'); } updOut(); });
 A.on('click', '[data-shint]', el => { ST.st[+el.dataset.shint].hint = true; updOut(); });
 A.on('click', '[data-sshow]', el => { const i = +el.dataset.sshow, s = curStep(i); if(!s) return; const st = ST.st[i]; (s.ask || []).forEach((a, j) => { if(st.ok[j] == null) st.ok[j] = false; }); updOut(); });

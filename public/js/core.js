@@ -95,10 +95,13 @@ A.DEF = {
   // accès payant : inscription unique (ou abonnement mensuel), validée par la direction
   paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
   pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
+  // paiement en ligne international (Chariow) : liens et identifiants des produits, accès accordé automatiquement
+  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'https://smart-digital.mychariow.shop/prd_7prkaptk', prdAcces:'prd_7prkaptk', lienMois:'', prdMois:'', auto:true},
+  devises:{}, devisesOff:[],   // taux de change modifiés par la direction (FCFA pour 1 unité) et devises non proposées
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
 };
-A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {})}); };
+A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {}), chariow:Object.assign({}, A.DEF.chariow, m.chariow || {})}); };
 
 /* ---------- accès payant ---------- */
 A.paywallOn = () => A.cfg().paywall !== false;
@@ -110,7 +113,56 @@ A.hasAccess = () => {
 };
 A.accesFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.acces_fin ? ts(me.acces_fin) : null; };
 A.prixTxt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA (paiement unique)`; };
+/* ---------- promotions : prix normal barré en rouge, prix payé, date de fin facultative ----------
+   Le prix payé reste toujours « prix » (livre) ou le prix de l'inscription : le prix barré n'est qu'affiché.
+   Après la date de fin (jour inclus), le prix barré disparaît tout seul. */
+const finJour = d => { if(!d) return 0; const t = new Date(String(d).slice(0, 10) + 'T23:59:59').getTime(); return isNaN(t) ? 0 : t; };
+A.promo = (prix, barre, fin) => {
+  prix = +prix || 0; barre = +barre || 0; const t = finJour(fin);
+  if(!(prix > 0 && barre > prix) || (t && t < now())) return null;
+  return {old:barre, pct:Math.round((1 - prix / barre) * 100), fin:t || null, jours:t ? Math.ceil((t - now()) / 86400000) : null};
+};
+A.promoFinie = (prix, barre, fin) => { const t = finJour(fin); return +barre > +prix && !!t && t < now(); };
+A.promoAcces = () => { const c = A.cfg(); return A.promo(c.formule === 'mensuel' ? c.prixMois : c.prixAcces, c.prixBarre, c.promoFin); };
+A.promoUrg = p => !p || p.jours == null ? '' : p.jours <= 1 ? 'Dernier jour de l\'offre !' : `Offre valable jusqu'au ${fd(p.fin)} · plus que ${p.jours} jours`;
+A.promoTag = p => p ? `<span class="px-pct">-${p.pct} %</span>` : '';
+A.promoOld = (p, u = 'FCFA') => p ? `<s class="px-old">${F(p.old)} ${u}</s>` : '';
 A.prixCourt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA une seule fois`; };
+/* ---------- devises : les prix sont fixés en FCFA, chacun voit l'équivalent dans sa devise ----------
+   t = nombre de FCFA pour 1 unité (taux indicatifs, modifiables par la direction ; parités fixes pour le FCFA,
+   l'euro et l'escudo cap-verdien) ; d = décimales affichées */
+A.DEVISES = [
+  ['XOF','FCFA','Franc CFA (BCEAO)',"Côte d'Ivoire, Sénégal, Mali, Burkina Faso, Bénin, Togo, Niger, Guinée-Bissau",1,0],
+  ['XAF','FCFA','Franc CFA (BEAC)','Cameroun, Gabon, Congo, Tchad, Centrafrique, Guinée équatoriale',1,0],
+  ['EUR','€','Euro','France, Belgique, zone euro',655.957,2],
+  ['USD','$ US','Dollar américain','États-Unis et paiements internationaux',565,2],
+  ['CAD','$ CA','Dollar canadien','Canada',410,2],
+  ['GBP','£','Livre sterling','Royaume-Uni',755,2],
+  ['GHS','GH₵','Cedi','Ghana',52,2],
+  ['NGN','₦','Naira','Nigeria',0.37,0],
+  ['GNF','GNF','Franc guinéen','Guinée',0.065,0],
+  ['SLE','Le','Leone','Sierra Leone',24.8,2],
+  ['LRD','L$','Dollar libérien','Liberia',2.83,0],
+  ['GMD','D','Dalasi','Gambie',7.8,0],
+  ['MRU','UM','Ouguiya','Mauritanie',14.2,0],
+  ['CVE','Esc','Escudo cap-verdien','Cap-Vert',5.949,0]
+].map(([c, s, n, p, t, d]) => ({c, s, n, p, t, d}));
+A.DEV_FIXES = ['XOF','XAF','EUR','CVE'];
+A.devInfo = c => A.DEVISES.find(x => x.c === c) || A.DEVISES[0];
+A.taux = c => { const D = A.devInfo(c); if(A.DEV_FIXES.includes(D.c)) return D.t; const o = +((A.cfg().devises || {})[D.c]); return o > 0 ? o : D.t; };
+A.devisesOn = () => { const off = A.cfg().devisesOff || []; return A.DEVISES.filter(d => d.c === 'XOF' || !off.includes(d.c)); };
+A.devise = () => { const c = ls.get('devise', 'XOF'); return A.devisesOn().some(d => d.c === c) ? c : 'XOF'; };
+A.setDevise = c => ls.set('devise', c);
+A.conv = (fcfa, c) => (+fcfa || 0) / (A.taux(c) || 1);
+A.money = (fcfa, c = A.devise()) => {
+  const D = A.devInfo(c), v = A.conv(fcfa, D.c);
+  if(D.s === 'FCFA') return F(Math.round(v)) + ' FCFA';
+  try{ return new Intl.NumberFormat('fr-FR', {minimumFractionDigits:D.d, maximumFractionDigits:D.d}).format(v).replace(/\u202f/g, ' ') + ' ' + D.s; }catch(_){ return v.toFixed(D.d) + ' ' + D.s; }
+};
+/* « ≈ 6,10 € » quand le visiteur a choisi une autre devise que le FCFA */
+A.eq = (fcfa, c = A.devise()) => A.devInfo(c).s === 'FCFA' ? '' : '≈ ' + A.money(fcfa, c);
+A.devSel = (lab = true) => `<label class="devsel" title="Afficher les prix dans une autre devise">${ic('globe')}${lab ? '<span>Devise</span>' : ''}<select data-devsel aria-label="Devise d'affichage">${A.devisesOn().map(d => `<option value="${d.c}" ${d.c === A.devise() ? 'selected' : ''}>${d.c} · ${esc(d.n)}</option>`).join('')}</select></label>`;
+
 /* chapitre gratuit : les « preview » premiers chapitres de chaque matière, dans l'ordre du programme */
 A.isFree = id => {
   const pv = +A.cfg().preview || 0; if(!pv) return false;
@@ -226,7 +278,7 @@ let sb = null;
 
 /* ---- démo locale : tout est gardé dans ce navigateur ---- */
 function demoSeed(){
-  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}, paiements:[]};
+  const d = {users:{}, admins:{}, invites:{}, connexions:[], progress:{}, quiz:{}, works:{}, ia:[], settings:{main:{}}, contents:{}, annonces:{}, annales:{}, paiements:[], livres:{}, achats:[]};
   const t = now(), day = 86400000;
   const people = [
     ['u_ak','Koné Aminata','Élève / étudiant','Yopougon'],['u_kj','Kouassi Jean-Marc','Technicien','Cocody'],
@@ -245,13 +297,33 @@ function demoSeed(){
     d.progress[u+':'+c] = {owner:u, data:{chap:c, mat:c.split('-')[0], done:true, at: t - (list.length-k)*day*.8}};
     if(k%2===0) d.quiz[u+':'+c+':'+k] = {owner:u, data:{chap:c, mat:c.split('-')[0], score: 2 + (k*7+u.length)%3, total:4, at: t - (list.length-k)*day*.8}};
   }));
+  // paiement en ligne (Chariow) d'une apprenante de la diaspora : accès ouvert automatiquement
+  d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day};
+  d.paiements.push({id:d.paiements.length + 1, owner:'u_dm', at:t - 4*day, montant:4000, moyen:'chariow', numero:'', reference:'sale_demo_1', formule:'unique', mois:0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:t - 4*day, source:'chariow', email:'mariam.diallo@exemple.fr', devise:'EUR', montant_devise:6.1, objet:'acces', applique:true});
+  // livres d'exemple (à remplacer par les vôtres dans Espace PDG › Livres)
+  d.livres.lv_demo1 = {data:{titre:'Le béton armé pas à pas', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Du calcul des charges au plan de ferraillage : poutres, poteaux, dalles et semelles selon le BAEL, avec des exemples de chantiers ivoiriens.', description:"Ce livre d'exemple montre comment vos ouvrages apparaissent sur la plateforme.\n\n- Descente de charges et combinaisons ELU / ELS\n- Poutres, poteaux, dalles, semelles\n- 60 exercices corrigés\n\nRemplacez-le par vos propres livres dans l'Espace PDG, rubrique **Livres**.", prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(t + 20*day).toISOString().slice(0, 10), format:'PDF', pages:184, annee:2026, couleur:'#1D4FA8', publie:true, ordre:1, vedette:true, lienAchat:'', prdChariow:''}, fichier:''};
+  d.livres.lv_demo2 = {data:{titre:'Réussir son métré et son devis', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Avant-métré, quantitatif et devis estimatif d\'une maison : méthode, modèles de tableaux et prix unitaires en FCFA.', description:"Livre d'exemple : modifiez le titre, la couverture, le prix et la description, ou masquez-le.", prix:5000, format:'PDF et papier', pages:126, annee:2025, couleur:'#C95F18', publie:true, ordre:2, lienAchat:'', prdChariow:''}, fichier:''};
+  d.achats.push({owner:'u_kj', livre:'lv_demo2', at:t - 6*day, source:'paiement'});
+  d.paiements.push({id:d.paiements.length + 1, owner:'u_kj', at:t - 6*day, montant:5000, moyen:'wave', numero:d.users.u_kj.data.phone, reference:'T778812', formule:'unique', mois:0, statut:'valide', note:'', traite_at:t - 6*day, objet:'livre', livre:'lv_demo2', applique:true});
   d.ia.push({owner:'u_np', at:t-3*3600000, data:{kind:'chat', ref:'ba'}},{owner:'u_kj', at:t-26*3600000, data:{kind:'expliquer', ref:'ba-2'}},{owner:'u_ak', at:t-50*3600000, data:{kind:'chat', ref:'rdm'}});
   d.annonces.a1 = {titre:'Bienvenue sur BâtiPro Académie', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
   return d;
 }
+/* démo : accorder ce qu'un paiement validé a payé (même règle que la fonction SQL appliquer_paiement) */
+function localApply(x){
+  const d = L.db; if(!x.owner || x.applique) return;
+  if(x.objet === 'livre'){ if(!d.livres[x.livre]) return; d.achats = d.achats || []; if(!d.achats.some(a => a.owner === x.owner && a.livre === x.livre)) d.achats.push({owner:x.owner, livre:x.livre, at:now(), source:'paiement'}); }
+  else{ const u = d.users[x.owner]; if(!u) return; const illim = u.acces === 'actif' && !u.acces_fin;
+    u.acces_fin = x.formule === 'mensuel' && !illim ? new Date(Math.max(now(), u.acces_fin ? ts(u.acces_fin) : 0) + (x.mois||1)*30.44*86400000).toISOString() : null;
+    u.acces = 'actif'; u.acces_at = u.acces_at || now(); }
+  x.applique = true;
+}
 const L = {
   db: null,
-  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = []; },
+  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = [];
+    if(!this.db.livres){ const s = demoSeed(); this.db.livres = s.livres; this.db.achats = []; this.save(); } if(!this.db.achats) this.db.achats = [];
+    const ex = this.db.livres.lv_demo1;   // démo : livre d'exemple en promotion (10 000 barré → 7 000 FCFA)
+    if(ex && ex.data.prixBarre == null && /exemple/i.test(ex.data.sousTitre || '')){ Object.assign(ex.data, {prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(now() + 20*86400000).toISOString().slice(0, 10)}); this.save(); } },
   save(){ ls.set('db', this.db); },
   sess(){ return ls.get('sess', null); }
 };
@@ -263,6 +335,7 @@ function applyPublic(settings, contents, annonces){
   if(m0 && m0.name1 === 'Morata') settings = Object.assign({}, settings, {main:Object.assign(JSON.parse(JSON.stringify(m0).replace(/Morata/g, 'BâtiPro Académie')), {nom:'BâtiPro Académie', name1:'Bâti', name2:'Pro'})});
   S.settings = settings || {}; S.contents = contents || {}; S.annonces = annonces || {};
 }
+function livresList(rows){ return (rows || []).map(r => ({id:r.id, ...(r.data || {})})).sort((a, b) => (+a.ordre || 99) - (+b.ordre || 99) || String(a.titre).localeCompare(String(b.titre))); }
 function rows2obj(rows){ const o = {}; (rows||[]).forEach(r => o[r.id] = r.data || {}); return o; }
 
 async function loadMine(){
@@ -291,6 +364,7 @@ A.loadAdmin = async function(){
     S.adm = {
       profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
       paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
+      achats: (d.achats||[]).slice(),
       connexions: d.connexions.slice().sort((a,b)=>b.at-a.at),
       progress: Object.values(d.progress).map(p => ({owner:p.owner, ...p.data})),
       quiz: Object.values(d.quiz).map(q => ({owner:q.owner, ...q.data})),
@@ -310,10 +384,12 @@ A.loadAdmin = async function(){
     sb.from('admins').select('uid'),
     sb.from('paiements').select('*').order('at',{ascending:false}).limit(2000)
   ]);
+  const ach = await sb.from('livres_achats').select('owner,livre,at,source').limit(5000);
   const admins = new Set((ad.data||[]).map(x=>x.uid));
   S.adm = {
     profiles: (pr.data||[]).map(p => ({...p, data:p.data||{}, status:p.status||'actif', acces:p.acces||'gratuit', admin: admins.has(p.id)})),
     paiements: (py.data||[]).map(x => ({...x, at: ts(x.at), traite_at: x.traite_at ? ts(x.traite_at) : null})),
+    achats: (ach.data||[]).map(x => ({...x, at: ts(x.at)})),
     connexions: (cx.data||[]).map(c => ({...c, at: ts(c.at)})),
     progress: (pg.data||[]).map(p => ({owner:p.owner, ...p.data})),
     quiz: (qz.data||[]).map(q => ({owner:q.owner, ...q.data})),
@@ -326,18 +402,20 @@ A.loadAdmin = async function(){
 /* ---- connexion / session ---- */
 async function afterAuth(user){
   A.resetCours();
-  if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; S.pay = []; return; }
+  if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; S.pay = []; S.achats = []; return; }
   if(S.mode === 'local'){
     const u = L.db.users[user.id]; if(!u){ S.me = null; return; }
     S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
   }else{
+    try{ await sb.rpc('rattacher_paiements'); }catch(_){}   // achats en ligne faits avec cet e-mail avant la création du compte
     const [{data:roles}, {data:prof}] = await Promise.all([sb.rpc('my_roles'), sb.from('profiles').select('*').eq('id', user.id).maybeSingle()]);
     S.adminExists = !!(roles && roles.admin_exists);
     S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
   }
   await loadMine();
   await A.db.myPayments().catch(e => console.warn(e));
-  if(S.me.isAdmin) await A.loadAdmin().catch(e => console.warn(e));
+  await A.db.mesLivres().catch(e => console.warn(e));
+  if(S.me.isAdmin){ await A.loadAdmin().catch(e => console.warn(e)); if(S.mode === 'sb') await A.db.livres().catch(() => {}); }  // livres masqués visibles par la direction
   if(!ss.get('cx_'+S.me.id)){ ss.set('cx_'+S.me.id, '1'); A.db.logConnexion(); }
   A.db.touch();
 }
@@ -349,11 +427,13 @@ A.db = {
       sb = A.sb = window.supabase.createClient(CONF.supabaseUrl, CONF.supabaseAnonKey, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}});
       sb.auth.onAuthStateChange(ev => { if(ev === 'PASSWORD_RECOVERY') setTimeout(()=>A.openPwNew && A.openPwNew(), 300); });
       try{
-        const [st, ct, an, ae] = await Promise.all([
-          sb.from('settings').select('id,data'), sb.from('contents').select('id,data'), sb.from('annonces').select('id,data'), sb.rpc('admin_exists')
+        const [st, ct, an, ae, lv] = await Promise.all([
+          sb.from('settings').select('id,data'), sb.from('contents').select('id,data'), sb.from('annonces').select('id,data'), sb.rpc('admin_exists'),
+          sb.from('livres').select('id,data,updated_at')
         ]);
         if(st.error) throw st.error;
         applyPublic(rows2obj(st.data), rows2obj(ct.data), rows2obj(an.data));
+        S.livres = lv.error ? [] : livresList(lv.data);  // table absente tant que le script SQL n'a pas été relancé
         S.adminExists = !!ae.data;
         const {data:{session}} = await sb.auth.getSession();
         await afterAuth(session ? session.user : null);
@@ -361,6 +441,7 @@ A.db = {
     }else{
       S.mode = 'local'; L.load();
       applyPublic(L.db.settings, L.db.contents, L.db.annonces);
+      S.livres = livresList(Object.entries(L.db.livres).map(([id, r]) => ({id, data:r.data})));
       S.adminExists = true;
       const s = L.sess();
       await afterAuth(s && L.db.users[s.uid] ? {id:s.uid} : null);
@@ -494,22 +575,25 @@ A.db = {
     const {data, error} = await sb.from('paiements').select('*').eq('owner', S.me.id).order('at', {ascending:false}).limit(50);
     if(error) throw error; S.pay = (data||[]).map(x => ({...x, at:ts(x.at)})); return S.pay;
   },
-  async declarePayment(moyen, numero, reference){
+  async declarePayment(moyen, numero, reference, objet = 'acces', livre = null){
     const c = A.cfg();
     if(S.mode === 'local'){
       const d = L.db; if((numero.replace(/\D/g,'')).length < 8) return {ok:false, msg:'Numéro de téléphone incomplet'};
       if(reference.trim().length < 4) return {ok:false, msg:'Référence de la transaction incomplète'};
       if(d.paiements.filter(x => x.owner === S.me.id && x.statut === 'en_attente').length >= 3) return {ok:false, msg:'Vous avez déjà des paiements en attente de validation'};
-      const mens = c.formule === 'mensuel';
-      d.paiements.push({id:(d.paiements.reduce((a,x)=>Math.max(a, x.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:mens ? +c.prixMois : +c.prixAcces, moyen, numero:numero.trim(), reference:reference.trim(), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'en_attente', note:''});
+      const mens = objet !== 'livre' && c.formule === 'mensuel', lv = objet === 'livre' ? (d.livres[livre] || {}).data : null;
+      if(objet === 'livre' && (!lv || !(+lv.prix > 0))) return {ok:false, msg:'Livre introuvable'};
+      d.paiements.push({id:(d.paiements.reduce((a,x)=>Math.max(a, x.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:lv ? +lv.prix : mens ? +c.prixMois : +c.prixAcces, moyen, numero:numero.trim(), reference:reference.trim(), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'en_attente', note:'', objet, livre:lv ? livre : null, source:'manuel', devise:'XOF'});
       L.save(); await this.myPayments(); return {ok:true};
     }
-    const {error} = await sb.rpc('declarer_paiement', {p_moyen:moyen, p_numero:numero, p_reference:reference});
+    const {error} = await sb.rpc('declarer_paiement', {p_moyen:moyen, p_numero:numero, p_reference:reference, p_objet:objet, p_livre:livre});
     if(error) return {ok:false, msg:sbErr(error)};
     await this.myPayments(); return {ok:true};
   },
-  async refreshAccess(){ // après validation par la direction : relit les droits sans se déconnecter
+  async refreshAccess(){ // après validation par la direction ou paiement en ligne : relit les droits sans se déconnecter
     if(!S.me) return;
+    if(S.mode === 'sb'){ try{ await sb.rpc('rattacher_paiements'); }catch(_){} }
+    await this.mesLivres().catch(()=>{});
     if(S.mode === 'local'){ const u = L.db.users[S.me.id]; if(u){ S.me.acces = u.acces||'gratuit'; S.me.acces_fin = u.acces_fin||null; } }
     else{ const {data} = await sb.from('profiles').select('acces,acces_fin,status').eq('id', S.me.id).maybeSingle(); if(data){ S.me.acces = data.acces||'gratuit'; S.me.acces_fin = data.acces_fin||null; S.me.status = data.status||'actif'; }
       const ct = await sb.from('contents').select('id,data'); if(!ct.error) S.contents = rows2obj(ct.data); }
@@ -519,11 +603,63 @@ A.db = {
     if(S.mode === 'local'){
       const d = L.db, x = d.paiements.find(p => p.id === id); if(!x) return false;
       x.statut = ok ? 'valide' : 'refuse'; x.note = note || ''; x.traite_at = now();
-      if(ok){ const u = d.users[x.owner]; if(u){ u.acces = 'actif'; u.acces_at = u.acces_at || now();
-        u.acces_fin = x.formule === 'mensuel' ? new Date(Math.max(now(), u.acces_fin ? ts(u.acces_fin) : 0) + (x.mois||1)*30.44*86400000).toISOString() : null; } }
+      if(ok) localApply(x);
       L.save();
     }else{ const {error} = await sb.rpc('admin_traiter_paiement', {p_id:id, p_ok:ok, p_note:note||''}); if(error){ toast(sbErr(error), 'x'); return false; } }
     await A.loadAdmin(); return true;
+  },
+  /* ---- livres ---- */
+  async livres(){
+    if(S.mode === 'local'){ S.livres = livresList(Object.entries(L.db.livres).map(([id, r]) => ({id, data:r.data}))); return S.livres; }
+    const {data, error} = await sb.from('livres').select('id,data,updated_at'); if(!error) S.livres = livresList(data); return S.livres || [];
+  },
+  async mesLivres(){
+    if(!S.me){ S.achats = []; return []; }
+    if(S.mode === 'local'){ S.achats = (L.db.achats || []).filter(x => x.owner === S.me.id); return S.achats; }
+    const {data, error} = await sb.from('livres_achats').select('livre,at,source').eq('owner', S.me.id);
+    S.achats = error ? [] : (data || []).map(x => ({...x, at:ts(x.at)})); return S.achats;
+  },
+  async livreFichier(id){
+    if(S.mode === 'local'){ const r = L.db.livres[id]; if(!r) return ''; const own = S.me && (S.me.isAdmin || (L.db.achats||[]).some(x => x.owner === S.me.id && x.livre === id) || (r.data.publie && !(+r.data.prix > 0))); return own ? r.fichier || '' : ''; }
+    const {data, error} = await sb.rpc('livre_fichier', {p_id:id}); if(error){ toast(sbErr(error), 'x'); return ''; } return data || '';
+  },
+  async saveLivre(id, data, fichier){
+    if(S.mode === 'local'){
+      id = id || uid('lv_'); const prev = L.db.livres[id] || {};
+      L.db.livres[id] = {data, fichier:fichier == null ? (prev.fichier || '') : fichier};
+      try{ L.save(); }catch(_){ toast('Stockage du navigateur plein : utilisez une image plus légère', 'alert'); return null; }
+      await this.livres(); return id;
+    }
+    const {data:nid, error} = await sb.rpc('admin_livre_save', {p_id:id || '', p_data:data, p_fichier:fichier == null ? null : fichier});
+    if(error){ toast(sbErr(error), 'x'); return null; } await this.livres(); return nid;
+  },
+  async delLivre(id){
+    if(S.mode === 'local'){ if((L.db.achats||[]).some(x => x.livre === id)){ toast('Ce livre a déjà des acheteurs : masquez-le plutôt (ils le gardent)', 'x'); return false; } delete L.db.livres[id]; L.save(); await this.livres(); return true; }
+    const {error} = await sb.rpc('admin_livre_delete', {p_id:id}); if(error){ toast(sbErr(error), 'x'); return false; } await this.livres(); return true;
+  },
+  async offrirLivre(owner, livre, ok){
+    if(S.mode === 'local'){ const d = L.db; d.achats = (d.achats||[]).filter(x => !(x.owner === owner && x.livre === livre)); if(ok) d.achats.push({owner, livre, at:now(), source:'offert'}); L.save(); }
+    else{ const {error} = await sb.rpc('admin_offrir_livre', {p_uid:owner, p_livre:livre, p_ok:ok}); if(error){ toast(sbErr(error), 'x'); return false; } }
+    await A.loadAdmin(); return true;
+  },
+  /* ---- paiement en ligne Chariow : page de paiement sécurisée, accès accordé dès la confirmation ---- */
+  async chariowCheckout(body){
+    if(S.mode === 'local') return {demo:true};
+    try{
+      const r = await fetch('/api/chariow/checkout', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + await this.token()}, body:JSON.stringify(body)});
+      const j = await r.json().catch(() => ({error:'Service de paiement indisponible'}));
+      return r.ok ? j : {...j, error:j.error || 'Service de paiement indisponible', status:r.status};
+    }catch(_){ return {error:'Connexion impossible au service de paiement', status:0}; }
+  },
+  async chariowDemo(objet, livre){ // démonstration : simule la notification de Chariow (paiement confirmé → accès immédiat)
+    const c = A.cfg(), d = L.db, lv = objet === 'livre' ? (d.livres[livre] || {}).data : null, mens = !lv && c.formule === 'mensuel', dev = A.devise();
+    const fcfa = lv ? +lv.prix : mens ? +c.prixMois : +c.prixAcces;
+    const x = {id:(d.paiements.reduce((a,p)=>Math.max(a, p.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:fcfa, moyen:'chariow', numero:'', reference:'sale_demo_' + Date.now().toString(36), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:now(), source:'chariow', email:S.me.email, devise:dev, montant_devise:+A.conv(fcfa, dev).toFixed(2), objet:lv ? 'livre' : 'acces', livre:lv ? livre : null};
+    d.paiements.push(x); localApply(x); L.save(); await this.refreshAccess(); return true;
+  },
+  async chariowEtat(){
+    if(S.mode === 'local') return null;
+    try{ const r = await fetch('/api/chariow/etat', {cache:'no-store'}); return r.ok ? await r.json() : null; }catch(_){ return null; }
   },
   async setAccess(id, acces, fin){
     if(S.mode === 'local'){ const u = L.db.users[id]; if(!u) return false; u.acces = acces; if(acces === 'actif'){ u.acces_fin = fin || null; u.acces_at = u.acces_at || now(); } L.save(); }
@@ -685,7 +821,7 @@ A.lockup = (dark, tag) => { const c = A.cfg(); return `<a class="lock${dark?' dk
 
 function siteShell(body, m){
   const cur = m.path.split('/')[0] || '';
-  const L2 = [['','Accueil'],['matieres','Matières'],['construction','Construction A→Z'],['outils','Outils'],['a-propos','À propos']];
+  const L2 = [['','Accueil'],['matieres','Matières'],['construction','Construction A→Z'],['outils','Outils']].concat((S.livres || []).some(l => l.publie) ? [['livres','Livres']] : [], [['a-propos','À propos']]);
   const link = ([h,n]) => `<a href="#/${h}" ${cur===h?'aria-current="page"':''}>${n}</a>`;
   const acts = S.me
     ? `<a class="btn b-pri b-sm" href="${S.me.isAdmin?'#/admin':'#/app'}">${ic(S.me.isAdmin?'crown':'grid')}${S.me.isAdmin?'Espace PDG':'Mon espace'}</a>`
@@ -698,6 +834,7 @@ function siteShell(body, m){
   <footer class="sfoot"><div class="wrap"><div class="fg">
    <div>${A.lockup(true)}<p style="margin-top:10px;max-width:40ch">${esc(c.tagline)} : cours, exercices, projets de construction réels, dessin de plans, métré et assistant IA.</p></div>
    <div><h4>Apprendre</h4><a href="#/matieres">Toutes les matières</a><a href="#/construction">Construction de A à Z</a><a href="#/outils">Atelier de dessin & métré</a></div>
+   ${(S.livres || []).some(l => l.publie) || /^https:\/\//.test(c.chariow.boutique || '') ? `<div><h4>Livres & boutique</h4>${(S.livres || []).some(l => l.publie) ? `<a href="#/livres">Les livres de ${esc(c.ceo)}</a>${S.me ? '<a href="#/app/livres">Mes livres</a>' : ''}` : ''}${/^https:\/\//.test(c.chariow.boutique || '') ? `<a href="${esc(c.chariow.boutique)}" target="_blank" rel="noopener">Boutique en ligne</a>` : ''}</div>` : ''}
    <div><h4>Compte</h4>${S.me?'<a href="#/app">Mon espace</a>':'<a href="#/inscription">Créer un compte</a><a href="#/connexion">Se connecter</a>'}</div>
    <div><h4>Contact</h4><span>${esc(c.city)}</span>${c.phone?`<span>${esc(c.phone)}</span>`:''}${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}${c.whatsapp?`<a href="https://wa.me/${esc(String(c.whatsapp).replace(/\D/g,'').replace(/^0/,'2250'))}" target="_blank" rel="noopener">WhatsApp</a>`:''}</div>
   </div><div class="fbot"><span>© ${new Date().getFullYear()} ${esc(brandText())} · Tous droits réservés</span><a href="#/direction">${ic('lock')}Espace direction</a></div></div></footer></div>`;
@@ -705,12 +842,12 @@ function siteShell(body, m){
 
 const LNAV = [
   ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
-  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/abonnement','Mon abonnement','coins'],['app/profil','Mon profil','user']
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/livres','Livres','books'],['app/abonnement','Mon abonnement','coins'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],
   ['Apprenants'],['admin/apprenants','Apprenants','users'],['admin/abonnements','Abonnements & paiements','coins'],['admin/progression','Progression & quiz','target'],
-  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annales','Annales d\'examens','doc'],['admin/annonces','Annonces','bell'],
+  ['Contenus'],['admin/contenus','Matières & cours','book'],['admin/annales','Annales d\'examens','doc'],['admin/livres','Livres','books'],['admin/annonces','Annonces','bell'],
   ['Outils'],['admin/ia','Intelligence artificielle','spark'],['admin/travaux','Travaux des apprenants','folder'],
   ['Réglages'],['admin/parametres','Paramètres','cog']
 ];
@@ -718,7 +855,7 @@ function navActive(path, h){
   if(h === 'app' || h === 'admin') return path === h;
   const base = h.split('/')[1];
   const seg = path.split('/')[1] || '';
-  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil', exercice:'exercices', solveur:'exercices', epreuve:'exercices', annale:path.startsWith('admin') ? 'annales' : 'exercices'};
+  const alias = {matiere:'matieres', cours:'matieres', apprenant:'apprenants', chapitre:'contenus', attestation:'profil', exercice:'exercices', solveur:'exercices', epreuve:'exercices', livre:'livres', annale:path.startsWith('admin') ? 'annales' : 'exercices'};
   return seg === base || alias[seg] === base;
 }
 function appShell(body, m, title, crumb, actions, adm){
@@ -792,6 +929,7 @@ A.on('click', '[data-act="side"]', () => { const s = $('#side'); s.classList.add
 A.on('click', '[data-act="smenu"]', () => { const m = $('#smenu'); m.hidden = !m.hidden; });
 A.on('click', '[data-act="logout"]', async () => { await A.db.signOut(); toast('Déconnecté', 'logout'); A.go('#/'); });
 A.on('click', '[data-copy]', el => copy(el.dataset.copy));
+A.on('change', '[data-devsel]', el => { A.setDevise(el.value); A.refresh(); });
 A.on('click', '[data-act="print"]', () => window.print());
 
 /* ---------- petits composants ---------- */
