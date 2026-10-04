@@ -2,6 +2,20 @@
 
 Durée : environ 30 minutes, depuis un ordinateur. Même principe que pour EventLoc CI.
 
+## En bref : mise en ligne en 7 étapes
+
+| # | Où | Quoi faire |
+|---|---|---|
+| 1 | **Supabase** | Créer le projet, coller et exécuter `supabase.sql` (SQL Editor → Run), noter le **Project URL**, la clé **anon** et la clé **service_role** |
+| 2 | **GitHub** | Fusionner la dernière version dans `main`, puis remplir `public/config.js` (URL + clé anon) |
+| 3 | **Netlify** | Importer le dépôt `Morata` (branche `main`), **Deploy**, renommer le site (ex. `batipro-academie`) |
+| 4 | **Netlify** | *Environment variables* : `ANTHROPIC_API_KEY`, `CHARIOW_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (+ facultatif `RESEND_API_KEY`, `MAIL_FROM`, `MAIL_DIRECTION`), puis **Trigger deploy** |
+| 5 | **Chariow** | *Automatisation → Pulses* : « vente réussie » vers `https://VOTRE-SITE.netlify.app/api/chariow/webhook` ; copier le secret `whsec_…` dans Netlify (`CHARIOW_WEBHOOK_SECRET`) et redéployer |
+| 6 | **Supabase** | *Authentication → URL Configuration* : **Site URL** = l'adresse Netlify |
+| 7 | **Votre site** | *Espace direction* : créer le compte PDG ; vérifier *Abonnements & paiements → Réglages* (Chariow : OK) ; faire un achat test ; ajouter vos livres et vos promotions |
+
+Les clés secrètes (`sk_…`, `whsec_…`, service_role, `sk-ant-…`) se collent **uniquement** dans Netlify : jamais dans un fichier, sur GitHub ou dans un message.
+
 ## Contenu du dossier
 
 | Fichier / dossier | Rôle |
