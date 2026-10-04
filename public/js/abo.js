@@ -302,7 +302,9 @@ function reglagesChariow(c){
   return `<div class="cols"><div class="card stack">
    <h3 style="margin:0">Paiement en ligne international (Chariow)</h3>
    <p class="sub">Pour les apprenants hors de Côte d'Ivoire, ou quand Wave et MTN ne passent pas : carte bancaire, Mobile Money d'autres pays… depuis votre boutique Chariow. <b>L'accès s'ouvre tout seul</b> dès la confirmation du paiement.</p>
-   <div class="g2"><label class="fld"><span>Inscription : lien de la page produit Chariow</span><input class="inp" id="ab_chw_lienAcces" value="${esc(ch.lienAcces || '')}" placeholder="https://…"></label>
+   <div class="g2"><label class="fld"><span>Adresse de votre boutique Chariow</span><input class="inp" id="ab_chw_boutique" value="${esc(ch.boutique || '')}" placeholder="https://votre-boutique.mychariow.com"></label>
+    <div class="fld"><span>Raccourcis</span><div class="row" style="padding-top:2px">${/^https:\/\//.test(ch.boutique || '') ? `<a class="btn b-line b-sm" href="${esc(ch.boutique)}" target="_blank" rel="noopener">${ic('globe')}Ma boutique</a>` : ''}<a class="btn b-line b-sm" href="https://app.chariow.com" target="_blank" rel="noopener">${ic('cog')}Tableau de bord Chariow</a></div></div></div>
+   <div class="g2"><label class="fld"><span>Inscription : lien de la page produit Chariow</span><input class="inp" id="ab_chw_lienAcces" value="${esc(ch.lienAcces || '')}" placeholder="${esc(/^https:\/\//.test(ch.boutique || '') ? ch.boutique.replace(/\/+$/, '') + '/prd_…' : 'https://…')}"></label>
     <label class="fld"><span>Inscription : identifiant du produit</span><input class="inp mono" id="ab_chw_prdAcces" value="${esc(ch.prdAcces || '')}" placeholder="prd_…"></label></div>
    <div class="g2"><label class="fld"><span>Abonnement mensuel : lien du produit</span><input class="inp" id="ab_chw_lienMois" value="${esc(ch.lienMois || '')}" placeholder="https://… (si formule mensuelle)"></label>
     <label class="fld"><span>Abonnement mensuel : identifiant du produit</span><input class="inp mono" id="ab_chw_prdMois" value="${esc(ch.prdMois || '')}" placeholder="prd_…"></label></div>
@@ -314,7 +316,7 @@ function reglagesChariow(c){
    ${etat}
    <label class="fld"><span>Adresse à coller dans Chariow › Automatisation › Pulses</span><div class="row nw"><input class="inp mono" readonly value="${esc(hook)}"><button class="btn b-line b-sm" data-copy="${esc(hook)}">${ic('copy')}Copier</button></div></label>
    <ol class="abo-steps small">
-    <li>Dans Chariow, créez le produit <b>« ${esc(A.brandText())} : accès complet »</b> au prix de ${F(c.prixAcces)} FCFA (produit numérique), puis copiez son lien et son identifiant (prd_…) ci-contre.</li>
+    <li>Dans <a href="https://app.chariow.com" target="_blank" rel="noopener">votre tableau de bord Chariow</a>, créez le produit <b>« ${esc(A.brandText())} : accès complet »</b> au prix de ${F(c.prixAcces)} FCFA (produit numérique), puis copiez son lien${/^https:\/\//.test(ch.boutique || '') ? ` (de la forme <span class="mono">${esc(ch.boutique.replace(/^https:\/\//, '').replace(/\/+$/, ''))}/prd_…</span>)` : ''} ci-contre : l'identifiant prd_… est repris automatiquement.</li>
     <li>Dans <b>Automatisation › Pulses</b>, ajoutez un Pulse « vente réussie » vers l'adresse ci-dessus, et copiez son secret (whsec_…).</li>
     <li>Dans <b>Netlify › Site configuration › Environment variables</b>, ajoutez CHARIOW_API_KEY, CHARIOW_WEBHOOK_SECRET et SUPABASE_SERVICE_ROLE_KEY, puis redéployez.</li>
     <li>Faites un achat test : l'accès doit s'ouvrir seul et le paiement apparaître dans l'Historique avec l'étiquette « En ligne ».</li>
@@ -366,9 +368,9 @@ A.on('click', '[data-act="absave"]', async () => {
   const pay = {}; MOYENS.forEach(m => pay[m[0]] = A.val('ab_pay_' + m[0]).trim()); pay.titulaire = A.val('ab_pay_titulaire').trim();
   if(Object.values(pay).concat([A.val('ab_whatsapp')]).some(v => String(v).replace(/\D/g, '').length >= 16)){ toast('Un numéro de carte bancaire ne doit pas être affiché : indiquez un numéro de téléphone', 'x'); return; }
   const prd = (lien, v) => (String(v || '').trim() || (String(lien || '').match(/prd_[A-Za-z0-9]+/) || [''])[0]);
-  const chariow = {lienAcces:A.val('ab_chw_lienAcces').trim(), lienMois:A.val('ab_chw_lienMois').trim(), auto:$('#ab_chw_auto') ? $('#ab_chw_auto').checked : true};
+  const chariow = {boutique:A.val('ab_chw_boutique').trim().replace(/\/+$/, ''), lienAcces:A.val('ab_chw_lienAcces').trim(), lienMois:A.val('ab_chw_lienMois').trim(), auto:$('#ab_chw_auto') ? $('#ab_chw_auto').checked : true};
   chariow.prdAcces = prd(chariow.lienAcces, A.val('ab_chw_prdAcces')); chariow.prdMois = prd(chariow.lienMois, A.val('ab_chw_prdMois'));
-  if([chariow.lienAcces, chariow.lienMois].some(l => l && !/^https:\/\//.test(l))){ toast('Les liens Chariow doivent commencer par https://', 'x'); return; }
+  if([chariow.boutique, chariow.lienAcces, chariow.lienMois].some(l => l && !/^https:\/\//.test(l))){ toast('Les liens Chariow doivent commencer par https://', 'x'); return; }
   if(/whsec_|sk_|sb_secret_|service_role/i.test(JSON.stringify(chariow))){ toast('Une clé secrète ne doit jamais être enregistrée ici : mettez-la dans les variables Netlify', 'x'); return; }
   const patch = {paywall:$('#ab_paywall').checked, formule:A.val('ab_formule'), preview:Math.max(0, +A.val('ab_preview') || 0), prixAcces:Math.max(0, +A.val('ab_prixAcces') || 0), prixMois:Math.max(0, +A.val('ab_prixMois') || 0), pay, whatsapp:A.val('ab_whatsapp').trim(), chariow};
   if(await A.db.saveSettings(patch)){ A.resetCours(); toast('Réglages de l\'accès payant enregistrés', 'coins'); A.refresh(); }

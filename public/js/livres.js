@@ -31,6 +31,8 @@ const fiche = (l, actions) => `<div class="ldet">${A.livreCover(l, true)}<div cl
   ${actions}
   ${l.description ? `<div class="md">${A.md(l.description).html}</div>` : ''}
 </div></div>`;
+/* lien vers la boutique Chariow de la direction (autres produits numériques) */
+const boutique = () => { const u = (A.cfg().chariow || {}).boutique; return /^https:\/\/\S+$/.test(u || '') ? `<div class="note info">${ic('globe')}<span>Retrouvez aussi tous les produits numériques de ${esc(A.cfg().ceo)} sur sa <a href="${esc(u)}" target="_blank" rel="noopener">boutique en ligne</a> (paiement par carte bancaire ou Mobile Money, depuis tous les pays).</span></div>` : ''; };
 const extrait = l => safeUrl(l.extrait) ? `<a class="btn b-line" href="${esc(l.extrait)}" target="_blank" rel="noopener">${ic('eye')}Lire un extrait</a>` : '';
 
 /* section de la page d'accueil */
@@ -47,6 +49,7 @@ A.page('livres', {space:'site', title:'Livres', render(){
   return `<div class="wrap"><section class="sect stack s20">
    <div class="lhero"><div class="stack s8"><span class="kick">Bibliothèque</span><h1 style="font-size:clamp(28px,4vw,40px)">Les livres de ${esc(c.ceo)}</h1><p class="muted">Des ouvrages pratiques pour apprendre et exercer les métiers du bâtiment, à lire sur téléphone, tablette ou ordinateur. Paiement par Mobile Money${A.chwDispo('livre', '') || L.some(l => l.prdChariow || l.lienAchat) ? ' ou en ligne depuis n\'importe quel pays' : ''}.</p></div>${L.some(l => !gratuit(l)) ? A.devSel() : ''}</div>
    ${L.length ? `<div class="lgrid">${L.map(l => card(l, 'livre')).join('')}</div>` : A.empty('books', 'Les livres arrivent bientôt.')}
+   ${boutique()}
   </section></div>`;
 }});
 A.page('livre/:id', {space:'site', title:p => (livre(p.id) || {}).titre || 'Livre', render(p){
@@ -66,7 +69,8 @@ A.page('app/livres', {space:'app', free:true, title:'Livres', crumb:'La biblioth
   const L = pub(), mine = (S.livres || []).filter(l => owned(l.id) || (l.publie && gratuit(l)));
   const list = lvTab === 'miens' ? mine : L;
   return `<div class="toolbar"><div class="tabs"><button class="tab ${lvTab === 'tous' ? 'on' : ''}" data-lvtab="tous">${ic('books')}Catalogue <span class="cnt">${L.length}</span></button><button class="tab ${lvTab === 'miens' ? 'on' : ''}" data-lvtab="miens">${ic('book')}Mes livres <span class="cnt">${mine.length}</span></button></div>${L.some(l => !gratuit(l)) ? A.devSel() : ''}</div>
-   ${list.length ? `<div class="lgrid">${list.map(l => card(l, 'app/livre')).join('')}</div>` : `<div class="card">${A.empty('books', lvTab === 'miens' ? 'Vous n\'avez pas encore de livre : parcourez le catalogue.' : 'Aucun livre pour le moment : la direction les ajoutera bientôt.')}</div>`}`;
+   ${list.length ? `<div class="lgrid">${list.map(l => card(l, 'app/livre')).join('')}</div>` : `<div class="card">${A.empty('books', lvTab === 'miens' ? 'Vous n\'avez pas encore de livre : parcourez le catalogue.' : 'Aucun livre pour le moment : la direction les ajoutera bientôt.')}</div>`}
+   ${lvTab === 'tous' ? boutique() : ''}`;
 }});
 A.on('click', '[data-lvtab]', el => { lvTab = el.dataset.lvtab; A.refresh(); });
 

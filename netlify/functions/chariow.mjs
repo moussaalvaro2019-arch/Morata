@@ -15,6 +15,7 @@
 //   SITE_URL                   facultatif : adresse du site pour le retour après paiement
 //   RESEND_API_KEY + MAIL_FROM facultatif : e-mail « votre accès est activé » envoyé par la plateforme
 //                              (Chariow envoie de toute façon son reçu d'achat à l'acheteur)
+//   MAIL_DIRECTION             facultatif : adresse de la direction, prévenue à chaque paiement en ligne
 // =====================================================================
 import crypto from "node:crypto";
 
@@ -141,6 +142,19 @@ async function envoyerMail(o, site) {
   } catch (_) { return false; }
 }
 
+/* avis à la direction pour chaque paiement en ligne (facultatif) */
+async function avisDirection(o, v, site) {
+  const key = env("RESEND_API_KEY"), from = env("MAIL_FROM"), to = env("MAIL_DIRECTION");
+  if (!key || !from || !to) return false;
+  const quoi = o.objet === "livre" ? `le livre « ${o.livre || "?"} »` : o.formule === "mensuel" ? "un mois d'abonnement" : "l'inscription (accès complet)";
+  const etat = o.statut === "valide" ? (o.compte ? "accordé automatiquement" : "accordé dès que l'acheteur créera son compte avec cette adresse") : "à valider dans l'Espace PDG";
+  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#14202E"><p><b>Nouveau paiement en ligne (Chariow)</b></p><p>${H(o.nom || o.email || "Un acheteur")} (${H(o.email || "")}) a payé ${H(quoi)}${v.montant != null ? ` : ${H(v.montant)} ${H(v.devise || "")}` : ""}.</p><p>Accès : <b>${H(etat)}</b>.</p><p><a href="${H(site)}/#/admin/abonnements">Ouvrir Abonnements & paiements</a></p></div>`;
+  try {
+    const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" }, body: JSON.stringify({ from, to: to.split(/[,;\s]+/).filter(Boolean).slice(0, 3), subject: `Paiement en ligne : ${o.objet === "livre" ? "livre" : "inscription"} ${o.email || ""}`.trim(), html }) });
+    return r.ok;
+  } catch (_) { return false; }
+}
+
 /* ---------- POST /api/chariow/webhook ---------- */
 async function webhook(request) {
   const secret = env("CHARIOW_WEBHOOK_SECRET"), apiKey = env("CHARIOW_API_KEY"), svc = env("SUPABASE_SERVICE_ROLE_KEY");
@@ -174,7 +188,9 @@ async function webhook(request) {
   if (!r.ok) return json({ error: (r.data && r.data.message) || "Enregistrement impossible" }, 500);
   const o = r.data || {};
   let mail = false;
-  if (o.ok && !o.doublon && !refund && o.statut === "valide") mail = await envoyerMail(o, (env("SITE_URL") || new URL(request.url).origin).replace(/\/+$/, ""));
+  const site = (env("SITE_URL") || new URL(request.url).origin).replace(/\/+$/, "");
+  if (o.ok && !o.doublon && !refund && o.statut === "valide") mail = await envoyerMail(o, site);
+  if (o.ok && !o.doublon && !refund) await avisDirection(o, v, site);
   return json({ ok: true, statut: o.statut || (o.rembourse ? "rembourse" : ""), doublon: !!o.doublon, compte: !!o.compte, mail });
 }
 

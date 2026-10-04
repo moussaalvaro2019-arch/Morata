@@ -96,7 +96,7 @@ A.DEF = {
   paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
   pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
   // paiement en ligne international (Chariow) : liens et identifiants des produits, accès accordé automatiquement
-  chariow:{lienAcces:'', prdAcces:'', lienMois:'', prdMois:'', auto:true},
+  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'', prdAcces:'', lienMois:'', prdMois:'', auto:true},
   devises:{}, devisesOff:[],   // taux de change modifiés par la direction (FCFA pour 1 unité) et devises non proposées
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
@@ -818,7 +818,7 @@ function siteShell(body, m){
   <footer class="sfoot"><div class="wrap"><div class="fg">
    <div>${A.lockup(true)}<p style="margin-top:10px;max-width:40ch">${esc(c.tagline)} : cours, exercices, projets de construction réels, dessin de plans, métré et assistant IA.</p></div>
    <div><h4>Apprendre</h4><a href="#/matieres">Toutes les matières</a><a href="#/construction">Construction de A à Z</a><a href="#/outils">Atelier de dessin & métré</a></div>
-   ${(S.livres || []).some(l => l.publie) ? `<div><h4>Livres</h4><a href="#/livres">Les livres de ${esc(c.ceo)}</a>${S.me ? '<a href="#/app/livres">Mes livres</a>' : ''}</div>` : ''}
+   ${(S.livres || []).some(l => l.publie) || /^https:\/\//.test(c.chariow.boutique || '') ? `<div><h4>Livres & boutique</h4>${(S.livres || []).some(l => l.publie) ? `<a href="#/livres">Les livres de ${esc(c.ceo)}</a>${S.me ? '<a href="#/app/livres">Mes livres</a>' : ''}` : ''}${/^https:\/\//.test(c.chariow.boutique || '') ? `<a href="${esc(c.chariow.boutique)}" target="_blank" rel="noopener">Boutique en ligne</a>` : ''}</div>` : ''}
    <div><h4>Compte</h4>${S.me?'<a href="#/app">Mon espace</a>':'<a href="#/inscription">Créer un compte</a><a href="#/connexion">Se connecter</a>'}</div>
    <div><h4>Contact</h4><span>${esc(c.city)}</span>${c.phone?`<span>${esc(c.phone)}</span>`:''}${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}${c.whatsapp?`<a href="https://wa.me/${esc(String(c.whatsapp).replace(/\D/g,'').replace(/^0/,'2250'))}" target="_blank" rel="noopener">WhatsApp</a>`:''}</div>
   </div><div class="fbot"><span>© ${new Date().getFullYear()} ${esc(brandText())} · Tous droits réservés</span><a href="#/direction">${ic('lock')}Espace direction</a></div></div></footer></div>`;
