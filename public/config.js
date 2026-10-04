@@ -5,6 +5,6 @@
 // N'utilisez JAMAIS la clé « service_role » ici.
 // =====================================================================
 window.MRT_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: ""
+  supabaseUrl: "https://uqqlwjfohwqkvsjddlhz.supabase.co",
+  supabaseAnonKey: "sb_publishable_8kU--o_qPlaeeeInZ7X4qg_Wo97ZU52"
 };
