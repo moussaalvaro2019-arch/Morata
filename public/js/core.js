@@ -96,7 +96,7 @@ A.DEF = {
   paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
   pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
   // paiement en ligne international (Chariow) : liens et identifiants des produits, accès accordé automatiquement
-  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'', prdAcces:'', lienMois:'', prdMois:'', auto:true},
+  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'https://smart-digital.mychariow.shop/prd_7prkaptk', prdAcces:'prd_7prkaptk', lienMois:'', prdMois:'', auto:true},
   devises:{}, devisesOff:[],   // taux de change modifiés par la direction (FCFA pour 1 unité) et devises non proposées
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18

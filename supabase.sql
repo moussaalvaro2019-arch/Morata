@@ -574,6 +574,12 @@ update public.settings
    set data = '{"paywall":true,"prixAcces":4000,"formule":"unique","prixMois":2000,"preview":1,"whatsapp":"0544176359","pay":{"wave":"0544176359","mtn":"0544176359","orange":"","moov":"","djamo":"","titulaire":"DOUMBIA Moussa"}}'::jsonb || data,
        updated_at = now()
  where id = 'main' and not (data ? 'paywall');
+-- Paiement en ligne (une seule fois) : boutique Chariow de la direction et produit « BâtiPro Académie : accès complet ».
+-- Modifiable ensuite dans Espace PDG › Abonnements & paiements › Réglages.
+update public.settings
+   set data = jsonb_set(data, '{chariow}', '{"boutique":"https://smart-digital.mychariow.com","lienAcces":"https://smart-digital.mychariow.shop/prd_7prkaptk","prdAcces":"prd_7prkaptk","lienMois":"","prdMois":"","auto":true}'::jsonb),
+       updated_at = now()
+ where id = 'main' and not (data ? 'chariow');
 -- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
 update public.settings
    set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,
