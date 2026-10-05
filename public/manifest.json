@@ -1,0 +1,19 @@
+{
+  "name": "BâtiPro – Académie du Bâtiment",
+  "short_name": "BâtiPro",
+  "description": "BâtiPro, l'académie du bâtiment pour apprendre, pratiquer et progresser.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0E1A2B",
+  "theme_color": "#0E1A2B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/batipro-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
