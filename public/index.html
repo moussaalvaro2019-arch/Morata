@@ -178,5 +178,14 @@
 <script src="js/abo.js"></script>
 <script src="js/livres.js"></script>
 <script src="js/boot.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(() => console.log("BâtiPro : Service Worker activé"))
+        .catch((error) => console.error("Erreur Service Worker :", error));
+    });
+  }
+</script>
 </body>
 </html>
