@@ -2,6 +2,8 @@
 # les cours protégés dans netlify/functions (contenu dans le dossier « contenus »)
 [build]
   publish = "public"
+  # empreintes de version + cache navigateur longue durée (moins de requêtes facturées)
+  command = "node outils/build.mjs"
 
 # Cours protégés : la fonction netlify/functions/cours.mjs lit le dossier « contenus »
 # (non publié) et n'envoie le contenu complet qu'aux apprenants dont l'accès est actif.
