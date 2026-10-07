@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BâtiPro Académie</title>
 <meta name="description" content="BâtiPro Académie, l'académie du bâtiment : cours et exercices corrigés de mathématiques, RDM, béton armé, géotechnique, topographie, métré, construction de A à Z, atelier de dessin et assistant IA.">
-<meta name="theme-color" content="#0E1A2B">
+<meta name="theme-color" content="#0E1A2B"> 
+<link rel="icon" type="image/png" href="/batipro-icon.png">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -176,5 +178,14 @@
 <script src="js/abo.js"></script>
 <script src="js/livres.js"></script>
 <script src="js/boot.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(() => console.log("BâtiPro : Service Worker activé"))
+        .catch((error) => console.error("Erreur Service Worker :", error));
+    });
+  }
+</script>
 </body>
 </html>
