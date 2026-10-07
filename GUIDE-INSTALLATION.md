@@ -23,7 +23,7 @@ Les clés secrètes (`sk_…`, `whsec_…`, service_role, `sk-ant-…`) se colle
 | `public/` | Le site et toute l'application (pages, cours, atelier de dessin, métré, espace PDG) |
 | `public/config.js` | Les 2 informations de votre projet Supabase : à remplir ici **ou**, plus simple, à mettre dans Netlify (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) |
 | `netlify/functions/config.mjs` | Donne au site l'adresse et la clé publique Supabase rangées dans Netlify (`/api/config`) |
-| `contenus/cours/` | Le contenu complet des 18 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
+| `contenus/cours/` | Le contenu complet des 19 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
 | `netlify/functions/cours.mjs` | Les cours protégés : n'envoie le contenu des chapitres payants qu'aux apprenants dont l'accès est actif |
 | `netlify/functions/chariow.mjs` | Le paiement en ligne Chariow : envoie l'apprenant sur la page de paiement, puis reçoit l'avis de Chariow et ouvre l'accès (ou remet le livre) tout seul |
 | `outils/` | Petits outils : catalogue des cours, serveur de test local |
@@ -83,7 +83,7 @@ Si vous repartez d'un dépôt vide :
 
 1. **app.netlify.com** → connectez-vous avec GitHub.
 2. **Add new site** (ou **Add new project**) → **Import an existing project** → **GitHub** → choisissez le dépôt `Morata`, branche **main**.
-3. Laissez **Build command** vide. **Publish directory** : `public` (déjà indiqué par `netlify.toml`). → **Deploy**. Netlify installe aussi, sans rien vous demander, la fonction des cours protégés (`/api/cours`) et l'assistant IA.
+3. **Build command** : `node outils/build.mjs` et **Publish directory** : `public` (les deux sont déjà indiqués par `netlify.toml` ; laissez les champs tels que Netlify les propose). → **Deploy**. Netlify installe aussi, sans rien vous demander, la fonction des cours protégés (`/api/cours`) et l'assistant IA.
 4. Notez l'adresse du site (ex. `https://batipro-academie.netlify.app`). Vous pouvez la changer dans **Site configuration → Change site name**.
 5. Retournez dans Supabase → **Authentication** → **URL Configuration** → **Site URL** : collez l'adresse Netlify (sert au lien « Mot de passe oublié »).
 
@@ -131,24 +131,35 @@ Autres variables : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (étape 2, utilisées a
 - **Livres** : vos livres (ajout, couverture, prix, publication, ventes, livres offerts).
 - **Paramètres** : nom de la plateforme, textes d'accueil, contacts (WhatsApp), ouverture des inscriptions, **bordereau des prix** du métré, **administrateurs** (inviter un collaborateur), exports.
 
-### Accès payant : premier chapitre gratuit, puis inscription à 4 000 FCFA
-**Si votre site était déjà en ligne avant cette version** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Il ajoute les colonnes d'accès des profils, la table des paiements et les fonctions de validation, sans toucher à vos données. Vos apprenants déjà inscrits sont alors **non payés** : activez dans l'onglet **Tous les apprenants** ceux que vous voulez garder gratuits.
+### Accès payant : inscription (31 jours tout compris), puis Inscrit, Basic ou Premium
+**Si votre site était déjà en ligne avant cette version** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Il ajoute les colonnes d'essai et d'abonnement des profils, les fonctions des formules et les produits Chariow Basic et Premium, sans toucher à vos données. Les apprenants déjà actifs reçoivent leurs 31 jours tout compris à partir de leur date d'activation.
+
+**Le principe** :
+| Formule | Comment l'obtenir | Ce qu'elle ouvre |
+|---|---|---|
+| **Non inscrit** | — | le premier chapitre de chaque matière (réglable) |
+| **Premium offert** (31 jours) | **inscription** : 4 000 FCFA, une seule fois | **tout**, pendant 31 jours à partir du paiement |
+| **Inscrit** | automatique après les 31 jours | **tous les cours**, mais moins d'exercices (2 par chapitre), de quiz (3) et de sujets (niveau Débutant) ; pas de solveurs, d'épreuves, d'annales, de métré complet, d'atelier de dessin ni d'assistant IA |
+| **Basic** (31 jours) | abonnement Basic | plus d'exercices (4), de quiz (5) et de sujets (jusqu'au niveau Intermédiaire), solveurs Débutant et Intermédiaire, toute la banque d'exercices, épreuves, annales, **3 métrés complets par mois** ; ni atelier de dessin ni assistant IA |
+| **Premium** (31 jours) | abonnement Premium | **tout** : exercices, quiz, sujets et solveurs sans limite, métrés illimités, atelier de dessin 2D/3D, assistant IA et résolution en photo |
+Ces limites sont des **réglages par défaut** : vous les changez dans Espace PDG → Abonnements & paiements → Réglages → **Contenu des formules**. Un apprenant voit toujours **toutes les fonctions** sur son tableau de bord : celles que sa formule ne comprend pas portent un cadenas « Basic » ou « Premium » et ouvrent une page qui présente les offres. Un abonnement pris pendant les 31 jours offerts commence **à la fin** de cette période ; un réabonnement à la même formule s'ajoute à la date de fin en cours.
 
 **Réglages** — Espace PDG → **Abonnements & paiements** → onglet **Réglages** :
 - **Activer l'accès payant** (décoché : toute la plateforme redevient gratuite) ;
-- **Formule** : *Inscription : paiement unique* (4 000 FCFA par défaut) ou *Abonnement mensuel* (prix par mois, à utiliser quand la plateforme sera connue) ;
+- **Prix de l'inscription** (4 000 FCFA, une seule fois), **Jours tout compris après l'inscription** (31), **Prix Basic** et **Prix Premium**, **Durée d'un abonnement Basic ou Premium** (31 jours). Les prix Basic (2 000) et Premium (5 000) sont des **valeurs de départ** : mettez exactement les prix de vos produits Chariow ;
 - **Chapitres gratuits par matière** : 1 par défaut (le premier de chaque matière, en lecture complète) ;
+- **Contenu des formules** : nombre d'exercices, de quiz et de sujets par chapitre, niveau des solveurs, banque d'exercices, épreuves, annales, métrés par mois (−1 = illimité), atelier, IA, pour Inscrit et pour Basic (Premium contient toujours tout) ;
 - **Promotion (facultatif)** : **prix normal barré** (affiché en rouge, barré, à côté du prix de l'inscription, avec le pourcentage de réduction), **fin de l'offre** et **nom de l'offre** (« Offre de lancement »). Visible sur l'accueil, l'inscription, « Mon abonnement » et l'écran des parties réservées. Mettez le même prix de vente sur le produit Chariow ;
 - **Où les apprenants paient** : numéros **Wave** et **MTN Mobile Money** (0544176359 déjà rempli), Orange, Moov, Djamo, **nom du bénéficiaire affiché** et numéro **WhatsApp** pour les preuves de paiement.
 
 > **Ne mettez jamais un numéro de carte bancaire** (16 chiffres, carte Visa Djamo…) : ces numéros sont visibles par tous les visiteurs et pourraient servir à des fraudes. Pour Djamo, indiquez le **numéro de téléphone** lié au compte. La plateforme refuse d'enregistrer un numéro de 16 chiffres ou plus.
 
 **Au quotidien** :
-1. L'apprenant lit gratuitement le premier chapitre, s'inscrit, puis ouvre **Mon abonnement** : il voit le montant et vos numéros, paie depuis son téléphone, puis **déclare son paiement** (numéro utilisé et référence du SMS) ; il peut aussi vous envoyer la capture sur WhatsApp.
-2. Vous recevez l'argent **directement** sur votre numéro Wave ou MTN Money. Vous vérifiez la réception sur votre téléphone, puis Espace PDG → **Abonnements & paiements** → onglet **À valider** → **Valider** : l'accès s'ouvre aussitôt (ou **Refuser** si le paiement n'est pas arrivé).
-3. Vous pouvez à tout moment **activer** (paiement en espèces, bourse, partenaire) ou **désactiver** un apprenant (onglets *Tous les apprenants*, *Accès actifs*, *Non payés*, *Expirés*), et, en formule mensuelle, prolonger d'un mois. Le tableau de bord de la page indique les encaissements.
+1. L'apprenant lit gratuitement le premier chapitre, s'inscrit, puis ouvre **Mon abonnement** : il choisit **Inscription**, **Basic** ou **Premium**, voit le montant et vos numéros, paie depuis son téléphone, puis **déclare son paiement** (numéro utilisé et référence du SMS) ; il peut aussi vous envoyer la capture sur WhatsApp. Ou il paie en ligne (Chariow) et tout s'ouvre seul.
+2. Vous recevez l'argent **directement** sur votre numéro Wave ou MTN Money. Vous vérifiez la réception sur votre téléphone, puis Espace PDG → **Abonnements & paiements** → onglet **À valider** → **Valider** : l'inscription ou l'abonnement s'ouvre aussitôt (ou **Refuser** si le paiement n'est pas arrivé).
+3. Vous pouvez à tout moment **activer** (paiement en espèces, bourse, partenaire) ou **désactiver** un apprenant, lui **offrir 31 jours de Basic ou de Premium**, ou **retirer son abonnement** (onglets *Tous les apprenants*, *Abonnés Basic / Premium*, *Accès actifs*, *Non payés*, *Expirés*). Chaque fiche indique la formule en cours et sa date de fin.
 
-**Ce qui est protégé** : sans accès actif, le serveur n'envoie ni le contenu des chapitres payants, ni leurs exercices, quiz et sujets d'examen ; l'assistant IA, la résolution en photo et les annales sont aussi réservés aux accès actifs. Les administrateurs ont toujours un accès complet.
+**Ce qui est protégé** : sans inscription, le serveur n'envoie pas le contenu des chapitres payants ; il n'envoie ensuite que le nombre d'exercices, de quiz et de sujets que permet la formule de l'apprenant. L'assistant IA (vérifié aussi par le serveur), l'atelier, les solveurs, les annales et le métré complet suivent les mêmes règles. Les administrateurs ont toujours un accès complet.
 
 **Recevoir l'argent automatiquement (sans validation manuelle)** : branchez le paiement en ligne Chariow (section suivante). Les paiements Wave / MTN directs sur votre numéro restent, eux, à valider en un clic : aucune application ne peut voir votre compte Wave ou MTN personnel. Aucune plateforme ne peut non plus prélever de l'argent sur un apprenant simplement parce qu'il se connecte : chaque paiement est fait (ou autorisé) par lui.
 
@@ -158,9 +169,16 @@ Pour les apprenants qui ne sont pas en Côte d'Ivoire, ou quand Wave et MTN ne p
 > La plateforme ne peut pas se connecter à votre compte Chariow à votre place : la création du produit et des clés se fait par vous, dans Chariow, en 10 minutes. **Ne communiquez jamais vos clés** (ni par message, ni dans le code) : elles se collent uniquement dans Netlify.
 
 1. **Relancez `supabase.sql`** une fois (SQL Editor → New query → coller → Run) : il ajoute les paiements en ligne, les livres et leurs fonctions, sans toucher à vos données.
-2. **Le produit est déjà créé** : « BâtiPro Académie : accès complet », `https://smart-digital.mychariow.shop/prd_7prkaptk` (identifiant `prd_7prkaptk`), déjà renseigné dans la plateforme et dans `supabase.sql`. Pour un autre produit (abonnement mensuel, livre), même méthode : **créez le produit dans Chariow** (app.chariow.com → votre boutique → **Produits** → nouveau produit numérique) : nom **« BâtiPro Académie : accès complet »**, prix **4 000 FCFA** (le même que dans vos réglages), description courte (« Accès complet à la plateforme : cours, exercices, sujets, IA… »). Comme contenu à livrer, mettez simplement le lien de votre site. Publiez-le, puis notez **le lien de la page du produit**, de la forme `https://smart-digital.mychariow.com/prd_…` : l'identifiant `prd_…` qu'il contient est repris automatiquement (si vous donnez au produit une adresse personnalisée, recopiez l'identifiant à part, il figure dans les détails du produit). Si vous passez un jour en abonnement mensuel, créez un second produit au prix du mois.
+2. **Vos produits sont déjà reliés** (identifiants recopiés dans la plateforme et dans `supabase.sql`) :
+   | Produit Chariow | Lien | Effet automatique après paiement |
+   |---|---|---|
+   | Inscription (accès complet) | `https://smart-digital.mychariow.shop/prd_7prkaptk` | inscription + 31 jours tout compris |
+   | Abonnement Basic | `https://smart-digital.mychariow.shop/prd_dk1qojwp` | 31 jours de Basic |
+   | Abonnement Premium | `https://smart-digital.mychariow.shop/prd_8eq7b1ed` | 31 jours de Premium |
+   | Livre « Le prisonnier du doute » | `https://smart-digital.mychariow.shop/prd_i8fzh9cq` | livre ajouté dans « Mes livres » |
+   Vérifiez dans Chariow que le **prix** de chaque produit est le même que dans vos réglages (inscription, Basic, Premium) et sur la fiche du livre. Pour un nouveau produit, même méthode : **créez-le dans Chariow** (app.chariow.com → votre boutique → **Produits** → nouveau produit numérique), mettez comme contenu à livrer le lien de votre site (ou le PDF du livre), publiez, puis collez **le lien de la page du produit** (`https://smart-digital.mychariow.com/prd_…`) dans les Réglages ou sur la fiche du livre : l'identifiant `prd_…` est repris automatiquement.
 3. **Clé API** : Chariow → **Paramètres** → **Développeurs / API** → créez une clé et copiez-la.
-4. **Pulse (avis de paiement)** : Chariow → **Automatisation** → **Pulses** → nouveau Pulse, événement **vente réussie** (`successful.sale`), adresse : `https://VOTRE-SITE.netlify.app/api/chariow/webhook` (elle est affichée avec un bouton Copier dans Espace PDG → Abonnements & paiements → Réglages). Ajoutez aussi l'événement de remboursement s'il est proposé. Copiez le **secret** du Pulse (il commence par `whsec_`).
+4. **Pulse (avis de paiement)** : Chariow → **Automatisation** → **Pulses** → nouveau Pulse, événement **vente réussie** (`successful.sale`), adresse : `https://VOTRE-SITE.netlify.app/api/chariow/webhook` (elle est affichée avec un bouton Copier dans Espace PDG → Abonnements & paiements → Réglages). Ajoutez aussi l'événement de remboursement s'il est proposé. Copiez le **secret** du Pulse (il commence par `whsec_`). **Un seul Pulse suffit pour tous les produits** : c'est l'identifiant du produit vendu qui dit à la plateforme s'il faut ouvrir l'inscription, Basic, Premium ou le livre. Si votre Pulse déjà créé pour l'inscription est limité à certains produits, **ajoutez-y Basic, Premium et le livre** (ou choisissez « tous les produits ») : sinon Chariow ne préviendra pas la plateforme pour ces ventes.
 5. **Netlify** → votre site → **Site configuration** → **Environment variables** → ajoutez :
    - `CHARIOW_API_KEY` = la clé API de l'étape 3 ;
    - `CHARIOW_WEBHOOK_SECRET` = le secret `whsec_…` de l'étape 4 ;
@@ -179,6 +197,8 @@ Pour les apprenants qui ne sont pas en Côte d'Ivoire, ou quand Wave et MTN ne p
 Les prix restent fixés en **FCFA**. Partout où un prix est affiché (accueil, Mon abonnement, livres), le sélecteur **Devise** montre l'équivalent en franc CFA BEAC, euro, dollar américain ou canadien, livre sterling, cedi, naira, franc guinéen, leone, dollar libérien, dalasi, ouguiya ou escudo cap-verdien, et le paiement en ligne peut se faire dans cette devise (Chariow affiche le montant exact ; si une devise n'est pas acceptée, Chariow encaisse dans la devise de votre boutique). Espace PDG → Abonnements & paiements → Réglages → **Devises affichées** : mettez à jour les taux (nombre de FCFA pour 1 unité) et décochez les devises que vous ne voulez pas proposer. Le FCFA, l'euro et l'escudo ont une parité fixe.
 
 ### Vos livres
+**« Le prisonnier du doute »** est déjà préparé (après avoir relancé `supabase.sql`) : fiche créée **non publiée**, auteur DOUMBIA Moussa, relié au produit Chariow `prd_i8fzh9cq`. Ouvrez Espace PDG → **Livres** → la fiche du livre et complétez : résumé, présentation, couverture, **prix de vente** (le même que dans Chariow), lien du livre complet (ou laissez Chariow livrer le PDF), extrait gratuit ; cochez **Publié** puis enregistrez. Un achat sur Chariow ajoute alors le livre dans « Mes livres » de l'acheteur.
+
 Espace PDG → **Livres** → **Ajouter un livre** : titre, sous-titre, auteur, résumé, présentation détaillée, format, pages, année, **prix en FCFA** (0 = gratuit pour les inscrits), **couverture** (envoyez une image depuis votre téléphone ou ordinateur, ou laissez la couverture dessinée aux couleurs de votre choix), **lien du livre complet** (par exemple un PDF partagé par lien sur Google Drive : il n'est montré qu'aux acheteurs), lien d'un **extrait gratuit**. Cochez **Publié** pour le montrer sur le site public (rubrique « Livres », page d'accueil si « Mettre en avant ») et dans l'espace des apprenants. Vous pouvez le modifier ou le masquer à tout moment ; un livre déjà acheté ne peut plus être supprimé (masquez-le : les acheteurs le gardent).
 - **Vendre en ligne** : créez le livre comme produit dans votre boutique Chariow (livraison du PDF par Chariow), puis collez sur la fiche du livre le **lien** et l'**identifiant `prd_…`** du produit : l'acheteur paie par carte ou Mobile Money, le livre apparaît aussitôt dans « Mes livres ».
 - **Vendre par Mobile Money** : l'apprenant paie sur votre numéro et déclare le paiement ; vous validez dans **Abonnements & paiements** (« Valider : remettre le livre »).
@@ -189,7 +209,7 @@ Un visiteur sans compte peut voir le catalogue et chaque fiche ; pour acheter, i
 > **Conseil marketing** : une promotion convainc quand elle est vraie et limitée dans le temps. Fixez une **date de fin** (2 à 4 semaines), annoncez-la sur WhatsApp et les réseaux, puis appliquez réellement le prix normal après l'offre (ou relancez une nouvelle offre nommée : rentrée, examens, fêtes). Un prix barré qui n'a jamais été pratiqué peut être considéré comme une pratique commerciale trompeuse par la réglementation sur la consommation.
 
 ### Sujets d'examen par chapitre
-Chaque chapitre des 18 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 316 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
+Chaque chapitre des 19 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 334 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits ; la formule Inscrit ouvre les sujets du niveau Débutant, Basic jusqu'au niveau Intermédiaire, Premium tous. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
 
 ### Annales d'examens (sujets officiels)
 **Importer toute une rubrique d'un site autorisé (Fomesoutra…)** — Espace PDG → **Annales d'examens** → carte **Importer les sujets d'un site autorisé** :
@@ -222,7 +242,7 @@ Les apprenants envoient la photo d'un exercice depuis **Résoudre en photo**. Ch
 
 ### Ce que voit l'apprenant
 - Sur chaque matière, les **trois niveaux** côte à côte : il choisit le sien (« Choisir comme mon niveau »), suit les chapitres dans l'ordre et passe au niveau suivant ; une **attestation** est délivrée pour chaque niveau terminé et pour la matière complète.
-- Dans **Construction A→Z**, chaque projet type ouvre ses plans de tous les niveaux, ses coupes, sa note de calcul (fiche de chaque poteau, poutre, dalle, semelle…), les 18 matières appliquées au projet et sa maquette 3D modifiable.
+- Dans **Construction A→Z**, chaque projet type ouvre ses plans de tous les niveaux, ses coupes, sa note de calcul (fiche de chaque poteau, poutre, dalle, semelle…), les matières appliquées au projet (dont le dessin technique : bordereau des plans, surfaces, niveaux, toiture, escalier) et sa maquette 3D modifiable.
 - Dans l'**Atelier de dessin**, le bouton 3D (ou la vue partagée) affiche le dessin en volume ; les commandes 3D, matériaux et couleurs sont dans la barre de la vue 3D. La commande **RDM** ouvre l'étude complète de la poutre sélectionnée.
 - **Exercices & annales** : solveurs guidés (l'apprenant répond à chaque étape, la plateforme corrige), exercices corrigés type BTS et Licence, épreuves d'entraînement chronométrées, annales publiées.
 - **Études progressives** : à la fin des chapitres sur les poteaux, les dalles, les fondations et les poutres, la carte « Appliquer ce cours pas à pas » ouvre l'étude complète de l'élément (de la charge jusqu'au plan de ferraillage et à la nomenclature), en mode guidé ou en corrigé complet. Dans un projet type, chaque poteau, dalle et semelle a aussi son bouton « Étude pas à pas ».
@@ -233,6 +253,10 @@ Paramètres → Administrateurs → nom + e-mail → **Inviter**. La personne s'
 
 ### Mettre à jour le site
 Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement en une minute. Les cours modifiés depuis l'espace PDG sont stockés dans Supabase et ne sont pas écrasés.
+
+### Application installable et crédits Netlify
+- **Installer l'application** : sur Android (Chrome), menu ⋮ → **Installer l'application** (ou « Ajouter à l'écran d'accueil ») ; sur iPhone (Safari), bouton Partager → **Sur l'écran d'accueil**. L'icône BâtiPro apparaît comme une application ; les mises à jour du site arrivent toutes seules.
+- **Économiser les crédits Netlify** : à chaque mise en ligne, `outils/build.mjs` ajoute une empreinte à chaque fichier et autorise les navigateurs à les garder un an : une visite ne coûte plus que quelques requêtes. Regroupez vos modifications sur GitHub en **un seul envoi** (chaque envoi déclenche une mise en ligne, qui consomme des minutes de construction). Si un fichier de workflow GitHub (dossier `.github/workflows`) lance des tests inutiles à chaque envoi, supprimez-le.
 
 ## En cas de problème
 
@@ -252,4 +276,5 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 | « Le paiement en ligne n'est pas encore branché » | Ajoutez `CHARIOW_API_KEY` sur Netlify et redéployez, puis renseignez l'identifiant `prd_…` dans Réglages (ou sur la fiche du livre) |
 | Paiement Chariow reçu mais accès toujours fermé | Réglages → carte « Branchement de Chariow » : les trois lignes doivent être **OK** ; vérifiez l'adresse du Pulse (`/api/chariow/webhook`) et l'identifiant `prd_…`. Chariow renvoie l'avis tant qu'il n'est pas accepté. En attendant, activez l'apprenant à la main |
 | Un paiement en ligne est dans « À valider » | Soit le produit Chariow n'est pas relié (identifiant `prd_…` absent ou différent : corrigez-le), soit l'option « Ouvrir l'accès automatiquement » est décochée. Vérifiez la vente dans Chariow puis **Valider** |
+| Abonnement Basic ou Premium payé sur Chariow, mais l'apprenant reste « Inscrit » | Le Pulse ne couvre que le produit d'inscription : dans Chariow → Pulses, ajoutez les produits Basic (`prd_dk1qojwp`), Premium (`prd_8eq7b1ed`) et le livre, ou choisissez tous les produits. Pour une vente déjà faite, vérifiez-la dans Chariow puis donnez l'abonnement à la main (fiche de l'apprenant → **+31 j Basic** ou **+31 j Premium**) |
 | L'acheteur a payé sur Chariow sans compte | Il s'inscrit avec **la même adresse e-mail** : l'accès (ou le livre) est ajouté automatiquement à sa première connexion |
