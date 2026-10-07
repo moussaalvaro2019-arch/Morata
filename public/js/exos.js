@@ -44,8 +44,8 @@ A.page('app/exercices', {space:'app', title:'Exercices & annales', crumb:'S\'ent
       return `<a class="mcard" href="#/app/exercices/${m.id}">${A.matIcon(m)}<b>${esc(m.titre)}</b><div class="meta">${nsj ? `<span>${ic('doc')} ${nsj} sujet${nsj > 1 ? 's' : ''} d'examen</span>` : ''}<span>${ic('target')} ${ns} solveur${ns > 1 ? 's' : ''}</span><span>${ic('book')} ${ne} exercice${ne > 1 ? 's' : ''}</span>${na ? `<span>${ic('doc')} ${na} annale${na > 1 ? 's' : ''}</span>` : ''}</div></a>`; }).join('')}</div>`;
   else if(hubTab === 'sol') body = A.GROUPES.map(g => { const ms = cat.filter(m => m.groupe === g.id); const list = ms.flatMap(m => SOL.L.filter(s => s.mat === m.id));
       return list.length ? `<div class="stack s8"><h3>${esc(g.n)}</h3><div class="exlist">${list.map(solRow).join('')}</div></div>` : ''; }).join('');
-  else if(hubTab === 'ep') body = epList(EXO.EP);
-  else body = annList(AN, true);
+  else if(hubTab === 'ep') body = (A.droit('epreuves') ? '' : A.upsell('Les épreuves d\'entraînement chronométrées sont disponibles', 'epreuves')) + epList(EXO.EP);
+  else body = (A.droit('annales') ? '' : A.upsell('Les annales officielles corrigées sont disponibles', 'annales')) + annList(AN, true);
   return `<div class="stack">
    <div class="exhero"><span class="ic">${ic('camera')}</span><div class="stack s8"><h2 style="color:#fff">Un exercice qui bloque ?</h2><p>Prenez-le en photo : l'IA lit l'énoncé et vous explique la résolution étape par étape, dans n'importe quelle matière.</p></div><a class="btn b-pri b-lg" href="#/app/resoudre">${ic('camera')}Résoudre en photo</a></div>
    <div class="tabs" style="flex-wrap:wrap">${tabs.map(([k, n, icn]) => `<button class="tab ${hubTab === k ? 'on' : ''}" data-exhub="${k}">${ic(icn)}${n}</button>`).join('')}</div>
@@ -54,13 +54,13 @@ A.page('app/exercices', {space:'app', title:'Exercices & annales', crumb:'S\'ent
 }});
 A.on('click', '[data-exhub]', el => { hubTab = el.dataset.exhub; A.refresh(); });
 function solRow(s){ const m = A.mat(s.mat), N = A.NIVEAUX[s.niv - 1];
-  return `<a class="exrow" href="${SOL.link(s.id)}"><span class="tag sol">${ic('target')}Guidé</span><span style="min-width:0"><span class="ti">${esc(s.titre)}</span><div class="sub">${esc(m ? m.court || m.titre : '')} · ${esc(s.resume || '')}</div></span><span class="pill" style="background:${N.bg};color:${N.c}">${'●'.repeat(N.id)}</span></a>`; }
+  return `<a class="exrow" href="${SOL.link(s.id)}"><span class="tag sol">${ic('target')}Guidé</span><span style="min-width:0"><span class="ti">${esc(s.titre)}</span><div class="sub">${esc(m ? m.court || m.titre : '')} · ${esc(s.resume || '')}</div></span><span class="pill" style="background:${N.bg};color:${N.c}">${'●'.repeat(N.id)}</span>${A.droitSolveur(s.id) ? '' : A.lockTag(() => false)}</a>`; }
 function exRow(e){ const m = A.mat(e.mat);
-  return `<a class="exrow" href="#/app/exercice/${e.id}">${nivTag(e.niv)}<span style="min-width:0"><span class="ti">${esc(e.titre)}</span><div class="sub">${esc(m ? m.court || m.titre : '')}${e.theme ? ' · ' + esc(e.theme) : ''}${e.duree ? ' · ' + e.duree + ' min' : ''}${e.sol ? ' · corrigé pas à pas' : ''}</div></span>${ic('chev')}</a>`; }
+  return `<a class="exrow" href="#/app/exercice/${e.id}">${nivTag(e.niv)}<span style="min-width:0"><span class="ti">${esc(e.titre)}</span><div class="sub">${esc(m ? m.court || m.titre : '')}${e.theme ? ' · ' + esc(e.theme) : ''}${e.duree ? ' · ' + e.duree + ' min' : ''}${e.sol ? ' · corrigé pas à pas' : ''}</div></span>${A.droitExo(e.id) ? ic('chev') : A.lockTag(() => false)}</a>`; }
 function epList(list){
   if(!list.length) return A.empty('clock', 'Aucune épreuve d\'entraînement.');
   return `<p class="sub">Sujets d'entraînement composés à partir des exercices de la plateforme, dans les conditions de l'examen (durée, enchaînement des exercices). Ce ne sont pas les sujets officiels : ceux-ci se trouvent dans l'onglet « Annales officielles ».</p>
-  <div class="exlist">${list.map(ep => `<a class="exrow" href="#/app/epreuve/${ep.id}">${nivTag(ep.exam)}<span style="min-width:0"><span class="ti">${esc(ep.titre)}</span><div class="sub">${esc(ep.duree)} · ${ep.exos.length} exercice${ep.exos.length > 1 ? 's' : ''} · ${esc(ep.mats.map(id => (A.mat(id) || {}).court || id).join(', '))}</div></span>${ic('chev')}</a>`).join('')}</div>`;
+  <div class="exlist">${list.map(ep => `<a class="exrow" href="#/app/epreuve/${ep.id}">${nivTag(ep.exam)}<span style="min-width:0"><span class="ti">${esc(ep.titre)}</span><div class="sub">${esc(ep.duree)} · ${ep.exos.length} exercice${ep.exos.length > 1 ? 's' : ''} · ${esc(ep.mats.map(id => (A.mat(id) || {}).court || id).join(', '))}</div></span>${A.droit('epreuves') ? ic('chev') : A.lockTag(() => false)}</a>`).join('')}</div>`;
 }
 let anF = {exam:'', annee:'', mat:''};
 function annList(list, filters, edit){
@@ -89,7 +89,7 @@ A.page('app/exercices/:mat', {space:'app', title:p => (A.mat(p.mat) || {}).titre
   return `<div class="stack">${A.matHead(m)}
    ${sjs.length ? `<div class="card stack"><div class="row between"><h3 style="margin:0;justify-content:flex-start">${ic('doc')} Sujets d'examen par chapitre</h3><span class="sub">${sjs.length}</span></div>
     <p class="sub">Un sujet type examen (BTS, Licence) pour chaque chapitre du cours : contexte de chantier, données, questions notées, puis corrigé détaillé et barème. Faites-le en temps limité en « mode examen ».</p>
-    ${A.NIVEAUX.map(N => { const L = sjs.filter(c => A.nivOf(c) === N.id); return L.length ? `<div class="stack s8"><b style="color:${N.c}">${'●'.repeat(N.id)} ${N.n}</b><div class="exlist">${L.map(c => `<a class="exrow" href="#/app/sujet/${c.id}"><span class="tag" style="background:${N.bg};color:${N.c}">${ic('doc')}Sujet</span><span style="min-width:0"><span class="ti">${esc(c.titre)}</span><div class="sub">${c.sujet && c.sujet.titre ? esc(c.sujet.titre) + ' · ' : ''}${(c.sujet && c.sujet.duree) || ''}${c.sujet && c.sujet.duree ? ' min' : 'sujet noté sur 20'}</div></span>${A.canRead(c.id) ? ic('chev') : ic('lock')}</a>`).join('')}</div></div>` : ''; }).join('')}</div>` : ''}
+    ${A.NIVEAUX.map(N => { const L = sjs.filter(c => A.nivOf(c) === N.id); return L.length ? `<div class="stack s8"><b style="color:${N.c}">${'●'.repeat(N.id)} ${N.n}</b><div class="exlist">${L.map(c => `<a class="exrow" href="#/app/sujet/${c.id}"><span class="tag" style="background:${N.bg};color:${N.c}">${ic('doc')}Sujet</span><span style="min-width:0"><span class="ti">${esc(c.titre)}</span><div class="sub">${c.sujet && c.sujet.titre ? esc(c.sujet.titre) + ' · ' : ''}${(c.sujet && c.sujet.duree) || ''}${c.sujet && c.sujet.duree ? ' min' : 'sujet noté sur 20'}</div></span>${A.canRead(c.id) && !(N.id > (+A.lim('sujets') || 0)) ? ic('chev') : ic('lock')}</a>`).join('')}</div></div>` : ''; }).join('')}</div>` : ''}
    <div class="g2" style="align-items:start">
     <div class="stack">
      <div class="card stack"><div class="row between"><h3 style="margin:0;justify-content:flex-start">${ic('target')} Solveurs guidés</h3><span class="sub">${sols.length}</span></div>

@@ -113,8 +113,9 @@ A.page('app/metre', {space:'app', title:'Métré & devis', crumb:'Outils', rende
   const plans = Object.entries(S.works||{}).filter(([,w]) => w.kind === 'dessin');
   return `<div class="cols"><div class="stack">
    <div class="card"><h3>Mes métrés <small>${mine.length}</small></h3>${mine.length ? `<div class="tw"><table class="t"><thead><tr><th>Nom</th><th>Projet</th><th class="r">Total TTC</th><th>Modifié</th><th></th></tr></thead><tbody>${mine.map(([id,w])=>{const t=totals(w.data);return `<tr class="click" data-go="#/app/metre/${id}"><td><b>${esc(w.data.name)}</b></td><td class="sub">${esc(w.data.projet||'—')}</td><td class="r mono">${F(t.ttc)} F</td><td class="sub">${A.ago(w.updated_at)}</td><td class="r">${ic('chev')}</td></tr>`}).join('')}</tbody></table></div>` : `<p class="sub">Aucun métré enregistré. Créez-en un ci-dessous.</p>`}</div>
-   <div class="card stack"><h3>Nouveau métré</h3>
-    <div class="g3"><button class="btn b-pri" data-act="mnew">${ic('plus')}Métré vierge</button>
+   <div class="card stack"><h3>Nouveau métré${+A.lim('metres') > 0 ? ` <small>${A.metresMois()} / ${A.lim('metres')} ce mois-ci</small>` : ''}</h3>
+    ${A.peutMetre() ? '' : A.upsell(+A.lim('metres') > 0 ? `Vous avez créé vos ${A.lim('metres')} métrés du mois. Des métrés illimités sont disponibles` : 'La création d\'un métré complet et de son devis (DQE) est disponible', 'metres')}
+    <div class="g3" ${A.peutMetre() ? '' : 'hidden'}><button class="btn b-pri" data-act="mnew">${ic('plus')}Métré vierge</button>
      <select class="inp" id="mProj"><option value="">À partir d'un projet type…</option>${(A.AZ.projets||[]).map(p=>`<option value="${p.id}">${esc(p.titre)}</option>`).join('')}</select>
      <select class="inp" id="mPlan" ${plans.length?'':'disabled'}><option value="">${plans.length?'À partir de mon plan…':'Aucun plan dessiné'}</option>${plans.map(([id,w])=>`<option value="${id}">${esc(w.data.name)}</option>`).join('')}</select></div>
     <p class="sub">Le métré d'un projet type ou d'un plan dessiné est calculé automatiquement : murs, surfaces, béton, acier, enduits, carrelage, menuiseries.</p></div>
@@ -194,6 +195,8 @@ A.on('click', '[data-mbib]', el => {
 A.on('click', '[data-bibadd]', el => { const k = el.dataset.bibadd, p = PRIX[k]; MD.doc.lots[+el.dataset.li].lignes.push({code:k, d:p.d, u:p.u, pu:pu(k)}); MD.dirty = true; toast('Ajouté : ' + p.d); A.closeWin(); reEd(); });
 A.on('click', '[data-act="msave"]', async () => {
   if(!MD) return; MD.doc.name = MD.doc.name.trim() || 'Métré sans nom';
+  if(!MD.id && !A.peutMetre()){ toast('Nombre de métrés du mois atteint pour votre formule', 'lock'); A.go('#/app/abonnement'); return; }
+  if(!MD.id && !MD.doc.cree) MD.doc.cree = A.now();   // compte des métrés créés dans le mois (formules)
   const id = await A.db.saveWork(MD.id, 'metre', MD.doc); const wasNew = !MD.id; MD.id = id; MD.dirty = false; toast('Métré enregistré', 'save');
   if(wasNew) A.go('#/app/metre/' + id);
 });

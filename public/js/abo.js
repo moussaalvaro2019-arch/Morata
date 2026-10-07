@@ -1,5 +1,10 @@
 /* =====================================================================
-   ACCÈS PAYANT : inscription (paiement unique) ou abonnement mensuel
+   ACCÈS PAYANT ET FORMULES
+   - Inscription (paiement unique) : 31 jours tout compris (essai Premium), puis formule
+     « Inscrit » : tous les cours, contenus réduits (exercices, quiz, sujets).
+   - Abonnements Basic et Premium (31 jours) : plus d'exercices, solveurs, sujets, métré
+     (Basic) ; tout, dont l'atelier de dessin et l'assistant IA (Premium).
+   - Une fonctionnalité non comprise reste visible, avec l'offre qui la débloque.
    - Apprenant : page « Mon abonnement », déclaration du paiement Wave / Mobile Money
    - Partout : écran « Activez votre accès » pour les parties réservées
    - PDG : validation des paiements, activation / désactivation des accès, réglages
@@ -21,7 +26,9 @@ const telFmt = t => String(t || '').replace(/\D/g, '').replace(/(\d{2})(?=\d)/g,
 const waLink = (num, txt) => { const d = String(num || '').replace(/\D/g, ''); return d ? `https://wa.me/${d.length <= 10 ? '225' + d : d}${txt ? '?text=' + encodeURIComponent(txt) : ''}` : ''; };
 const moyensActifs = () => { const p = A.cfg().pay || {}; return MOYENS.filter(m => String(p[m[0]] || '').trim()); };
 const montant = () => { const c = A.cfg(); return c.formule === 'mensuel' ? +c.prixMois : +c.prixAcces; };
-const pending = () => (S.pay || []).filter(x => x.statut === 'en_attente' && (x.objet || 'acces') === 'acces');
+const prixPlan = plan => +(plan === 'premium' ? A.cfg().prixPremium : A.cfg().prixBasic) || 0;
+const pending = () => (S.pay || []).filter(x => x.statut === 'en_attente' && ['acces', 'abo'].includes(x.objet || 'acces'));
+const objetTxt = x => x.objet === 'livre' ? 'Livre : ' + (((S.livres || []).find(l => l.id === x.livre) || {}).titre || x.livre || '?') : x.objet === 'abo' ? 'Abonnement ' + (x.formule === 'premium' ? 'Premium' : 'Basic') : x.formule === 'mensuel' ? 'Abonnement d\'un mois' : 'Inscription';
 const statutPill = s => s === 'valide' ? '<span class="pill p-ok dot">Validé</span>' : s === 'refuse' ? '<span class="pill p-bad dot">Refusé</span>' : s === 'rembourse' ? '<span class="pill p-mute dot">Remboursé</span>' : '<span class="pill p-warn dot">En attente</span>';
 A.statutPill = statutPill; A.moyenN = moyenN; A.telFmt = telFmt; A.waLink = waLink; A.moyensActifs = moyensActifs;
 /* montant payé dans une autre devise que le FCFA (paiement en ligne) */
@@ -39,6 +46,7 @@ const PAYS = [['CI',"Côte d'Ivoire",'XOF'],['SN','Sénégal','XOF'],['ML','Mali
 const chwConf = (objet, livre) => {
   if(objet === 'livre'){ const l = (S.livres || []).find(x => x.id === livre) || {}; return {lien:String(l.lienAchat || '').trim(), prd:String(l.prdChariow || '').trim()}; }
   const ch = A.cfg().chariow || {}, m = A.cfg().formule === 'mensuel';
+  if(objet === 'abo'){ const k = livre === 'premium' ? 'Premium' : 'Basic'; return {lien:String(ch['lien' + k] || '').trim(), prd:String(ch['prd' + k] || '').trim()}; }
   return {lien:String((m ? ch.lienMois : ch.lienAcces) || '').trim(), prd:String((m ? ch.prdMois : ch.prdAcces) || '').trim()};
 };
 A.chwDispo = (objet, livre) => { const c = chwConf(objet, livre); return S.mode === 'local' || !!(c.prd || /^https:\/\//.test(c.lien)); };
@@ -56,7 +64,7 @@ A.chwBox = (objet, livre, fcfa, promo) => {
   return `<div class="stack chw">
    <ul class="chw-list">
     <li>${ic('card')}<span><b>Carte bancaire</b> (Visa, Mastercard), <b>Mobile Money</b> de nombreux pays d'Afrique (Orange, MTN, Moov, Wave…) et les autres moyens proposés par Chariow selon votre pays.</span></li>
-    <li>${ic('zap')}<span><b>Accès immédiat</b> : dès que Chariow confirme le paiement, ${objet === 'livre' ? 'le livre apparaît dans votre espace' : 'votre accès s\'ouvre'} tout seul, sans attendre la direction.</span></li>
+    <li>${ic('zap')}<span><b>Accès immédiat</b> : dès que Chariow confirme le paiement, ${objet === 'livre' ? 'le livre apparaît dans votre espace' : objet === 'abo' ? 'votre abonnement s\'active' : 'votre accès s\'ouvre'} tout seul, sans attendre la direction.</span></li>
     <li>${ic('mail')}<span>Reçu et confirmation envoyés à <b>${esc(S.me ? S.me.email : '')}</b> : le paiement est relié à ce compte.</span></li>
    </ul>
    ${lienSeul ? '' : `<div class="g3"><label class="fld"><span>Pays</span><select class="inp" id="chwPays">${PAYS.map(p => `<option value="${p[0]}" ${p[0] === chwPays ? 'selected' : ''}>${esc(p[1])}</option>`).join('')}</select></label>
@@ -73,28 +81,31 @@ A.on('change', '#chwPays', el => { chwPays = el.value; const p = PAYS.find(x => 
 /* attente de la confirmation de Chariow : on relit les droits jusqu'à l'ouverture de l'accès (ou du livre) */
 let poll = null;
 A.chwAttente = () => !!poll;
+const etatAbo = () => S.me ? [S.me.abo, S.me.abo_fin].join('|') : '';
+const chwOk = (objet, ref, avant) => objet === 'livre' ? (S.achats || []).some(a => a.livre === ref) : objet === 'abo' ? etatAbo() !== avant && S.me.abo === ref && ts(S.me.abo_fin) > now() : A.hasAccess();
 A.chwPoll = (objet, livre) => {
   if(poll || S.mode !== 'sb') return;
   let n = 0;
-  const ok = () => objet === 'livre' ? (S.achats || []).some(a => a.livre === livre) : A.hasAccess();
+  const avant = (A.ls.get('chw_wait', null) || {}).avant || etatAbo();
+  const ok = () => chwOk(objet, livre, avant);
   poll = setInterval(async () => {
     if(document.visibilityState !== 'visible') return;
     n++;
     await A.db.refreshAccess().catch(() => {});
-    if(ok()){ clearInterval(poll); poll = null; A.ls.del('chw_wait'); toast(objet === 'livre' ? 'Paiement confirmé : votre livre est disponible' : 'Paiement confirmé : votre accès est activé, bonne formation !', 'check'); A.render(); }
+    if(ok()){ clearInterval(poll); poll = null; A.ls.del('chw_wait'); toast(objet === 'livre' ? 'Paiement confirmé : votre livre est disponible' : objet === 'abo' ? 'Paiement confirmé : votre abonnement est activé' : 'Paiement confirmé : votre accès est activé, bonne formation !', 'check'); A.render(); }
     else if(n >= 75){ clearInterval(poll); poll = null; A.refresh(); }
   }, 4000);
   A.refresh();
 };
-A.on('click', '[data-chwlien]', el => { A.ls.set('chw_wait', {objet:el.dataset.chwlien, livre:el.dataset.livre || null, at:A.now()}); A.chwPoll(el.dataset.chwlien, el.dataset.livre || null); });
+A.on('click', '[data-chwlien]', el => { A.ls.set('chw_wait', {objet:el.dataset.chwlien, livre:el.dataset.livre || null, at:A.now(), avant:etatAbo()}); A.chwPoll(el.dataset.chwlien, el.dataset.livre || null); });
 A.on('click', '[data-chwpay]', async el => {
   const objet = el.dataset.chwpay, livre = el.dataset.livre || null, old = el.innerHTML;
   el.disabled = true; el.innerHTML = ic('refresh') + 'Connexion au paiement sécurisé…';
   try{
-    if(S.mode === 'local'){ await A.db.chariowDemo(objet, livre); toast(objet === 'livre' ? 'Paiement simulé : le livre est disponible immédiatement' : 'Paiement simulé : votre accès est activé immédiatement', 'check'); A.render(); return; }
+    if(S.mode === 'local'){ await A.db.chariowDemo(objet, livre); toast(objet === 'livre' ? 'Paiement simulé : le livre est disponible immédiatement' : objet === 'abo' ? 'Paiement simulé : votre abonnement est activé immédiatement' : 'Paiement simulé : votre accès est activé immédiatement', 'check'); A.render(); return; }
     const c = chwConf(objet, livre);
-    const r = await A.db.chariowCheckout({objet, livre, devise:A.devise(), pays:A.val('chwPays') || 'CI', tel:A.val('chwTel'), nom:(S.me.data && S.me.data.name) || ''});
-    if(r.url){ A.ls.set('chw_wait', {objet, livre, at:A.now()}); location.href = r.url; return; }
+    const r = await A.db.chariowCheckout({objet, livre:objet === 'livre' ? livre : null, plan:objet === 'abo' ? livre : null, devise:A.devise(), pays:A.val('chwPays') || 'CI', tel:A.val('chwTel'), nom:(S.me.data && S.me.data.name) || ''});
+    if(r.url){ A.ls.set('chw_wait', {objet, livre, at:A.now(), avant:etatAbo()}); location.href = r.url; return; }
     if(r.deja){ await A.db.refreshAccess(); toast(r.chariow ? 'Chariow indique que ce produit est déjà payé : votre accès est mis à jour' : 'C\'est déjà payé : bonne lecture !', 'check'); A.render(); return; }
     if(r.termine){ await A.db.refreshAccess(); A.render(); return; }
     if(/^https:\/\//.test(c.lien)){
@@ -107,24 +118,80 @@ A.on('click', '[data-chwpay]', async el => {
 /* retour depuis Chariow (ou paiement lancé dans un autre onglet) : bandeau d'attente */
 A.chwRetour = (objet, livre) => {
   const w = A.ls.get('chw_wait', null), retour = A.query().get('chariow') === 'retour' || (w && w.objet === objet && (w.livre || null) === (livre || null) && A.now() - w.at < 3*3600000);
-  const ok = objet === 'livre' ? (S.achats || []).some(a => a.livre === livre) : A.hasAccess();
+  const ok = objet === 'livre' ? (S.achats || []).some(a => a.livre === livre) : objet === 'abo' ? (w && chwOk('abo', w.livre, w.avant)) || (!w && !!A.aboActif()) : A.hasAccess();
   if(!retour || ok || S.mode !== 'sb') return '';
+  if(objet === 'acces' && w && w.objet === 'abo'){ objet = 'abo'; livre = w.livre; }
   if(!poll) setTimeout(() => A.chwPoll(objet, livre), 0);
   return `<div class="note info">${ic('clock')}<span><b>Paiement en cours de confirmation par Chariow…</b> ${poll ? 'Cette page se met à jour toute seule' : 'Vérification terminée'} : ${objet === 'livre' ? 'le livre' : 'votre accès'} s'ouvrira dès que Chariow aura confirmé le paiement (en général quelques secondes). Si rien ne change après quelques minutes, écrivez à la direction sur WhatsApp avec votre reçu Chariow.${poll ? '' : ` <button class="btn b-line b-xs" data-act="chwrecheck">${ic('refresh')}Vérifier à nouveau</button>`}</span></div>`;
 };
 A.on('click', '[data-act="chwrecheck"]', () => { const w = A.ls.get('chw_wait', null) || {objet:'acces'}; A.chwPoll(w.objet, w.livre); });
+/* étiquette de la formule d'une personne (espace PDG et page Mon abonnement) */
 A.accesPill = p => {
   if(p.admin) return '<span class="pill p-amber">Admin</span>';
-  if(p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) < now()) return '<span class="pill p-bad dot">Expiré</span>';
-  if(p.acces === 'actif') return `<span class="pill p-ok dot">${p.acces_fin ? 'Abonné' : 'Payé'}</span>`;
+  const n = A.niveauDe(p), t = now();
+  if(n === 'premium') return `<span class="pill p-or dot">${p.abo === 'premium' && ts(p.abo_fin) > t ? 'Premium' : 'Premium (essai)'}</span>`;
+  if(n === 'basic') return '<span class="pill p-info dot">Basic</span>';
+  if(n === 'inscrit') return '<span class="pill p-ok dot">Inscrit</span>';
+  if(p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) < t) return '<span class="pill p-bad dot">Expiré</span>';
   return '<span class="pill p-mute dot">Non payé</span>';
 };
+A.accesDetail = p => { const t = now(), L = [];
+  if(p.abo && p.abo_fin) L.push(`${p.abo === 'premium' ? 'Premium' : 'Basic'} ${ts(p.abo_fin) > t ? 'jusqu\'au' : 'terminé le'} ${fd(p.abo_fin)}`);
+  if(p.acces === 'actif' && p.essai_fin && ts(p.essai_fin) > t) L.push('essai Premium jusqu\'au ' + fd(p.essai_fin));
+  if(p.acces === 'actif') L.push('inscription ' + (p.acces_fin ? 'jusqu\'au ' + fd(p.acces_fin) : 'payée'));
+  return L.join(' · '); };
+
+/* =====================================================================
+   FORMULES : ce que comprend chacune, verrous, écran « formule requise »
+   ===================================================================== */
+const PLANS = ['inscrit', 'basic', 'premium'];
+const FEAT = {
+  exos:['edit', 'Exercices corrigés par chapitre'], quiz:['target', 'Questions de quiz par chapitre'], sujets:['doc', 'Sujets d\'examen corrigés'],
+  solveurs:['steps', 'Solveurs guidés et études pas à pas'], banque:['book', 'Exercices type BTS et Licence'], epreuves:['clock', 'Épreuves d\'entraînement chronométrées'],
+  annales:['doc', 'Annales officielles'], metres:['calc', 'Métré complet et devis (DQE)'], atelier:['compass', 'Atelier de dessin 2D / 3D'], ia:['spark', 'Assistant IA et résolution en photo']
+};
+const NIVX = ['—', 'Débutant', 'Débutant + Intermédiaire', 'Tous les niveaux'];
+const fv = (k, v) => k === 'exos' || k === 'quiz' ? (v >= 99 ? 'Tous' : v ? String(v) : '—') : k === 'sujets' || k === 'solveurs' ? NIVX[Math.max(0, Math.min(3, +v || 0))]
+  : k === 'banque' ? (v === 'tout' ? 'BTS et Licence' : 'BTS (sans solveur)') : k === 'metres' ? (+v < 0 ? 'Illimité' : +v ? `${v} par mois` : '—') : v ? '✓' : '—';
+const nomPlan = n => n === 'premium' ? 'Premium' : n === 'basic' ? 'Basic' : 'Inscription';
+A.offresTable = (cur) => `<div class="tw"><table class="t offt"><thead><tr><th>Ce que comprend chaque formule</th>${PLANS.map(n => `<th class="c ${cur === n ? 'on' : ''}">${n === 'inscrit' ? 'Inscrit' : nomPlan(n)}</th>`).join('')}</tr></thead><tbody>
+  <tr><td>${ic('book')} Tous les cours des ${A.catalog().length} matières</td>${PLANS.map(n => `<td class="c ${cur === n ? 'on' : ''}">✓</td>`).join('')}</tr>
+  <tr><td>${ic('crane')} Construction A→Z et projets types</td>${PLANS.map(n => `<td class="c ${cur === n ? 'on' : ''}">✓</td>`).join('')}</tr>
+  ${Object.entries(FEAT).map(([k, [i, t]]) => `<tr><td>${ic(i)} ${esc(t)}</td>${PLANS.map(n => { const v = fv(k, A.offre(n)[k]); return `<td class="c ${cur === n ? 'on' : ''} ${v === '—' ? 'no' : ''}">${esc(v)}</td>`; }).join('')}</tr>`).join('')}
+  </tbody></table></div>`;
+/* écran affiché à la place d'une fonctionnalité non comprise dans la formule */
+A.upgradePage = (need, p) => {
+  const k = typeof need === 'object' ? need.k : need, f = FEAT[k] || ['lock', 'Cette fonctionnalité'], n = A.niveau();
+  const min = typeof need === 'object' && need.min ? need.min(p) : A.offreMin(o => { const v = o[k]; return v === true || v === 'tout' || (typeof v === 'number' && v !== 0); });
+  const quota = k === 'metres' && +A.lim('metres') > 0;
+  return `<div class="abo-wall card stack">
+   <div class="row" style="gap:14px"><span class="abo-lock">${ic(f[0])}</span><div><span class="kick">${ic('lock')} Formule ${esc(nomPlan(min))} requise</span><h2 style="font-size:clamp(20px,2.6vw,26px);margin-top:4px">${esc(f[1])}</h2></div></div>
+   <p class="sub" style="font-size:15px">${quota ? `Vous avez déjà créé <b>${A.metresMois()} métré${A.metresMois() > 1 ? 's' : ''}</b> ce mois-ci, le maximum de votre formule ${esc(A.NIV_NOM[n])}. Passez à <b>Premium</b> pour des métrés illimités, ou attendez le mois prochain.`
+     : `Cette fonctionnalité n'est pas comprise dans votre formule actuelle (<b>${esc(A.NIV_NOM[n])}</b>). Activez l'abonnement <b>${esc(nomPlan(min))}</b> pour l'utiliser${min === 'premium' ? '' : ', ou Premium pour tout débloquer'}.`}</p>
+   ${A.offresTable(n)}
+   <div class="row"><a class="btn b-pri b-lg" href="#/app/abonnement">${ic('coins')}Voir les offres</a><a class="btn b-ghost" href="#/app">${ic('home')}Tableau de bord</a></div></div>`;
+};
+/* petit cadenas : dans le menu, sur les raccourcis du tableau de bord, dans les listes */
+const NAVNEED = {'app/atelier':'atelier', 'app/ia':'ia', 'app/resoudre':'ia', 'app/metre':'metres'};
+A.lockTag = (need, p) => A.S.me && !A.droit(need, p) ? `<span class="lk" title="Formule supérieure requise">${ic('lock')}</span>` : '';
+A.navLock = path => NAVNEED[path] ? A.lockTag(NAVNEED[path]) : '';
+/* encart « débloquer davantage » dans un chapitre */
+A.upsell = (txt, k) => { const min = A.offreMin(o => { const v = o[k]; return v === true || v === 'tout' || (typeof v === 'number' && (v < 0 || v > (+A.lim(k) || 0))); });
+  return `<div class="upsell noprint">${ic('lock')}<span>${txt} avec la formule <b>${esc(nomPlan(min))}</b>.</span><a class="btn b-pri b-xs" href="#/app/abonnement">Voir les offres</a></div>`; };
+/* fonctionnalités réservées : à la place de la page, l'écran « formule requise » */
+const NEED = {
+  'app/atelier':'atelier', 'app/atelier/:id':'atelier', 'app/ia':'ia', 'app/resoudre':'ia', 'app/epreuve/:id':'epreuves', 'app/annale/:id':'annales',
+  'app/solveur/:id':{k:'solveurs', test:p => A.droitSolveur(p.id), min:p => { const d = A.SOL && A.SOL.get(p.id); return A.offreMin(o => (+o.solveurs || 0) >= ((d && d.niv) || 1)); }},
+  'app/exercice/:id':{k:'banque', test:p => A.droitExo(p.id), min:() => A.offreMin(o => o.banque === 'tout')},
+  'app/metre/:id':{k:'metres', test:p => p.id !== 'nouveau' || A.peutMetre(), min:() => A.offreMin(o => +o.metres < 0 || +o.metres > A.metresMois())}
+};
+A.routes.forEach(r => { const k = r.parts.join('/'); if(NEED[k]) r.def.need = NEED[k]; });
 
 /* ---------- ce que l'inscription débloque ---------- */
 function avantages(){
   const cat = A.catalog(), ch = cat.reduce((a, m) => a + m.chapitres.length, 0), ex = cat.reduce((a, m) => a + m.chapitres.reduce((b, c) => b + A.nex(c), 0), 0), su = cat.reduce((a, m) => a + m.chapitres.filter(c => c.ns || c.sujet).length, 0);
   return [
-    ['book', `${ch} chapitres de cours`, 'les 18 matières, du niveau Débutant au niveau Avancé'],
+    ['book', `${ch} chapitres de cours`, `les ${cat.length} matières, du niveau Débutant au niveau Avancé`],
     ['edit', `${F(ex)} exercices corrigés`, 'à la fin de chaque chapitre, corrigés pas à pas'],
     ['doc', su ? `${su} sujets d'examen corrigés` : 'Sujets d\'examen corrigés', 'un sujet type examen par chapitre, avec barème et corrigé'],
     ['target', 'Quiz, solveurs guidés et annales', 'pour s\'entraîner et préparer le BTS, la Licence, les concours'],
@@ -147,37 +214,72 @@ A.paywallPage = path => {
 };
 /* encart dans un chapitre réservé */
 A.lockedChapter = (c, m) => `<div class="stack s20"><div class="lesson"><span class="kick">${A.nivPill(c)} ${esc(m.titre)}</span><h1 style="font-size:clamp(24px,3vw,32px);margin:8px 0 6px">${esc(c.titre)}</h1><p class="sub">${c.duree || 20} min de lecture · ${A.nex(c)} exercices corrigés · ${A.nq(c)} questions de quiz${c.ns || c.sujet ? ' · 1 sujet d\'examen corrigé' : ''}</p></div>${A.paywallPage('')}</div>`;
-/* bandeau du tableau de bord */
+/* bandeau du tableau de bord : essai qui se termine, abonnement qui expire, inscription à faire */
 A.aboBanner = () => {
   if(!S.me || S.me.isAdmin || !A.paywallOn()) return '';
-  const fin = A.accesFin();
-  if(A.hasAccess()) return fin && fin - now() < 7*DAY ? `<div class="note">${ic('clock')}<span>Votre abonnement se termine le <b>${fd(fin)}</b>. <a href="#/app/abonnement">Le renouveler</a></span></div>` : '';
-  const wait = pending()[0];
-  return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">${wait ? 'Paiement en cours de validation' : 'Activez votre accès complet'}</b><span>${wait ? `Déclaré ${ago(wait.at)} : votre accès s'ouvrira dès la validation par la direction.` : `Le premier chapitre de chaque matière est gratuit. Pour tout le reste : ${esc(A.prixTxt())}${A.promoAcces() ? ` au lieu de ${A.promoOld(A.promoAcces())} ${A.promoTag(A.promoAcces())}` : ''}.`}</span></div><div class="row">${wait ? `<button class="btn b-line" style="background:#fff" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}<a class="btn b-pri" href="#/app/abonnement">${ic('coins')}${wait ? 'Voir mon paiement' : 'Payer ' + F(montant()) + ' FCFA'}</a></div></div>`;
+  const n = A.niveau(), essai = A.essaiFin(), abo = A.aboActif(), fin = A.accesFin(), wait = pending()[0];
+  if(n !== 'aucun'){
+    if(wait) return `<div class="note info">${ic('clock')}<span>Paiement déclaré ${ago(wait.at)} : il sera validé dès que la direction aura vérifié la réception.</span></div>`;
+    if(essai) return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">Premium offert : encore ${Math.max(1, Math.ceil((essai - now()) / DAY))} jour${Math.ceil((essai - now()) / DAY) > 1 ? 's' : ''}</b><span>Vous profitez de tout jusqu'au <b>${fd(essai)}</b>. Ensuite, votre formule Inscrit garde tous les cours ; prenez Basic ou Premium pour garder les solveurs, les sujets, le métré${A.offre('basic').atelier ? '' : ', l\'atelier de dessin et l\'assistant IA'}.</span></div><div class="row"><a class="btn b-pri" href="#/app/abonnement">${ic('coins')}Voir les offres</a></div></div>`;
+    if(abo && abo.fin - now() < 7*DAY) return `<div class="note">${ic('clock')}<span>Votre abonnement <b>${abo.plan === 'premium' ? 'Premium' : 'Basic'}</b> se termine le <b>${fd(abo.fin)}</b>. <a href="#/app/abonnement">Le renouveler</a></span></div>`;
+    if(n === 'inscrit') return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">Formule Inscrit : tous les cours</b><span>Débloquez plus d'exercices, les sujets d'examen, les solveurs guidés et le métré avec <b>Basic</b> (${F(prixPlan('basic'))} FCFA), ou tout, dont l'atelier de dessin et le professeur IA, avec <b>Premium</b> (${F(prixPlan('premium'))} FCFA) pour ${+A.cfg().aboJours || 31} jours.</span></div><div class="row"><a class="btn b-pri" href="#/app/abonnement">${ic('coins')}Voir les offres</a></div></div>`;
+    return fin && fin - now() < 7*DAY ? `<div class="note">${ic('clock')}<span>Votre accès se termine le <b>${fd(fin)}</b>. <a href="#/app/abonnement">Le renouveler</a></span></div>` : '';
+  }
+  return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">${wait ? 'Paiement en cours de validation' : 'Activez votre accès complet'}</b><span>${wait ? `Déclaré ${ago(wait.at)} : votre accès s'ouvrira dès la validation par la direction.` : `Le premier chapitre de chaque matière est gratuit. Inscription : ${esc(A.prixTxt())}${A.promoAcces() ? ` au lieu de ${A.promoOld(A.promoAcces())} ${A.promoTag(A.promoAcces())}` : ''}, avec <b>${+A.cfg().essaiJours || 31} jours de Premium offerts</b> (tout compris).`}</span></div><div class="row">${wait ? `<button class="btn b-line" style="background:#fff" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}<a class="btn b-pri" href="#/app/abonnement">${ic('coins')}${wait ? 'Voir mon paiement' : 'Payer ' + F(montant()) + ' FCFA'}</a></div></div>`;
+};
+/* carte « Ma formule » du tableau de bord : ce qui est ouvert, ce qui est verrouillé */
+A.formuleCard = () => {
+  if(!S.me || !A.paywallOn() || S.me.isAdmin) return '';
+  const n = A.niveau(), o = A.offre(n), essai = A.essaiFin(), abo = A.aboActif();
+  const L = [['book', 'Cours', n !== 'aucun' ? 'tous' : '1er chapitre', n !== 'aucun', 'app/matieres'],
+    ['edit', 'Exercices', o.exos >= 99 ? 'tous' : o.exos + ' / chapitre', n !== 'aucun', 'app/matieres'],
+    ['doc', 'Sujets d\'examen', fv('sujets', o.sujets), n !== 'aucun' && o.sujets > 0, 'app/exercices'],
+    ['steps', 'Solveurs guidés', fv('solveurs', o.solveurs), n !== 'aucun' && o.solveurs > 0, 'app/exercices'],
+    ['calc', 'Métré & devis', fv('metres', o.metres), n !== 'aucun' && +o.metres !== 0, 'app/metre'],
+    ['compass', 'Atelier de dessin', o.atelier ? 'inclus' : 'Premium', n !== 'aucun' && o.atelier, 'app/atelier'],
+    ['spark', 'Assistant IA', o.ia ? 'inclus' : 'Premium', n !== 'aucun' && o.ia, 'app/ia']];
+  return `<div class="card stack formule"><div class="row between"><div class="row" style="gap:10px"><b style="font-family:var(--fd);font-size:17px">Ma formule</b>${A.accesPill(Object.assign({}, S.me, {admin:false}))}</div><span class="sub">${esc(essai ? 'Premium offert jusqu\'au ' + fd(essai) : abo ? (abo.plan === 'premium' ? 'Premium' : 'Basic') + ' jusqu\'au ' + fd(abo.fin) : n === 'inscrit' ? 'tous les cours, contenus réduits' : n === 'aucun' ? 'version gratuite' : '')}</span></div>
+   <div class="fgrid">${L.map(([i, t, v, on, h]) => `<a class="fitem ${on ? '' : 'off'}" href="#/${h}"><span class="fi">${ic(on ? i : 'lock')}</span><span><b>${esc(t)}</b><small>${esc(v)}</small></span></a>`).join('')}</div>
+   ${n === 'premium' && !essai ? '' : `<a class="btn b-pri b-sm" style="justify-self:start" href="#/app/abonnement">${ic('coins')}${n === 'aucun' ? 'Activer mon accès' : 'Comparer les formules'}</a>`}</div>`;
 };
 
 /* ---------- page apprenant : Mon abonnement ---------- */
-let payMoyen = '', payMode = '';
-A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:'Accès complet à la plateforme', render(){
-  const c = A.cfg(), P = c.pay || {}, ms = moyensActifs(), has = A.hasAccess(), fin = A.accesFin(), wait = pending()[0], hist = S.pay || [];
+let payMoyen = '', payMode = '', ACH = null;
+const achPrix = () => ACH.objet === 'abo' ? prixPlan(ACH.plan) : montant();
+const achNom = () => ACH.objet === 'abo' ? `Abonnement ${nomPlan(ACH.plan)} · ${+A.cfg().aboJours || 31} jours` : A.cfg().formule === 'mensuel' ? 'Abonnement mensuel' : 'Inscription';
+A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:'Formules et paiement', render(){
+  const c = A.cfg(), P = c.pay || {}, ms = moyensActifs(), n = A.niveau(), inscrit = S.me.acces === 'actif' || S.me.isAdmin, wait = pending()[0], hist = S.pay || [];
+  const essai = A.essaiFin(), abo = A.aboActif(), jours = +c.aboJours || 31;
+  if(!ACH){ const q = A.query().get('plan'); ACH = ['basic', 'premium'].includes(q) && inscrit ? {objet:'abo', plan:q} : !inscrit ? {objet:'acces'} : {objet:'abo', plan:abo ? abo.plan : 'premium'}; }
+  if(ACH.objet === 'acces' && inscrit && c.formule !== 'mensuel') ACH = {objet:'abo', plan:'premium'};
   if(!payMoyen || !ms.find(m => m[0] === payMoyen)) payMoyen = (ms[0] || ['wave'])[0];
-  const chw = A.chwDispo('acces'), modes = [ms.length ? 'momo' : null, chw ? 'chariow' : null].filter(Boolean);
+  const chw = A.chwDispo(ACH.objet, ACH.plan), modes = [ms.length ? 'momo' : null, chw ? 'chariow' : null].filter(Boolean);
   if(!modes.includes(payMode)) payMode = modes[0] || 'momo';
-  const num = P[payMoyen] || '', name = (S.me.data && S.me.data.name) || S.me.email, mens = c.formule === 'mensuel';
-  const waTxt = `Bonjour, je suis ${name} (${S.me.email}). Je viens de payer ${F(montant())} FCFA par ${moyenN(payMoyen)} pour mon accès à ${A.brandText()}.`;
+  const num = P[payMoyen] || '', name = (S.me.data && S.me.data.name) || S.me.email, px = achPrix(), promo = ACH.objet === 'acces' ? A.promoAcces() : null;
+  const waTxt = `Bonjour, je suis ${name} (${S.me.email}). Je viens de payer ${F(px)} FCFA par ${moyenN(payMoyen)} pour : ${achNom()} (${A.brandText()}).`;
   const etat = !A.paywallOn() ? `<div class="note ok">${ic('check')}<span>L'accès à la plateforme est actuellement <b>gratuit pour tous</b>.</span></div>`
     : S.me.isAdmin ? `<div class="note ok">${ic('crown')}<span>Compte administrateur : accès complet.</span></div>`
-    : has ? `<div class="note ok">${ic('check')}<span><b>Votre accès est actif</b>${fin ? ` jusqu'au <b>${fd(fin)}</b>` : ' (sans limite de durée)'}. Bonne formation !</span></div>`
-    : wait ? `<div class="note info">${ic('clock')}<span><b>Paiement déclaré ${ago(wait.at)}</b> : ${F(wait.montant)} FCFA par ${esc(moyenN(wait.moyen))}, référence ${esc(wait.reference)}. La direction vérifie la réception puis active votre accès.</span></div>`
-    : `<div class="note">${ic('lock')}<span>Vous utilisez la <b>version gratuite</b> : premier chapitre de chaque matière.</span></div>`;
-  const showPay = A.paywallOn() && !S.me.isAdmin && (!has || (fin && mens));
-  const eq = A.eq(montant());
+    : wait ? `<div class="note info">${ic('clock')}<span><b>Paiement déclaré ${ago(wait.at)}</b> : ${F(wait.montant)} FCFA par ${esc(moyenN(wait.moyen))} (${esc(objetTxt(wait))}), référence ${esc(wait.reference)}. La direction vérifie la réception puis l'active.</span></div>`
+    : n === 'aucun' ? `<div class="note">${ic('lock')}<span>Vous utilisez la <b>version gratuite</b> : premier chapitre de chaque matière.</span></div>`
+    : `<div class="note ok">${ic('check')}<span>Votre formule : <b>${esc(A.NIV_NOM[n])}</b>${essai ? ` (offert après l'inscription) jusqu'au <b>${fd(essai)}</b>, puis formule Inscrit` : abo ? ` jusqu'au <b>${fd(abo.fin)}</b>` : n === 'inscrit' ? ' : tous les cours, contenus réduits' : ''}.</span></div>`;
+  const carte = (k, titre, prix, unite, desc, bouton, actif, dispo) => `<div class="offre ${actif ? 'on' : ''} ${ACH.objet === (k === 'acces' ? 'acces' : 'abo') && (k === 'acces' || ACH.plan === k) ? 'sel' : ''}">
+    <div class="stack s8"><span class="kick">${esc(titre)}</span>${k === 'acces' && promo ? `<div class="row nw" style="gap:6px">${A.promoOld(promo)}${A.promoTag(promo)}</div>` : ''}<b class="oprix">${F(prix)} <small>FCFA ${esc(unite)}</small></b>${A.eq(prix) ? `<span class="sub">${esc(A.eq(prix))}</span>` : ''}</div>
+    <ul>${desc.map(d => `<li>${ic('check')}<span>${d}</span></li>`).join('')}</ul>
+    ${actif ? `<span class="pill p-ok dot" style="justify-self:start">${esc(actif)}</span>` : ''}
+    ${bouton ? `<button class="btn ${dispo ? 'b-pri' : 'b-line'} b-sm" ${dispo ? `data-ach="${k}"` : 'disabled'}>${bouton}</button>` : ''}</div>`;
+  const ob = A.offre('basic'), oi = A.offre('inscrit');
+  const offres = A.paywallOn() && !S.me.isAdmin ? `<div class="offres">
+    ${carte('acces', 'Inscription', montant(), c.formule === 'mensuel' ? '/ mois' : 'une seule fois', [`<b>${+c.essaiJours || 31} jours Premium offerts</b> : tout est ouvert`, 'Ensuite : <b>tous les cours</b>, sans limite de durée', `${oi.exos} exercices et ${oi.quiz} questions de quiz par chapitre`, 'Sujets d\'examen du niveau Débutant'], inscrit ? '' : 'S\'inscrire', inscrit ? 'Payée' : '', !inscrit)}
+    ${carte('basic', 'Abonnement Basic', prixPlan('basic'), `/ ${jours} jours`, [`${ob.exos >= 99 ? 'Tous les' : ob.exos} exercices et ${ob.quiz >= 99 ? 'toutes les' : ob.quiz} questions de quiz par chapitre`, `Sujets d'examen : ${esc(fv('sujets', ob.sujets))}`, `Solveurs guidés : ${esc(fv('solveurs', ob.solveurs))}`, `Métré et devis : ${esc(fv('metres', ob.metres))}`, 'Épreuves et annales'], 'Choisir Basic', abo && abo.plan === 'basic' ? 'En cours' : '', inscrit)}
+    ${carte('premium', 'Abonnement Premium', prixPlan('premium'), `/ ${jours} jours`, ['<b>Tout</b> : exercices, quiz, sujets, solveurs', 'Atelier de dessin 2D / 3D', 'Assistant IA et résolution en photo', 'Métré et devis illimités'], 'Choisir Premium', abo && abo.plan === 'premium' ? 'En cours' : essai ? 'Offert (essai)' : '', inscrit)}
+   </div>${inscrit ? '' : `<p class="sub">Les abonnements Basic et Premium se prennent après l'inscription. ${essai ? '' : 'L\'inscription comprend déjà 31 jours Premium.'}</p>`}` : '';
+  const showPay = A.paywallOn() && !S.me.isAdmin && (ACH.objet === 'abo' ? inscrit : !inscrit || c.formule === 'mensuel');
   const momo = `<ol class="abo-steps">
-     <li><b>Envoyez ${F(montant())} FCFA par ${esc(moyenN(payMoyen))}</b> au numéro :
+     <li><b>Envoyez ${F(px)} FCFA par ${esc(moyenN(payMoyen))}</b> au numéro :
       <div class="abo-num"><span class="mono">${esc(telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div>
       <span class="sub">Bénéficiaire : ${esc(P.titulaire || c.ceo)}. ${payMoyen === 'wave' ? 'Dans l\'application Wave : « Envoyer », saisissez le numéro et le montant.' : payMoyen === 'mtn' ? 'Avec MTN MoMo : composez *133# puis « Transfert d\'argent », ou utilisez l\'application MoMo.' : payMoyen === 'orange' ? 'Avec Orange Money : composez #144# ou utilisez l\'application Max it.' : payMoyen === 'moov' ? 'Avec Moov Money : composez *155# ou utilisez l\'application Moov Money.' : 'Depuis votre application, faites un transfert vers ce compte.'}</span></li>
      <li><b>Gardez le SMS de confirmation</b> : il contient la référence (identifiant) de la transaction.</li>
-     <li><b>Déclarez votre paiement ci-dessous</b> : la direction vérifie la réception et active votre accès, en général dans la journée.</li>
+     <li><b>Déclarez votre paiement ci-dessous</b> : la direction vérifie la réception et l'active, en général dans la journée.</li>
     </ol>
     <form class="stack" id="fPay">
      <div class="g2"><label class="fld"><span>Numéro utilisé pour payer</span><input class="inp" id="payNum" type="tel" inputmode="tel" placeholder="07 00 00 00 00" value="${esc((S.me.data && S.me.data.phone) || '')}" required></label>
@@ -185,33 +287,36 @@ A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:
      <div class="row"><button class="btn b-pri" type="submit">${ic('check')}J'ai payé : déclarer mon paiement</button>${c.whatsapp ? `<a class="btn b-ok" target="_blank" rel="noopener" href="${esc(waLink(c.whatsapp, waTxt))}">${ic('whatsapp')}Envoyer la capture sur WhatsApp</a>` : ''}</div>
      <p class="sub">${c.whatsapp ? `WhatsApp de la direction : <b class="mono" style="color:var(--ink)">${esc(telFmt(c.whatsapp))}</b>. ` : ''}N'envoyez jamais votre code secret (PIN) : personne de la plateforme ne vous le demandera.</p>
     </form>`;
-  return `<div class="cols"><div class="stack">
-   ${A.chwRetour('acces')}
+  return `<div class="stack">
+   ${A.chwRetour(ACH.objet === 'abo' ? 'abo' : 'acces', ACH.objet === 'abo' ? ACH.plan : null)}
    ${etat}
-   ${showPay ? `<div class="card stack">
-    <div class="row between"><div><span class="kick">${mens ? 'Abonnement mensuel' : 'Inscription'}</span>${A.promoAcces() ? `<div class="row nw" style="gap:8px;margin-top:6px">${A.promoOld(A.promoAcces())}${A.promoTag(A.promoAcces())}${A.cfg().promoNom ? `<b class="px-urg">${esc(A.cfg().promoNom)}</b>` : ''}</div>` : ''}<h2 style="font-size:24px;margin-top:4px">${F(montant())} <small style="font-size:15px;color:var(--muted)">FCFA${mens ? ' / mois' : ' · une seule fois'}</small></h2>${A.promoUrg(A.promoAcces()) ? `<div class="px-urg">${ic('clock')} ${esc(A.promoUrg(A.promoAcces()))}</div>` : ''}${eq ? `<div class="sub" style="font-size:14px;margin-top:2px">${esc(eq)}${mens ? ' par mois' : ''}</div>` : ''}</div>${A.devSel()}</div>
+   ${offres}
+   ${showPay ? `<div class="card stack" id="payBox">
+    <div class="row between"><div><span class="kick">Paiement</span>${promo ? `<div class="row nw" style="gap:8px;margin-top:6px">${A.promoOld(promo)}${A.promoTag(promo)}${c.promoNom ? `<b class="px-urg">${esc(c.promoNom)}</b>` : ''}</div>` : ''}<h2 style="font-size:22px;margin-top:4px">${esc(achNom())} : ${F(px)} <small style="font-size:15px;color:var(--muted)">FCFA</small></h2>${promo && A.promoUrg(promo) ? `<div class="px-urg">${ic('clock')} ${esc(A.promoUrg(promo))}</div>` : ''}${A.eq(px) ? `<div class="sub" style="font-size:14px;margin-top:2px">${esc(A.eq(px))}</div>` : ''}${ACH.objet === 'abo' && (essai || (abo && abo.plan === ACH.plan)) ? `<div class="sub" style="margin-top:4px">${ic('info')} Les ${jours} jours commenceront ${essai ? 'après votre essai Premium (' + fd(essai) + ')' : 'à la fin de votre abonnement en cours (' + fd(abo.fin) + ')'} : vous ne perdez aucun jour.</div>` : ''}</div>${A.devSel()}</div>
     ${modes.length > 1 ? `<div class="paymodes" role="tablist">
       <button class="paymode ${payMode === 'momo' ? 'on' : ''}" data-paymode="momo" role="tab" aria-selected="${payMode === 'momo'}"><span class="pm-ic">${ic('phone')}</span><span><b>Mobile Money · Côte d'Ivoire</b><small>${esc(ms.map(m => m[1]).join(', '))} · validé par la direction</small></span></button>
-      <button class="paymode ${payMode === 'chariow' ? 'on' : ''}" data-paymode="chariow" role="tab" aria-selected="${payMode === 'chariow'}"><span class="pm-ic">${ic('globe')}</span><span><b>Paiement en ligne · tous pays</b><small>carte bancaire, Mobile Money d'autres pays… · accès immédiat</small></span></button>
+      <button class="paymode ${payMode === 'chariow' ? 'on' : ''}" data-paymode="chariow" role="tab" aria-selected="${payMode === 'chariow'}"><span class="pm-ic">${ic('globe')}</span><span><b>Paiement en ligne · tous pays</b><small>carte bancaire, Mobile Money d'autres pays… · activation immédiate</small></span></button>
      </div>` : ''}
-    ${payMode === 'chariow' ? A.chwBox('acces', null, montant(), A.promoAcces()) : `${ms.length > 1 ? `<div class="tabs">${ms.map(m => `<button class="tab ${payMoyen === m[0] ? 'on' : ''}" data-paym="${m[0]}"><i class="abo-dot" style="background:${m[2]}"></i>${esc(m[1])}</button>`).join('')}</div>` : ''}${momo}`}
+    ${payMode === 'chariow' ? A.chwBox(ACH.objet, ACH.objet === 'abo' ? ACH.plan : null, px, promo) : `${ms.length > 1 ? `<div class="tabs">${ms.map(m => `<button class="tab ${payMoyen === m[0] ? 'on' : ''}" data-paym="${m[0]}"><i class="abo-dot" style="background:${m[2]}"></i>${esc(m[1])}</button>`).join('')}</div>` : ''}${momo}`}
    </div>` : ''}
-   ${hist.length ? `<div class="card"><h3>Mes paiements <small>${hist.length}</small></h3><div class="tw"><table class="t"><thead><tr><th>Date</th><th>Objet</th><th>Moyen et référence</th><th class="r">Montant</th><th>Statut</th></tr></thead><tbody>${hist.map(x => `<tr><td class="nowrap">${fdt(x.at)}</td><td style="min-width:130px">${x.objet === 'livre' ? `Livre : ${esc(((S.livres || []).find(l => l.id === x.livre) || {}).titre || 'livre')}` : x.formule === 'mensuel' ? 'Abonnement (1 mois)' : 'Inscription'}</td><td style="min-width:130px">${esc(moyenN(x.moyen))}<div class="small faint mono" style="overflow-wrap:anywhere">${esc([telFmt(x.numero), x.reference].filter(Boolean).join(' · '))}</div></td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}</td><td style="min-width:110px">${statutPill(x.statut)}${x.note ? `<div class="small faint">${esc(x.note)}</div>` : ''}</td></tr>`).join('')}</tbody></table></div>${wait ? `<button class="btn b-line b-sm" style="margin-top:10px" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}</div>` : ''}
-  </div><div class="stack">
-   <div class="card stack"><h3 style="margin:0">Ce que comprend l'accès</h3>${avantagesHtml()}</div>
+   ${A.paywallOn() ? `<div class="card stack"><h3 style="margin:0">Comparer les formules</h3>${A.offresTable(n)}</div>` : ''}
+   <div class="cols"><div class="stack">
+   ${hist.length ? `<div class="card"><h3>Mes paiements <small>${hist.length}</small></h3><div class="tw"><table class="t"><thead><tr><th>Date</th><th>Objet</th><th>Moyen et référence</th><th class="r">Montant</th><th>Statut</th></tr></thead><tbody>${hist.map(x => `<tr><td class="nowrap">${fdt(x.at)}</td><td style="min-width:130px">${esc(objetTxt(x))}</td><td style="min-width:130px">${esc(moyenN(x.moyen))}<div class="small faint mono" style="overflow-wrap:anywhere">${esc([telFmt(x.numero), x.reference].filter(Boolean).join(' · '))}</div></td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}</td><td style="min-width:110px">${statutPill(x.statut)}${x.note ? `<div class="small faint">${esc(x.note)}</div>` : ''}</td></tr>`).join('')}</tbody></table></div>${wait ? `<button class="btn b-line b-sm" style="margin-top:10px" data-act="abocheck">${ic('refresh')}Vérifier mon accès</button>` : ''}</div>` : `<div class="card stack"><h3 style="margin:0">Ce que comprend l'accès</h3>${avantagesHtml()}</div>`}
+   </div><div class="stack">
    <div class="card"><h3>Questions fréquentes</h3><div class="stack s8 small">
     <p><b>Combien de temps pour l'activation ?</b><br>${chw ? 'Paiement en ligne : immédiat, dès que Chariow confirme le paiement. ' : ''}Mobile Money : dès que la direction a vérifié la réception, en général dans la journée. Le bouton « Vérifier mon accès » met à jour votre compte.</p>
+    <p><b>Que se passe-t-il après les ${+c.essaiJours || 31} jours offerts ?</b><br>Vous gardez tous les cours (formule Inscrit), avec moins d'exercices, de quiz et de sujets. Les solveurs, le métré, l'atelier de dessin et l'assistant IA demandent un abonnement Basic ou Premium. Votre progression est conservée.</p>
     <p><b>J'habite hors de Côte d'Ivoire.</b><br>${chw ? 'Choisissez « Paiement en ligne » : carte bancaire ou Mobile Money de votre pays, dans la devise de votre choix.' : 'Écrivez à la direction sur WhatsApp : elle vous indiquera comment payer depuis votre pays.'}</p>
     <p><b>Je me suis trompé de montant ou de numéro.</b><br>Écrivez à la direction sur WhatsApp avec la capture du paiement.</p>
-    <p><b>${mens ? 'Que se passe-t-il à la fin du mois ?' : 'Dois-je payer chaque mois ?'}</b><br>${mens ? 'Votre accès reste actif jusqu\'à la date indiquée ; renouvelez-le avant pour ne rien perdre. Votre progression est conservée.' : 'Non : l\'inscription actuelle est un paiement unique.'}</p>
    </div></div>
-  </div></div>`;
+  </div></div></div>`;
 }});
+A.on('click', '[data-ach]', el => { const k = el.dataset.ach; ACH = k === 'acces' ? {objet:'acces'} : {objet:'abo', plan:k}; A.refresh(); setTimeout(() => { const b = $('#payBox'); if(b) b.scrollIntoView({behavior:'smooth', block:'start'}); }, 50); });
 A.on('click', '[data-paymode]', el => { payMode = el.dataset.paymode; A.refresh(); });
 A.on('click', '[data-paym]', el => { payMoyen = el.dataset.paym; A.refresh(); });
 A.on('submit', '#fPay', async () => {
   const num = A.val('payNum'), ref = A.val('payRef');
-  const r = await A.db.declarePayment(payMoyen, num, ref);
+  const r = await A.db.declarePayment(payMoyen, num, ref, ACH ? ACH.objet : 'acces', null, ACH && ACH.objet === 'abo' ? ACH.plan : null);
   if(!r.ok){ toast(r.msg || 'Erreur', 'x'); return; }
   toast('Paiement déclaré : la direction va le vérifier', 'check'); A.refresh();
 });
@@ -230,28 +335,29 @@ const profOf = id => AD().profiles.find(p => p.id === id) || {id, email:'(compte
 const payer = x => x.owner ? profOf(x.owner) : {id:'', email:x.email || '—', data:{name:x.email || 'Acheteur'}, sansCompte:true};
 const payerLink = (x, p) => p.sansCompte ? `<b>${esc(p.email)}</b><div class="small faint">compte pas encore créé : ${x.objet === 'livre' ? 'le livre' : 'l\'accès'} sera ajouté à son inscription avec cet e-mail</div>`
   : `<a href="#/admin/apprenant/${x.owner}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}${(p.data || {}).phone ? ' · ' + esc(telFmt(p.data.phone)) : ''}</div>`;
-const objetTxt = x => x.objet === 'livre' ? 'Livre : ' + (((S.livres || []).find(l => l.id === x.livre) || {}).titre || x.livre || '?') : x.formule === 'mensuel' ? 'Abonnement d\'un mois' : 'Inscription';
+
 const sourcePill = x => x.source === 'chariow' ? ' <span class="pill p-info">En ligne</span>' : '';
 let abF = 'attente', abQ = '';
 A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', crumb:'Accès payant à la plateforme', actions:() => `<button class="btn b-line b-sm" data-act="admrefresh">${ic('refresh')}<span class="hs">Actualiser</span></button>`, render(){
   const c = A.cfg(), P = c.pay || {}, D = AD(), pay = D.paiements || [], L = D.profiles.filter(p => !p.admin), t = now();
   const ok = pay.filter(x => x.statut === 'valide'), wait = pay.filter(x => x.statut === 'en_attente');
-  const actifs = L.filter(p => p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t)), exp = L.filter(p => p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) <= t);
+  const niv = p => A.niveauDe(p), actifs = L.filter(p => niv(p) !== 'aucun'), abonnes = L.filter(p => p.abo && ts(p.abo_fin) > t);
+  const exp = L.filter(p => (p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) <= t) || (p.abo && p.abo_fin && ts(p.abo_fin) <= t));
   const mois = new Date(); mois.setDate(1); mois.setHours(0, 0, 0, 0);
   const recM = ok.filter(x => ts(x.traite_at || x.at) >= mois.getTime()).reduce((a, x) => a + (+x.montant || 0), 0), rec = ok.reduce((a, x) => a + (+x.montant || 0), 0);
   let rows = abF === 'attente' ? wait : abF === 'historique' ? pay.filter(x => x.statut !== 'en_attente') : null;
-  let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'nonpayes' ? L.filter(p => p.acces !== 'actif') : abF === 'expires' ? exp : null;
+  let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'abonnes' ? abonnes : abF === 'nonpayes' ? L.filter(p => niv(p) === 'aucun') : abF === 'expires' ? exp : null;
   if(abQ){ const q = abQ.toLowerCase(), hit = p => (nm(p) + ' ' + p.email + ' ' + ((p.data || {}).phone || '')).toLowerCase().includes(q);
     if(rows) rows = rows.filter(x => hit(payer(x)) || String(x.reference).toLowerCase().includes(q) || String(x.numero).includes(q)); if(users) users = users.filter(hit); }
-  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['nonpayes', 'Non payés', L.filter(p => p.acces !== 'actif').length], ['expires', 'Expirés', exp.length], ['reglages', 'Réglages', '']];
+  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['reglages', 'Réglages', '']];
   const payRow = x => { const p = payer(x); return `<tr><td class="nowrap">${fdt(x.at)}<div class="small faint">${ago(x.at)}</div></td><td>${payerLink(x, p)}</td><td>${esc(moyenN(x.moyen))}${sourcePill(x)}<div class="small faint mono">${esc(telFmt(x.numero))}</div></td><td class="mono small" style="overflow-wrap:anywhere">${esc(x.reference)}</td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}<div class="small faint">${esc(objetTxt(x))}</div></td>
     <td>${x.statut === 'en_attente' ? `<div class="row nw"><button class="btn b-ok b-xs" data-payok="${x.id}">${ic('check')}Valider</button><button class="btn b-line b-xs" data-payno="${x.id}">${ic('x')}Refuser</button></div>` : statutPill(x.statut) + (x.note ? `<div class="small faint">${esc(x.note)}</div>` : '') + (x.traite_at ? `<div class="small faint">${fd(x.traite_at)}</div>` : '')}</td></tr>`; };
-  const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${p.acces === 'actif' ? `<div class="small faint">${p.acces_fin ? 'jusqu\'au ' + fd(p.acces_fin) : 'sans limite'}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
+  const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${A.accesDetail(p) ? `<div class="small faint">${esc(A.accesDetail(p))}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
   let body;
   if(abF === 'reglages') body = reglages(c, P);
   else if(rows && abF === 'attente') body = `<div class="abo-cards">${rows.map(x => { const p = payer(x); return `<div class="card stack s8"><div class="row between nw"><div style="min-width:0;overflow-wrap:anywhere">${payerLink(x, p)}</div><b class="mono nowrap" style="font-size:17px">${F(x.montant)} F${devPaye(x)}</b></div>
       <dl class="kv"><dt>Moyen</dt><dd>${esc(moyenN(x.moyen))}${sourcePill(x)}</dd>${x.numero ? `<dt>Payé depuis</dt><dd class="mono">${esc(telFmt(x.numero))}</dd>` : ''}<dt>Référence</dt><dd class="mono" style="overflow-wrap:anywhere">${esc(x.reference)}</dd><dt>${x.source === 'chariow' ? 'Reçu' : 'Déclaré'}</dt><dd>${fdt(x.at)} · ${ago(x.at)}</dd><dt>Objet</dt><dd>${esc(objetTxt(x))}</dd></dl>${x.note ? `<p class="sub" style="margin:0">${esc(x.note)}</p>` : ''}
-      <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}${x.objet === 'livre' ? 'Valider : remettre le livre' : 'Valider : activer l\'accès'}</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
+      <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}${x.objet === 'livre' ? 'Valider : remettre le livre' : x.objet === 'abo' ? 'Valider : activer l\'abonnement' : 'Valider : activer l\'accès'}</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
     ${rows.length ? `<div class="note info">${ic('info')}<span>Avant de valider, vérifiez sur votre téléphone (${moyensActifs().map(m => m[1] + ' ' + telFmt(P[m[0]])).join(' · ')}) que le montant est bien arrivé avec cette référence${rows.some(x => x.source === 'chariow') ? ', ou dans votre tableau de bord Chariow (Ventes) pour un paiement en ligne' : ''}.</span></div>` : ''}`;
   else if(rows) body = `<div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Déclaré le</th><th>Apprenant</th><th>Moyen / numéro</th><th>Référence</th><th class="r">Montant</th><th>${abF === 'attente' ? 'Action' : 'Statut'}</th></tr></thead><tbody>${rows.map(payRow).join('') || `<tr><td colspan="6">${A.empty('coins', abF === 'attente' ? 'Aucun paiement à valider.' : 'Aucun paiement traité.')}</td></tr>`}</tbody></table></div></div>
     ${abF === 'attente' && rows.length ? `<div class="note info">${ic('info')}<span>Avant de valider, vérifiez sur votre téléphone (${moyensActifs().map(m => m[1] + ' ' + telFmt(P[m[0]])).join(' · ')}) que le montant est bien arrivé avec cette référence.</span></div>` : ''}`;
@@ -270,11 +376,13 @@ function reglages(c, P){
   return `<div class="cols"><div class="card stack">
    <h3 style="margin:0">Accès payant</h3>
    <label class="check"><input type="checkbox" id="ab_paywall" ${c.paywall !== false ? 'checked' : ''}>Activer l'accès payant (sinon toute la plateforme est gratuite)</label>
-   <div class="g2"><label class="fld"><span>Formule</span><select class="inp" id="ab_formule"><option value="unique" ${c.formule !== 'mensuel' ? 'selected' : ''}>Inscription : paiement unique</option><option value="mensuel" ${c.formule === 'mensuel' ? 'selected' : ''}>Abonnement mensuel</option></select></label>
-    <label class="fld"><span>Chapitres gratuits par matière</span><input class="inp" type="number" min="0" id="ab_preview" value="${esc(c.preview)}"></label></div>
-   <div class="g2"><label class="fld"><span>Prix de l'inscription (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixAcces" value="${esc(c.prixAcces)}"></label>
-    <label class="fld"><span>Prix de l'abonnement mensuel (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixMois" value="${esc(c.prixMois)}"></label></div>
-   <p class="sub">Passer à la formule mensuelle ne retire rien aux inscrits déjà payés : leur accès reste sans limite de durée. Chaque paiement mensuel validé prolonge l'accès d'un mois.</p>
+   <div class="g2"><label class="fld"><span>Chapitres gratuits par matière (sans inscription)</span><input class="inp" type="number" min="0" id="ab_preview" value="${esc(c.preview)}"></label>
+    <label class="fld"><span>Prix de l'inscription (FCFA, une seule fois)</span><input class="inp" type="number" min="0" step="500" id="ab_prixAcces" value="${esc(c.prixAcces)}"></label></div>
+   <div class="g3"><label class="fld"><span>Jours tout compris après l'inscription</span><input class="inp" type="number" min="0" id="ab_essaiJours" value="${esc(c.essaiJours)}"></label>
+    <label class="fld"><span>Prix Basic (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixBasic" value="${esc(c.prixBasic)}"></label>
+    <label class="fld"><span>Prix Premium (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixPremium" value="${esc(c.prixPremium)}"></label></div>
+   <label class="fld" style="max-width:320px"><span>Durée d'un abonnement Basic ou Premium (jours)</span><input class="inp" type="number" min="1" id="ab_aboJours" value="${esc(c.aboJours)}"></label>
+   <p class="sub">Inscription = tous les cours à vie + ${esc(c.essaiJours)} jours tout compris ; ensuite formule « Inscrit » (contenus réduits). Chaque abonnement payé ajoute ${esc(c.aboJours)} jours, à la suite de l'essai ou de l'abonnement en cours. Mettez les mêmes prix sur vos produits Chariow.</p>
    <div class="promo-box stack s8"><b class="small">Promotion (facultatif) : prix normal barré en rouge à côté du prix ci-dessus</b>
     <div class="g3"><label class="fld"><span>Prix normal barré (FCFA)</span><input class="inp" type="number" min="0" step="500" id="ab_prixBarre" value="${esc(c.prixBarre || '')}" placeholder="ex. 6000"></label>
      <label class="fld"><span>Fin de l'offre</span><input class="inp" type="date" id="ab_promoFin" value="${esc(c.promoFin || '')}"></label>
@@ -290,9 +398,28 @@ function reglages(c, P){
    <ol class="abo-steps"><li><b>L'apprenant paie</b> le montant sur votre numéro Wave ou Mobile Money, depuis son téléphone.</li><li><b>Il déclare le paiement</b> sur la plateforme (numéro utilisé et référence du SMS), et peut vous envoyer la capture sur WhatsApp.</li><li><b>Vous vérifiez</b> la réception sur votre téléphone, puis cliquez sur <b>Valider</b> dans l'onglet « À valider » : son accès s'ouvre aussitôt.</li><li>Vous pouvez à tout moment <b>activer ou désactiver</b> un apprenant (onglets Apprenants), par exemple en cas de paiement en espèces ou d'abonnement non renouvelé.</li></ol>
    <p class="sub">Les cours complets ne sont envoyés par le serveur qu'aux comptes dont l'accès est actif : un visiteur ne peut lire que les chapitres gratuits.</p>
    <p class="sub">Les paiements en ligne par Chariow (ci-dessous) n'ont pas besoin de validation : l'accès s'ouvre dès que Chariow confirme le paiement. Vous gardez la main : activer, désactiver ou offrir un accès à tout moment.</p></div></div>
+  ${reglagesOffres(c)}
   ${reglagesChariow(c)}
   ${reglagesDevises(c)}`;
 }
+/* ---------- réglages : contenu de chaque formule ---------- */
+function reglagesOffres(c){
+  const champ = (n, k) => { const v = A.offre(n)[k], id = `of_${n}_${k}`;
+    if(k === 'sujets' || k === 'solveurs') return `<select class="inp sm" id="${id}">${NIVX.map((t, i) => `<option value="${i}" ${+v === i ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+    if(k === 'banque') return `<select class="inp sm" id="${id}"><option value="bts" ${v !== 'tout' ? 'selected' : ''}>BTS (sans solveur)</option><option value="tout" ${v === 'tout' ? 'selected' : ''}>BTS et Licence</option></select>`;
+    if(typeof v === 'boolean') return `<input type="checkbox" id="${id}" ${v ? 'checked' : ''} aria-label="${esc(FEAT[k][1])}">`;
+    return `<input class="inp sm mono" style="width:90px" type="number" id="${id}" value="${esc(v)}" ${k === 'metres' ? 'min="-1" title="-1 = illimité, 0 = aucun"' : 'min="0"'}>`; };
+  return `<div class="card stack"><h3 style="margin:0">Contenu des formules</h3>
+   <p class="sub">Ce que voit chaque formule. Premium a toujours tout. Pour le métré : nombre de métrés complets par mois (-1 = illimité, 0 = aucun). Les fonctionnalités non comprises restent visibles, avec un cadenas et l'offre qui les débloque.</p>
+   <div class="tw"><table class="t"><thead><tr><th></th><th>Inscrit (après l'essai)</th><th>Basic</th><th>Premium</th></tr></thead><tbody>${Object.entries(FEAT).map(([k, [i, t]]) => `<tr><td>${ic(i)} ${esc(t)}</td><td>${champ('inscrit', k)}</td><td>${champ('basic', k)}</td><td class="sub">${esc(fv(k, A.offre('premium')[k]))}</td></tr>`).join('')}</tbody></table></div>
+   <button class="btn b-pri" style="justify-self:start" data-act="offsave">${ic('save')}Enregistrer le contenu des formules</button></div>`;
+}
+A.on('click', '[data-act="offsave"]', async () => {
+  const offres = {};
+  ['inscrit', 'basic'].forEach(n => { offres[n] = {}; Object.keys(FEAT).forEach(k => { const el = $(`#of_${n}_${k}`); if(!el) return;
+    offres[n][k] = el.type === 'checkbox' ? el.checked : k === 'banque' ? el.value : Math.max(k === 'metres' ? -1 : 0, Math.round(+el.value || 0)); }); });
+  if(await A.db.saveSettings({offres})){ A.resetCours(); toast('Contenu des formules enregistré', 'check'); A.refresh(); }
+});
 /* ---------- réglages : paiement en ligne Chariow ---------- */
 let chwEtat;   // undefined : à lire ; null : en cours ou indisponible
 function reglagesChariow(c){
@@ -311,8 +438,10 @@ function reglagesChariow(c){
     <div class="fld"><span>Raccourcis</span><div class="row" style="padding-top:2px">${/^https:\/\//.test(ch.boutique || '') ? `<a class="btn b-line b-sm" href="${esc(ch.boutique)}" target="_blank" rel="noopener">${ic('globe')}Ma boutique</a>` : ''}<a class="btn b-line b-sm" href="https://app.chariow.com" target="_blank" rel="noopener">${ic('cog')}Tableau de bord Chariow</a></div></div></div>
    <div class="g2"><label class="fld"><span>Inscription : lien de la page produit Chariow</span><input class="inp" id="ab_chw_lienAcces" value="${esc(ch.lienAcces || '')}" placeholder="${esc(/^https:\/\//.test(ch.boutique || '') ? ch.boutique.replace(/\/+$/, '') + '/prd_…' : 'https://…')}"></label>
     <label class="fld"><span>Inscription : identifiant du produit</span><input class="inp mono" id="ab_chw_prdAcces" value="${esc(ch.prdAcces || '')}" placeholder="prd_…"></label></div>
-   <div class="g2"><label class="fld"><span>Abonnement mensuel : lien du produit</span><input class="inp" id="ab_chw_lienMois" value="${esc(ch.lienMois || '')}" placeholder="https://… (si formule mensuelle)"></label>
-    <label class="fld"><span>Abonnement mensuel : identifiant du produit</span><input class="inp mono" id="ab_chw_prdMois" value="${esc(ch.prdMois || '')}" placeholder="prd_…"></label></div>
+   <div class="g2"><label class="fld"><span>Abonnement Basic : lien du produit</span><input class="inp" id="ab_chw_lienBasic" value="${esc(ch.lienBasic || '')}" placeholder="https://…/prd_…"></label>
+    <label class="fld"><span>Abonnement Basic : identifiant du produit</span><input class="inp mono" id="ab_chw_prdBasic" value="${esc(ch.prdBasic || '')}" placeholder="prd_…"></label></div>
+   <div class="g2"><label class="fld"><span>Abonnement Premium : lien du produit</span><input class="inp" id="ab_chw_lienPremium" value="${esc(ch.lienPremium || '')}" placeholder="https://…/prd_…"></label>
+    <label class="fld"><span>Abonnement Premium : identifiant du produit</span><input class="inp mono" id="ab_chw_prdPremium" value="${esc(ch.prdPremium || '')}" placeholder="prd_…"></label></div>
    <label class="check"><input type="checkbox" id="ab_chw_auto" ${ch.auto !== false ? 'checked' : ''}>Ouvrir l'accès automatiquement dès que Chariow confirme le paiement (sinon le paiement arrive dans « À valider » et vous confirmez vous-même)</label>
    <p class="sub">Pour vos livres, le lien et l'identifiant Chariow se renseignent sur la fiche de chaque livre (Espace PDG › Livres).</p>
    <button class="btn b-pri" style="justify-self:start" data-act="absave">${ic('save')}Enregistrer</button>
@@ -341,10 +470,17 @@ function reglagesDevises(c){
 }
 A.accesBtns = p => {
   if(p.admin) return '<span class="sub">—</span>';
-  const act = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > now());
-  return `<div class="row nw">${act ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="gratuit">${ic('lock')}Désactiver</button>` : `<button class="btn b-ok b-xs" data-acc="${p.id}" data-v="actif">${ic('check')}Activer</button>`}${A.cfg().formule === 'mensuel' || p.acces_fin ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="mois">${ic('cal')}+1 mois</button>` : ''}</div>`;
+  const act = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > now()), j = +A.cfg().aboJours || 31, abo = p.abo && ts(p.abo_fin) > now();
+  return `<div class="row" style="gap:6px">${act ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="gratuit">${ic('lock')}Désactiver</button>` : `<button class="btn b-ok b-xs" data-acc="${p.id}" data-v="actif">${ic('check')}Activer l'inscription</button>`}${A.cfg().formule === 'mensuel' || p.acces_fin ? `<button class="btn b-line b-xs" data-acc="${p.id}" data-v="mois">${ic('cal')}+1 mois</button>` : ''}
+    <button class="btn b-line b-xs" data-abo="${p.id}" data-plan="basic">+${j} j Basic</button><button class="btn b-line b-xs" data-abo="${p.id}" data-plan="premium">+${j} j Premium</button>${abo ? `<button class="btn b-ghost b-xs" data-abo="${p.id}" data-plan="">${ic('x')}Retirer l'abonnement</button>` : ''}</div>`;
 };
-A.accesCard = u => u.admin ? '' : `<div class="card"><h3>Accès payant ${A.accesPill(u)}</h3><dl class="kv"><dt>Accès</dt><dd>${u.acces === 'actif' ? (u.acces_fin ? 'Actif jusqu\'au ' + fd(u.acces_fin) : 'Actif, sans limite') : 'Non payé (chapitres gratuits seulement)'}</dd>${u.acces_at ? `<dt>Activé le</dt><dd>${fd(u.acces_at)}</dd>` : ''}</dl>
+A.on('click', '[data-abo]', async el => {
+  const id = el.dataset.abo, plan = el.dataset.plan, p = profOf(id), j = (+A.cfg().aboJours || 31) * DAY;
+  if(!plan && el.dataset.c !== '1'){ el.dataset.c = '1'; el.innerHTML = ic('alert') + 'Confirmer'; return; }
+  const base = plan && p.abo === plan && ts(p.abo_fin) > now() ? ts(p.abo_fin) : now();
+  if(await A.db.setAbo(id, plan, plan ? new Date(base + j).toISOString() : null)){ toast(plan ? `Abonnement ${plan === 'premium' ? 'Premium' : 'Basic'} jusqu'au ${fd(base + j)}` : 'Abonnement retiré', plan ? 'check' : 'lock'); A.refresh(); }
+});
+A.accesCard = u => u.admin ? '' : `<div class="card"><h3>Formule ${A.accesPill(u)}</h3><dl class="kv"><dt>Inscription</dt><dd>${u.acces === 'actif' ? (u.acces_fin ? 'Active jusqu\'au ' + fd(u.acces_fin) : 'Payée') : 'Non payée (chapitres gratuits seulement)'}</dd>${u.acces_at ? `<dt>Activée le</dt><dd>${fd(u.acces_at)}</dd>` : ''}${u.essai_fin ? `<dt>Essai Premium</dt><dd>${ts(u.essai_fin) > now() ? 'jusqu\'au' : 'terminé le'} ${fd(u.essai_fin)}</dd>` : ''}${u.abo ? `<dt>Abonnement</dt><dd>${u.abo === 'premium' ? 'Premium' : 'Basic'} ${ts(u.abo_fin) > now() ? 'jusqu\'au' : 'terminé le'} ${fd(u.abo_fin)}</dd>` : ''}</dl>
   ${(() => { const L = (AD().paiements || []).filter(x => x.owner === u.id); return L.length ? `<div class="stack s8" style="margin:10px 0">${L.slice(0, 6).map(x => `<div class="row between nw small"><span>${fd(x.at)} · ${esc(moyenN(x.moyen))} · <span class="mono">${esc(x.reference)}</span></span><span class="row nw">${F(x.montant)} F ${x.statut === 'en_attente' ? `<button class="btn b-ok b-xs" data-payok="${x.id}">Valider</button>` : statutPill(x.statut)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:8px 0">Aucun paiement déclaré.</p>'; })()}
   ${(() => { const L = (AD().achats || []).filter(a => a.owner === u.id); return L.length ? `<p class="small" style="margin:0 0 10px"><b>Livres :</b> ${L.map(a => esc((((S.livres || []).find(l => l.id === a.livre) || {}).titre || a.livre)) + (a.source === 'offert' ? ' (offert)' : '')).join(', ')}</p>` : ''; })()}
   ${A.accesBtns(u)}</div>`;
@@ -373,11 +509,15 @@ A.on('click', '[data-act="absave"]', async () => {
   const pay = {}; MOYENS.forEach(m => pay[m[0]] = A.val('ab_pay_' + m[0]).trim()); pay.titulaire = A.val('ab_pay_titulaire').trim();
   if(Object.values(pay).concat([A.val('ab_whatsapp')]).some(v => String(v).replace(/\D/g, '').length >= 16)){ toast('Un numéro de carte bancaire ne doit pas être affiché : indiquez un numéro de téléphone', 'x'); return; }
   const prd = (lien, v) => (String(v || '').trim() || (String(lien || '').match(/prd_[A-Za-z0-9]+/) || [''])[0]);
-  const chariow = {boutique:A.val('ab_chw_boutique').trim().replace(/\/+$/, ''), lienAcces:A.val('ab_chw_lienAcces').trim(), lienMois:A.val('ab_chw_lienMois').trim(), auto:$('#ab_chw_auto') ? $('#ab_chw_auto').checked : true};
-  chariow.prdAcces = prd(chariow.lienAcces, A.val('ab_chw_prdAcces')); chariow.prdMois = prd(chariow.lienMois, A.val('ab_chw_prdMois'));
-  if([chariow.boutique, chariow.lienAcces, chariow.lienMois].some(l => l && !/^https:\/\//.test(l))){ toast('Les liens Chariow doivent commencer par https://', 'x'); return; }
+  const c0 = A.cfg().chariow || {};
+  const chariow = {boutique:A.val('ab_chw_boutique').trim().replace(/\/+$/, ''), lienAcces:A.val('ab_chw_lienAcces').trim(), lienMois:c0.lienMois || '', prdMois:c0.prdMois || '',
+    lienBasic:A.val('ab_chw_lienBasic').trim(), lienPremium:A.val('ab_chw_lienPremium').trim(), auto:$('#ab_chw_auto') ? $('#ab_chw_auto').checked : true};
+  chariow.prdAcces = prd(chariow.lienAcces, A.val('ab_chw_prdAcces')); chariow.prdBasic = prd(chariow.lienBasic, A.val('ab_chw_prdBasic')); chariow.prdPremium = prd(chariow.lienPremium, A.val('ab_chw_prdPremium'));
+  if([chariow.boutique, chariow.lienAcces, chariow.lienBasic, chariow.lienPremium].some(l => l && !/^https:\/\//.test(l))){ toast('Les liens Chariow doivent commencer par https://', 'x'); return; }
   if(/whsec_|sk_|sb_secret_|service_role/i.test(JSON.stringify(chariow))){ toast('Une clé secrète ne doit jamais être enregistrée ici : mettez-la dans les variables Netlify', 'x'); return; }
-  const patch = {paywall:$('#ab_paywall').checked, formule:A.val('ab_formule'), preview:Math.max(0, +A.val('ab_preview') || 0), prixAcces:Math.max(0, +A.val('ab_prixAcces') || 0), prixMois:Math.max(0, +A.val('ab_prixMois') || 0), pay, whatsapp:A.val('ab_whatsapp').trim(), chariow,
+  const n0 = (id, d, min = 0) => { const v = Math.round(+A.val(id)); return isNaN(v) ? d : Math.max(min, v); }, c1 = A.cfg();
+  const patch = {paywall:$('#ab_paywall').checked, formule:c1.formule || 'unique', preview:n0('ab_preview', 1), prixAcces:n0('ab_prixAcces', 4000), prixMois:+c1.prixMois || 2000, pay, whatsapp:A.val('ab_whatsapp').trim(), chariow,
+    essaiJours:n0('ab_essaiJours', 31), aboJours:n0('ab_aboJours', 31, 1), prixBasic:n0('ab_prixBasic', 2000), prixPremium:n0('ab_prixPremium', 5000),
     prixBarre:Math.max(0, Math.round(+A.val('ab_prixBarre') || 0)) || '', promoFin:/^\d{4}-\d{2}-\d{2}$/.test(A.val('ab_promoFin')) ? A.val('ab_promoFin') : '', promoNom:A.val('ab_promoNom').trim().slice(0, 40)};
   const prixActif = patch.formule === 'mensuel' ? patch.prixMois : patch.prixAcces;
   if(patch.prixBarre && patch.prixBarre <= prixActif){ toast('Le prix barré doit être plus élevé que le prix de l\'' + (patch.formule === 'mensuel' ? 'abonnement' : 'inscription') + ' (ou laissez-le vide)', 'x'); return; }

@@ -9,6 +9,8 @@
 // Sans accès, seuls les premiers chapitres de chaque matière (réglage « chapitres
 // gratuits » de l'Espace PDG) sont envoyés avec leur contenu ; les autres arrivent
 // sans contenu, ni exercices, ni quiz, ni sujet d'examen.
+// Selon la formule (Inscrit, Basic, Premium), le nombre d'exercices corrigés et de
+// questions de quiz par chapitre et les sujets d'examen envoyés sont limités.
 // Sans Supabase configuré (site de démonstration), tout est envoyé.
 // =====================================================================
 import fs from "node:fs";
@@ -52,19 +54,27 @@ async function supabaseConf(request) {
   }
   return url && key ? { url: url.replace(/\/+$/, ""), key } : null;
 }
+const PREMIUM = { exos: 99, quiz: 99, sujets: 3 };
 async function acces(request, sb) {
-  if (!sb) return { full: true, preview: 999, demo: true };
+  if (!sb) return { full: true, preview: 999, demo: true, lim: PREMIUM };
   const auth = request.headers.get("authorization") || "";
   const token = /^Bearer\s+\S+$/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : sb.key;
   try {
     const r = await fetch(sb.url + "/rest/v1/rpc/cours_acces", { method: "POST", headers: { apikey: sb.key, Authorization: "Bearer " + token, "Content-Type": "application/json" }, body: "{}" });
-    if (r.ok) { const j = await r.json(); return { full: !!j.full, preview: Math.max(0, +j.preview || 0) }; }
+    if (r.ok) { const j = await r.json(); return { full: !!j.full, preview: Math.max(0, +j.preview || 0), niveau: j.niveau, lim: j.lim || { exos: 2, quiz: 3, sujets: 1 } }; }
     if (token !== sb.key) { // jeton expiré : on retombe sur l'accès public
       const r2 = await fetch(sb.url + "/rest/v1/rpc/cours_acces", { method: "POST", headers: { apikey: sb.key, Authorization: "Bearer " + sb.key, "Content-Type": "application/json" }, body: "{}" });
-      if (r2.ok) { const j = await r2.json(); return { full: !!j.full, preview: Math.max(0, +j.preview || 0), expired: true }; }
+      if (r2.ok) { const j = await r2.json(); return { full: !!j.full, preview: Math.max(0, +j.preview || 0), expired: true, niveau: j.niveau, lim: j.lim || { exos: 2, quiz: 3, sujets: 1 } }; }
     }
   } catch (_) {}
-  return { full: false, preview: 1, erreur: true };
+  return { full: false, preview: 1, erreur: true, lim: { exos: 2, quiz: 3, sujets: 1 } };
+}
+/* contenu d'un chapitre accessible, réduit selon la formule */
+function limiter(c, lim) {
+  const ex = c.exercices || [], qz = c.quiz || [], nE = Math.max(0, +lim.exos || 0), nQ = Math.max(0, +lim.quiz || 0);
+  const out = { ...c, exercices: ex.slice(0, nE), quiz: qz.slice(0, nQ), nexTot: ex.length, nqTot: qz.length };
+  if (c.sujet && (c.niv || 2) > (+lim.sujets || 0)) out.sujet = { titre: c.sujet.titre, duree: c.sujet.duree, niveau: c.sujet.niveau, bareme: c.sujet.bareme, verrou: true };
+  return out;
 }
 const LOCKED = (c) => ({ id: c.id, niv: c.niv, titre: c.titre, duree: c.duree, nq: (c.quiz || []).length, nex: (c.exercices || []).length, sujet: c.sujet ? { titre: c.sujet.titre, duree: c.sujet.duree } : undefined, verrou: true });
 
@@ -76,7 +86,7 @@ export default async (request) => {
   try { m = matiere(id); } catch (e) { return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { "Content-Type": "application/json" } }); }
   if (!m) return new Response(JSON.stringify({ error: "Matière inconnue" }), { status: 404, headers: { "Content-Type": "application/json" } });
   const sb = await supabaseConf(request), a = await acces(request, sb);
-  const out = { ...m, chapitres: m.chapitres.map((c, i) => (a.full || i < a.preview ? c : LOCKED(c))), acces: { full: a.full, preview: a.preview, expired: !!a.expired } };
+  const out = { ...m, chapitres: m.chapitres.map((c, i) => (a.full || i < a.preview ? limiter(c, a.lim || PREMIUM) : LOCKED(c))), acces: { full: a.full, preview: a.preview, expired: !!a.expired, niveau: a.niveau || (a.demo ? "premium" : "") } };
   const headers = { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" };
   if (asScript) return new Response("A.addMatiere(" + JSON.stringify(out) + ");\n", { headers: { ...headers, "Content-Type": "text/javascript; charset=utf-8" } });
   return new Response(JSON.stringify(out), { headers: { ...headers, "Content-Type": "application/json; charset=utf-8" } });

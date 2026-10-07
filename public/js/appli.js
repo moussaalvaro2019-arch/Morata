@@ -55,7 +55,7 @@ function steelByDia(M){
 }
 
 /* =====================================================================
-   LES 18 APPLICATIONS
+   LES APPLICATIONS (une par matière)
    ===================================================================== */
 const G = {};
 
@@ -239,6 +239,52 @@ ${p.planning.map((r, i) => `${i+1}. **${String(r[0])}** : semaines ${r[1] + 1} �
 - ${M.lint.length} linteaux, dont ${M.lint.filter(l => l.o.w >= 1.4).length} de plus de 1,40 m (ouvertures larges).
 ${c.slab ? `- ${M.panels.filter(e => !e.tremie).length} panneaux de plancher : poutrelles posées dans le sens de la petite portée, étais à mi-portée pendant 21 jours.` : '- Arase des murs à +3,00 avec chaînage continu sur lequel s\'ancrent les fermes (pattes de scellement).'}
 ${T.type === 'terrasse' ? `- Relevés d'étanchéité de 15 cm sur l'acrotère, ${Math.max(2, Math.ceil(c.Wd*c.Dp/80))} évacuations d'eaux pluviales.` : `- Gouttières sur les ${T.type === '4 pans' ? '4 côtés' : '2 longs pans'} et ${Math.max(4, 2*Math.ceil((c.Wd + 1.2)/12) + 2)} descentes.`}`;
+};
+
+G.dessin = c => {
+  const {M, p, T, L} = c, W = Math.max(c.Wd, c.Dp), D = Math.min(c.Wd, c.Dp), nL = c.nL, SOL = A.SOL;
+  const FM = [['A4', 26.7, 19], ['A3', 39, 27.7], ['A2', 56.4, 40], ['A1', 81.1, 57.4], ['A0', 115.9, 82.1]];
+  const fmt = (a, b, E) => { const w = a*100/E + 8, h = b*100/E + 8, f = FM.find(([, fw, fh]) => (w <= fw && h + 6 <= fh) || (w + 18 <= fw && h <= fh)); return f ? f[0] : 'A0 (ou plan découpé)'; };
+  const pente = T.type === 'terrasse' ? 0 : (T.pente || 0), d = T.debord || 0, a = pente*Math.PI/180, Le = W + 2*d, le = D + 2*d;
+  const fH = T.type === 'terrasse' ? (T.acrotere || .6) + .3 : le/2*Math.tan(a), Htot = nL*HN + fH;
+  const lvName = l => String(l.court || l.nom || 'Niveau'), low = n => /^[A-Z0-9+ ]+$/.test(n) ? n : n.toLowerCase();
+  let k = 10; const bord = [['A-01', 'Plan de situation', '1/2 000', 'A4'], ['A-02', 'Plan de masse (réseaux, niveaux, reculs)', '1/200', fmt(W + 10, D + 10, 200)]];
+  L.forEach(l => bord.push(['A-' + (++k), 'Plan du ' + low(lvName(l)), '1/50', fmt(W, D, 50)]));
+  bord.push(['A-20', 'Façades principale et arrière', '1/50', fmt(W, Htot, 50)], ['A-21', 'Façades latérales', '1/50', fmt(D, Htot, 50)], ['A-30', 'Coupes A–A et B–B', '1/50', fmt(W, Htot + 1.5, 50)]);
+  if(T.type !== 'terrasse') bord.push(['A-40', 'Plan de toiture', '1/100', fmt(Le, le, 100)]); else bord.push(['A-40', 'Plan de la terrasse (pentes, évacuations)', '1/100', fmt(W, D, 100)]);
+  bord.push(['S-01', `Plan de fondations (${M.semelles.length} semelles, longrines)`, '1/50', fmt(W, D, 50)]);
+  if(c.slab) L.slice(0, -1).concat(T.type === 'terrasse' ? [L[L.length - 1]] : []).forEach((l, i) => bord.push(['S-1' + i, 'Coffrage du plancher haut du ' + low(lvName(l)), '1/50', fmt(W, D, 50)]));
+  bord.push(['S-20', 'Ferraillage des poteaux, poutres et semelles', '1/20 – 1/50', 'A1'], ['E-01', 'Électricité (implantation + schéma unifilaire)', '1/50', fmt(W, D, 50)], ['P-01', 'Plomberie et assainissement', '1/50 – 1/200', fmt(W, D, 50)]);
+  const exc = ['terrasse', 'escalier'], ann = ['service'];
+  const srows = c.uniq.map(l => { const ps = l.lv.pieces.filter(r => !exc.includes(r.t)); const Sh = sum(ps.filter(r => !ann.includes(r.t)), area), Sa = sum(ps.filter(r => ann.includes(r.t)), area); return [lvName(l) + (c.rep(l) > 1 ? ` (× ${c.rep(l)})` : ''), String(ps.length), fm(Sh, 2) + ' m²', Sa ? fm(Sa, 2) + ' m²' : '—', fm(Sh/(c.Wd*c.Dp), 2)]; });
+  const nrows = L.map((l, i) => [lvName(l), (i ? '+' : '±') + fm(i*HN, 2), '+' + fm(i*HN + HN, 2)]);
+  const st = M.stairs[0];
+  const link = (id, prm, t) => SOL && SOL.get(id) ? `[${t}](${SOL.link(id, prm, 'guide')})` : '';
+  return `## Le dossier de plans de ce projet
+Emprise **${fm(c.Wd)} × ${fm(c.Dp)} m**, ${nL} niveau${nL > 1 ? 'x' : ''}, hauteur totale ≈ **${fm(Htot, 2)} m**. Au 1/50, le plan d'un niveau occupe ${fm(W*2, 1)} × ${fm(D*2, 1)} cm (sans les cotes) ; au 1/100 (permis de construire), ${fm(W, 1)} × ${fm(D, 1)} cm.
+
+${tab(['N°', 'Titre', 'Échelle', 'Format'], bord)}
+
+Chaque plan porte un **cartouche** (projet ${esc(p.nom || p.titre || '')}, titre, échelle, date, indice) en bas à droite et se plie au format A4. ${link('des-echelle', {L:W, l:D, fmt:'A2', cot:4, cw:18, ch:6}, 'Refaire le choix d\'échelle pas à pas')}
+
+## Tableau des surfaces
+${tab(['Niveau', 'Pièces', 'Surface habitable', 'Annexes', 'Rapport / emprise'], srows)}
+
+Surfaces mesurées entre faces intérieures des murs (enduits déduits) ; escaliers et terrasses non compris.
+
+## Cotes de niveau
+${tab(['Niveau', 'Sol fini', 'Sol fini du niveau supérieur'], nrows)}
+
+Hauteur d'étage (sol fini à sol fini) : **${fm(HN, 2)} m**. ${T.type === 'terrasse' ? `Toiture-terrasse : dessus de dalle vers **+${fm(nL*HN, 2)}**, acrotère de ${fm(T.acrotere || .6)} m.` : `Toiture ${T.type} à **${pente}°**, débords de ${fm(d)} m : faîtage à environ **+${fm(nL*HN + fH, 2)}** (${fm(fH, 2)} m au-dessus de l'égout).`} ${link('des-niveaux', {alt:(c.site.alt || 10), tn:(c.site.tn ?? -.3), n:nL, hsp:HN - .26, pl:20, rev:6, et:8, acr:T.type === 'terrasse' ? (T.acrotere || .6) : 0, hm:17}, 'Calculer les niveaux pas à pas')}
+${T.type !== 'terrasse' ? `
+## Plan de toiture et vraies grandeurs
+Contour d'égout **${fm(Le, 2)} × ${fm(le, 2)} m** ; rampant (l/2) / cos α = **${fm(le/2/Math.cos(a), 2)} m** ; ${T.type === '4 pans' ? `faîtage ${fm(Le - le, 2)} m ; arêtier ${fm(le/2*Math.SQRT2, 2)} m en plan, **${fm(Math.hypot(le/2*Math.SQRT2, fH), 2)} m** en vraie grandeur ;` : `faîtage ${fm(Le, 2)} m ;`} surface de couverture = surface en plan / cos α = **${fm(Le*le/Math.cos(a), 1)} m²**. Sur le plan de toiture, on dessine le contour d'égout en trait fort, les murs en trait interrompu, ${T.type === '4 pans' ? 'les arêtiers à 45°, ' : ''}le faîtage et une flèche de pente par versant. ${T.type === '4 pans' ? link('des-toiture4', {L:W, l:D, d, pe:pente, ep:T.entraxe && T.entraxe < 2 ? T.entraxe : 1.2}, 'Étudier cette toiture pas à pas') : ''}
+` : ''}${st ? `
+## L'escalier sur les plans
+${st.n} marches de **${fm(st.hm*100, 1)} cm**, giron **${fm(st.g*100, 1)} cm** (2h + g = ${fm(2*st.hm*100 + st.g*100, 1)} cm), en deux volées de ${st.n1} et ${st.n2} marches, emmarchement ${fm(st.emm, 2)} m. En plan : flèche de montée depuis la 1re marche, marches numérotées, ligne de brisure vers la ${Math.min(st.n1, 7)}e marche ; à l'étage, la trémie et le garde-corps. En coupe : paillasse de ${fm(st.e*100, 0)} cm hachurée, échappée ≥ 2,00 m. ${link('tech-escalier', {H:st.H, hc:Math.round(st.hm*100), emm:+st.emm.toFixed(2), epl:20}, 'Recalculer l\'escalier pas à pas')}
+` : ''}
+> [!retenir] À vérifier avant de diffuser
+> Cotes en chaîne = cotes totales sur chaque façade ; ouvertures identiques sur plans, façades et tableau des menuiseries ; mêmes niveaux partout ; réservations des réseaux sur les plans de coffrage ; dernier indice sur le chantier.`;
 };
 
 G.metre = c => {
@@ -525,7 +571,7 @@ Sous ${M.semelles.reduce((a, e) => e.Ns > a.Ns ? e : a).id}, la contrainte verti
 };
 
 /* ---------- affichage ---------- */
-const ORDER = ['topo','geo','rdm','ba','mat','tech','metre','eco','chant','ro','math','om','sp','pb','therm','acou','mdf','mmc'];
+const ORDER = ['topo','geo','rdm','ba','mat','tech','dessin','metre','eco','chant','ro','math','om','sp','pb','therm','acou','mdf','mmc'];
 function chips(p){
   return `<div class="achips">${ORDER.map(id => { const m = A.mat(id); if(!m) return ''; return `<button class="achip" data-appli="${id}" data-pj="${p.id}"><span class="ic" style="background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span><span>${esc(m.court||m.titre)}<small>appliquée au projet</small></span></button>`; }).join('')}</div>`;
 }

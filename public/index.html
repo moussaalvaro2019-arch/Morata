@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BâtiPro Académie</title>
 <meta name="description" content="BâtiPro Académie, l'académie du bâtiment : cours et exercices corrigés de mathématiques, RDM, béton armé, géotechnique, topographie, métré, construction de A à Z, atelier de dessin et assistant IA.">
-<meta name="theme-color" content="#0E1A2B"> 
-<link rel="icon" type="image/png" href="/batipro-icon.png">
+<meta name="theme-color" content="#0E1A2B">
+<link rel="icon" type="image/png" sizes="256x256" href="/batipro-icon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="BâtiPro">
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -179,11 +181,10 @@
 <script src="js/livres.js"></script>
 <script src="js/boot.js"></script>
 <script>
-  if ("serviceWorker" in navigator) {
+  // application installable (téléphone, ordinateur) ; pas sur le serveur de test local
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/service-worker.js")
-        .then(() => console.log("BâtiPro : Service Worker activé"))
-        .catch((error) => console.error("Erreur Service Worker :", error));
+      navigator.serviceWorker.register("/service-worker.js").catch((error) => console.warn("Service worker :", error));
     });
   }
 </script>

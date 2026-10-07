@@ -47,6 +47,12 @@ create table if not exists public.paiements (
   traite_par uuid
 );
 
+-- Formules : inscription (avec une période d'essai Premium), puis abonnements Basic ou Premium
+alter table public.profiles add column if not exists essai_fin timestamptz;   -- fin des 31 jours tout compris qui suivent l'inscription
+alter table public.profiles add column if not exists abo       text;          -- basic | premium (abonnement en cours)
+alter table public.profiles add column if not exists abo_fin   timestamptz;   -- fin de l'abonnement
+update public.profiles set essai_fin = coalesce(acces_at, now()) + interval '31 days' where acces = 'actif' and essai_fin is null;
+
 -- Paiements en ligne (Chariow : carte bancaire, Mobile Money de tous les pays…) et achats de livres
 alter table public.paiements alter column owner drop not null;                                  -- paiement en ligne reçu avant la création du compte
 alter table public.paiements add column if not exists objet    text not null default 'acces';  -- acces | livre
@@ -97,13 +103,49 @@ language sql stable security definer set search_path = public as $$
   select auth.uid() is not null and coalesce((select status from public.profiles where id = auth.uid()), 'actif') <> 'suspendu';
 $$;
 
--- Accès complet aux cours : direction, accès payant désactivé, ou accès actif (non expiré)
+-- Niveau d'accès de la personne connectée :
+--   aucun   : pas encore inscrite (chapitres gratuits seulement)
+--   inscrit : inscription payée, période d'essai terminée (tous les cours, contenus réduits)
+--   basic   : abonnement Basic en cours
+--   premium : abonnement Premium en cours, période d'essai après l'inscription, direction, ou accès payant désactivé
+create or replace function public.niveau_acces() returns text
+language sql stable security definer set search_path = public as $$
+  select case
+    when auth.uid() is null then 'aucun'
+    when exists (select 1 from public.admins where uid = auth.uid()) then 'premium'
+    when coalesce((select (data->>'paywall')::boolean from public.settings where id = 'main'), true) = false then 'premium'
+    else coalesce((select case
+      when p.status = 'suspendu' then 'aucun'
+      when p.abo = 'premium' and p.abo_fin > now() then 'premium'
+      when p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()) and p.essai_fin > now() then 'premium'
+      when p.abo = 'basic' and p.abo_fin > now() then 'basic'
+      when p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()) then 'inscrit'
+      else 'aucun' end from public.profiles p where p.id = auth.uid()), 'aucun')
+  end;
+$$;
+
+-- Ce que comprend chaque formule (réglable par la direction : settings.main.offres.inscrit / .basic)
+--   exos / quiz : exercices corrigés et questions de quiz par chapitre ; sujets / solveurs : niveau maximal (0 = aucun)
+--   banque : bts (exercices BTS sans solveur) | tout ; metres : métrés par mois (-1 = illimité, 0 = aucun)
+create or replace function public.offre_droits(p_niv text) returns jsonb
+language sql stable security definer set search_path = public as $$
+  select case when p_niv = 'premium'
+    then '{"exos":99,"quiz":99,"sujets":3,"solveurs":3,"banque":"tout","epreuves":true,"annales":true,"metres":-1,"atelier":true,"ia":true}'::jsonb
+    else (case when p_niv = 'basic'
+            then '{"exos":4,"quiz":5,"sujets":2,"solveurs":2,"banque":"tout","epreuves":true,"annales":true,"metres":3,"atelier":false,"ia":false}'::jsonb
+            else '{"exos":2,"quiz":3,"sujets":1,"solveurs":0,"banque":"bts","epreuves":false,"annales":false,"metres":0,"atelier":false,"ia":false}'::jsonb end)
+         || coalesce((select data->'offres'->(case when p_niv = 'basic' then 'basic' else 'inscrit' end) from public.settings where id = 'main'), '{}'::jsonb)
+  end;
+$$;
+create or replace function public.droit(p_cle text) returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce((public.offre_droits(public.niveau_acces())->>p_cle)::boolean, false);
+$$;
+
+-- Accès aux cours (tous les chapitres) : toute personne inscrite ou abonnée
 create or replace function public.has_access() returns boolean
 language sql stable security definer set search_path = public as $$
-  select public.is_admin()
-      or coalesce((select (data->>'paywall')::boolean from public.settings where id = 'main'), true) = false
-      or exists (select 1 from public.profiles p where p.id = auth.uid() and p.status <> 'suspendu'
-                 and p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()));
+  select public.niveau_acces() <> 'aucun';
 $$;
 
 create or replace function public.is_real_user() returns boolean
@@ -193,7 +235,7 @@ create policy cx_delete on public.connexions for delete using (public.is_admin()
 create policy ia_read on public.ia_logs for select using (owner = auth.uid() or public.is_admin());
 
 -- Annales : les apprenants lisent les sujets publiés, la direction gère tout
-create policy annales_read  on public.annales for select using ((coalesce((meta->>'pub')::boolean, false) and public.has_access()) or public.is_admin());
+create policy annales_read  on public.annales for select using ((coalesce((meta->>'pub')::boolean, false) and public.droit('annales')) or public.is_admin());
 
 -- Paiements : chacun voit les siens, la direction voit tout ; écriture uniquement par les fonctions ci-dessous
 create policy pay_read on public.paiements for select using (owner = auth.uid() or public.is_admin());
@@ -239,33 +281,48 @@ language sql stable security definer set search_path = public as $$
     'status', coalesce((select status from public.profiles where id = auth.uid()), 'actif'),
     'acces', coalesce((select acces from public.profiles where id = auth.uid()), 'gratuit'),
     'acces_fin', (select acces_fin from public.profiles where id = auth.uid()),
-    'has_access', public.has_access());
+    'has_access', public.has_access(),
+    'niveau', public.niveau_acces());
 $$;
 
 -- Cours protégés : la fonction Netlify /api/cours demande ici si le contenu complet peut être envoyé
 create or replace function public.cours_acces() returns json
 language sql stable security definer set search_path = public as $$
   select json_build_object('full', public.has_access(),
-    'preview', coalesce(nullif((select data->>'preview' from public.settings where id = 'main'), '')::int, 1));
+    'preview', coalesce(nullif((select data->>'preview' from public.settings where id = 'main'), '')::int, 1),
+    'niveau', public.niveau_acces(), 'lim', public.offre_droits(public.niveau_acces()));
 $$;
 
 -- Accorder ce qu'un paiement validé a payé : accès à la plateforme (prolongé d'un mois pour un abonnement) ou livre.
 -- Fonction interne : appelée par la validation de la direction, par le paiement en ligne et au rattachement d'un compte.
 create or replace function public.appliquer_paiement(p_id bigint) returns boolean
 language plpgsql security definer set search_path = public as $$
-declare v_p public.paiements; v_fin timestamptz;
+declare v_p public.paiements; v_fin timestamptz; v_set jsonb; v_pr public.profiles; v_debut timestamptz;
 begin
   select * into v_p from public.paiements where id = p_id for update;
   if not found or v_p.owner is null or v_p.statut <> 'valide' or v_p.applique then return false; end if;
   if v_p.objet = 'livre' then
     if v_p.livre is null or not exists (select 1 from public.livres where id = v_p.livre) then return false; end if;
     insert into public.livres_achats (owner, livre, paiement, source) values (v_p.owner, v_p.livre, v_p.id, 'paiement') on conflict (owner, livre) do nothing;
+  elsif v_p.objet = 'abo' then   -- abonnement Basic ou Premium : 31 jours (réglable), à la suite de l'essai ou du même abonnement en cours
+    if v_p.formule not in ('basic', 'premium') then return false; end if;
+    select data into v_set from public.settings where id = 'main';
+    select * into v_pr from public.profiles where id = v_p.owner;
+    if not found then return false; end if;
+    v_debut := greatest(now(), case when v_pr.acces = 'actif' and v_pr.essai_fin > now() then v_pr.essai_fin else now() end,
+                        case when v_pr.abo = v_p.formule and v_pr.abo_fin > now() then v_pr.abo_fin else now() end);
+    update public.profiles set abo = v_p.formule,
+      abo_fin = v_debut + make_interval(days => coalesce(nullif(v_set->>'aboJours', '')::int, 31) * greatest(1, v_p.mois))
+    where id = v_p.owner;
   else
     if v_p.formule = 'mensuel' then   -- un mois de plus, sauf pour un accès déjà actif sans limite de durée
       select case when acces = 'actif' and acces_fin is null then null else greatest(now(), coalesce(acces_fin, now())) + make_interval(months => greatest(1, v_p.mois)) end
         into v_fin from public.profiles where id = v_p.owner;
     else v_fin := null; end if;
-    update public.profiles set acces = 'actif', acces_fin = v_fin, acces_at = coalesce(acces_at, now()) where id = v_p.owner;
+    select data into v_set from public.settings where id = 'main';
+    update public.profiles set acces = 'actif', acces_fin = v_fin, acces_at = coalesce(acces_at, now()),
+      essai_fin = coalesce(essai_fin, now() + make_interval(days => coalesce(nullif(v_set->>'essaiJours', '')::int, 31)))
+    where id = v_p.owner;
   end if;
   update public.paiements set applique = true where id = p_id;
   return true;
@@ -273,7 +330,8 @@ end $$;
 
 -- Apprenant : déclarer un paiement Wave / Mobile Money (montant fixé par les réglages de la direction ou par le prix du livre)
 drop function if exists public.declarer_paiement(text, text, text);
-create or replace function public.declarer_paiement(p_moyen text, p_numero text, p_reference text, p_objet text default 'acces', p_livre text default null) returns bigint
+drop function if exists public.declarer_paiement(text, text, text, text, text);
+create or replace function public.declarer_paiement(p_moyen text, p_numero text, p_reference text, p_objet text default 'acces', p_livre text default null, p_plan text default null) returns bigint
 language plpgsql security definer set search_path = public as $$
 declare v_set jsonb; v_formule text; v_montant int; v_id bigint; v_livre jsonb;
 begin
@@ -294,6 +352,14 @@ begin
     return v_id;
   end if;
   select data into v_set from public.settings where id = 'main';
+  if coalesce(p_objet, 'acces') = 'abo' then
+    if coalesce(p_plan, '') not in ('basic', 'premium') then raise exception 'Abonnement inconnu'; end if;
+    v_montant := case when p_plan = 'premium' then coalesce(nullif(v_set->>'prixPremium', '')::int, 5000) else coalesce(nullif(v_set->>'prixBasic', '')::int, 2000) end;
+    insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois, objet)
+    values (auth.uid(), v_montant, left(lower(coalesce(p_moyen, '')), 20), left(trim(p_numero), 30), left(trim(p_reference), 60), p_plan, 1, 'abo')
+    returning id into v_id;
+    return v_id;
+  end if;
   v_formule := coalesce(nullif(v_set->>'formule', ''), 'unique');
   v_montant := case when v_formule = 'mensuel' then coalesce(nullif(v_set->>'prixMois', '')::int, 2000) else coalesce(nullif(v_set->>'prixAcces', '')::int, 4000) end;
   insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois)
@@ -365,7 +431,8 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 -- Paiement en ligne (Chariow) : ce que l'apprenant achète, pour la fonction Netlify /api/chariow/checkout
-create or replace function public.chariow_offre(p_objet text, p_livre text) returns json
+drop function if exists public.chariow_offre(text, text);
+create or replace function public.chariow_offre(p_objet text, p_livre text, p_plan text default null) returns json
 language plpgsql stable security definer set search_path = public as $$
 declare v_set jsonb; v_ch jsonb; v_prod text; v_prix numeric; v_titre text; v_l jsonb; v_data jsonb; v_mens boolean;
 begin
@@ -378,13 +445,18 @@ begin
     if not found then raise exception 'Livre introuvable'; end if;
     if exists (select 1 from public.livres_achats where owner = auth.uid() and livre = p_livre) then return json_build_object('deja', true); end if;
     v_prod := nullif(trim(coalesce(v_l->>'prdChariow', '')), ''); v_prix := coalesce(nullif(v_l->>'prix', '')::numeric, 0); v_titre := v_l->>'titre';
+  elsif coalesce(p_objet, 'acces') = 'abo' then
+    if coalesce(p_plan, '') not in ('basic', 'premium') then raise exception 'Abonnement inconnu'; end if;
+    v_prod := nullif(trim(coalesce(v_ch->>(case when p_plan = 'premium' then 'prdPremium' else 'prdBasic' end), '')), '');
+    v_prix := case when p_plan = 'premium' then coalesce(nullif(v_set->>'prixPremium', '')::numeric, 5000) else coalesce(nullif(v_set->>'prixBasic', '')::numeric, 2000) end;
+    v_titre := 'Abonnement ' || initcap(p_plan);
   else
     v_mens := coalesce(v_set->>'formule', 'unique') = 'mensuel';
     if public.has_access() and not v_mens then return json_build_object('deja', true); end if;
     v_prod := nullif(trim(coalesce(case when v_mens then v_ch->>'prdMois' else v_ch->>'prdAcces' end, '')), '');
     v_prix := case when v_mens then coalesce(nullif(v_set->>'prixMois', '')::numeric, 2000) else coalesce(nullif(v_set->>'prixAcces', '')::numeric, 4000) end;
   end if;
-  return json_build_object('produit', v_prod, 'prix', v_prix, 'titre', v_titre, 'objet', coalesce(p_objet, 'acces'), 'livre', p_livre,
+  return json_build_object('produit', v_prod, 'prix', v_prix, 'titre', v_titre, 'objet', coalesce(p_objet, 'acces'), 'livre', p_livre, 'plan', p_plan,
     'uid', auth.uid(), 'email', lower(auth.jwt()->>'email'), 'nom', coalesce(v_data->>'name', ''), 'tel', coalesce(v_data->>'phone', ''),
     'plateforme', coalesce(nullif(trim(v_set->>'nom'), ''), 'BâtiPro Académie'));
 end $$;
@@ -417,6 +489,10 @@ begin
   -- 1. le produit Chariow vendu : accès (inscription ou mois d'abonnement) ou livre
   if v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdAcces', '')), '') then
     v_objet := 'acces'; v_prix := coalesce(nullif(v_set->>'prixAcces', '')::numeric, 4000);
+  elsif v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdBasic', '')), '') then
+    v_objet := 'abo'; v_formule := 'basic'; v_mois := 1; v_prix := coalesce(nullif(v_set->>'prixBasic', '')::numeric, 2000);
+  elsif v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdPremium', '')), '') then
+    v_objet := 'abo'; v_formule := 'premium'; v_mois := 1; v_prix := coalesce(nullif(v_set->>'prixPremium', '')::numeric, 5000);
   elsif v_prod is not null and v_prod = nullif(trim(coalesce(v_ch->>'prdMois', '')), '') then
     v_objet := 'acces'; v_formule := 'mensuel'; v_mois := 1; v_prix := coalesce(nullif(v_set->>'prixMois', '')::numeric, 2000);
   elsif v_prod is not null then
@@ -440,8 +516,10 @@ begin
                  when v_statut = 'en_attente' then 'Paiement en ligne reçu (Chariow) : à confirmer'
                  else 'Paiement en ligne Chariow : accordé automatiquement' end;
   if v_objet is null then  -- produit non relié : on garde ce que la plateforme avait demandé, la direction décide
-    v_objet := case when p->>'objet' = 'livre' and exists (select 1 from public.livres where id = p->>'livre') then 'livre' else 'acces' end;
+    v_objet := case when p->>'objet' = 'livre' and exists (select 1 from public.livres where id = p->>'livre') then 'livre'
+                    when p->>'objet' = 'abo' and p->>'plan' in ('basic', 'premium') then 'abo' else 'acces' end;
     if v_objet = 'livre' then v_livre := p->>'livre'; end if;
+    if v_objet = 'abo' then v_formule := p->>'plan'; v_mois := 1; end if;
   end if;
   insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois, statut, note, objet, livre, source, email, ext_id, devise, montant_devise, traite_at)
   values (v_owner, v_montant, 'chariow', left(coalesce(p->>'telephone', ''), 30), v_ext, v_formule, v_mois, v_statut, v_note, v_objet, v_livre,
@@ -450,7 +528,7 @@ begin
   if v_statut = 'valide' and v_owner is not null then perform public.appliquer_paiement(v_id); end if;
   return json_build_object('ok', true, 'id', v_id, 'statut', v_statut, 'objet', v_objet, 'formule', v_formule, 'compte', v_owner is not null,
     'email', coalesce(v_email, (select email from public.profiles where id = v_owner)), 'nom', (select data->>'name' from public.profiles where id = v_owner),
-    'livre', v_titre, 'fin', (select acces_fin from public.profiles where id = v_owner),
+    'livre', v_titre, 'fin', (select acces_fin from public.profiles where id = v_owner), 'abo_fin', (select abo_fin from public.profiles where id = v_owner),
     'plateforme', coalesce(nullif(trim(v_set->>'nom'), ''), 'BâtiPro Académie'));
 end $$;
 
@@ -462,8 +540,20 @@ begin
   if p_acces not in ('gratuit', 'actif') then raise exception 'Accès inconnu'; end if;
   update public.profiles set acces = p_acces,
     acces_fin = case when p_acces = 'actif' then p_fin else acces_fin end,
-    acces_at = case when p_acces = 'actif' then coalesce(acces_at, now()) else acces_at end
+    acces_at = case when p_acces = 'actif' then coalesce(acces_at, now()) else acces_at end,
+    essai_fin = case when p_acces = 'actif' then coalesce(essai_fin, now() + make_interval(days => coalesce(nullif((select data->>'essaiJours' from public.settings where id = 'main'), '')::int, 31))) else essai_fin end
   where id = p_uid;
+  return true;
+end $$;
+
+-- Direction : donner, prolonger ou retirer un abonnement Basic / Premium (p_plan vide = retirer)
+create or replace function public.admin_set_abo(p_uid uuid, p_plan text, p_fin timestamptz) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then raise exception 'Réservé à la direction'; end if;
+  if coalesce(p_plan, '') = '' then update public.profiles set abo = null, abo_fin = null where id = p_uid; return true; end if;
+  if p_plan not in ('basic', 'premium') then raise exception 'Abonnement inconnu'; end if;
+  update public.profiles set abo = p_plan, abo_fin = coalesce(p_fin, now() + interval '31 days') where id = p_uid;
   return true;
 end $$;
 
@@ -530,8 +620,9 @@ begin
   v_set := coalesce(v_set, '{}'::jsonb);
   v_admin := public.is_admin();
   if not public.is_active() then return json_build_object('ok', false, 'code', 'suspendu', 'msg', 'Votre compte est suspendu.'); end if;
-  if not v_admin and not public.has_access() then
-    return json_build_object('ok', false, 'code', 'acces', 'msg', 'Activez votre accès (inscription) pour utiliser l''assistant IA.');
+  if not v_admin and not public.droit('ia') then
+    if not public.has_access() then return json_build_object('ok', false, 'code', 'acces', 'msg', 'Activez votre accès (inscription) pour utiliser l''assistant IA.'); end if;
+    return json_build_object('ok', false, 'code', 'premium', 'msg', 'L''assistant IA est réservé à l''abonnement Premium.');
   end if;
   if not v_admin and coalesce(v_set->>'iaActive', 'true') = 'false' then
     return json_build_object('ok', false, 'code', 'off', 'msg', 'L''assistant IA est momentanément désactivé par la direction.');
@@ -551,18 +642,21 @@ end $$;
 
 revoke execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
   public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
-  public.declarer_paiement(text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
+  public.declarer_paiement(text, text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
   public.rattacher_paiements(), public.admin_livre_save(text, jsonb, text), public.admin_livre_delete(text), public.admin_offrir_livre(uuid, text, boolean),
-  public.livre_fichier(text), public.chariow_offre(text, text) from public, anon;
+  public.livre_fichier(text), public.chariow_offre(text, text, text) from public, anon;
 -- fonctions internes : jamais appelables depuis le navigateur
 revoke execute on function public.appliquer_paiement(bigint), public.chariow_vente(jsonb) from public, anon, authenticated;
 grant execute on function public.chariow_vente(jsonb) to service_role;
-grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces() to anon, authenticated;
+grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces(),
+  public.niveau_acces(), public.offre_droits(text), public.droit(text) to anon, authenticated;
+revoke execute on function public.admin_set_abo(uuid, text, timestamptz) from public, anon;
+grant execute on function public.admin_set_abo(uuid, text, timestamptz) to authenticated;
 grant execute on function public.ia_check(text, text), public.touch(text), public.admin_set_status(uuid, text), public.admin_delete_user(uuid),
   public.claim_first_admin(text), public.claim_admin_invite(), public.my_roles(),
-  public.declarer_paiement(text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
+  public.declarer_paiement(text, text, text, text, text, text), public.admin_traiter_paiement(bigint, boolean, text), public.admin_set_acces(uuid, text, timestamptz),
   public.rattacher_paiements(), public.admin_livre_save(text, jsonb, text), public.admin_livre_delete(text), public.admin_offrir_livre(uuid, text, boolean),
-  public.livre_fichier(text), public.chariow_offre(text, text) to authenticated;
+  public.livre_fichier(text), public.chariow_offre(text, text, text) to authenticated;
 
 -- ---------- Paramètres de départ ----------
 -- Insérés seulement s'ils n'existent pas : vos réglages ne sont jamais écrasés.
@@ -580,6 +674,18 @@ update public.settings
    set data = jsonb_set(data, '{chariow}', '{"boutique":"https://smart-digital.mychariow.com","lienAcces":"https://smart-digital.mychariow.shop/prd_7prkaptk","prdAcces":"prd_7prkaptk","lienMois":"","prdMois":"","auto":true}'::jsonb),
        updated_at = now()
  where id = 'main' and not (data ? 'chariow');
+-- Formules (une seule fois) : 31 jours tout compris après l'inscription, abonnements Basic et Premium de 31 jours.
+-- Prix modifiables dans Espace PDG › Abonnements & paiements › Réglages (mettez les mêmes que sur Chariow).
+update public.settings
+   set data = '{"essaiJours":31,"aboJours":31,"prixBasic":2000,"prixPremium":5000}'::jsonb || data, updated_at = now()
+ where id = 'main' and not (data ? 'prixBasic');
+update public.settings
+   set data = jsonb_set(data, '{chariow}', '{"lienBasic":"https://smart-digital.mychariow.shop/prd_dk1qojwp","prdBasic":"prd_dk1qojwp","lienPremium":"https://smart-digital.mychariow.shop/prd_8eq7b1ed","prdPremium":"prd_8eq7b1ed"}'::jsonb || coalesce(data->'chariow', '{}'::jsonb)),
+       updated_at = now()
+ where id = 'main' and not coalesce((data->'chariow') ? 'prdBasic', false);
+-- Livre « Le prisonnier du doute » relié à son produit Chariow (masqué : complétez prix, couverture et résumé puis publiez-le)
+insert into public.livres (id, data) values ('lv_prisonnier_du_doute', '{"titre":"Le prisonnier du doute","auteur":"DOUMBIA Moussa","resume":"","description":"","prix":0,"format":"PDF","langue":"Français","publie":false,"ordre":1,"lienAchat":"https://smart-digital.mychariow.shop/prd_i8fzh9cq","prdChariow":"prd_i8fzh9cq"}'::jsonb)
+on conflict (id) do nothing;
 -- Changement de nom : Morata → BâtiPro Académie (une seule fois, tant que l'ancien nom est encore en place)
 update public.settings
    set data = (replace(data::text, 'Morata', 'BâtiPro Académie'))::jsonb || '{"nom":"BâtiPro Académie","name1":"Bâti","name2":"Pro"}'::jsonb,

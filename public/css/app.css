@@ -807,3 +807,29 @@ table.t.click td.mono b{color:var(--navy)}
 .lvpx{font-size:15px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
 .lvpx:empty{display:none}
 .abo-band .px-old{color:#B42318}
+/* ---------- formules : offres, verrous, carte « Ma formule » ---------- */
+.offres{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.offre{display:grid;gap:12px;align-content:start;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;min-width:0}
+.offre.sel{border-color:var(--or);box-shadow:0 0 0 3px var(--or3)}
+.offre.on{background:linear-gradient(180deg,#F3FBF6,var(--card) 120px)}
+.offre .oprix{font-family:var(--fd);font-size:26px;color:var(--or2);line-height:1.1}
+.offre .oprix small{font-size:13px;color:var(--muted);font-weight:600}
+.offre ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:13.5px}
+.offre li{display:flex;gap:8px;align-items:flex-start}
+.offre li .i{width:16px;height:16px;color:var(--ok);flex:none;margin-top:2px}
+.offt td.c,.offt th.c{text-align:center;white-space:nowrap}
+.offt td.c.on,.offt th.c.on{background:#FFF8F2}
+.offt td.no{color:var(--faint)}
+.offt td .i{width:15px;height:15px;vertical-align:-2px;color:var(--muted)}
+.upsell{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border:1.5px dashed #E9C9A8;background:#FFF9F2;border-radius:14px;padding:12px 14px;margin-top:12px;font-size:14px}
+.upsell>.i{width:18px;height:18px;color:var(--or2);flex:none}
+.upsell span{flex:1 1 220px;min-width:0}
+.lk{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;background:#FCEFCF;color:#8A5A07;vertical-align:middle;margin-left:4px;flex:none}
+.lk .i{width:12px;height:12px}
+.nav .lk{margin-left:auto}
+.formule .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:8px}
+.fitem{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 10px;text-decoration:none;color:var(--ink);min-width:0}
+.fitem b{display:block;font-size:13px}.fitem small{display:block;color:var(--muted);font-size:12px}
+.fitem .fi{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--okbg);color:var(--ok);flex:none}
+.fitem .fi .i{width:16px;height:16px}
+.fitem.off{background:var(--soft)}.fitem.off .fi{background:#FCEFCF;color:#8A5A07}.fitem.off b{color:var(--muted)}

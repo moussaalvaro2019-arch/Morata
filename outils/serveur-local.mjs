@@ -11,6 +11,7 @@ const BASE = path.join(path.dirname(fileURLToPath(import.meta.url)), '..'), ROOT
 process.chdir(BASE);
 const cours = (await import(path.join(BASE, 'netlify', 'functions', 'cours.mjs'))).default;
 const chariow = (await import(path.join(BASE, 'netlify', 'functions', 'chariow.mjs'))).default;
+const conf = (await import(path.join(BASE, 'netlify', 'functions', 'config.mjs'))).default;
 const PORT = +(process.env.PORT || process.argv[2] || 8080);
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
 http.createServer(async (req, res) => {
@@ -19,6 +20,7 @@ http.createServer(async (req, res) => {
     const r = await cours(new Request(url, { headers: req.headers }));
     res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
   }
+  if (url.pathname === '/api/config') { const r = await conf(); res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(await r.text()); return; }
   if (url.pathname.startsWith('/api/chariow/')) {
     const chunks = []; for await (const c of req) chunks.push(c);
     const r = await chariow(new Request(url, { method: req.method, headers: req.headers, body: req.method === 'GET' || req.method === 'HEAD' ? undefined : Buffer.concat(chunks) }));

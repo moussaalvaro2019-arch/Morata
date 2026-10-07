@@ -101,6 +101,43 @@ A.addMatiere({id:"chant", titre:"Organisation et gestion de chantier", court:"Ge
   {id:"chant-16", niv:3, titre:"Piloter par la valeur acquise : délais et coûts", duree:50, nq:5, nex:5, ns:1},
   {id:"chant-17", niv:3, titre:"Étude de cas : préparer et piloter le chantier d'une villa", duree:70, nq:5, nex:5, ns:1}
  ]});
+A.addMatiere({id:"dessin", titre:"Dessin technique et architectural", court:"Dessin technique", groupe:"constr", icone:"compass", couleur:"#3D5A99", niveau:"Débutant", heures:90, ordre:3, prerequis:["math"], resume:"Lire et dessiner les plans du bâtiment : matériel et normes, formats et cartouche, traits, écriture et hachures, échelles et cotation, constructions géométriques, vues et coupes, perspectives, plans de niveau, façades, coupes et escaliers, plans de coffrage et de ferraillage, réseaux, toitures, plan de masse, dossier de permis de construire et passage à la DAO, avec exercices corrigés, quiz et sujets d'examen.", objectifs:[
+  "Utiliser le matériel de dessin et respecter les normes (formats, traits, écriture, cartouche)",
+  "Choisir une échelle et coter un dessin selon les règles du bâtiment",
+  "Réaliser les constructions géométriques utiles au dessin et au chantier",
+  "Représenter un objet en vues orthogonales, en coupe et en perspective",
+  "Lire puis dessiner un plan de niveau, une façade et une coupe de bâtiment",
+  "Calculer et dessiner un escalier et une toiture (pentes, vraies grandeurs)",
+  "Lire les plans de coffrage, de ferraillage et de réseaux",
+  "Établir un plan de masse et constituer un dossier de plans complet",
+  "Passer du dessin à la main à la DAO et à la maquette numérique"
+ ], applications:[
+  "Plans d'une villa (niveaux, façades, coupes)",
+  "Dossier de demande de permis de construire",
+  "Lecture des plans sur le chantier (implantation, coffrage, ferraillage)",
+  "Plans de récolement des réseaux",
+  "Croquis côtés et relevés d'un bâtiment existant",
+  "Perspectives de présentation pour un client"
+ ], src:"data/cours/dessin.js?v=5e4e5523", chapitres:[
+  {id:"dessin-1", niv:1, titre:"Rôle du dessin technique, normes, matériel et formats", duree:50, nq:5, nex:5, ns:1},
+  {id:"dessin-2", niv:1, titre:"Traits, écriture et hachures normalisés", duree:50, nq:5, nex:5, ns:1},
+  {id:"dessin-3", niv:1, titre:"Échelles et cotation", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-4", niv:1, titre:"Constructions géométriques utiles au dessin et au chantier", duree:55, nq:5, nex:5, ns:1},
+  {id:"dessin-5", niv:1, titre:"Projections orthogonales : les vues", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-6", niv:1, titre:"Lire un plan de bâtiment", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-7", niv:2, titre:"Coupes et sections", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-8", niv:2, titre:"Perspectives cavalière et isométrique", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-9", niv:2, titre:"Dessiner un plan de niveau", duree:70, nq:5, nex:5, ns:1},
+  {id:"dessin-10", niv:2, titre:"Façades (élévations) et cotes de niveau", duree:55, nq:5, nex:5, ns:1},
+  {id:"dessin-11", niv:2, titre:"La coupe de bâtiment", duree:65, nq:5, nex:5, ns:1},
+  {id:"dessin-12", niv:2, titre:"Dessiner un escalier", duree:65, nq:5, nex:5, ns:1},
+  {id:"dessin-13", niv:3, titre:"Plans de structure : coffrage et ferraillage", duree:75, nq:5, nex:5, ns:1},
+  {id:"dessin-14", niv:3, titre:"Plans de réseaux : électricité, plomberie, assainissement", duree:70, nq:5, nex:5, ns:1},
+  {id:"dessin-15", niv:3, titre:"Toitures : plans, pentes et vraies grandeurs", duree:75, nq:5, nex:5, ns:1},
+  {id:"dessin-16", niv:3, titre:"Plan de situation, plan de masse et implantation", duree:70, nq:5, nex:5, ns:1},
+  {id:"dessin-17", niv:3, titre:"Le dossier de plans : permis de construire et exécution", duree:60, nq:5, nex:5, ns:1},
+  {id:"dessin-18", niv:3, titre:"Du dessin à la DAO et à la maquette numérique ; perspective conique", duree:70, nq:5, nex:5, ns:1}
+ ]});
 A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", groupe:"gest", icone:"coins", couleur:"#1E9B5E", niveau:"Intermédiaire", heures:60, ordre:2, prerequis:["metre"], resume:"Comprendre et maîtriser l'argent de la construction : coûts, prix, marges et TVA, coût global d'une opération, devis et appels d'offres, budget d'un particulier, sous-détail de prix, estimation, marchés et révision des prix, emprunts et intérêts, gestion de l'entreprise de BTP, garanties et assurances, rentabilité immobilière, VAN et TRI, coût global énergétique et contrôle des coûts, avec applications et exercices corrigés.", objectifs:[
   "Calculer prix, marges, TVA, pourcentages et indices",
   "Décomposer le coût global d'une opération et établir un budget",
