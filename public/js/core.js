@@ -101,10 +101,12 @@ A.DEF = {
   devises:{}, devisesOff:[],   // taux de change modifiés par la direction (FCFA pour 1 unité) et devises non proposées
   // formules : 31 jours tout compris après l'inscription, puis abonnements Basic et Premium (31 jours)
   essaiJours:31, aboJours:31, prixBasic:2000, prixPremium:5000, offres:{},
+  // parrainage : tous les 3 filleuls qui paient, le parrain reçoit 31 jours de Premium (même règle que parrainage_valider en SQL)
+  parrainage:{actif:true, filleuls:3, jours:31, formule:'premium'},
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
 };
-A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {}), chariow:Object.assign({}, A.DEF.chariow, m.chariow || {})}); };
+A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {}), chariow:Object.assign({}, A.DEF.chariow, m.chariow || {}), parrainage:Object.assign({}, A.DEF.parrainage, m.parrainage || {})}); };
 
 /* ---------- accès payant ---------- */
 A.paywallOn = () => A.cfg().paywall !== false;
@@ -334,6 +336,8 @@ function demoSeed(){
   const J = n => new Date(t + n*day).toISOString();
   Object.assign(d.users.u_ak, {essai_fin:J(-2)}); Object.assign(d.users.u_kj, {essai_fin:J(-5), abo:'basic', abo_fin:J(20)});
   Object.assign(d.users.u_ti, {essai_fin:J(-8), abo:'premium', abo_fin:J(5)}); Object.assign(d.users.u_yc, {essai_fin:J(4)});
+  // parrainage : Traoré Ibrahim a invité 3 amis ; 2 ont payé, le 3e attend la validation de son paiement
+  Object.assign(d.users.u_ak, {parrain:'u_ti', filleul_valide:true}); Object.assign(d.users.u_kj, {parrain:'u_ti', filleul_valide:true}); d.users.u_np.parrain = 'u_ti';
   // paiement en ligne (Chariow) d'une apprenante de la diaspora : accès ouvert automatiquement
   d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day, essai_fin:J(27)};
   d.paiements.push({id:d.paiements.length + 1, owner:'u_dm', at:t - 4*day, montant:4000, moyen:'chariow', numero:'', reference:'sale_demo_1', formule:'unique', mois:0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:t - 4*day, source:'chariow', email:'mariam.diallo@exemple.fr', devise:'EUR', montant_devise:6.1, objet:'acces', applique:true});
@@ -345,6 +349,28 @@ function demoSeed(){
   d.ia.push({owner:'u_np', at:t-3*3600000, data:{kind:'chat', ref:'ba'}},{owner:'u_kj', at:t-26*3600000, data:{kind:'expliquer', ref:'ba-2'}},{owner:'u_ak', at:t-50*3600000, data:{kind:'chat', ref:'rdm'}});
   d.annonces.a1 = {titre:'Bienvenue sur BâtiPro Académie', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
   return d;
+}
+/* démo : code de parrainage de 6 caractères faciles à lire (sans O, 0, I, 1), unique */
+function codeParrain(users){
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', pris = new Set(Object.values(users).map(u => u.code_parrain)); let v;
+  do{ v = Array.from({length:6}, () => c[Math.floor(Math.random() * c.length)]).join(''); }while(pris.has(v));
+  return v;
+}
+const payeAcces = id => (L.db.paiements || []).some(p => p.owner === id && p.statut === 'valide' && ['acces', 'abo'].includes(p.objet || 'acces'));
+/* démo : le filleul a payé → compté une fois ; tous les N filleuls payants, le parrain reçoit J jours (même règle que parrainage_valider en SQL) */
+function localParrainage(fid){
+  const d = L.db, f = d.users[fid]; if(!f || !f.parrain || f.filleul_valide) return;
+  f.filleul_valide = true;
+  const pid = f.parrain, p = d.users[pid], c = A.cfg().parrainage; if(!p || c.actif === false) return;
+  const req = Math.max(1, Math.round(+c.filleuls) || 3), jours = Math.max(1, Math.round(+c.jours) || 31), plan = c.formule === 'basic' ? 'basic' : 'premium', t = now();
+  const ok = Object.values(d.users).filter(u => u.parrain === pid && u.filleul_valide).length;
+  for(let n = Math.floor(ok / req) - (p.parrain_recompenses || 0); n > 0; n--){
+    const eff = p.abo === 'premium' && ts(p.abo_fin) > t ? 'premium' : plan;   // jamais de Premium remplacé par Basic
+    const debut = Math.max(t, p.acces === 'actif' && ts(p.essai_fin) > t ? ts(p.essai_fin) : 0, p.abo === eff && ts(p.abo_fin) > t ? ts(p.abo_fin) : 0);
+    p.abo = eff; p.abo_fin = new Date(debut + jours * 86400000).toISOString(); p.parrain_recompenses = (p.parrain_recompenses || 0) + 1;
+    d.paiements.push({id:d.paiements.reduce((a, x) => Math.max(a, x.id || 0), 0) + 1, owner:pid, at:t, montant:0, moyen:'parrainage', numero:'', reference:'PARRAINAGE-' + p.parrain_recompenses, formule:eff, mois:1, statut:'valide',
+      note:`Récompense de parrainage : ${req} filleuls inscrits, ${jours} jours offerts`, traite_at:t, objet:'abo', source:'parrainage', applique:true, devise:'XOF'});
+  }
 }
 /* démo : accorder ce qu'un paiement validé a payé (même règle que la fonction SQL appliquer_paiement) */
 function localApply(x){
@@ -358,11 +384,13 @@ function localApply(x){
     u.acces_fin = x.formule === 'mensuel' && !illim ? new Date(Math.max(now(), u.acces_fin ? ts(u.acces_fin) : 0) + (x.mois||1)*30.44*86400000).toISOString() : null;
     u.acces = 'actif'; u.acces_at = u.acces_at || now(); }
   x.applique = true;
+  if(x.objet !== 'livre') localParrainage(x.owner);
 }
 const L = {
   db: null,
   load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = [];
     if(!this.db.livres){ const s = demoSeed(); this.db.livres = s.livres; this.db.achats = []; this.save(); } if(!this.db.achats) this.db.achats = [];
+    const sansCode = Object.values(this.db.users).filter(u => !u.code_parrain); sansCode.forEach(u => u.code_parrain = codeParrain(this.db.users)); if(sansCode.length) this.save();
     const ex = this.db.livres.lv_demo1;   // démo : livre d'exemple en promotion (10 000 barré → 7 000 FCFA)
     if(ex && ex.data.prixBarre == null && /exemple/i.test(ex.data.sousTitre || '')){ Object.assign(ex.data, {prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(now() + 20*86400000).toISOString().slice(0, 10)}); this.save(); } },
   save(){ ls.set('db', this.db); },
@@ -403,7 +431,8 @@ A.loadAdmin = async function(){
   if(S.mode === 'local'){
     const d = L.db;
     S.adm = {
-      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
+      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id],
+        code_parrain:u.code_parrain||null, parrain:u.parrain||null, filleul_valide:!!u.filleul_valide, parrain_recompenses:u.parrain_recompenses||0})),
       paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
       achats: (d.achats||[]).slice(),
       connexions: d.connexions.slice().sort((a,b)=>b.at-a.at),
@@ -415,8 +444,10 @@ A.loadAdmin = async function(){
     };
     return;
   }
+  const col = 'id,email,data,status,acces,acces_fin,acces_at,essai_fin,abo,abo_fin,created_at,last_seen,last_page';
   const [pr, cx, pg, qz, ia, wk, ad, py] = await Promise.all([
-    sb.from('profiles').select('id,email,data,status,acces,acces_fin,acces_at,essai_fin,abo,abo_fin,created_at,last_seen,last_page').limit(5000),
+    // colonnes du parrainage absentes tant que le script SQL n'a pas été relancé : on relit sans elles
+    sb.from('profiles').select(col + ',code_parrain,parrain,filleul_valide,parrain_recompenses').limit(5000).then(r => r.error ? sb.from('profiles').select(col).limit(5000) : r),
     sb.from('connexions').select('id,owner,at,data').order('at',{ascending:false}).limit(1000),
     sb.from('progress').select('owner,data').limit(10000),
     sb.from('quiz_results').select('owner,data').limit(10000),
@@ -494,16 +525,17 @@ A.db = {
     S.ready = true;
     setInterval(() => { if(S.me && document.visibilityState === 'visible') A.db.touch(); }, 60000);
   },
-  async signUp({email, password, name, phone, city, profil}){
+  async signUp({email, password, name, phone, city, profil, parrain}){
     email = String(email).trim().toLowerCase();
     const data = {name:String(name).trim(), phone:String(phone||'').trim(), city:String(city||'').trim(), profil:profil||''};
+    const code = String(parrain || '').trim().toUpperCase();   // code parrain (lien d'invitation) : rattache le filleul
     if(S.mode === 'local'){
       if(Object.values(L.db.users).some(u => u.email === email)) return {ok:false, msg:'Un compte existe déjà avec cet e-mail'};
-      const id = uid('u_');
-      L.db.users[id] = {email, pass: await sha(email+'|'+password), data, status:'actif', created_at: now(), last_seen: now()};
+      const id = uid('u_'), par = code ? Object.keys(L.db.users).find(k => L.db.users[k].code_parrain === code) : null;
+      L.db.users[id] = {email, pass: await sha(email+'|'+password), data, status:'actif', created_at: now(), last_seen: now(), code_parrain:codeParrain(L.db.users), parrain:par || null};
       L.save(); ls.set('sess', {uid:id}); await afterAuth({id}); return {ok:true};
     }
-    const r = await sb.auth.signUp({email, password, options:{data, emailRedirectTo: location.origin + location.pathname}});
+    const r = await sb.auth.signUp({email, password, options:{data:code ? {...data, parrain:code} : data, emailRedirectTo: location.origin + location.pathname}});
     if(r.error) return {ok:false, msg: /already|registered|exists/i.test(r.error.message) ? 'Un compte existe déjà avec cet e-mail. Connectez-vous.' : sbErr(r.error)};
     if(!r.data.session) return {ok:false, confirm:true, msg:'Compte créé. Ouvrez le lien reçu par e-mail pour l\'activer, puis connectez-vous.'};
     await afterAuth(r.data.session.user); return {ok:true};
@@ -636,6 +668,34 @@ A.db = {
     if(error) return {ok:false, msg:sbErr(error)};
     await this.myPayments(); return {ok:true};
   },
+  /* ---- parrainage : mon code, mes filleuls, ma progression vers la prochaine récompense ---- */
+  async parrainage(){
+    if(!S.me) return null;
+    if(S.mode === 'local'){
+      const d = L.db, u = d.users[S.me.id]; if(!u) return null;
+      if(!u.code_parrain){ u.code_parrain = codeParrain(d.users); L.save(); }
+      const c = A.cfg().parrainage, f = Object.values(d.users).filter(x => x.parrain === S.me.id), p = u.parrain ? d.users[u.parrain] : null;
+      return {code:u.code_parrain, inscrits:f.length, payants:f.filter(x => x.filleul_valide).length, recompenses:u.parrain_recompenses || 0,
+        requis:Math.max(1, Math.round(+c.filleuls) || 3), jours:Math.max(1, Math.round(+c.jours) || 31), formule:c.formule === 'basic' ? 'basic' : 'premium', actif:c.actif !== false,
+        parrain:!!p, parrain_nom:p ? (p.data || {}).name || 'un ami' : null, peut_saisir:!p && !payeAcces(S.me.id)};
+    }
+    const {data, error} = await sb.rpc('mon_parrainage'); if(error) throw error; return data;
+  },
+  async definirParrain(code){   // inscrit sans le lien : saisir le code de son parrain, avant le premier paiement
+    code = String(code || '').trim().toUpperCase();
+    if(S.mode === 'local'){
+      const d = L.db, u = d.users[S.me.id];
+      if(u.parrain && d.users[u.parrain]) return {ok:false, msg:'Vous avez déjà un parrain'};
+      if(payeAcces(S.me.id)) return {ok:false, msg:'Le code parrain se saisit avant le premier paiement'};
+      const id = Object.keys(d.users).find(k => d.users[k].code_parrain === code);
+      if(!id) return {ok:false, msg:'Code parrain introuvable'};
+      if(id === S.me.id) return {ok:false, msg:'Vous ne pouvez pas être votre propre parrain'};
+      if(d.users[id].parrain === S.me.id) return {ok:false, msg:'Cette personne est déjà votre filleul'};
+      u.parrain = id; L.save(); return {ok:true, nom:(d.users[id].data || {}).name || 'votre parrain'};
+    }
+    const {data, error} = await sb.rpc('definir_parrain', {p_code:code});
+    return error ? {ok:false, msg:sbErr(error)} : {ok:true, nom:data};
+  },
   async refreshAccess(){ // après validation par la direction ou paiement en ligne : relit les droits sans se déconnecter
     if(!S.me) return;
     if(S.mode === 'sb'){ try{ await sb.rpc('rattacher_paiements'); }catch(_){} }
@@ -726,6 +786,7 @@ A.db = {
   async deleteUser(id){
     if(S.mode === 'local'){
       const d = L.db; delete d.users[id]; delete d.admins[id];
+      Object.values(d.users).forEach(u => { if(u.parrain === id) u.parrain = null; });
       d.connexions = d.connexions.filter(c => c.owner !== id); d.ia = d.ia.filter(c => c.owner !== id); d.paiements = (d.paiements||[]).filter(c => c.owner !== id);
       ['progress','quiz','works'].forEach(k => Object.keys(d[k]).forEach(x => { if(d[k][x].owner === id) delete d[k][x]; }));
       L.save();
@@ -896,7 +957,7 @@ function siteShell(body, m){
 
 const LNAV = [
   ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
-  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/livres','Livres','books'],['app/abonnement','Mon abonnement','coins'],['app/profil','Mon profil','user']
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/livres','Livres','books'],['app/abonnement','Mon abonnement','coins'],['app/parrainage','Parrainage','users'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],

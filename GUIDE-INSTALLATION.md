@@ -132,7 +132,7 @@ Autres variables : `SUPABASE_URL` et `SUPABASE_ANON_KEY` (étape 2, utilisées a
 - **Paramètres** : nom de la plateforme, textes d'accueil, contacts (WhatsApp), ouverture des inscriptions, **bordereau des prix** du métré, **administrateurs** (inviter un collaborateur), exports.
 
 ### Accès payant : inscription (31 jours tout compris), puis Inscrit, Basic ou Premium
-**Si votre site était déjà en ligne avant cette version** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Il ajoute les colonnes d'essai et d'abonnement des profils, les fonctions des formules et les produits Chariow Basic et Premium, sans toucher à vos données. Les apprenants déjà actifs reçoivent leurs 31 jours tout compris à partir de leur date d'activation.
+**Si votre site était déjà en ligne avant cette version** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Il ajoute les colonnes d'essai et d'abonnement des profils, les fonctions des formules, les produits Chariow Basic et Premium et le parrainage, sans toucher à vos données. Les apprenants déjà actifs reçoivent leurs 31 jours tout compris à partir de leur date d'activation.
 
 **Le principe** :
 | Formule | Comment l'obtenir | Ce qu'elle ouvre |
@@ -192,6 +192,17 @@ Pour les apprenants qui ne sont pas en Côte d'Ivoire, ou quand Wave et MTN ne p
 **Comment la plateforme sait qui a payé** : le paiement lancé depuis la plateforme porte l'identifiant du compte de l'apprenant ; un achat fait directement sur votre boutique Chariow est relié par **l'adresse e-mail** : si le compte n'existe pas encore, le paiement attend et l'accès s'ouvre dès que la personne s'inscrit avec cette adresse. Pour éviter qu'un inconnu s'inscrive avec l'adresse d'un acheteur avant lui, vous pouvez réactiver **Confirm email** dans Supabase (étape 1.4).
 
 **Sécurité** : la fonction n'accepte que les avis signés par Chariow avec votre secret, ou des ventes qu'elle a vérifiées elle-même auprès de Chariow avec votre clé API ; une même vente n'est jamais comptée deux fois. Un produit Chariow non relié à une offre (identifiant inconnu) arrive dans **À valider** avec une note, pour que vous décidiez. En cas de remboursement signalé par Chariow, le paiement passe à « Remboursé » et vous retirez l'accès si nécessaire.
+
+### Parrainage : vos apprenants font connaître la plateforme
+Chaque apprenant a un **code parrain** de 6 caractères et un **lien d'invitation** (menu **Parrainage** de son espace), avec un bouton **Partager sur WhatsApp**. Un ami qui crée son compte avec ce lien est rattaché automatiquement (le code est rempli tout seul dans le formulaire d'inscription) ; inscrit sans le lien, il peut saisir le code lui-même dans « Parrainage », tant qu'il n'a rien payé.
+
+**La récompense est automatique** : dès que le paiement d'inscription ou d'abonnement d'un filleul est validé (par vous, en un clic, ou par Chariow), il compte pour son parrain, une seule fois. Tous les **3 filleuls payants**, le parrain reçoit **31 jours de Premium**, ajoutés à la suite de sa formule en cours ; la récompense apparaît dans son historique (« Parrainage (offert) », 0 FCFA). Vous n'avez rien à faire.
+
+1. **Relancez `supabase.sql`** une fois (SQL Editor → New query → coller → Run) : il ajoute les codes, le rattachement des filleuls et les récompenses, sans toucher à vos données ; chaque compte existant reçoit son code.
+2. **Espace PDG → Abonnements & paiements → onglet Parrainage** : la liste des parrains, leurs filleuls (payé ou non), leurs récompenses, et les **réglages** : nombre d'amis payants par récompense, jours offerts, formule offerte (Premium ou Basic), mise en pause. La fiche de chaque apprenant indique aussi son code, son parrain et ses filleuls.
+3. **Communication** : sur votre affiche, vos publications TikTok et dans les groupes WhatsApp, invitez chaque nouvel inscrit à partager son lien (« Invitez 3 amis du bâtiment, recevez un mois de Premium »).
+
+Seuls les filleuls qui **paient** comptent : un faux compte ne rapporte rien. Un parrain déjà Premium reste Premium (les jours s'ajoutent).
 
 ### Devises
 Les prix restent fixés en **FCFA**. Partout où un prix est affiché (accueil, Mon abonnement, livres), le sélecteur **Devise** montre l'équivalent en franc CFA BEAC, euro, dollar américain ou canadien, livre sterling, cedi, naira, franc guinéen, leone, dollar libérien, dalasi, ouguiya ou escudo cap-verdien, et le paiement en ligne peut se faire dans cette devise (Chariow affiche le montant exact ; si une devise n'est pas acceptée, Chariow encaisse dans la devise de votre boutique). Espace PDG → Abonnements & paiements → Réglages → **Devises affichées** : mettez à jour les taux (nombre de FCFA pour 1 unité) et décochez les devises que vous ne voulez pas proposer. Le FCFA, l'euro et l'escudo ont une parité fixe.
@@ -277,4 +288,6 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 | Paiement Chariow reçu mais accès toujours fermé | Réglages → carte « Branchement de Chariow » : les trois lignes doivent être **OK** ; vérifiez l'adresse du Pulse (`/api/chariow/webhook`) et l'identifiant `prd_…`. Chariow renvoie l'avis tant qu'il n'est pas accepté. En attendant, activez l'apprenant à la main |
 | Un paiement en ligne est dans « À valider » | Soit le produit Chariow n'est pas relié (identifiant `prd_…` absent ou différent : corrigez-le), soit l'option « Ouvrir l'accès automatiquement » est décochée. Vérifiez la vente dans Chariow puis **Valider** |
 | Abonnement Basic ou Premium payé sur Chariow, mais l'apprenant reste « Inscrit » | Le Pulse ne couvre que le produit d'inscription : dans Chariow → Pulses, ajoutez les produits Basic (`prd_dk1qojwp`), Premium (`prd_8eq7b1ed`) et le livre, ou choisissez tous les produits. Pour une vente déjà faite, vérifiez-la dans Chariow puis donnez l'abonnement à la main (fiche de l'apprenant → **+31 j Basic** ou **+31 j Premium**) |
+| La page Parrainage affiche « Le parrainage n'est pas encore disponible » | Relancez `supabase.sql` (il ajoute les fonctions du parrainage) |
+| Un filleul a payé mais ne compte pas pour son parrain | Il s'est inscrit sans le lien : il peut saisir le code dans « Parrainage » seulement **avant** son premier paiement. Après, offrez vous-même le mois au parrain (fiche du parrain → **+31 j Premium**) |
 | L'acheteur a payé sur Chariow sans compte | Il s'inscrit avec **la même adresse e-mail** : l'accès (ou le livre) est ajouté automatiquement à sa première connexion |
