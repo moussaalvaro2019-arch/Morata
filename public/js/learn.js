@@ -33,6 +33,7 @@ A.page('app', {space:'app', free:true, title:'Tableau de bord', crumb:'Espace ap
   const sugg = enCours.length ? enCours : cat.filter(m => ['math','ba','rdm','metre','tech'].includes(m.id)).slice(0,4);
   const ann = Object.entries(S.annonces||{}).map(([id,a])=>({id,...a})).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,3);
   const quiz = (S.quiz||[]).slice(0,5);
+  const lk = n => A.lockTag ? A.lockTag(n) : '';
   return `${A.aboBanner ? A.aboBanner() : ''}
   <div class="welcome"><div class="stack s8"><span class="kick" style="color:var(--amber)">Bonjour ${esc(first())}</span><h2>${st.done ? 'Continuons sur votre lancée.' : 'Bienvenue sur votre espace de formation.'}</h2>
    <p>${st.done ? `Vous avez terminé ${st.done} chapitre${st.done>1?'s':''} sur ${st.total}.` : 'Choisissez une matière ou suivez le parcours Construction de A à Z.'}</p>
@@ -45,13 +46,14 @@ A.page('app', {space:'app', free:true, title:'Tableau de bord', crumb:'Espace ap
    <div class="kpi"><small>${ic('folder')}Mes travaux</small><b>${Object.keys(S.works||{}).length}</b><em>plans, métrés et exercices en photo</em></div>
   </div>
   <div class="qa">
-   <a href="#/app/resoudre"><span class="ic" style="background:var(--or);color:#fff">${ic('camera')}</span><b>Résoudre en photo</b><span>L'IA corrige votre exercice</span></a>
+   <a href="#/app/resoudre"><span class="ic" style="background:var(--or);color:#fff">${ic('camera')}</span><b>Résoudre en photo ${lk('ia')}</b><span>L'IA corrige votre exercice</span></a>
    <a href="#/app/exercices"><span class="ic" style="background:var(--okbg);color:var(--ok)">${ic('target')}</span><b>Exercices & annales</b><span>S'entraîner pas à pas</span></a>
    <a href="#/app/construction"><span class="ic" style="background:var(--or3);color:var(--or2)">${ic('crane')}</span><b>Construction A→Z</b><span>Le chantier étape par étape</span></a>
-   <a href="#/app/atelier"><span class="ic" style="background:#E7ECF5;color:var(--navy)">${ic('compass')}</span><b>Atelier de dessin</b><span>Dessiner un plan</span></a>
-   <a href="#/app/metre"><span class="ic" style="background:var(--bluebg);color:var(--blue)">${ic('calc')}</span><b>Métré</b><span>Quantités et devis</span></a>
-   <a href="#/app/ia"><span class="ic" style="background:linear-gradient(140deg,#E4EDFC,#FBE6D6);color:var(--blue)">${ic('spark')}</span><b>Assistant IA</b><span>Poser une question</span></a>
+   <a href="#/app/atelier"><span class="ic" style="background:#E7ECF5;color:var(--navy)">${ic('compass')}</span><b>Atelier de dessin ${lk('atelier')}</b><span>Dessiner un plan</span></a>
+   <a href="#/app/metre"><span class="ic" style="background:var(--bluebg);color:var(--blue)">${ic('calc')}</span><b>Métré ${lk('metres')}</b><span>Quantités et devis</span></a>
+   <a href="#/app/ia"><span class="ic" style="background:linear-gradient(140deg,#E4EDFC,#FBE6D6);color:var(--blue)">${ic('spark')}</span><b>Assistant IA ${lk('ia')}</b><span>Poser une question</span></a>
   </div>
+  ${A.formuleCard ? A.formuleCard() : ''}
   <div class="cols">
    <div class="stack">
     <div class="sech"><h2 style="font-size:20px">${enCours.length?'Mes matières en cours':'Pour bien commencer'}</h2><a class="btn b-line b-sm" href="#/app/matieres">Toutes les matières</a></div>
@@ -120,7 +122,7 @@ A.page('app/cours/:id', {space:'app', free:true, title:p => ((A.chap(p.id)||{}).
   const prev = list[idx-1], next = list[idx+1];
   const done = S.progress[c.id] && S.progress[c.id].done;
   const md = A.md(c.contenu || '');
-  if(!QZ || QZ.chap !== c.id) QZ = {chap:c.id, items:(c.quiz||[]), ans:{}, checked:false, ia:false};
+  if(!QZ || QZ.chap !== c.id) QZ = {chap:c.id, items:(c.quiz||[]).slice(0, Math.max(0, +A.lim('quiz') || 0)), tot:c.nqTot || (c.quiz||[]).length, ans:{}, checked:false, ia:false};
   return `<div class="reader">
    <div class="stack s20" style="min-width:0">
     <article class="lesson">
@@ -131,11 +133,11 @@ A.page('app/cours/:id', {space:'app', free:true, title:p => ((A.chap(p.id)||{}).
     ${A.SOL && A.SOL.chapStudies ? A.SOL.chapStudies(c) : ''}
     ${A.exosHtml(c)}
     ${A.sujetHtml(c)}
-    <div class="aipanel noprint" id="aiBox">
+    ${A.droit('ia') ? `<div class="aipanel noprint" id="aiBox">
      <div class="hd">${ic('spark')}Besoin d'aide sur ce chapitre ?</div>
      <div class="sugg"><button data-iaq="simple">${ic('chat')} Expliquer plus simplement</button><button data-iaq="exemple">${ic('calc')} Un exemple chiffré</button><button data-iaq="exercice">${ic('edit')} Un exercice corrigé</button><button data-iaq="chantier">${ic('hat')} Application sur chantier</button><button data-iaq="resume">${ic('list')} Fiche résumé</button></div>
      <div id="aiOut" class="aiout md" hidden></div>
-    </div>
+    </div>` : A.upsell ? A.upsell('Le professeur IA explique ce chapitre, donne des exemples et des exercices', 'ia') : ''}
     <section class="lesson noprint" id="quiz">${quizHtml(c)}</section>
     ${A.SOL && A.SOL.byMat(m.id).length ? `<div class="note noprint">${ic('target')}<div class="stack s8"><span><b>Passez à la pratique</b> : refaites un exercice type pas à pas (la plateforme vérifie chaque étape) ou faites corriger votre propre exercice en photo.</span><div class="row"><a class="btn b-pri b-sm" href="#/app/exercices/${m.id}">${ic('book')}Exercices de ${esc(m.court || m.titre)}</a><a class="btn b-line b-sm" href="#/app/resoudre?m=${m.id}">${ic('camera')}Résoudre en photo</a></div></div></div>` : ''}
     <div class="lnav noprint">
@@ -155,16 +157,20 @@ A.on('click', '[data-done]', async el => { const f = A.chap(el.dataset.done); aw
 /* Exercices corrigés à la fin du chapitre : énoncé, puis corrigé détaillé à ouvrir */
 const EXD = {1:['Application directe','#1E9B5E','#E7F5EE'], 2:['Entraînement','#D9661F','#FDEEE2'], 3:['Approfondissement','#C8363B','#FBE9E9']};
 A.exosHtml = c => {
-  const L = c.exercices || []; if(!L.length) return '';
+  const L0 = c.exercices || [], L = L0.slice(0, Math.max(0, +A.lim('exos') || 0)), cache = Math.max(0, (c.nexTot || L0.length) - L.length);
+  if(!L.length) return cache && A.upsell ? `<section class="lesson" id="exos"><span class="kick">À vous de jouer</span><h2 style="font-size:22px;margin:4px 0 10px">Exercices corrigés</h2>${A.upsell(`${cache} exercice${cache > 1 ? 's' : ''} corrigé${cache > 1 ? 's' : ''} dans ce chapitre`, 'exos')}</section>` : '';
   return `<section class="lesson" id="exos"><span class="kick">À vous de jouer</span><h2 style="font-size:22px;margin:4px 0 6px">Exercices corrigés</h2>
    <p class="sub" style="margin-bottom:14px">Cherchez chaque exercice sur une feuille avant d'ouvrir le corrigé : c'est en se trompant qu'on apprend.</p>
    <div class="exos">${L.map((x, i) => { const d = EXD[x.d] || EXD[2]; return `<div class="exo"><div class="row between nw" style="align-items:flex-start"><b>Exercice ${i + 1} · ${esc(x.t)}</b><span class="pill" style="background:${d[2]};color:${d[1]};flex:none">${d[0]}</span></div>
-    ${A.mdHtml(x.e)}<details class="cor"><summary>${ic('check')}Voir le corrigé détaillé</summary>${A.mdHtml(x.c)}</details></div>`; }).join('')}</div></section>`;
+    ${A.mdHtml(x.e)}<details class="cor"><summary>${ic('check')}Voir le corrigé détaillé</summary>${A.mdHtml(x.c)}</details></div>`; }).join('')}</div>${cache && A.upsell ? A.upsell(`${cache} autre${cache > 1 ? 's' : ''} exercice${cache > 1 ? 's' : ''} corrigé${cache > 1 ? 's' : ''} dans ce chapitre`, 'exos') : ''}</section>`;
 };
 
 /* Sujet type examen du chapitre : énoncé complet, puis corrigé détaillé et barème à ouvrir */
+A.sujetVerrou = c => !!(c.sujet && (c.sujet.verrou || A.nivOf(c) > (+A.lim('sujets') || 0)));
 A.sujetHtml = (c, opt={}) => {
-  const s = c.sujet; if(!s || !s.enonce) return '';
+  const s = c.sujet; if(!s) return '';
+  if(A.sujetVerrou(c)) return `<section class="lesson sujet" id="sujet"><span class="kick">${ic('lock')} Sujet type examen</span><h2 style="font-size:22px;margin:4px 0 10px">${esc(s.titre || 'Sujet d\'examen')}</h2>${A.upsell ? A.upsell(`Le sujet d'examen de ce chapitre (niveau ${A.NIVEAUX[A.nivOf(c) - 1].n}), avec son corrigé et son barème, est disponible`, 'sujets') : ''}</section>`;
+  if(!s.enonce) return '';
   return `<section class="lesson sujet" id="sujet"><div class="row between nw" style="align-items:flex-start"><div style="min-width:0"><span class="kick">${ic('doc')} Sujet type examen</span><h2 style="font-size:22px;margin:4px 0 6px">${esc(s.titre)}</h2></div>${opt.full ? '' : `<a class="btn b-line b-sm noprint" style="flex:none" href="#/app/sujet/${c.id}">${ic('clock')}Mode examen</a>`}</div>
    <div class="row" style="gap:8px;margin-bottom:12px"><span class="pill p-info">${ic('clock')} ${s.duree || 60} min</span><span class="pill p-mute">Noté sur ${s.bareme || 20}</span>${s.niveau ? `<span class="pill p-or">${esc(s.niveau)}</span>` : ''}</div>
    <div class="sujet-e">${A.mdHtml(s.enonce)}</div>
@@ -184,6 +190,7 @@ A.page('app/sujet/:id', {space:'app', free:true, title:p => (((A.chap(p.id)||{})
   if(!A.chapReady(f0)) return A.chapLoading();
   const f = A.chap(p.id), c = f.c, s = c.sujet; if(c.verrou) return A.lockedChapter(c, f.m);
   if(!s) return A.empty('doc', 'Ce chapitre n\'a pas encore de sujet d\'examen.');
+  if(A.sujetVerrou(c)) return A.sujetHtml(c);
   if(!SJ || SJ.id !== c.id) SJ = {id:c.id, total:(s.duree || 60)*60000, used:0, run:false, t0:0, show:false};
   const note = A.ls.get('sjNote:' + c.id, '');
   return `<div class="reader"><div class="stack s20" style="min-width:0">
@@ -210,11 +217,11 @@ A.on('click', '[data-sj]', el => {
 });
 
 function quizHtml(c){
-  const items = QZ.items;
-  if(!items.length && !QZ.loading) return `<div class="row between"><div><span class="kick">Quiz</span><h2 style="font-size:20px">Testez vos connaissances</h2></div><button class="btn b-blue b-sm" data-act="iaquiz">${ic('spark')}Générer un quiz avec l'IA</button></div><p class="sub" style="margin-top:8px">Ce chapitre n'a pas encore de quiz. Demandez à l'IA d'en créer un.</p>`;
+  const items = QZ.items, ia = A.droit('ia'), plus = !QZ.ia && QZ.tot > items.length && A.upsell ? A.upsell(`${QZ.tot - items.length} autre${QZ.tot - items.length > 1 ? 's' : ''} question${QZ.tot - items.length > 1 ? 's' : ''} de quiz dans ce chapitre`, 'quiz') : '';
+  if(!items.length && !QZ.loading) return `<div class="row between"><div><span class="kick">Quiz</span><h2 style="font-size:20px">Testez vos connaissances</h2></div>${ia ? `<button class="btn b-blue b-sm" data-act="iaquiz">${ic('spark')}Générer un quiz avec l'IA</button>` : ''}</div>${plus || `<p class="sub" style="margin-top:8px">Ce chapitre n'a pas encore de quiz.${ia ? ' Demandez à l\'IA d\'en créer un.' : ''}</p>`}`;
   if(QZ.loading) return `<div class="row">${ic('spark')}<span>L'IA prépare vos questions…</span><span class="typing"><i></i><i></i><i></i></span></div>`;
   const score = items.reduce((a,q,i)=>a+(QZ.ans[i]===q.r?1:0),0);
-  return `<div class="row between" style="margin-bottom:14px"><div><span class="kick">${QZ.ia?'Quiz généré par l\'IA':'Quiz'}</span><h2 style="font-size:20px">Testez vos connaissances</h2></div><button class="btn b-line b-sm" data-act="iaquiz">${ic('spark')}Nouveau quiz IA</button></div>
+  return `<div class="row between" style="margin-bottom:14px"><div><span class="kick">${QZ.ia?'Quiz généré par l\'IA':'Quiz'}</span><h2 style="font-size:20px">Testez vos connaissances</h2></div>${ia ? `<button class="btn b-line b-sm" data-act="iaquiz">${ic('spark')}Nouveau quiz IA</button>` : ''}</div>${plus}
   <div class="quiz">${items.map((q,i)=>`<div class="qq" id="q${i}"><b>${i+1}. ${A.mdHtml(q.q,{inner:true}).replace(/^<p>|<\/p>$/g,'')}</b>${q.o.map((o,j)=>{
     let cls = ''; if(QZ.checked){ if(j===q.r) cls='good'; else if(QZ.ans[i]===j) cls='bad'; } else if(QZ.ans[i]===j) cls='sel';
     return `<button class="qo ${cls}" data-qi="${i}" data-qj="${j}" ${QZ.checked?'disabled':''}><span class="k">${'ABCDE'[j]}</span><span>${esc(o)}</span></button>`;}).join('')}

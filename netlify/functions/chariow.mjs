@@ -130,9 +130,11 @@ async function envoyerMail(o, site) {
   if (!key || !from || !o.email) return false;
   const nom = o.plateforme || "BâtiPro Académie", livre = o.objet === "livre";
   const lien = site + (o.compte ? (livre ? "/#/app/livres" : "/#/app") : "/#/inscription?email=" + encodeURIComponent(o.email));
-  const sujet = o.compte ? (livre ? `Votre livre « ${o.livre || "acheté"} » est disponible` : `Votre accès à ${nom} est activé`) : `Paiement reçu : créez votre compte ${nom}`;
+  const abo = o.objet === "abo", plan = o.formule === "premium" ? "Premium" : "Basic";
+  const sujet = o.compte ? (livre ? `Votre livre « ${o.livre || "acheté"} » est disponible` : abo ? `Votre abonnement ${plan} à ${nom} est activé` : `Votre accès à ${nom} est activé`) : `Paiement reçu : créez votre compte ${nom}`;
   const corps = o.compte
     ? (livre ? `<p>Merci pour votre achat. Le livre <b>${H(o.livre || "")}</b> est maintenant dans votre espace, rubrique « Livres ».</p>`
+       : abo ? `<p>Merci pour votre paiement. <b>Votre abonnement ${plan} est activé</b>${o.abo_fin ? ` jusqu'au ${H(new Date(o.abo_fin).toLocaleDateString("fr-FR"))}` : ""}.</p>`
              : `<p>Merci pour votre paiement. <b>Votre accès complet est activé</b>${o.fin ? ` jusqu'au ${H(new Date(o.fin).toLocaleDateString("fr-FR"))}` : ""} : tous les cours, exercices corrigés, sujets d'examen, outils et l'assistant IA.</p>`)
     : `<p>Merci pour votre paiement. Pour en profiter, <b>créez votre compte avec cette même adresse e-mail</b> (${H(o.email)}) : ${livre ? "le livre" : "votre accès"} y sera ajouté automatiquement.</p>`;
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#14202E;max-width:560px">${o.nom ? `<p>Bonjour ${H(o.nom)},</p>` : "<p>Bonjour,</p>"}${corps}<p><a href="${H(lien)}" style="display:inline-block;background:#E8752A;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:bold">${o.compte ? "Ouvrir mon espace" : "Créer mon compte"}</a></p><p style="color:#5E6B7A;font-size:13px">${H(nom)} · paiement en ligne via Chariow</p></div>`;
@@ -146,7 +148,7 @@ async function envoyerMail(o, site) {
 async function avisDirection(o, v, site) {
   const key = env("RESEND_API_KEY"), from = env("MAIL_FROM"), to = env("MAIL_DIRECTION");
   if (!key || !from || !to) return false;
-  const quoi = o.objet === "livre" ? `le livre « ${o.livre || "?"} »` : o.formule === "mensuel" ? "un mois d'abonnement" : "l'inscription (accès complet)";
+  const quoi = o.objet === "livre" ? `le livre « ${o.livre || "?"} »` : o.objet === "abo" ? `l'abonnement ${o.formule === "premium" ? "Premium" : "Basic"}` : o.formule === "mensuel" ? "un mois d'abonnement" : "l'inscription (accès complet)";
   const etat = o.statut === "valide" ? (o.compte ? "accordé automatiquement" : "accordé dès que l'acheteur créera son compte avec cette adresse") : "à valider dans l'Espace PDG";
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#14202E"><p><b>Nouveau paiement en ligne (Chariow)</b></p><p>${H(o.nom || o.email || "Un acheteur")} (${H(o.email || "")}) a payé ${H(quoi)}${v.montant != null ? ` : ${H(v.montant)} ${H(v.devise || "")}` : ""}.</p><p>Accès : <b>${H(etat)}</b>.</p><p><a href="${H(site)}/#/admin/abonnements">Ouvrir Abonnements & paiements</a></p></div>`;
   try {
@@ -184,7 +186,7 @@ async function webhook(request) {
   const r = await rpc(sb, "chariow_vente", { p: {
     type: refund ? "remboursement" : "vente", ext_id: ext, email: v.email, produit: v.produit, produit_nom: v.produitNom,
     montant: v.montant == null ? "" : String(v.montant), devise: v.devise, telephone: v.telephone,
-    uid: str(v.meta.uid, 40), objet: str(v.meta.objet, 10), livre: str(v.meta.livre, 80) } }, svc);
+    uid: str(v.meta.uid, 40), objet: str(v.meta.objet, 10), livre: str(v.meta.livre, 80), plan: str(v.meta.plan, 10) } }, svc);
   if (!r.ok) return json({ error: (r.data && r.data.message) || "Enregistrement impossible" }, 500);
   const o = r.data || {};
   let mail = false;
@@ -211,8 +213,9 @@ async function checkout(request) {
   const auth = request.headers.get("authorization") || "";
   if (!/^Bearer\s+\S+$/i.test(auth)) return json({ error: "Connectez-vous d'abord" }, 401);
   let b = {}; try { b = await request.json(); } catch (_) {}
-  const objet = b.objet === "livre" ? "livre" : "acces", livre = objet === "livre" ? str(b.livre, 80) : null;
-  const of = await rpc(sb, "chariow_offre", { p_objet: objet, p_livre: livre }, sb.key, auth.replace(/^Bearer\s+/i, ""));
+  const objet = ["livre", "abo"].includes(b.objet) ? b.objet : "acces", livre = objet === "livre" ? str(b.livre, 80) : null;
+  const plan = objet === "abo" ? (b.plan === "premium" ? "premium" : "basic") : null;
+  const of = await rpc(sb, "chariow_offre", { p_objet: objet, p_livre: livre, p_plan: plan }, sb.key, auth.replace(/^Bearer\s+/i, ""));
   if (!of.ok) return json({ error: (of.data && of.data.message) || "Session expirée : reconnectez-vous" }, of.status === 401 ? 401 : 400);
   const o = of.data || {};
   if (o.deja) return json({ deja: true });
@@ -228,7 +231,7 @@ async function checkout(request) {
     product_id: o.produit, email: o.email,
     first_name: noms[0] || "Client", last_name: noms.slice(1).join(" ") || noms[0] || "Client",
     redirect_url: `${site}/#/${objet === "livre" ? "app/livre/" + encodeURIComponent(livre) : "app/abonnement"}?chariow=retour`,
-    custom_metadata: { uid: String(o.uid || ""), objet, livre: livre || "", plateforme: str(o.plateforme, 60) },
+    custom_metadata: { uid: String(o.uid || ""), objet, livre: livre || "", plan: plan || "", plateforme: str(o.plateforme, 60) },
   };
   if (tel.length >= 6) corps.phone = { number: tel, country_code: pays };
   const devise = /^[A-Z]{3}$/.test(String(b.devise || "")) ? b.devise : "";

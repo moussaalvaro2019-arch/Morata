@@ -96,8 +96,11 @@ A.DEF = {
   paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
   pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
   // paiement en ligne international (Chariow) : liens et identifiants des produits, accès accordé automatiquement
-  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'https://smart-digital.mychariow.shop/prd_7prkaptk', prdAcces:'prd_7prkaptk', lienMois:'', prdMois:'', auto:true},
+  chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'https://smart-digital.mychariow.shop/prd_7prkaptk', prdAcces:'prd_7prkaptk', lienMois:'', prdMois:'',
+    lienBasic:'https://smart-digital.mychariow.shop/prd_dk1qojwp', prdBasic:'prd_dk1qojwp', lienPremium:'https://smart-digital.mychariow.shop/prd_8eq7b1ed', prdPremium:'prd_8eq7b1ed', auto:true},
   devises:{}, devisesOff:[],   // taux de change modifiés par la direction (FCFA pour 1 unité) et devises non proposées
+  // formules : 31 jours tout compris après l'inscription, puis abonnements Basic et Premium (31 jours)
+  essaiJours:31, aboJours:31, prixBasic:2000, prixPremium:5000, offres:{},
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
 };
@@ -105,12 +108,42 @@ A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}
 
 /* ---------- accès payant ---------- */
 A.paywallOn = () => A.cfg().paywall !== false;
-A.hasAccess = () => {
-  const me = A.S.me; if(!me) return false;
-  if(me.isAdmin || !A.paywallOn()) return true;
-  if(me.status === 'suspendu') return false;
-  return me.acces === 'actif' && (!me.acces_fin || ts(me.acces_fin) > now());
+/* ---------- formules : aucun < inscrit < basic < premium ----------
+   Inscription payée : 31 jours tout compris (essai Premium), puis « Inscrit » (tous les cours,
+   contenus réduits) ; abonnements Basic et Premium de 31 jours. Même règle que niveau_acces() en SQL. */
+A.RANG = {aucun:0, inscrit:1, basic:2, premium:3};
+A.NIV_NOM = {aucun:'Non inscrit', inscrit:'Inscrit', basic:'Basic', premium:'Premium'};
+A.OFFRES_DEF = {
+  inscrit:{exos:2, quiz:3, sujets:1, solveurs:0, banque:'bts', epreuves:false, annales:false, metres:0, atelier:false, ia:false},
+  basic:{exos:4, quiz:5, sujets:2, solveurs:2, banque:'tout', epreuves:true, annales:true, metres:3, atelier:false, ia:false},
+  premium:{exos:99, quiz:99, sujets:3, solveurs:3, banque:'tout', epreuves:true, annales:true, metres:-1, atelier:true, ia:true}
 };
+A.niveauDe = p => {
+  if(!p) return 'aucun';
+  if(p.isAdmin || p.admin || !A.paywallOn()) return 'premium';
+  if(p.status === 'suspendu') return 'aucun';
+  const t = now(), insc = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t);
+  if(p.abo === 'premium' && ts(p.abo_fin) > t) return 'premium';
+  if(insc && p.essai_fin && ts(p.essai_fin) > t) return 'premium';
+  if(p.abo === 'basic' && ts(p.abo_fin) > t) return 'basic';
+  return insc ? 'inscrit' : 'aucun';
+};
+A.niveau = () => A.niveauDe(A.S.me);
+A.offre = (n = A.niveau()) => n === 'premium' ? A.OFFRES_DEF.premium : Object.assign({}, A.OFFRES_DEF[n === 'basic' ? 'basic' : 'inscrit'], ((A.cfg().offres || {})[n === 'basic' ? 'basic' : 'inscrit']) || {});
+A.lim = k => A.offre()[k];
+const ouvert = v => v === true || (typeof v === 'number' && v !== 0) || v === 'tout';
+A.droit = (need, p) => typeof need === 'function' ? !!need(p) : need && typeof need === 'object' ? !!need.test(p) : ouvert(A.lim(need));
+/* réglages fins : solveur selon son niveau, exercice de la banque, nombre de métrés du mois */
+A.droitSolveur = id => { const d = A.SOL && A.SOL.get(id); return !d || (d.niv || 1) <= (+A.lim('solveurs') || 0); };
+A.droitExo = id => { const e = A.EXO && A.EXO.get(id); if(!e || A.lim('banque') === 'tout') return true; return !/lic|master/i.test(e.niv || '') && !e.sol; };
+A.metresMois = () => { const d = new Date(); d.setDate(1); d.setHours(0, 0, 0, 0); return Object.values(A.S.works || {}).filter(w => w.kind === 'metre' && ts((w.data && w.data.cree) || w.updated_at) >= d.getTime()).length; };
+A.peutMetre = () => { const l = +A.lim('metres'); return l < 0 || A.metresMois() < l; };
+/* première formule qui ouvre une fonctionnalité (« disponible avec Basic ») */
+A.offreMin = test => ['inscrit', 'basic', 'premium'].find(n => test(A.offre(n))) || 'premium';
+/* essai Premium en cours après l'inscription : date de fin, sinon null */
+A.essaiFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.essai_fin && ts(me.essai_fin) > now() && !(me.abo === 'premium' && ts(me.abo_fin) > now()) ? ts(me.essai_fin) : null; };
+A.aboActif = () => { const me = A.S.me; return me && me.abo && ts(me.abo_fin) > now() ? {plan:me.abo, fin:ts(me.abo_fin)} : null; };
+A.hasAccess = () => A.niveau() !== 'aucun';
 A.accesFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.acces_fin ? ts(me.acces_fin) : null; };
 A.prixTxt = () => { const c = A.cfg(); return c.formule === 'mensuel' ? `${F(c.prixMois)} FCFA par mois` : `${F(c.prixAcces)} FCFA (paiement unique)`; };
 /* ---------- promotions : prix normal barré en rouge, prix payé, date de fin facultative ----------
@@ -297,8 +330,12 @@ function demoSeed(){
     d.progress[u+':'+c] = {owner:u, data:{chap:c, mat:c.split('-')[0], done:true, at: t - (list.length-k)*day*.8}};
     if(k%2===0) d.quiz[u+':'+c+':'+k] = {owner:u, data:{chap:c, mat:c.split('-')[0], score: 2 + (k*7+u.length)%3, total:4, at: t - (list.length-k)*day*.8}};
   }));
+  // formules de démonstration : inscrits (essai terminé ou en cours), Basic, Premium
+  const J = n => new Date(t + n*day).toISOString();
+  Object.assign(d.users.u_ak, {essai_fin:J(-2)}); Object.assign(d.users.u_kj, {essai_fin:J(-5), abo:'basic', abo_fin:J(20)});
+  Object.assign(d.users.u_ti, {essai_fin:J(-8), abo:'premium', abo_fin:J(5)}); Object.assign(d.users.u_yc, {essai_fin:J(4)});
   // paiement en ligne (Chariow) d'une apprenante de la diaspora : accès ouvert automatiquement
-  d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day};
+  d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day, essai_fin:J(27)};
   d.paiements.push({id:d.paiements.length + 1, owner:'u_dm', at:t - 4*day, montant:4000, moyen:'chariow', numero:'', reference:'sale_demo_1', formule:'unique', mois:0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:t - 4*day, source:'chariow', email:'mariam.diallo@exemple.fr', devise:'EUR', montant_devise:6.1, objet:'acces', applique:true});
   // livres d'exemple (à remplacer par les vôtres dans Espace PDG › Livres)
   d.livres.lv_demo1 = {data:{titre:'Le béton armé pas à pas', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Du calcul des charges au plan de ferraillage : poutres, poteaux, dalles et semelles selon le BAEL, avec des exemples de chantiers ivoiriens.', description:"Ce livre d'exemple montre comment vos ouvrages apparaissent sur la plateforme.\n\n- Descente de charges et combinaisons ELU / ELS\n- Poutres, poteaux, dalles, semelles\n- 60 exercices corrigés\n\nRemplacez-le par vos propres livres dans l'Espace PDG, rubrique **Livres**.", prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(t + 20*day).toISOString().slice(0, 10), format:'PDF', pages:184, annee:2026, couleur:'#1D4FA8', publie:true, ordre:1, vedette:true, lienAchat:'', prdChariow:''}, fichier:''};
@@ -313,7 +350,11 @@ function demoSeed(){
 function localApply(x){
   const d = L.db; if(!x.owner || x.applique) return;
   if(x.objet === 'livre'){ if(!d.livres[x.livre]) return; d.achats = d.achats || []; if(!d.achats.some(a => a.owner === x.owner && a.livre === x.livre)) d.achats.push({owner:x.owner, livre:x.livre, at:now(), source:'paiement'}); }
+  else if(x.objet === 'abo'){ const u = d.users[x.owner], c = A.cfg(); if(!u || !['basic', 'premium'].includes(x.formule)) return;
+    const debut = Math.max(now(), u.acces === 'actif' && u.essai_fin && ts(u.essai_fin) > now() ? ts(u.essai_fin) : 0, u.abo === x.formule && ts(u.abo_fin) > now() ? ts(u.abo_fin) : 0);
+    u.abo = x.formule; u.abo_fin = new Date(debut + (+c.aboJours || 31) * (x.mois || 1) * 86400000).toISOString(); }
   else{ const u = d.users[x.owner]; if(!u) return; const illim = u.acces === 'actif' && !u.acces_fin;
+    if(!u.essai_fin) u.essai_fin = new Date(now() + (+A.cfg().essaiJours || 31) * 86400000).toISOString();
     u.acces_fin = x.formule === 'mensuel' && !illim ? new Date(Math.max(now(), u.acces_fin ? ts(u.acces_fin) : 0) + (x.mois||1)*30.44*86400000).toISOString() : null;
     u.acces = 'actif'; u.acces_at = u.acces_at || now(); }
   x.applique = true;
@@ -362,7 +403,7 @@ A.loadAdmin = async function(){
   if(S.mode === 'local'){
     const d = L.db;
     S.adm = {
-      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
+      profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id]})),
       paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
       achats: (d.achats||[]).slice(),
       connexions: d.connexions.slice().sort((a,b)=>b.at-a.at),
@@ -375,7 +416,7 @@ A.loadAdmin = async function(){
     return;
   }
   const [pr, cx, pg, qz, ia, wk, ad, py] = await Promise.all([
-    sb.from('profiles').select('id,email,data,status,acces,acces_fin,acces_at,created_at,last_seen,last_page').limit(5000),
+    sb.from('profiles').select('id,email,data,status,acces,acces_fin,acces_at,essai_fin,abo,abo_fin,created_at,last_seen,last_page').limit(5000),
     sb.from('connexions').select('id,owner,at,data').order('at',{ascending:false}).limit(1000),
     sb.from('progress').select('owner,data').limit(10000),
     sb.from('quiz_results').select('owner,data').limit(10000),
@@ -405,12 +446,12 @@ async function afterAuth(user){
   if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; S.pay = []; S.achats = []; return; }
   if(S.mode === 'local'){
     const u = L.db.users[user.id]; if(!u){ S.me = null; return; }
-    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
+    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
   }else{
     try{ await sb.rpc('rattacher_paiements'); }catch(_){}   // achats en ligne faits avec cet e-mail avant la création du compte
     const [{data:roles}, {data:prof}] = await Promise.all([sb.rpc('my_roles'), sb.from('profiles').select('*').eq('id', user.id).maybeSingle()]);
     S.adminExists = !!(roles && roles.admin_exists);
-    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
+    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, essai_fin:(prof&&prof.essai_fin)||null, abo:(prof&&prof.abo)||null, abo_fin:(prof&&prof.abo_fin)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
   }
   await loadMine();
   await A.db.myPayments().catch(e => console.warn(e));
@@ -579,18 +620,19 @@ A.db = {
     const {data, error} = await sb.from('paiements').select('*').eq('owner', S.me.id).order('at', {ascending:false}).limit(50);
     if(error) throw error; S.pay = (data||[]).map(x => ({...x, at:ts(x.at)})); return S.pay;
   },
-  async declarePayment(moyen, numero, reference, objet = 'acces', livre = null){
+  async declarePayment(moyen, numero, reference, objet = 'acces', livre = null, plan = null){
     const c = A.cfg();
     if(S.mode === 'local'){
       const d = L.db; if((numero.replace(/\D/g,'')).length < 8) return {ok:false, msg:'Numéro de téléphone incomplet'};
       if(reference.trim().length < 4) return {ok:false, msg:'Référence de la transaction incomplète'};
       if(d.paiements.filter(x => x.owner === S.me.id && x.statut === 'en_attente').length >= 3) return {ok:false, msg:'Vous avez déjà des paiements en attente de validation'};
-      const mens = objet !== 'livre' && c.formule === 'mensuel', lv = objet === 'livre' ? (d.livres[livre] || {}).data : null;
+      const abo = objet === 'abo', mens = !abo && objet !== 'livre' && c.formule === 'mensuel', lv = objet === 'livre' ? (d.livres[livre] || {}).data : null;
       if(objet === 'livre' && (!lv || !(+lv.prix > 0))) return {ok:false, msg:'Livre introuvable'};
-      d.paiements.push({id:(d.paiements.reduce((a,x)=>Math.max(a, x.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:lv ? +lv.prix : mens ? +c.prixMois : +c.prixAcces, moyen, numero:numero.trim(), reference:reference.trim(), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'en_attente', note:'', objet, livre:lv ? livre : null, source:'manuel', devise:'XOF'});
+      if(abo && !['basic', 'premium'].includes(plan)) return {ok:false, msg:'Abonnement inconnu'};
+      d.paiements.push({id:(d.paiements.reduce((a,x)=>Math.max(a, x.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:lv ? +lv.prix : abo ? +(plan === 'premium' ? c.prixPremium : c.prixBasic) : mens ? +c.prixMois : +c.prixAcces, moyen, numero:numero.trim(), reference:reference.trim(), formule:abo ? plan : mens ? 'mensuel' : 'unique', mois:mens || abo ? 1 : 0, statut:'en_attente', note:'', objet, livre:lv ? livre : null, source:'manuel', devise:'XOF'});
       L.save(); await this.myPayments(); return {ok:true};
     }
-    const {error} = await sb.rpc('declarer_paiement', {p_moyen:moyen, p_numero:numero, p_reference:reference, p_objet:objet, p_livre:livre});
+    const {error} = await sb.rpc('declarer_paiement', {p_moyen:moyen, p_numero:numero, p_reference:reference, p_objet:objet, p_livre:livre, p_plan:plan});
     if(error) return {ok:false, msg:sbErr(error)};
     await this.myPayments(); return {ok:true};
   },
@@ -598,8 +640,9 @@ A.db = {
     if(!S.me) return;
     if(S.mode === 'sb'){ try{ await sb.rpc('rattacher_paiements'); }catch(_){} }
     await this.mesLivres().catch(()=>{});
-    if(S.mode === 'local'){ const u = L.db.users[S.me.id]; if(u){ S.me.acces = u.acces||'gratuit'; S.me.acces_fin = u.acces_fin||null; } }
-    else{ const {data} = await sb.from('profiles').select('acces,acces_fin,status').eq('id', S.me.id).maybeSingle(); if(data){ S.me.acces = data.acces||'gratuit'; S.me.acces_fin = data.acces_fin||null; S.me.status = data.status||'actif'; }
+    const prend = u => { ['acces', 'acces_fin', 'essai_fin', 'abo', 'abo_fin'].forEach(k => S.me[k] = u[k] || (k === 'acces' ? 'gratuit' : null)); };
+    if(S.mode === 'local'){ const u = L.db.users[S.me.id]; if(u) prend(u); }
+    else{ const {data} = await sb.from('profiles').select('acces,acces_fin,essai_fin,abo,abo_fin,status').eq('id', S.me.id).maybeSingle(); if(data){ prend(data); S.me.status = data.status||'actif'; }
       const ct = await sb.from('contents').select('id,data'); if(!ct.error) S.contents = rows2obj(ct.data); }
     A.resetCours(); await this.myPayments().catch(()=>{});
   },
@@ -655,18 +698,23 @@ A.db = {
       return r.ok ? j : {...j, error:j.error || 'Service de paiement indisponible', status:r.status};
     }catch(_){ return {error:'Connexion impossible au service de paiement', status:0}; }
   },
-  async chariowDemo(objet, livre){ // démonstration : simule la notification de Chariow (paiement confirmé → accès immédiat)
-    const c = A.cfg(), d = L.db, lv = objet === 'livre' ? (d.livres[livre] || {}).data : null, mens = !lv && c.formule === 'mensuel', dev = A.devise();
-    const fcfa = lv ? +lv.prix : mens ? +c.prixMois : +c.prixAcces;
-    const x = {id:(d.paiements.reduce((a,p)=>Math.max(a, p.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:fcfa, moyen:'chariow', numero:'', reference:'sale_demo_' + Date.now().toString(36), formule:mens ? 'mensuel' : 'unique', mois:mens ? 1 : 0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:now(), source:'chariow', email:S.me.email, devise:dev, montant_devise:+A.conv(fcfa, dev).toFixed(2), objet:lv ? 'livre' : 'acces', livre:lv ? livre : null};
+  async chariowDemo(objet, ref){ // démonstration : simule la notification de Chariow (paiement confirmé → accès immédiat)
+    const c = A.cfg(), d = L.db, lv = objet === 'livre' ? (d.livres[ref] || {}).data : null, abo = objet === 'abo', mens = !lv && !abo && c.formule === 'mensuel', dev = A.devise();
+    const fcfa = lv ? +lv.prix : abo ? +(ref === 'premium' ? c.prixPremium : c.prixBasic) : mens ? +c.prixMois : +c.prixAcces;
+    const x = {id:(d.paiements.reduce((a,p)=>Math.max(a, p.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:fcfa, moyen:'chariow', numero:'', reference:'sale_demo_' + Date.now().toString(36), formule:abo ? ref : mens ? 'mensuel' : 'unique', mois:mens || abo ? 1 : 0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:now(), source:'chariow', email:S.me.email, devise:dev, montant_devise:+A.conv(fcfa, dev).toFixed(2), objet:lv ? 'livre' : abo ? 'abo' : 'acces', livre:lv ? ref : null};
     d.paiements.push(x); localApply(x); L.save(); await this.refreshAccess(); return true;
   },
   async chariowEtat(){
     if(S.mode === 'local') return null;
     try{ const r = await fetch('/api/chariow/etat', {cache:'no-store'}); return r.ok ? await r.json() : null; }catch(_){ return null; }
   },
+  async setAbo(id, plan, fin){   // direction : donner, prolonger ou retirer un abonnement (plan vide = retirer)
+    if(S.mode === 'local'){ const u = L.db.users[id]; if(!u) return false; u.abo = plan || null; u.abo_fin = plan ? (fin || new Date(now() + 31*86400000).toISOString()) : null; L.save(); }
+    else{ const {error} = await sb.rpc('admin_set_abo', {p_uid:id, p_plan:plan || '', p_fin:fin || null}); if(error){ toast(sbErr(error), 'x'); return false; } }
+    await A.loadAdmin(); return true;
+  },
   async setAccess(id, acces, fin){
-    if(S.mode === 'local'){ const u = L.db.users[id]; if(!u) return false; u.acces = acces; if(acces === 'actif'){ u.acces_fin = fin || null; u.acces_at = u.acces_at || now(); } L.save(); }
+    if(S.mode === 'local'){ const u = L.db.users[id]; if(!u) return false; u.acces = acces; if(acces === 'actif'){ u.acces_fin = fin || null; u.acces_at = u.acces_at || now(); u.essai_fin = u.essai_fin || new Date(now() + (+A.cfg().essaiJours || 31)*86400000).toISOString(); } L.save(); }
     else{ const {error} = await sb.rpc('admin_set_acces', {p_uid:id, p_acces:acces, p_fin:fin || null}); if(error){ toast(sbErr(error), 'x'); return false; } }
     await A.loadAdmin(); return true;
   },
@@ -786,6 +834,8 @@ A.render = function(opts={}){
   if(S.me && S.me.status === 'suspendu' && sp !== 'site' && sp !== 'bare'){ app.innerHTML = suspended(); return; }
   // accès payant : hors pages libres (tableau de bord, programme, chapitres gratuits, profil, abonnement), on présente l'inscription
   if(sp === 'app' && !m.def.free && !A.hasAccess() && A.paywallPage) m = {def:{title:'Activez votre accès', crumb:'Espace apprenant', free:true, render:() => A.paywallPage(m.path)}, params:m.params, path:m.path};
+  // fonctionnalité non comprise dans la formule : elle reste visible, avec l'offre qui la débloque
+  else if(sp === 'app' && m.def.need && A.upgradePage && !A.droit(m.def.need, m.params)){ const nd = m.def.need, t = typeof m.def.title === 'function' ? m.def.title(m.params) : m.def.title; m = {def:{title:t, crumb:'Formule requise', free:true, render:() => A.upgradePage(nd, m.params)}, params:m.params, path:m.path}; }
   if(opts.soft && current && current.path === m.path && current.def.static) return;
   if(current && current.def.unmount && (!opts.soft || current.path !== m.path)) try{ current.def.unmount(); }catch(e){ console.warn(e); }
   const keepScroll = opts.soft && current && current.path === m.path;
@@ -865,7 +915,7 @@ function navActive(path, h){
 function appShell(body, m, title, crumb, actions, adm){
   const me = S.me, name = (me.data && me.data.name) || me.email;
   const nav = (adm ? ANAV : LNAV).map(n => n.length === 1 ? `<div class="sec">${n[0]}</div>` :
-    `<a class="nav" href="#/${n[0]}" ${navActive(m.path, n[0])?'aria-current="page"':''}>${ic(n[2])}${n[1]}${n[0]==='admin/connexions'&&S.adm?`<span class="cnt">${onlineCount()}</span>`:''}${n[0]==='admin/abonnements'&&S.adm&&(S.adm.paiements||[]).some(x=>x.statut==='en_attente')?`<span class="cnt" style="background:var(--or);color:#fff">${S.adm.paiements.filter(x=>x.statut==='en_attente').length}</span>`:''}${n[0]==='app/abonnement'&&!A.hasAccess()?'<span class="cnt" style="background:var(--or);color:#fff">!</span>':''}</a>`).join('');
+    `<a class="nav" href="#/${n[0]}" ${navActive(m.path, n[0])?'aria-current="page"':''}>${ic(n[2])}${n[1]}${n[0]==='admin/connexions'&&S.adm?`<span class="cnt">${onlineCount()}</span>`:''}${n[0]==='admin/abonnements'&&S.adm&&(S.adm.paiements||[]).some(x=>x.statut==='en_attente')?`<span class="cnt" style="background:var(--or);color:#fff">${S.adm.paiements.filter(x=>x.statut==='en_attente').length}</span>`:''}${n[0]==='app/abonnement'&&!A.hasAccess()?'<span class="cnt" style="background:var(--or);color:#fff">!</span>':''}${!adm && A.navLock ? A.navLock(n[0]) : ''}</a>`).join('');
   const foot = adm
     ? `<a class="nav" href="#/app">${ic('book')}Voir l'espace apprenant</a><a class="nav" href="#/">${ic('globe')}Voir le site public</a>`
     : `${me.isAdmin?`<a class="nav" href="#/admin">${ic('crown')}Espace PDG</a>`:''}<a class="nav" href="#/">${ic('globe')}Site public</a>`;
