@@ -360,4 +360,180 @@ F['debord'] = () => svg(520, 300, `
  ${Dim(190,282,310,282,'d')}${Dim(120,110,120,220,'H')}
  ${T(430,240,'Baie entièrement à l\'ombre si',{a:'middle',s:11})}${T(430,258,'d ≥ H / tan h',{a:'middle',s:14,b:1,c:ST})}
  ${T(260,20,'Coupe perpendiculaire à la façade',{a:'middle',s:11,b:1})}`, 'Dimensionnement d\'un débord');
+/* ---------------- Dessin technique et architectural ---------------- */
+const Rt = (x, y, w, h, o={}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" ${o.rx?`rx="${o.rx}"`:''} fill="${o.f||'none'}" stroke="${o.c||INK}" stroke-width="${o.w||1.4}" ${o.d?`stroke-dasharray="${o.d}"`:''}/>`;
+const Pa = (d, o={}) => `<path d="${d}" fill="${o.f||'none'}" stroke="${o.c||INK}" stroke-width="${o.w||1.4}" stroke-linejoin="round" ${o.d?`stroke-dasharray="${o.d}"`:''}/>`;
+const tick = (x, y) => Ln(x - 5, y + 5, x + 5, y - 5, {w:1.8});
+const lvl = (x, y, t, o={}) => Ln(x - 30, y, x + 40, y, {c:GR, w:1}) + Pa(`M ${x} ${y} L ${x - 6} ${y - 9} L ${x + 6} ${y - 9} Z`, {f:o.f || 'none', w:1.2}) + T(x + 10, y - 3, t, {s:11, b:1, c:o.c || INK});
+
+F['formats'] = () => svg(560, 390, `
+ ${Rt(40,20,480,340,{w:2.6})}${Rt(40,20,240,340,{w:1.6})}${Rt(280,20,240,170,{w:1.6})}${Rt(280,190,120,170,{w:1.6})}${Rt(400,190,120,85,{w:1.6})}${Rt(400,275,120,85,{w:1.6})}
+ ${T(160,180,'A1',{a:'middle',s:26,b:1,c:BL})}${T(160,202,'594 × 841 mm',{a:'middle',s:12})}
+ ${T(400,100,'A2',{a:'middle',s:22,b:1,c:BL})}${T(400,120,'420 × 594 mm',{a:'middle',s:12})}
+ ${T(340,270,'A3',{a:'middle',s:18,b:1,c:BL})}${T(340,288,'297 × 420',{a:'middle',s:11})}
+ ${T(460,230,'A4',{a:'middle',s:15,b:1,c:BL})}${T(460,246,'210 × 297',{a:'middle',s:10})}
+ ${T(460,315,'A4',{a:'middle',s:15,b:1,c:BL})}${T(460,331,'210 × 297',{a:'middle',s:10})}
+ ${T(280,382,'A0 = 841 × 1 189 mm (1 m²) · chaque format est la moitié du précédent · côtés dans le rapport √2',{a:'middle',s:11,b:1})}`, 'Formats normalisés de la série A');
+
+F['cartouche'] = () => svg(600, 370, `
+ ${Rt(10,10,580,345,{c:GR,w:1})}${Rt(40,22,538,321,{w:2.6})}
+ ${Dim(10,40,40,40,'')}${T(25,58,'20',{a:'middle',s:10,c:GR})}${T(48,40,'marge de reliure (20 mm)',{s:10,c:GR})}
+ <g opacity=".55">${Rt(80,60,220,150,{w:2.2})}${Ln(80,130,190,130,{w:2.2})}${Ln(190,60,190,175,{w:2.2})}${T(130,100,'Séjour',{a:'middle',s:11})}${T(245,100,'Chambre',{a:'middle',s:11})}</g>
+ ${T(190,240,'zone de dessin',{a:'middle',s:12,c:GR})}
+ <circle cx="520" cy="70" r="18" fill="none" stroke="${INK}"/>${Pa('M 520 52 L 512 80 L 520 74 L 528 80 Z',{f:INK,w:1})}${T(520,46,'N',{a:'middle',s:12,b:1})}
+ ${Rt(338,233,240,110,{w:2.2})}${Ln(338,258,578,258,{w:1})}${Ln(338,292,578,292,{w:1})}${Ln(338,317,578,317,{w:1})}${Ln(478,292,478,343,{w:1})}
+ ${T(344,250,'Projet : villa R+1 — lot 245, Cocody',{s:11})}
+ ${T(458,282,'PLAN DU REZ-DE-CHAUSSÉE',{a:'middle',s:14,b:1})}
+ ${T(344,309,'Échelle : 1/50',{s:11,b:1})}${T(484,309,'Date : 07/10/2026',{s:10})}
+ ${T(344,334,'Dessiné : K. Yao',{s:10})}${T(484,334,'Plan A-02 · indice B',{s:10,b:1})}
+ ${Ln(250,300,332,300,{c:OR,w:1.2,m:'fo'})}${T(60,284,'cartouche : en bas à droite,',{s:11,c:OR,b:1})}${T(60,300,'lisible une fois le plan plié en A4',{s:11,c:OR,b:1})}
+ ${Ln(560,150,578,150,{c:OR,w:1.2,m:'fo'})}${T(556,146,'cadre en trait fort',{a:'end',s:11,c:OR})}${T(556,160,'(bord de feuille en trait fin)',{a:'end',s:10,c:GR})}`, 'Cadre et cartouche');
+
+F['traits'] = () => svg(600, 268, `
+ ${Ln(30,30,230,30,{w:2.8})}${Ln(30,70,230,70,{w:1})}${Ln(30,110,230,110,{w:1.3,d:'10 5'})}${Ln(30,150,230,150,{w:1,d:'22 4 2 4'})}
+ ${Ln(30,190,62,190,{w:2.8})}${Ln(62,190,198,190,{w:1,d:'22 4 2 4'})}${Ln(198,190,230,190,{w:2.8})}${Ln(34,190,34,174,{w:1.4,m:'fa'})}${Ln(226,190,226,174,{w:1.4,m:'fa'})}${T(22,178,'A',{s:12,b:1})}${T(236,178,'A',{s:12,b:1})}
+ ${Pa('M 30 230 L 112 230 L 118 220 L 126 240 L 132 230 L 230 230',{w:1})}
+ ${[['Continu fort (0,5 à 0,7 mm)','contours et arêtes vus, murs coupés en plan et en coupe'],['Continu fin (0,13 à 0,25 mm)','lignes de cote et d\'attache, hachures, mobilier, carrelage'],['Interrompu fin','contours et arêtes cachés (non vus)'],['Mixte fin (trait-point)','axes, plans de symétrie, trajectoires'],['Mixte fin, fort aux extrémités','trace d\'un plan de coupe (flèches = sens d\'observation)'],['Continu fin avec zigzag','limite d\'une vue partielle ou d\'une coupe interrompue']].map((r,i)=>T(256,34+40*i,r[0],{s:12,b:1})+T(256,50+40*i,r[1],{s:11,c:GR})).join('')}`, 'Types de traits');
+
+F['cotation'] = () => svg(600, 300, `
+ ${T(150,26,'Dessin industriel : flèches, cotes en mm',{a:'middle',s:12,b:1})}
+ ${Rt(40,70,200,100,{w:2.6})}
+ ${Ln(40,175,40,228,{c:GR,w:1})}${Ln(240,175,240,228,{c:GR,w:1})}${Ln(40,218,240,218,{w:1,m:'fa',ms:'fa'})}${T(140,212,'200',{a:'middle',s:13,b:1})}
+ ${Ln(245,70,298,70,{c:GR,w:1})}${Ln(245,170,298,170,{c:GR,w:1})}${Ln(288,70,288,170,{w:1,m:'fa',ms:'fa'})}${T(281,120,'100',{a:'middle',s:13,b:1,r:-90})}
+ ${Ln(70,262,42,224,{c:OR,w:1,m:'fo'})}${T(74,268,'ligne d\'attache',{s:11,c:OR})}
+ ${Ln(176,252,176,222,{c:OR,w:1,m:'fo'})}${T(150,262,'ligne de cote',{s:11,c:OR})}
+ ${T(160,212,'← chiffre de cote',{s:10,c:OR})}
+ ${T(470,26,'Bâtiment : traits obliques, cotes en m ou cm',{a:'middle',s:12,b:1})}
+ ${Rt(340,80,60,14,{f:'url(#fh)',w:2.2})}${Rt(445,80,125,14,{f:'url(#fh)',w:2.2})}<path d="M 445 94 A 45 45 0 0 1 400 139" fill="none" stroke="${INK}" stroke-width="1"/>${Ln(400,94,400,139,{w:2})}
+ ${[340,400,445,570].map(x=>Ln(x,100,x,190,{c:GR,w:1})).join('')}${Ln(334,150,576,150,{w:1})}${[340,400,445,570].map(x=>tick(x,150)).join('')}
+ ${T(370,144,'1,20',{a:'middle',s:12,b:1})}${T(422,144,'0,90',{a:'middle',s:12,b:1})}${T(507,144,'2,50',{a:'middle',s:12,b:1})}
+ ${Ln(334,180,576,180,{w:1})}${tick(340,180)}${tick(570,180)}${T(455,174,'4,60',{a:'middle',s:12,b:1})}
+ ${T(455,212,'cotes en chaîne (1re ligne) puis cote totale (2e ligne) :',{a:'middle',s:11,c:GR})}${T(455,228,'1,20 + 0,90 + 2,50 = 4,60 ✓',{a:'middle',s:12,c:BL,b:1})}
+ ${T(455,262,'Les cotes se lisent du bas ou de la droite de la feuille',{a:'middle',s:11,c:GR})}`, 'Éléments de la cotation');
+
+F['vues'] = () => { const k = .9, ox = 470, oy = 232, P = (x, y, z) => `${(ox + (x - y)*.866*k).toFixed(1)} ${(oy - ((x + y)*.5 + z)*k).toFixed(1)}`, poly = (pts, f) => Pa('M ' + pts.map(p => P(...p)).join(' L ') + ' Z', {f, w:1.8});
+ return svg(600, 330, `
+ ${Pa('M 40 130 L 160 130 L 160 90 L 100 90 L 100 50 L 40 50 Z',{w:2.4})}${T(100,40,'Vue de face',{a:'middle',s:12,b:1})}
+ ${Rt(40,160,120,70,{w:2.4})}${Ln(100,160,100,230,{w:2.4})}${T(100,248,'Vue de dessus',{a:'middle',s:12,b:1})}
+ ${Rt(190,50,70,80,{w:2.4})}${Ln(190,90,260,90,{w:1.3,d:'7 4'})}${T(225,40,'Vue de gauche',{a:'middle',s:12,b:1})}
+ ${[40,100,160].map(x=>Ln(x,134,x,156,{c:GR,w:.8,d:'3 3'})).join('')}${[50,90,130].map(y=>Ln(164,y,186,y,{c:GR,w:.8,d:'3 3'})).join('')}
+ ${T(268,94,'arête cachée',{s:10,c:GR})}
+ ${poly([[60,0,40],[120,0,40],[120,70,40],[60,70,40]],'#F3EEE4')}${poly([[0,0,80],[60,0,80],[60,70,80],[0,70,80]],'#F3EEE4')}
+ ${poly([[0,0,0],[0,70,0],[0,70,80],[0,0,80]],'#D9D2C4')}${poly([[0,0,0],[120,0,0],[120,0,40],[60,0,40],[60,0,80],[0,0,80]],CO)}
+ ${T(490,100,'Perspective de la pièce',{a:'middle',s:11,c:GR})}${Ln(548,248,533,224,{c:OR,w:1,m:'fo'})}${T(540,262,'face',{s:11,c:OR,b:1})}
+ ${T(300,304,'Méthode européenne : la vue de dessus se place SOUS la vue de face,',{a:'middle',s:11,b:1})}${T(300,320,'la vue de gauche à DROITE de la vue de face ; les vues sont alignées par des lignes de rappel.',{a:'middle',s:11,b:1})}`, 'Projections orthogonales'); };
+
+F['coupe-principe'] = () => svg(600, 330, `
+ ${Pa('M 40 30 L 240 30 L 240 130 L 40 130 Z M 55 45 L 55 115 L 225 115 L 225 45 Z',{f:'url(#fh)',w:2.4})}
+ ${Ln(14,80,52,80,{w:2.8})}${Ln(52,80,228,80,{w:1,d:'22 4 2 4'})}${Ln(228,80,266,80,{w:2.8})}${Ln(18,80,18,58,{w:1.6,m:'fa'})}${Ln(262,80,262,58,{w:1.6,m:'fa'})}${T(10,54,'A',{s:13,b:1})}${T(266,54,'A',{s:13,b:1})}
+ ${T(140,152,'Vue en plan avec la trace du plan de coupe A–A',{a:'middle',s:11,b:1})}
+ ${Pa('M 40 180 L 55 180 L 55 265 L 225 265 L 225 180 L 240 180 L 240 280 L 40 280 Z',{f:'url(#fh)',w:2.4})}${Ln(55,180,225,180,{w:1.2})}
+ ${T(140,305,'Coupe A–A',{a:'middle',s:12,b:1})}
+ ${Ln(330,236,236,232,{c:OR,w:1,m:'fo'})}${T(336,232,'parties coupées : trait fort + hachures',{s:11,c:OR,b:1})}
+ ${Ln(330,176,150,181,{c:BL,w:1,m:'fb'})}${T(336,180,'parties vues au-delà : trait fin (sans hachures)',{s:11,c:BL,b:1})}
+ ${T(330,60,'On coupe l\'objet par un plan fictif, on enlève',{s:11})}${T(330,76,'la partie située entre l\'observateur et le plan,',{s:11})}${T(330,92,'puis on dessine ce qui reste, vu dans le sens',{s:11})}${T(330,108,'des flèches.',{s:11})}`, 'Principe de la coupe');
+
+F['perspectives'] = () => svg(600, 290, `
+ ${Pa('M 60 120 L 95.4 84.6 L 195.4 84.6 L 160 120 Z',{f:'#F3EEE4',w:2})}${Pa('M 160 120 L 195.4 84.6 L 195.4 184.6 L 160 220 Z',{f:'#D9D2C4',w:2})}${Rt(60,120,100,100,{f:CO,w:2})}
+ ${Ln(95.4,184.6,95.4,84.6,{w:1,d:'6 4'})}${Ln(95.4,184.6,195.4,184.6,{w:1,d:'6 4'})}${Ln(95.4,184.6,60,220,{w:1,d:'6 4'})}
+ ${Ln(160,220,215,220,{c:GR,w:1,d:'4 3'})}<path d="M 196 220 A 36 36 0 0 0 185.5 194.5" fill="none" stroke="${OR}" stroke-width="1.4"/>${T(200,206,'45°',{s:11,c:OR,b:1})}
+ ${T(110,250,'Cavalière',{a:'middle',s:13,b:1})}${T(110,266,'face en vraie grandeur ; fuyantes à 45°',{a:'middle',s:11,c:GR})}${T(110,280,'réduites de moitié (k = 0,5)',{a:'middle',s:11,c:GR})}
+ ${Pa('M 430 130 L 516.6 80 L 430 30 L 343.4 80 Z',{f:'#F3EEE4',w:2})}${Pa('M 430 230 L 516.6 180 L 516.6 80 L 430 130 Z',{f:CO,w:2})}${Pa('M 430 230 L 343.4 180 L 343.4 80 L 430 130 Z',{f:'#D9D2C4',w:2})}
+ ${Ln(430,230,548,230,{c:GR,w:1,d:'4 3'})}<path d="M 500 230 A 70 70 0 0 0 490.6 195" fill="none" stroke="${OR}" stroke-width="1.4"/>${T(504,218,'30°',{s:11,c:OR,b:1})}
+ ${T(430,250,'Isométrique',{a:'middle',s:13,b:1})}${T(430,266,'trois axes à 120° ; vraies longueurs',{a:'middle',s:11,c:GR})}${T(430,280,'mesurées sur les axes (k = 1)',{a:'middle',s:11,c:GR})}`, 'Perspectives cavalière et isométrique');
+
+F['symboles'] = () => { const W = (x, y, w) => Rt(x, y, w, 10, {f:'url(#fh)', w:1.6}), tile = (c, r, body, lab) => { const x = 10 + c*147, y = 8 + r*146; return Rt(x, y, 140, 138, {c:'#E3DFD7', w:1, rx:10}) + body(x, y) + T(x + 70, y + 130, lab, {a:'middle', s:11, b:1}); };
+ return svg(600, 304, [
+  tile(0, 0, (x, y) => W(x+10,y+30,30) + W(x+100,y+30,30) + Ln(x+40,y+40,x+40,y+100,{w:2.2}) + `<path d="M ${x+100} ${y+40} A 60 60 0 0 1 ${x+40} ${y+100}" fill="none" stroke="${INK}" stroke-width="1"/>`, 'Porte battante'),
+  tile(1, 0, (x, y) => W(x+10,y+50,30) + W(x+100,y+50,30) + Rt(x+40,y+50,60,10,{w:1}) + Ln(x+40,y+55,x+100,y+55,{w:1}) + Ln(x+34,y+66,x+106,y+66,{w:1}) + T(x+70,y+84,'appui',{a:'middle',s:10,c:GR}), 'Fenêtre'),
+  tile(2, 0, (x, y) => W(x+5,y+50,25) + W(x+110,y+50,25) + Ln(x+30,y+53,x+76,y+53,{w:2.2}) + Ln(x+64,y+57,x+110,y+57,{w:2.2}) + Ln(x+46,y+78,x+86,y+78,{w:1,m:'fa'}), 'Baie coulissante'),
+  tile(3, 0, (x, y) => Rt(x+30,y+12,80,100,{w:1.6}) + [1,2,3,4,5,6,7].map(i => Ln(x+30,y+12+i*12.5,x+110,y+12+i*12.5,{w:1})).join('') + Ln(x+70,y+106,x+70,y+20,{w:1.2,m:'fa'}) + `<circle cx="${x+70}" cy="${y+107}" r="3" fill="${INK}"/>`, 'Escalier (sens de montée)'),
+  tile(0, 1, (x, y) => Ln(x+20,y+16,x+120,y+16,{w:2.6}) + Rt(x+50,y+18,40,14,{w:1.4}) + `<ellipse cx="${x+70}" cy="${y+62}" rx="18" ry="26" fill="none" stroke="${INK}" stroke-width="1.4"/><ellipse cx="${x+70}" cy="${y+64}" rx="11" ry="17" fill="none" stroke="${INK}" stroke-width="1"/>`, 'WC'),
+  tile(1, 1, (x, y) => Ln(x+20,y+16,x+120,y+16,{w:2.6}) + Rt(x+38,y+18,64,46,{w:1.4,rx:8}) + `<ellipse cx="${x+70}" cy="${y+44}" rx="24" ry="15" fill="none" stroke="${INK}" stroke-width="1"/><circle cx="${x+70}" cy="${y+26}" r="3" fill="${INK}"/>`, 'Lavabo'),
+  tile(2, 1, (x, y) => Rt(x+30,y+14,80,80,{w:1.6}) + Ln(x+30,y+14,x+110,y+94,{w:.8}) + Ln(x+110,y+14,x+30,y+94,{w:.8}) + `<circle cx="${x+70}" cy="${y+54}" r="5" fill="#fff" stroke="${INK}"/>`, 'Douche (bac 80 × 80)'),
+  tile(3, 1, (x, y) => Ln(x+10,y+16,x+130,y+16,{w:2.6}) + Rt(x+10,y+18,120,56,{w:1.4}) + Rt(x+18,y+26,36,40,{w:1,rx:5}) + Rt(x+58,y+26,36,40,{w:1,rx:5}) + [0,1,2,3].map(i => Ln(x+100,y+30+i*10,x+124,y+30+i*10,{w:.8})).join(''), 'Évier 2 bacs + égouttoir')
+ ].join(''), 'Symboles des plans d\'architecture'); };
+
+F['niveaux'] = () => svg(600, 330, `
+ <rect x="0" y="259" width="600" height="40" fill="url(#fsol)"/>${Ln(0,259,600,259,{w:1.6})}
+ ${Rt(230,250,200,6,{f:CO,w:1.4})}${Rt(230,160,200,6,{f:CO,w:1.4})}${Rt(230,70,200,6,{f:CO,w:1.4})}
+ ${Rt(220,52,10,207,{f:'url(#fh)',w:2})}${Rt(430,52,10,207,{f:'url(#fh)',w:2})}${Rt(208,259,34,30,{f:CO,w:1.4})}${Rt(418,259,34,30,{f:CO,w:1.4})}
+ ${lvl(60,250,'±0,00 sol fini RDC',{c:BL})}${lvl(60,160,'+3,00 sol fini étage')}${lvl(60,70,'+6,00 dessus dalle')}${lvl(60,52,'+6,60 acrotère')}${lvl(515,259,'TN −0,30')}
+ ${Dim(300,166,300,250,'HSP 2,80')}${Dim(300,76,300,160,'HSP 2,80')}${Dim(470,160,470,250,'3,00')}${Dim(470,70,470,160,'3,00')}
+ ${T(320,214,'Rez-de-chaussée',{s:12})}${T(320,124,'Étage',{s:12})}
+ ${T(482,190,'hauteur d\'étage',{s:11,c:GR})}${T(482,204,'(sol fini à sol fini)',{s:10,c:GR})}
+ ${T(300,318,'Repère : ±0,00 = altitude 32,75 m. Les cotes de niveau sont en mètres, relatives à ce repère.',{a:'middle',s:11,b:1})}`, 'Cotes de niveau en coupe');
+
+F['toiture-4pans'] = () => svg(600, 320, `
+ ${Rt(40,60,320,180,{w:2})}${Ln(130,150,270,150,{w:3,c:ST})}${Ln(40,60,130,150,{w:2})}${Ln(40,240,130,150,{w:2})}${Ln(360,60,270,150,{w:2})}${Ln(360,240,270,150,{w:2})}
+ ${T(200,142,'faîtage',{a:'middle',s:11,b:1,c:ST})}${T(78,96,'arêtier',{s:11,b:1,r:45})}
+ ${Ln(200,128,200,78,{c:OR,w:1.6,m:'fo'})}${Ln(200,172,200,222,{c:OR,w:1.6,m:'fo'})}${Ln(108,150,58,150,{c:OR,w:1.6,m:'fo'})}${Ln(292,150,342,150,{c:OR,w:1.6,m:'fo'})}
+ ${T(214,108,'long pan',{s:11})}${T(214,206,'long pan',{s:11})}${T(64,170,'croupe',{s:11})}${T(296,170,'croupe',{s:11})}
+ ${Dim(40,262,360,262,'L = longueur')}${Dim(22,60,22,240,'l = largeur')}${T(200,300,'Plan de toiture : pentes égales → arêtiers à 45° en plan',{a:'middle',s:11,b:1})}
+ ${Ln(400,250,527,250,{w:1.6})}${Ln(527,250,527,198,{w:1.6,c:BL})}${Ln(400,250,527,198,{w:2.6,c:ST})}
+ ${T(463,268,'arêtier en plan = (l/2)·√2',{a:'middle',s:10.5})}${T(533,228,'f',{s:13,b:1,c:BL})}${T(450,214,'vraie grandeur',{a:'middle',s:11,b:1,c:ST,r:-22})}
+ ${T(490,60,'Rabattement de l\'arêtier',{a:'middle',s:12,b:1})}${T(490,80,'f = (l/2) · tan α',{a:'middle',s:11})}${T(490,98,'VG = √(plan² + f²)',{a:'middle',s:11,b:1,c:ST})}`, 'Toiture à quatre pans');
+
+F['perspective-conique'] = () => svg(600, 290, `
+ ${Ln(10,110,590,110,{c:BL,w:1.4})}${T(300,102,'ligne d\'horizon (hauteur des yeux)',{a:'middle',s:11,c:BL})}
+ <circle cx="40" cy="110" r="4" fill="${OR}"/><circle cx="560" cy="110" r="4" fill="${OR}"/>${T(40,130,'PF1',{a:'middle',s:12,b:1,c:OR})}${T(560,130,'PF2',{a:'middle',s:12,b:1,c:OR})}
+ ${[[260,150],[260,250],[150,130],[150,180]].map(([x,y])=>Ln(x,y,40,110,{c:GR,w:.8,d:'4 4'})).join('')}${[[260,150],[260,250],[400,131.3],[400,184.7]].map(([x,y])=>Ln(x,y,560,110,{c:GR,w:.8,d:'4 4'})).join('')}
+ ${Pa('M 260 150 L 150 130 L 275 123.9 L 400 131.3 Z',{f:'#F3EEE4',w:2})}${Pa('M 260 150 L 150 130 L 150 180 L 260 250 Z',{f:'#D9D2C4',w:2})}${Pa('M 260 150 L 400 131.3 L 400 184.7 L 260 250 Z',{f:CO,w:2})}
+ ${T(300,280,'Les verticales restent verticales ; les horizontales fuient vers deux points de fuite situés sur l\'horizon.',{a:'middle',s:11,b:1})}`, 'Perspective conique à deux points de fuite');
+
+F['plan-masse'] = () => svg(600, 350, `
+ <rect x="0" y="318" width="600" height="32" fill="#E3DFD7"/>${T(300,338,'Voie publique (emprise 12 m)',{a:'middle',s:11,b:1})}
+ ${Pa('M 60 40 L 470 30 L 500 300 L 80 310 Z',{w:1.6,d:'14 4 2 4'})}${[[60,40,'B1'],[470,30,'B2'],[500,300,'B3'],[80,310,'B4']].map(([x,y,t])=>`<circle cx="${x}" cy="${y}" r="5" fill="#fff" stroke="${INK}" stroke-width="1.6"/>`+T(x+(x<300?-10:10),y-8,t,{a:x<300?'end':'start',s:11,b:1})).join('')}
+ ${Rt(170,110,200,120,{f:CO,w:2.6})}${T(270,165,'Villa R+1',{a:'middle',s:13,b:1})}${T(270,184,'emprise 20,00 × 12,00 m',{a:'middle',s:11})}${lvl(300,212,'±0,00 = 32,75',{f:INK})}
+ ${Dim(70,150,170,150,'4,00')}${Dim(370,150,486,150,'4,50')}${Dim(250,230,250,306,'5,00')}
+ ${Ln(430,330,430,262,{c:OR,w:2.4,m:'fo'})}${T(446,300,'accès',{s:11,c:OR,b:1})}
+ ${Rt(100,250,30,20,{w:1.2})}${T(115,264,'FS',{a:'middle',s:9})}<circle cx="150" cy="260" r="8" fill="none" stroke="${INK}"/>${T(98,288,'fosse + puisard',{s:9,c:GR})}
+ ${[[100,80],[420,70],[440,240]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="14" fill="#DDEBD9" stroke="#3E7B4F"/>`).join('')}
+ ${T(74,60,'TN 32,40',{s:10,c:GR})}${T(458,50,'TN 32,95',{s:10,c:GR,a:'end'})}${T(486,290,'TN 32,60',{s:10,c:GR,a:'end'})}
+ <circle cx="550" cy="70" r="20" fill="none" stroke="${INK}"/>${Pa('M 550 50 L 541 82 L 550 75 L 559 82 Z',{f:INK,w:1})}${T(550,44,'N',{a:'middle',s:12,b:1})}`, 'Plan de masse');
+F['plan-type'] = () => { const k = 40, X = m => 110 + m*k, Y = m => 40 + m*k, fr = v => v.toFixed(2).replace('.', ',');
+ const wall = (x1, y1, x2, y2, f) => Rt(X(x1), Y(y1), (x2 - x1)*k, (y2 - y1)*k, {f:f || 'url(#fh)', w:2});
+ const winH = (x1, x2, y) => Rt(X(x1), Y(y), (x2 - x1)*k, .2*k, {w:1}) + Ln(X(x1), Y(y + .1), X(x2), Y(y + .1), {w:1});
+ const winV = (y1, y2, x) => Rt(X(x), Y(y1), .2*k, (y2 - y1)*k, {w:1}) + Ln(X(x + .1), Y(y1), X(x + .1), Y(y2), {w:1});
+ const chainH = (xs, y) => Ln(X(xs[0]) - 6, y, X(xs[xs.length - 1]) + 6, y, {w:1}) + xs.map(x => tick(X(x), y)).join('') + xs.slice(1).map((x, i) => T((X(x) + X(xs[i]))/2, y - 4, fr(x - xs[i]), {a:'middle', s:10, b:1})).join('');
+ const chainV = (ys, x) => Ln(x, Y(ys[0]) - 6, x, Y(ys[ys.length - 1]) + 6, {w:1}) + ys.map(y => tick(x, Y(y))).join('') + ys.slice(1).map((y, i) => T(x - 4, (Y(y) + Y(ys[i]))/2, fr(y - ys[i]), {a:'middle', s:10, b:1, r:-90})).join('');
+ const door = (hx, hy, lx, ly, ax, ay, sw) => Ln(X(hx), Y(hy), X(lx), Y(ly), {w:2}) + `<path d="M ${X(ax)} ${Y(ay)} A ${Math.hypot(lx - hx, ly - hy)*k} ${Math.hypot(lx - hx, ly - hy)*k} 0 0 ${sw} ${X(lx)} ${Y(ly)}" fill="none" stroke="${INK}" stroke-width="1"/>`;
+ return svg(600, 400, `
+ ${T(110,24,'Plan du rez-de-chaussée — 1/100 — cotes en mètres',{s:12,b:1})}
+ ${[[0,1.2],[2.4,3.4],[4.4,6.8],[8,10]].map(([a,b]) => wall(a,6.8,b,7)).join('')}${[[0,2],[3.2,10]].map(([a,b]) => wall(a,0,b,.2)).join('')}${wall(0,.2,.2,6.8)}${wall(9.8,.2,10,1.4)}${wall(9.8,2.6,10,6.8)}
+ ${[[.2,1],[1.8,5],[5.8,6.8]].map(([a,b]) => wall(5.6,a,5.7,b,CO)).join('')}${wall(5.7,4,9.8,4.1,CO)}
+ ${winH(1.2,2.4,6.8)}${winH(6.8,8,6.8)}${winH(2,3.2,0)}${winV(1.4,2.6,9.8)}
+ ${door(3.4,6.8,3.4,5.8,4.4,6.8,0)}${door(5.7,1.8,6.5,1.8,5.7,1,1)}${door(5.7,5,6.5,5,5.7,5.8,0)}
+ ${T(X(2.9),Y(2.3),'Séjour',{a:'middle',s:13,b:1})}${T(X(2.9),Y(2.3)+16,'35,64 m²',{a:'middle',s:11})}${T(X(7.75),Y(2.3),'Chambre',{a:'middle',s:13,b:1})}${T(X(7.75),Y(2.3)+16,'15,58 m²',{a:'middle',s:11})}${T(X(7.75),Y(5.4),'Cuisine',{a:'middle',s:13,b:1})}${T(X(7.75),Y(5.4)+16,'11,07 m²',{a:'middle',s:11})}
+ ${T(X(2.9),Y(2.3)+31,'5,40 × 6,60',{a:'middle',s:10,c:GR})}${T(X(7.75),Y(2.3)+31,'4,10 × 3,80',{a:'middle',s:10,c:GR})}${T(X(7.75),Y(5.4)+31,'4,10 × 2,70',{a:'middle',s:10,c:GR})}
+ ${[0,1.2,2.4,3.4,4.4,6.8,8,10,5.65].map(x => Ln(X(x),Y(7)+4,X(x),388,{c:GR,w:.7})).join('')}${chainH([0,1.2,2.4,3.4,4.4,6.8,8,10],340)}${chainH([0,5.65,10],362)}${chainH([0,10],384)}
+ ${[0,1.4,2.6,4.05,7].map(y => Ln(X(10)+4,Y(y),578,Y(y),{c:GR,w:.7})).join('')}${chainV([0,1.4,2.6,7],530)}${chainV([0,4.05,7],552)}${chainV([0,7],574)}
+ <circle cx="55" cy="80" r="20" fill="none" stroke="${INK}"/>${Pa('M 55 60 L 46 92 L 55 85 L 64 92 Z',{f:INK,w:1})}${T(55,54,'N',{a:'middle',s:12,b:1})}
+ ${T(55,150,'1re ligne :',{a:'middle',s:10,c:GR})}${T(55,163,'ouvertures',{a:'middle',s:10,c:GR})}${T(55,183,'2e : axes',{a:'middle',s:10,c:GR})}${T(55,203,'3e : totale',{a:'middle',s:10,c:GR})}`, 'Plan de niveau coté'); };
+F['symboles-elec'] = () => { const tile = (c, r, body, lab) => { const x = 10 + c*147, y = 8 + r*146; return Rt(x, y, 140, 138, {c:'#E3DFD7', w:1, rx:10}) + body(x + 70, y + 60) + T(x + 70, y + 130, lab, {a:'middle', s:11, b:1}); };
+ const pl = (x, y, r=16) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" stroke="${INK}" stroke-width="1.6"/>` + Ln(x - r*.7, y - r*.7, x + r*.7, y + r*.7, {w:1.4}) + Ln(x - r*.7, y + r*.7, x + r*.7, y - r*.7, {w:1.4});
+ const sw = (x, y, dirs) => `<circle cx="${x}" cy="${y}" r="6" fill="#fff" stroke="${INK}" stroke-width="1.6"/>` + dirs.map(([dx, dy]) => { const x1 = x + dx*5, y1 = y + dy*5, x2 = x + dx*30, y2 = y + dy*30; return Ln(x1, y1, x2, y2, {w:1.6}) + Ln(x2, y2, x2 + dy*8, y2 - dx*8, {w:1.6}); }).join('');
+ return svg(600, 304, [
+  tile(0, 0, (x, y) => pl(x, y, 20), 'Point lumineux (plafond)'),
+  tile(1, 0, (x, y) => Ln(x - 50, y - 30, x + 50, y - 30, {w:3}) + Ln(x, y - 30, x, y - 16, {w:1.6}) + pl(x, y), 'Applique murale'),
+  tile(2, 0, (x, y) => sw(x, y + 10, [[.707, -.707]]), 'Interrupteur simple'),
+  tile(3, 0, (x, y) => sw(x, y, [[.707, -.707], [-.707, .707]]), 'Va-et-vient'),
+  tile(0, 1, (x, y) => `<path d="M ${x - 18} ${y} A 18 18 0 0 1 ${x + 18} ${y}" fill="none" stroke="${INK}" stroke-width="1.6"/>` + Ln(x - 18, y, x + 18, y, {w:1.6}) + Ln(x, y, x, y + 30, {w:1.6}) + Ln(x - 22, y - 24, x + 22, y - 24, {w:1.6}) + Ln(x, y - 24, x, y - 18, {w:1.6}), 'Prise de courant 2P+T'),
+  tile(1, 1, (x, y) => Rt(x - 36, y - 18, 72, 36, {w:1.6}) + `<path d="M ${x - 36} ${y + 18} L ${x + 36} ${y - 18} L ${x + 36} ${y + 18} Z" fill="${INK}"/>`, 'Tableau de répartition'),
+  tile(2, 1, (x, y) => Rt(x - 40, y - 14, 80, 28, {w:1.6, rx:4}) + T(x, y + 5, 'CLIM', {a:'middle', s:12, b:1}) + Ln(x - 30, y + 22, x - 30, y + 40, {w:1, m:'fa'}) + Ln(x, y + 22, x, y + 40, {w:1, m:'fa'}) + Ln(x + 30, y + 22, x + 30, y + 40, {w:1, m:'fa'}), 'Climatiseur (split)'),
+  tile(3, 1, (x, y) => sw(x - 42, y + 24, [[.707, -.707]]) + pl(x + 34, y - 14, 13) + `<path d="M ${x - 30} ${y + 4} Q ${x - 10} ${y - 34} ${x + 22} ${y - 20}" fill="none" stroke="${GR}" stroke-width="1.2" stroke-dasharray="5 3"/>`, 'Liaison de commande')
+ ].join(''), 'Symboles électriques'); };
+
+F['assainissement'] = () => { const X = d => 150 + d*12.4, Y = z => 250 - (z - 30.6)*100;
+ const R = [['R1', 0, 32.20, 31.60], ['R2', 18, 32.10, 31.24], ['R3', 33, 31.85, 30.94]], fr = (v, d=2) => v.toFixed(d).replace('.', ',');
+ let g = T(300, 20, 'Profil en long d\'un collecteur (hauteurs exagérées)', {a:'middle', s:12, b:1});
+ g += Pa('M ' + R.map(r => `${Math.max(130, X(r[1]) - 40)} ${Y(r[2])} L ${Math.min(590, X(r[1]) + 40)} ${Y(r[2])}`).join(' L '), {c:'#7A5C2E', w:2});
+ g += `<path d="M ${R.map(r => `${X(r[1])} ${Y(r[2])}`).join(' L ')} L ${X(33)} 240 L ${X(0)} 240 Z" fill="url(#fsol)" opacity=".35"/>`;
+ g += Pa('M ' + R.map(r => `${X(r[1])} ${Y(r[3])}`).join(' L '), {c:BL, w:2}) + Pa('M ' + R.map(r => `${X(r[1])} ${Y(r[3] + .125)}`).join(' L '), {c:BL, w:1.2});
+ g += R.map(r => Rt(X(r[1]) - 8, Y(r[2]), 16, (r[2] - r[3] + .1)*100, {f:'#fff', w:1.6}) + T(X(r[1]), Y(r[2]) - 8, r[0], {a:'middle', s:12, b:1})).join('');
+ g += T((X(0) + X(18))/2, (Y(31.60) + Y(31.24))/2 + 22, 'PVC Ø 125 — p = 2 %', {a:'middle', s:10.5, c:BL, b:1}) + T(X(26), Y(32.0) - 10, 'terrain', {a:'middle', s:10.5, c:'#7A5C2E'}) + T(X(27), Y(31.0) + 22, 'fil d\'eau', {a:'middle', s:10.5, c:BL});
+ const rows = [['Distance (m)', r => fr(r[1], 2)], ['Tampon', r => fr(r[2])], ['Fil d\'eau (FE)', r => fr(r[3])], ['Profondeur (m)', r => fr(r[2] - r[3])]];
+ rows.forEach(([l, f], i) => { const y = 272 + i*17; g += T(14, y, l, {s:10.5, c:GR}) + R.map(r => T(X(r[1]), y, f(r), {a:'middle', s:10.5, b:i === 3})).join(''); });
+ g += Ln(10, 258, 590, 258, {c:'#E3DFD7', w:1});
+ return svg(600, 340, g, 'Profil en long d\'assainissement'); };
 })();
