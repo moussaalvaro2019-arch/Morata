@@ -54,6 +54,7 @@ A.page('app', {space:'app', free:true, title:'Tableau de bord', crumb:'Espace ap
    <a href="#/app/ia"><span class="ic" style="background:linear-gradient(140deg,#E4EDFC,#FBE6D6);color:var(--blue)">${ic('spark')}</span><b>Assistant IA ${lk('ia')}</b><span>Poser une question</span></a>
   </div>
   ${A.formuleCard ? A.formuleCard() : ''}
+  ${A.parrainBand ? A.parrainBand() : ''}
   <div class="cols">
    <div class="stack">
     <div class="sech"><h2 style="font-size:20px">${enCours.length?'Mes matières en cours':'Pour bien commencer'}</h2><a class="btn b-line b-sm" href="#/app/matieres">Toutes les matières</a></div>

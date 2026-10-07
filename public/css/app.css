@@ -833,3 +833,14 @@ table.t.click td.mono b{color:var(--navy)}
 .fitem .fi{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--okbg);color:var(--ok);flex:none}
 .fitem .fi .i{width:16px;height:16px}
 .fitem.off{background:var(--soft)}.fitem.off .fi{background:#FCEFCF;color:#8A5A07}.fitem.off b{color:var(--muted)}
+/* parrainage */
+.par-band{display:flex;gap:12px;align-items:center;border:1px solid #CFE3D6;background:linear-gradient(120deg,#EAF7EF,#F6FBF7);border-radius:16px;padding:12px 14px;text-decoration:none;color:var(--ink);min-width:0}
+.par-band>span:nth-child(2){flex:1;min-width:0}
+.par-band b{display:block;font-size:14.5px}.par-band small{display:block;color:var(--muted);font-size:12.5px}
+.par-band .fi{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--ok);color:#fff;flex:none}
+.par-band>.i{color:var(--ok);flex:none}
+.par-hero{border-color:#CFE3D6;background:linear-gradient(140deg,#F4FBF6,#FFFFFF 60%)}
+.par-code{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;border:1px dashed #9CC9AE;border-radius:14px;padding:12px 14px;background:#fff}
+.par-code small{display:block;color:var(--muted);font-size:12px}
+.par-code b{display:block;font-size:28px;letter-spacing:.18em;color:var(--ink)}
+.kpi .bar{margin-top:4px}

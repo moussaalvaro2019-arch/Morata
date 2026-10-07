@@ -53,6 +53,14 @@ alter table public.profiles add column if not exists abo       text;          --
 alter table public.profiles add column if not exists abo_fin   timestamptz;   -- fin de l'abonnement
 update public.profiles set essai_fin = coalesce(acces_at, now()) + interval '31 days' where acces = 'actif' and essai_fin is null;
 
+-- Parrainage : chaque apprenant a un code ; le filleul est rattaché à son inscription ; récompense automatique
+alter table public.profiles add column if not exists code_parrain text;                                          -- code personnel à partager
+alter table public.profiles add column if not exists parrain uuid references auth.users(id) on delete set null;  -- qui l'a invité
+alter table public.profiles add column if not exists filleul_valide boolean not null default false;              -- le filleul a payé (inscription ou abonnement)
+alter table public.profiles add column if not exists parrain_recompenses integer not null default 0;             -- récompenses déjà accordées au parrain
+create unique index if not exists profiles_code_parrain_idx on public.profiles (code_parrain) where code_parrain is not null;
+create index if not exists profiles_parrain_idx on public.profiles (parrain) where parrain is not null;
+
 -- Paiements en ligne (Chariow : carte bancaire, Mobile Money de tous les pays…) et achats de livres
 alter table public.paiements alter column owner drop not null;                                  -- paiement en ligne reçu avant la création du compte
 alter table public.paiements add column if not exists objet    text not null default 'acces';  -- acces | livre
@@ -156,11 +164,28 @@ language sql stable as $$
 $$;
 
 -- ---------- Création automatique du profil à l'inscription ----------
+-- Code de parrainage : 6 caractères faciles à lire (sans O, 0, I, 1)
+create or replace function public.nouveau_code_parrain() returns text
+language plpgsql volatile security definer set search_path = public as $$
+declare v text; c constant text := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; i int;
+begin
+  loop
+    v := '';
+    for i in 1..6 loop v := v || substr(c, 1 + floor(random() * length(c))::int, 1); end loop;
+    exit when not exists (select 1 from public.profiles where code_parrain = v);
+  end loop;
+  return v;
+end $$;
 create or replace function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
+declare v_parrain uuid;
 begin
-  insert into public.profiles (id, email, data)
-  values (new.id, lower(new.email), coalesce(new.raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified')
+  -- code parrain saisi à l'inscription (lien d'invitation) : rattache le filleul à son parrain
+  select id into v_parrain from public.profiles
+   where code_parrain = upper(trim(coalesce(new.raw_user_meta_data->>'parrain', ''))) and id <> new.id limit 1;
+  insert into public.profiles (id, email, data, parrain, code_parrain)
+  values (new.id, lower(new.email), coalesce(new.raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain',
+          v_parrain, public.nouveau_code_parrain())
   on conflict (id) do nothing;
   return new;
 end $$;
@@ -168,8 +193,14 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute function public.handle_new_user();
 -- comptes déjà existants (si le script est lancé après des inscriptions)
 insert into public.profiles (id, email, data)
-select id, lower(email), coalesce(raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' from auth.users
+select id, lower(email), coalesce(raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain' from auth.users
 on conflict (id) do nothing;
+-- un code de parrainage pour chaque compte qui n'en a pas encore
+do $$ declare r record; begin
+  for r in select id from public.profiles where code_parrain is null loop
+    update public.profiles set code_parrain = public.nouveau_code_parrain() where id = r.id;
+  end loop;
+end $$;
 
 -- ---------- Sécurité par ligne (RLS) ----------
 alter table public.profiles      enable row level security;
@@ -325,7 +356,74 @@ begin
     where id = v_p.owner;
   end if;
   update public.paiements set applique = true where id = p_id;
+  if v_p.objet in ('acces', 'abo') then perform public.parrainage_valider(v_p.owner); end if;
   return true;
+end $$;
+
+-- Parrainage : le filleul a payé → compté une fois ; tous les N filleuls payants, le parrain reçoit J jours d'abonnement
+-- (réglages de la direction : settings.main.parrainage = {actif, filleuls, jours, formule})
+create or replace function public.parrainage_valider(p_filleul uuid) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_par uuid; v_set jsonb; v_req int; v_jours int; v_plan text; v_eff text; v_ok int; v_dues int; v_pr public.profiles; v_debut timestamptz;
+begin
+  update public.profiles set filleul_valide = true where id = p_filleul and parrain is not null and not filleul_valide returning parrain into v_par;
+  if v_par is null then return; end if;
+  select data->'parrainage' into v_set from public.settings where id = 'main';
+  if not coalesce((v_set->>'actif')::boolean, true) then return; end if;
+  v_req := greatest(1, coalesce(nullif(v_set->>'filleuls', '')::int, 3));
+  v_jours := greatest(1, coalesce(nullif(v_set->>'jours', '')::int, 31));
+  v_plan := case when v_set->>'formule' = 'basic' then 'basic' else 'premium' end;
+  select * into v_pr from public.profiles where id = v_par for update;
+  if not found then return; end if;
+  select count(*) into v_ok from public.profiles where parrain = v_par and filleul_valide;
+  v_dues := v_ok / v_req - v_pr.parrain_recompenses;
+  while v_dues > 0 loop
+    select * into v_pr from public.profiles where id = v_par;
+    v_eff := case when v_pr.abo = 'premium' and v_pr.abo_fin > now() then 'premium' else v_plan end;   -- jamais de Premium remplacé par Basic
+    v_debut := greatest(now(), case when v_pr.acces = 'actif' and v_pr.essai_fin > now() then v_pr.essai_fin else now() end,
+                        case when v_pr.abo = v_eff and v_pr.abo_fin > now() then v_pr.abo_fin else now() end);
+    update public.profiles set abo = v_eff, abo_fin = v_debut + make_interval(days => v_jours), parrain_recompenses = parrain_recompenses + 1 where id = v_par;
+    insert into public.paiements (owner, montant, moyen, numero, reference, formule, mois, statut, note, traite_at, objet, source, applique)
+    values (v_par, 0, 'parrainage', '', 'PARRAINAGE-' || (v_pr.parrain_recompenses + 1), v_eff, 1, 'valide',
+            'Récompense de parrainage : ' || v_req || ' filleuls inscrits, ' || v_jours || ' jours offerts', now(), 'abo', 'parrainage', true);
+    v_dues := v_dues - 1;
+  end loop;
+end $$;
+
+-- Apprenant : mon code, mes filleuls et ma progression vers la prochaine récompense
+create or replace function public.mon_parrainage() returns json
+language plpgsql security definer set search_path = public as $$
+declare v_code text; v_rec int; v_par uuid; v_set jsonb; v_n int; v_ok int; v_nom text;
+begin
+  if auth.uid() is null then raise exception 'Connectez-vous d''abord'; end if;
+  select code_parrain, parrain_recompenses, parrain into v_code, v_rec, v_par from public.profiles where id = auth.uid();
+  if not found then raise exception 'Profil introuvable'; end if;
+  if v_code is null then v_code := public.nouveau_code_parrain(); update public.profiles set code_parrain = v_code where id = auth.uid(); end if;
+  select data->'parrainage' into v_set from public.settings where id = 'main';
+  select count(*), count(*) filter (where filleul_valide) into v_n, v_ok from public.profiles where parrain = auth.uid();
+  if v_par is not null then select coalesce(nullif(data->>'name', ''), 'un ami') into v_nom from public.profiles where id = v_par; end if;
+  return json_build_object('code', v_code, 'inscrits', v_n, 'payants', v_ok, 'recompenses', v_rec,
+    'requis', greatest(1, coalesce(nullif(v_set->>'filleuls', '')::int, 3)), 'jours', greatest(1, coalesce(nullif(v_set->>'jours', '')::int, 31)),
+    'formule', case when v_set->>'formule' = 'basic' then 'basic' else 'premium' end, 'actif', coalesce((v_set->>'actif')::boolean, true),
+    'parrain', v_par is not null, 'parrain_nom', v_nom,
+    'peut_saisir', v_par is null and not exists (select 1 from public.paiements where owner = auth.uid() and statut = 'valide' and objet in ('acces', 'abo')));
+end $$;
+
+-- Apprenant inscrit sans le lien : saisir le code de son parrain, avant son premier paiement
+create or replace function public.definir_parrain(p_code text) returns text
+language plpgsql security definer set search_path = public as $$
+declare v_par uuid; v_nom text;
+begin
+  if auth.uid() is null or not public.is_real_user() then raise exception 'Connectez-vous d''abord'; end if;
+  if exists (select 1 from public.profiles where id = auth.uid() and parrain is not null) then raise exception 'Vous avez déjà un parrain'; end if;
+  if exists (select 1 from public.paiements where owner = auth.uid() and statut = 'valide' and objet in ('acces', 'abo')) then
+    raise exception 'Le code parrain se saisit avant le premier paiement'; end if;
+  select id, coalesce(nullif(data->>'name', ''), 'votre parrain') into v_par, v_nom from public.profiles where code_parrain = upper(trim(coalesce(p_code, '')));
+  if v_par is null then raise exception 'Code parrain introuvable'; end if;
+  if v_par = auth.uid() then raise exception 'Vous ne pouvez pas être votre propre parrain'; end if;
+  if exists (select 1 from public.profiles where id = v_par and parrain = auth.uid()) then raise exception 'Cette personne est déjà votre filleul'; end if;
+  update public.profiles set parrain = v_par where id = auth.uid();
+  return v_nom;
 end $$;
 
 -- Apprenant : déclarer un paiement Wave / Mobile Money (montant fixé par les réglages de la direction ou par le prix du livre)
@@ -647,6 +745,9 @@ revoke execute on function public.ia_check(text, text), public.touch(text), publ
   public.livre_fichier(text), public.chariow_offre(text, text, text) from public, anon;
 -- fonctions internes : jamais appelables depuis le navigateur
 revoke execute on function public.appliquer_paiement(bigint), public.chariow_vente(jsonb) from public, anon, authenticated;
+revoke execute on function public.parrainage_valider(uuid), public.nouveau_code_parrain() from public, anon, authenticated;
+revoke execute on function public.mon_parrainage(), public.definir_parrain(text) from public, anon;
+grant execute on function public.mon_parrainage(), public.definir_parrain(text) to authenticated;
 grant execute on function public.chariow_vente(jsonb) to service_role;
 grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces(),
   public.niveau_acces(), public.offre_droits(text), public.droit(text) to anon, authenticated;
@@ -679,6 +780,10 @@ update public.settings
 update public.settings
    set data = '{"essaiJours":31,"aboJours":31,"prixBasic":2000,"prixPremium":5000}'::jsonb || data, updated_at = now()
  where id = 'main' and not (data ? 'prixBasic');
+-- Parrainage (une seule fois) : 3 filleuls payants = 31 jours de Premium offerts au parrain (réglable dans Réglages)
+update public.settings
+   set data = '{"parrainage":{"actif":true,"filleuls":3,"jours":31,"formule":"premium"}}'::jsonb || data, updated_at = now()
+ where id = 'main' and not (data ? 'parrainage');
 update public.settings
    set data = jsonb_set(data, '{chariow}', '{"lienBasic":"https://smart-digital.mychariow.shop/prd_dk1qojwp","prdBasic":"prd_dk1qojwp","lienPremium":"https://smart-digital.mychariow.shop/prd_8eq7b1ed","prdPremium":"prd_8eq7b1ed"}'::jsonb || coalesce(data->'chariow', '{}'::jsonb)),
        updated_at = now()

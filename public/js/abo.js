@@ -21,7 +21,7 @@
 const {$, $$, esc, ic, F, toast, S, fd, fdt, ago, ts, now} = A;
 const DAY = 86400000;
 const MOYENS = [['wave','Wave','#1DC4FF'],['mtn','MTN Mobile Money','#FFCB05'],['orange','Orange Money','#FF7900'],['moov','Moov Money','#0066B3'],['djamo','Djamo','#111827']];
-const moyenN = k => k === 'chariow' ? 'Paiement en ligne (Chariow)' : (MOYENS.find(m => m[0] === k) || [k, k || 'Autre'])[1];
+const moyenN = k => k === 'chariow' ? 'Paiement en ligne (Chariow)' : k === 'parrainage' ? 'Parrainage (offert)' : (MOYENS.find(m => m[0] === k) || [k, k || 'Autre'])[1];
 const telFmt = t => String(t || '').replace(/\D/g, '').replace(/(\d{2})(?=\d)/g, '$1 ').trim();
 const waLink = (num, txt) => { const d = String(num || '').replace(/\D/g, ''); return d ? `https://wa.me/${d.length <= 10 ? '225' + d : d}${txt ? '?text=' + encodeURIComponent(txt) : ''}` : ''; };
 const moyensActifs = () => { const p = A.cfg().pay || {}; return MOYENS.filter(m => String(p[m[0]] || '').trim()); };
@@ -327,6 +327,64 @@ A.on('click', '[data-act="abocheck"]', async () => {
   A.render();
 });
 
+/* =====================================================================
+   PARRAINAGE : chaque apprenant a un code ; ses amis s'inscrivent avec son lien ;
+   tous les N filleuls qui paient, il reçoit J jours de Premium (automatique, en SQL)
+   ===================================================================== */
+let PAR, parUid = '', parAt = 0, parCharge = false;   // PAR : mon parrainage (undefined : à lire ; false : indisponible)
+const parLire = force => {
+  if(parCharge || !S.me || (!force && parUid === S.me.id && now() - parAt < 30000)) return;
+  if(parUid !== S.me.id) PAR = undefined;
+  parCharge = true; parUid = S.me.id; parAt = now();
+  A.db.parrainage().then(r => { PAR = r || false; }).catch(e => { console.warn(e); PAR = false; }).finally(() => { parCharge = false; parAt = now(); A.refresh(); });
+};
+const parLien = code => location.origin + location.pathname + '#/inscription?parrain=' + encodeURIComponent(code);
+const parMsg = code => `Salut ! Je me forme aux métiers du bâtiment sur ${A.cfg().nom} : cours de génie civil (béton armé, RDM, topographie, métré, dessin de plans…), exercices corrigés type BTS et un professeur IA. Inscris-toi avec mon lien : ${parLien(code)} (code parrain : ${code})`;
+const nomPlanP = f => f === 'basic' ? 'Basic' : 'Premium';
+/* bandeau discret du tableau de bord */
+A.parrainBand = () => {
+  const c = A.cfg().parrainage; if(!S.me || S.me.isAdmin || c.actif === false || !A.paywallOn()) return '';
+  return `<a class="par-band" href="#/app/parrainage"><span class="fi">${ic('users')}</span><span><b>Invitez ${Math.max(1, +c.filleuls || 3)} amis : ${Math.max(1, +c.jours || 31)} jours de ${nomPlanP(c.formule)} offerts</b><small>Partagez votre lien de parrainage sur WhatsApp. La récompense s'ajoute toute seule.</small></span>${ic('arrow')}</a>`;
+};
+A.page('app/parrainage', {space:'app', free:true, title:'Parrainage', crumb:'Invitez vos amis du bâtiment', render(){
+  parLire();
+  if(!PAR) return PAR === false
+    ? `<div class="card stack">${A.empty('users', 'Le parrainage n\'est pas encore disponible.')}${S.me.isAdmin ? `<div class="note">${ic('alert')}<span>Direction : relancez le script <b>supabase.sql</b> dans Supabase (SQL Editor) pour activer le parrainage.</span></div>` : ''}</div>`
+    : `<div class="card"><p class="sub">Chargement de votre parrainage…</p></div>`;
+  const P = PAR, lien = parLien(P.code), vers = P.payants % P.requis, reste = P.requis - vers, plan = nomPlanP(P.formule);
+  const saisie = P.peut_saisir ? `<div class="card stack s8"><h3 style="margin:0">Un ami vous a invité ?</h3><p class="sub" style="margin:0">Saisissez son code avant votre premier paiement : votre inscription comptera pour lui.</p>
+     <form id="fParrain" class="row"><input class="inp mono" id="parCode" maxlength="12" autocapitalize="characters" autocomplete="off" style="max-width:200px" placeholder="Code parrain" value="${esc(A.ls.get('parrain', ''))}"><button class="btn b-line" type="submit">${ic('check')}Valider le code</button></form></div>`
+    : P.parrain ? `<div class="note ok">${ic('users')}<span>Vous avez été invité par <b>${esc(P.parrain_nom || 'un ami')}</b>. Merci de l'avoir rejoint !</span></div>` : '';
+  const side = saisie + (P.recompenses ? `<a class="btn b-line" style="justify-self:start" href="#/app/abonnement">${ic('coins')}Voir mon abonnement</a>` : '');
+  return `<div class="par-hero card stack">
+    <div class="stack s8"><span class="kick">Parrainage</span><h2 style="margin:0">Invitez ${P.requis} amis, recevez ${P.jours} jours de ${plan}</h2>
+     <p class="sub" style="margin:0">Pour chaque groupe de <b>${P.requis} amis</b> qui s'inscrivent avec votre lien et paient leur inscription ou un abonnement, <b>${P.jours} jours de ${plan}</b> s'ajoutent automatiquement à votre compte. Sans limite : ${P.requis * 2} amis = ${P.jours * 2} jours.</p></div>
+    ${P.actif ? '' : `<div class="note">${ic('clock')}<span>La direction a mis le parrainage en pause : vos amis inscrits sont toujours comptés et vos récompenses seront accordées à la reprise.</span></div>`}
+    <div class="par-code"><div><small>Votre code</small><b class="mono" id="parMonCode">${esc(P.code)}</b></div><button class="btn b-line b-sm" data-copy="${esc(P.code)}">${ic('copy')}Copier le code</button></div>
+    <label class="fld"><span>Votre lien d'invitation</span><div class="row nw"><input class="inp mono" id="parLien" readonly value="${esc(lien)}" style="min-width:0"><button class="btn b-line" data-copy="${esc(lien)}" aria-label="Copier le lien">${ic('copy')}<span class="hs">Copier</span></button></div></label>
+    <div class="row"><a class="btn b-ok" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(parMsg(P.code))}">${ic('whatsapp')}Partager sur WhatsApp</a><button class="btn b-line" data-copy="${esc(parMsg(P.code))}">${ic('copy')}Copier le message</button></div>
+   </div>
+   <div class="kpis">
+    <div class="kpi hl"><small>${ic('target')}Prochaine récompense</small><b>${vers} / ${P.requis}</b><em>${reste === 1 ? 'encore 1 ami qui paie' : 'encore ' + reste + ' amis qui paient'}</em>${A.bar ? A.bar(Math.round(vers / P.requis * 100)) : ''}</div>
+    <div class="kpi"><small>${ic('users')}Amis inscrits</small><b>${P.inscrits}</b><em>avec votre code</em></div>
+    <div class="kpi"><small>${ic('check')}Amis qui ont payé</small><b style="color:var(--ok)">${P.payants}</b><em>comptent pour les récompenses</em></div>
+    <div class="kpi"><small>${ic('award')}Récompenses reçues</small><b>${P.recompenses}</b><em>${P.recompenses ? P.recompenses * P.jours + ' jours offerts' : 'pas encore'}</em></div>
+   </div>
+   ${side ? '<div class="cols">' : ''}<div class="card stack"><h3 style="margin:0">Comment ça marche</h3>
+     <ol class="abo-steps"><li><b>Partagez votre lien</b> dans vos groupes WhatsApp de génie civil, à vos collègues de chantier, à vos camarades de classe.</li>
+      <li><b>Votre ami crée son compte</b> avec le lien : votre code est rempli tout seul. Il peut aussi le saisir lui-même dans « Parrainage » avant son premier paiement.</li>
+      <li><b>Il paie</b> son inscription ou un abonnement (Wave, Mobile Money ou paiement en ligne).</li>
+      <li><b>Dès ${P.requis} amis payants</b>, ${P.jours} jours de ${plan} s'ajoutent à votre compte, à la suite de votre formule en cours. Vous le voyez dans « Mon abonnement ».</li></ol>
+     <p class="sub" style="margin:0">Seuls les amis qui paient comptent, une seule fois chacun. Un compte par personne : les faux comptes ne rapportent rien.</p></div>
+    ${side ? `<div class="stack">${side}</div></div>` : ''}`;
+}});
+A.on('submit', '#fParrain', async () => {
+  const code = A.val('parCode').trim(); if(code.length < 4){ toast('Saisissez le code de votre parrain', 'x'); return; }
+  const r = await A.db.definirParrain(code);
+  if(!r.ok){ toast(r.msg || 'Code refusé', 'x'); return; }
+  A.ls.del('parrain'); toast('Merci ! Vous êtes rattaché à ' + (r.nom || 'votre parrain'), 'check'); parLire(true);
+});
+
 /* ---------- Espace PDG : abonnements et paiements ---------- */
 const AD = () => S.adm || {profiles:[], paiements:[]};
 const nm = p => (p && p.data && p.data.name) || (p && p.email) || '—';
@@ -336,11 +394,11 @@ const payer = x => x.owner ? profOf(x.owner) : {id:'', email:x.email || '—', d
 const payerLink = (x, p) => p.sansCompte ? `<b>${esc(p.email)}</b><div class="small faint">compte pas encore créé : ${x.objet === 'livre' ? 'le livre' : 'l\'accès'} sera ajouté à son inscription avec cet e-mail</div>`
   : `<a href="#/admin/apprenant/${x.owner}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}${(p.data || {}).phone ? ' · ' + esc(telFmt(p.data.phone)) : ''}</div>`;
 
-const sourcePill = x => x.source === 'chariow' ? ' <span class="pill p-info">En ligne</span>' : '';
+const sourcePill = x => x.source === 'chariow' ? ' <span class="pill p-info">En ligne</span>' : x.source === 'parrainage' ? ' <span class="pill p-ok">Parrainage</span>' : '';
 let abF = 'attente', abQ = '';
 A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', crumb:'Accès payant à la plateforme', actions:() => `<button class="btn b-line b-sm" data-act="admrefresh">${ic('refresh')}<span class="hs">Actualiser</span></button>`, render(){
   const c = A.cfg(), P = c.pay || {}, D = AD(), pay = D.paiements || [], L = D.profiles.filter(p => !p.admin), t = now();
-  const ok = pay.filter(x => x.statut === 'valide'), wait = pay.filter(x => x.statut === 'en_attente');
+  const ok = pay.filter(x => x.statut === 'valide' && x.source !== 'parrainage'), wait = pay.filter(x => x.statut === 'en_attente');
   const niv = p => A.niveauDe(p), actifs = L.filter(p => niv(p) !== 'aucun'), abonnes = L.filter(p => p.abo && ts(p.abo_fin) > t);
   const exp = L.filter(p => (p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) <= t) || (p.abo && p.abo_fin && ts(p.abo_fin) <= t));
   const mois = new Date(); mois.setDate(1); mois.setHours(0, 0, 0, 0);
@@ -349,12 +407,13 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'abonnes' ? abonnes : abF === 'nonpayes' ? L.filter(p => niv(p) === 'aucun') : abF === 'expires' ? exp : null;
   if(abQ){ const q = abQ.toLowerCase(), hit = p => (nm(p) + ' ' + p.email + ' ' + ((p.data || {}).phone || '')).toLowerCase().includes(q);
     if(rows) rows = rows.filter(x => hit(payer(x)) || String(x.reference).toLowerCase().includes(q) || String(x.numero).includes(q)); if(users) users = users.filter(hit); }
-  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['reglages', 'Réglages', '']];
+  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['parrainage', 'Parrainage', L.filter(p => p.parrain).length], ['reglages', 'Réglages', '']];
   const payRow = x => { const p = payer(x); return `<tr><td class="nowrap">${fdt(x.at)}<div class="small faint">${ago(x.at)}</div></td><td>${payerLink(x, p)}</td><td>${esc(moyenN(x.moyen))}${sourcePill(x)}<div class="small faint mono">${esc(telFmt(x.numero))}</div></td><td class="mono small" style="overflow-wrap:anywhere">${esc(x.reference)}</td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}<div class="small faint">${esc(objetTxt(x))}</div></td>
     <td>${x.statut === 'en_attente' ? `<div class="row nw"><button class="btn b-ok b-xs" data-payok="${x.id}">${ic('check')}Valider</button><button class="btn b-line b-xs" data-payno="${x.id}">${ic('x')}Refuser</button></div>` : statutPill(x.statut) + (x.note ? `<div class="small faint">${esc(x.note)}</div>` : '') + (x.traite_at ? `<div class="small faint">${fd(x.traite_at)}</div>` : '')}</td></tr>`; };
   const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${A.accesDetail(p) ? `<div class="small faint">${esc(A.accesDetail(p))}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
   let body;
   if(abF === 'reglages') body = reglages(c, P);
+  else if(abF === 'parrainage') body = parrainageAdm(c, D.profiles);
   else if(rows && abF === 'attente') body = `<div class="abo-cards">${rows.map(x => { const p = payer(x); return `<div class="card stack s8"><div class="row between nw"><div style="min-width:0;overflow-wrap:anywhere">${payerLink(x, p)}</div><b class="mono nowrap" style="font-size:17px">${F(x.montant)} F${devPaye(x)}</b></div>
       <dl class="kv"><dt>Moyen</dt><dd>${esc(moyenN(x.moyen))}${sourcePill(x)}</dd>${x.numero ? `<dt>Payé depuis</dt><dd class="mono">${esc(telFmt(x.numero))}</dd>` : ''}<dt>Référence</dt><dd class="mono" style="overflow-wrap:anywhere">${esc(x.reference)}</dd><dt>${x.source === 'chariow' ? 'Reçu' : 'Déclaré'}</dt><dd>${fdt(x.at)} · ${ago(x.at)}</dd><dt>Objet</dt><dd>${esc(objetTxt(x))}</dd></dl>${x.note ? `<p class="sub" style="margin:0">${esc(x.note)}</p>` : ''}
       <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}${x.objet === 'livre' ? 'Valider : remettre le livre' : x.objet === 'abo' ? 'Valider : activer l\'abonnement' : 'Valider : activer l\'accès'}</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
@@ -372,6 +431,30 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   <div class="toolbar">${abF === 'reglages' ? '' : `<label class="search">${ic('search')}<input id="abQ" placeholder="Nom, e-mail, téléphone, référence…" value="${esc(abQ)}"></label>`}<div class="tabs">${tabs.map(x => `<button class="tab ${abF === x[0] ? 'on' : ''}" data-abf="${x[0]}">${x[1]}${x[2] !== '' ? ` <span class="cnt">${x[2]}</span>` : ''}</button>`).join('')}</div></div>
   ${body}`;
 }});
+/* ---------- Espace PDG : parrainage (parrains, filleuls, récompenses, réglages) ---------- */
+function parrainageAdm(c, profs){
+  const R = c.parrainage, req = Math.max(1, +R.filleuls || 3), dispo = profs.some(p => p.code_parrain);
+  const fil = {}; profs.forEach(p => { if(p.parrain) (fil[p.parrain] = fil[p.parrain] || []).push(p); });
+  const rows = Object.keys(fil).map(id => { const f = fil[id], ok = f.filter(x => x.filleul_valide).length; return {p:profOf(id), f, ok}; }).sort((a, b) => b.ok - a.ok || b.f.length - a.f.length);
+  const recs = (AD().paiements || []).filter(x => x.source === 'parrainage');
+  const tab = rows.length ? `<div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Parrain</th><th>Code</th><th>Filleuls</th><th class="r">Inscrits</th><th class="r">Ont payé</th><th class="r">Récompenses</th><th>Prochaine</th></tr></thead><tbody>${rows.map(r => `<tr><td><a href="#/admin/apprenant/${r.p.id}" style="text-decoration:none"><b>${esc(nm(r.p))}</b></a><div class="small faint">${esc(r.p.email)}</div></td><td class="mono">${esc(r.p.code_parrain || '—')}</td>
+      <td class="small">${r.f.map(x => `<a href="#/admin/apprenant/${x.id}" style="text-decoration:none">${esc(nm(x))}</a>${x.filleul_valide ? ' ' + ic('check') : ' <span class="faint">(pas encore payé)</span>'}`).join('<br>')}</td><td class="r mono">${r.f.length}</td><td class="r mono" style="color:var(--ok)">${r.ok}</td><td class="r mono">${+r.p.parrain_recompenses || 0}</td><td class="mono nowrap">${r.ok % req} / ${req}</td></tr>`).join('')}</tbody></table></div></div>`
+    : `<div class="card">${A.empty('users', dispo ? 'Aucun apprenant n\'a encore été invité avec un code parrain.' : 'Le parrainage s\'active quand vous relancez le script supabase.sql.')}</div>`;
+  return `${tab}
+   <div class="cols"><div class="card stack"><h3 style="margin:0">Réglages du parrainage</h3>
+    <label class="check"><input type="checkbox" id="par_actif" ${R.actif !== false ? 'checked' : ''}>Récompenser automatiquement les parrains</label>
+    <div class="g3"><label class="fld"><span>Amis payants pour une récompense</span><input class="inp" type="number" min="1" max="50" id="par_filleuls" value="${esc(R.filleuls)}"></label>
+     <label class="fld"><span>Jours offerts par récompense</span><input class="inp" type="number" min="1" max="366" id="par_jours" value="${esc(R.jours)}"></label>
+     <label class="fld"><span>Formule offerte</span><select class="inp" id="par_formule"><option value="premium" ${R.formule !== 'basic' ? 'selected' : ''}>Premium</option><option value="basic" ${R.formule === 'basic' ? 'selected' : ''}>Basic</option></select></label></div>
+    <p class="sub" style="margin:0">Un filleul compte quand son paiement d'inscription ou d'abonnement est validé (par vous ou par Chariow), une seule fois. Les jours s'ajoutent à la suite de la formule en cours du parrain ; un parrain déjà Premium reste Premium. En pause, les filleuls continuent d'être comptés et les récompenses dues sont accordées au prochain paiement d'un filleul après la reprise.</p>
+    <button class="btn b-pri" style="justify-self:start" data-act="parsave">${ic('save')}Enregistrer</button></div>
+   <div class="card stack"><h3 style="margin:0">Récompenses accordées <small>${recs.length}</small></h3>${recs.length ? `<div class="stack s8">${recs.slice(0, 20).map(x => `<div class="row between nw"><span style="min-width:0"><b>${esc(nm(profOf(x.owner)))}</b><span class="small faint" style="display:block">${esc(x.note || '')}</span></span><span class="small faint nowrap">${fd(x.traite_at || x.at)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:0">Aucune récompense pour le moment.</p>'}</div></div>`;
+}
+A.on('click', '[data-act="parsave"]', async () => {
+  const n = (id, d, max) => Math.min(max, Math.max(1, Math.round(+A.val(id) || d)));
+  const parrainage = {actif:$('#par_actif').checked, filleuls:n('par_filleuls', 3, 50), jours:n('par_jours', 31, 366), formule:A.val('par_formule') === 'basic' ? 'basic' : 'premium'};
+  if(await A.db.saveSettings({parrainage})){ toast('Réglages du parrainage enregistrés', 'check'); A.refresh(); }
+});
 function reglages(c, P){
   return `<div class="cols"><div class="card stack">
    <h3 style="margin:0">Accès payant</h3>

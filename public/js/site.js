@@ -218,9 +218,14 @@ A.on('submit', '#fLogin', async () => {
   A.go(next && next.startsWith('#/app') ? next : '#/app');
 });
 
+/* lien d'invitation (…#/inscription?parrain=CODE) : le code est gardé jusqu'à la création du compte */
+const prendreParrain = () => { const q = String(A.query().get('parrain') || '').trim().toUpperCase(); if(/^[A-Z0-9]{4,12}$/.test(q)) A.ls.set('parrain', q); };
+window.addEventListener('hashchange', prendreParrain); prendreParrain();
+
 A.page('inscription', {space:'bare', title:'Inscription', render(){
-  if(S.me){ location.replace('#/app'); return null; }
-  const c = A.cfg();
+  prendreParrain();   // le routeur affiche la page avant les autres écouteurs de hashchange
+  if(S.me){ location.replace(A.ls.get('parrain', '') ? '#/app/parrainage' : '#/app'); return null; }
+  const c = A.cfg(), parrain = A.ls.get('parrain', '');
   if(c.openSignup === false) return `<div class="auth">${authHero()}<div class="a-side"><h2>Inscriptions fermées</h2><p class="muted">Les inscriptions sont momentanément fermées. Revenez bientôt ou contactez la direction.</p><a class="btn b-line" href="#/connexion">J'ai déjà un compte</a></div></div>`;
   return `<div class="auth">${authHero()}<div class="a-side">
    <div class="stack s8"><span class="kick">${A.paywallOn() ? 'Inscription' : 'Gratuit'}</span><h2>Créer mon compte</h2><p class="muted">Déjà inscrit ? <a href="#/connexion" style="color:var(--or2);font-weight:600">Connectez-vous</a></p>${A.paywallOn() ? `<div class="note info">${ic('coins')}<span>Accès complet : <b>${esc(A.prixTxt())}</b>${A.promoAcces() ? ` au lieu de ${A.promoOld(A.promoAcces())} ${A.promoTag(A.promoAcces())}` : ''}, par ${['wave','mtn','orange','moov'].filter(k => (c.pay||{})[k]).map(k => ({wave:'Wave', mtn:'MTN Mobile Money', orange:'Orange Money', moov:'Moov Money'})[k]).join(' ou ') || 'Mobile Money'}. ${A.chwDispo && A.chwDispo('acces') ? ' Depuis l\'étranger : paiement en ligne par carte bancaire, accès immédiat.' : ''} Après la création du compte, une page vous indique comment payer.</span></div>` : ''}</div>
@@ -229,6 +234,7 @@ A.page('inscription', {space:'bare', title:'Inscription', render(){
     <div class="g2"><label class="fld"><span>E-mail</span><input class="inp" id="suEmail" type="email" autocomplete="email" value="${esc(A.query().get('email') || '')}" required></label><label class="fld"><span>Téléphone (WhatsApp)</span><input class="inp" id="suPhone" inputmode="tel" autocomplete="tel"></label></div>
     <div class="g2"><label class="fld"><span>Ville</span><input class="inp" id="suCity" placeholder="Ex. Abidjan"></label><label class="fld"><span>Vous êtes</span><select class="inp" id="suProfil">${A.PROFILS.map(x=>`<option>${esc(x)}</option>`).join('')}</select></label></div>
     <div class="g2"><label class="fld"><span>Mot de passe (6 caractères min.)</span><input class="inp" id="suPw" type="password" autocomplete="new-password" required></label><label class="fld"><span>Confirmer</span><input class="inp" id="suPw2" type="password" autocomplete="new-password" required></label></div>
+    <label class="fld"><span>Code parrain (facultatif)</span><input class="inp mono" id="suParrain" maxlength="12" autocapitalize="characters" autocomplete="off" value="${esc(parrain)}" placeholder="Code d'un ami déjà inscrit"></label>${parrain ? `<p class="sub" style="margin:-6px 0 0">${ic('users')} Un ami vous a invité : son code est déjà rempli.</p>` : ''}
     <label class="check"><input type="checkbox" id="suOk" required><span class="sub">J'accepte que ma progression et mes connexions soient enregistrées pour le suivi pédagogique.</span></label>
     <button class="btn b-pri b-lg b-full">Créer mon compte ${ic('arrow')}</button>
    </form></div></div>`;
@@ -241,8 +247,9 @@ A.on('submit', '#fSignup', async () => {
   if(!A.emailOk(email)){ toast('E-mail invalide', 'x'); return; }
   if(!pwOk(A.val('suPw'), A.val('suPw2'))) return;
   const b = $('#fSignup button'); b.disabled = true;
-  const r = await A.db.signUp({email, password:A.val('suPw'), name, phone:A.val('suPhone'), city:A.val('suCity'), profil:A.val('suProfil')});
+  const r = await A.db.signUp({email, password:A.val('suPw'), name, phone:A.val('suPhone'), city:A.val('suCity'), profil:A.val('suProfil'), parrain:A.val('suParrain')});
   b.disabled = false;
+  if(r.ok || r.confirm) A.ls.del('parrain');
   if(!r.ok){ toast(r.msg, r.confirm ? 'mail' : 'x'); if(r.confirm) A.go('#/connexion'); return; }
   toast('Compte créé. Bienvenue !');
   const next = A.ss.get('next'); A.ss.del('next');
