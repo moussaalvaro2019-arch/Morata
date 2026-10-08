@@ -263,6 +263,7 @@ A.page('app/profil', {space:'app', free:true, title:'Mon profil', crumb:'Compte'
    <div class="card"><h3>Mes informations</h3><form id="fProf" class="stack">
     <div class="g2"><label class="fld"><span>Nom et prénoms</span><input class="inp" id="pfName" value="${esc(d.name)}"></label><label class="fld"><span>E-mail</span><input class="inp" value="${esc(me.email)}" disabled></label></div>
     <div class="g3"><label class="fld"><span>Téléphone</span><input class="inp" id="pfPhone" value="${esc(d.phone)}"></label><label class="fld"><span>Ville</span><input class="inp" id="pfCity" value="${esc(d.city)}"></label><label class="fld"><span>Profil</span><select class="inp" id="pfProfil">${A.PROFILS.concat(d.profil && !A.PROFILS.includes(d.profil)?[d.profil]:[]).map(x=>`<option ${x===d.profil?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div>
+    <label class="check"><input type="checkbox" id="pfRappels" ${d.rappels === false ? '' : 'checked'}><span class="sub">Recevoir par e-mail les rappels utiles : paiement à terminer, fin de mon essai ou de mon abonnement.</span></label>
     <button class="btn b-pri" style="justify-self:start">${ic('save')}Enregistrer</button></form></div>
    <div class="card"><h3>Mot de passe</h3><div class="g2"><label class="fld"><span>Nouveau mot de passe</span><input class="inp" id="pnPw" type="password" autocomplete="new-password"></label><label class="fld"><span>Confirmer</span><input class="inp" id="pnPw2" type="password" autocomplete="new-password"></label></div><button class="btn b-line" style="margin-top:12px" data-act="pwsave">${ic('lock')}Changer le mot de passe</button></div>
    <div class="card"><h3>Mes travaux <small>${works.length}</small></h3>${works.length?`<div class="tw"><table class="t"><thead><tr><th>Nom</th><th>Type</th><th>Modifié</th><th></th></tr></thead><tbody>${works.map(([id,w])=>`<tr><td><b>${esc((w.data||{}).name||'Sans nom')}</b></td><td>${A.workPill(w.kind)}</td><td class="sub">${ago(w.updated_at)}</td><td class="r"><a class="btn b-line b-xs" href="${w.kind==='photo'?'#/app/resoudre?h='+id:'#/app/'+(w.kind==='dessin'?'atelier':'metre')+'/'+id}">Ouvrir</a></td></tr>`).join('')}</tbody></table></div>`:'<p class="sub">Vos plans, vos métrés et vos exercices résolus en photo apparaîtront ici.</p>'}</div>
@@ -275,7 +276,7 @@ A.page('app/profil', {space:'app', free:true, title:'Mon profil', crumb:'Compte'
   </div></div>`;
 }});
 A.on('submit', '#fProf', async () => {
-  const data = Object.assign({}, S.me.data, {name:A.val('pfName').trim(), phone:A.val('pfPhone').trim(), city:A.val('pfCity').trim(), profil:A.val('pfProfil')});
+  const data = Object.assign({}, S.me.data, {name:A.val('pfName').trim(), phone:A.val('pfPhone').trim(), city:A.val('pfCity').trim(), profil:A.val('pfProfil'), rappels:!!($('#pfRappels') || {checked:true}).checked});
   if(await A.db.saveProfile(data)){ toast('Profil enregistré'); A.refresh(); }
 });
 
