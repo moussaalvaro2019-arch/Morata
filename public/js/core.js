@@ -784,6 +784,14 @@ A.db = {
     const x = {id:(d.paiements.reduce((a,p)=>Math.max(a, p.id||0), 0)) + 1, owner:S.me.id, at:now(), montant:fcfa, moyen:'chariow', numero:'', reference:'sale_demo_' + Date.now().toString(36), formule:abo ? ref : mens ? 'mensuel' : 'unique', mois:mens || abo ? 1 : 0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:now(), source:'chariow', email:S.me.email, devise:dev, montant_devise:+A.conv(fcfa, dev).toFixed(2), objet:lv ? 'livre' : abo ? 'abo' : 'acces', livre:lv ? ref : null};
     d.paiements.push(x); localApply(x); L.save(); await this.refreshAccess(); return true;
   },
+  async relancer(owner, situation){   // direction : envoyer tout de suite le message type par e-mail
+    const kind = situation === 'paiement' ? 'paiement' : situation.startsWith('essai') ? 'fin_essai' : 'fin_abo';
+    if(S.mode === 'local'){ L.db.rappels = L.db.rappels || []; L.db.rappels.push({owner, kind, ref:'manuel:' + new Date().toISOString(), at:new Date().toISOString()}); L.save(); return {ok:true, demo:true}; }
+    try{
+      const r = await fetch('/api/relance', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + await this.token()}, body:JSON.stringify({owner, situation})});
+      const j = await r.json().catch(() => ({})); return r.ok ? j : {ok:false, error:j.error || 'Service d\'envoi indisponible'};
+    }catch(_){ return {ok:false, error:'Connexion impossible au service d\'envoi'}; }
+  },
   async chariowEtat(){
     if(S.mode === 'local') return null;
     try{ const r = await fetch('/api/chariow/etat', {cache:'no-store'}); return r.ok ? await r.json() : null; }catch(_){ return null; }

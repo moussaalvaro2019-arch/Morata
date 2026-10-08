@@ -33,6 +33,9 @@ const F = (n) => Math.round(+n || 0).toLocaleString("fr-FR").replace(/[  ]/g,
 const telFmt = (t) => String(t || "").replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 const prenom = (p) => String((p.data || {}).name || "").trim().split(/\s+/)[0] || "";
 
+export function reglagesPlateforme(reglages = {}) {
+  return Object.assign({ nom: "BâtiPro Académie", ceo: "La direction", prixAcces: 4000, prixBasic: 2000, prixPremium: 5000, essaiJours: 31, aboJours: 31, whatsapp: "0544176359" }, reglages);
+}
 /* ---------- qui relancer, et avec quel message (logique pure, testée hors ligne) ---------- */
 export function choisirRappels({ profils = [], admins = [], paiements = [], envoyes = [], reglages = {}, maintenant = Date.now(), site = "" }) {
   const R = Object.assign({ actif: true, impayes: true, fins: true }, reglages.rappels || {});
@@ -41,7 +44,7 @@ export function choisirRappels({ profils = [], admins = [], paiements = [], envo
   const attente = new Set(paiements.filter((x) => x.statut === "en_attente" && ["acces", "abo", null, undefined].includes(x.objet)).map((x) => x.owner));
   const paye = new Set(paiements.filter((x) => x.statut === "valide" && ["acces", "abo", null, undefined].includes(x.objet)).map((x) => x.owner));
   const deja = new Set(envoyes.map((e) => `${e.owner}|${e.kind}|${e.ref}`));
-  const c = Object.assign({ nom: "BâtiPro Académie", prixAcces: 4000, prixBasic: 2000, prixPremium: 5000, essaiJours: 31, aboJours: 31, whatsapp: "0544176359" }, reglages);
+  const c = reglagesPlateforme(reglages);
   const t = maintenant, out = [];
   for (const p of profils) {
     const email = String(p.email || "").trim().toLowerCase();
@@ -69,40 +72,45 @@ export function choisirRappels({ profils = [], admins = [], paiements = [], envo
   return out;
 }
 
-/* ---------- textes des e-mails ---------- */
+/* ---------- messages types (modifiables par la direction : settings.main.rappels.modeles) ----------
+   Le même texte sert à l'e-mail automatique et au bouton WhatsApp de l'onglet Relances.
+   Copie identique dans public/js/abo.js (A.RAP_MODELES) : un test vérifie qu'elles ne divergent pas. */
+export const MODELES = {
+  paiement: { sujet: "Votre compte {plateforme} est prêt : il reste à activer votre accès",
+    texte: "Bonjour {prenom},\n\nVous avez créé votre compte sur {plateforme} le {date}, mais votre inscription n'est pas encore payée.\n\nLe premier chapitre de chaque matière reste gratuit. L'inscription ({prix_inscription} FCFA) ouvre tout pendant {jours_essai} jours : tous les cours, les exercices corrigés, les sujets d'examen, les calculs guidés, l'atelier de dessin et le professeur IA.\n\nPaiement par Wave, MTN Mobile Money ou carte bancaire : {lien}\n\nUne question ? Répondez à ce message ou écrivez-nous sur WhatsApp au {whatsapp}.\n\n{directeur}, {plateforme}" },
+  essai_avant: { sujet: "Vos jours tout compris se terminent le {date}",
+    texte: "Bonjour {prenom},\n\nVous profitez de tout sur {plateforme} jusqu'au {date}. Ensuite, vous gardez tous les cours avec la formule Inscrit.\n\nPour garder les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA, choisissez Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}" },
+  essai_fini: { sujet: "Votre période tout compris est terminée",
+    texte: "Bonjour {prenom},\n\nVotre période tout compris sur {plateforme} s'est terminée le {date}. Vous gardez tous les cours avec la formule Inscrit.\n\nPour retrouver les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA : Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}" },
+  abo_avant: { sujet: "Votre abonnement {formule} se termine le {date}",
+    texte: "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} se termine le {date}. Renouvelez-le pour continuer sans interruption : {prix} FCFA pour {jours_abo} jours, ajoutés à la suite des jours qui vous restent.\n\nRenouveler : {lien}\n\n{directeur}, {plateforme}" },
+  abo_fini: { sujet: "Votre abonnement {formule} a pris fin",
+    texte: "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} s'est terminé le {date} : vous êtes revenu à la formule Inscrit (tous les cours, contenus réduits).\n\nReprenez {formule} pour {prix} FCFA ({jours_abo} jours) : {lien}\n\n{directeur}, {plateforme}" },
+};
+const BOUTONS = { paiement: "Activer mon accès", essai_avant: "Choisir ma formule", essai_fini: "Choisir ma formule", abo_avant: "Renouveler", abo_fini: "Reprendre mon abonnement" };
+export const situation = (r) => r.kind === "paiement" ? "paiement" : (r.kind === "fin_essai" ? "essai_" : "abo_") + (String(r.ref).startsWith("fini:") ? "fini" : "avant");
+export function remplir(modele, vars) {
+  return String(modele || "").replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k] ?? "") : m)).replace(/[ \u00a0]+([,.])/g, "$1").trim();
+}
+export function variables(r, p, c, site) {
+  const plan = r.plan === "premium" ? "Premium" : "Basic";
+  return { prenom: r.prenom || prenom(p), plateforme: c.nom, date: dateFr(r.kind === "paiement" ? r.cree : r.fin),
+    prix_inscription: F(c.prixAcces), prix_basic: F(c.prixBasic), prix_premium: F(c.prixPremium),
+    prix: F(r.kind === "fin_abo" ? (r.plan === "premium" ? c.prixPremium : c.prixBasic) : c.prixAcces), formule: plan,
+    jours_essai: c.essaiJours, jours_abo: c.aboJours, lien: (site || "") + "/#/app/abonnement", whatsapp: telFmt(c.whatsapp), directeur: c.ceo };
+}
+
+/* ---------- e-mail à partir du message type ---------- */
 export function message(r, p, c, site) {
-  const plan = r.plan === "premium" ? "Premium" : "Basic", prixPlan = r.plan === "premium" ? c.prixPremium : c.prixBasic;
-  const lien = (site || "") + "/#/app/abonnement", wa = telFmt(c.whatsapp), fini = String(r.ref).startsWith("fini:");
-  let sujet, corps, bouton;
-  if (r.kind === "paiement") {
-    sujet = r.etape === 7 ? `Dernier rappel : votre accès à ${c.nom} n'est pas encore activé`
-      : r.etape === 3 ? `Vous avez lu le premier chapitre ? Activez votre accès complet`
-      : `Votre compte ${c.nom} est prêt : il reste à activer votre accès`;
-    corps = [`Vous avez créé votre compte le ${dateFr(r.cree)}, mais votre inscription n'est pas encore payée.`,
-      `Le premier chapitre de chaque matière reste gratuit. Pour tout débloquer (tous les cours, exercices corrigés, sujets d'examen, calculs guidés pas à pas, atelier de dessin et professeur IA), l'inscription coûte <b>${F(c.prixAcces)} FCFA</b>, avec <b>${c.essaiJours} jours tout compris</b>.`,
-      `Paiement par Wave, MTN Mobile Money ou carte bancaire, depuis la page « Mon abonnement ».`];
-    bouton = "Activer mon accès";
-  } else if (r.kind === "fin_essai") {
-    sujet = fini ? `Votre période tout compris est terminée` : `Vos jours tout compris se terminent le ${dateFr(r.fin)}`;
-    corps = [fini ? `Votre période tout compris s'est terminée le ${dateFr(r.fin)}. Vous gardez tous les cours avec la formule Inscrit.`
-                  : `Vous profitez de tout jusqu'au <b>${dateFr(r.fin)}</b>. Ensuite, vous gardez tous les cours avec la formule Inscrit.`,
-      `Pour garder les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA : <b>Basic ${F(c.prixBasic)} FCFA</b> ou <b>Premium ${F(c.prixPremium)} FCFA</b> pour ${c.aboJours} jours.`];
-    bouton = "Choisir ma formule";
-  } else {
-    sujet = fini ? `Votre abonnement ${plan} a pris fin` : `Votre abonnement ${plan} se termine le ${dateFr(r.fin)}`;
-    corps = [fini ? `Votre abonnement <b>${plan}</b> s'est terminé le ${dateFr(r.fin)} : vous êtes revenu à la formule Inscrit (tous les cours, contenus réduits).`
-                  : `Votre abonnement <b>${plan}</b> se termine le <b>${dateFr(r.fin)}</b>.`,
-      `Renouvelez-le pour continuer sans interruption : <b>${F(prixPlan)} FCFA</b> pour ${c.aboJours} jours${fini ? "" : ", ajoutés à la suite des jours qui vous restent"}.`];
-    bouton = fini ? "Reprendre mon abonnement" : "Renouveler";
-  }
-  const nom = r.prenom || prenom(p);
-  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#14202E;max-width:560px">
-<p>Bonjour${nom ? " " + H(nom) : ""},</p>${corps.map((x) => `<p>${x}</p>`).join("")}
-<p><a href="${H(lien)}" style="display:inline-block;background:#E8752A;color:#fff;padding:11px 20px;border-radius:10px;text-decoration:none;font-weight:bold">${H(bouton)}</a></p>
-${wa ? `<p>Une question ? Écrivez-nous sur WhatsApp : <b>${H(wa)}</b>.</p>` : ""}
-<p style="color:#5E6B7A;font-size:12.5px">${H(c.nom)} · ${H((site || "").replace(/^https?:\/\//, ""))}<br>Vous recevez ce message car vous avez un compte sur la plateforme. Pour ne plus recevoir ces rappels : Mon profil → décochez « Recevoir par e-mail les rappels utiles ».</p></div>`;
-  const texte = [`Bonjour${nom ? " " + nom : ""},`, ...corps.map((x) => x.replace(/<[^>]+>/g, "")), `${bouton} : ${lien}`, wa ? `WhatsApp : ${wa}` : ""].filter(Boolean).join("\n\n");
-  return { sujet, html, texte };
+  const k = situation(r), m = Object.assign({}, MODELES[k], ((c.rappels || {}).modeles || {})[k] || {});
+  const v = variables(r, p, c, site), sujet = remplir(m.sujet || MODELES[k].sujet, v), texte = remplir(m.texte || MODELES[k].texte, v);
+  const lien = v.lien, wa = v.whatsapp && !texte.includes(v.whatsapp) ? `Une question ? WhatsApp : ${v.whatsapp}` : "";
+  const pied = `${c.nom} · ${(site || "").replace(/^https?:\/\//, "")}`, desinscription = "Vous recevez ce message car vous avez un compte sur la plateforme. Pour ne plus recevoir ces rappels : Mon profil → décochez « Recevoir par e-mail les rappels utiles ».";
+  const para = texte.split(/\n\s*\n/).map((b) => `<p>${H(b).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#C95F18">$1</a>').replace(/\n/g, "<br>")}</p>`).join("");
+  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#14202E;max-width:560px">${para}
+<p><a href="${H(lien)}" style="display:inline-block;background:#E8752A;color:#fff;padding:11px 20px;border-radius:10px;text-decoration:none;font-weight:bold">${H(BOUTONS[k])}</a></p>
+${wa ? `<p>${H(wa)}</p>` : ""}<p style="color:#5E6B7A;font-size:12.5px">${H(pied)}<br>${H(desinscription)}</p></div>`;
+  return { sujet, html, texte: texte + (wa ? "\n\n" + wa : "") + "\n\n--\n" + pied + "\n" + desinscription, situation: k };
 }
 
 /* ---------- Supabase (clé de service) ---------- */

@@ -467,13 +467,25 @@ function aRelancer(L, pay){
   });
   return out.sort((a, b) => (a.kind === 'paiement' ? 1 : 0) - (b.kind === 'paiement' ? 1 : 0) || (a.fin || a.cree) - (b.fin || b.cree));
 }
-const relanceTxt = (r, c) => {
-  const nom = ((r.p.data || {}).name || '').split(' ')[0], site = location.origin + location.pathname, plan = nomPlan(r.plan), jours = +c.aboJours || 31;
-  const deb = `Bonjour${nom ? ' ' + nom : ''}, c'est ${c.ceo} de ${A.cfg().nom}. `;
-  if(r.kind === 'paiement') return deb + `Vous avez créé votre compte le ${fd(r.cree)}, mais votre inscription n'est pas encore payée. Le 1er chapitre de chaque matière est gratuit ; l'inscription (${F(montant())} FCFA) ouvre tout pendant ${+c.essaiJours || 31} jours. Payez ici : ${site}#/app/abonnement. Une question ? Répondez-moi ici.`;
-  if(r.kind === 'fin_essai') return deb + (r.fini ? `Votre période tout compris s'est terminée le ${fd(r.fin)} : vous gardez tous les cours.` : `Vos jours tout compris se terminent le ${fd(r.fin)}.`) + ` Pour garder les exercices, sujets, calculs guidés, l'atelier et le professeur IA : Basic ${F(prixPlan('basic'))} FCFA ou Premium ${F(prixPlan('premium'))} FCFA pour ${jours} jours. ${site}#/app/abonnement`;
-  return deb + (r.fini ? `Votre abonnement ${plan} s'est terminé le ${fd(r.fin)}.` : `Votre abonnement ${plan} se termine le ${fd(r.fin)}.`) + ` Renouvelez-le : ${F(prixPlan(r.plan))} FCFA pour ${jours} jours${r.fini ? '' : ', ajoutés à la suite'}. ${site}#/app/abonnement`;
+/* messages types : copie identique de MODELES dans netlify/functions/rappels.mjs (vérifiée par un test) */
+A.RAP_MODELES = {
+  paiement:{"sujet": "Votre compte {plateforme} est prêt : il reste à activer votre accès", "texte": "Bonjour {prenom},\n\nVous avez créé votre compte sur {plateforme} le {date}, mais votre inscription n'est pas encore payée.\n\nLe premier chapitre de chaque matière reste gratuit. L'inscription ({prix_inscription} FCFA) ouvre tout pendant {jours_essai} jours : tous les cours, les exercices corrigés, les sujets d'examen, les calculs guidés, l'atelier de dessin et le professeur IA.\n\nPaiement par Wave, MTN Mobile Money ou carte bancaire : {lien}\n\nUne question ? Répondez à ce message ou écrivez-nous sur WhatsApp au {whatsapp}.\n\n{directeur}, {plateforme}"},
+  essai_avant:{"sujet": "Vos jours tout compris se terminent le {date}", "texte": "Bonjour {prenom},\n\nVous profitez de tout sur {plateforme} jusqu'au {date}. Ensuite, vous gardez tous les cours avec la formule Inscrit.\n\nPour garder les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA, choisissez Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}"},
+  essai_fini:{"sujet": "Votre période tout compris est terminée", "texte": "Bonjour {prenom},\n\nVotre période tout compris sur {plateforme} s'est terminée le {date}. Vous gardez tous les cours avec la formule Inscrit.\n\nPour retrouver les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA : Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}"},
+  abo_avant:{"sujet": "Votre abonnement {formule} se termine le {date}", "texte": "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} se termine le {date}. Renouvelez-le pour continuer sans interruption : {prix} FCFA pour {jours_abo} jours, ajoutés à la suite des jours qui vous restent.\n\nRenouveler : {lien}\n\n{directeur}, {plateforme}"},
+  abo_fini:{"sujet": "Votre abonnement {formule} a pris fin", "texte": "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} s'est terminé le {date} : vous êtes revenu à la formule Inscrit (tous les cours, contenus réduits).\n\nReprenez {formule} pour {prix} FCFA ({jours_abo} jours) : {lien}\n\n{directeur}, {plateforme}"}
 };
+const RAP_SIT = [['paiement', 'Inscrit qui n\'a pas payé'], ['essai_avant', 'Essai : 3 jours avant la fin'], ['essai_fini', 'Essai terminé'], ['abo_avant', 'Abonnement : 3 jours avant la fin'], ['abo_fini', 'Abonnement terminé']];
+const RAP_VARS = [['prenom', 'prénom de l\'apprenant'], ['date', 'date d\'inscription ou de fin'], ['prix_inscription', 'prix de l\'inscription'], ['prix_basic', 'prix Basic'], ['prix_premium', 'prix Premium'], ['prix', 'prix de sa formule'], ['formule', 'Basic ou Premium'], ['jours_essai', 'jours tout compris'], ['jours_abo', 'jours d\'abonnement'], ['lien', 'lien vers Mon abonnement'], ['whatsapp', 'votre WhatsApp'], ['directeur', 'votre nom'], ['plateforme', 'nom de la plateforme']];
+const situationDe = r => r.kind === 'paiement' ? 'paiement' : (r.kind === 'fin_essai' ? 'essai_' : 'abo_') + (r.fini ? 'fini' : 'avant');
+const modeleDe = (k, c) => Object.assign({}, A.RAP_MODELES[k], (((c.rappels || {}).modeles) || {})[k] || {});
+const remplir = (t, v) => String(t || '').replace(/\{(\w+)\}/g, (m, k) => k in v ? String(v[k] ?? '') : m).replace(/[ \u00a0]+([,.])/g, '$1').trim();
+const dateLong = v => new Date(ts(v)).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+const relanceVars = (r, c) => ({prenom:((r.p.data || {}).name || '').trim().split(/\s+/)[0] || '', plateforme:A.cfg().nom, date:dateLong(r.kind === 'paiement' ? r.cree : r.fin),
+  prix_inscription:F(montant()), prix_basic:F(prixPlan('basic')), prix_premium:F(prixPlan('premium')), prix:F(r.kind === 'fin_abo' ? prixPlan(r.plan) : montant()), formule:nomPlan(r.plan || 'premium'),
+  jours_essai:+c.essaiJours || 31, jours_abo:+c.aboJours || 31, lien:location.origin + location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') + '/#/app/abonnement', whatsapp:telFmt(c.whatsapp), directeur:c.ceo});
+const relanceTxt = (r, c) => remplir(modeleDe(situationDe(r), c).texte, relanceVars(r, c));
+let rpSit = 'paiement';
 function relancesAdm(c, L, pay){
   const R = Object.assign({actif:true, impayes:true, fins:true}, c.rappels || {}), liste = aRelancer(L, pay), rap = AD().rappels || [];
   const dernier = id => rap.filter(x => x.owner === id).sort((a, b) => ts(b.at) - ts(a.at))[0];
@@ -488,20 +500,56 @@ function relancesAdm(c, L, pay){
     return `<tr><td><a href="#/admin/apprenant/${r.p.id}" style="text-decoration:none"><b>${esc(nm(r.p))}</b></a><div class="small faint">${esc(r.p.email)}${tel ? ' · ' + esc(telFmt(tel)) : ''}</div></td>
      <td><span class="pill ${r.kind === 'paiement' ? 'p-warn' : r.fini ? 'p-bad' : 'p-info'}">${esc(RAP_NOM[r.kind])}</span><div class="small faint">${esc(sit(r))}</div></td>
      <td class="small">${d ? `${esc(RAP_NOM[d.kind] || d.kind)}<div class="faint">${fdt(d.at)}</div>` : '<span class="faint">aucun</span>'}${(r.p.data || {}).rappels === false ? '<div class="faint">a refusé les e-mails</div>' : ''}</td>
-     <td><div class="row nw">${tel ? `<a class="btn b-ok b-xs" target="_blank" rel="noopener" href="${esc(waLink(tel, txt))}">${ic('whatsapp')}WhatsApp</a>` : ''}<button class="btn b-line b-xs" data-copy="${esc(txt)}">${ic('copy')}Message</button></div></td></tr>`; }).join('');
+     <td><div class="row nw">${tel ? `<a class="btn b-ok b-xs" target="_blank" rel="noopener" href="${esc(waLink(tel, txt))}">${ic('whatsapp')}WhatsApp</a>` : ''}<button class="btn b-line b-xs" data-relmail="${esc(r.p.id)}" data-sit="${situationDe(r)}">${ic('mail')}E-mail</button><button class="btn b-ghost b-xs" data-copy="${esc(txt)}" aria-label="Copier le message">${ic('copy')}</button></div></td></tr>`; }).join('');
+  const M = modeleDe(rpSit, c), exemple = liste.find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
+  const perso = !!((((c.rappels || {}).modeles) || {})[rpSit]);
+  const editeur = `<div class="card stack"><div class="row between"><h3 style="margin:0">Messages types</h3><span class="sub">utilisés pour l'e-mail automatique, le bouton E-mail et le bouton WhatsApp</span></div>
+    <div class="tabs">${RAP_SIT.map(([k, t]) => `<button class="tab ${rpSit === k ? 'on' : ''}" data-rpsit="${k}">${esc(t)}${(((c.rappels || {}).modeles) || {})[k] ? ' ✎' : ''}</button>`).join('')}</div>
+    <div class="cols"><div class="stack s8">
+      <label class="fld"><span>Objet de l'e-mail</span><input class="inp" id="rp_sujet" maxlength="150" value="${esc(M.sujet)}"></label>
+      <label class="fld"><span>Message (e-mail et WhatsApp)</span><textarea class="inp" id="rp_texte" rows="12" maxlength="2000">${esc(M.texte)}</textarea></label>
+      <div class="row"><button class="btn b-pri" data-act="rpmodsave">${ic('save')}Enregistrer ce message</button>${perso ? `<button class="btn b-line" data-act="rpmodreset">${ic('undo')}Remettre le texte d'origine</button>` : ''}<button class="btn b-ghost" data-act="rpmodvoir">${ic('eye')}Aperçu</button></div>
+      <p class="sub" style="margin:0">Mots remplacés automatiquement (écrivez-les avec les accolades) : ${RAP_VARS.map(([k, t]) => `<code>{${k}}</code> ${esc(t)}`).join(' · ')}. L'e-mail ajoute tout seul un bouton vers « Mon abonnement » et la mention pour se désinscrire.</p></div>
+     <div class="stack s8"><b class="small">Aperçu${exemple.p.id ? ' pour ' + esc(nm(exemple.p)) : ' (exemple)'}</b><div class="rp-apercu" id="rp_apercu"><b>${esc(remplir(M.sujet, relanceVars(exemple, c)))}</b>\n\n${esc(remplir(M.texte, relanceVars(exemple, c)))}</div></div></div></div>`;
   return `<div class="cols"><div class="card stack"><h3 style="margin:0">Rappels automatiques par e-mail</h3>${etat}
     <label class="check"><input type="checkbox" id="rp_actif" ${R.actif !== false ? 'checked' : ''}>Envoyer les rappels automatiquement</label>
     <label class="check"><input type="checkbox" id="rp_impayes" ${R.impayes !== false ? 'checked' : ''}>Inscrits qui n'ont pas payé : 1, 3 puis 7 jours après la création du compte</label>
     <label class="check"><input type="checkbox" id="rp_fins" ${R.fins !== false ? 'checked' : ''}>Essai et abonnements : 3 jours avant la fin, puis le jour où ils se terminent</label>
     <p class="sub" style="margin:0">Dans l'application, l'apprenant voit aussi une fenêtre d'avertissement (une fois par jour) dès 3 jours avant la fin. Il peut refuser les e-mails dans « Mon profil ».</p>
     <button class="btn b-pri" style="justify-self:start" data-act="rpsave">${ic('save')}Enregistrer</button></div>
-   <div class="card stack"><h3 style="margin:0">Derniers e-mails envoyés <small>${rap.length}</small></h3>${rap.length ? `<div class="stack s8">${rap.slice(0, 15).map(x => `<div class="row between nw"><span style="min-width:0"><b>${esc(nm(profOf(x.owner)))}</b><span class="small faint" style="display:block">${esc(RAP_NOM[x.kind] || x.kind)} · ${esc(String(x.ref).replace(/^(avant|fini):(\d{4}-\d{2}-\d{2})$/, (m, k, d) => (k === 'avant' ? 'fin le ' : 'terminé le ') + fd(d)).replace(/^j(\d+)$/, '$1 j après l\'inscription'))}</span></span><span class="small faint nowrap">${fdt(x.at)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:0">Aucun e-mail envoyé pour le moment.</p>'}</div></div>
+   <div class="card stack"><h3 style="margin:0">Derniers e-mails envoyés <small>${rap.length}</small></h3>${rap.length ? `<div class="stack s8">${rap.slice(0, 15).map(x => `<div class="row between nw"><span style="min-width:0"><b>${esc(nm(profOf(x.owner)))}</b><span class="small faint" style="display:block">${esc(RAP_NOM[x.kind] || x.kind)} · ${esc(String(x.ref).replace(/^(avant|fini):(\d{4}-\d{2}-\d{2})$/, (m, k, d) => (k === 'avant' ? 'fin le ' : 'terminé le ') + fd(d)).replace(/^j(\d+)$/, '$1 j après l\'inscription').replace(/^manuel:.*$/, 'envoyé par vous'))}</span></span><span class="small faint nowrap">${fdt(x.at)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:0">Aucun e-mail envoyé pour le moment.</p>'}</div></div>
    <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>À relancer</th><th>Situation</th><th>Dernier e-mail</th><th>Relancer vous-même</th></tr></thead><tbody>${rows || `<tr><td colspan="4">${A.empty('check', 'Personne à relancer pour le moment.')}</td></tr>`}</tbody></table></div></div>
-   <p class="sub">Le bouton WhatsApp ouvre la conversation avec un message déjà écrit (à envoyer depuis votre WhatsApp Business). Les envois WhatsApp entièrement automatiques demandent l'API WhatsApp Business de Meta (payante, vérification de l'entreprise) : les e-mails font ce travail gratuitement.</p>`;
+   ${editeur}
+   <p class="sub">Le bouton <b>E-mail</b> envoie tout de suite le message type à cette personne. Le bouton <b>WhatsApp</b> ouvre la conversation avec le message déjà écrit : vous pouvez encore le modifier avant d'appuyer sur Envoyer dans votre WhatsApp Business. Les envois WhatsApp entièrement automatiques demandent l'API WhatsApp Business de Meta (payante, vérification de l'entreprise) : les e-mails font ce travail gratuitement.</p>`;
 }
 A.on('click', '[data-act="rpsave"]', async () => {
-  const rappels = {actif:$('#rp_actif').checked, impayes:$('#rp_impayes').checked, fins:$('#rp_fins').checked};
+  const rappels = Object.assign({}, A.cfg().rappels || {}, {actif:$('#rp_actif').checked, impayes:$('#rp_impayes').checked, fins:$('#rp_fins').checked});
   if(await A.db.saveSettings({rappels})){ toast('Réglages des rappels enregistrés', 'check'); A.refresh(); }
+});
+A.on('click', '[data-rpsit]', el => { rpSit = el.dataset.rpsit; A.refresh(); });
+const rpModeles = m => A.db.saveSettings({rappels:Object.assign({}, A.cfg().rappels || {}, {modeles:m})});
+A.on('click', '[data-act="rpmodsave"]', async () => {
+  const sujet = A.val('rp_sujet').trim(), texte = A.val('rp_texte').trim();
+  if(sujet.length < 5 || texte.length < 20){ toast('Écrivez un objet et un message', 'x'); return; }
+  const inconnus = [...(sujet + ' ' + texte).matchAll(/\{(\w+)\}/g)].map(x => x[1]).filter(k => !RAP_VARS.some(v => v[0] === k));
+  if(inconnus.length){ toast('Mot inconnu entre accolades : {' + inconnus[0] + '}', 'x'); return; }
+  const m = Object.assign({}, (A.cfg().rappels || {}).modeles || {}), d = A.RAP_MODELES[rpSit];
+  if(sujet === d.sujet && texte === d.texte) delete m[rpSit]; else m[rpSit] = {sujet, texte};
+  if(await rpModeles(m)){ toast('Message enregistré', 'check'); A.refresh(); }
+});
+A.on('click', '[data-act="rpmodreset"]', async () => { const m = Object.assign({}, (A.cfg().rappels || {}).modeles || {}); delete m[rpSit]; if(await rpModeles(m)){ toast('Texte d\'origine remis', 'check'); A.refresh(); } });
+A.on('click', '[data-act="rpmodvoir"]', () => {   // aperçu du texte en cours de saisie, avant d'enregistrer
+  const c = A.cfg(), L = AD().profiles.filter(p => !p.admin), ex = aRelancer(L, AD().paiements || []).find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
+  const v = relanceVars(ex, c), el = $('#rp_apercu'); if(el) el.innerHTML = `<b>${esc(remplir(A.val('rp_sujet'), v))}</b>\n\n${esc(remplir(A.val('rp_texte'), v))}`;
+});
+A.on('click', '[data-relmail]', async el => {
+  const owner = el.dataset.relmail, sit = el.dataset.sit, p = AD().profiles.find(x => x.id === owner) || {};
+  if((p.data || {}).rappels === false && !el.dataset.ok){ el.dataset.ok = '1'; toast('Cette personne a refusé les e-mails : cliquez encore pour envoyer quand même', 'alert'); return; }
+  el.disabled = true;
+  const r = await A.db.relancer(owner, sit);
+  el.disabled = false;
+  if(!r.ok){ toast(r.error || 'Envoi impossible', 'x'); return; }
+  toast(r.demo ? 'Démonstration : e-mail simulé (rien n\'est envoyé)' : 'E-mail envoyé à ' + (r.email || p.email), 'mail'); await A.loadAdmin(); A.refresh();
 });
 
 /* ---------- Espace PDG : parrainage (parrains, filleuls, récompenses, réglages) ---------- */
