@@ -14,6 +14,7 @@
 //   SUPABASE_URL               facultatif (sinon lu dans /config.js)
 //   SITE_URL                   facultatif : adresse du site pour le retour après paiement
 //   RESEND_API_KEY + MAIL_FROM facultatif : e-mail « votre accès est activé » envoyé par la plateforme
+//   MAIL_REPLY_TO              facultatif : adresse qui reçoit les réponses des acheteurs
 //                              (Chariow envoie de toute façon son reçu d'achat à l'acheteur)
 //   MAIL_DIRECTION             facultatif : adresse de la direction, prévenue à chaque paiement en ligne
 // =====================================================================
@@ -139,7 +140,7 @@ async function envoyerMail(o, site) {
     : `<p>Merci pour votre paiement. Pour en profiter, <b>créez votre compte avec cette même adresse e-mail</b> (${H(o.email)}) : ${livre ? "le livre" : "votre accès"} y sera ajouté automatiquement.</p>`;
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#14202E;max-width:560px">${o.nom ? `<p>Bonjour ${H(o.nom)},</p>` : "<p>Bonjour,</p>"}${corps}<p><a href="${H(lien)}" style="display:inline-block;background:#E8752A;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:bold">${o.compte ? "Ouvrir mon espace" : "Créer mon compte"}</a></p><p style="color:#5E6B7A;font-size:13px">${H(nom)} · paiement en ligne via Chariow</p></div>`;
   try {
-    const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" }, body: JSON.stringify({ from, to: [o.email], subject: sujet, html }) });
+    const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ from, to: [o.email], subject: sujet, html }, env("MAIL_REPLY_TO").trim() ? { reply_to: env("MAIL_REPLY_TO").trim() } : {})) });
     return r.ok;
   } catch (_) { return false; }
 }

@@ -12,6 +12,7 @@
 //   RESEND_API_KEY + MAIL_FROM envoi des e-mails (domaine vérifié sur resend.com)
 //   SUPABASE_URL               facultatif (sinon lu dans config.js du site)
 //   SITE_URL                   facultatif (sinon l'adresse principale du site Netlify)
+//   MAIL_REPLY_TO              facultatif : adresse qui reçoit les réponses des apprenants (ex. votre Gmail)
 // Réglages de la direction : settings.main.rappels = {actif, impayes, fins} (Espace PDG → Relances).
 // Les apprenants qui décochent « Rappels par e-mail » dans Mon profil (data.rappels = false) ne reçoivent rien.
 // =====================================================================
@@ -120,7 +121,7 @@ async function supabaseUrl(site) {
 
 export async function lancer({ maintenant = Date.now(), attendre = (ms) => new Promise((r) => setTimeout(r, ms)) } = {}) {
   const site = (env("SITE_URL") || env("URL") || "https://batiproo.com").replace(/\/+$/, "");
-  const svc = env("SUPABASE_SERVICE_ROLE_KEY"), cle = env("RESEND_API_KEY"), from = env("MAIL_FROM");
+  const svc = env("SUPABASE_SERVICE_ROLE_KEY"), cle = env("RESEND_API_KEY"), from = env("MAIL_FROM"), reponse = env("MAIL_REPLY_TO").trim();
   if (!svc) return { ok: false, raison: "SUPABASE_SERVICE_ROLE_KEY manquant" };
   if (!cle || !from) return { ok: false, raison: "RESEND_API_KEY ou MAIL_FROM manquant : aucun e-mail envoyé" };
   const url = await supabaseUrl(site);
@@ -158,7 +159,7 @@ export async function lancer({ maintenant = Date.now(), attendre = (ms) => new P
     try {
       const r = await fetch("https://api.resend.com/emails", {
         method: "POST", headers: { Authorization: "Bearer " + cle, "Content-Type": "application/json" },
-        body: JSON.stringify({ from, to: [m.email], subject: m.sujet, html: m.html, text: m.texte }),
+        body: JSON.stringify(Object.assign({ from, to: [m.email], subject: m.sujet, html: m.html, text: m.texte }, reponse ? { reply_to: reponse } : {})),
       });
       ok = r.ok;
     } catch (_) { ok = false; }
