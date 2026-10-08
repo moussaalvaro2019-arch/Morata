@@ -536,4 +536,31 @@ F['assainissement'] = () => { const X = d => 150 + d*12.4, Y = z => 250 - (z - 3
  rows.forEach(([l, f], i) => { const y = 272 + i*17; g += T(14, y, l, {s:10.5, c:GR}) + R.map(r => T(X(r[1]), y, f(r), {a:'middle', s:10.5, b:i === 3})).join(''); });
  g += Ln(10, 258, 590, 258, {c:'#E3DFD7', w:1});
  return svg(600, 340, g, 'Profil en long d\'assainissement'); };
+/* ---------------- Expression française : communication et lettre ---------------- */
+F.communication = () => { const bx = (x, y, w, h, t1, t2, c) => Rt(x, y, w, h, {rx:12, f:'#fff', c, w:2}) + T(x + w/2, y + h/2 - 3, t1, {a:'middle', b:1, s:13, c}) + T(x + w/2, y + h/2 + 14, t2, {a:'middle', s:10.5, c:GR});
+ return svg(600, 300, `
+ ${bx(20, 100, 140, 70, 'Émetteur', 'qui parle / écrit ?', BL)}${bx(440, 100, 140, 70, 'Destinataire', 'qui reçoit ?', OR)}
+ ${Rt(220, 108, 160, 54, {rx:27, f:'#F4EEE3', c:INK})}${T(300, 131, 'Message', {a:'middle', b:1, s:13})}${T(300, 148, 'quoi ? pourquoi ?', {a:'middle', s:10.5, c:GR})}
+ ${Ln(160, 135, 218, 135, {w:2, m:'fa'})}${Ln(382, 135, 438, 135, {w:2, m:'fa'})}
+ ${T(250, 92, 'Canal (oral, lettre, courriel…) et code (langue, registre)', {a:'middle', s:11})}
+ ${Pa('M 510 172 C 510 260, 90 260, 90 172', {c:GR, w:1.6, d:'6 4'})}${Ln(91, 180, 90, 174, {c:GR, w:1.6, m:'fa'})}
+ ${T(300, 252, 'Retour (feed-back) : le destinataire montre qu’il a compris', {a:'middle', s:11, c:GR})}
+ ${Pa('M 410 22 l 10 16 l -14 6 l 12 18', {c:ST, w:2})}${T(386, 18, 'Bruit : machines, mot inconnu, écriture illisible', {a:'middle', s:11, c:ST})}
+ ${Ln(414, 64, 410, 128, {c:ST, w:1.2, d:'3 3'})}
+ ${T(300, 288, 'Contexte : lieu, moment, relation entre les personnes', {a:'middle', s:11, b:1})}`, 'Schéma de la communication'); };
+
+F.lettre = () => { const L = (x, y, w, c=GR) => Ln(x, y, x + w, y, {c, w:3}); const lab = (x, y, t) => T(x, y, t, {s:10.5, c:BL, b:1});
+ return svg(600, 420, `
+ ${Rt(150, 10, 300, 400, {f:'#fff', c:INK, w:1.4})}
+ ${L(170, 34, 90)}${L(170, 44, 70)}${L(170, 54, 80)}${lab(18, 46, 'En-tête de l’expéditeur')}${Ln(122, 43, 166, 43, {c:BL, w:1})}
+ ${L(330, 84, 100)}${L(330, 94, 90)}${L(330, 104, 70)}${lab(462, 96, 'Destinataire')}
+ ${L(330, 124, 100)}${lab(462, 127, 'Lieu et date')}
+ ${L(170, 146, 70)}${lab(18, 149, 'Références')}${Ln(110, 146, 166, 146, {c:BL, w:1})}
+ ${Ln(170, 162, 330, 162, {c:INK, w:3})}${lab(18, 165, 'Objet (souligné ou gras)')}${Ln(150, 162, 166, 162, {c:BL, w:1})}
+ ${L(170, 184, 60, INK)}${lab(18, 187, 'Formule d’appel')}${Ln(112, 184, 166, 184, {c:BL, w:1})}
+ ${[204, 214, 224].map(y => L(186, y, 240)).join('')}${[244, 254, 264, 274].map(y => L(170, y, 256)).join('')}${[294, 304].map(y => L(170, y, 230)).join('')}
+ ${lab(462, 216, 'Introduction')}${lab(462, 260, 'Développement')}${lab(462, 300, 'Conclusion')}
+ ${[324, 334].map(y => L(170, y, 250, INK)).join('')}${lab(18, 330, 'Formule de politesse')}${Ln(130, 329, 166, 329, {c:BL, w:1})}
+ ${L(340, 358, 80, INK)}${Pa('M 340 378 c 10 -14 20 8 30 -6 s 20 10 34 -4', {c:INK, w:1.6})}${lab(462, 370, 'Signature')}
+ ${L(170, 396, 60)}${lab(18, 399, 'Pièces jointes (P. J.)')}${Ln(140, 396, 166, 396, {c:BL, w:1})}`, 'Mise en page d’une lettre'); };
 })();

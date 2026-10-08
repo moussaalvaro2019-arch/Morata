@@ -77,7 +77,8 @@ A.GROUPES = [
   {id:'struct', n:'Mécanique & structures'},
   {id:'sol',    n:'Sol & terrain'},
   {id:'constr', n:'Matériaux & construction'},
-  {id:'gest',   n:'Gestion, économie & métré'}
+  {id:'gest',   n:'Gestion, économie & métré'},
+  {id:'lang',   n:'Langues & communication'}
 ];
 A.PROFILS = ['Élève / étudiant','Technicien','Ouvrier / artisan','Ingénieur','Architecte / dessinateur','Entrepreneur','Autre'];
 A.MODELES = [
@@ -1030,7 +1031,7 @@ function siteShell(body, m){
 
 const LNAV = [
   ['app','Tableau de bord','home'],['app/matieres','Matières','book'],['app/resoudre','Résoudre en photo','camera'],['app/exercices','Exercices & annales','target'],
-  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/livres','Livres','books'],['app/abonnement','Mon abonnement','coins'],['app/parrainage','Parrainage','users'],['app/profil','Mon profil','user']
+  ['app/construction','Construction A→Z','crane'],['app/atelier','Atelier de dessin','compass'],['app/metre','Métré','calc'],['app/ia','Assistant IA','spark'],['app/dictionnaire','Dictionnaires','dico'],['app/livres','Livres','books'],['app/abonnement','Mon abonnement','coins'],['app/parrainage','Parrainage','users'],['app/profil','Mon profil','user']
 ];
 const ANAV = [
   ['Pilotage'],['admin','Tableau de bord','chart'],['admin/connexions','Connexions','online'],

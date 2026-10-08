@@ -23,7 +23,7 @@ Les clés secrètes (`sk_…`, `whsec_…`, service_role, `sk-ant-…`) se colle
 | `public/` | Le site et toute l'application (pages, cours, atelier de dessin, métré, espace PDG) |
 | `public/config.js` | Les 2 informations de votre projet Supabase : à remplir ici **ou**, plus simple, à mettre dans Netlify (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) |
 | `netlify/functions/config.mjs` | Donne au site l'adresse et la clé publique Supabase rangées dans Netlify (`/api/config`) |
-| `contenus/cours/` | Le contenu complet des 19 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
+| `contenus/cours/` | Le contenu complet des 21 matières (cours, exercices, quiz, sujets d'examen). Il n'est **pas** publié tel quel : seule la fonction des cours le lit |
 | `netlify/functions/cours.mjs` | Les cours protégés : n'envoie le contenu des chapitres payants qu'aux apprenants dont l'accès est actif |
 | `netlify/functions/chariow.mjs` | Le paiement en ligne Chariow : envoie l'apprenant sur la page de paiement, puis reçoit l'avis de Chariow et ouvre l'accès (ou remet le livre) tout seul |
 | `outils/` | Petits outils : catalogue des cours, serveur de test local |
@@ -268,7 +268,7 @@ Un visiteur sans compte peut voir le catalogue et chaque fiche ; pour acheter, i
 > **Conseil marketing** : une promotion convainc quand elle est vraie et limitée dans le temps. Fixez une **date de fin** (2 à 4 semaines), annoncez-la sur WhatsApp et les réseaux, puis appliquez réellement le prix normal après l'offre (ou relancez une nouvelle offre nommée : rentrée, examens, fêtes). Un prix barré qui n'a jamais été pratiqué peut être considéré comme une pratique commerciale trompeuse par la réglementation sur la consommation.
 
 ### Sujets d'examen par chapitre
-Chaque chapitre des 19 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 334 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits ; la formule Inscrit ouvre les sujets du niveau Débutant, Basic jusqu'au niveau Intermédiaire, Premium tous. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
+Chaque chapitre des 21 matières se termine par un **sujet type examen** (noté sur 20, durée et barème indiqués, contexte ivoirien) suivi de son **corrigé détaillé** et des « Erreurs à éviter » : 334 sujets au total. L'apprenant peut ouvrir le sujet en **mode examen** (chronomètre, corrigé masqué jusqu'à ce qu'il le demande, impression). Les sujets font partie du contenu payant, sauf dans les chapitres gratuits ; la formule Inscrit ouvre les sujets du niveau Débutant, Basic jusqu'au niveau Intermédiaire, Premium tous. Pour modifier un sujet, éditez le fichier de la matière dans `contenus/cours/` puis lancez `node outils/catalogue.mjs` (voir README).
 
 ### Annales d'examens (sujets officiels)
 **Importer toute une rubrique d'un site autorisé (Fomesoutra…)** — Espace PDG → **Annales d'examens** → carte **Importer les sujets d'un site autorisé** :
@@ -295,6 +295,12 @@ La plateforme s'appelle **BâtiPro Académie** (slogan : « Académie du bâtime
 3. Facultatif : GitHub → votre dépôt → **Settings** → **Repository name** pour renommer le dépôt. Netlify reste relié au dépôt renommé.
 
 Pour un nom de domaine propre (par exemple `batipro-academie.ci` ou `.com`), achetez-le chez un registraire puis ajoutez-le dans Netlify → **Domain management**. Avant de communiquer largement, vérifiez que le nom est libre et protégez-le si besoin : en Côte d'Ivoire, les marques se déposent auprès de l'OAPI (Organisation africaine de la propriété intellectuelle).
+
+### Langues : expression française, anglais et dictionnaires
+- **Deux matières** dans la famille « Langues & communication » : **Technique d'expression française – Écrit professionnel** et **Anglais général et technique du bâtiment**, chacune en 3 niveaux et 15 chapitres (cours, exercices corrigés, quiz, sujet d'examen corrigé), comme les autres matières : le premier chapitre est gratuit, la suite suit les formules d'accès. Vous pouvez les modifier dans **Matières & cours** comme toutes les matières.
+- **Menu « Dictionnaires »** (ouvert à tous les inscrits, même sans formule) : dictionnaire de **français** (définition, exemple, synonymes, traduction anglaise) et dictionnaire **anglais ↔ français** (dans les deux sens, avec exemples). Recherche avec ou sans accents, filtres « Courant / Écrit professionnel / Bâtiment », mot du jour, bouton **Écouter** (le téléphone lit le mot avec l'accent britannique ou américain) et **quiz de vocabulaire** de 10 questions. Si un mot manque, un bouton prépare la question pour l'assistant IA (réservé aux formules qui comprennent l'IA).
+- **Dans chaque projet type** (Construction A→Z), les fenêtres « Expression française » et « Anglais » appliquées au projet : courriel de transmission du devis avec les vrais montants, compte rendu de réunion de chantier, description du projet et tableau des quantités en anglais.
+- Pour ajouter des mots : fichiers `public/data/dico-fr.js` et `public/data/dico-en.js` (une ligne par mot, entre crochets, en suivant le modèle des lignes existantes), puis envoi sur GitHub.
 
 ### Résolution d'exercices en photo
 Les apprenants envoient la photo d'un exercice depuis **Résoudre en photo**. Chaque résolution (et chaque question de suivi) compte pour une question dans le quota quotidien réglé dans Espace PDG → Intelligence artificielle. Les résolutions sont visibles dans **Travaux des apprenants**.
