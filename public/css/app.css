@@ -847,3 +847,4 @@ table.t.click td.mono b{color:var(--navy)}
 .demob.bad{background:var(--badbg);color:#8A1F23;flex-wrap:wrap}
 .demob .btn{margin-left:4px}
 .rp-apercu{white-space:pre-wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--soft);font-size:13.5px;line-height:1.5;max-height:420px;overflow:auto;overflow-wrap:anywhere}
+.pay-lien{justify-self:start;max-width:100%;white-space:normal;text-align:center}

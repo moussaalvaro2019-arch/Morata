@@ -77,12 +77,11 @@ A.page('app/livres', {space:'app', free:true, title:'Livres', crumb:'La biblioth
 A.on('click', '[data-lvtab]', el => { lvTab = el.dataset.lvtab; A.refresh(); });
 
 function momoBox(l){
-  const ms = A.moyensActifs(), P = A.cfg().pay || {};
+  const ms = A.moyensActifs();
   if(!ms.length) return `<p class="sub">Contactez la direction sur WhatsApp pour acheter ce livre.</p>`;
   if(!ms.find(m => m[0] === lvMoyen)) lvMoyen = ms[0][0];
-  const num = P[lvMoyen] || '';
   return `${ms.length > 1 ? `<div class="tabs">${ms.map(m => `<button class="tab ${lvMoyen === m[0] ? 'on' : ''}" data-lvmoyen="${m[0]}"><i class="abo-dot" style="background:${m[2]}"></i>${esc(m[1])}</button>`).join('')}</div>` : ''}
-   <ol class="abo-steps"><li><b>Envoyez ${F(l.prix)} FCFA par ${esc(A.moyenN(lvMoyen))}</b>${promo(l) ? ` (${A.promoOld(promo(l))} ${A.promoTag(promo(l))})` : ''} au numéro :<div class="abo-num"><span class="mono">${esc(A.telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div><span class="sub">Bénéficiaire : ${esc(P.titulaire || A.cfg().ceo)}.</span></li>
+   <ol class="abo-steps"><li><div class="stack s8">${A.payEtape(lvMoyen, +l.prix)}${promo(l) ? `<span class="sub">${A.promoOld(promo(l))} ${A.promoTag(promo(l))}</span>` : ''}</div></li>
     <li><b>Déclarez le paiement</b> avec la référence du SMS : la direction vérifie la réception et le livre apparaît dans « Mes livres ».</li></ol>
    <form class="stack" id="fPayLv" data-livre="${l.id}"><div class="g2"><label class="fld"><span>Numéro utilisé pour payer</span><input class="inp" id="lvNum" type="tel" inputmode="tel" value="${esc((S.me.data && S.me.data.phone) || '')}" required></label><label class="fld"><span>Référence de la transaction</span><input class="inp" id="lvRef" placeholder="ex. TXN123456" required></label></div>
     <div class="row"><button class="btn b-pri" type="submit">${ic('check')}J'ai payé : déclarer mon paiement</button></div></form>`;
