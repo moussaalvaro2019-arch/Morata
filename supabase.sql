@@ -58,6 +58,10 @@ alter table public.profiles add column if not exists code_parrain text;         
 alter table public.profiles add column if not exists parrain uuid references auth.users(id) on delete set null;  -- qui l'a invité
 alter table public.profiles add column if not exists filleul_valide boolean not null default false;              -- le filleul a payé (inscription ou abonnement)
 alter table public.profiles add column if not exists parrain_recompenses integer not null default 0;             -- récompenses déjà accordées au parrain
+-- Essai gratuit (publicité) : quelques jours tout compris avec un code donné par la direction, une seule fois par compte
+alter table public.profiles add column if not exists essai_gratuit_fin timestamptz;   -- fin de l'essai gratuit
+alter table public.profiles add column if not exists code_essai text;                 -- code utilisé (TOUS : offert à tous)
+create index if not exists profiles_code_essai_idx on public.profiles (code_essai) where code_essai is not null;
 create unique index if not exists profiles_code_parrain_idx on public.profiles (code_parrain) where code_parrain is not null;
 create index if not exists profiles_parrain_idx on public.profiles (parrain) where parrain is not null;
 
@@ -103,6 +107,21 @@ create table if not exists public.rappels (
 );
 create index if not exists rappels_at_idx on public.rappels (at desc);
 
+-- Tailles maximales des données qu'un apprenant peut écrire lui-même (contre le remplissage abusif de la base)
+-- « not valid » : vérifié pour toute nouvelle écriture, sans bloquer le script si une ancienne ligne dépasse
+do $$ begin
+  if not exists (select 1 from pg_constraint where conname = 'profiles_data_taille') then
+    alter table public.profiles add constraint profiles_data_taille check (pg_column_size(data) <= 20000) not valid; end if;
+  if not exists (select 1 from pg_constraint where conname = 'progress_data_taille') then
+    alter table public.progress add constraint progress_data_taille check (pg_column_size(data) <= 8000) not valid; end if;
+  if not exists (select 1 from pg_constraint where conname = 'quiz_data_taille') then
+    alter table public.quiz_results add constraint quiz_data_taille check (pg_column_size(data) <= 8000) not valid; end if;
+  if not exists (select 1 from pg_constraint where conname = 'connexions_data_taille') then
+    alter table public.connexions add constraint connexions_data_taille check (pg_column_size(data) <= 4000) not valid; end if;
+  if not exists (select 1 from pg_constraint where conname = 'works_data_taille') then
+    alter table public.works add constraint works_data_taille check (pg_column_size(data) <= 3000000) not valid; end if;
+end $$;
+
 create index if not exists connexions_at_idx    on public.connexions (at desc);
 create index if not exists paiements_owner_idx  on public.paiements (owner);
 create index if not exists paiements_statut_idx on public.paiements (statut, at desc);
@@ -136,6 +155,7 @@ language sql stable security definer set search_path = public as $$
     when coalesce((select (data->>'paywall')::boolean from public.settings where id = 'main'), true) = false then 'premium'
     else coalesce((select case
       when p.status = 'suspendu' then 'aucun'
+      when p.essai_gratuit_fin > now() then 'premium'
       when p.abo = 'premium' and p.abo_fin > now() then 'premium'
       when p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()) and p.essai_fin > now() then 'premium'
       when p.abo = 'basic' and p.abo_fin > now() then 'basic'
@@ -175,6 +195,61 @@ language sql stable as $$
      and coalesce(auth.jwt()->>'email', '') <> '';
 $$;
 
+-- ---------- Essai gratuit (publicité) ----------
+-- Code valable ? (settings.main.essaiGratuit = {actif, jours, codes[], pourTous, ia, fin}) → le code, « TOUS » si offert à tous, sinon null
+create or replace function public.essai_gratuit_code(p_code text) returns text
+language plpgsql stable security definer set search_path = public as $$
+declare v_set jsonb; v_code text := upper(trim(coalesce(p_code, '')));
+begin
+  select data->'essaiGratuit' into v_set from public.settings where id = 'main';
+  if v_set is null or not coalesce((v_set->>'actif')::boolean, false) then return null; end if;
+  if coalesce(v_set->>'fin', '') ~ '^\d{4}-\d{2}-\d{2}$' and now() >= ((v_set->>'fin')::date + 1) then return null; end if;   -- offre terminée
+  if v_code <> '' and jsonb_typeof(v_set->'codes') = 'array'
+     and exists (select 1 from jsonb_array_elements_text(v_set->'codes') c where upper(trim(c)) = v_code) then return v_code; end if;
+  if coalesce((v_set->>'pourTous')::boolean, false) then return 'TOUS'; end if;
+  return null;
+end $$;
+-- Ouvrir l'essai : une seule fois, et seulement pour un compte qui n'a encore rien payé (fonction interne)
+create or replace function public.ouvrir_essai_gratuit(p_uid uuid, p_code text) returns timestamptz
+language plpgsql security definer set search_path = public as $$
+declare v_set jsonb; v_jours int; v_fin timestamptz;
+begin
+  if p_code is null then return null; end if;
+  select data->'essaiGratuit' into v_set from public.settings where id = 'main';
+  v_jours := case when coalesce(v_set->>'jours', '') ~ '^\d{1,3}$' then greatest(1, least(60, (v_set->>'jours')::int)) else 3 end;
+  v_fin := now() + make_interval(days => v_jours);
+  update public.profiles set essai_gratuit_fin = v_fin, code_essai = left(p_code, 30)
+   where id = p_uid and essai_gratuit_fin is null and coalesce(acces, '') <> 'actif'
+     and not exists (select 1 from public.paiements where owner = p_uid and statut = 'valide' and objet in ('acces', 'abo'));
+  if not found then return null; end if;
+  return v_fin;
+end $$;
+-- Apprenant inscrit sans code : saisir un code d'essai (une seule fois, avant tout paiement)
+create or replace function public.utiliser_code_essai(p_code text) returns timestamptz
+language plpgsql security definer set search_path = public as $$
+declare v_p public.profiles; v_code text; v_fin timestamptz;
+begin
+  if auth.uid() is null or not public.is_real_user() then raise exception 'Connectez-vous d''abord'; end if;
+  select * into v_p from public.profiles where id = auth.uid();
+  if not found then raise exception 'Profil introuvable'; end if;
+  if v_p.essai_gratuit_fin is not null then raise exception 'Vous avez déjà utilisé votre essai gratuit'; end if;
+  if v_p.acces = 'actif' or exists (select 1 from public.paiements where owner = auth.uid() and statut = 'valide' and objet in ('acces', 'abo')) then
+    raise exception 'L''essai gratuit est réservé aux comptes qui n''ont pas encore payé'; end if;
+  v_code := public.essai_gratuit_code(p_code);
+  if v_code is null then raise exception 'Code d''essai invalide ou offre terminée'; end if;
+  v_fin := public.ouvrir_essai_gratuit(auth.uid(), v_code);
+  if v_fin is null then raise exception 'Essai gratuit impossible pour ce compte'; end if;
+  return v_fin;
+end $$;
+-- La personne connectée n'a Premium que grâce à l'essai gratuit ? (quota d'IA réduit)
+create or replace function public.essai_gratuit_seul() returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce((select coalesce(p.essai_gratuit_fin > now(), false)
+      and not coalesce(p.abo = 'premium' and p.abo_fin > now(), false)
+      and not coalesce(p.acces = 'actif' and (p.acces_fin is null or p.acces_fin > now()) and p.essai_fin > now(), false)
+    from public.profiles p where p.id = auth.uid()), false);
+$$;
+
 -- ---------- Création automatique du profil à l'inscription ----------
 -- Code de parrainage : 6 caractères faciles à lire (sans O, 0, I, 1)
 create or replace function public.nouveau_code_parrain() returns text
@@ -196,16 +271,21 @@ begin
   select id into v_parrain from public.profiles
    where code_parrain = upper(trim(coalesce(new.raw_user_meta_data->>'parrain', ''))) and id <> new.id limit 1;
   insert into public.profiles (id, email, data, parrain, code_parrain)
-  values (new.id, lower(new.email), coalesce(new.raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain',
+  values (new.id, lower(new.email), coalesce(new.raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain' - 'code_essai',
           v_parrain, public.nouveau_code_parrain())
   on conflict (id) do nothing;
+  -- essai gratuit : code saisi à l'inscription (ou offert à tous) ; ne doit jamais empêcher l'inscription
+  begin
+    perform public.ouvrir_essai_gratuit(new.id, public.essai_gratuit_code(new.raw_user_meta_data->>'code_essai'));
+  exception when others then null;
+  end;
   return new;
 end $$;
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute function public.handle_new_user();
 -- comptes déjà existants (si le script est lancé après des inscriptions)
 insert into public.profiles (id, email, data)
-select id, lower(email), coalesce(raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain' from auth.users
+select id, lower(email), coalesce(raw_user_meta_data, '{}'::jsonb) - 'email_verified' - 'sub' - 'email' - 'phone_verified' - 'parrain' - 'code_essai' from auth.users
 on conflict (id) do nothing;
 -- un code de parrainage pour chaque compte qui n'en a pas encore
 do $$ declare r record; begin
@@ -692,7 +772,8 @@ language plpgsql security definer set search_path = public as $$
 declare v_inv public.admin_invites;
 begin
   if not public.is_real_user() then return false; end if;
-  select * into v_inv from public.admin_invites where email = lower(auth.jwt()->>'email');
+  -- invitation valable 7 jours (au-delà, la direction en refait une)
+  select * into v_inv from public.admin_invites where email = lower(auth.jwt()->>'email') and created_at > now() - interval '7 days';
   if not found then return false; end if;
   insert into public.admins (uid, email, name) values (auth.uid(), v_inv.email, v_inv.name) on conflict (uid) do nothing;
   delete from public.admin_invites where email = v_inv.email;
@@ -746,6 +827,9 @@ begin
   end if;
   if not v_admin then
     v_quota := coalesce(nullif(v_set->>'iaQuota', '')::int, 30);
+    if public.essai_gratuit_seul() then   -- essai gratuit : quota d'IA réduit (évite les abus de comptes multiples)
+      v_quota := least(v_quota, case when coalesce(v_set->'essaiGratuit'->>'ia', '') ~ '^\d{1,3}$' then (v_set->'essaiGratuit'->>'ia')::int else 5 end);
+    end if;
     select count(*) into v_used from public.ia_logs where owner = v_uid and at >= date_trunc('day', now());
     if v_used >= v_quota then
       return json_build_object('ok', false, 'code', 'quota', 'msg', format('Vous avez atteint la limite de %s questions pour aujourd''hui. Revenez demain !', v_quota));
@@ -767,6 +851,9 @@ revoke execute on function public.appliquer_paiement(bigint), public.chariow_ven
 revoke execute on function public.parrainage_valider(uuid), public.nouveau_code_parrain() from public, anon, authenticated;
 revoke execute on function public.mon_parrainage(), public.definir_parrain(text) from public, anon;
 grant execute on function public.mon_parrainage(), public.definir_parrain(text) to authenticated;
+revoke execute on function public.essai_gratuit_code(text), public.ouvrir_essai_gratuit(uuid, text), public.essai_gratuit_seul() from public, anon, authenticated;
+revoke execute on function public.utiliser_code_essai(text) from public, anon;
+grant execute on function public.utiliser_code_essai(text) to authenticated;
 grant execute on function public.chariow_vente(jsonb) to service_role;
 grant execute on function public.admin_exists(), public.is_admin(), public.is_active(), public.is_real_user(), public.has_access(), public.cours_acces(),
   public.niveau_acces(), public.offre_droits(text), public.droit(text) to anon, authenticated;
@@ -803,6 +890,10 @@ update public.settings
 update public.settings
    set data = '{"rappels":{"actif":true,"impayes":true,"fins":true}}'::jsonb || data, updated_at = now()
  where id = 'main' and not (data ? 'rappels');
+-- Essai gratuit (une seule fois) : 3 jours tout compris avec le code BATIPRO3 (codes, durée et date de fin réglables dans Réglages)
+update public.settings
+   set data = '{"essaiGratuit":{"actif":true,"jours":3,"codes":["BATIPRO3"],"pourTous":false,"ia":5,"fin":""}}'::jsonb || data, updated_at = now()
+ where id = 'main' and not (data ? 'essaiGratuit');
 -- Parrainage (une seule fois) : 3 filleuls payants = 31 jours de Premium offerts au parrain (réglable dans Réglages)
 update public.settings
    set data = '{"parrainage":{"actif":true,"filleuls":3,"jours":31,"formule":"premium"}}'::jsonb || data, updated_at = now()

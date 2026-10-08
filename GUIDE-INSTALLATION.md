@@ -46,7 +46,7 @@ Sans configuration, le site fonctionne en **mode démonstration** : les comptes 
    - Region : **West EU (Paris)** ou **Frankfurt** (les plus proches d'Abidjan)
    - **Create new project**, attendez 1 à 2 minutes.
 3. Menu de gauche → **SQL Editor** → **New query**. Ouvrez `supabase.sql`, copiez **tout** son contenu, collez, puis **Run**. Le message « Success. No rows returned » doit apparaître.
-4. Menu de gauche → **Authentication** → **Sign In / Providers** → **Email** : désactivez **Confirm email** (les apprenants pourront se connecter juste après leur inscription). Laissez les connexions anonymes **désactivées** (elles ne servent pas ici).
+4. Menu de gauche → **Authentication** → **Sign In / Providers** → **Email** : désactivez **Confirm email** pour commencer (les apprenants pourront se connecter juste après leur inscription) et mettez **Minimum password length** à 8. Quand les e-mails Resend seront branchés, réactivez Confirm email (voir « Sécurité du site »). Laissez les connexions anonymes **désactivées** (elles ne servent pas ici).
 5. Menu de gauche → **Project Settings** → **API** (ou **Data API**). Copiez :
    - **Project URL** (ex. `https://abcdefgh.supabase.co`)
    - la clé **anon public** ou **publishable** (longue chaîne)
@@ -206,10 +206,38 @@ Chaque apprenant a un **code parrain** de 6 caractères et un **lien d'invitatio
 
 Seuls les filleuls qui **paient** comptent : un faux compte ne rapporte rien. Un parrain déjà Premium reste Premium (les jours s'ajoutent).
 
+### Essai gratuit de 3 jours (code publicitaire)
+Pour vos publicités (TikTok, Facebook, WhatsApp, affiches), vous donnez un **code d'essai** : la personne qui s'inscrit avec ce code a **tout le Premium pendant 3 jours**, à compter de son inscription. Rien à valider de votre côté.
+
+- **Le code** : `BATIPRO3` est prêt. La personne le tape dans la case « Code d'essai gratuit » du formulaire d'inscription, ou utilise votre **lien** qui le remplit tout seul : `https://batiproo.com/#/inscription?essai=BATIPRO3`. Inscrite sans code, elle peut encore le saisir dans **Mon abonnement** tant qu'elle n'a rien payé.
+- **Pendant l'essai** : tous les cours, exercices, solveurs, atelier, photos… comme Premium ; l'assistant IA est limité à **5 questions par jour** (réglable) pour protéger vos crédits IA. Un bandeau « Essai gratuit : encore 3 jours » s'affiche sur son tableau de bord.
+- **À la fin** : la veille, puis le jour où l'essai se termine, elle reçoit un **e-mail** et une **fenêtre** dans l'application qui l'invitent à payer l'inscription (4 000 FCFA). Ensuite elle retrouve la version gratuite (premier chapitre de chaque matière) jusqu'à son paiement, puis Inscrit, Basic ou Premium comme d'habitude. Les relances « inscrit qui n'a pas payé » ne partent pas pendant l'essai.
+- **Règles de sécurité** : **un seul essai par compte**, jamais pour un compte qui a déjà payé ; le code est vérifié par la base de données (impossible de le contourner depuis le navigateur ou de s'offrir plus de jours).
+
+**Espace PDG → Abonnements & paiements → onglet Essai gratuit** :
+1. **Réglages** : activer / couper l'offre, nombre de jours (1 à 60), date de fin de l'offre (après cette date les codes ne marchent plus), questions IA par jour pendant l'essai, et vos **codes** (séparés par des virgules : par exemple `TIKTOK3` pour TikTok, `FACEBOOK3` pour Facebook, afin de savoir quelle publicité marche le mieux). La case **« Offrir l'essai à tout le monde, même sans code »** donne les 3 jours à tout le monde.
+2. **Résultats par code** : nombre d'essais ouverts, essais en cours, et combien ont **payé** ensuite ; le lien à partager pour chaque code.
+3. Les messages de fin d'essai se modifient dans l'onglet **Relances → Messages types** (« Essai gratuit : veille de la fin », « Essai gratuit terminé »).
+
+**Si votre site était déjà en ligne** : relancez `supabase.sql` une fois (SQL Editor → New query → coller → Run). Sans cela, la case du code est ignorée.
+
+### Sécurité du site
+Ce qui est en place (rien à faire de votre côté) :
+- **En-têtes de protection** sur toutes les pages (fichier `netlify.toml`) : seuls les scripts du site peuvent s'exécuter (un texte piégé glissé dans un cours, un nom ou un message ne peut pas lancer de code), le site ne peut pas être affiché dans la page d'un autre site (anti-hameçonnage), connexion **HTTPS** obligatoire, caméra réservée au site, micro et localisation bloqués.
+- **Base de données** : règles de sécurité par ligne (chacun ne voit que ses propres données ; seule la direction voit tout), les apprenants ne peuvent modifier que leur profil (nom, téléphone, ville), jamais leur accès, leur formule, leurs dates ou leur essai ; les paiements, les accès et l'essai gratuit passent par des fonctions vérifiées par le serveur ; la taille des données envoyées est limitée.
+- **Comptes** : mot de passe de **8 caractères minimum** ; une invitation d'administrateur n'est valable que **7 jours** ; un administrateur ne peut pas être suspendu par un autre.
+- **Clés secrètes** (Supabase service_role, Chariow, Anthropic, Resend) : uniquement dans les variables Netlify, jamais dans le code, sur GitHub ou dans un message. Si une clé a été montrée à quelqu'un, supprimez-la et créez-en une nouvelle chez le fournisseur, puis remplacez-la dans Netlify et redéployez.
+
+**À faire de votre côté (10 minutes, fortement conseillé)** :
+1. **Mot de passe PDG** : long (12 caractères ou plus, avec chiffres et signes), utilisé **nulle part ailleurs**, jamais partagé ; pour un collaborateur, invitez-le comme administrateur avec son propre e-mail (Paramètres → Administrateurs) au lieu de donner vos accès. Protégez aussi vos comptes Supabase, Netlify, GitHub, Resend et Chariow avec la **validation en deux étapes** (2FA).
+2. **Supabase → Authentication → Sign In / Providers → Email** : **Minimum password length = 8**.
+3. **Confirmation des e-mails (contre les faux comptes qui enchaînent les essais gratuits)** : d'abord **Supabase → Authentication → Emails → SMTP Settings** → *Enable custom SMTP* : Host `smtp.resend.com`, Port `465`, Username `resend`, Password = votre clé Resend (`re_…`, à coller seulement ici), Sender email `contact@batiproo.com`, Sender name `BâtiPro Académie` → Save. **Ensuite seulement**, Sign In / Providers → Email → activez **Confirm email**. Vérifiez aussi **URL Configuration** : Site URL = `https://batiproo.com`, et `https://batiproo.com/**` dans *Redirect URLs*. Chaque nouvel inscrit reçoit alors un lien à ouvrir avant sa première connexion : un compte avec une adresse inventée ne peut plus profiter de l'essai. (Sans le SMTP de Resend, Supabase n'envoie que quelques e-mails par heure : n'activez pas Confirm email avant.)
+
 ### Relances : rappels automatiques par e-mail et WhatsApp
 La plateforme relance toute seule, par e-mail, **chaque heure de 7 h à 19 h** (au plus un e-mail par personne et par passage, jamais deux fois le même) :
 - les **inscrits qui n'ont pas encore payé** : 1 jour, 3 jours puis 7 jours après la création du compte (comptes de moins de 30 jours, sans paiement en attente de validation) ;
 - les apprenants dont **l'essai tout compris ou l'abonnement Basic / Premium se termine dans 3 jours**, puis le jour où il se termine.
+- les personnes en **essai gratuit** (code publicitaire) : la veille de la fin, puis quand il est terminé (invitation à payer l'inscription).
 
 Dans l'application, l'apprenant voit aussi une **fenêtre d'avertissement** (une fois par jour) dès 3 jours avant la fin, et le bandeau du tableau de bord. Il peut refuser les e-mails dans **Mon profil**.
 
@@ -280,7 +308,7 @@ Les apprenants envoient la photo d'un exercice depuis **Résoudre en photo**. Ch
 - **Résoudre en photo** : photo de l'exercice → résolution pas à pas, guidage, vérification de la réponse ou explication de l'énoncé.
 
 ### Ajouter un administrateur
-Paramètres → Administrateurs → nom + e-mail → **Inviter**. La personne s'inscrit (ou se connecte) avec cet e-mail puis passe par **Espace direction** : elle devient administrateur.
+Paramètres → Administrateurs → nom + e-mail → **Inviter**. La personne s'inscrit (ou se connecte) avec cet e-mail puis passe par **Espace direction** : elle devient administrateur. L'invitation est valable **7 jours** (la date limite s'affiche) ; passé ce délai, invitez de nouveau la même adresse.
 
 ### Mettre à jour le site
 Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement en une minute. Les cours modifiés depuis l'espace PDG sont stockés dans Supabase et ne sont pas écrasés.
@@ -314,4 +342,10 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 | Abonnement Basic ou Premium payé sur Chariow, mais l'apprenant reste « Inscrit » | Le Pulse ne couvre que le produit d'inscription : dans Chariow → Pulses, ajoutez les produits Basic (`prd_dk1qojwp`), Premium (`prd_8eq7b1ed`) et le livre, ou choisissez tous les produits. Pour une vente déjà faite, vérifiez-la dans Chariow puis donnez l'abonnement à la main (fiche de l'apprenant → **+31 j Basic** ou **+31 j Premium**) |
 | La page Parrainage affiche « Le parrainage n'est pas encore disponible » | Relancez `supabase.sql` (il ajoute les fonctions du parrainage) |
 | Un filleul a payé mais ne compte pas pour son parrain | Il s'est inscrit sans le lien : il peut saisir le code dans « Parrainage » seulement **avant** son premier paiement. Après, offrez vous-même le mois au parrain (fiche du parrain → **+31 j Premium**) |
+| La case « Code d'essai gratuit » n'apparaît pas, ou « Essai gratuit impossible » | Relancez `supabase.sql` ; vérifiez dans l'onglet **Essai gratuit** que l'offre est active, que la date de fin n'est pas passée et que le code est bien dans la liste |
+| « Code d'essai invalide ou offre terminée » | Le code n'est pas dans la liste (les majuscules ne comptent pas), l'offre est coupée ou sa date de fin est passée |
+| « Vous avez déjà utilisé votre essai gratuit » / « réservé aux comptes qui n'ont pas encore payé » | Normal : un seul essai par compte, et jamais après un paiement. Pour faire un geste, donnez des jours à la main (fiche de l'apprenant) |
+| Un nouvel administrateur n'arrive pas à entrer dans l'Espace PDG | Son invitation a plus de 7 jours ou il utilise une autre adresse e-mail : Paramètres → Administrateurs → invitez-le de nouveau avec l'adresse exacte de son compte |
+| Après avoir activé « Confirm email », les inscrits ne reçoivent pas le lien | Le SMTP de Resend n'est pas configuré dans Supabase (ou mauvaise clé) : configurez-le (section « Sécurité du site »), ou désactivez Confirm email en attendant |
+| Une fonction du site ne marche plus juste après la mise à jour (page blanche, impression, 3D) | Videz le cache du navigateur (ou ouvrez le site en navigation privée) ; si le problème reste, notez le message et signalez-le : la politique de sécurité bloque peut-être un fichier venu d'un autre site |
 | L'acheteur a payé sur Chariow sans compte | Il s'inscrit avec **la même adresse e-mail** : l'accès (ou le livre) est ajouté automatiquement à sa première connexion |

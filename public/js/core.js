@@ -105,10 +105,12 @@ A.DEF = {
   essaiJours:31, aboJours:31, prixBasic:2000, prixPremium:5000, offres:{},
   // parrainage : tous les 3 filleuls qui paient, le parrain reçoit 31 jours de Premium (même règle que parrainage_valider en SQL)
   parrainage:{actif:true, filleuls:3, jours:31, formule:'premium'},
+  // essai gratuit (publicité) : N jours tout compris avec un code de la direction, une fois par compte, avant tout paiement
+  essaiGratuit:{actif:true, jours:3, codes:['BATIPRO3'], pourTous:false, ia:5, fin:''},
   iaActive:true, iaModel:'claude-opus-5-5', iaQuota:30,
   devise:'FCFA', tva:18
 };
-A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {}), chariow:Object.assign({}, A.DEF.chariow, m.chariow || {}), parrainage:Object.assign({}, A.DEF.parrainage, m.parrainage || {})}); };
+A.cfg = () => { const m = (A.S.settings||{}).main || {}; return Object.assign({}, A.DEF, m, {pay:Object.assign({}, A.DEF.pay, m.pay || {}), chariow:Object.assign({}, A.DEF.chariow, m.chariow || {}), parrainage:Object.assign({}, A.DEF.parrainage, m.parrainage || {}), essaiGratuit:Object.assign({}, A.DEF.essaiGratuit, m.essaiGratuit || {})}); };
 
 /* ---------- accès payant ---------- */
 A.paywallOn = () => A.cfg().paywall !== false;
@@ -126,6 +128,7 @@ A.niveauDe = p => {
   if(!p) return 'aucun';
   if(p.isAdmin || p.admin || !A.paywallOn()) return 'premium';
   if(p.status === 'suspendu') return 'aucun';
+  if(p.essai_gratuit_fin && ts(p.essai_gratuit_fin) > now()) return 'premium';   // essai gratuit (code publicitaire)
   const t = now(), insc = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t);
   if(p.abo === 'premium' && ts(p.abo_fin) > t) return 'premium';
   if(insc && p.essai_fin && ts(p.essai_fin) > t) return 'premium';
@@ -146,6 +149,15 @@ A.peutMetre = () => { const l = +A.lim('metres'); return l < 0 || A.metresMois()
 A.offreMin = test => ['inscrit', 'basic', 'premium'].find(n => test(A.offre(n))) || 'premium';
 /* essai Premium en cours après l'inscription : date de fin, sinon null */
 A.essaiFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.essai_fin && ts(me.essai_fin) > now() && !(me.abo === 'premium' && ts(me.abo_fin) > now()) ? ts(me.essai_fin) : null; };
+A.essaiGratuitFin = () => { const me = A.S.me; return me && me.essai_gratuit_fin && ts(me.essai_gratuit_fin) > now() ? ts(me.essai_gratuit_fin) : null; };
+/* code d'essai valable ? même règle que essai_gratuit_code() en SQL → le code, « TOUS », ou null */
+A.essaiCode = code => {
+  const E = A.cfg().essaiGratuit || {}, v = String(code || '').trim().toUpperCase();
+  if(!E.actif) return null;
+  if(/^\d{4}-\d{2}-\d{2}$/.test(E.fin || '') && now() >= Date.parse(E.fin + 'T00:00:00Z') + 86400000) return null;
+  if(v && Array.isArray(E.codes) && E.codes.some(c => String(c).trim().toUpperCase() === v)) return v;
+  return E.pourTous ? 'TOUS' : null;
+};
 A.aboActif = () => { const me = A.S.me; return me && me.abo && ts(me.abo_fin) > now() ? {plan:me.abo, fin:ts(me.abo_fin)} : null; };
 A.hasAccess = () => A.niveau() !== 'aucun';
 A.accesFin = () => { const me = A.S.me; return me && me.acces === 'actif' && me.acces_fin ? ts(me.acces_fin) : null; };
@@ -340,6 +352,8 @@ function demoSeed(){
   Object.assign(d.users.u_ti, {essai_fin:J(-8), abo:'premium', abo_fin:J(5)}); Object.assign(d.users.u_yc, {essai_fin:J(4)});
   // parrainage : Traoré Ibrahim a invité 3 amis ; 2 ont payé, le 3e attend la validation de son paiement
   Object.assign(d.users.u_ak, {parrain:'u_ti', filleul_valide:true}); Object.assign(d.users.u_kj, {parrain:'u_ti', filleul_valide:true}); d.users.u_np.parrain = 'u_ti';
+  // essai gratuit de 3 jours avec le code publicitaire BATIPRO3 (rien payé)
+  d.users.u_fg = {email:'fofana.grace@exemple.ci', pass:'', data:{name:'Fofana Grâce', profil:'Élève / étudiant', city:'Daloa', phone:'0708091011'}, status:'actif', created_at:t - 2*day, last_seen:t - 1800000, last_page:'#/app/cours/ba-1', acces:'gratuit', essai_gratuit_fin:J(1), code_essai:'BATIPRO3'};
   // paiement en ligne (Chariow) d'une apprenante de la diaspora : accès ouvert automatiquement
   d.users.u_dm = {email:'mariam.diallo@exemple.fr', pass:'', data:{name:'Diallo Mariam', profil:'Élève / étudiant', city:'Paris (France)', phone:'+33612345678'}, status:'actif', created_at:t - 4*day, last_seen:t - 7200000, last_page:'#/app/matieres', acces:'actif', acces_at:t - 4*day, essai_fin:J(27)};
   d.paiements.push({id:d.paiements.length + 1, owner:'u_dm', at:t - 4*day, montant:4000, moyen:'chariow', numero:'', reference:'sale_demo_1', formule:'unique', mois:0, statut:'valide', note:'Paiement en ligne Chariow : accordé automatiquement', traite_at:t - 4*day, source:'chariow', email:'mariam.diallo@exemple.fr', devise:'EUR', montant_devise:6.1, objet:'acces', applique:true});
@@ -375,6 +389,12 @@ function localParrainage(fid){
     d.paiements.push({id:d.paiements.reduce((a, x) => Math.max(a, x.id || 0), 0) + 1, owner:pid, at:t, montant:0, moyen:'parrainage', numero:'', reference:'PARRAINAGE-' + p.parrain_recompenses, formule:eff, mois:1, statut:'valide',
       note:`Récompense de parrainage : ${req} filleuls inscrits, ${jours} jours offerts`, traite_at:t, objet:'abo', source:'parrainage', applique:true, devise:'XOF'});
   }
+}
+/* démo : essai gratuit, une fois, pour un compte qui n'a rien payé (même règle que ouvrir_essai_gratuit en SQL) */
+function localEssai(id, code){
+  const u = L.db.users[id]; if(!u || !code || u.essai_gratuit_fin || u.acces === 'actif' || payeAcces(id)) return null;
+  const j = Math.max(1, Math.min(60, Math.round(+A.cfg().essaiGratuit.jours) || 3));
+  u.essai_gratuit_fin = new Date(now() + j * 86400000).toISOString(); u.code_essai = String(code).slice(0, 30); return u.essai_gratuit_fin;
 }
 /* démo : accorder ce qu'un paiement validé a payé (même règle que la fonction SQL appliquer_paiement) */
 function localApply(x){
@@ -436,7 +456,8 @@ A.loadAdmin = async function(){
     const d = L.db;
     S.adm = {
       profiles: Object.entries(d.users).map(([id,u]) => ({id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, acces_at:u.acces_at||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, created_at:u.created_at, last_seen:u.last_seen, last_page:u.last_page, admin: !!d.admins[id],
-        code_parrain:u.code_parrain||null, parrain:u.parrain||null, filleul_valide:!!u.filleul_valide, parrain_recompenses:u.parrain_recompenses||0})),
+        code_parrain:u.code_parrain||null, parrain:u.parrain||null, filleul_valide:!!u.filleul_valide, parrain_recompenses:u.parrain_recompenses||0,
+        essai_gratuit_fin:u.essai_gratuit_fin||null, code_essai:u.code_essai||null})),
       paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
       achats: (d.achats||[]).slice(),
       rappels: (d.rappels||[]).slice().sort((a,b)=>ts(b.at)-ts(a.at)),
@@ -452,7 +473,9 @@ A.loadAdmin = async function(){
   const col = 'id,email,data,status,acces,acces_fin,acces_at,essai_fin,abo,abo_fin,created_at,last_seen,last_page';
   const [pr, cx, pg, qz, ia, wk, ad, py] = await Promise.all([
     // colonnes du parrainage absentes tant que le script SQL n'a pas été relancé : on relit sans elles
-    sb.from('profiles').select(col + ',code_parrain,parrain,filleul_valide,parrain_recompenses').limit(5000).then(r => r.error ? sb.from('profiles').select(col).limit(5000) : r),
+    sb.from('profiles').select(col + ',code_parrain,parrain,filleul_valide,parrain_recompenses,essai_gratuit_fin,code_essai').limit(5000)
+      .then(r => r.error ? sb.from('profiles').select(col + ',code_parrain,parrain,filleul_valide,parrain_recompenses').limit(5000) : r)
+      .then(r => r.error ? sb.from('profiles').select(col).limit(5000) : r),
     sb.from('connexions').select('id,owner,at,data').order('at',{ascending:false}).limit(1000),
     sb.from('progress').select('owner,data').limit(10000),
     sb.from('quiz_results').select('owner,data').limit(10000),
@@ -484,12 +507,12 @@ async function afterAuth(user){
   if(!user){ S.me = null; S.progress = {}; S.quiz = []; S.works = {}; S.adm = null; S.pay = []; S.achats = []; return; }
   if(S.mode === 'local'){
     const u = L.db.users[user.id]; if(!u){ S.me = null; return; }
-    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
+    S.me = {id:user.id, email:u.email, data:u.data||{}, status:u.status||'actif', acces:u.acces||'gratuit', acces_fin:u.acces_fin||null, essai_fin:u.essai_fin||null, abo:u.abo||null, abo_fin:u.abo_fin||null, essai_gratuit_fin:u.essai_gratuit_fin||null, code_essai:u.code_essai||null, isAdmin: !!L.db.admins[user.id], created_at:u.created_at};
   }else{
     try{ await sb.rpc('rattacher_paiements'); }catch(_){}   // achats en ligne faits avec cet e-mail avant la création du compte
     const [{data:roles}, {data:prof}] = await Promise.all([sb.rpc('my_roles'), sb.from('profiles').select('*').eq('id', user.id).maybeSingle()]);
     S.adminExists = !!(roles && roles.admin_exists);
-    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, essai_fin:(prof&&prof.essai_fin)||null, abo:(prof&&prof.abo)||null, abo_fin:(prof&&prof.abo_fin)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
+    S.me = {id:user.id, email:user.email, data:(prof&&prof.data)||user.user_metadata||{}, status:(prof&&prof.status)||'actif', acces:(prof&&prof.acces)||'gratuit', acces_fin:(prof&&prof.acces_fin)||null, essai_fin:(prof&&prof.essai_fin)||null, abo:(prof&&prof.abo)||null, abo_fin:(prof&&prof.abo_fin)||null, essai_gratuit_fin:(prof&&prof.essai_gratuit_fin)||null, code_essai:(prof&&prof.code_essai)||null, isAdmin: !!(roles && roles.is_admin), created_at: prof && prof.created_at};
   }
   await loadMine();
   await A.db.myPayments().catch(e => console.warn(e));
@@ -545,21 +568,24 @@ A.db = {
     S.ready = true;
     setInterval(() => { if(S.me && document.visibilityState === 'visible') A.db.touch(); }, 60000);
   },
-  async signUp({email, password, name, phone, city, profil, parrain}){
+  async signUp({email, password, name, phone, city, profil, parrain, essai}){
     if(S.panne === 'bibliotheque') return {ok:false, msg:PANNE};
     email = String(email).trim().toLowerCase();
     const data = {name:String(name).trim(), phone:String(phone||'').trim(), city:String(city||'').trim(), profil:profil||''};
     const code = String(parrain || '').trim().toUpperCase();   // code parrain (lien d'invitation) : rattache le filleul
+    const codeEssai = String(essai || '').trim().toUpperCase().slice(0, 30);   // code d'essai gratuit (publicité)
     if(S.mode === 'local'){
       if(Object.values(L.db.users).some(u => u.email === email)) return {ok:false, msg:'Un compte existe déjà avec cet e-mail'};
       const id = uid('u_'), par = code ? Object.keys(L.db.users).find(k => L.db.users[k].code_parrain === code) : null;
       L.db.users[id] = {email, pass: await sha(email+'|'+password), data, status:'actif', created_at: now(), last_seen: now(), code_parrain:codeParrain(L.db.users), parrain:par || null};
-      L.save(); ls.set('sess', {uid:id}); await afterAuth({id}); return {ok:true};
+      const essaiFin = localEssai(id, A.essaiCode(codeEssai));
+      L.save(); ls.set('sess', {uid:id}); await afterAuth({id}); return {ok:true, essai:essaiFin};
     }
-    const r = await sb.auth.signUp({email, password, options:{data:code ? {...data, parrain:code} : data, emailRedirectTo: location.origin + location.pathname}});
+    const meta = Object.assign({}, data, code ? {parrain:code} : {}, codeEssai ? {code_essai:codeEssai} : {});
+    const r = await sb.auth.signUp({email, password, options:{data:meta, emailRedirectTo: location.origin + location.pathname}});
     if(r.error) return {ok:false, msg: /already|registered|exists/i.test(r.error.message) ? 'Un compte existe déjà avec cet e-mail. Connectez-vous.' : sbErr(r.error)};
     if(!r.data.session) return {ok:false, confirm:true, msg:'Compte créé. Ouvrez le lien reçu par e-mail pour l\'activer, puis connectez-vous.'};
-    await afterAuth(r.data.session.user); return {ok:true};
+    await afterAuth(r.data.session.user); return {ok:true, essai:A.essaiGratuitFin()};
   },
   async signIn(email, password){
     if(S.panne === 'bibliotheque') return {ok:false, msg:PANNE};
@@ -703,6 +729,20 @@ A.db = {
     }
     const {data, error} = await sb.rpc('mon_parrainage'); if(error) throw error; return data;
   },
+  async utiliserCodeEssai(code){   // inscrit sans code : ouvrir l'essai gratuit (une fois, avant tout paiement)
+    code = String(code || '').trim().toUpperCase().slice(0, 30);
+    if(S.mode === 'local'){
+      const u = L.db.users[S.me.id]; if(!u) return {ok:false, msg:'Profil introuvable'};
+      if(u.essai_gratuit_fin) return {ok:false, msg:'Vous avez déjà utilisé votre essai gratuit'};
+      if(u.acces === 'actif' || payeAcces(S.me.id)) return {ok:false, msg:'L\'essai gratuit est réservé aux comptes qui n\'ont pas encore payé'};
+      const v = A.essaiCode(code); if(!v) return {ok:false, msg:'Code d\'essai invalide ou offre terminée'};
+      const fin = localEssai(S.me.id, v); if(!fin) return {ok:false, msg:'Essai gratuit impossible pour ce compte'};
+      L.save(); await this.refreshAccess(); return {ok:true, fin};
+    }
+    const {data, error} = await sb.rpc('utiliser_code_essai', {p_code:code});
+    if(error) return {ok:false, msg:/function|schema cache/i.test(error.message || '') ? 'Essai gratuit pas encore disponible : la direction doit relancer le script SQL' : sbErr(error)};
+    await this.refreshAccess(); return {ok:true, fin:data};
+  },
   async definirParrain(code){   // inscrit sans le lien : saisir le code de son parrain, avant le premier paiement
     code = String(code || '').trim().toUpperCase();
     if(S.mode === 'local'){
@@ -722,9 +762,9 @@ A.db = {
     if(!S.me) return;
     if(S.mode === 'sb'){ try{ await sb.rpc('rattacher_paiements'); }catch(_){} }
     await this.mesLivres().catch(()=>{});
-    const prend = u => { ['acces', 'acces_fin', 'essai_fin', 'abo', 'abo_fin'].forEach(k => S.me[k] = u[k] || (k === 'acces' ? 'gratuit' : null)); };
+    const prend = u => { ['acces', 'acces_fin', 'essai_fin', 'abo', 'abo_fin', 'essai_gratuit_fin', 'code_essai'].forEach(k => S.me[k] = u[k] || (k === 'acces' ? 'gratuit' : null)); };
     if(S.mode === 'local'){ const u = L.db.users[S.me.id]; if(u) prend(u); }
-    else{ const {data} = await sb.from('profiles').select('acces,acces_fin,essai_fin,abo,abo_fin,status').eq('id', S.me.id).maybeSingle(); if(data){ prend(data); S.me.status = data.status||'actif'; }
+    else{ const {data} = await sb.from('profiles').select('*').eq('id', S.me.id).maybeSingle(); if(data){ prend(data); S.me.status = data.status||'actif'; }
       const ct = await sb.from('contents').select('id,data'); if(!ct.error) S.contents = rows2obj(ct.data); }
     A.resetCours(); await this.myPayments().catch(()=>{});
   },
@@ -825,12 +865,14 @@ A.db = {
   },
   async admins(){
     if(S.mode === 'local') return {admins: Object.entries(L.db.admins).map(([uid,a]) => ({uid, ...a})), invites: Object.entries(L.db.invites).map(([email,a]) => ({email, ...a}))};
-    const [a, i] = await Promise.all([sb.from('admins').select('uid,email,name'), sb.from('admin_invites').select('email,name')]);
+    const [a, i] = await Promise.all([sb.from('admins').select('uid,email,name'), sb.from('admin_invites').select('email,name,created_at')]);
     return {admins:a.data||[], invites:i.data||[]};
   },
   async invite(email, name){
     email = email.trim().toLowerCase();
-    if(S.mode === 'local'){ L.db.invites[email] = {name}; L.save(); return true; }
+    if(S.mode === 'local'){ L.db.invites[email] = {name, created_at:new Date().toISOString()}; L.save(); return true; }
+    // réinviter la même adresse relance les 7 jours de validité (l'ancienne invitation est remplacée)
+    await sb.from('admin_invites').delete().eq('email', email);
     const {error} = await sb.from('admin_invites').insert({email, name}); if(error){ toast(sbErr(error), 'x'); return false; } return true;
   },
   async delInvite(email){
@@ -843,7 +885,7 @@ A.db = {
   },
   async logConnexion(){
     if(!S.me) return;
-    const data = {ua: navigator.userAgent.slice(0,200), page: location.hash || '#/', w: window.innerWidth};
+    const data = {ua: navigator.userAgent.slice(0,200), page: (location.hash || '#/').slice(0,200), w: window.innerWidth};
     if(S.mode === 'local'){ L.db.connexions.push({id:uid('cx'), owner:S.me.id, at:now(), data}); L.save(); return; }
     await sb.from('connexions').insert({data});
   },
@@ -1068,6 +1110,8 @@ A.on = (type, sel, fn) => H[type].push([sel, fn]);
     if(el){ if(type === 'submit') e.preventDefault(); try{ const r = fn(el, e); if(r && r.catch) r.catch(err => { console.error(err); toast(err.message||'Erreur', 'x'); }); }catch(err){ console.error(err); toast(err.message||'Erreur', 'x'); } }
   }
 }));
+// liens « javascript:void 0 » (boutons en forme de lien) : la politique de sécurité du site interdit de les suivre, on s'en tient au clic
+document.addEventListener('click', e => { const a = e.target.closest ? e.target.closest('a[href^="javascript:"]') : null; if(a) e.preventDefault(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && winState && !e.defaultPrevented){ closeWin(); } });
 A.on('click', '[data-act="closewin"]', () => closeWin());
 A.on('click', '.ov', (el, e) => { if(e.target === el) closeWin(); });

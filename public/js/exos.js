@@ -294,7 +294,7 @@ const loadPdfjs = () => pdfjs || (pdfjs = new Promise((res, rej) => { if(window.
   sc.onload = () => { const L = window.pdfjsLib; if(!L) return rej(new Error('lecteur PDF indisponible')); L.GlobalWorkerOptions.workerSrc = 'vendor/pdfjs/pdf.worker.min.js'; res(L); };
   sc.onerror = () => { pdfjs = null; rej(new Error('lecteur PDF indisponible')); }; document.head.appendChild(sc); }));
 A.pdfPages = async (buf, opt = {}) => {
-  const L = await loadPdfjs(), doc = await L.getDocument({data:new Uint8Array(buf)}).promise, out = [], n = Math.min(doc.numPages, opt.max || 16), W = opt.width || 1300;
+  const L = await loadPdfjs(), doc = await L.getDocument({data:new Uint8Array(buf), isEvalSupported:false}).promise, out = [], n = Math.min(doc.numPages, opt.max || 16), W = opt.width || 1300;
   for(let i = 1; i <= n; i++){ const page = await doc.getPage(i), v0 = page.getViewport({scale:1}), sc = Math.min(3, W/Math.max(v0.width, v0.height)*1.0), v = page.getViewport({scale:sc});
     const c = document.createElement('canvas'); c.width = Math.round(v.width); c.height = Math.round(v.height); const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
     await page.render({canvasContext:g, viewport:v}).promise; out.push(c.toDataURL('image/jpeg', opt.q || .7)); page.cleanup(); }

@@ -180,13 +180,6 @@
 <script src="js/abo.js"></script>
 <script src="js/livres.js"></script>
 <script src="js/boot.js"></script>
-<script>
-  // application installable (téléphone, ordinateur) ; pas sur le serveur de test local
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/service-worker.js").catch((error) => console.warn("Service worker :", error));
-    });
-  }
-</script>
+<script src="js/sw-register.js"></script>
 </body>
 </html>

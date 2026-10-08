@@ -2,7 +2,7 @@
 // BâtiPro Académie · Relance immédiate par e-mail (Netlify Function)
 //   POST /api/relance  { owner, situation }   (en-tête Authorization: Bearer <session de la direction>)
 //   Envoie tout de suite à un apprenant le message type de la situation (paiement, essai_avant,
-//   essai_fini, abo_avant, abo_fini), tel que la direction l'a rédigé dans l'onglet Relances.
+//   essai_fini, gratuit_avant, gratuit_fini, abo_avant, abo_fini), tel que la direction l'a rédigé dans l'onglet Relances.
 //   Réservé aux administrateurs (vérifié par la fonction SQL is_admin avec la session de l'appelant).
 // Variables Netlify : SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, MAIL_FROM, MAIL_REPLY_TO (facultatif),
 //   SUPABASE_URL / SUPABASE_ANON_KEY (sinon lus dans config.js), SITE_URL (facultatif).
@@ -52,13 +52,14 @@ export default async (request) => {
   const lire = async (chemin) => { const r = await fetch(`${sb.url}/rest/v1/${chemin}`, { headers: sbHeaders(svc) }); if (!r.ok) throw new Error(chemin.split("?")[0] + " " + r.status); return r.json(); };
   let p, reglages;
   try {
-    const [pr, st] = await Promise.all([lire(`profiles?id=eq.${owner}&select=id,email,data,abo,abo_fin,essai_fin,created_at,status`), lire("settings?id=eq.main&select=data")]);
+    const [pr, st] = await Promise.all([lire(`profiles?id=eq.${owner}&select=*`), lire("settings?id=eq.main&select=data")]);
     p = pr[0]; reglages = (st[0] || {}).data || {};
   } catch (e) { return json({ error: "Lecture de la base impossible : " + e.message }, 502); }
   if (!p || !p.email) return json({ error: "Apprenant introuvable" }, 404);
   const fini = sit.endsWith("_fini");
   const r = sit === "paiement" ? { kind: "paiement", ref: "manuel", cree: p.created_at }
     : sit.startsWith("essai") ? { kind: "fin_essai", ref: fini ? "fini:" : "avant:", fin: p.essai_fin }
+    : sit.startsWith("gratuit") ? { kind: "essai_gratuit", ref: fini ? "fini:" : "avant:", fin: p.essai_gratuit_fin }
     : { kind: "fin_abo", ref: fini ? "fini:" : "avant:", fin: p.abo_fin, plan: p.abo };
   if (r.kind !== "paiement" && !r.fin) return json({ error: "Pas de date de fin pour cet apprenant" }, 400);
   const m = message(r, p, reglagesPlateforme(reglages), site);

@@ -62,7 +62,15 @@ export function choisirRappels({ profils = [], admins = [], paiements = [], envo
       if (d > 0 && d <= 3) r = { kind: "fin_essai", ref: "avant:" + jour(p.essai_fin), fin: p.essai_fin };
       else if (d <= 0 && d >= -3 && !aboActif) r = { kind: "fin_essai", ref: "fini:" + jour(p.essai_fin), fin: p.essai_fin };
     }
-    if (!r && R.impayes !== false && !insc && !aboActif && !attente.has(p.id) && !paye.has(p.id)) {
+    // essai gratuit (code publicitaire) : la veille de la fin, puis à la fin (sans paiement)
+    const g = ts(p.essai_gratuit_fin);
+    if (!r && R.fins !== false && g && !insc && !aboActif && !attente.has(p.id) && !paye.has(p.id)) {
+      const d = (g - t) / DAY;
+      if (d > 0 && d <= 1) r = { kind: "essai_gratuit", ref: "avant:" + jour(p.essai_gratuit_fin), fin: p.essai_gratuit_fin };
+      else if (d <= 0 && d >= -3) r = { kind: "essai_gratuit", ref: "fini:" + jour(p.essai_gratuit_fin), fin: p.essai_gratuit_fin };
+    }
+    // pas de relance « paiement » pendant l'essai gratuit ni dans les 4 jours qui suivent (le message de fin d'essai suffit)
+    if (!r && R.impayes !== false && !insc && !aboActif && !attente.has(p.id) && !paye.has(p.id) && !(g && t - g < 4 * DAY)) {
       const age = (t - ts(p.created_at)) / DAY, etape = age >= 7 ? 7 : age >= 3 ? 3 : age >= 1 ? 1 : 0;
       if (etape && age <= 30) r = { kind: "paiement", ref: "j" + etape, cree: p.created_at, etape };
     }
@@ -84,11 +92,15 @@ export const MODELES = {
     texte: "Bonjour {prenom},\n\nVotre période tout compris sur {plateforme} s'est terminée le {date}. Vous gardez tous les cours avec la formule Inscrit.\n\nPour retrouver les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA : Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}" },
   abo_avant: { sujet: "Votre abonnement {formule} se termine le {date}",
     texte: "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} se termine le {date}. Renouvelez-le pour continuer sans interruption : {prix} FCFA pour {jours_abo} jours, ajoutés à la suite des jours qui vous restent.\n\nRenouveler : {lien}\n\n{directeur}, {plateforme}" },
+  gratuit_avant: { sujet: "Votre essai gratuit se termine le {date}",
+    texte: "Bonjour {prenom},\n\nVotre essai gratuit sur {plateforme} se termine le {date}. Pour garder l'accès à tous les cours, aux exercices corrigés, aux sujets d'examen et aux outils, payez l'inscription : {prix_inscription} FCFA une seule fois, avec {jours_essai} jours tout compris.\n\nPayer maintenant : {lien}\n\nUne question ? Répondez à ce message ou écrivez-nous sur WhatsApp au {whatsapp}.\n\n{directeur}, {plateforme}" },
+  gratuit_fini: { sujet: "Votre essai gratuit est terminé",
+    texte: "Bonjour {prenom},\n\nVotre essai gratuit sur {plateforme} s'est terminé le {date}. Merci de l'avoir essayé ! Vous gardez le premier chapitre de chaque matière.\n\nPour tout retrouver, payez l'inscription : {prix_inscription} FCFA une seule fois, avec {jours_essai} jours tout compris, puis les abonnements Basic ou Premium si vous le souhaitez.\n\nPayer maintenant : {lien}\n\n{directeur}, {plateforme}" },
   abo_fini: { sujet: "Votre abonnement {formule} a pris fin",
     texte: "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} s'est terminé le {date} : vous êtes revenu à la formule Inscrit (tous les cours, contenus réduits).\n\nReprenez {formule} pour {prix} FCFA ({jours_abo} jours) : {lien}\n\n{directeur}, {plateforme}" },
 };
-const BOUTONS = { paiement: "Activer mon accès", essai_avant: "Choisir ma formule", essai_fini: "Choisir ma formule", abo_avant: "Renouveler", abo_fini: "Reprendre mon abonnement" };
-export const situation = (r) => r.kind === "paiement" ? "paiement" : (r.kind === "fin_essai" ? "essai_" : "abo_") + (String(r.ref).startsWith("fini:") ? "fini" : "avant");
+const BOUTONS = { paiement: "Activer mon accès", essai_avant: "Choisir ma formule", essai_fini: "Choisir ma formule", gratuit_avant: "Payer l'inscription", gratuit_fini: "Payer l'inscription", abo_avant: "Renouveler", abo_fini: "Reprendre mon abonnement" };
+export const situation = (r) => r.kind === "paiement" ? "paiement" : (r.kind === "fin_essai" ? "essai_" : r.kind === "essai_gratuit" ? "gratuit_" : "abo_") + (String(r.ref).startsWith("fini:") ? "fini" : "avant");
 export function remplir(modele, vars) {
   return String(modele || "").replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k] ?? "") : m)).replace(/[ \u00a0]+([,.])/g, "$1").trim();
 }
@@ -144,7 +156,7 @@ export async function lancer({ maintenant = Date.now(), attendre = (ms) => new P
     const depuis = new Date(maintenant - 120 * DAY).toISOString();
     const [st, profils, admins, paiements, envoyes] = await Promise.all([
       lire("settings?id=eq.main&select=data"),
-      lire("profiles?select=id,email,data,status,acces,acces_fin,essai_fin,abo,abo_fin,created_at&limit=20000"),
+      lire("profiles?select=*&limit=20000"),   // toutes les colonnes : marche aussi tant que le script SQL n'a pas été relancé
       lire("admins?select=uid"),
       lire("paiements?select=owner,statut,objet&owner=not.is.null&statut=in.(en_attente,valide)&limit=50000"),
       lire(`rappels?select=owner,kind,ref&at=gte.${encodeURIComponent(depuis)}&limit=50000`),
