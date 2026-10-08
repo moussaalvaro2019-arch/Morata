@@ -94,7 +94,9 @@ A.DEF = {
   openSignup:true, preview:1,
   // accès payant : inscription unique (ou abonnement mensuel), validée par la direction
   paywall:true, prixAcces:4000, formule:'unique', prixMois:2000,
-  pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa'},
+  pay:{wave:'0544176359', mtn:'0544176359', orange:'', moov:'', djamo:'', titulaire:'DOUMBIA Moussa',
+    // liens de paiement marchand : l'apprenant paie en un clic depuis son téléphone (Wave Business…)
+    liens:{wave:'https://pay.wave.com/m/M_ci_dGQTCOYKLm62/c/ci/', mtn:'', orange:'', moov:''}, waveNom:'SmartDigital'},
   // paiement en ligne international (Chariow) : liens et identifiants des produits, accès accordé automatiquement
   chariow:{boutique:'https://smart-digital.mychariow.com', lienAcces:'https://smart-digital.mychariow.shop/prd_7prkaptk', prdAcces:'prd_7prkaptk', lienMois:'', prdMois:'',
     lienBasic:'https://smart-digital.mychariow.shop/prd_dk1qojwp', prdBasic:'prd_dk1qojwp', lienPremium:'https://smart-digital.mychariow.shop/prd_8eq7b1ed', prdPremium:'prd_8eq7b1ed', auto:true},

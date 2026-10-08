@@ -24,7 +24,27 @@ const MOYENS = [['wave','Wave','#1DC4FF'],['mtn','MTN Mobile Money','#FFCB05'],[
 const moyenN = k => k === 'chariow' ? 'Paiement en ligne (Chariow)' : k === 'parrainage' ? 'Parrainage (offert)' : (MOYENS.find(m => m[0] === k) || [k, k || 'Autre'])[1];
 const telFmt = t => String(t || '').replace(/\D/g, '').replace(/(\d{2})(?=\d)/g, '$1 ').trim();
 const waLink = (num, txt) => { const d = String(num || '').replace(/\D/g, ''); return d ? `https://wa.me/${d.length <= 10 ? '225' + d : d}${txt ? '?text=' + encodeURIComponent(txt) : ''}` : ''; };
-const moyensActifs = () => { const p = A.cfg().pay || {}; return MOYENS.filter(m => String(p[m[0]] || '').trim()); };
+const lienOk = l => /^https:\/\/[^\s"'<>]+$/.test(String(l || '').trim());
+const moyensActifs = () => { const p = A.cfg().pay || {}; return MOYENS.filter(m => String(p[m[0]] || '').trim() || lienOk((p.liens || {})[m[0]])); };
+/* lien de paiement marchand (Wave Business…) : le montant est ajouté pour Wave ; sans lien, numéro à copier
+   et, sur Android, code USSD à composer en un geste (iPhone : Apple bloque l'ouverture des codes * et #) */
+const USSD = {mtn:'*133#', orange:'#144#', moov:'*155#'};
+const lienPaiement = (k, montantF) => {
+  const l = String(((A.cfg().pay || {}).liens || {})[k] || '').trim(); if(!lienOk(l)) return '';
+  if(k !== 'wave' || !(montantF > 0)) return l;
+  try{ const u = new URL(l); if(!u.searchParams.has('amount')) u.searchParams.set('amount', String(Math.round(montantF))); return u.toString(); }catch(_){ return l; }
+};
+A.payEtape = (k, montantF) => {
+  const c = A.cfg(), P = c.pay || {}, num = P[k] || '', lien = lienPaiement(k, montantF), nom = moyenN(k), benef = esc(P.titulaire || c.ceo);
+  const numero = num ? `<div class="abo-num"><span class="mono">${esc(telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div>` : '';
+  const aide = k === 'wave' ? 'Dans l\'application Wave : « Envoyer », saisissez le numéro et le montant.' : k === 'mtn' ? 'Avec MTN MoMo : composez *133# puis « Transfert d\'argent », ou utilisez l\'application MoMo.' : k === 'orange' ? 'Avec Orange Money : composez #144# ou utilisez l\'application Max it.' : k === 'moov' ? 'Avec Moov Money : composez *155# ou utilisez l\'application Moov Money.' : 'Depuis votre application, faites un transfert vers ce compte.';
+  if(lien) return `<b>Payez ${F(montantF)} FCFA en un clic avec ${esc(nom)}</b>
+      <a class="btn b-pri b-lg pay-lien" href="${esc(lien)}" target="_blank" rel="noopener" data-paylien="${k}">${ic('phone')}Payer ${F(montantF)} FCFA avec ${esc(nom)}</a>
+      <span class="sub">Le lien ouvre ${k === 'wave' ? 'Wave' : 'le paiement'} sur votre téléphone : vérifiez le montant (<b>${F(montantF)} FCFA</b>) puis confirmez avec votre code secret.${k === 'wave' && P.waveNom ? ` Wave affiche le bénéficiaire « ${esc(P.waveNom)} » : c'est bien nous.` : ''}</span>
+      ${numero ? `<span class="sub">Le lien ne s'ouvre pas ? Envoyez le montant au numéro :</span>${numero}<span class="sub">Bénéficiaire : ${benef}.</span>` : ''}`;
+  const ussd = USSD[k] && /Android/i.test(navigator.userAgent || '') ? `<a class="btn b-line b-sm" style="justify-self:start" href="tel:${USSD[k].replace(/#/g, '%23')}">${ic('phone')}Composer ${USSD[k]}</a>` : '';
+  return `<b>Envoyez ${F(montantF)} FCFA par ${esc(nom)}</b> au numéro :${numero}<span class="sub">Bénéficiaire : ${benef}. ${aide}</span>${ussd}`;
+};
 const montant = () => { const c = A.cfg(); return c.formule === 'mensuel' ? +c.prixMois : +c.prixAcces; };
 const prixPlan = plan => +(plan === 'premium' ? A.cfg().prixPremium : A.cfg().prixBasic) || 0;
 const pending = () => (S.pay || []).filter(x => x.statut === 'en_attente' && ['acces', 'abo'].includes(x.objet || 'acces'));
@@ -274,7 +294,7 @@ A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:
   if(!payMoyen || !ms.find(m => m[0] === payMoyen)) payMoyen = (ms[0] || ['wave'])[0];
   const chw = A.chwDispo(ACH.objet, ACH.plan), modes = [ms.length ? 'momo' : null, chw ? 'chariow' : null].filter(Boolean);
   if(!modes.includes(payMode)) payMode = modes[0] || 'momo';
-  const num = P[payMoyen] || '', name = (S.me.data && S.me.data.name) || S.me.email, px = achPrix(), promo = ACH.objet === 'acces' ? A.promoAcces() : null;
+  const name = (S.me.data && S.me.data.name) || S.me.email, px = achPrix(), promo = ACH.objet === 'acces' ? A.promoAcces() : null;
   const waTxt = `Bonjour, je suis ${name} (${S.me.email}). Je viens de payer ${F(px)} FCFA par ${moyenN(payMoyen)} pour : ${achNom()} (${A.brandText()}).`;
   const etat = !A.paywallOn() ? `<div class="note ok">${ic('check')}<span>L'accès à la plateforme est actuellement <b>gratuit pour tous</b>.</span></div>`
     : S.me.isAdmin ? `<div class="note ok">${ic('crown')}<span>Compte administrateur : accès complet.</span></div>`
@@ -294,10 +314,8 @@ A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:
    </div>${inscrit ? '' : `<p class="sub">Les abonnements Basic et Premium se prennent après l'inscription. ${essai ? '' : 'L\'inscription comprend déjà 31 jours Premium.'}</p>`}` : '';
   const showPay = A.paywallOn() && !S.me.isAdmin && (ACH.objet === 'abo' ? inscrit : !inscrit || c.formule === 'mensuel');
   const momo = `<ol class="abo-steps">
-     <li><b>Envoyez ${F(px)} FCFA par ${esc(moyenN(payMoyen))}</b> au numéro :
-      <div class="abo-num"><span class="mono">${esc(telFmt(num))}</span><button class="btn b-line b-sm" data-copy="${esc(String(num).replace(/\s/g, ''))}">${ic('copy')}Copier</button></div>
-      <span class="sub">Bénéficiaire : ${esc(P.titulaire || c.ceo)}. ${payMoyen === 'wave' ? 'Dans l\'application Wave : « Envoyer », saisissez le numéro et le montant.' : payMoyen === 'mtn' ? 'Avec MTN MoMo : composez *133# puis « Transfert d\'argent », ou utilisez l\'application MoMo.' : payMoyen === 'orange' ? 'Avec Orange Money : composez #144# ou utilisez l\'application Max it.' : payMoyen === 'moov' ? 'Avec Moov Money : composez *155# ou utilisez l\'application Moov Money.' : 'Depuis votre application, faites un transfert vers ce compte.'}</span></li>
-     <li><b>Gardez le SMS de confirmation</b> : il contient la référence (identifiant) de la transaction.</li>
+     <li><div class="stack s8">${A.payEtape(payMoyen, px)}</div></li>
+     <li><b>Gardez le reçu ou le SMS de confirmation</b> : il contient la référence (identifiant) de la transaction.</li>
      <li><b>Déclarez votre paiement ci-dessous</b> : la direction vérifie la réception et l'active, en général dans la journée.</li>
     </ol>
     <form class="stack" id="fPay">
@@ -595,6 +613,10 @@ function reglages(c, P){
    <h3 style="margin:8px 0 0">Où les apprenants paient</h3>
    <div class="g2">${MOYENS.map(m => `<label class="fld"><span>${esc(m[1])}${m[0] === 'djamo' ? ' (numéro de téléphone du compte)' : ''}</span><input class="inp" id="ab_pay_${m[0]}" inputmode="tel" value="${esc(P[m[0]] || '')}" placeholder="laisser vide si non utilisé"></label>`).join('')}
     <label class="fld"><span>Nom du bénéficiaire affiché</span><input class="inp" id="ab_pay_titulaire" value="${esc(P.titulaire || '')}"></label></div>
+   <div class="promo-box stack s8"><b class="small">Paiement en un clic (facultatif) : liens de paiement marchand</b>
+    <div class="g2">${MOYENS.filter(m => m[0] !== 'djamo').map(m => `<label class="fld"><span>Lien ${esc(m[1])}${m[0] === 'wave' ? ' Business' : ''}</span><input class="inp" id="ab_lien_${m[0]}" value="${esc((P.liens || {})[m[0]] || '')}" placeholder="${m[0] === 'wave' ? 'https://pay.wave.com/m/…' : 'https://… (si votre opérateur vous en donne un)'}"></label>`).join('')}
+     <label class="fld"><span>Nom affiché par Wave (bénéficiaire)</span><input class="inp" id="ab_pay_waveNom" maxlength="60" value="${esc(P.waveNom || '')}" placeholder="ex. SmartDigital"></label></div>
+    <p class="sub" style="margin:0">Avec un lien, la page de paiement affiche un gros bouton « Payer … avec Wave » : l'application Wave s'ouvre avec le montant, l'apprenant confirme avec son code secret, puis déclare son paiement (référence du reçu) et vous validez comme d'habitude. Sans lien, il copie votre numéro ; sur Android, un bouton compose directement *133# (MTN), #144# (Orange) ou *155# (Moov).</p></div>
    <label class="fld" style="max-width:320px"><span>WhatsApp pour les preuves de paiement</span><input class="inp" id="ab_whatsapp" inputmode="tel" value="${esc(c.whatsapp || '')}"></label>
    <div class="note bad">${ic('shield')}<span>N'inscrivez jamais un <b>numéro de carte bancaire</b> (16 chiffres, carte Visa Djamo…) : il serait visible par tous les visiteurs et pourrait servir à des fraudes. Pour Djamo, indiquez le numéro de téléphone lié au compte.</span></div>
    <button class="btn b-pri" style="justify-self:start" data-act="absave">${ic('save')}Enregistrer</button>
@@ -712,6 +734,10 @@ A.on('click', '[data-acc]', async el => {
 A.on('click', '[data-act="absave"]', async () => {
   const pay = {}; MOYENS.forEach(m => pay[m[0]] = A.val('ab_pay_' + m[0]).trim()); pay.titulaire = A.val('ab_pay_titulaire').trim();
   if(Object.values(pay).concat([A.val('ab_whatsapp')]).some(v => String(v).replace(/\D/g, '').length >= 16)){ toast('Un numéro de carte bancaire ne doit pas être affiché : indiquez un numéro de téléphone', 'x'); return; }
+  pay.liens = {}; MOYENS.filter(m => m[0] !== 'djamo').forEach(m => { const el = $('#ab_lien_' + m[0]); pay.liens[m[0]] = el ? el.value.trim() : String(((A.cfg().pay || {}).liens || {})[m[0]] || ''); });
+  if(Object.values(pay.liens).some(l => l && !lienOk(l))){ toast('Les liens de paiement doivent commencer par https://', 'x'); return; }
+  if(pay.liens.wave && !/^https:\/\/pay\.wave\.com\//.test(pay.liens.wave)){ toast('Le lien Wave doit commencer par https://pay.wave.com/', 'x'); return; }
+  pay.waveNom = $('#ab_pay_waveNom') ? $('#ab_pay_waveNom').value.trim().slice(0, 60) : String((A.cfg().pay || {}).waveNom || '');
   const prd = (lien, v) => (String(v || '').trim() || (String(lien || '').match(/prd_[A-Za-z0-9]+/) || [''])[0]);
   const c0 = A.cfg().chariow || {};
   const chariow = {boutique:A.val('ab_chw_boutique').trim().replace(/\/+$/, ''), lienAcces:A.val('ab_chw_lienAcces').trim(), lienMois:c0.lienMois || '', prdMois:c0.prdMois || '',
