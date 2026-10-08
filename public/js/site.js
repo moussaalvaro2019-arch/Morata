@@ -205,7 +205,8 @@ A.page('connexion', {space:'bare', title:'Connexion', render(){
     <button class="btn b-pri b-lg b-full">Se connecter ${ic('arrow')}</button>
     <button type="button" class="btn b-ghost b-sm" style="justify-self:start" data-act="pwforgot">Mot de passe oublié ?</button>
    </form>
-   ${S.mode==='local'?`<div class="note info">${ic('info')}<span>Mode démonstration : créez un compte de test, il restera dans ce navigateur.</span></div>`:''}
+   ${S.panne === 'bibliotheque' ? `<div class="note bad">${ic('alert')}<span>Connexion au serveur impossible pour le moment : votre compte n'est pas perdu. Vérifiez votre connexion Internet puis <button class="btn b-xs b-line" type="button" data-act="recharger">réessayez</button>.</span></div>`
+     : S.mode==='local'?`<div class="note info">${ic('info')}<span>Mode démonstration : créez un compte de test, il restera dans ce navigateur.</span></div>`:''}
   </div></div>`;
 }});
 A.on('submit', '#fLogin', async () => {
@@ -270,6 +271,8 @@ A.page('direction', {space:'bare', title:'Espace direction', render(){
   let body;
   if(S.me && S.me.isAdmin){
     body = `<p>Connecté : <b style="color:#fff">${esc(S.me.email)}</b></p><a class="btn b-amber b-lg" href="#/admin">${ic('crown')}Ouvrir l'espace PDG ${ic('arrow')}</a><button class="btn b-sm" style="background:transparent;color:#9FB0C4;justify-self:start" data-act="logout">${ic('logout')}Se déconnecter</button>`;
+  }else if(S.panne === 'bibliotheque'){
+    body = `<p>Connexion au serveur impossible : la bibliothèque Supabase (fichier vendor/supabase.js) ne s'est pas chargée sur cet appareil. Vérifiez la connexion Internet puis réessayez.</p><button class="btn b-amber b-lg" data-act="recharger">${ic('refresh')}Réessayer</button>`;
   }else if(S.mode === 'local'){
     body = `<p>Mode démonstration : l'espace PDG s'ouvre sans mot de passe. Une fois Supabase configuré, il sera protégé par votre e-mail et votre mot de passe.</p><button class="btn b-amber b-lg" data-act="demoadmin">${ic('crown')}Ouvrir l'espace PDG (démo) ${ic('arrow')}</button>`;
   }else{

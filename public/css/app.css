@@ -844,3 +844,5 @@ table.t.click td.mono b{color:var(--navy)}
 .par-code small{display:block;color:var(--muted);font-size:12px}
 .par-code b{display:block;font-size:28px;letter-spacing:.18em;color:var(--ink)}
 .kpi .bar{margin-top:4px}
+.demob.bad{background:var(--badbg);color:#8A1F23;flex-wrap:wrap}
+.demob .btn{margin-left:4px}

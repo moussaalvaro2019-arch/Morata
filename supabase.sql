@@ -91,6 +91,18 @@ create table if not exists public.livres_achats (
   primary key (owner, livre)
 );
 
+-- Rappels envoyés automatiquement (paiement à faire, fin d'essai ou d'abonnement) : jamais deux fois le même
+create table if not exists public.rappels (
+  id bigserial primary key,
+  owner uuid not null references auth.users(id) on delete cascade,
+  kind text not null,                          -- paiement | fin_essai | fin_abo
+  ref text not null,                           -- étape (j1, j3, j7) ou date de fin concernée
+  canal text not null default 'email',
+  at timestamptz not null default now(),
+  unique (owner, kind, ref)
+);
+create index if not exists rappels_at_idx on public.rappels (at desc);
+
 create index if not exists connexions_at_idx    on public.connexions (at desc);
 create index if not exists paiements_owner_idx  on public.paiements (owner);
 create index if not exists paiements_statut_idx on public.paiements (statut, at desc);
@@ -218,10 +230,11 @@ alter table public.annales       enable row level security;
 alter table public.paiements     enable row level security;
 alter table public.livres        enable row level security;
 alter table public.livres_achats enable row level security;
+alter table public.rappels       enable row level security;
 
 do $$ declare r record; begin
   for r in select policyname, tablename from pg_policies where schemaname = 'public'
-    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales','paiements','livres','livres_achats')
+    and tablename in ('profiles','admins','admin_invites','settings','contents','annonces','progress','quiz_results','works','connexions','ia_logs','annales','paiements','livres','livres_achats','rappels')
   loop execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename); end loop;
 end $$;
 
@@ -276,10 +289,13 @@ create policy annales_write on public.annales for all using (public.is_admin()) 
 create policy livres_read  on public.livres for select using (coalesce((data->>'publie')::boolean, false) or public.is_admin());
 create policy achats_read  on public.livres_achats for select using (owner = auth.uid() or public.is_admin());
 
+-- Rappels : lus par la direction ; écrits uniquement par la fonction planifiée (clé de service)
+create policy rappels_read on public.rappels for select using (public.is_admin());
+
 -- ---------- Droits d'accès aux tables ----------
 revoke all on public.profiles, public.admins, public.admin_invites, public.settings, public.contents, public.annonces,
               public.progress, public.quiz_results, public.works, public.connexions, public.ia_logs, public.annales, public.paiements,
-              public.livres, public.livres_achats from anon, authenticated;
+              public.livres, public.livres_achats, public.rappels from anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select on public.settings, public.contents, public.annonces to anon, authenticated;
 grant insert, update, delete on public.settings, public.contents, public.annonces to authenticated;
@@ -296,6 +312,9 @@ grant select on public.ia_logs to authenticated;
 grant select on public.paiements to authenticated;
 grant select (id, data, updated_at) on public.livres to anon, authenticated;   -- jamais la colonne « fichier »
 grant select on public.livres_achats to authenticated;
+grant select on public.rappels to authenticated;
+grant select, insert, delete on public.rappels to service_role;   -- fonction planifiée « rappels » (clé de service)
+grant usage on sequence public.rappels_id_seq to service_role;
 grant usage, select on all sequences in schema public to authenticated;
 
 -- ---------- Fonctions appelées par l'application ----------
@@ -780,6 +799,10 @@ update public.settings
 update public.settings
    set data = '{"essaiJours":31,"aboJours":31,"prixBasic":2000,"prixPremium":5000}'::jsonb || data, updated_at = now()
  where id = 'main' and not (data ? 'prixBasic');
+-- Rappels par e-mail (une seule fois) : inscrits qui n'ont pas payé, fins d'essai et d'abonnement (réglable dans Relances)
+update public.settings
+   set data = '{"rappels":{"actif":true,"impayes":true,"fins":true}}'::jsonb || data, updated_at = now()
+ where id = 'main' and not (data ? 'rappels');
 -- Parrainage (une seule fois) : 3 filleuls payants = 31 jours de Premium offerts au parrain (réglable dans Réglages)
 update public.settings
    set data = '{"parrainage":{"actif":true,"filleuls":3,"jours":31,"formule":"premium"}}'::jsonb || data, updated_at = now()

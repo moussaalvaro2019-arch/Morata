@@ -9,7 +9,7 @@ Durée : environ 30 minutes, depuis un ordinateur. Même principe que pour Event
 | 1 | **Supabase** | Créer le projet, coller et exécuter `supabase.sql` (SQL Editor → Run), noter le **Project URL**, la clé **anon** et la clé **service_role** |
 | 2 | **GitHub** | Fusionner la dernière version dans `main` (demande de fusion n° 5 → **Merge**). Rien d'autre à modifier |
 | 3 | **Netlify** | Importer le dépôt `Morata` (branche `main`), **Deploy**, renommer le site (ex. `batipro-academie`) |
-| 4 | **Netlify** | *Environment variables* : `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CHARIOW_API_KEY`, `ANTHROPIC_API_KEY` (+ facultatif `RESEND_API_KEY`, `MAIL_FROM`, `MAIL_DIRECTION`), puis **Trigger deploy** |
+| 4 | **Netlify** | *Environment variables* : `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CHARIOW_API_KEY`, `ANTHROPIC_API_KEY` (+ pour les e-mails de rappel et de confirmation : `RESEND_API_KEY`, `MAIL_FROM`, facultatif `MAIL_DIRECTION`), puis **Trigger deploy** |
 | 5 | **Chariow** | *Automatisation → Pulses* : « vente réussie » vers `https://VOTRE-SITE.netlify.app/api/chariow/webhook` ; copier le secret `whsec_…` dans Netlify (`CHARIOW_WEBHOOK_SECRET`) et redéployer |
 | 6 | **Supabase** | *Authentication → URL Configuration* : **Site URL** = l'adresse Netlify |
 | 7 | **Votre site** | *Espace direction* : créer le compte PDG ; vérifier *Abonnements & paiements → Réglages* (Chariow : OK) ; faire un achat test ; ajouter vos livres et vos promotions |
@@ -204,6 +204,22 @@ Chaque apprenant a un **code parrain** de 6 caractères et un **lien d'invitatio
 
 Seuls les filleuls qui **paient** comptent : un faux compte ne rapporte rien. Un parrain déjà Premium reste Premium (les jours s'ajoutent).
 
+### Relances : rappels automatiques par e-mail et WhatsApp
+La plateforme relance toute seule, par e-mail, **chaque heure de 7 h à 19 h** (au plus un e-mail par personne et par passage, jamais deux fois le même) :
+- les **inscrits qui n'ont pas encore payé** : 1 jour, 3 jours puis 7 jours après la création du compte (comptes de moins de 30 jours, sans paiement en attente de validation) ;
+- les apprenants dont **l'essai tout compris ou l'abonnement Basic / Premium se termine dans 3 jours**, puis le jour où il se termine.
+
+Dans l'application, l'apprenant voit aussi une **fenêtre d'avertissement** (une fois par jour) dès 3 jours avant la fin, et le bandeau du tableau de bord. Il peut refuser les e-mails dans **Mon profil**.
+
+**Brancher l'envoi des e-mails (une seule fois, 15 minutes)** :
+1. **Relancez `supabase.sql`** (SQL Editor → New query → coller → Run) : il ajoute le journal des rappels (table `rappels`), sans toucher à vos données.
+2. Créez un compte gratuit sur **resend.com** (jusqu'à 100 e-mails par jour). Menu **Domains** → **Add domain** → `batiproo.com`. Resend affiche 3 ou 4 enregistrements DNS (TXT et MX) : ajoutez-les là où vous gérez votre domaine (chez le vendeur du nom de domaine, ou dans Netlify → **Domains** → batiproo.com → **DNS records** si Netlify gère votre domaine), puis cliquez sur **Verify** (quelques minutes à quelques heures).
+3. Resend → **API Keys** → **Create API key** (droit « Sending access ») → copiez la clé (elle commence par `re_`).
+4. **Netlify** → votre site → **Site configuration** → **Environment variables** → ajoutez `RESEND_API_KEY` = la clé, et `MAIL_FROM` = `BâtiPro Académie <contact@batiproo.com>` (l'adresse doit être sur le domaine vérifié). `SUPABASE_SERVICE_ROLE_KEY` doit aussi être présente (c'est la même que pour Chariow). Puis **Deploys** → **Trigger deploy**. Ces clés ne se mettent **jamais** dans le code ni sur GitHub.
+5. Vérifiez : **Espace PDG → Abonnements & paiements → onglet Relances** affiche « E-mails automatiques branchés ». Dans Netlify → **Functions** (ou **Logs**) → `rappels`, chaque passage écrit une ligne `Rappels : {"ok":true, "envoyes":…}`.
+
+**L'onglet Relances** liste les personnes à relancer (inscrites sans paiement, essais et abonnements qui finissent ou viennent de finir), le dernier e-mail reçu et un bouton **WhatsApp** qui ouvre la conversation avec un message déjà écrit : vous l'envoyez depuis votre WhatsApp Business en un geste. Les réglages permettent de couper toutes les relances, ou seulement celles des impayés ou des fins d'abonnement. Les messages WhatsApp entièrement automatiques demandent l'API WhatsApp Business de Meta (payante par conversation, vérification de l'entreprise) : les e-mails font ce travail gratuitement.
+
 ### Devises
 Les prix restent fixés en **FCFA**. Partout où un prix est affiché (accueil, Mon abonnement, livres), le sélecteur **Devise** montre l'équivalent en franc CFA BEAC, euro, dollar américain ou canadien, livre sterling, cedi, naira, franc guinéen, leone, dollar libérien, dalasi, ouguiya ou escudo cap-verdien, et le paiement en ligne peut se faire dans cette devise (Chariow affiche le montant exact ; si une devise n'est pas acceptée, Chariow encaisse dans la devise de votre boutique). Espace PDG → Abonnements & paiements → Réglages → **Devises affichées** : mettez à jour les taux (nombre de FCFA pour 1 unité) et décochez les devises que vous ne voulez pas proposer. Le FCFA, l'euro et l'escudo ont une parité fixe.
 
@@ -273,7 +289,11 @@ Remplacez les fichiers modifiés sur GitHub : Netlify republie automatiquement e
 
 | Message / symptôme | Solution |
 |---|---|
-| Bandeau jaune « Mode démonstration » | Les variables Netlify `SUPABASE_URL` et `SUPABASE_ANON_KEY` manquent (ajoutez-les puis redéployez), ou `public/config.js` est mal rempli (guillemets, virgule) |
+| Bandeau jaune « Mode démonstration » | L'adresse Supabase est introuvable : `public/config.js` est vide ou mal rempli (guillemets, virgule) et les variables Netlify `SUPABASE_URL` et `SUPABASE_ANON_KEY` manquent. Dans ce mode, chaque compte reste dans le téléphone de la personne : l'Espace PDG ne voit personne |
+| Bandeau rouge « Connexion au serveur impossible » | L'adresse Supabase est connue mais la base n'a pas pu être jointe sur cet appareil (connexion Internet, ou fichier `vendor/supabase.js` absent du site) : l'inscription est suspendue au lieu de créer un compte perdu. Réessayez ; si tout le monde le voit, vérifiez le dernier déploiement Netlify |
+| Des personnes disent s'être inscrites mais l'Espace PDG n'en montre aucune | Elles se sont inscrites pendant que le site était en mode démonstration : leur compte est resté dans leur téléphone. Demandez-leur de recréer leur compte (et vérifiez les paiements reçus sur Wave / MTN) |
+| Onglet Relances : « E-mails automatiques pas encore branchés » | Ajoutez `RESEND_API_KEY` et `MAIL_FROM` (et `SUPABASE_SERVICE_ROLE_KEY`) dans Netlify puis redéployez ; le domaine de `MAIL_FROM` doit être vérifié sur Resend |
+| Aucun e-mail de rappel ne part | Netlify → Functions → `rappels` : lisez la dernière ligne (`raison`). Relancez `supabase.sql` si la table `rappels` manque ; vérifiez la limite de Resend (100 par jour en gratuit) |
 | « Base de données inaccessible » | Le script `supabase.sql` n'a pas été exécuté, ou l'URL / la clé sont fausses |
 | « Compte créé. Ouvrez le lien reçu par e-mail… » | Désactivez « Confirm email » (étape 1.4) ou cliquez sur le lien reçu |
 | « L'assistant IA n'est pas encore activé » | Ajoutez `ANTHROPIC_API_KEY` sur Netlify puis redéployez (étape 6) |

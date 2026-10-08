@@ -345,6 +345,8 @@ function demoSeed(){
   d.livres.lv_demo1 = {data:{titre:'Le béton armé pas à pas', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Du calcul des charges au plan de ferraillage : poutres, poteaux, dalles et semelles selon le BAEL, avec des exemples de chantiers ivoiriens.', description:"Ce livre d'exemple montre comment vos ouvrages apparaissent sur la plateforme.\n\n- Descente de charges et combinaisons ELU / ELS\n- Poutres, poteaux, dalles, semelles\n- 60 exercices corrigés\n\nRemplacez-le par vos propres livres dans l'Espace PDG, rubrique **Livres**.", prix:7000, prixBarre:10000, promoNom:'Prix de lancement', promoFin:new Date(t + 20*day).toISOString().slice(0, 10), format:'PDF', pages:184, annee:2026, couleur:'#1D4FA8', publie:true, ordre:1, vedette:true, lienAchat:'', prdChariow:''}, fichier:''};
   d.livres.lv_demo2 = {data:{titre:'Réussir son métré et son devis', sousTitre:'Livre d\'exemple de la démonstration', auteur:'DOUMBIA Moussa', resume:'Avant-métré, quantitatif et devis estimatif d\'une maison : méthode, modèles de tableaux et prix unitaires en FCFA.', description:"Livre d'exemple : modifiez le titre, la couverture, le prix et la description, ou masquez-le.", prix:5000, format:'PDF et papier', pages:126, annee:2025, couleur:'#C95F18', publie:true, ordre:2, lienAchat:'', prdChariow:''}, fichier:''};
   d.achats.push({owner:'u_kj', livre:'lv_demo2', at:t - 6*day, source:'paiement'});
+  // rappel envoyé automatiquement (en démonstration, aucun e-mail ne part réellement)
+  d.rappels = [{owner:'u_ak', kind:'fin_essai', ref:'fini:' + J(-2).slice(0, 10), at:J(-1.8)}];
   d.paiements.push({id:d.paiements.length + 1, owner:'u_kj', at:t - 6*day, montant:5000, moyen:'wave', numero:d.users.u_kj.data.phone, reference:'T778812', formule:'unique', mois:0, statut:'valide', note:'', traite_at:t - 6*day, objet:'livre', livre:'lv_demo2', applique:true});
   d.ia.push({owner:'u_np', at:t-3*3600000, data:{kind:'chat', ref:'ba'}},{owner:'u_kj', at:t-26*3600000, data:{kind:'expliquer', ref:'ba-2'}},{owner:'u_ak', at:t-50*3600000, data:{kind:'chat', ref:'rdm'}});
   d.annonces.a1 = {titre:'Bienvenue sur BâtiPro Académie', texte:"Les cours de béton armé et de métré sont en ligne. Commencez par la Construction de A à Z pour voir comment toutes les matières s'enchaînent sur un vrai chantier.", at: t - 2*day};
@@ -388,7 +390,7 @@ function localApply(x){
 }
 const L = {
   db: null,
-  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = [];
+  load(){ this.db = ls.get('db', null); if(!this.db || !this.db.users){ this.db = demoSeed(); this.save(); } if(!this.db.paiements) this.db.paiements = []; if(!this.db.rappels) this.db.rappels = [];
     if(!this.db.livres){ const s = demoSeed(); this.db.livres = s.livres; this.db.achats = []; this.save(); } if(!this.db.achats) this.db.achats = [];
     const sansCode = Object.values(this.db.users).filter(u => !u.code_parrain); sansCode.forEach(u => u.code_parrain = codeParrain(this.db.users)); if(sansCode.length) this.save();
     const ex = this.db.livres.lv_demo1;   // démo : livre d'exemple en promotion (10 000 barré → 7 000 FCFA)
@@ -435,6 +437,7 @@ A.loadAdmin = async function(){
         code_parrain:u.code_parrain||null, parrain:u.parrain||null, filleul_valide:!!u.filleul_valide, parrain_recompenses:u.parrain_recompenses||0})),
       paiements: (d.paiements||[]).slice().sort((a,b)=>b.at-a.at),
       achats: (d.achats||[]).slice(),
+      rappels: (d.rappels||[]).slice().sort((a,b)=>ts(b.at)-ts(a.at)),
       connexions: d.connexions.slice().sort((a,b)=>b.at-a.at),
       progress: Object.values(d.progress).map(p => ({owner:p.owner, ...p.data})),
       quiz: Object.values(d.quiz).map(q => ({owner:q.owner, ...q.data})),
@@ -457,11 +460,13 @@ A.loadAdmin = async function(){
     sb.from('paiements').select('*').order('at',{ascending:false}).limit(2000)
   ]);
   const ach = await sb.from('livres_achats').select('owner,livre,at,source').limit(5000);
+  const rap = await sb.from('rappels').select('owner,kind,ref,at').order('at',{ascending:false}).limit(1000);   // table absente tant que le script SQL n'a pas été relancé
   const admins = new Set((ad.data||[]).map(x=>x.uid));
   S.adm = {
     profiles: (pr.data||[]).map(p => ({...p, data:p.data||{}, status:p.status||'actif', acces:p.acces||'gratuit', admin: admins.has(p.id)})),
     paiements: (py.data||[]).map(x => ({...x, at: ts(x.at), traite_at: x.traite_at ? ts(x.traite_at) : null})),
     achats: (ach.data||[]).map(x => ({...x, at: ts(x.at)})),
+    rappels: rap.error ? [] : (rap.data||[]),
     connexions: (cx.data||[]).map(c => ({...c, at: ts(c.at)})),
     progress: (pg.data||[]).map(p => ({owner:p.owner, ...p.data})),
     quiz: (qz.data||[]).map(q => ({owner:q.owner, ...q.data})),
@@ -492,13 +497,26 @@ async function afterAuth(user){
   A.db.touch();
 }
 
+function chargerScript(src, ms = 8000){
+  return new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; s.async = true;
+    const t = setTimeout(() => ko(new Error('délai dépassé')), ms); s.onload = () => { clearTimeout(t); ok(); }; s.onerror = () => { clearTimeout(t); ko(new Error('échec')); }; document.head.appendChild(s); });
+}
+const PANNE = 'Connexion au serveur impossible pour le moment : réessayez dans quelques minutes (votre compte n\'est pas perdu).';
 A.db = {
   async init(){
     // config.js vide : adresse et clé publique Supabase lues dans les variables Netlify (fonction /api/config)
     if(!(CONF.supabaseUrl && CONF.supabaseAnonKey) && /^https?:$/.test(location.protocol)){
       try{ const r = await fetch('/api/config', {cache:'no-store'}); if(r.ok){ const j = await r.json(); if(j && j.supabaseUrl && j.supabaseAnonKey) Object.assign(CONF, j); } }catch(_){}
     }
-    if(CONF.supabaseUrl && CONF.supabaseAnonKey && window.supabase){
+    const cles = !!(CONF.supabaseUrl && CONF.supabaseAnonKey);
+    // bibliothèque Supabase servie par le site (vendor/supabase.js) ; secours : CDN
+    if(cles && !window.supabase) await chargerScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js').catch(() => {});
+    if(cles && !window.supabase){
+      // adresse de la base connue mais bibliothèque introuvable : jamais de bascule silencieuse en démonstration
+      // (les comptes resteraient dans le téléphone) ; on affiche la panne et on bloque inscription et connexion
+      console.error('Supabase : bibliothèque non chargée (vendor/supabase.js)');
+      S.mode = 'local'; S.panne = 'bibliotheque'; L.load(); applyPublic({}, {}, {}); S.livres = []; S.adminExists = true; S.me = null;
+    }else if(cles){
       S.mode = 'sb';
       sb = A.sb = window.supabase.createClient(CONF.supabaseUrl, CONF.supabaseAnonKey, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}});
       sb.auth.onAuthStateChange(ev => { if(ev === 'PASSWORD_RECOVERY') setTimeout(()=>A.openPwNew && A.openPwNew(), 300); });
@@ -513,7 +531,7 @@ A.db = {
         S.adminExists = !!ae.data;
         const {data:{session}} = await sb.auth.getSession();
         await afterAuth(session ? session.user : null);
-      }catch(e){ console.error(e); toast('Base de données inaccessible : vérifiez config.js et le script SQL', 'alert'); }
+      }catch(e){ console.error(e); S.panne = 'base'; toast('Base de données inaccessible : vérifiez config.js et le script SQL', 'alert'); }
     }else{
       S.mode = 'local'; L.load();
       applyPublic(L.db.settings, L.db.contents, L.db.annonces);
@@ -526,6 +544,7 @@ A.db = {
     setInterval(() => { if(S.me && document.visibilityState === 'visible') A.db.touch(); }, 60000);
   },
   async signUp({email, password, name, phone, city, profil, parrain}){
+    if(S.panne === 'bibliotheque') return {ok:false, msg:PANNE};
     email = String(email).trim().toLowerCase();
     const data = {name:String(name).trim(), phone:String(phone||'').trim(), city:String(city||'').trim(), profil:profil||''};
     const code = String(parrain || '').trim().toUpperCase();   // code parrain (lien d'invitation) : rattache le filleul
@@ -541,6 +560,7 @@ A.db = {
     await afterAuth(r.data.session.user); return {ok:true};
   },
   async signIn(email, password){
+    if(S.panne === 'bibliotheque') return {ok:false, msg:PANNE};
     email = String(email).trim().toLowerCase();
     if(S.mode === 'local'){
       const h = await sha(email+'|'+password);
@@ -569,7 +589,7 @@ A.db = {
     const {error} = await sb.auth.updateUser({password:pw}); return error ? {ok:false, msg:sbErr(error)} : {ok:true};
   },
   async demoAdmin(){
-    if(S.mode !== 'local') return;
+    if(S.mode !== 'local' || S.panne) return;
     if(!L.db.users.pdg) L.db.users.pdg = {email:'pdg@demo.local', pass:'', data:{name:A.cfg().ceo, profil:'PDG'}, status:'actif', created_at: now()};
     L.db.admins.pdg = {email:'pdg@demo.local', name:A.cfg().ceo}; L.save();
     ls.set('sess', {uid:'pdg'}); ss.del('cx_pdg'); await afterAuth({id:'pdg'});
@@ -909,7 +929,8 @@ A.render = function(opts={}){
   const title = typeof m.def.title === 'function' ? m.def.title(m.params) : m.def.title;
   const crumb = typeof m.def.crumb === 'function' ? m.def.crumb(m.params) : m.def.crumb;
   const actions = m.def.actions ? m.def.actions(m.params) : '';
-  const demo = S.mode === 'local' ? `<div class="demob noprint">${ic('info')}Mode démonstration : données gardées dans ce navigateur (config.js non renseigné).</div>` : '';
+  const demo = S.panne === 'bibliotheque' ? `<div class="demob bad noprint">${ic('alert')}Connexion au serveur impossible : inscription et connexion momentanément indisponibles. <button class="btn b-xs b-line" data-act="recharger">${ic('refresh')}Réessayer</button></div>`
+    : S.mode === 'local' ? `<div class="demob noprint">${ic('info')}Mode démonstration : données gardées dans ce navigateur (adresse Supabase non renseignée).</div>` : '';
   let html;
   if(sp === 'site') html = siteShell(body, m);
   else if(sp === 'app') html = appShell(body, m, title, crumb, actions, false);
@@ -1044,6 +1065,7 @@ A.on('click', '[data-act="side"]', () => { const s = $('#side'); s.classList.add
 A.on('click', '[data-act="smenu"]', () => { const m = $('#smenu'); m.hidden = !m.hidden; });
 A.on('click', '[data-act="logout"]', async () => { await A.db.signOut(); toast('Déconnecté', 'logout'); A.go('#/'); });
 A.on('click', '[data-copy]', el => copy(el.dataset.copy));
+A.on('click', '[data-act="recharger"]', () => location.reload());
 A.on('change', '[data-devsel]', el => { A.setDevise(el.value); A.refresh(); });
 A.on('click', '[data-act="print"]', () => window.print());
 

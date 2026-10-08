@@ -214,9 +214,28 @@ A.paywallPage = path => {
 };
 /* encart dans un chapitre réservé */
 A.lockedChapter = (c, m) => `<div class="stack s20"><div class="lesson"><span class="kick">${A.nivPill(c)} ${esc(m.titre)}</span><h1 style="font-size:clamp(24px,3vw,32px);margin:8px 0 6px">${esc(c.titre)}</h1><p class="sub">${c.duree || 20} min de lecture · ${A.nex(c)} exercices corrigés · ${A.nq(c)} questions de quiz${c.ns || c.sujet ? ' · 1 sujet d\'examen corrigé' : ''}</p></div>${A.paywallPage('')}</div>`;
+/* fenêtre d'avertissement (une fois par jour) : essai ou abonnement qui se termine dans 3 jours, abonnement terminé */
+A.alerteFin = () => {
+  if(!S.me || S.me.isAdmin || !A.paywallOn()) return;
+  const me = S.me, t = now(), c = A.cfg(), aboFin = ['basic', 'premium'].includes(me.abo) ? ts(me.abo_fin) : 0, essai = A.essaiFin(), plan = nomPlan(me.abo);
+  const dans = f => { const j = Math.max(1, Math.ceil((f - t) / DAY)); return j === 1 ? 'demain' : 'dans ' + j + ' jours'; };
+  let k, titre, txt, btn;
+  if(aboFin > t && aboFin - t <= 3*DAY){ k = 'abo:' + me.abo_fin; titre = `Votre abonnement ${plan} se termine ${dans(aboFin)}`; btn = 'Renouveler maintenant';
+    txt = `Il se termine le <b>${fd(aboFin)}</b>. Renouvelez-le maintenant pour ne rien perdre : ${F(prixPlan(me.abo))} FCFA pour ${+c.aboJours || 31} jours, ajoutés à la suite des jours qui vous restent.`; }
+  else if(aboFin && aboFin <= t && t - aboFin <= 7*DAY && !(essai)){ k = 'abofini:' + me.abo_fin; titre = `Votre abonnement ${plan} a pris fin`; btn = 'Reprendre ' + plan;
+    txt = `Il s'est terminé le <b>${fd(aboFin)}</b>. Vous gardez tous les cours avec la formule Inscrit ; reprenez ${plan} (${F(prixPlan(me.abo))} FCFA pour ${+c.aboJours || 31} jours) pour retrouver tout ce qu'il comprend.`; }
+  else if(essai && essai - t <= 3*DAY){ k = 'essai:' + me.essai_fin; titre = `Vos jours tout compris se terminent ${dans(essai)}`; btn = 'Choisir ma formule';
+    txt = `Vous profitez de tout jusqu'au <b>${fd(essai)}</b>. Ensuite, vous gardez tous les cours (formule Inscrit). Pour garder le reste : <b>Basic</b> ${F(prixPlan('basic'))} FCFA ou <b>Premium</b> ${F(prixPlan('premium'))} FCFA pour ${+c.aboJours || 31} jours.`; }
+  else return;
+  const cle = 'alerte_' + me.id + '_' + k, auj = new Date().toISOString().slice(0, 10);
+  if(A.ls.get(cle, '') === auj) return;
+  A.ls.set(cle, auj);
+  setTimeout(() => { if(S.me && S.me.id === me.id) A.win({title:titre, body:`<p style="margin:0">${txt}</p>`, foot:`<button class="btn b-line" data-act="closewin">Plus tard</button><a class="btn b-pri" href="#/app/abonnement" data-act="closewin">${ic('coins')}${esc(btn)}</a>`}); }, 500);
+};
 /* bandeau du tableau de bord : essai qui se termine, abonnement qui expire, inscription à faire */
 A.aboBanner = () => {
   if(!S.me || S.me.isAdmin || !A.paywallOn()) return '';
+  A.alerteFin();
   const n = A.niveau(), essai = A.essaiFin(), abo = A.aboActif(), fin = A.accesFin(), wait = pending()[0];
   if(n !== 'aucun'){
     if(wait) return `<div class="note info">${ic('clock')}<span>Paiement déclaré ${ago(wait.at)} : il sera validé dès que la direction aura vérifié la réception.</span></div>`;
@@ -407,13 +426,14 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'abonnes' ? abonnes : abF === 'nonpayes' ? L.filter(p => niv(p) === 'aucun') : abF === 'expires' ? exp : null;
   if(abQ){ const q = abQ.toLowerCase(), hit = p => (nm(p) + ' ' + p.email + ' ' + ((p.data || {}).phone || '')).toLowerCase().includes(q);
     if(rows) rows = rows.filter(x => hit(payer(x)) || String(x.reference).toLowerCase().includes(q) || String(x.numero).includes(q)); if(users) users = users.filter(hit); }
-  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['parrainage', 'Parrainage', L.filter(p => p.parrain).length], ['reglages', 'Réglages', '']];
+  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['parrainage', 'Parrainage', L.filter(p => p.parrain).length], ['relances', 'Relances', aRelancer(L, pay).length], ['reglages', 'Réglages', '']];
   const payRow = x => { const p = payer(x); return `<tr><td class="nowrap">${fdt(x.at)}<div class="small faint">${ago(x.at)}</div></td><td>${payerLink(x, p)}</td><td>${esc(moyenN(x.moyen))}${sourcePill(x)}<div class="small faint mono">${esc(telFmt(x.numero))}</div></td><td class="mono small" style="overflow-wrap:anywhere">${esc(x.reference)}</td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}<div class="small faint">${esc(objetTxt(x))}</div></td>
     <td>${x.statut === 'en_attente' ? `<div class="row nw"><button class="btn b-ok b-xs" data-payok="${x.id}">${ic('check')}Valider</button><button class="btn b-line b-xs" data-payno="${x.id}">${ic('x')}Refuser</button></div>` : statutPill(x.statut) + (x.note ? `<div class="small faint">${esc(x.note)}</div>` : '') + (x.traite_at ? `<div class="small faint">${fd(x.traite_at)}</div>` : '')}</td></tr>`; };
   const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${A.accesDetail(p) ? `<div class="small faint">${esc(A.accesDetail(p))}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
   let body;
   if(abF === 'reglages') body = reglages(c, P);
   else if(abF === 'parrainage') body = parrainageAdm(c, D.profiles);
+  else if(abF === 'relances') body = relancesAdm(c, L, pay);
   else if(rows && abF === 'attente') body = `<div class="abo-cards">${rows.map(x => { const p = payer(x); return `<div class="card stack s8"><div class="row between nw"><div style="min-width:0;overflow-wrap:anywhere">${payerLink(x, p)}</div><b class="mono nowrap" style="font-size:17px">${F(x.montant)} F${devPaye(x)}</b></div>
       <dl class="kv"><dt>Moyen</dt><dd>${esc(moyenN(x.moyen))}${sourcePill(x)}</dd>${x.numero ? `<dt>Payé depuis</dt><dd class="mono">${esc(telFmt(x.numero))}</dd>` : ''}<dt>Référence</dt><dd class="mono" style="overflow-wrap:anywhere">${esc(x.reference)}</dd><dt>${x.source === 'chariow' ? 'Reçu' : 'Déclaré'}</dt><dd>${fdt(x.at)} · ${ago(x.at)}</dd><dt>Objet</dt><dd>${esc(objetTxt(x))}</dd></dl>${x.note ? `<p class="sub" style="margin:0">${esc(x.note)}</p>` : ''}
       <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}${x.objet === 'livre' ? 'Valider : remettre le livre' : x.objet === 'abo' ? 'Valider : activer l\'abonnement' : 'Valider : activer l\'accès'}</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
@@ -431,6 +451,59 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   <div class="toolbar">${abF === 'reglages' ? '' : `<label class="search">${ic('search')}<input id="abQ" placeholder="Nom, e-mail, téléphone, référence…" value="${esc(abQ)}"></label>`}<div class="tabs">${tabs.map(x => `<button class="tab ${abF === x[0] ? 'on' : ''}" data-abf="${x[0]}">${x[1]}${x[2] !== '' ? ` <span class="cnt">${x[2]}</span>` : ''}</button>`).join('')}</div></div>
   ${body}`;
 }});
+/* ---------- Espace PDG : relances (qui n'a pas payé, essais et abonnements qui se terminent) ----------
+   Mêmes règles que la fonction netlify/functions/rappels.mjs, qui envoie les e-mails chaque heure de 7 h à 19 h. */
+const RAP_NOM = {paiement:'Paiement à faire', fin_essai:'Fin de l\'essai', fin_abo:'Fin d\'abonnement'};
+function aRelancer(L, pay){
+  const t = now(), att = new Set(pay.filter(x => x.statut === 'en_attente' && ['acces', 'abo'].includes(x.objet || 'acces')).map(x => x.owner));
+  const paye = new Set(pay.filter(x => x.statut === 'valide' && ['acces', 'abo'].includes(x.objet || 'acces')).map(x => x.owner));
+  const out = [];
+  L.forEach(p => {
+    if(p.status === 'suspendu') return;
+    const insc = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t), aboFin = ['basic', 'premium'].includes(p.abo) ? ts(p.abo_fin) : 0, aboActif = aboFin > t, j = f => (f - t) / DAY;
+    if(aboFin && Math.abs(j(aboFin)) <= 7) out.push({p, kind:'fin_abo', fin:aboFin, plan:p.abo, fini:aboFin <= t});
+    else if(insc && p.essai_fin && !(aboActif && aboFin >= ts(p.essai_fin)) && Math.abs(j(ts(p.essai_fin))) <= 7) out.push({p, kind:'fin_essai', fin:ts(p.essai_fin), fini:ts(p.essai_fin) <= t});
+    else if(!insc && !aboActif && !att.has(p.id) && !paye.has(p.id) && t - ts(p.created_at) <= 30*DAY) out.push({p, kind:'paiement', cree:ts(p.created_at)});
+  });
+  return out.sort((a, b) => (a.kind === 'paiement' ? 1 : 0) - (b.kind === 'paiement' ? 1 : 0) || (a.fin || a.cree) - (b.fin || b.cree));
+}
+const relanceTxt = (r, c) => {
+  const nom = ((r.p.data || {}).name || '').split(' ')[0], site = location.origin + location.pathname, plan = nomPlan(r.plan), jours = +c.aboJours || 31;
+  const deb = `Bonjour${nom ? ' ' + nom : ''}, c'est ${c.ceo} de ${A.cfg().nom}. `;
+  if(r.kind === 'paiement') return deb + `Vous avez créé votre compte le ${fd(r.cree)}, mais votre inscription n'est pas encore payée. Le 1er chapitre de chaque matière est gratuit ; l'inscription (${F(montant())} FCFA) ouvre tout pendant ${+c.essaiJours || 31} jours. Payez ici : ${site}#/app/abonnement. Une question ? Répondez-moi ici.`;
+  if(r.kind === 'fin_essai') return deb + (r.fini ? `Votre période tout compris s'est terminée le ${fd(r.fin)} : vous gardez tous les cours.` : `Vos jours tout compris se terminent le ${fd(r.fin)}.`) + ` Pour garder les exercices, sujets, calculs guidés, l'atelier et le professeur IA : Basic ${F(prixPlan('basic'))} FCFA ou Premium ${F(prixPlan('premium'))} FCFA pour ${jours} jours. ${site}#/app/abonnement`;
+  return deb + (r.fini ? `Votre abonnement ${plan} s'est terminé le ${fd(r.fin)}.` : `Votre abonnement ${plan} se termine le ${fd(r.fin)}.`) + ` Renouvelez-le : ${F(prixPlan(r.plan))} FCFA pour ${jours} jours${r.fini ? '' : ', ajoutés à la suite'}. ${site}#/app/abonnement`;
+};
+function relancesAdm(c, L, pay){
+  const R = Object.assign({actif:true, impayes:true, fins:true}, c.rappels || {}), liste = aRelancer(L, pay), rap = AD().rappels || [];
+  const dernier = id => rap.filter(x => x.owner === id).sort((a, b) => ts(b.at) - ts(a.at))[0];
+  if(chwEtat === undefined && S.mode === 'sb'){ chwEtat = null; A.db.chariowEtat().then(r => { chwEtat = r || false; A.refresh(); }); }
+  const e = chwEtat || {}, mailOk = e.mail && e.service;
+  const etat = S.mode === 'local' ? `<div class="note info">${ic('info')}<span>Mode démonstration : aucun e-mail n'est envoyé. Sur votre site, la fonction <b>rappels</b> les envoie toute seule.</span></div>`
+    : chwEtat === null ? '<p class="sub">Vérification de l\'envoi des e-mails…</p>'
+    : mailOk ? `<div class="note ok">${ic('check')}<span>E-mails automatiques <b>branchés</b> : envoyés chaque heure de 7 h à 19 h, au plus un par personne et jamais deux fois le même.</span></div>`
+    : `<div class="note">${ic('alert')}<span>E-mails automatiques <b>pas encore branchés</b> : ajoutez dans Netlify les variables <b>RESEND_API_KEY</b> et <b>MAIL_FROM</b>${e.service ? '' : ' ainsi que <b>SUPABASE_SERVICE_ROLE_KEY</b>'} (voir le guide, section Relances). En attendant, utilisez les boutons WhatsApp ci-dessous.</span></div>`;
+  const sit = r => r.kind === 'paiement' ? `Inscrit ${ago(r.cree)}, rien payé` : r.kind === 'fin_essai' ? (r.fini ? 'Essai terminé le ' : 'Essai jusqu\'au ') + fd(r.fin) : `${nomPlan(r.plan)} ${r.fini ? 'terminé le' : 'jusqu\'au'} ${fd(r.fin)}`;
+  const rows = liste.map((r, i) => { const d = dernier(r.p.id), tel = (r.p.data || {}).phone, txt = relanceTxt(r, c);
+    return `<tr><td><a href="#/admin/apprenant/${r.p.id}" style="text-decoration:none"><b>${esc(nm(r.p))}</b></a><div class="small faint">${esc(r.p.email)}${tel ? ' · ' + esc(telFmt(tel)) : ''}</div></td>
+     <td><span class="pill ${r.kind === 'paiement' ? 'p-warn' : r.fini ? 'p-bad' : 'p-info'}">${esc(RAP_NOM[r.kind])}</span><div class="small faint">${esc(sit(r))}</div></td>
+     <td class="small">${d ? `${esc(RAP_NOM[d.kind] || d.kind)}<div class="faint">${fdt(d.at)}</div>` : '<span class="faint">aucun</span>'}${(r.p.data || {}).rappels === false ? '<div class="faint">a refusé les e-mails</div>' : ''}</td>
+     <td><div class="row nw">${tel ? `<a class="btn b-ok b-xs" target="_blank" rel="noopener" href="${esc(waLink(tel, txt))}">${ic('whatsapp')}WhatsApp</a>` : ''}<button class="btn b-line b-xs" data-copy="${esc(txt)}">${ic('copy')}Message</button></div></td></tr>`; }).join('');
+  return `<div class="cols"><div class="card stack"><h3 style="margin:0">Rappels automatiques par e-mail</h3>${etat}
+    <label class="check"><input type="checkbox" id="rp_actif" ${R.actif !== false ? 'checked' : ''}>Envoyer les rappels automatiquement</label>
+    <label class="check"><input type="checkbox" id="rp_impayes" ${R.impayes !== false ? 'checked' : ''}>Inscrits qui n'ont pas payé : 1, 3 puis 7 jours après la création du compte</label>
+    <label class="check"><input type="checkbox" id="rp_fins" ${R.fins !== false ? 'checked' : ''}>Essai et abonnements : 3 jours avant la fin, puis le jour où ils se terminent</label>
+    <p class="sub" style="margin:0">Dans l'application, l'apprenant voit aussi une fenêtre d'avertissement (une fois par jour) dès 3 jours avant la fin. Il peut refuser les e-mails dans « Mon profil ».</p>
+    <button class="btn b-pri" style="justify-self:start" data-act="rpsave">${ic('save')}Enregistrer</button></div>
+   <div class="card stack"><h3 style="margin:0">Derniers e-mails envoyés <small>${rap.length}</small></h3>${rap.length ? `<div class="stack s8">${rap.slice(0, 15).map(x => `<div class="row between nw"><span style="min-width:0"><b>${esc(nm(profOf(x.owner)))}</b><span class="small faint" style="display:block">${esc(RAP_NOM[x.kind] || x.kind)} · ${esc(String(x.ref).replace(/^(avant|fini):(\d{4}-\d{2}-\d{2})$/, (m, k, d) => (k === 'avant' ? 'fin le ' : 'terminé le ') + fd(d)).replace(/^j(\d+)$/, '$1 j après l\'inscription'))}</span></span><span class="small faint nowrap">${fdt(x.at)}</span></div>`).join('')}</div>` : '<p class="sub" style="margin:0">Aucun e-mail envoyé pour le moment.</p>'}</div></div>
+   <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>À relancer</th><th>Situation</th><th>Dernier e-mail</th><th>Relancer vous-même</th></tr></thead><tbody>${rows || `<tr><td colspan="4">${A.empty('check', 'Personne à relancer pour le moment.')}</td></tr>`}</tbody></table></div></div>
+   <p class="sub">Le bouton WhatsApp ouvre la conversation avec un message déjà écrit (à envoyer depuis votre WhatsApp Business). Les envois WhatsApp entièrement automatiques demandent l'API WhatsApp Business de Meta (payante, vérification de l'entreprise) : les e-mails font ce travail gratuitement.</p>`;
+}
+A.on('click', '[data-act="rpsave"]', async () => {
+  const rappels = {actif:$('#rp_actif').checked, impayes:$('#rp_impayes').checked, fins:$('#rp_fins').checked};
+  if(await A.db.saveSettings({rappels})){ toast('Réglages des rappels enregistrés', 'check'); A.refresh(); }
+});
+
 /* ---------- Espace PDG : parrainage (parrains, filleuls, récompenses, réglages) ---------- */
 function parrainageAdm(c, profs){
   const R = c.parrainage, req = Math.max(1, +R.filleuls || 3), dispo = profs.some(p => p.code_parrain);
