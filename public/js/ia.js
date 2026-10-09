@@ -109,6 +109,7 @@ A.page('app/ia', {space:'app', title:'Assistant IA', crumb:'Votre professeur dis
  render(){
   loadChat();
   const qm = A.query().get('m'); if(qm && A.mat(qm)) CH.mat = qm;
+  const qq = (A.query().get('q') || '').slice(0, 600);   // question préparée (ex. depuis le dictionnaire)
   const cat = A.catalog();
   return `<div class="chat"><div class="msgs" id="msgs">${CH.msgs.length ? CH.msgs.map(msgHtml).join('') : `<div class="stack" style="margin:auto;max-width:620px;text-align:center;justify-items:center;padding:20px">
      <span style="width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:30px;background:linear-gradient(140deg,#2F6FDB,#E8752A);color:#fff">${ic('spark')}</span>
@@ -116,7 +117,7 @@ A.page('app/ia', {space:'app', title:'Assistant IA', crumb:'Votre professeur dis
      <div class="sugg" style="justify-content:center">${SUGG.map(s=>`<button data-sugg="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>`}</div>
    <form class="composer" id="fChat">
     <div class="row nw"><select class="inp sm" id="chMat" style="width:auto;max-width:60%"><option value="">Toutes matières</option>${cat.map(m=>`<option value="${m.id}" ${m.id===CH.mat?'selected':''}>${esc(m.titre)}</option>`).join('')}</select><span class="sub grow">${A.cfg().iaQuota ? `Jusqu'à ${A.cfg().iaQuota} questions par jour` : ''}</span></div>
-    <div class="row nw"><textarea class="inp" id="chIn" rows="1" placeholder="Écrivez votre question… (Entrée pour envoyer, Maj+Entrée pour aller à la ligne)"></textarea><button class="btn b-blue" id="chSend" aria-label="Envoyer">${ic('send')}</button></div>
+    <div class="row nw"><textarea class="inp" id="chIn" rows="1" placeholder="Écrivez votre question… (Entrée pour envoyer, Maj+Entrée pour aller à la ligne)">${esc(qq)}</textarea><button class="btn b-blue" id="chSend" aria-label="Envoyer">${ic('send')}</button></div>
    </form></div>`;
  },
  mount(){ const m = $('#msgs'); if(m) m.scrollTop = m.scrollHeight; const t = $('#chIn'); if(t) t.focus(); },

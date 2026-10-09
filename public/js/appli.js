@@ -570,8 +570,67 @@ ${Lb > 25 ? '**Joint de dilatation** nécessaire (longueur > 25 m).' : 'Longueur
 Sous ${M.semelles.reduce((a, e) => e.Ns > a.Ns ? e : a).id}, la contrainte verticale vaut σ1 = ${fm(M.semelles.reduce((a, e) => e.Ns > a.Ns ? e : a).sreal, 0)} kPa ; dans le sol, la contrainte horizontale σ3 ≈ K0 σ1 ≈ 0,5 σ1. Le cisaillement maximal τ = (σ1 − σ3)/2 ≈ ${fm(M.semelles.reduce((a, e) => e.Ns > a.Ns ? e : a).sreal/4, 0)} kPa (centre du cercle de Mohr à ${fm(.75*M.semelles.reduce((a, e) => e.Ns > a.Ns ? e : a).sreal, 0)} kPa).`;
 };
 
+/* ---------- Langues & communication ---------- */
+G.fr = c => {
+  const {p, M, DQ} = c, ville = (p.site || {}).ville || 'Abidjan', wk = Math.max(...p.planning.map(r => r[1] + r[2])), nNiv = c.nL;
+  const ht = DQ ? Math.round(DQ.ht) : 0, tv = DQ ? Math.round(DQ.tv) : 0, ttc = DQ ? Math.round(DQ.ttc) : 0;
+  const go = p.planning.filter(x => /Fondation|Structure|Poteaux|Soubassement|Élévation/.test(x[0]));
+  return `## Courriel de transmission du devis
+**Objet** : ${p.titre} à ${ville} – Devis n° ${new Date().getFullYear()}-${String(p.id).slice(0, 3).toUpperCase()}01
+Madame, Monsieur,
+Comme suite à notre rencontre, nous avons le plaisir de vous adresser ci-joint notre devis pour la construction de votre ${p.titre.toLowerCase()} (${nNiv} niveau${nNiv > 1 ? 'x' : ''}, ${fm(c.ME.info.Shab, 0)} m² habitables) à ${ville}.
+${DQ ? `Le montant des travaux s'élève à **${F(ht)} F CFA HT**, soit **${F(ttc)} F CFA TTC** (TVA de 18 % : ${F(tv)} F CFA).` : ''} La durée prévisionnelle des travaux est de **${wk} semaines**, à compter de l'ordre de service de démarrage.
+Ce devis est valable 30 jours. Nous restons à votre disposition pour vous le présenter en détail.
+Nous vous prions d'agréer, Madame, Monsieur, nos salutations distinguées.
+*Le conducteur de travaux*
+
+> [!retenir] Ce que l'on vérifie avant d'envoyer
+> Objet précis, montants **HT / TVA / TTC** cohérents (${F(ht)} + ${F(tv)} = ${F(ht + tv)}), durée, validité de l'offre, pièce jointe bien jointe, formule de politesse qui reprend la formule d'appel.
+
+## Extrait du compte rendu de la réunion de chantier n° 4
+**1. Gros œuvre** – Les ${M.semelles.length} semelles sont coulées. Le ferraillage des ${M.postEls.length} poteaux du rez-de-chaussée est en cours ; le bureau de contrôle le vérifiera avant coulage.
+**2. Approvisionnements** – Le conducteur de travaux rappelle que ${fm(M.totAcier/1000, 2)} t d'aciers et environ ${F(Math.round(M.totBeton))} m³ de béton sont nécessaires pour l'ensemble de la structure ; la prochaine livraison d'aciers est prévue la semaine prochaine.
+**3. Planning** – ${go.length ? `Les travaux de gros œuvre (${go.map(x => x[0].toLowerCase()).join(', ')}) se poursuivent conformément au planning.` : 'Les travaux se poursuivent conformément au planning.'}
+**4. Sécurité** – Le chef de chantier rappelle le port obligatoire du casque et du harnais${nNiv > 1 ? ' pour les travaux sur les planchers en étage' : ''}.
+| N° | Action | Responsable | Échéance |
+|---|---|---|---|
+| 4.1 | Contrôle du ferraillage des poteaux | Bureau de contrôle | avant coulage |
+| 4.2 | Commande des aciers du niveau suivant | Entreprise | sous 8 jours |
+| 4.3 | Validation des échantillons de carrelage | Maître d'ouvrage | réunion n° 5 |
+
+## Le mot juste pour ce projet
+| Mot | Sens dans ce projet |
+|---|---|
+| **semelle** | fondation élargie sous chacun des ${M.semelles.length} poteaux |
+| **chaînage** | ceinture en béton armé qui relie les murs |
+| **descente de charges** | calcul des charges transmises jusqu'au sol (note de calcul du projet) |
+| **réception** | acceptation de l'ouvrage par le client à la fin des ${wk} semaines |
+Retrouvez ces mots et leurs synonymes dans le [dictionnaire de français](#/app/dictionnaire?l=fr).`;
+};
+G.en = c => {
+  const {p, M, DQ} = c, ville = (p.site || {}).ville || 'Abidjan', wk = Math.max(...p.planning.map(r => r[1] + r[2])), nNiv = c.nL;
+  const storeys = nNiv === 1 ? 'single-storey' : nNiv + '-storey';
+  const rows = [['Fondations (semelles)', 'Footings', String(M.semelles.length)], ['Poteaux', 'Columns', String(M.postEls.length)]]
+    .concat(c.slab ? [['Poutres', 'Beams', String(M.beams.length)], ['Panneaux de dalle', 'Slab panels', String(M.panels.length)]] : [])
+    .concat([['Béton armé', 'Reinforced concrete', fm(M.totBeton, 1) + ' m³'], ['Aciers (armatures)', 'Reinforcing steel (rebars)', fm(M.totAcier/1000, 2) + ' t'],
+      ['Maçonnerie d\'agglos', 'Concrete blockwork', fm(c.q('agg15') + c.q('agg10'), 1) + ' m²'], ['Enduits', 'Plaster / render', fm(c.q('enduit'), 1) + ' m²'], ['Carrelage et faïence', 'Floor and wall tiles', fm(c.q('carreau') + c.q('faience'), 1) + ' m²']]);
+  return `## Project description
+This project is a **${storeys} ${p.id === 'immeuble' ? 'residential building' : 'house'}** in **${ville}**, Côte d'Ivoire. It has a habitable floor area of **${fm(c.ME.info.Shab, 0)} square metres**. The structure **is made of** reinforced concrete: ${M.semelles.length} footings **support** ${M.postEls.length} columns${c.slab ? `, and ${M.beams.length} beams **carry** the floor slabs` : ''}. The walls **are built** with concrete blocks and **are plastered** on both sides.
+${DQ ? `The construction cost **is estimated at** ${F(Math.round(DQ.ht))} CFA francs **excluding VAT** (${F(Math.round(DQ.ttc))} CFA francs including VAT). ` : ''}The works **will last** about **${wk} weeks**.
+
+## Bilingual quantity table
+${tab(['Français', 'English', 'Quantity'], rows)}
+
+## Sample weekly progress report
+> [!exemple] Week 6 – Progress summary
+> This week, we **have completed** the ${M.semelles.length} footings and we **have started** the reinforcement of the ground-floor columns. The site engineer **inspected** the rebars on Tuesday. So far, about ${F(Math.round(M.totBeton*.25))} m³ of concrete **have been poured**. We **haven't received** the second delivery of steel **yet**; the supplier **has promised** it for Monday. Next week, we **are going to** pour the columns.
+
+## Useful words for this project
+footing (semelle), column (poteau), beam (poutre), slab (dalle), blockwork (maçonnerie d'agglos), formwork (coffrage), rebar (armature), cover (enrobage), ring beam (chaînage), roof (toiture), handover (réception). Listen to their pronunciation in the [English–French dictionary](#/app/dictionnaire?l=en).`;
+};
+
 /* ---------- affichage ---------- */
-const ORDER = ['topo','geo','rdm','ba','mat','tech','dessin','metre','eco','chant','ro','math','om','sp','pb','therm','acou','mdf','mmc'];
+const ORDER = ['topo','geo','rdm','ba','mat','tech','dessin','metre','eco','chant','ro','math','om','sp','pb','therm','acou','mdf','mmc','fr','en'];
 function chips(p){
   return `<div class="achips">${ORDER.map(id => { const m = A.mat(id); if(!m) return ''; return `<button class="achip" data-appli="${id}" data-pj="${p.id}"><span class="ic" style="background:${esc(m.couleur||'#5B6B7F')}">${ic(m.icone||'book')}</span><span>${esc(m.court||m.titre)}<small>appliquée au projet</small></span></button>`; }).join('')}</div>`;
 }

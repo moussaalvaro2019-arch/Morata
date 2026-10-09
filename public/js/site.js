@@ -220,13 +220,14 @@ A.on('submit', '#fLogin', async () => {
 });
 
 /* lien d'invitation (…#/inscription?parrain=CODE) : le code est gardé jusqu'à la création du compte */
-const prendreParrain = () => { const q = String(A.query().get('parrain') || '').trim().toUpperCase(); if(/^[A-Z0-9]{4,12}$/.test(q)) A.ls.set('parrain', q); };
+const prendreParrain = () => { const q = String(A.query().get('parrain') || '').trim().toUpperCase(); if(/^[A-Z0-9]{4,12}$/.test(q)) A.ls.set('parrain', q);
+  const e = String(A.query().get('essai') || '').trim().toUpperCase(); if(/^[A-Z0-9_-]{3,30}$/.test(e)) A.ls.set('essai', e); };   // lien publicitaire …?essai=CODE
 window.addEventListener('hashchange', prendreParrain); prendreParrain();
 
 A.page('inscription', {space:'bare', title:'Inscription', render(){
   prendreParrain();   // le routeur affiche la page avant les autres écouteurs de hashchange
   if(S.me){ location.replace(A.ls.get('parrain', '') ? '#/app/parrainage' : '#/app'); return null; }
-  const c = A.cfg(), parrain = A.ls.get('parrain', '');
+  const c = A.cfg(), parrain = A.ls.get('parrain', ''), E = c.essaiGratuit || {}, essai = A.ls.get('essai', '');
   if(c.openSignup === false) return `<div class="auth">${authHero()}<div class="a-side"><h2>Inscriptions fermées</h2><p class="muted">Les inscriptions sont momentanément fermées. Revenez bientôt ou contactez la direction.</p><a class="btn b-line" href="#/connexion">J'ai déjà un compte</a></div></div>`;
   return `<div class="auth">${authHero()}<div class="a-side">
    <div class="stack s8"><span class="kick">${A.paywallOn() ? 'Inscription' : 'Gratuit'}</span><h2>Créer mon compte</h2><p class="muted">Déjà inscrit ? <a href="#/connexion" style="color:var(--or2);font-weight:600">Connectez-vous</a></p>${A.paywallOn() ? `<div class="note info">${ic('coins')}<span>Accès complet : <b>${esc(A.prixTxt())}</b>${A.promoAcces() ? ` au lieu de ${A.promoOld(A.promoAcces())} ${A.promoTag(A.promoAcces())}` : ''}, par ${['wave','mtn','orange','moov'].filter(k => (c.pay||{})[k]).map(k => ({wave:'Wave', mtn:'MTN Mobile Money', orange:'Orange Money', moov:'Moov Money'})[k]).join(' ou ') || 'Mobile Money'}. ${A.chwDispo && A.chwDispo('acces') ? ' Depuis l\'étranger : paiement en ligne par carte bancaire, accès immédiat.' : ''} Après la création du compte, une page vous indique comment payer.</span></div>` : ''}</div>
@@ -234,13 +235,15 @@ A.page('inscription', {space:'bare', title:'Inscription', render(){
     <label class="fld"><span>Nom et prénoms</span><input class="inp" id="suName" autocomplete="name" required></label>
     <div class="g2"><label class="fld"><span>E-mail</span><input class="inp" id="suEmail" type="email" autocomplete="email" value="${esc(A.query().get('email') || '')}" required></label><label class="fld"><span>Téléphone (WhatsApp)</span><input class="inp" id="suPhone" inputmode="tel" autocomplete="tel"></label></div>
     <div class="g2"><label class="fld"><span>Ville</span><input class="inp" id="suCity" placeholder="Ex. Abidjan"></label><label class="fld"><span>Vous êtes</span><select class="inp" id="suProfil">${A.PROFILS.map(x=>`<option>${esc(x)}</option>`).join('')}</select></label></div>
-    <div class="g2"><label class="fld"><span>Mot de passe (6 caractères min.)</span><input class="inp" id="suPw" type="password" autocomplete="new-password" required></label><label class="fld"><span>Confirmer</span><input class="inp" id="suPw2" type="password" autocomplete="new-password" required></label></div>
+    <div class="g2"><label class="fld"><span>Mot de passe (8 caractères min.)</span><input class="inp" id="suPw" type="password" autocomplete="new-password" required></label><label class="fld"><span>Confirmer</span><input class="inp" id="suPw2" type="password" autocomplete="new-password" required></label></div>
+    ${E.actif && E.pourTous ? `<div class="note ok">${ic('award')}<span><b>${+E.jours || 3} jours gratuits offerts</b> dès la création de votre compte : tout est ouvert.</span></div>`
+      : E.actif ? `<label class="fld"><span>Code d'essai gratuit (facultatif)</span><input class="inp mono" id="suEssai" maxlength="30" autocapitalize="characters" autocomplete="off" value="${esc(essai)}" placeholder="Code reçu (affiche, WhatsApp, TikTok…)"></label>${essai ? `<p class="sub" style="margin:-6px 0 0">${ic('award')} Votre code donne <b>${+E.jours || 3} jours gratuits</b> : tout est ouvert dès la création du compte.</p>` : ''}` : ''}
     <label class="fld"><span>Code parrain (facultatif)</span><input class="inp mono" id="suParrain" maxlength="12" autocapitalize="characters" autocomplete="off" value="${esc(parrain)}" placeholder="Code d'un ami déjà inscrit"></label>${parrain ? `<p class="sub" style="margin:-6px 0 0">${ic('users')} Un ami vous a invité : son code est déjà rempli.</p>` : ''}
     <label class="check"><input type="checkbox" id="suOk" required><span class="sub">J'accepte que ma progression et mes connexions soient enregistrées pour le suivi pédagogique.</span></label>
     <button class="btn b-pri b-lg b-full">Créer mon compte ${ic('arrow')}</button>
    </form></div></div>`;
 }});
-const pwOk = (a, b) => { if(!a || a.length < 6){ toast('Mot de passe : 6 caractères minimum', 'x'); return false; } if(a !== b){ toast('Les deux mots de passe ne correspondent pas', 'x'); return false; } return true; };
+const pwOk = (a, b) => { if(!a || a.length < 8){ toast("Mot de passe : 8 caractères minimum", "x"); return false; } if(a !== b){ toast('Les deux mots de passe ne correspondent pas', 'x'); return false; } return true; };
 A.pwOk = pwOk;
 A.on('submit', '#fSignup', async () => {
   const name = A.val('suName').trim(), email = A.val('suEmail').trim();
@@ -248,11 +251,13 @@ A.on('submit', '#fSignup', async () => {
   if(!A.emailOk(email)){ toast('E-mail invalide', 'x'); return; }
   if(!pwOk(A.val('suPw'), A.val('suPw2'))) return;
   const b = $('#fSignup button'); b.disabled = true;
-  const r = await A.db.signUp({email, password:A.val('suPw'), name, phone:A.val('suPhone'), city:A.val('suCity'), profil:A.val('suProfil'), parrain:A.val('suParrain')});
+  const r = await A.db.signUp({email, password:A.val('suPw'), name, phone:A.val('suPhone'), city:A.val('suCity'), profil:A.val('suProfil'), parrain:A.val('suParrain'), essai:$('#suEssai') ? A.val('suEssai') : ''});
   b.disabled = false;
-  if(r.ok || r.confirm) A.ls.del('parrain');
+  if(r.ok || r.confirm){ A.ls.del('parrain'); A.ls.del('essai'); }
   if(!r.ok){ toast(r.msg, r.confirm ? 'mail' : 'x'); if(r.confirm) A.go('#/connexion'); return; }
-  toast('Compte créé. Bienvenue !');
+  if(r.essai){ toast(`Essai gratuit activé jusqu'au ${new Date(r.essai).toLocaleDateString('fr-FR', {day:'numeric', month:'long'})} : profitez de tout !`, 'award'); A.go('#/app'); return; }
+  if($('#suEssai') && A.val('suEssai').trim()) toast('Compte créé, mais ce code d\'essai n\'est pas valable (vous pourrez en saisir un autre dans « Mon abonnement »)', 'alert');
+  else toast('Compte créé. Bienvenue !');
   const next = A.ss.get('next'); A.ss.del('next');
   A.go(next && next.startsWith('#/app/livre') ? next : A.hasAccess() ? '#/app' : '#/app/abonnement');
 });
@@ -300,7 +305,7 @@ A.on('submit', '#fDir', async () => {
 });
 A.on('click', '[data-act="firstadmin"]', () => A.win({title:'Créer le compte PDG', body:`<div class="note ok">${ic('crown')}<span>Ce bouton n'existe que tant qu'aucun PDG n'est enregistré. Le premier compte créé devient administrateur principal.</span></div>
  <label class="fld"><span>Nom</span><input class="inp" id="faName" value="${esc(A.cfg().ceo)}"></label><label class="fld"><span>E-mail</span><input class="inp" id="faEmail" type="email" autocomplete="username"></label>
- <div class="g2"><label class="fld"><span>Mot de passe (6 caractères min.)</span><input class="inp" id="faPw" type="password" autocomplete="new-password"></label><label class="fld"><span>Confirmer</span><input class="inp" id="faPw2" type="password" autocomplete="new-password"></label></div>`,
+ <div class="g2"><label class="fld"><span>Mot de passe (8 caractères min.)</span><input class="inp" id="faPw" type="password" autocomplete="new-password"></label><label class="fld"><span>Confirmer</span><input class="inp" id="faPw2" type="password" autocomplete="new-password"></label></div>`,
  foot:`<button class="btn b-amber" data-act="dofirstadmin">${ic('check')}Créer mon compte PDG</button>`}));
 A.on('click', '[data-act="dofirstadmin"]', async () => {
   const email = A.val('faEmail'), pw = A.val('faPw');

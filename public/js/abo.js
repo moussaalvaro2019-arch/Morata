@@ -149,13 +149,14 @@ A.on('click', '[data-act="chwrecheck"]', () => { const w = A.ls.get('chw_wait', 
 A.accesPill = p => {
   if(p.admin) return '<span class="pill p-amber">Admin</span>';
   const n = A.niveauDe(p), t = now();
-  if(n === 'premium') return `<span class="pill p-or dot">${p.abo === 'premium' && ts(p.abo_fin) > t ? 'Premium' : 'Premium (essai)'}</span>`;
+  if(n === 'premium') return `<span class="pill p-or dot">${p.abo === 'premium' && ts(p.abo_fin) > t ? 'Premium' : p.essai_gratuit_fin && ts(p.essai_gratuit_fin) > t && !(p.acces === 'actif' && ts(p.essai_fin) > t) ? 'Essai gratuit' : 'Premium (essai)'}</span>`;
   if(n === 'basic') return '<span class="pill p-info dot">Basic</span>';
   if(n === 'inscrit') return '<span class="pill p-ok dot">Inscrit</span>';
   if(p.acces === 'actif' && p.acces_fin && ts(p.acces_fin) < t) return '<span class="pill p-bad dot">Expiré</span>';
   return '<span class="pill p-mute dot">Non payé</span>';
 };
 A.accesDetail = p => { const t = now(), L = [];
+  if(p.essai_gratuit_fin) L.push(`essai gratuit${p.code_essai && p.code_essai !== 'TOUS' ? ' (' + p.code_essai + ')' : ''} ${ts(p.essai_gratuit_fin) > t ? 'jusqu\'au' : 'terminé le'} ${fd(p.essai_gratuit_fin)}`);
   if(p.abo && p.abo_fin) L.push(`${p.abo === 'premium' ? 'Premium' : 'Basic'} ${ts(p.abo_fin) > t ? 'jusqu\'au' : 'terminé le'} ${fd(p.abo_fin)}`);
   if(p.acces === 'actif' && p.essai_fin && ts(p.essai_fin) > t) L.push('essai Premium jusqu\'au ' + fd(p.essai_fin));
   if(p.acces === 'actif') L.push('inscription ' + (p.acces_fin ? 'jusqu\'au ' + fd(p.acces_fin) : 'payée'));
@@ -244,6 +245,10 @@ A.alerteFin = () => {
     txt = `Il se termine le <b>${fd(aboFin)}</b>. Renouvelez-le maintenant pour ne rien perdre : ${F(prixPlan(me.abo))} FCFA pour ${+c.aboJours || 31} jours, ajoutés à la suite des jours qui vous restent.`; }
   else if(aboFin && aboFin <= t && t - aboFin <= 7*DAY && !(essai)){ k = 'abofini:' + me.abo_fin; titre = `Votre abonnement ${plan} a pris fin`; btn = 'Reprendre ' + plan;
     txt = `Il s'est terminé le <b>${fd(aboFin)}</b>. Vous gardez tous les cours avec la formule Inscrit ; reprenez ${plan} (${F(prixPlan(me.abo))} FCFA pour ${+c.aboJours || 31} jours) pour retrouver tout ce qu'il comprend.`; }
+  else if(A.essaiGratuitFin() && A.essaiGratuitFin() - t <= DAY){ const f = A.essaiGratuitFin(); k = 'gratuit:' + me.essai_gratuit_fin; titre = `Votre essai gratuit se termine ${dans(f)}`; btn = 'Payer l\'inscription';
+    txt = `Vous profitez de tout jusqu'au <b>${fdt(f)}</b>. Pour garder l'accès, payez l'inscription : <b>${F(montant())} FCFA</b> une seule fois, avec <b>${+c.essaiJours || 31} jours tout compris</b> puis tous les cours.`; }
+  else if(me.essai_gratuit_fin && ts(me.essai_gratuit_fin) <= t && t - ts(me.essai_gratuit_fin) <= 7*DAY && A.niveau() === 'aucun'){ k = 'gratuitfini:' + me.essai_gratuit_fin; titre = 'Votre essai gratuit est terminé'; btn = 'Payer l\'inscription';
+    txt = `Merci d'avoir essayé ! Vous gardez le premier chapitre de chaque matière. Pour tout retrouver, payez l'inscription : <b>${F(montant())} FCFA</b> une seule fois, avec <b>${+c.essaiJours || 31} jours tout compris</b>, puis les abonnements si vous le souhaitez.`; }
   else if(essai && essai - t <= 3*DAY){ k = 'essai:' + me.essai_fin; titre = `Vos jours tout compris se terminent ${dans(essai)}`; btn = 'Choisir ma formule';
     txt = `Vous profitez de tout jusqu'au <b>${fd(essai)}</b>. Ensuite, vous gardez tous les cours (formule Inscrit). Pour garder le reste : <b>Basic</b> ${F(prixPlan('basic'))} FCFA ou <b>Premium</b> ${F(prixPlan('premium'))} FCFA pour ${+c.aboJours || 31} jours.`; }
   else return;
@@ -259,6 +264,8 @@ A.aboBanner = () => {
   const n = A.niveau(), essai = A.essaiFin(), abo = A.aboActif(), fin = A.accesFin(), wait = pending()[0];
   if(n !== 'aucun'){
     if(wait) return `<div class="note info">${ic('clock')}<span>Paiement déclaré ${ago(wait.at)} : il sera validé dès que la direction aura vérifié la réception.</span></div>`;
+    const g = A.essaiGratuitFin();
+    if(g && !essai && !abo) return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">Essai gratuit : ${g - now() < DAY ? 'dernier jour' : 'encore ' + Math.ceil((g - now()) / DAY) + ' jours'}</b><span>Tout est ouvert jusqu'au <b>${fdt(g)}</b>. Pour garder l'accès ensuite : inscription <b>${F(montant())} FCFA</b> une seule fois, avec <b>${+A.cfg().essaiJours || 31} jours tout compris</b>.</span></div><div class="row"><a class="btn b-pri" href="#/app/abonnement">${ic('coins')}Payer l'inscription</a></div></div>`;
     if(essai) return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">Premium offert : encore ${Math.max(1, Math.ceil((essai - now()) / DAY))} jour${Math.ceil((essai - now()) / DAY) > 1 ? 's' : ''}</b><span>Vous profitez de tout jusqu'au <b>${fd(essai)}</b>. Ensuite, votre formule Inscrit garde tous les cours ; prenez Basic ou Premium pour garder les solveurs, les sujets, le métré${A.offre('basic').atelier ? '' : ', l\'atelier de dessin et l\'assistant IA'}.</span></div><div class="row"><a class="btn b-pri" href="#/app/abonnement">${ic('coins')}Voir les offres</a></div></div>`;
     if(abo && abo.fin - now() < 7*DAY) return `<div class="note">${ic('clock')}<span>Votre abonnement <b>${abo.plan === 'premium' ? 'Premium' : 'Basic'}</b> se termine le <b>${fd(abo.fin)}</b>. <a href="#/app/abonnement">Le renouveler</a></span></div>`;
     if(n === 'inscrit') return `<div class="abo-band"><div class="stack s8"><b style="font-size:17px">Formule Inscrit : tous les cours</b><span>Débloquez plus d'exercices, les sujets d'examen, les solveurs guidés et le métré avec <b>Basic</b> (${F(prixPlan('basic'))} FCFA), ou tout, dont l'atelier de dessin et le professeur IA, avec <b>Premium</b> (${F(prixPlan('premium'))} FCFA) pour ${+A.cfg().aboJours || 31} jours.</span></div><div class="row"><a class="btn b-pri" href="#/app/abonnement">${ic('coins')}Voir les offres</a></div></div>`;
@@ -277,7 +284,7 @@ A.formuleCard = () => {
     ['calc', 'Métré & devis', fv('metres', o.metres), n !== 'aucun' && +o.metres !== 0, 'app/metre'],
     ['compass', 'Atelier de dessin', o.atelier ? 'inclus' : 'Premium', n !== 'aucun' && o.atelier, 'app/atelier'],
     ['spark', 'Assistant IA', o.ia ? 'inclus' : 'Premium', n !== 'aucun' && o.ia, 'app/ia']];
-  return `<div class="card stack formule"><div class="row between"><div class="row" style="gap:10px"><b style="font-family:var(--fd);font-size:17px">Ma formule</b>${A.accesPill(Object.assign({}, S.me, {admin:false}))}</div><span class="sub">${esc(essai ? 'Premium offert jusqu\'au ' + fd(essai) : abo ? (abo.plan === 'premium' ? 'Premium' : 'Basic') + ' jusqu\'au ' + fd(abo.fin) : n === 'inscrit' ? 'tous les cours, contenus réduits' : n === 'aucun' ? 'version gratuite' : '')}</span></div>
+  return `<div class="card stack formule"><div class="row between"><div class="row" style="gap:10px"><b style="font-family:var(--fd);font-size:17px">Ma formule</b>${A.accesPill(Object.assign({}, S.me, {admin:false}))}</div><span class="sub">${esc(A.essaiGratuitFin() && !essai && !abo ? 'Essai gratuit jusqu\'au ' + fd(A.essaiGratuitFin()) : essai ? 'Premium offert jusqu\'au ' + fd(essai) : abo ? (abo.plan === 'premium' ? 'Premium' : 'Basic') + ' jusqu\'au ' + fd(abo.fin) : n === 'inscrit' ? 'tous les cours, contenus réduits' : n === 'aucun' ? 'version gratuite' : '')}</span></div>
    <div class="fgrid">${L.map(([i, t, v, on, h]) => `<a class="fitem ${on ? '' : 'off'}" href="#/${h}"><span class="fi">${ic(on ? i : 'lock')}</span><span><b>${esc(t)}</b><small>${esc(v)}</small></span></a>`).join('')}</div>
    ${n === 'premium' && !essai ? '' : `<a class="btn b-pri b-sm" style="justify-self:start" href="#/app/abonnement">${ic('coins')}${n === 'aucun' ? 'Activer mon accès' : 'Comparer les formules'}</a>`}</div>`;
 };
@@ -299,7 +306,8 @@ A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:
   const etat = !A.paywallOn() ? `<div class="note ok">${ic('check')}<span>L'accès à la plateforme est actuellement <b>gratuit pour tous</b>.</span></div>`
     : S.me.isAdmin ? `<div class="note ok">${ic('crown')}<span>Compte administrateur : accès complet.</span></div>`
     : wait ? `<div class="note info">${ic('clock')}<span><b>Paiement déclaré ${ago(wait.at)}</b> : ${F(wait.montant)} FCFA par ${esc(moyenN(wait.moyen))} (${esc(objetTxt(wait))}), référence ${esc(wait.reference)}. La direction vérifie la réception puis l'active.</span></div>`
-    : n === 'aucun' ? `<div class="note">${ic('lock')}<span>Vous utilisez la <b>version gratuite</b> : premier chapitre de chaque matière.</span></div>`
+    : A.essaiGratuitFin() && !essai && !abo ? `<div class="note ok">${ic('award')}<span><b>Essai gratuit</b> : tout est ouvert jusqu'au <b>${fdt(A.essaiGratuitFin())}</b>. Ensuite, payez l'inscription ci-dessous pour garder l'accès.</span></div>`
+    : n === 'aucun' ? `<div class="note">${ic('lock')}<span>Vous utilisez la <b>version gratuite</b> : premier chapitre de chaque matière.${S.me.essai_gratuit_fin ? ` Votre essai gratuit s'est terminé le ${fd(S.me.essai_gratuit_fin)}.` : ''}</span></div>`
     : `<div class="note ok">${ic('check')}<span>Votre formule : <b>${esc(A.NIV_NOM[n])}</b>${essai ? ` (offert après l'inscription) jusqu'au <b>${fd(essai)}</b>, puis formule Inscrit` : abo ? ` jusqu'au <b>${fd(abo.fin)}</b>` : n === 'inscrit' ? ' : tous les cours, contenus réduits' : ''}.</span></div>`;
   const carte = (k, titre, prix, unite, desc, bouton, actif, dispo) => `<div class="offre ${actif ? 'on' : ''} ${ACH.objet === (k === 'acces' ? 'acces' : 'abo') && (k === 'acces' || ACH.plan === k) ? 'sel' : ''}">
     <div class="stack s8"><span class="kick">${esc(titre)}</span>${k === 'acces' && promo ? `<div class="row nw" style="gap:6px">${A.promoOld(promo)}${A.promoTag(promo)}</div>` : ''}<b class="oprix">${F(prix)} <small>FCFA ${esc(unite)}</small></b>${A.eq(prix) ? `<span class="sub">${esc(A.eq(prix))}</span>` : ''}</div>
@@ -324,9 +332,13 @@ A.page('app/abonnement', {space:'app', free:true, title:'Mon abonnement', crumb:
      <div class="row"><button class="btn b-pri" type="submit">${ic('check')}J'ai payé : déclarer mon paiement</button>${c.whatsapp ? `<a class="btn b-ok" target="_blank" rel="noopener" href="${esc(waLink(c.whatsapp, waTxt))}">${ic('whatsapp')}Envoyer la capture sur WhatsApp</a>` : ''}</div>
      <p class="sub">${c.whatsapp ? `WhatsApp de la direction : <b class="mono" style="color:var(--ink)">${esc(telFmt(c.whatsapp))}</b>. ` : ''}N'envoyez jamais votre code secret (PIN) : personne de la plateforme ne vous le demandera.</p>
     </form>`;
+  const E = c.essaiGratuit || {}, codeEssai = E.actif && !S.me.isAdmin && A.paywallOn() && !S.me.essai_gratuit_fin && !inscrit && !hist.some(x => x.statut === 'valide' && ['acces', 'abo'].includes(x.objet || 'acces'))
+    ? `<div class="card stack s8"><b>Vous avez un code d'essai gratuit ?</b><span class="sub">${+E.jours || 3} jours où tout est ouvert, une seule fois, avant votre inscription.</span>
+       <form id="fEssai" class="row"><input class="inp mono" id="essaiCode" maxlength="30" autocapitalize="characters" autocomplete="off" style="max-width:220px" placeholder="Code d'essai" value="${esc(A.ls.get('essai', ''))}"><button class="btn b-line" type="submit">${ic('award')}Activer mon essai</button></form></div>` : '';
   return `<div class="stack">
    ${A.chwRetour(ACH.objet === 'abo' ? 'abo' : 'acces', ACH.objet === 'abo' ? ACH.plan : null)}
    ${etat}
+   ${codeEssai}
    ${offres}
    ${showPay ? `<div class="card stack" id="payBox">
     <div class="row between"><div><span class="kick">Paiement</span>${promo ? `<div class="row nw" style="gap:8px;margin-top:6px">${A.promoOld(promo)}${A.promoTag(promo)}${c.promoNom ? `<b class="px-urg">${esc(c.promoNom)}</b>` : ''}</div>` : ''}<h2 style="font-size:22px;margin-top:4px">${esc(achNom())} : ${F(px)} <small style="font-size:15px;color:var(--muted)">FCFA</small></h2>${promo && A.promoUrg(promo) ? `<div class="px-urg">${ic('clock')} ${esc(A.promoUrg(promo))}</div>` : ''}${A.eq(px) ? `<div class="sub" style="font-size:14px;margin-top:2px">${esc(A.eq(px))}</div>` : ''}${ACH.objet === 'abo' && (essai || (abo && abo.plan === ACH.plan)) ? `<div class="sub" style="margin-top:4px">${ic('info')} Les ${jours} jours commenceront ${essai ? 'après votre essai Premium (' + fd(essai) + ')' : 'à la fin de votre abonnement en cours (' + fd(abo.fin) + ')'} : vous ne perdez aucun jour.</div>` : ''}</div>${A.devSel()}</div>
@@ -356,6 +368,12 @@ A.on('submit', '#fPay', async () => {
   const r = await A.db.declarePayment(payMoyen, num, ref, ACH ? ACH.objet : 'acces', null, ACH && ACH.objet === 'abo' ? ACH.plan : null);
   if(!r.ok){ toast(r.msg || 'Erreur', 'x'); return; }
   toast('Paiement déclaré : la direction va le vérifier', 'check'); A.refresh();
+});
+A.on('submit', '#fEssai', async () => {
+  const code = A.val('essaiCode').trim(); if(code.length < 3){ toast('Saisissez votre code d\'essai', 'x'); return; }
+  const r = await A.db.utiliserCodeEssai(code);
+  if(!r.ok){ toast(r.msg || 'Code refusé', 'x'); return; }
+  A.ls.del('essai'); toast('Essai gratuit activé : profitez de tout !', 'award'); A.go('#/app');
 });
 A.on('click', '[data-act="abocheck"]', async () => {
   const had = A.hasAccess(); await A.db.refreshAccess();
@@ -444,7 +462,7 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   let users = abF === 'apprenants' ? L : abF === 'actifs' ? actifs : abF === 'abonnes' ? abonnes : abF === 'nonpayes' ? L.filter(p => niv(p) === 'aucun') : abF === 'expires' ? exp : null;
   if(abQ){ const q = abQ.toLowerCase(), hit = p => (nm(p) + ' ' + p.email + ' ' + ((p.data || {}).phone || '')).toLowerCase().includes(q);
     if(rows) rows = rows.filter(x => hit(payer(x)) || String(x.reference).toLowerCase().includes(q) || String(x.numero).includes(q)); if(users) users = users.filter(hit); }
-  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['parrainage', 'Parrainage', L.filter(p => p.parrain).length], ['relances', 'Relances', aRelancer(L, pay).length], ['reglages', 'Réglages', '']];
+  const tabs = [['attente', 'À valider', wait.length], ['historique', 'Historique', pay.length - wait.length], ['apprenants', 'Tous les apprenants', L.length], ['actifs', 'Accès actifs', actifs.length], ['abonnes', 'Abonnés Basic / Premium', abonnes.length], ['nonpayes', 'Non payés', L.filter(p => niv(p) === 'aucun').length], ['expires', 'Expirés', exp.length], ['parrainage', 'Parrainage', L.filter(p => p.parrain).length], ['relances', 'Relances', aRelancer(L, pay).length], ['essai', 'Essai gratuit', L.filter(p => p.essai_gratuit_fin && ts(p.essai_gratuit_fin) > t).length], ['reglages', 'Réglages', '']];
   const payRow = x => { const p = payer(x); return `<tr><td class="nowrap">${fdt(x.at)}<div class="small faint">${ago(x.at)}</div></td><td>${payerLink(x, p)}</td><td>${esc(moyenN(x.moyen))}${sourcePill(x)}<div class="small faint mono">${esc(telFmt(x.numero))}</div></td><td class="mono small" style="overflow-wrap:anywhere">${esc(x.reference)}</td><td class="r mono nowrap">${F(x.montant)} F${devPaye(x)}<div class="small faint">${esc(objetTxt(x))}</div></td>
     <td>${x.statut === 'en_attente' ? `<div class="row nw"><button class="btn b-ok b-xs" data-payok="${x.id}">${ic('check')}Valider</button><button class="btn b-line b-xs" data-payno="${x.id}">${ic('x')}Refuser</button></div>` : statutPill(x.statut) + (x.note ? `<div class="small faint">${esc(x.note)}</div>` : '') + (x.traite_at ? `<div class="small faint">${fd(x.traite_at)}</div>` : '')}</td></tr>`; };
   const userRow = p => `<tr><td><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><div class="small faint">${esc(p.email)}</div></td><td class="sub">${esc(telFmt((p.data || {}).phone)) || '—'}</td><td class="sub nowrap">${fd(p.created_at)}</td><td>${A.accesPill(p)}${A.accesDetail(p) ? `<div class="small faint">${esc(A.accesDetail(p))}</div>` : ''}</td><td>${A.accesBtns(p)}</td></tr>`;
@@ -452,6 +470,7 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   if(abF === 'reglages') body = reglages(c, P);
   else if(abF === 'parrainage') body = parrainageAdm(c, D.profiles);
   else if(abF === 'relances') body = relancesAdm(c, L, pay);
+  else if(abF === 'essai') body = essaiAdm(c, L, pay);
   else if(rows && abF === 'attente') body = `<div class="abo-cards">${rows.map(x => { const p = payer(x); return `<div class="card stack s8"><div class="row between nw"><div style="min-width:0;overflow-wrap:anywhere">${payerLink(x, p)}</div><b class="mono nowrap" style="font-size:17px">${F(x.montant)} F${devPaye(x)}</b></div>
       <dl class="kv"><dt>Moyen</dt><dd>${esc(moyenN(x.moyen))}${sourcePill(x)}</dd>${x.numero ? `<dt>Payé depuis</dt><dd class="mono">${esc(telFmt(x.numero))}</dd>` : ''}<dt>Référence</dt><dd class="mono" style="overflow-wrap:anywhere">${esc(x.reference)}</dd><dt>${x.source === 'chariow' ? 'Reçu' : 'Déclaré'}</dt><dd>${fdt(x.at)} · ${ago(x.at)}</dd><dt>Objet</dt><dd>${esc(objetTxt(x))}</dd></dl>${x.note ? `<p class="sub" style="margin:0">${esc(x.note)}</p>` : ''}
       <div class="row"><button class="btn b-ok b-sm" data-payok="${x.id}">${ic('check')}${x.objet === 'livre' ? 'Valider : remettre le livre' : x.objet === 'abo' ? 'Valider : activer l\'abonnement' : 'Valider : activer l\'accès'}</button><button class="btn b-line b-sm" data-payno="${x.id}">${ic('x')}Refuser</button>${(p.data || {}).phone ? `<a class="btn b-ghost b-sm" target="_blank" rel="noopener" href="${esc(waLink(p.data.phone))}">${ic('whatsapp')}WhatsApp</a>` : ''}</div></div>`; }).join('') || `<div class="card">${A.empty('coins', 'Aucun paiement à valider.')}</div>`}</div>
@@ -469,9 +488,46 @@ A.page('admin/abonnements', {space:'admin', title:'Abonnements & paiements', cru
   <div class="toolbar">${abF === 'reglages' ? '' : `<label class="search">${ic('search')}<input id="abQ" placeholder="Nom, e-mail, téléphone, référence…" value="${esc(abQ)}"></label>`}<div class="tabs">${tabs.map(x => `<button class="tab ${abF === x[0] ? 'on' : ''}" data-abf="${x[0]}">${x[1]}${x[2] !== '' ? ` <span class="cnt">${x[2]}</span>` : ''}</button>`).join('')}</div></div>
   ${body}`;
 }});
+/* ---------- Espace PDG : essai gratuit (publicité) : réglages, codes, liens à partager, résultats ---------- */
+function essaiAdm(c, L, pay){
+  const E = c.essaiGratuit || {}, t = now(), codes = (Array.isArray(E.codes) ? E.codes : []).map(x => String(x).toUpperCase());
+  const dispo = L.some(p => 'essai_gratuit_fin' in p);
+  const paye = new Set(pay.filter(x => x.statut === 'valide' && ['acces', 'abo'].includes(x.objet || 'acces')).map(x => x.owner));
+  const essais = L.filter(p => p.essai_gratuit_fin), conv = p => p.acces === 'actif' || paye.has(p.id);
+  const parCode = {}; essais.forEach(p => { const k = p.code_essai || '?'; (parCode[k] = parCode[k] || []).push(p); });
+  codes.forEach(k => parCode[k] = parCode[k] || []);
+  const lien = k => location.origin + location.pathname.replace(/index\.html$/, '') + '#/inscription?essai=' + encodeURIComponent(k);
+  const rows = Object.keys(parCode).sort((a, b) => parCode[b].length - parCode[a].length).map(k => { const P = parCode[k], ok = P.filter(conv).length, enc = P.filter(p => ts(p.essai_gratuit_fin) > t).length;
+    return `<tr><td class="mono"><b>${esc(k === 'TOUS' ? 'Offert à tous' : k)}</b>${codes.includes(k) || k === 'TOUS' ? '' : ' <span class="small faint">(retiré)</span>'}</td><td class="r mono">${P.length}</td><td class="r mono">${enc}</td><td class="r mono" style="color:var(--ok)">${ok}</td><td class="r mono">${P.length ? Math.round(ok / P.length * 100) + ' %' : '—'}</td>
+      <td>${k !== 'TOUS' && k !== '?' ? `<div class="row nw"><button class="btn b-line b-xs" data-copy="${esc(lien(k))}">${ic('link')}Lien</button><a class="btn b-ok b-xs" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(`Essaie gratuitement ${A.cfg().nom} pendant ${+E.jours || 3} jours : cours de génie civil, exercices corrigés, sujets d'examen et professeur IA. Inscris-toi avec le code ${k} : ${lien(k)}`)}">${ic('whatsapp')}Partager</a></div>` : ''}</td></tr>`; }).join('');
+  const recents = essais.slice().sort((a, b) => ts(b.essai_gratuit_fin) - ts(a.essai_gratuit_fin)).slice(0, 15);
+  return `${dispo || S.mode === 'local' ? '' : `<div class="note">${ic('alert')}<span>Relancez le script <b>supabase.sql</b> dans Supabase pour activer l'essai gratuit.</span></div>`}
+   <div class="cols"><div class="card stack"><h3 style="margin:0">Essai gratuit (publicité)</h3>
+    <label class="check"><input type="checkbox" id="eg_actif" ${E.actif ? 'checked' : ''}>Proposer l'essai gratuit</label>
+    <div class="g3"><label class="fld"><span>Durée de l'essai (jours)</span><input class="inp" type="number" min="1" max="60" id="eg_jours" value="${esc(E.jours || 3)}"></label>
+     <label class="fld"><span>Questions à l'IA par jour pendant l'essai</span><input class="inp" type="number" min="0" max="100" id="eg_ia" value="${esc(E.ia == null ? 5 : E.ia)}"></label>
+     <label class="fld"><span>Fin de l'offre (facultatif)</span><input class="inp" type="date" id="eg_fin" value="${esc(E.fin || '')}"></label></div>
+    <label class="fld"><span>Codes à donner (séparés par des virgules)</span><input class="inp mono" id="eg_codes" value="${esc(codes.join(', '))}" placeholder="BATIPRO3, TIKTOK, WHATSAPP"></label>
+    <label class="check"><input type="checkbox" id="eg_tous" ${E.pourTous ? 'checked' : ''}>Offrir l'essai à tout le monde, même sans code</label>
+    <p class="sub" style="margin:0">L'essai ouvre tout (comme Premium) pendant la durée choisie, <b>une seule fois par compte</b> et seulement pour un compte qui n'a encore rien payé. L'IA est limitée pendant l'essai pour éviter les abus de faux comptes. À la fin, l'apprenant revient à la version gratuite et reçoit le message « Essai gratuit terminé » (Relances) : il paie ensuite l'inscription normalement. Un code différent par canal (affiche, TikTok, WhatsApp…) vous montre ce qui marche le mieux.</p>
+    <button class="btn b-pri" style="justify-self:start" data-act="egsave">${ic('save')}Enregistrer</button></div>
+   <div class="card stack"><h3 style="margin:0">Derniers essais <small>${essais.length}</small></h3>${recents.length ? `<div class="stack s8">${recents.map(p => `<div class="row between nw"><span style="min-width:0"><a href="#/admin/apprenant/${p.id}" style="text-decoration:none"><b>${esc(nm(p))}</b></a><span class="small faint" style="display:block">${esc(p.code_essai || '')} · ${ts(p.essai_gratuit_fin) > t ? 'jusqu\'au ' + fdt(p.essai_gratuit_fin) : 'terminé le ' + fd(p.essai_gratuit_fin)}</span></span>${conv(p) ? '<span class="pill p-ok dot">a payé</span>' : ts(p.essai_gratuit_fin) > t ? '<span class="pill p-or dot">en cours</span>' : '<span class="pill p-mute dot">pas payé</span>'}</div>`).join('')}</div>` : '<p class="sub" style="margin:0">Aucun essai pour le moment.</p>'}</div></div>
+   <div class="card pad0"><div class="tw"><table class="t"><thead><tr><th>Code</th><th class="r">Essais</th><th class="r">En cours</th><th class="r">Ont payé</th><th class="r">Conversion</th><th>Partager</th></tr></thead><tbody>${rows || `<tr><td colspan="6">${A.empty('award', 'Ajoutez un code ci-dessus.')}</td></tr>`}</tbody></table></div></div>`;
+}
+A.on('click', '[data-act="egsave"]', async () => {
+  const codes = [...new Set(A.val('eg_codes').toUpperCase().split(/[\s,;]+/).filter(Boolean))];
+  const mauvais = codes.find(k => !/^[A-Z0-9_-]{3,30}$/.test(k));
+  if(mauvais){ toast('Code « ' + mauvais + ' » : 3 à 30 lettres, chiffres, - ou _', 'x'); return; }
+  const n = (id, d, a, b) => Math.min(b, Math.max(a, Math.round(+A.val(id)) || d));
+  const fin = /^\d{4}-\d{2}-\d{2}$/.test(A.val('eg_fin')) ? A.val('eg_fin') : '';
+  const essaiGratuit = {actif:$('#eg_actif').checked, jours:n('eg_jours', 3, 1, 60), ia:Math.min(100, Math.max(0, Math.round(+A.val('eg_ia') || 0))), fin, codes, pourTous:$('#eg_tous').checked};
+  if(essaiGratuit.actif && !codes.length && !essaiGratuit.pourTous){ toast('Ajoutez au moins un code, ou cochez « Offrir à tout le monde »', 'x'); return; }
+  if(await A.db.saveSettings({essaiGratuit})){ toast('Essai gratuit enregistré', 'check'); A.refresh(); }
+});
+
 /* ---------- Espace PDG : relances (qui n'a pas payé, essais et abonnements qui se terminent) ----------
    Mêmes règles que la fonction netlify/functions/rappels.mjs, qui envoie les e-mails chaque heure de 7 h à 19 h. */
-const RAP_NOM = {paiement:'Paiement à faire', fin_essai:'Fin de l\'essai', fin_abo:'Fin d\'abonnement'};
+const RAP_NOM = {paiement:'Paiement à faire', fin_essai:'Fin de l\'essai', essai_gratuit:'Fin de l\'essai gratuit', fin_abo:'Fin d\'abonnement'};
 function aRelancer(L, pay){
   const t = now(), att = new Set(pay.filter(x => x.statut === 'en_attente' && ['acces', 'abo'].includes(x.objet || 'acces')).map(x => x.owner));
   const paye = new Set(pay.filter(x => x.statut === 'valide' && ['acces', 'abo'].includes(x.objet || 'acces')).map(x => x.owner));
@@ -481,6 +537,8 @@ function aRelancer(L, pay){
     const insc = p.acces === 'actif' && (!p.acces_fin || ts(p.acces_fin) > t), aboFin = ['basic', 'premium'].includes(p.abo) ? ts(p.abo_fin) : 0, aboActif = aboFin > t, j = f => (f - t) / DAY;
     if(aboFin && Math.abs(j(aboFin)) <= 7) out.push({p, kind:'fin_abo', fin:aboFin, plan:p.abo, fini:aboFin <= t});
     else if(insc && p.essai_fin && !(aboActif && aboFin >= ts(p.essai_fin)) && Math.abs(j(ts(p.essai_fin))) <= 7) out.push({p, kind:'fin_essai', fin:ts(p.essai_fin), fini:ts(p.essai_fin) <= t});
+    else if(!insc && !aboActif && !att.has(p.id) && !paye.has(p.id) && p.essai_gratuit_fin && j(ts(p.essai_gratuit_fin)) <= 1 && j(ts(p.essai_gratuit_fin)) >= -7) out.push({p, kind:'essai_gratuit', fin:ts(p.essai_gratuit_fin), fini:ts(p.essai_gratuit_fin) <= t});
+    else if(p.essai_gratuit_fin && ts(p.essai_gratuit_fin) > t) return;   // essai gratuit en cours : rien à relancer
     else if(!insc && !aboActif && !att.has(p.id) && !paye.has(p.id) && t - ts(p.created_at) <= 30*DAY) out.push({p, kind:'paiement', cree:ts(p.created_at)});
   });
   return out.sort((a, b) => (a.kind === 'paiement' ? 1 : 0) - (b.kind === 'paiement' ? 1 : 0) || (a.fin || a.cree) - (b.fin || b.cree));
@@ -491,11 +549,13 @@ A.RAP_MODELES = {
   essai_avant:{"sujet": "Vos jours tout compris se terminent le {date}", "texte": "Bonjour {prenom},\n\nVous profitez de tout sur {plateforme} jusqu'au {date}. Ensuite, vous gardez tous les cours avec la formule Inscrit.\n\nPour garder les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA, choisissez Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}"},
   essai_fini:{"sujet": "Votre période tout compris est terminée", "texte": "Bonjour {prenom},\n\nVotre période tout compris sur {plateforme} s'est terminée le {date}. Vous gardez tous les cours avec la formule Inscrit.\n\nPour retrouver les exercices et sujets complets, les calculs guidés, le métré, l'atelier de dessin et le professeur IA : Basic ({prix_basic} FCFA) ou Premium ({prix_premium} FCFA) pour {jours_abo} jours : {lien}\n\n{directeur}, {plateforme}"},
   abo_avant:{"sujet": "Votre abonnement {formule} se termine le {date}", "texte": "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} se termine le {date}. Renouvelez-le pour continuer sans interruption : {prix} FCFA pour {jours_abo} jours, ajoutés à la suite des jours qui vous restent.\n\nRenouveler : {lien}\n\n{directeur}, {plateforme}"},
+  gratuit_avant:{"sujet": "Votre essai gratuit se termine le {date}", "texte": "Bonjour {prenom},\n\nVotre essai gratuit sur {plateforme} se termine le {date}. Pour garder l'accès à tous les cours, aux exercices corrigés, aux sujets d'examen et aux outils, payez l'inscription : {prix_inscription} FCFA une seule fois, avec {jours_essai} jours tout compris.\n\nPayer maintenant : {lien}\n\nUne question ? Répondez à ce message ou écrivez-nous sur WhatsApp au {whatsapp}.\n\n{directeur}, {plateforme}"},
+  gratuit_fini:{"sujet": "Votre essai gratuit est terminé", "texte": "Bonjour {prenom},\n\nVotre essai gratuit sur {plateforme} s'est terminé le {date}. Merci de l'avoir essayé ! Vous gardez le premier chapitre de chaque matière.\n\nPour tout retrouver, payez l'inscription : {prix_inscription} FCFA une seule fois, avec {jours_essai} jours tout compris, puis les abonnements Basic ou Premium si vous le souhaitez.\n\nPayer maintenant : {lien}\n\n{directeur}, {plateforme}"},
   abo_fini:{"sujet": "Votre abonnement {formule} a pris fin", "texte": "Bonjour {prenom},\n\nVotre abonnement {formule} sur {plateforme} s'est terminé le {date} : vous êtes revenu à la formule Inscrit (tous les cours, contenus réduits).\n\nReprenez {formule} pour {prix} FCFA ({jours_abo} jours) : {lien}\n\n{directeur}, {plateforme}"}
 };
-const RAP_SIT = [['paiement', 'Inscrit qui n\'a pas payé'], ['essai_avant', 'Essai : 3 jours avant la fin'], ['essai_fini', 'Essai terminé'], ['abo_avant', 'Abonnement : 3 jours avant la fin'], ['abo_fini', 'Abonnement terminé']];
+const RAP_SIT = [['paiement', 'Inscrit qui n\'a pas payé'], ['gratuit_avant', 'Essai gratuit : veille de la fin'], ['gratuit_fini', 'Essai gratuit terminé'], ['essai_avant', 'Essai : 3 jours avant la fin'], ['essai_fini', 'Essai terminé'], ['abo_avant', 'Abonnement : 3 jours avant la fin'], ['abo_fini', 'Abonnement terminé']];
 const RAP_VARS = [['prenom', 'prénom de l\'apprenant'], ['date', 'date d\'inscription ou de fin'], ['prix_inscription', 'prix de l\'inscription'], ['prix_basic', 'prix Basic'], ['prix_premium', 'prix Premium'], ['prix', 'prix de sa formule'], ['formule', 'Basic ou Premium'], ['jours_essai', 'jours tout compris'], ['jours_abo', 'jours d\'abonnement'], ['lien', 'lien vers Mon abonnement'], ['whatsapp', 'votre WhatsApp'], ['directeur', 'votre nom'], ['plateforme', 'nom de la plateforme']];
-const situationDe = r => r.kind === 'paiement' ? 'paiement' : (r.kind === 'fin_essai' ? 'essai_' : 'abo_') + (r.fini ? 'fini' : 'avant');
+const situationDe = r => r.kind === 'paiement' ? 'paiement' : (r.kind === 'fin_essai' ? 'essai_' : r.kind === 'essai_gratuit' ? 'gratuit_' : 'abo_') + (r.fini ? 'fini' : 'avant');
 const modeleDe = (k, c) => Object.assign({}, A.RAP_MODELES[k], (((c.rappels || {}).modeles) || {})[k] || {});
 const remplir = (t, v) => String(t || '').replace(/\{(\w+)\}/g, (m, k) => k in v ? String(v[k] ?? '') : m).replace(/[ \u00a0]+([,.])/g, '$1').trim();
 const dateLong = v => new Date(ts(v)).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
@@ -513,13 +573,13 @@ function relancesAdm(c, L, pay){
     : chwEtat === null ? '<p class="sub">Vérification de l\'envoi des e-mails…</p>'
     : mailOk ? `<div class="note ok">${ic('check')}<span>E-mails automatiques <b>branchés</b> : envoyés chaque heure de 7 h à 19 h, au plus un par personne et jamais deux fois le même.</span></div>`
     : `<div class="note">${ic('alert')}<span>E-mails automatiques <b>pas encore branchés</b> : ajoutez dans Netlify les variables <b>RESEND_API_KEY</b> et <b>MAIL_FROM</b>${e.service ? '' : ' ainsi que <b>SUPABASE_SERVICE_ROLE_KEY</b>'} (voir le guide, section Relances). En attendant, utilisez les boutons WhatsApp ci-dessous.</span></div>`;
-  const sit = r => r.kind === 'paiement' ? `Inscrit ${ago(r.cree)}, rien payé` : r.kind === 'fin_essai' ? (r.fini ? 'Essai terminé le ' : 'Essai jusqu\'au ') + fd(r.fin) : `${nomPlan(r.plan)} ${r.fini ? 'terminé le' : 'jusqu\'au'} ${fd(r.fin)}`;
+  const sit = r => r.kind === 'paiement' ? `Inscrit ${ago(r.cree)}, rien payé` : r.kind === 'essai_gratuit' ? (r.fini ? 'Essai gratuit terminé le ' : 'Essai gratuit jusqu\'au ') + fd(r.fin) : r.kind === 'fin_essai' ? (r.fini ? 'Essai terminé le ' : 'Essai jusqu\'au ') + fd(r.fin) : `${nomPlan(r.plan)} ${r.fini ? 'terminé le' : 'jusqu\'au'} ${fd(r.fin)}`;
   const rows = liste.map((r, i) => { const d = dernier(r.p.id), tel = (r.p.data || {}).phone, txt = relanceTxt(r, c);
     return `<tr><td><a href="#/admin/apprenant/${r.p.id}" style="text-decoration:none"><b>${esc(nm(r.p))}</b></a><div class="small faint">${esc(r.p.email)}${tel ? ' · ' + esc(telFmt(tel)) : ''}</div></td>
      <td><span class="pill ${r.kind === 'paiement' ? 'p-warn' : r.fini ? 'p-bad' : 'p-info'}">${esc(RAP_NOM[r.kind])}</span><div class="small faint">${esc(sit(r))}</div></td>
      <td class="small">${d ? `${esc(RAP_NOM[d.kind] || d.kind)}<div class="faint">${fdt(d.at)}</div>` : '<span class="faint">aucun</span>'}${(r.p.data || {}).rappels === false ? '<div class="faint">a refusé les e-mails</div>' : ''}</td>
      <td><div class="row nw">${tel ? `<a class="btn b-ok b-xs" target="_blank" rel="noopener" href="${esc(waLink(tel, txt))}">${ic('whatsapp')}WhatsApp</a>` : ''}<button class="btn b-line b-xs" data-relmail="${esc(r.p.id)}" data-sit="${situationDe(r)}">${ic('mail')}E-mail</button><button class="btn b-ghost b-xs" data-copy="${esc(txt)}" aria-label="Copier le message">${ic('copy')}</button></div></td></tr>`; }).join('');
-  const M = modeleDe(rpSit, c), exemple = liste.find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
+  const M = modeleDe(rpSit, c), exemple = liste.find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : rpSit.startsWith('gratuit') ? 'essai_gratuit' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
   const perso = !!((((c.rappels || {}).modeles) || {})[rpSit]);
   const editeur = `<div class="card stack"><div class="row between"><h3 style="margin:0">Messages types</h3><span class="sub">utilisés pour l'e-mail automatique, le bouton E-mail et le bouton WhatsApp</span></div>
     <div class="tabs">${RAP_SIT.map(([k, t]) => `<button class="tab ${rpSit === k ? 'on' : ''}" data-rpsit="${k}">${esc(t)}${(((c.rappels || {}).modeles) || {})[k] ? ' ✎' : ''}</button>`).join('')}</div>
@@ -557,7 +617,7 @@ A.on('click', '[data-act="rpmodsave"]', async () => {
 });
 A.on('click', '[data-act="rpmodreset"]', async () => { const m = Object.assign({}, (A.cfg().rappels || {}).modeles || {}); delete m[rpSit]; if(await rpModeles(m)){ toast('Texte d\'origine remis', 'check'); A.refresh(); } });
 A.on('click', '[data-act="rpmodvoir"]', () => {   // aperçu du texte en cours de saisie, avant d'enregistrer
-  const c = A.cfg(), L = AD().profiles.filter(p => !p.admin), ex = aRelancer(L, AD().paiements || []).find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
+  const c = A.cfg(), L = AD().profiles.filter(p => !p.admin), ex = aRelancer(L, AD().paiements || []).find(r => situationDe(r) === rpSit) || {p:{data:{name:'Aminata Koné'}}, kind:rpSit === 'paiement' ? 'paiement' : rpSit.startsWith('essai') ? 'fin_essai' : rpSit.startsWith('gratuit') ? 'essai_gratuit' : 'fin_abo', plan:'premium', fini:rpSit.endsWith('fini'), cree:now() - 2*DAY, fin:now() + 2*DAY};
   const v = relanceVars(ex, c), el = $('#rp_apercu'); if(el) el.innerHTML = `<b>${esc(remplir(A.val('rp_sujet'), v))}</b>\n\n${esc(remplir(A.val('rp_texte'), v))}`;
 });
 A.on('click', '[data-relmail]', async el => {

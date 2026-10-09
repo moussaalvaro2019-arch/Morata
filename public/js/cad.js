@@ -879,7 +879,9 @@ function exportPng(){
   img.onload = () => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img, 0, 0); c.toBlob(b => A.download((C.name||'plan').replace(/[^\w-]+/g,'_') + '.png', b), 'image/png'); };
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
-function printPlan(){ const w = window.open('', '_blank'); if(!w){ toast('Autorisez les fenêtres pour imprimer', 'x'); return; } w.document.write(`<!doctype html><title>${esc(C.name)}</title><body style="margin:0">${standalone()}<script>setTimeout(()=>print(),300)<\/script>`); w.document.close(); }
+function printPlan(){ const w = window.open('', '_blank'); if(!w){ toast('Autorisez les fenêtres pour imprimer', 'x'); return; } w.document.write(`<!doctype html><title>${esc(C.name)}</title><body style="margin:0">${standalone()}`); w.document.close();
+  // impression lancée d'ici : la politique de sécurité du site interdit les scripts écrits dans la page
+  setTimeout(() => { try{ w.focus(); w.print(); }catch(_){} }, 300); }
 
 /* ---------- métré du plan ---------- */
 function metreDoc(d){

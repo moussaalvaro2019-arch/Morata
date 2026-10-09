@@ -169,6 +169,74 @@ A.addMatiere({id:"eco", titre:"Économie du bâtiment", court:"Économie", group
   {id:"eco-9", niv:3, titre:"Contrôle des coûts, avenants et réclamations", duree:50, nq:5, nex:5, ns:1},
   {id:"eco-16", niv:3, titre:"Étude de cas : montage financier d'un immeuble de rapport", duree:60, nq:5, nex:5, ns:1}
  ]});
+A.addMatiere({id:"en", titre:"Anglais général et technique du bâtiment", court:"Anglais", groupe:"lang", icone:"globe", couleur:"#1F6F8B", niveau:"Débutant", heures:80, ordre:2, prerequis:[], dico:"en", resume:"Comprendre et utiliser l'anglais au travail : se présenter, décrire les tâches et les métiers du chantier, nommer les outils et les matériaux, raconter le travail réalisé, lire les nombres, les mesures et les unités (métriques et impériales), planifier, appliquer les consignes de sécurité, faire le point sur l'avancement, comparer des matériaux, décrire un procédé, rédiger des courriels, participer à une réunion ou à un appel, lire des plans et des spécifications, préparer un CV et un entretien, présenter un projet, avec exercices corrigés, quiz, sujets d'examen et un dictionnaire anglais ↔ français.", objectifs:[
+  "Se présenter, présenter son entreprise et échanger des informations simples",
+  "Utiliser les temps de base (présent, prétérit, futur, present perfect) dans un contexte professionnel",
+  "Nommer les métiers, les outils, les matériaux et les éléments d'un bâtiment en anglais",
+  "Lire et dire les nombres, les dimensions, les unités métriques et impériales, les dates et les prix",
+  "Comprendre et rédiger des consignes de sécurité avec les modaux",
+  "Décrire un procédé de construction à la voix passive et comparer des matériaux",
+  "Rédiger des courriels professionnels et participer à une réunion ou à un appel téléphonique",
+  "Lire un plan, une spécification ou un rapport technique en anglais",
+  "Préparer un CV, une lettre de motivation et un entretien en anglais ; présenter un projet"
+ ], applications:[
+  "Échanger avec un fournisseur ou un ingénieur étranger",
+  "Lire la notice technique d'un adjuvant ou d'un engin",
+  "Comprendre un plan annoté en anglais (dimensions en pieds et pouces)",
+  "Rédiger un rapport d'avancement (progress report)",
+  "Répondre à un appel d'offres international",
+  "Préparer le TOEIC ou un entretien en anglais"
+ ], src:"data/cours/en.js?v=7a7744a6", chapitres:[
+  {id:"en-1", niv:1, titre:"Se présenter : saluer, épeler, compter, to be et have got", duree:45, nq:5, nex:5, ns:1},
+  {id:"en-2", niv:1, titre:"Présent simple et présent continu : métiers et tâches du chantier", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-3", niv:1, titre:"Noms, articles, quantités et prépositions : outils et matériaux", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-4", niv:1, titre:"Le prétérit (past simple) : raconter le travail réalisé", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-5", niv:1, titre:"Nombres, mesures, unités, dates et prix", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-6", niv:2, titre:"Le futur et le planning d'un projet", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-7", niv:2, titre:"Les modaux et la sécurité sur le chantier (HSE)", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-8", niv:2, titre:"Le present perfect : faire le point sur l'avancement", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-9", niv:2, titre:"Comparer et décrire les matériaux et leurs propriétés", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-10", niv:2, titre:"La voix passive et les instructions : décrire un procédé de construction", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-11", niv:3, titre:"Courriels et lettres professionnels en anglais", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-12", niv:3, titre:"Réunions, téléphone et négociation ; les conditionnels", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-13", niv:3, titre:"Lire des documents techniques : plans, spécifications et rapports", duree:55, nq:5, nex:5, ns:1},
+  {id:"en-14", niv:3, titre:"CV et entretien d'embauche en anglais", duree:50, nq:5, nex:5, ns:1},
+  {id:"en-15", niv:3, titre:"Présenter un projet, rédiger un rapport et réussir l'épreuve d'anglais", duree:55, nq:5, nex:5, ns:1}
+ ]});
+A.addMatiere({id:"fr", titre:"Technique d'expression française – Écrit professionnel", court:"Expression française", groupe:"lang", icone:"edit", couleur:"#7A3E9D", niveau:"Débutant", heures:80, ordre:1, prerequis:[], dico:"fr", resume:"Écrire et parler juste dans la vie professionnelle du bâtiment : situation de communication et registres, phrase et ponctuation, orthographe grammaticale, conjugaison et accords, vocabulaire précis et technique, lecture et prise de notes, résumé et synthèse, lettre administrative et commerciale, courriel, note de service, compte rendu et procès-verbal, rapport de stage et rapport technique, argumentation, CV et lettre de motivation, prise de parole, écrits du chantier, avec exercices corrigés, quiz, sujets d'examen et un dictionnaire de français.", objectifs:[
+  "Analyser une situation de communication et choisir le registre de langue adapté",
+  "Construire des phrases claires, bien ponctuées et sans faute d'accord",
+  "Conjuguer les verbes usuels et accorder le participe passé",
+  "Employer le mot juste, y compris le vocabulaire technique du bâtiment",
+  "Lire un document, prendre des notes, résumer et faire une synthèse",
+  "Rédiger lettres, courriels, notes de service, convocations, comptes rendus et procès-verbaux",
+  "Construire un rapport de stage ou un rapport technique et argumenter",
+  "Rédiger un CV, une lettre de motivation et préparer un entretien ou une soutenance",
+  "Rédiger les écrits du chantier : descriptif, ordre de service, réserves, PV de réception"
+ ], applications:[
+  "Courriel au client pour transmettre un devis",
+  "Compte rendu de la réunion de chantier hebdomadaire",
+  "Rapport de stage de BTS Bâtiment",
+  "Lettre de réclamation à un fournisseur de ciment",
+  "Note de service sur le port des équipements de protection",
+  "Lettre de motivation pour un poste de conducteur de travaux"
+ ], src:"data/cours/fr.js?v=c6baeadb", chapitres:[
+  {id:"fr-1", niv:1, titre:"Communiquer dans le monde professionnel : situation et registres de langue", duree:45, nq:5, nex:5, ns:1},
+  {id:"fr-2", niv:1, titre:"La phrase et la ponctuation", duree:50, nq:5, nex:5, ns:1},
+  {id:"fr-3", niv:1, titre:"Orthographe grammaticale : accords et homophones", duree:55, nq:5, nex:5, ns:1},
+  {id:"fr-4", niv:1, titre:"Conjugaison utile et accord du participe passé", duree:55, nq:5, nex:5, ns:1},
+  {id:"fr-5", niv:1, titre:"Le mot juste : vocabulaire précis et technique", duree:50, nq:5, nex:5, ns:1},
+  {id:"fr-6", niv:2, titre:"Lire un document et prendre des notes", duree:50, nq:5, nex:5, ns:1},
+  {id:"fr-7", niv:2, titre:"Résumé de texte et synthèse de documents", duree:60, nq:5, nex:5, ns:1},
+  {id:"fr-8", niv:2, titre:"La lettre administrative et la lettre commerciale", duree:60, nq:5, nex:5, ns:1},
+  {id:"fr-9", niv:2, titre:"Courriel, note de service, convocation et communiqué", duree:55, nq:5, nex:5, ns:1},
+  {id:"fr-10", niv:2, titre:"Le compte rendu et le procès-verbal", duree:60, nq:5, nex:5, ns:1},
+  {id:"fr-11", niv:3, titre:"Le rapport : rapport technique et rapport de stage", duree:60, nq:5, nex:5, ns:1},
+  {id:"fr-12", niv:3, titre:"Argumenter et convaincre", duree:55, nq:5, nex:5, ns:1},
+  {id:"fr-13", niv:3, titre:"CV, lettre de motivation et entretien d'embauche", duree:55, nq:5, nex:5, ns:1},
+  {id:"fr-14", niv:3, titre:"Communication orale : exposé, soutenance, réunion et téléphone", duree:50, nq:5, nex:5, ns:1},
+  {id:"fr-15", niv:3, titre:"Les écrits du chantier : descriptif, ordre de service, journal, réserves et réception", duree:60, nq:5, nex:5, ns:1}
+ ]});
 A.addMatiere({id:"geo", titre:"Géotechnique", court:"Géotechnique", groupe:"sol", icone:"mountain", couleur:"#8B5A2B", niveau:"Intermédiaire", heures:75, ordre:1, prerequis:["mmc", "sp"], resume:"Connaître le sol pour bien fonder : paramètres d'état, sols tropicaux et lagunaires, reconnaissance, identification et classification, compactage, contraintes et eau dans le sol, cisaillement, capacité portante, tassements, essais in situ, pieux, poussée des terres, stabilité des pentes et amélioration des sols, avec applications et exercices corrigés.", objectifs:[
   "Calculer les paramètres d'état d'un sol (w, γ, γd, e, n, Sr)",
   "Reconnaître les principaux sols de Côte d'Ivoire et leurs pièges",
